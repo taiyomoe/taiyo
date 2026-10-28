@@ -47,12 +47,13 @@ const styles = stylex.create({
   },
 })
 
-type EditChapterFormProps = {
+export function EditChapterForm({
+  chapter,
+  onDone,
+}: {
   chapter: EditableChapter
   onDone: () => void
-}
-
-export function EditChapterForm({ chapter, onDone }: EditChapterFormProps) {
+}) {
   const details = useQuery(chapterQueryOptions(chapter.id))
   const invalidate = useInvalidateReview()
   const edit = useMutation({

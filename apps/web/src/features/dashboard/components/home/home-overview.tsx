@@ -17,11 +17,7 @@ const styles = stylex.create({
   },
 })
 
-type HomeOverviewProps = {
-  data: MyOverview | undefined
-}
-
-export function HomeOverview({ data }: HomeOverviewProps) {
+export function HomeOverview({ data }: { data: MyOverview | undefined }) {
   return (
     <section sx={homeStyles.section}>
       <h2 sx={homeStyles.sectionTitle}>{m.home_overview_yours()}</h2>

@@ -70,11 +70,13 @@ const styles = stylex.create({
   },
 })
 
-export type SwitchProps = SwitchPrimitive.Root.Props & {
+export function Switch({
+  className,
+  sx,
+  ...props
+}: SwitchPrimitive.Root.Props & {
   sx?: Sx
-}
-
-export function Switch({ className, sx, ...props }: SwitchProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(focus.control, styles.root, switchRootMarker, sx)
   const thumbProps = stylex.props(styles.thumb)
 

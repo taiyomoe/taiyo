@@ -29,12 +29,7 @@ const styles = stylex.create({
   },
 })
 
-type DashboardIntroProps = {
-  name: string
-  subtitle: string
-}
-
-export function DashboardIntro({ name, subtitle }: DashboardIntroProps) {
+export function DashboardIntro({ name, subtitle }: { name: string; subtitle: string }) {
   const hour = useClientValue(() => new Date().getHours())
   let greeting = m.dashboard_greeting({ name })
 

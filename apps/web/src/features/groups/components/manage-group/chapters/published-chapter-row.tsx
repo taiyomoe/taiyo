@@ -8,14 +8,17 @@ import { ChapterRow } from "@/features/groups/components/manage-group/chapters/c
 import { targetOf } from "@/features/groups/lib/chapter-target"
 import { m } from "@/paraglide/messages"
 
-type PublishedChapterRowProps = {
+export function PublishedChapterRow({
+  chapter,
+  can,
+  onEdit,
+  onDelete,
+}: {
   chapter: LatestChapter
   can: Permissions
   onEdit: (chapter: EditableChapter) => void
   onDelete: (chapterId: string) => void
-}
-
-export function PublishedChapterRow({ chapter, can, onEdit, onDelete }: PublishedChapterRowProps) {
+}) {
   return (
     <ChapterRow
       actions={

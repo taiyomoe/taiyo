@@ -19,14 +19,17 @@ export type Confirmation = {
   run: () => Promise<unknown>
 }
 
-type ConfirmDialogProps = {
+export function ConfirmDialog({
+  confirmation,
+  error,
+  pending,
+  onClose,
+}: {
   confirmation: Confirmation | null
   error: string | null
   pending: boolean
   onClose: () => void
-}
-
-export function ConfirmDialog({ confirmation, error, pending, onClose }: ConfirmDialogProps) {
+}) {
   return (
     <AlertDialog
       onOpenChange={(open) => {

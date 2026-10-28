@@ -20,13 +20,6 @@ import { useId } from "react"
 import { type GridPage, SortablePage } from "@/features/uploads/components/sortable-page"
 import { m } from "@/paraglide/messages"
 
-type SortablePageGridProps = {
-  pages: GridPage[]
-  disabled?: boolean
-  onReorder: (keys: string[]) => void
-  onRemove?: (key: string) => void
-}
-
 const styles = stylex.create({
   list: {
     margin: 0,
@@ -43,7 +36,12 @@ export function SortablePageGrid({
   disabled = false,
   onReorder,
   onRemove,
-}: SortablePageGridProps) {
+}: {
+  pages: GridPage[]
+  disabled?: boolean
+  onReorder: (keys: string[]) => void
+  onRemove?: (key: string) => void
+}) {
   const dndId = useId()
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 4 } }),

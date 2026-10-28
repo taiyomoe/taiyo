@@ -4,14 +4,17 @@ import type { ChapterSubmission } from "@/features/uploads/api/submissions"
 import { SubmissionRow } from "@/features/uploads/components/submission-row"
 import { m } from "@/paraglide/messages"
 
-type ReviewQueueRowProps = {
+export function ReviewQueueRow({
+  submission,
+  selected,
+  onSelect,
+  onReview,
+}: {
   submission: ChapterSubmission
   selected: boolean
   onSelect: (checked: boolean) => void
   onReview: () => void
-}
-
-export function ReviewQueueRow({ submission, selected, onSelect, onReview }: ReviewQueueRowProps) {
+}) {
   return (
     <SubmissionRow
       actions={

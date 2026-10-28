@@ -16,11 +16,7 @@ const styles = stylex.create({
   },
 })
 
-type OverviewErrorProps = {
-  onRetry: () => void
-}
-
-export function OverviewError({ onRetry }: OverviewErrorProps) {
+export function OverviewError({ onRetry }: { onRetry: () => void }) {
   return (
     <Card sx={styles.error}>
       <p sx={styles.errorText}>{m.dashboard_error()}</p>

@@ -10,12 +10,13 @@ import {
 } from "@taiyomoe/ui/components/ui/menu"
 import { m } from "@/paraglide/messages"
 
-type MemberActionsMenuProps = {
+export function MemberActionsMenu({
+  name,
+  items,
+}: {
   name: string
   items: Array<{ key: string; label: string; destructive?: boolean; onClick: () => void }>
-}
-
-export function MemberActionsMenu({ name, items }: MemberActionsMenuProps) {
+}) {
   return (
     <Menu>
       <MenuTrigger

@@ -18,11 +18,7 @@ const styles = stylex.create({
   },
 })
 
-type SuggestionMetaProps = {
-  suggestion: MediaSuggestionDetail
-}
-
-export function SuggestionMeta({ suggestion }: SuggestionMetaProps) {
+export function SuggestionMeta({ suggestion }: { suggestion: MediaSuggestionDetail }) {
   return (
     <div sx={styles.meta}>
       <Badge variant={SUGGESTION_STATUS[suggestion.status].variant}>

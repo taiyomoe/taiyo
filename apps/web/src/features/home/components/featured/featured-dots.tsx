@@ -52,15 +52,6 @@ const styles = stylex.create({
   },
 })
 
-type FeaturedDotsProps = {
-  medias: FeaturedMedia[]
-  selected: number
-  emblaApi: UseEmblaCarouselType[1]
-  autoplay: boolean
-  paused: boolean
-  reducedMotion: boolean
-}
-
 export function FeaturedDots({
   medias,
   selected,
@@ -68,7 +59,14 @@ export function FeaturedDots({
   autoplay,
   paused,
   reducedMotion,
-}: FeaturedDotsProps) {
+}: {
+  medias: FeaturedMedia[]
+  selected: number
+  emblaApi: UseEmblaCarouselType[1]
+  autoplay: boolean
+  paused: boolean
+  reducedMotion: boolean
+}) {
   return (
     <div sx={styles.dots}>
       {medias.map((media, index) => {

@@ -28,13 +28,15 @@ const styles = stylex.create({
 const getRange = (first: number, last: number) =>
   first === last ? m.chapter_number({ number: first }) : m.media_chapters_range({ first, last })
 
-type VolumeRailProps = {
+export function VolumeRail({
+  facets,
+  selected,
+  onSelect,
+}: {
   facets: MediaChapterFacets
   selected: string | undefined
   onSelect: (volume: string | undefined) => void
-}
-
-export function VolumeRail({ facets, selected, onSelect }: VolumeRailProps) {
+}) {
   const first = Math.min(...facets.volumes.map((volume) => volume.firstNumber))
   const last = Math.max(...facets.volumes.map((volume) => volume.lastNumber))
 

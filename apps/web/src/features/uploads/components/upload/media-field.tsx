@@ -16,12 +16,6 @@ import { m } from "@/paraglide/messages"
 
 export type MediaOption = { id: string; title: string; type: string }
 
-type MediaFieldProps = {
-  invalid: boolean
-  value: MediaOption | null
-  onChange: (media: MediaOption | null) => void
-}
-
 const styles = stylex.create({
   option: {
     gap: "0.625rem",
@@ -43,7 +37,15 @@ const styles = stylex.create({
   },
 })
 
-export function MediaField({ invalid, value: media, onChange }: MediaFieldProps) {
+export function MediaField({
+  invalid,
+  value: media,
+  onChange,
+}: {
+  invalid: boolean
+  value: MediaOption | null
+  onChange: (media: MediaOption | null) => void
+}) {
   const [mediaSearch, setMediaSearch] = useState("")
   const mediaQuery = useDeferredValue(mediaSearch.trim())
   const mediaResults = useQuery({

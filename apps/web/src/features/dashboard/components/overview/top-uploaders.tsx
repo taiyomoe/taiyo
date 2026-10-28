@@ -14,19 +14,17 @@ import { m } from "@/paraglide/messages"
 
 const ROW_HEIGHT = 36
 
-type TopUploadersProps = {
-  overview: DashboardOverview
-  compare: boolean
-  tone: string
-  previousTone: string
-}
-
 export function TopUploaders({
   overview: { topUploaders },
   compare,
   tone,
   previousTone,
-}: TopUploadersProps) {
+}: {
+  overview: DashboardOverview
+  compare: boolean
+  tone: string
+  previousTone: string
+}) {
   const definition = useMemo(() => {
     const names = new Map(topUploaders.map((uploader) => [uploader.id, uploader.displayUsername]))
     const reach = (uploader: (typeof topUploaders)[number]) =>

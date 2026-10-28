@@ -12,10 +12,6 @@ const styles = stylex.create({
   },
 })
 
-type CardNoteProps = {
-  children: ReactNode
-}
-
-export function CardNote({ children }: CardNoteProps) {
+export function CardNote({ children }: { children: ReactNode }) {
   return <p sx={styles.note}>{children}</p>
 }

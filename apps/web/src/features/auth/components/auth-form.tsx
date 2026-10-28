@@ -33,11 +33,7 @@ const styles = stylex.create({
   },
 })
 
-type AuthFormProps = {
-  type: "sign-in" | "sign-up"
-}
-
-export const AuthForm = ({ type }: AuthFormProps) => (
+export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => (
   <div data-auth-screen sx={styles.screen}>
     <AuthScene />
     <div sx={styles.panel}>

@@ -10,13 +10,6 @@ import {
 import { RELEASE_UNITS, type ReleaseUnit } from "@/features/uploads/lib/chapter-batch/release"
 import { m } from "@/paraglide/messages"
 
-type AmountInputProps = {
-  amount: string
-  unit: ReleaseUnit
-  invalid: boolean
-  onChange: (patch: { amount?: string; unit?: ReleaseUnit }) => void
-}
-
 const UNIT_LABELS: Record<ReleaseUnit, () => string> = {
   hours: m.upload_unit_hours,
   days: m.upload_unit_days,
@@ -30,7 +23,17 @@ const styles = stylex.create({
   },
 })
 
-export function AmountInput({ amount, unit, invalid, onChange }: AmountInputProps) {
+export function AmountInput({
+  amount,
+  unit,
+  invalid,
+  onChange,
+}: {
+  amount: string
+  unit: ReleaseUnit
+  invalid: boolean
+  onChange: (patch: { amount?: string; unit?: ReleaseUnit }) => void
+}) {
   return (
     <div sx={styles.amount}>
       <Input

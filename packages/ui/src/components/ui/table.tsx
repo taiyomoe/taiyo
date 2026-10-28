@@ -137,19 +137,17 @@ const styles = stylex.create({
   },
 })
 
-export type TableProps = React.ComponentProps<"table"> & {
-  variant?: TableVariant
-  render?: useRender.ComponentProps<"div">["render"]
-  sx?: Sx
-}
-
 export function Table({
   className,
   variant = "default",
   render,
   sx,
   ...props
-}: TableProps): React.ReactElement {
+}: React.ComponentProps<"table"> & {
+  variant?: TableVariant
+  render?: useRender.ComponentProps<"div">["render"]
+  sx?: Sx
+}): React.ReactElement {
   const containerProps = stylex.props(styles.container)
   const tableProps = stylex.props(styles.table, variant === "card" && styles.tableCard, sx)
   const defaultProps = {

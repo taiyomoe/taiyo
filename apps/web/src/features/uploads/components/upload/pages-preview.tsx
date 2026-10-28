@@ -6,12 +6,6 @@ import type { ChapterSource } from "@/features/uploads/lib/chapter-batch/sources
 import { SortablePageGrid } from "@/features/uploads/components/sortable-page-grid"
 import { m } from "@/paraglide/messages"
 
-type PagesPreviewProps = {
-  source: ChapterSource
-  pageKeys: string[]
-  onChange: (pageKeys: string[]) => void
-}
-
 const styles = stylex.create({
   loading: {
     margin: 0,
@@ -19,7 +13,15 @@ const styles = stylex.create({
   },
 })
 
-export function PagesPreview({ source, pageKeys, onChange }: PagesPreviewProps) {
+export function PagesPreview({
+  source,
+  pageKeys,
+  onChange,
+}: {
+  source: ChapterSource
+  pageKeys: string[]
+  onChange: (pageKeys: string[]) => void
+}) {
   const { data } = useQuery({
     queryKey: ["chapter-batch", "pages", source.key],
     queryFn: () => source.open(),

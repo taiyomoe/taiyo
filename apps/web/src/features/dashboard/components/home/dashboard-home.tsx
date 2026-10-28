@@ -22,11 +22,7 @@ const styles = stylex.create({
   },
 })
 
-type DashboardHomeProps = {
-  name: string
-}
-
-export function DashboardHome({ name }: DashboardHomeProps) {
+export function DashboardHome({ name }: { name: string }) {
   const { data } = useQuery(myOverviewQueryOptions)
 
   return (

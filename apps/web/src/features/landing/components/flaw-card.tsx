@@ -75,13 +75,15 @@ const styles = stylex.create({
   },
 })
 
-type FlawCardProps = {
+export const FlawCard = ({
+  icon,
+  title,
+  body,
+}: {
   icon: IconSvgElement
   title: string
   body: string
-}
-
-export const FlawCard = ({ icon, title, body }: FlawCardProps) => {
+}) => {
   const [hovered, setHovered] = useState(false)
 
   return (

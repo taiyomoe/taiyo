@@ -113,14 +113,17 @@ const styles = stylex.create({
   },
 })
 
-type ChapterGroupsProps = {
+export function ChapterGroups({
+  groups,
+  max = 1,
+  wrap = false,
+  sx,
+}: {
   groups: LatestChapter["groups"]
   max?: number
   wrap?: boolean
   sx?: Sx
-}
-
-export function ChapterGroups({ groups, max = 1, wrap = false, sx }: ChapterGroupsProps) {
+}) {
   const hidden = groups.slice(max)
 
   return (

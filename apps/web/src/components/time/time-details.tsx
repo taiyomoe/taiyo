@@ -42,13 +42,7 @@ const styles = stylex.create({
   },
 })
 
-type TimeDetailsProps = {
-  date: Date
-  future: boolean
-  now: number
-}
-
-export function TimeDetails({ date, future, now }: TimeDetailsProps) {
+export function TimeDetails({ date, future, now }: { date: Date; future: boolean; now: number }) {
   const locale = getLocale()
   const { timeZone } = new Intl.DateTimeFormat().resolvedOptions()
 

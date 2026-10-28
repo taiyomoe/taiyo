@@ -10,17 +10,6 @@ import { groupChaptersStyles } from "@/features/groups/components/manage-group/c
 import { PublishedChapterRow } from "@/features/groups/components/manage-group/chapters/published-chapter-row"
 import { m } from "@/paraglide/messages"
 
-type PublishedChaptersProps = {
-  chapters: LatestChapter[]
-  can: Permissions
-  page: number
-  pageCount: number
-  titled: boolean
-  onPageChange: (page: number) => void
-  onEdit: (chapter: EditableChapter) => void
-  onDelete: (chapterId: string) => void
-}
-
 export function PublishedChapters({
   chapters,
   can,
@@ -30,7 +19,16 @@ export function PublishedChapters({
   onPageChange,
   onEdit,
   onDelete,
-}: PublishedChaptersProps) {
+}: {
+  chapters: LatestChapter[]
+  can: Permissions
+  page: number
+  pageCount: number
+  titled: boolean
+  onPageChange: (page: number) => void
+  onEdit: (chapter: EditableChapter) => void
+  onDelete: (chapterId: string) => void
+}) {
   return (
     <section sx={groupChaptersStyles.section}>
       {titled ? <h3 sx={groupChaptersStyles.sectionTitle}>{m.group_chapters()}</h3> : null}

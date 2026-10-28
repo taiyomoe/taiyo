@@ -15,11 +15,6 @@ const styles = stylex.create({
   },
 })
 
-export type SunLinkProps = Omit<ComponentProps<typeof Link>, "children"> &
-  SunSkinProps & {
-    children?: ReactNode
-  }
-
 export const SunLink = ({
   className,
   children,
@@ -28,7 +23,10 @@ export const SunLink = ({
   style,
   sx,
   ...props
-}: SunLinkProps) => {
+}: Omit<ComponentProps<typeof Link>, "children"> &
+  SunSkinProps & {
+    children?: ReactNode
+  }) => {
   const styleProps = stylex.props(
     sunStyles.base,
     styles.link,

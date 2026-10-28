@@ -178,12 +178,6 @@ const SIZE_STYLE = {
   sm: sizeStyles.sm,
 } as const
 
-export type BadgeProps = useRender.ComponentProps<"span"> & {
-  variant?: BadgeVariant
-  size?: BadgeSize
-  sx?: Sx
-}
-
 export function Badge({
   className,
   variant = "default",
@@ -191,7 +185,11 @@ export function Badge({
   render,
   sx,
   ...props
-}: BadgeProps): React.ReactElement {
+}: useRender.ComponentProps<"span"> & {
+  variant?: BadgeVariant
+  size?: BadgeSize
+  sx?: Sx
+}): React.ReactElement {
   const interactive = Boolean(render)
   const styleProps = stylex.props(
     focus.control,

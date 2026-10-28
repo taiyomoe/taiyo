@@ -9,13 +9,11 @@ import { MemberPermissions } from "@/features/groups/components/member-permissio
 import { RoleBadge } from "@/features/groups/components/role-badge"
 import { m } from "@/paraglide/messages"
 
-type MyGroupRowProps = {
-  membership: MyGroup
-}
-
 export function MyGroupRow({
   membership: { group, role, permissions, memberCount },
-}: MyGroupRowProps) {
+}: {
+  membership: MyGroup
+}) {
   return (
     <ListRow>
       <GroupAvatar id={group.id} name={group.name} />

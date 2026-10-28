@@ -50,14 +50,17 @@ const styles = stylex.create({
   },
 })
 
-type UploadTrayHeaderProps = {
+export function UploadTrayHeader({
+  summary,
+  open,
+  onToggle,
+  onDismiss,
+}: {
   summary: ReturnType<typeof summarize>
   open: boolean
   onToggle: () => void
   onDismiss: () => void
-}
-
-export function UploadTrayHeader({ summary, open, onToggle, onDismiss }: UploadTrayHeaderProps) {
+}) {
   return (
     <div sx={styles.header}>
       {summary.busy ? (

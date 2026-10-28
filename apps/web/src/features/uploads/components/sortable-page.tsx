@@ -9,13 +9,6 @@ import { m } from "@/paraglide/messages"
 
 export type GridPage = { key: string; url: string | null }
 
-type SortablePageProps = {
-  page: GridPage
-  index: number
-  disabled: boolean
-  onRemove: (() => void) | undefined
-}
-
 const styles = stylex.create({
   page: {
     borderColor: colors.border,
@@ -71,7 +64,17 @@ const styles = stylex.create({
   },
 })
 
-export function SortablePage({ page, index, disabled, onRemove }: SortablePageProps) {
+export function SortablePage({
+  page,
+  index,
+  disabled,
+  onRemove,
+}: {
+  page: GridPage
+  index: number
+  disabled: boolean
+  onRemove: (() => void) | undefined
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: page.key,
     disabled,

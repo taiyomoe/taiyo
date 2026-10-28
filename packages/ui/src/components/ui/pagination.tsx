@@ -122,12 +122,6 @@ export function PaginationItem({ ...props }: React.ComponentProps<"li">): React.
   return <li data-slot="pagination-item" {...props} />
 }
 
-export type PaginationLinkProps = {
-  isActive?: boolean
-  size?: React.ComponentProps<typeof Button>["size"]
-  sx?: Sx
-} & useRender.ComponentProps<"a">
-
 export function PaginationLink({
   className,
   isActive,
@@ -135,7 +129,11 @@ export function PaginationLink({
   render,
   sx,
   ...props
-}: PaginationLinkProps): React.ReactElement {
+}: {
+  isActive?: boolean
+  size?: React.ComponentProps<typeof Button>["size"]
+  sx?: Sx
+} & useRender.ComponentProps<"a">): React.ReactElement {
   const styleProps = stylex.props(sx)
   const defaultProps = {
     "aria-current": isActive === true ? ("page" as const) : undefined,

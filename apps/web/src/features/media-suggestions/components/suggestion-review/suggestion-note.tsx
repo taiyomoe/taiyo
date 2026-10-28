@@ -23,12 +23,7 @@ const styles = stylex.create({
   },
 })
 
-type SuggestionNoteProps = {
-  label: string
-  children: ReactNode
-}
-
-export function SuggestionNote({ label, children }: SuggestionNoteProps) {
+export function SuggestionNote({ label, children }: { label: string; children: ReactNode }) {
   return (
     <p sx={styles.note}>
       <span sx={styles.noteLabel}>{label}</span>

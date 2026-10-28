@@ -21,12 +21,13 @@ const styles = stylex.create({
   },
 })
 
-type RequesterProps = {
+export function Requester({
+  person,
+  verb,
+}: {
   person: OwnershipRequest["requester"]
   verb: string
-}
-
-export function Requester({ person, verb }: RequesterProps) {
+}) {
   return (
     <>
       <PersonAvatar person={person} />

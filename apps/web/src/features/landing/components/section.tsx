@@ -10,8 +10,6 @@ const styles = stylex.create({
   },
 })
 
-type SectionProps = {
-  children: ReactNode
-}
-
-export const Section = ({ children }: SectionProps) => <div sx={styles.section}>{children}</div>
+export const Section = ({ children }: { children: ReactNode }) => (
+  <div sx={styles.section}>{children}</div>
+)

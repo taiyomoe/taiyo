@@ -7,21 +7,6 @@ import { LanguagePicker } from "@/components/fields/language-picker"
 import { type GroupOption, GroupPicker } from "@/features/groups/components/group-picker"
 import { m } from "@/paraglide/messages"
 
-type ReviewFixFieldsProps = {
-  can: Permissions
-  number: string
-  numberInvalid: boolean
-  volume: string
-  title: string
-  language: Language
-  groups: GroupOption[]
-  onNumberChange: (number: string) => void
-  onVolumeChange: (volume: string) => void
-  onTitleChange: (title: string) => void
-  onLanguageChange: (language: Language) => void
-  onGroupsChange: (groups: GroupOption[]) => void
-}
-
 const styles = stylex.create({
   row: {
     gap: "0.75rem",
@@ -43,7 +28,20 @@ export function ReviewFixFields({
   onTitleChange,
   onLanguageChange,
   onGroupsChange,
-}: ReviewFixFieldsProps) {
+}: {
+  can: Permissions
+  number: string
+  numberInvalid: boolean
+  volume: string
+  title: string
+  language: Language
+  groups: GroupOption[]
+  onNumberChange: (number: string) => void
+  onVolumeChange: (volume: string) => void
+  onTitleChange: (title: string) => void
+  onLanguageChange: (language: Language) => void
+  onGroupsChange: (groups: GroupOption[]) => void
+}) {
   return (
     <>
       <div sx={styles.row}>

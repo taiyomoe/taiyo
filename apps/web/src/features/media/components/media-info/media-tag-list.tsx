@@ -38,11 +38,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaTagListProps = {
-  tags: ReturnType<typeof getMediaTags>
-}
-
-export function MediaTagList({ tags }: MediaTagListProps) {
+export function MediaTagList({ tags }: { tags: ReturnType<typeof getMediaTags> }) {
   const [showSpoilers, setShowSpoilers] = useState(false)
   const spoilers = tags.filter((tag) => tag.isSpoiler).length
   const visible = tags

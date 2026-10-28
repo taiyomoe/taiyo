@@ -12,14 +12,17 @@ import { ListCard } from "@/components/layout/dashboard-page"
 import { UserRow } from "@/features/users/components/users/user-row"
 import { m } from "@/paraglide/messages"
 
-type UsersListProps = {
+export function UsersList({
+  users,
+  can,
+  selfId,
+  onBan,
+}: {
   users: ManagedUser[] | undefined
   can: Permissions
   selfId: string
   onBan: (user: ManagedUser) => void
-}
-
-export function UsersList({ users, can, selfId, onBan }: UsersListProps) {
+}) {
   if (users === undefined || users.length > 0) {
     return (
       <ListCard>

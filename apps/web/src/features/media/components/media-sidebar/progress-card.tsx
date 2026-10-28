@@ -49,11 +49,7 @@ const styles = stylex.create({
   },
 })
 
-type ProgressCardProps = {
-  progress: ReadingProgress
-}
-
-export function ProgressCard({ progress }: ProgressCardProps) {
+export function ProgressCard({ progress }: { progress: ReadingProgress }) {
   const percent =
     progress.totalCount === 0 ? 0 : Math.round((progress.readCount / progress.totalCount) * 100)
 

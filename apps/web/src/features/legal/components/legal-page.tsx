@@ -97,15 +97,19 @@ export const prose = stylex.create({
   },
 })
 
-type LegalPageProps = {
+export const LegalPage = ({
+  eyebrow,
+  title,
+  updated,
+  intro,
+  sections,
+}: {
   eyebrow: string
   title: string
   updated: string
   intro: ReactNode
   sections: LegalSection[]
-}
-
-export const LegalPage = ({ eyebrow, title, updated, intro, sections }: LegalPageProps) => (
+}) => (
   <div sx={styles.page}>
     <LandingNav />
     <LegalMasthead eyebrow={eyebrow} intro={intro} title={title} updated={updated} />
@@ -126,10 +130,6 @@ export const LegalPage = ({ eyebrow, title, updated, intro, sections }: LegalPag
   </div>
 )
 
-type LegalContactProps = {
-  children: ReactNode
-}
-
-export const LegalContact = ({ children }: LegalContactProps) => (
+export const LegalContact = ({ children }: { children: ReactNode }) => (
   <div sx={styles.contact}>{children}</div>
 )

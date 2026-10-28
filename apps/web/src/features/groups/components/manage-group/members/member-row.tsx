@@ -38,18 +38,6 @@ const styles = stylex.create({
   },
 })
 
-type MemberRowProps = {
-  member: GroupMember
-  group: Group
-  userId: string
-  owners: number
-  can: Permissions
-  onEdit: () => void
-  onConfirm: (confirmation: Confirmation) => void
-  onAction: (action: "remove" | "promote" | "demote") => Promise<unknown>
-  onLeave: () => Promise<unknown>
-}
-
 export function MemberRow({
   member,
   group,
@@ -60,7 +48,17 @@ export function MemberRow({
   onConfirm,
   onAction,
   onLeave,
-}: MemberRowProps) {
+}: {
+  member: GroupMember
+  group: Group
+  userId: string
+  owners: number
+  can: Permissions
+  onEdit: () => void
+  onConfirm: (confirmation: Confirmation) => void
+  onAction: (action: "remove" | "promote" | "demote") => Promise<unknown>
+  onLeave: () => Promise<unknown>
+}) {
   const target: MemberTarget = {
     groupId: group.id,
     userId: member.userId,

@@ -35,14 +35,17 @@ const styles = stylex.create({
   },
 })
 
-type SectionHeadProps = {
+export const SectionHead = ({
+  eyebrow,
+  title,
+  sub,
+  centered = false,
+}: {
   eyebrow: string
   title: string
   sub?: string
   centered?: boolean
-}
-
-export const SectionHead = ({ eyebrow, title, sub, centered = false }: SectionHeadProps) => (
+}) => (
   <div sx={[styles.head, centered && styles.headCentered]}>
     <Eyebrow centered={centered}>{eyebrow}</Eyebrow>
     <h2 sx={styles.headTitle}>{title}</h2>

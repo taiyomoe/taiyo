@@ -12,16 +12,6 @@ import {
 import { RejectNoteField } from "@/features/uploads/components/chapter-reviews/reject-note-field"
 import { m } from "@/paraglide/messages"
 
-type BulkRejectDialogProps = {
-  open: boolean
-  reason: string
-  touched: boolean
-  pending: boolean
-  onClose: () => void
-  onReasonChange: (reason: string) => void
-  onSubmit: () => void
-}
-
 export function BulkRejectDialog({
   open,
   reason,
@@ -30,7 +20,15 @@ export function BulkRejectDialog({
   onClose,
   onReasonChange,
   onSubmit,
-}: BulkRejectDialogProps) {
+}: {
+  open: boolean
+  reason: string
+  touched: boolean
+  pending: boolean
+  onClose: () => void
+  onReasonChange: (reason: string) => void
+  onSubmit: () => void
+}) {
   return (
     <Dialog
       onOpenChange={(isOpen) => {

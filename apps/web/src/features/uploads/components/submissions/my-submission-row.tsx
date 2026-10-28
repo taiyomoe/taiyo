@@ -5,13 +5,15 @@ import { ScheduleActions } from "@/features/chapters/components/schedule-actions
 import { SubmissionRow } from "@/features/uploads/components/submission-row"
 import { m } from "@/paraglide/messages"
 
-type MySubmissionRowProps = {
+export function MySubmissionRow({
+  submission,
+  withdrawing,
+  onWithdraw,
+}: {
   submission: ChapterSubmission
   withdrawing: boolean
   onWithdraw: () => void
-}
-
-export function MySubmissionRow({ submission, withdrawing, onWithdraw }: MySubmissionRowProps) {
+}) {
   let actions: ReactNode
 
   if (submission.status === "SCHEDULED" && submission.publishAt !== null) {

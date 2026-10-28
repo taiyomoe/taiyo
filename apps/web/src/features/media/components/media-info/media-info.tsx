@@ -35,11 +35,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaInfoProps = {
-  media: Media
-}
-
-export function MediaInfo({ media }: MediaInfoProps) {
+export function MediaInfo({ media }: { media: Media }) {
   const synopsis = getSynopsis(media.synopsis)
   const tags = getMediaTags(media.tags)
   const altTitles = getAltTitles(media.titles)

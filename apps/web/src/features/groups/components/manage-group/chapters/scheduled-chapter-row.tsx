@@ -19,14 +19,17 @@ const styles = stylex.create({
   },
 })
 
-type ScheduledChapterRowProps = {
+export function ScheduledChapterRow({
+  chapter,
+  can,
+  onEdit,
+  onDelete,
+}: {
   chapter: UpcomingChapter
   can: Permissions
   onEdit: (chapter: EditableChapter) => void
   onDelete: (chapterId: string) => void
-}
-
-export function ScheduledChapterRow({ chapter, can, onEdit, onDelete }: ScheduledChapterRowProps) {
+}) {
   return (
     <ChapterRow
       actions={

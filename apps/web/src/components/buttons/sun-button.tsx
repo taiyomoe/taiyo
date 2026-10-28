@@ -17,11 +17,6 @@ export type SunSkinProps = {
   sx?: Sx
 }
 
-export type SunButtonProps = ComponentProps<"button"> &
-  SunSkinProps & {
-    loading?: boolean
-  }
-
 export const SunButton = ({
   className,
   children,
@@ -33,7 +28,10 @@ export const SunButton = ({
   sx,
   type = "button",
   ...props
-}: SunButtonProps) => {
+}: ComponentProps<"button"> &
+  SunSkinProps & {
+    loading?: boolean
+  }) => {
   const isDisabled = disabled === true || loading
   const styleProps = stylex.props(
     sunStyles.base,

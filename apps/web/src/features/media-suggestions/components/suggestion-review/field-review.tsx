@@ -69,15 +69,6 @@ const styles = stylex.create({
   },
 })
 
-type FieldReviewProps = {
-  field: MediaEditField
-  suggestion: MediaSuggestionDetail
-  draft: MediaEditDraft
-  onDraftChange: (draft: MediaEditDraft) => void
-  accepted: boolean | null
-  onAcceptedChange: (accepted: boolean) => void
-}
-
 export function FieldReview({
   field,
   suggestion,
@@ -85,7 +76,14 @@ export function FieldReview({
   onDraftChange,
   accepted,
   onAcceptedChange,
-}: FieldReviewProps) {
+}: {
+  field: MediaEditField
+  suggestion: MediaSuggestionDetail
+  draft: MediaEditDraft
+  onDraftChange: (draft: MediaEditDraft) => void
+  accepted: boolean | null
+  onAcceptedChange: (accepted: boolean) => void
+}) {
   const [adjusting, setAdjusting] = useState(false)
   const conflict = suggestion.conflicts.includes(field)
   const suggested = toDraft(suggestion.changes)

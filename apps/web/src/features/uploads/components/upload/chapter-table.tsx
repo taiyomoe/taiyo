@@ -7,19 +7,6 @@ import { ChapterTableRow } from "@/features/uploads/components/upload/chapter-ta
 import { uploadStyles } from "@/features/uploads/components/upload/upload-styles"
 import { m } from "@/paraglide/messages"
 
-type ChapterTableProps = {
-  rows: UploadRow[]
-  issues: Map<string, RowIssues>
-  plan: ReleasePlan
-  order: Map<string, number>
-  template: string
-  attempted: boolean
-  onRowChange: (key: string, patch: Partial<UploadRow>) => void
-  onEditPages: (key: string) => void
-  onRemove: (key: string) => void
-  onClear: () => void
-}
-
 const styles = stylex.create({
   cardHeader: {
     gap: "0.75rem",
@@ -66,7 +53,18 @@ export function ChapterTable({
   onEditPages,
   onRemove,
   onClear,
-}: ChapterTableProps) {
+}: {
+  rows: UploadRow[]
+  issues: Map<string, RowIssues>
+  plan: ReleasePlan
+  order: Map<string, number>
+  template: string
+  attempted: boolean
+  onRowChange: (key: string, patch: Partial<UploadRow>) => void
+  onEditPages: (key: string) => void
+  onRemove: (key: string) => void
+  onClear: () => void
+}) {
   return (
     <section sx={uploadStyles.card}>
       <div sx={styles.cardHeader}>

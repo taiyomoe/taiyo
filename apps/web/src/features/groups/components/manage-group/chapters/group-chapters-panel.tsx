@@ -27,12 +27,7 @@ const styles = stylex.create({
   },
 })
 
-type GroupChaptersPanelProps = {
-  groupId: string
-  can: Permissions
-}
-
-export function GroupChaptersPanel({ groupId, can }: GroupChaptersPanelProps) {
+export function GroupChaptersPanel({ groupId, can }: { groupId: string; can: Permissions }) {
   const [page, setPage] = useState(1)
   const { data } = useSuspenseQuery(groupChaptersQueryOptions(groupId, ALL_RATINGS, page, PER_PAGE))
   const upcoming = useQuery(upcomingChaptersQueryOptions({ contentRatings: ALL_RATINGS, groupId }))

@@ -105,11 +105,13 @@ const styles = stylex.create({
   },
 })
 
-export type CheckboxProps = CheckboxPrimitive.Root.Props & {
+export function Checkbox({
+  className,
+  sx,
+  ...props
+}: CheckboxPrimitive.Root.Props & {
   sx?: Sx
-}
-
-export function Checkbox({ className, sx, ...props }: CheckboxProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.base, sx)
   const indicatorProps = stylex.props(styles.indicator)
 

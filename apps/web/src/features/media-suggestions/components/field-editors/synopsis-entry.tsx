@@ -24,14 +24,17 @@ const styles = stylex.create({
   },
 })
 
-type SynopsisEntryProps = {
+export function SynopsisEntry({
+  language,
+  value,
+  onChange,
+  onRemove,
+}: {
   language: Language
   value: string
   onChange: (value: string) => void
   onRemove: () => void
-}
-
-export function SynopsisEntry({ language, value, onChange, onRemove }: SynopsisEntryProps) {
+}) {
   return (
     <Field>
       <div sx={styles.synopsisLabel}>

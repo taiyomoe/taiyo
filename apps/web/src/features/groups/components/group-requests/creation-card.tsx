@@ -24,11 +24,7 @@ const styles = stylex.create({
   },
 })
 
-type CreationCardProps = {
-  request: GroupCreationRequest
-}
-
-export function CreationCard({ request }: CreationCardProps) {
+export function CreationCard({ request }: { request: GroupCreationRequest }) {
   const queryClient = useQueryClient()
   const review = useMutation({
     mutationFn: async ({ id, note }: { id: string; note: string | null }) =>

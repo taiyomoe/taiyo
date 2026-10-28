@@ -46,14 +46,17 @@ const styles = stylex.create({
   },
 })
 
-type LegalMastheadProps = {
+export const LegalMasthead = ({
+  eyebrow,
+  title,
+  updated,
+  intro,
+}: {
   eyebrow: string
   title: string
   updated: string
   intro: ReactNode
-}
-
-export const LegalMasthead = ({ eyebrow, title, updated, intro }: LegalMastheadProps) => (
+}) => (
   <header sx={styles.masthead}>
     <Section>
       <div sx={styles.eyebrow}>{eyebrow}</div>

@@ -31,13 +31,15 @@ const styles = stylex.create({
   },
 })
 
-type FeaturedSlideProps = {
+export function FeaturedSlide({
+  media,
+  index,
+  total,
+}: {
   media: FeaturedMedia
   index: number
   total: number
-}
-
-export function FeaturedSlide({ media, index, total }: FeaturedSlideProps) {
+}) {
   const backdropUrl = media.bannerUrl ?? media.coverUrl
   const eager = index === 0
 

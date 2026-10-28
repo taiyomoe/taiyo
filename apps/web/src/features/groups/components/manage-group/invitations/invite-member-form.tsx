@@ -51,12 +51,7 @@ const ERRORS = {
   GROUP_INVITATION_EXISTS: m.invite_error_invitation_exists,
 }
 
-type InviteMemberFormProps = {
-  groupId: string
-  can: Permissions
-}
-
-export function InviteMemberForm({ groupId, can }: InviteMemberFormProps) {
+export function InviteMemberForm({ groupId, can }: { groupId: string; can: Permissions }) {
   const queryClient = useQueryClient()
   const invite = useMutation({
     mutationFn: async (json: { username: string; permissions: GroupPermission[] }) =>

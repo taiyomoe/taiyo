@@ -13,12 +13,7 @@ import { m } from "@/paraglide/messages"
 
 export const GROUP_CHAPTERS_PER_PAGE = 20
 
-type GroupChaptersProps = {
-  groupId: string
-  page: number
-}
-
-export function GroupChapters({ groupId, page }: GroupChaptersProps) {
+export function GroupChapters({ groupId, page }: { groupId: string; page: number }) {
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const navigate = useNavigate({ from: "/groups/$groupId" })
   const { data } = useSuspenseQuery(

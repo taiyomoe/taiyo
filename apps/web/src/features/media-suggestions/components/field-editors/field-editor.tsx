@@ -57,9 +57,7 @@ const EDITORS: Record<MediaEditField, (props: EditorProps) => ReactNode> = {
   staffs: StaffsEditor,
 }
 
-type FieldEditorProps = EditorProps & { field: MediaEditField }
-
-export function FieldEditor({ field, ...props }: FieldEditorProps) {
+export function FieldEditor({ field, ...props }: EditorProps & { field: MediaEditField }) {
   const Editor = EDITORS[field]
 
   return <Editor {...props} />

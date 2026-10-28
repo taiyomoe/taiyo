@@ -39,12 +39,13 @@ const styles = stylex.create({
   },
 })
 
-type PageJumpProps = {
+export function PageJump({
+  pageCount,
+  onJump,
+}: {
   pageCount: number
   onJump: (page: number) => void
-}
-
-export function PageJump({ pageCount, onJump }: PageJumpProps) {
+}) {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)

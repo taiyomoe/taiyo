@@ -6,15 +6,6 @@ import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UploadRow } from "@/features/uploads/lib/chapter-batch/upload-rows"
 import { m } from "@/paraglide/messages"
 
-type UploadFooterProps = {
-  rows: UploadRow[]
-  overCap: boolean
-  attempted: boolean
-  blocked: boolean
-  reading: boolean
-  onStart: () => void
-}
-
 const styles = stylex.create({
   footer: {
     padding: "0.75rem",
@@ -52,7 +43,14 @@ export function UploadFooter({
   blocked,
   reading,
   onStart,
-}: UploadFooterProps) {
+}: {
+  rows: UploadRow[]
+  overCap: boolean
+  attempted: boolean
+  blocked: boolean
+  reading: boolean
+  onStart: () => void
+}) {
   let footerStatus = (
     <span sx={styles.footerText}>
       {m.upload_total_pages({ count: rows.reduce((sum, row) => sum + row.pageKeys.length, 0) })}

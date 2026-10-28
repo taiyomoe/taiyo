@@ -18,14 +18,17 @@ import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
-type PermissionsFormProps = {
+export function PermissionsForm({
+  groupId,
+  member,
+  can,
+  onDone,
+}: {
   groupId: string
   member: GroupMember
   can: Permissions
   onDone: () => void
-}
-
-export function PermissionsForm({ groupId, member, can, onDone }: PermissionsFormProps) {
+}) {
   const queryClient = useQueryClient()
   const update = useMutation({
     mutationFn: async ({

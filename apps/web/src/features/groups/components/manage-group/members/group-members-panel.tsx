@@ -16,13 +16,15 @@ import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 
-type GroupMembersPanelProps = {
+export function GroupMembersPanel({
+  group,
+  userId,
+  can,
+}: {
   group: Group
   userId: string
   can: Permissions
-}
-
-export function GroupMembersPanel({ group, userId, can }: GroupMembersPanelProps) {
+}) {
   const { data: members } = useSuspenseQuery(groupMembersQueryOptions(group.id))
   const queryClient = useQueryClient()
   const invalidate = () =>

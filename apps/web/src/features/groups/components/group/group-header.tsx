@@ -53,13 +53,15 @@ const styles = stylex.create({
   },
 })
 
-type GroupHeaderProps = {
+export function GroupHeader({
+  group,
+  user,
+  canManage,
+}: {
   group: Group
   user: Session["user"] | null
   canManage: boolean
-}
-
-export function GroupHeader({ group, user, canManage }: GroupHeaderProps) {
+}) {
   return (
     <div sx={styles.header}>
       <div sx={styles.identity}>

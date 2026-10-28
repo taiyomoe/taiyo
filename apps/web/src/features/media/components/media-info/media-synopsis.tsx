@@ -26,11 +26,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaSynopsisProps = {
-  paragraphs: string[]
-}
-
-export function MediaSynopsis({ paragraphs }: MediaSynopsisProps) {
+export function MediaSynopsis({ paragraphs }: { paragraphs: string[] }) {
   const [expanded, setExpanded] = useState(false)
   const long = paragraphs.join(" ").length > SYNOPSIS_PREVIEW_LENGTH
 

@@ -37,11 +37,7 @@ const styles = stylex.create({
   },
 })
 
-type LegalTocProps = {
-  sections: LegalSection[]
-}
-
-export const LegalToc = ({ sections }: LegalTocProps) => (
+export const LegalToc = ({ sections }: { sections: LegalSection[] }) => (
   <nav sx={styles.toc} aria-label="On this page">
     <div sx={styles.tocLabel}>On this page</div>
     <ol sx={styles.tocList}>

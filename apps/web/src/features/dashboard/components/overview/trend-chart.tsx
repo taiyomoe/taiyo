@@ -21,16 +21,6 @@ import {
 } from "@/features/dashboard/lib/format"
 import { m } from "@/paraglide/messages"
 
-type TrendChartProps = {
-  overview: DashboardOverview
-  metric: DashboardOverview["metrics"]["reads"]
-  compare: boolean
-  tone: string
-  label: string
-  minHeight: number
-  ticks: number
-}
-
 export function TrendChart({
   overview: { buckets, unit },
   metric,
@@ -39,7 +29,15 @@ export function TrendChart({
   label,
   minHeight,
   ticks,
-}: TrendChartProps) {
+}: {
+  overview: DashboardOverview
+  metric: DashboardOverview["metrics"]["reads"]
+  compare: boolean
+  tone: string
+  label: string
+  minHeight: number
+  ticks: number
+}) {
   const definition = useMemo(() => {
     const rows = buckets.map((bucket, index) => ({
       bucket,

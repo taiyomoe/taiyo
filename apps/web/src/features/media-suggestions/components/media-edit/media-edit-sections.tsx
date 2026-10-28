@@ -30,13 +30,15 @@ const styles = stylex.create({
   },
 })
 
-type MediaEditSectionsProps = {
+export function MediaEditSections({
+  draft,
+  changed,
+  onChange,
+}: {
   draft: MediaEditDraft
   changed: readonly MediaEditField[]
   onChange: (draft: MediaEditDraft) => void
-}
-
-export function MediaEditSections({ draft, changed, onChange }: MediaEditSectionsProps) {
+}) {
   return (
     <div sx={styles.sections}>
       {SECTIONS.map((section) => (

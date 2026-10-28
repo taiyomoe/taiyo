@@ -7,12 +7,7 @@ import { AuthHeading } from "@/features/auth/components/auth-heading"
 import { AuthSwitchLink } from "@/features/auth/components/auth-switch-link"
 import { m } from "@/paraglide/messages"
 
-type SignUpConfirmationProps = {
-  email: string
-  onBack: () => void
-}
-
-export const SignUpConfirmation = ({ email, onBack }: SignUpConfirmationProps) => (
+export const SignUpConfirmation = ({ email, onBack }: { email: string; onBack: () => void }) => (
   <>
     <AuthHeading title={m.auth_check_inbox_title()} subtitle={m.auth_check_inbox_subtitle()} />
     <div sx={sx.confirmation}>

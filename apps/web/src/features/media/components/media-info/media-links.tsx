@@ -11,11 +11,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaLinksProps = {
-  links: ReturnType<typeof getMediaLinks>
-}
-
-export function MediaLinks({ links }: MediaLinksProps) {
+export function MediaLinks({ links }: { links: ReturnType<typeof getMediaLinks> }) {
   return (
     <div sx={styles.links}>
       {links.map((link) => (

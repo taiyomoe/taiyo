@@ -45,13 +45,15 @@ const styles = stylex.create({
   },
 })
 
-type ClaimGroupDialogProps = {
+export function ClaimGroupDialog({
+  group,
+  trigger,
+  onClaimed,
+}: {
   group: { id: string; name: string }
   trigger: ReactElement
   onClaimed: () => void
-}
-
-export function ClaimGroupDialog({ group, trigger, onClaimed }: ClaimGroupDialogProps) {
+}) {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const claim = useMutation({

@@ -17,12 +17,13 @@ const styles = stylex.create({
   },
 })
 
-type MediaChapterListEmptyProps = {
+export function MediaChapterListEmpty({
+  filtered,
+  onClear,
+}: {
   filtered: boolean
   onClear: () => void
-}
-
-export function MediaChapterListEmpty({ filtered, onClear }: MediaChapterListEmptyProps) {
+}) {
   return (
     <Empty sx={styles.empty}>
       <EmptyHeader>

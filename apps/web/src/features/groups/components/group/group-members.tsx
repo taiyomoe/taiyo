@@ -16,11 +16,7 @@ const styles = stylex.create({
   },
 })
 
-type GroupMembersProps = {
-  groupId: string
-}
-
-export function GroupMembers({ groupId }: GroupMembersProps) {
+export function GroupMembers({ groupId }: { groupId: string }) {
   const { data: members } = useSuspenseQuery(groupMembersQueryOptions(groupId))
 
   if (members.length === 0) {

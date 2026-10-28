@@ -12,13 +12,6 @@ import {
 } from "@/features/uploads/lib/chapter-batch/release"
 import { m } from "@/paraglide/messages"
 
-type ReleaseFieldProps = {
-  release: ReleaseSettings
-  error: string | null
-  rowCount: number
-  onChange: (patch: Partial<ReleaseSettings>) => void
-}
-
 const MODE_LABELS: Record<ReleaseMode, () => string> = {
   now: m.upload_release_now,
   date: m.upload_release_date,
@@ -48,7 +41,17 @@ const styles = stylex.create({
   },
 })
 
-export function ReleaseField({ release, error, rowCount, onChange }: ReleaseFieldProps) {
+export function ReleaseField({
+  release,
+  error,
+  rowCount,
+  onChange,
+}: {
+  release: ReleaseSettings
+  error: string | null
+  rowCount: number
+  onChange: (patch: Partial<ReleaseSettings>) => void
+}) {
   return (
     <Field invalid={error !== null}>
       <FieldLabel>{m.upload_release()}</FieldLabel>

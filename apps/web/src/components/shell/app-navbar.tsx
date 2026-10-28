@@ -57,12 +57,13 @@ const styles = stylex.create({
   },
 })
 
-type AppNavbarProps = {
+export function AppNavbar({
+  user,
+  overlay = false,
+}: {
   user: Session["user"] | null
   overlay?: boolean
-}
-
-export function AppNavbar({ user, overlay = false }: AppNavbarProps) {
+}) {
   const scrolled = useWindowScrolled()
 
   return (

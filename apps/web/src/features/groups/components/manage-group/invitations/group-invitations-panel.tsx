@@ -2,13 +2,15 @@ import type { Permissions } from "@taiyomoe/permissions"
 import { InviteMemberForm } from "@/features/groups/components/manage-group/invitations/invite-member-form"
 import { PendingInvitations } from "@/features/groups/components/manage-group/invitations/pending-invitations"
 
-type GroupInvitationsPanelProps = {
+export function GroupInvitationsPanel({
+  groupId,
+  userId,
+  can,
+}: {
   groupId: string
   userId: string
   can: Permissions
-}
-
-export function GroupInvitationsPanel({ groupId, userId, can }: GroupInvitationsPanelProps) {
+}) {
   return (
     <>
       <InviteMemberForm can={can} groupId={groupId} />

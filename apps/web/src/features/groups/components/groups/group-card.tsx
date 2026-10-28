@@ -35,11 +35,7 @@ const styles = stylex.create({
   },
 })
 
-type GroupCardProps = {
-  group: { id: string; name: string; owned: boolean }
-}
-
-export function GroupCard({ group }: GroupCardProps) {
+export function GroupCard({ group }: { group: { id: string; name: string; owned: boolean } }) {
   return (
     <Link params={{ groupId: group.id }} {...stylex.props(styles.card)} to="/groups/$groupId">
       <GroupAvatar id={group.id} name={group.name} />

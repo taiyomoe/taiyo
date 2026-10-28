@@ -2,21 +2,19 @@ import { Field, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
 import { m } from "@/paraglide/messages"
 
-type RejectNoteFieldProps = {
-  reason: string
-  touched: boolean
-  rows: number
-  onReasonChange: (reason: string) => void
-  onBlur?: () => void
-}
-
 export function RejectNoteField({
   reason,
   touched,
   rows,
   onReasonChange,
   onBlur,
-}: RejectNoteFieldProps) {
+}: {
+  reason: string
+  touched: boolean
+  rows: number
+  onReasonChange: (reason: string) => void
+  onBlur?: () => void
+}) {
   return (
     <Field invalid={touched && reason.trim() === ""}>
       <FieldLabel>{m.review_reject_note()}</FieldLabel>

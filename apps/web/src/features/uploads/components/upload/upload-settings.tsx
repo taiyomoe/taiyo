@@ -16,27 +16,6 @@ import { uploadStyles } from "@/features/uploads/components/upload/upload-styles
 import { NUMBER_TOKEN } from "@/features/uploads/lib/chapter-batch/links"
 import { m } from "@/paraglide/messages"
 
-type UploadSettingsProps = {
-  can: Permissions
-  attempted: boolean
-  media: MediaOption | null
-  onMediaChange: (media: MediaOption | null) => void
-  language: Language
-  onLanguageChange: (language: Language) => void
-  groups: GroupOption[]
-  onGroupsChange: (groups: GroupOption[]) => void
-  release: ReleaseSettings
-  planError: string | null
-  onReleaseChange: (patch: Partial<ReleaseSettings>) => void
-  rowCount: number
-  template: string
-  templateInvalid: boolean
-  onTemplateChange: (template: string) => void
-  publishes: boolean
-  pendingCount: number | undefined
-  slotsLeft: number
-}
-
 export function UploadSettings({
   can,
   attempted,
@@ -56,7 +35,26 @@ export function UploadSettings({
   publishes,
   pendingCount,
   slotsLeft,
-}: UploadSettingsProps) {
+}: {
+  can: Permissions
+  attempted: boolean
+  media: MediaOption | null
+  onMediaChange: (media: MediaOption | null) => void
+  language: Language
+  onLanguageChange: (language: Language) => void
+  groups: GroupOption[]
+  onGroupsChange: (groups: GroupOption[]) => void
+  release: ReleaseSettings
+  planError: string | null
+  onReleaseChange: (patch: Partial<ReleaseSettings>) => void
+  rowCount: number
+  template: string
+  templateInvalid: boolean
+  onTemplateChange: (template: string) => void
+  publishes: boolean
+  pendingCount: number | undefined
+  slotsLeft: number
+}) {
   const releaseError =
     release.mode === "date" && release.date === null && !attempted ? null : planError
 

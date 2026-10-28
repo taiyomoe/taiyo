@@ -17,12 +17,7 @@ import { GroupCard } from "@/features/groups/components/groups/group-card"
 import { groupsStyles } from "@/features/groups/components/groups/groups-styles"
 import { m } from "@/paraglide/messages"
 
-type GroupsGridProps = {
-  search: string | undefined
-  page: number
-}
-
-export function GroupsGrid({ search, page }: GroupsGridProps) {
+export function GroupsGrid({ search, page }: { search: string | undefined; page: number }) {
   const navigate = useNavigate({ from: "/groups/" })
   const { data } = useSuspenseQuery(groupsQueryOptions({ page, search }))
   const pageCount = Math.ceil(data.meta.total / GROUPS_PER_PAGE)

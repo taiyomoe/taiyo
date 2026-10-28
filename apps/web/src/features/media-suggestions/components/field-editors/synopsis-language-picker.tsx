@@ -18,12 +18,13 @@ const LANGUAGE_OPTIONS = [...LANGUAGES]
   .map((code) => ({ code, name: getLanguageName(code) }))
   .sort((a, b) => a.name.localeCompare(b.name))
 
-type SynopsisLanguagePickerProps = {
+export function SynopsisLanguagePicker({
+  exclude,
+  onPick,
+}: {
   exclude: readonly Language[]
   onPick: (language: Language) => void
-}
-
-export function SynopsisLanguagePicker({ exclude, onPick }: SynopsisLanguagePickerProps) {
+}) {
   return (
     <div sx={fieldEditorStyles.addPicker}>
       <Combobox<(typeof LANGUAGE_OPTIONS)[number]>

@@ -24,11 +24,15 @@ const styles = stylex.create({
   },
 })
 
-export type LabelProps = useRender.ComponentProps<"label"> & {
+export function Label({
+  className,
+  render,
+  sx,
+  style,
+  ...props
+}: useRender.ComponentProps<"label"> & {
   sx?: Sx
-}
-
-export function Label({ className, render, sx, style, ...props }: LabelProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.base, sx)
   const defaultProps = {
     className: cn(styleProps.className, className),

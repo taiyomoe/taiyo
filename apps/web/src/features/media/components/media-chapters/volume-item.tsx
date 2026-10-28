@@ -68,15 +68,19 @@ const styles = stylex.create({
   },
 })
 
-type VolumeItemProps = {
+export function VolumeItem({
+  name,
+  range: chapters,
+  count,
+  active,
+  onClick,
+}: {
   name: string
   range: string | null
   count: number
   active: boolean
   onClick: () => void
-}
-
-export function VolumeItem({ name, range: chapters, count, active, onClick }: VolumeItemProps) {
+}) {
   return (
     <li sx={styles.volumeItem}>
       <button aria-current={active} onClick={onClick} sx={styles.volume} type="button">

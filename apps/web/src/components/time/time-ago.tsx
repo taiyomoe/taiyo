@@ -30,13 +30,7 @@ const styles = stylex.create({
   },
 })
 
-type TimeAgoProps = {
-  date: string
-  future?: boolean
-  sx?: Sx
-}
-
-export function TimeAgo({ date, future = false, sx }: TimeAgoProps) {
+export function TimeAgo({ date, future = false, sx }: { date: string; future?: boolean; sx?: Sx }) {
   const parsed = new Date(date)
   const now = useNow()
   const hover = useHoverPopover()

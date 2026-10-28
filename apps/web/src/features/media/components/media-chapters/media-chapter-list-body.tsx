@@ -11,19 +11,17 @@ const styles = stylex.create({
   },
 })
 
-type MediaChapterListBodyProps = {
-  chapters: MediaChapter[] | undefined
-  stale: boolean
-  filtered: boolean
-  onClear: () => void
-}
-
 export function MediaChapterListBody({
   chapters,
   stale,
   filtered,
   onClear,
-}: MediaChapterListBodyProps) {
+}: {
+  chapters: MediaChapter[] | undefined
+  stale: boolean
+  filtered: boolean
+  onClear: () => void
+}) {
   if (chapters === undefined) {
     return <ChapterListSkeleton count={6} />
   }

@@ -18,19 +18,17 @@ import {
 } from "@/features/dashboard/lib/format"
 import { m } from "@/paraglide/messages"
 
-type ChaptersChartProps = {
-  overview: DashboardOverview
-  compare: boolean
-  tone: string
-  previousTone: string
-}
-
 export function ChaptersChart({
   overview: { buckets, unit, metrics },
   compare,
   tone,
   previousTone,
-}: ChaptersChartProps) {
+}: {
+  overview: DashboardOverview
+  compare: boolean
+  tone: string
+  previousTone: string
+}) {
   const definition = useMemo(() => {
     const metric = metrics.chaptersUploaded
     const rows = buckets.flatMap((bucket, index) => [

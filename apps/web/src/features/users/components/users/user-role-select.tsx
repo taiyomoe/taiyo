@@ -23,12 +23,7 @@ const styles = stylex.create({
   },
 })
 
-type UserRoleSelectProps = {
-  user: ManagedUser
-  editable: boolean
-}
-
-export function UserRoleSelect({ user, editable }: UserRoleSelectProps) {
+export function UserRoleSelect({ user, editable }: { user: ManagedUser; editable: boolean }) {
   const queryClient = useQueryClient()
   const setRole = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: Role }) =>

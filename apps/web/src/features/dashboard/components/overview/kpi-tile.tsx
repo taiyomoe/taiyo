@@ -56,14 +56,17 @@ const styles = stylex.create({
   },
 })
 
-type KpiTileProps = {
+export function KpiTile({
+  label,
+  icon: Icon,
+  metric,
+  compare,
+}: {
   label: string
   icon: (props: IconProps) => ReactElement
   metric: DashboardOverview["metrics"]["reads"] | null | undefined
   compare: boolean
-}
-
-export function KpiTile({ label, icon: Icon, metric, compare }: KpiTileProps) {
+}) {
   const delta = metric && compare ? getDelta(metric.total, metric.previousTotal) : null
 
   return (

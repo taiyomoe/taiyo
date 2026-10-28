@@ -34,13 +34,15 @@ const styles = stylex.create({
   },
 })
 
-type TagChipProps = {
+export function TagChip({
+  tag,
+  onSpoilerChange,
+  onRemove,
+}: {
   tag: MediaEditDraft["tags"][number]
   onSpoilerChange: (isSpoiler: boolean) => void
   onRemove: () => void
-}
-
-export function TagChip({ tag, onSpoilerChange, onRemove }: TagChipProps) {
+}) {
   return (
     <li sx={styles.chip}>
       <span sx={[styles.chipLabel, tag.isSpoiler && styles.chipSpoiler]}>

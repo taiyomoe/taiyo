@@ -12,11 +12,7 @@ import { Link } from "@tanstack/react-router"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import { m } from "@/paraglide/messages"
 
-type MediaEditSentProps = {
-  mediaId: string
-}
-
-export function MediaEditSent({ mediaId }: MediaEditSentProps) {
+export function MediaEditSent({ mediaId }: { mediaId: string }) {
   return (
     <DashboardPage title={m.media_edit_suggest_title()}>
       <Empty>

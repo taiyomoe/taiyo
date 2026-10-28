@@ -28,12 +28,13 @@ const styles = stylex.create({
   },
 })
 
-type KpiTilesProps = {
+export function KpiTiles({
+  overview,
+  compare,
+}: {
   overview: DashboardOverview | undefined
   compare: boolean
-}
-
-export function KpiTiles({ overview, compare }: KpiTilesProps) {
+}) {
   return (
     <div sx={styles.row}>
       {KPIS.map(({ key, label, icon }) => (

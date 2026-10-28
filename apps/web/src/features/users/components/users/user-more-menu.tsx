@@ -24,12 +24,7 @@ const styles = stylex.create({
   },
 })
 
-type UserMoreMenuProps = {
-  user: ManagedUser
-  can: Permissions
-}
-
-export function UserMoreMenu({ user, can }: UserMoreMenuProps) {
+export function UserMoreMenu({ user, can }: { user: ManagedUser; can: Permissions }) {
   const impersonate = useMutation({
     mutationFn: (userId: string) => unwrapAuth(authClient.admin.impersonateUser({ userId })),
     onSuccess: () => {

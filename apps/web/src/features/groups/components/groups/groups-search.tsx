@@ -19,11 +19,7 @@ const styles = stylex.create({
   },
 })
 
-type GroupsSearchProps = {
-  search: string | undefined
-}
-
-export function GroupsSearch({ search }: GroupsSearchProps) {
+export function GroupsSearch({ search }: { search: string | undefined }) {
   const navigate = useNavigate({ from: "/groups/" })
   const [draft, setDraft] = useState(search ?? "")
 

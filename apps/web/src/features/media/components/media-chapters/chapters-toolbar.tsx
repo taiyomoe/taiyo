@@ -37,19 +37,6 @@ const styles = stylex.create({
   },
 })
 
-type ChaptersToolbarProps = {
-  query: string | undefined
-  language: string | undefined
-  languages: MediaChapterFacets["languages"]
-  sort: ChapterSort
-  signedIn: boolean
-  unread: boolean
-  onSearch: (q?: string) => void
-  onLanguageChange: (language: string | undefined) => void
-  onSortChange: (sort: ChapterSort) => void
-  onUnreadChange: (checked: boolean) => void
-}
-
 export function ChaptersToolbar({
   query,
   language,
@@ -61,7 +48,18 @@ export function ChaptersToolbar({
   onLanguageChange,
   onSortChange,
   onUnreadChange,
-}: ChaptersToolbarProps) {
+}: {
+  query: string | undefined
+  language: string | undefined
+  languages: MediaChapterFacets["languages"]
+  sort: ChapterSort
+  signedIn: boolean
+  unread: boolean
+  onSearch: (q?: string) => void
+  onLanguageChange: (language: string | undefined) => void
+  onSortChange: (sort: ChapterSort) => void
+  onUnreadChange: (checked: boolean) => void
+}) {
   return (
     <div sx={styles.toolbar}>
       <ChapterSearchField onSearch={onSearch} value={query ?? ""} />

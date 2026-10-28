@@ -6,12 +6,13 @@ import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
 import { mediaEditStyles } from "@/features/media-suggestions/components/media-edit/media-edit-styles"
 import { m } from "@/paraglide/messages"
 
-type MediaEditNoteProps = {
+export function MediaEditNote({
+  value,
+  onChange,
+}: {
   value: string
   onChange: (value: string) => void
-}
-
-export function MediaEditNote({ value, onChange }: MediaEditNoteProps) {
+}) {
   return (
     <section sx={mediaEditStyles.card}>
       <Field>

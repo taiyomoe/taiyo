@@ -31,14 +31,17 @@ const styles = stylex.create({
   },
 })
 
-type OverviewCardProps = {
+export function OverviewCard({
+  icon,
+  title,
+  children,
+  actions,
+}: {
   icon: ReactNode
   title: string
   children: ReactNode
   actions: ReactNode
-}
-
-export function OverviewCard({ icon, title, children, actions }: OverviewCardProps) {
+}) {
   return (
     <Card sx={styles.card}>
       <div sx={styles.header}>

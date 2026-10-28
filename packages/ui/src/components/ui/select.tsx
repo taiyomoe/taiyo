@@ -312,11 +312,6 @@ const SIZE_STYLE = {
   sm: styles.triggerSm,
 } as const
 
-export type SelectButtonProps = useRender.ComponentProps<"button"> & {
-  size?: SelectSize
-  sx?: Sx
-}
-
 export function SelectButton({
   className,
   size = "default",
@@ -324,7 +319,10 @@ export function SelectButton({
   children,
   sx,
   ...props
-}: SelectButtonProps): React.ReactElement {
+}: useRender.ComponentProps<"button"> & {
+  size?: SelectSize
+  sx?: Sx
+}): React.ReactElement {
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
     ? undefined
     : "button"

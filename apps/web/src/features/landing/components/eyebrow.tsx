@@ -35,12 +35,13 @@ const styles = stylex.create({
   },
 })
 
-type EyebrowProps = {
+export const Eyebrow = ({
+  children,
+  centered = false,
+}: {
   children: ReactNode
   centered?: boolean
-}
-
-export const Eyebrow = ({ children, centered = false }: EyebrowProps) => (
+}) => (
   <div sx={[styles.eyebrow, centered && styles.eyebrowCentered]}>
     <span sx={styles.eyebrowDot} />
     <span sx={styles.eyebrowLabel}>{children}</span>

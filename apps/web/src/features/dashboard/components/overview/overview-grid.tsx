@@ -77,14 +77,17 @@ const styles = stylex.create({
   },
 })
 
-type OverviewGridProps = {
+export function OverviewGrid({
+  overview,
+  range,
+  compare,
+  stale,
+}: {
   overview: DashboardOverview | undefined
   range: DashboardRange
   compare: boolean
   stale: boolean
-}
-
-export function OverviewGrid({ overview, range, compare, stale }: OverviewGridProps) {
+}) {
   const { period, unit } = DASHBOARD_RANGE_LABELS[range]
   const byUnit = m.dashboard_card_subtitle({ period: period(), detail: unit() })
   const byReads = m.dashboard_card_subtitle({

@@ -6,15 +6,6 @@ import { PeriodLegend } from "@/features/dashboard/components/overview/period-le
 import { TopUploaders } from "@/features/dashboard/components/overview/top-uploaders"
 import { m } from "@/paraglide/messages"
 
-type UploadersCardProps = {
-  overview: DashboardOverview | undefined
-  compare: boolean
-  subtitle: string
-  tone: string
-  previousTone: string
-  sx: Sx
-}
-
 export function UploadersCard({
   overview,
   compare,
@@ -22,7 +13,14 @@ export function UploadersCard({
   tone,
   previousTone,
   sx,
-}: UploadersCardProps) {
+}: {
+  overview: DashboardOverview | undefined
+  compare: boolean
+  subtitle: string
+  tone: string
+  previousTone: string
+  sx: Sx
+}) {
   return (
     <DashboardCard subtitle={subtitle} sx={sx} title={m.dashboard_uploaders_title()}>
       {overview === undefined ? (

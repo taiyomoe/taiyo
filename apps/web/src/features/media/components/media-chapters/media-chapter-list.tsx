@@ -61,16 +61,6 @@ const styles = stylex.create({
   },
 })
 
-type MediaChapterListProps = {
-  title: string
-  chapters: MediaChapter[] | undefined
-  total: number
-  page: number
-  stale: boolean
-  filtered: boolean
-  onClear: () => void
-}
-
 export function MediaChapterList({
   title,
   chapters,
@@ -79,7 +69,15 @@ export function MediaChapterList({
   stale,
   filtered,
   onClear,
-}: MediaChapterListProps) {
+}: {
+  title: string
+  chapters: MediaChapter[] | undefined
+  total: number
+  page: number
+  stale: boolean
+  filtered: boolean
+  onClear: () => void
+}) {
   const ref = useRef<HTMLElement>(null)
   const previousPage = useRef(page)
   const navigate = routeApi.useNavigate()
