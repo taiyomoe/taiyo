@@ -53,14 +53,17 @@ const styles = stylex.create({
   },
 })
 
-type CoverArtProps = {
+export const CoverArt = ({
+  title,
+  children,
+  footer,
+  style,
+}: {
   title: string
   children?: ReactNode
   footer?: ReactNode
   style?: CSSProperties
-}
-
-export const CoverArt = ({ title, children, footer, style }: CoverArtProps) => {
+}) => {
   const [from, to] = GRADIENTS[hash(title) % GRADIENTS.length] ?? DEFAULT_GRADIENT
   const styleProps = stylex.props(styles.cover)
 

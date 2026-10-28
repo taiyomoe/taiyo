@@ -10,14 +10,17 @@ import { groupChaptersStyles } from "@/features/groups/components/manage-group/c
 import { ScheduledChapterRow } from "@/features/groups/components/manage-group/chapters/scheduled-chapter-row"
 import { m } from "@/paraglide/messages"
 
-type ScheduledChaptersProps = {
+export function ScheduledChapters({
+  chapters,
+  can,
+  onEdit,
+  onDelete,
+}: {
   chapters: UpcomingChapter[]
   can: Permissions
   onEdit: (chapter: EditableChapter) => void
   onDelete: (chapterId: string) => void
-}
-
-export function ScheduledChapters({ chapters, can, onEdit, onDelete }: ScheduledChaptersProps) {
+}) {
   return (
     <section sx={groupChaptersStyles.section}>
       <h3 sx={groupChaptersStyles.sectionTitle}>

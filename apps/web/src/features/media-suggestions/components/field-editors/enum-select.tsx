@@ -6,21 +6,19 @@ import {
   SelectValue,
 } from "@taiyomoe/ui/components/ui/select"
 
-type EnumSelectProps<T extends string> = {
-  value: T
-  onChange: (value: T) => void
-  options: readonly T[]
-  labels: Record<T, () => string>
-  label: string
-}
-
 export function EnumSelect<T extends string>({
   value,
   onChange,
   options,
   labels,
   label,
-}: EnumSelectProps<T>) {
+}: {
+  value: T
+  onChange: (value: T) => void
+  options: readonly T[]
+  labels: Record<T, () => string>
+  label: string
+}) {
   return (
     <Select
       onValueChange={(next) => {

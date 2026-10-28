@@ -57,12 +57,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaTabsProps = {
-  media: Media
-  user: Session["user"] | null
-}
-
-export function MediaTabs({ media, user }: MediaTabsProps) {
+export function MediaTabs({ media, user }: { media: Media; user: Session["user"] | null }) {
   const { tab = "chapters", lang } = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
   const contentRatings = useDeferredValue(useSettings().contentRatings)

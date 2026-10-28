@@ -46,11 +46,13 @@ const styles = stylex.create({
   },
 })
 
-export type FieldProps = FieldPrimitive.Root.Props & {
+export function Field({
+  className,
+  sx,
+  ...props
+}: FieldPrimitive.Root.Props & {
   sx?: Sx
-}
-
-export function Field({ className, sx, ...props }: FieldProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.root, sx)
 
   return (
@@ -63,11 +65,13 @@ export function Field({ className, sx, ...props }: FieldProps): React.ReactEleme
   )
 }
 
-export type FieldLabelProps = FieldPrimitive.Label.Props & {
+export function FieldLabel({
+  className,
+  sx,
+  ...props
+}: FieldPrimitive.Label.Props & {
   sx?: Sx
-}
-
-export function FieldLabel({ className, sx, ...props }: FieldLabelProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.label, sx)
 
   return (
@@ -80,11 +84,13 @@ export function FieldLabel({ className, sx, ...props }: FieldLabelProps): React.
   )
 }
 
-export type FieldItemProps = FieldPrimitive.Item.Props & {
+export function FieldItem({
+  className,
+  sx,
+  ...props
+}: FieldPrimitive.Item.Props & {
   sx?: Sx
-}
-
-export function FieldItem({ className, sx, ...props }: FieldItemProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.item, sx)
 
   return (
@@ -97,15 +103,13 @@ export function FieldItem({ className, sx, ...props }: FieldItemProps): React.Re
   )
 }
 
-export type FieldDescriptionProps = FieldPrimitive.Description.Props & {
-  sx?: Sx
-}
-
 export function FieldDescription({
   className,
   sx,
   ...props
-}: FieldDescriptionProps): React.ReactElement {
+}: FieldPrimitive.Description.Props & {
+  sx?: Sx
+}): React.ReactElement {
   const styleProps = stylex.props(styles.description, sx)
 
   return (
@@ -118,11 +122,13 @@ export function FieldDescription({
   )
 }
 
-export type FieldErrorProps = FieldPrimitive.Error.Props & {
+export function FieldError({
+  className,
+  sx,
+  ...props
+}: FieldPrimitive.Error.Props & {
   sx?: Sx
-}
-
-export function FieldError({ className, sx, ...props }: FieldErrorProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.error, sx)
 
   return (

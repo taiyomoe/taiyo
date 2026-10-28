@@ -33,12 +33,7 @@ const styles = stylex.create({
   },
 })
 
-type SetPasswordDialogProps = {
-  user: ManagedUser
-  onClose: () => void
-}
-
-export function SetPasswordDialog({ user, onClose }: SetPasswordDialogProps) {
+export function SetPasswordDialog({ user, onClose }: { user: ManagedUser; onClose: () => void }) {
   const queryClient = useQueryClient()
   const setPassword = useMutation({
     mutationFn: async ({

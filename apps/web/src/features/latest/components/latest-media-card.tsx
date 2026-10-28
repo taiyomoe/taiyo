@@ -118,12 +118,13 @@ const styles = stylex.create({
   },
 })
 
-type LatestMediaCardProps = {
+export function LatestMediaCard({
+  media,
+  contentRatings,
+}: {
   media: LatestMediaUpdate
   contentRatings: readonly ContentRating[]
-}
-
-export function LatestMediaCard({ media, contentRatings }: LatestMediaCardProps) {
+}) {
   const [expanded, setExpanded] = useState(false)
   const all = useQuery({
     ...mediaLatestChaptersQueryOptions(media.id, contentRatings),

@@ -14,11 +14,7 @@ import { DashboardSection, ListCard } from "@/components/layout/dashboard-page"
 import { MyGroupRow } from "@/features/groups/components/manage-groups/my-group-row"
 import { m } from "@/paraglide/messages"
 
-type MyGroupsSectionProps = {
-  groups: MyGroup[]
-}
-
-export function MyGroupsSection({ groups }: MyGroupsSectionProps) {
+export function MyGroupsSection({ groups }: { groups: MyGroup[] }) {
   return (
     <DashboardSection title={m.my_groups_section()}>
       {groups.length === 0 ? (

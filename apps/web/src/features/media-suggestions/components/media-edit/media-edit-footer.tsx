@@ -35,15 +35,6 @@ const styles = stylex.create({
   },
 })
 
-type MediaEditFooterProps = {
-  mediaId: string
-  direct: boolean
-  error: string | null
-  changedCount: number
-  pending: boolean
-  onSubmit: () => void
-}
-
 export function MediaEditFooter({
   mediaId,
   direct,
@@ -51,7 +42,14 @@ export function MediaEditFooter({
   changedCount,
   pending,
   onSubmit,
-}: MediaEditFooterProps) {
+}: {
+  mediaId: string
+  direct: boolean
+  error: string | null
+  changedCount: number
+  pending: boolean
+  onSubmit: () => void
+}) {
   return (
     <div sx={styles.footer}>
       <span sx={styles.footerText}>

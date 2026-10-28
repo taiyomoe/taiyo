@@ -7,15 +7,6 @@ import { formatDateTime } from "@/components/fields/date-time-picker"
 import { hostOf, isWebUrl } from "@/features/uploads/lib/chapter-batch/links"
 import { m } from "@/paraglide/messages"
 
-type ChapterRowMetaProps = {
-  source: ChapterSource | null
-  link: string | null
-  linkVisible: boolean
-  releaseAt: Date | null
-  issues: RowIssues
-  attempted: boolean
-}
-
 const styles = stylex.create({
   rowMeta: {
     gap: "0.75rem",
@@ -54,7 +45,14 @@ export function ChapterRowMeta({
   releaseAt,
   issues,
   attempted,
-}: ChapterRowMetaProps) {
+}: {
+  source: ChapterSource | null
+  link: string | null
+  linkVisible: boolean
+  releaseAt: Date | null
+  issues: RowIssues
+  attempted: boolean
+}) {
   return (
     <div sx={styles.rowMeta}>
       <span sx={styles.source} title={source?.name}>

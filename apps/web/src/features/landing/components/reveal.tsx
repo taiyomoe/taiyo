@@ -8,12 +8,7 @@ const styles = stylex.create({
   },
 })
 
-type RevealProps = {
-  children: ReactNode
-  delay?: number
-}
-
-export const Reveal = ({ children, delay = 0 }: RevealProps) => {
+export const Reveal = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [seen, setSeen] = useState(false)
   const revealProps = stylex.props(styles.reveal)

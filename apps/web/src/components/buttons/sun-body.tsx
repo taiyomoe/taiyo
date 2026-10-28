@@ -43,12 +43,7 @@ const styles = stylex.create({
   },
 })
 
-type SunBodyProps = {
-  children: ReactNode
-  loading?: boolean
-}
-
-export const SunBody = ({ children, loading }: SunBodyProps) => (
+export const SunBody = ({ children, loading }: { children: ReactNode; loading?: boolean }) => (
   <>
     <span sx={[styles.label, loading === true && styles.labelLoading]}>{children}</span>
     {loading === true ? (

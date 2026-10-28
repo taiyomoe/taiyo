@@ -26,21 +26,19 @@ const styles = stylex.create({
   },
 })
 
-type MediaEditSectionProps = {
-  title: string
-  fields: readonly MediaEditField[]
-  changed: boolean
-  draft: MediaEditDraft
-  onChange: (draft: MediaEditDraft) => void
-}
-
 export function MediaEditSection({
   title,
   fields,
   changed,
   draft,
   onChange,
-}: MediaEditSectionProps) {
+}: {
+  title: string
+  fields: readonly MediaEditField[]
+  changed: boolean
+  draft: MediaEditDraft
+  onChange: (draft: MediaEditDraft) => void
+}) {
   return (
     <section sx={mediaEditStyles.card}>
       <div sx={styles.cardHeader}>

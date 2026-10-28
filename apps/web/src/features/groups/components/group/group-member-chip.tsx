@@ -30,11 +30,7 @@ const styles = stylex.create({
   },
 })
 
-type GroupMemberChipProps = {
-  member: GroupMember
-}
-
-export function GroupMemberChip({ member }: GroupMemberChipProps) {
+export function GroupMemberChip({ member }: { member: GroupMember }) {
   return (
     <li sx={styles.member}>
       <PersonAvatar

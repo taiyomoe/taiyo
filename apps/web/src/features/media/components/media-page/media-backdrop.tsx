@@ -28,11 +28,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaBackdropProps = {
-  src: string | null
-}
-
-export function MediaBackdrop({ src }: MediaBackdropProps) {
+export function MediaBackdrop({ src }: { src: string | null }) {
   return (
     <div aria-hidden sx={styles.backdrop}>
       {src === null ? null : (

@@ -36,19 +36,17 @@ const styles = stylex.create({
   },
 })
 
-type ChapterSourceHeadingProps = {
-  coverUrl: string | null
-  mediaTitle: string
-  label: string
-  title: string
-}
-
 export function ChapterSourceHeading({
   coverUrl,
   mediaTitle,
   label,
   title,
-}: ChapterSourceHeadingProps) {
+}: {
+  coverUrl: string | null
+  mediaTitle: string
+  label: string
+  title: string
+}) {
   return (
     <div sx={styles.heading}>
       <Cover src={coverUrl} sx={styles.cover} />

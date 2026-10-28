@@ -11,17 +11,15 @@ const styles = stylex.create({
   },
 })
 
-type MemberPermissionsProps = {
-  role: GroupMembershipRole
-  permissions: readonly GroupPermission[] | null
-  showOwner?: boolean
-}
-
 export function MemberPermissions({
   role,
   permissions,
   showOwner = false,
-}: MemberPermissionsProps) {
+}: {
+  role: GroupMembershipRole
+  permissions: readonly GroupPermission[] | null
+  showOwner?: boolean
+}) {
   if (role === "OWNER") {
     return showOwner ? <span sx={styles.muted}>{m.my_groups_all_permissions()}</span> : null
   }

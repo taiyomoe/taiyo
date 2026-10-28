@@ -4,12 +4,13 @@ import * as stylex from "@stylexjs/stylex"
 import { homeStyles } from "@/features/dashboard/components/home/home-styles"
 import { m } from "@/paraglide/messages"
 
-type OverviewStatsProps = {
+export function OverviewStats({
+  counts,
+  acceptedLabel,
+}: {
   counts: { pending: number; accepted: number; rejected: number }
   acceptedLabel: string
-}
-
-export function OverviewStats({ counts, acceptedLabel }: OverviewStatsProps) {
+}) {
   return (
     <dl sx={homeStyles.stats}>
       {[

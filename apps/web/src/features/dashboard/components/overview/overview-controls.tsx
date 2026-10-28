@@ -56,12 +56,7 @@ const styles = stylex.create({
 const isRange = (value: unknown): value is DashboardRange =>
   DASHBOARD_RANGES.some((range) => range === value)
 
-type OverviewControlsProps = {
-  range: DashboardRange
-  compare: boolean
-}
-
-export function OverviewControls({ range, compare }: OverviewControlsProps) {
+export function OverviewControls({ range, compare }: { range: DashboardRange; compare: boolean }) {
   const navigate = useNavigate({ from: "/dashboard/" })
 
   return (

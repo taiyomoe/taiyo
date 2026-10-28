@@ -53,11 +53,7 @@ const OUTCOME_LABELS: Record<JobOutcome, () => string> = {
   review: m.uploads_state_review,
 }
 
-type UploadTrayJobProps = {
-  job: UploadJob
-}
-
-export function UploadTrayJob({ job }: UploadTrayJobProps) {
+export function UploadTrayJob({ job }: { job: UploadJob }) {
   const { state } = job
   let label: string
 

@@ -14,11 +14,7 @@ import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
-type ClaimCardProps = {
-  request: OwnershipRequest
-}
-
-export function ClaimCard({ request }: ClaimCardProps) {
+export function ClaimCard({ request }: { request: OwnershipRequest }) {
   const queryClient = useQueryClient()
   const review = useMutation({
     mutationFn: async ({ id, note }: { id: string; note: string | null }) =>

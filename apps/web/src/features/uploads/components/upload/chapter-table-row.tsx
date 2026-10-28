@@ -15,17 +15,6 @@ import {
 } from "@/features/uploads/lib/chapter-batch/upload-rows"
 import { m } from "@/paraglide/messages"
 
-type ChapterTableRowProps = {
-  row: UploadRow
-  issues: RowIssues
-  releaseAt: Date | null
-  template: string
-  attempted: boolean
-  onChange: (patch: Partial<UploadRow>) => void
-  onEditPages: () => void
-  onRemove: () => void
-}
-
 const styles = stylex.create({
   row: {
     gap: "0.375rem",
@@ -66,7 +55,16 @@ export function ChapterTableRow({
   onChange,
   onEditPages,
   onRemove,
-}: ChapterTableRowProps) {
+}: {
+  row: UploadRow
+  issues: RowIssues
+  releaseAt: Date | null
+  template: string
+  attempted: boolean
+  onChange: (patch: Partial<UploadRow>) => void
+  onEditPages: () => void
+  onRemove: () => void
+}) {
   const fromTemplate = resolveLink("", template, linkNumber(row))
   const link = resolveLink(row.link, template, linkNumber(row))
   const linkVisible = row.source === null || row.linkOpen || row.link !== ""

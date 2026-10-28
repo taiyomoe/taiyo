@@ -22,13 +22,15 @@ const styles = stylex.create({
   },
 })
 
-type StaffRowProps = {
+export function StaffRow({
+  staff,
+  onRoleChange,
+  onRemove,
+}: {
   staff: MediaEditStaff
   onRoleChange: (role: StaffRole) => void
   onRemove: () => void
-}
-
-export function StaffRow({ staff, onRoleChange, onRemove }: StaffRowProps) {
+}) {
   return (
     <div sx={styles.staffRow}>
       <span sx={styles.staffName}>{staff.name}</span>

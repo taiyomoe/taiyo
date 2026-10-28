@@ -7,19 +7,6 @@ import { MetricFigure } from "@/features/dashboard/components/overview/metric-fi
 import { PeriodLegend } from "@/features/dashboard/components/overview/period-legend"
 import { TrendChart } from "@/features/dashboard/components/overview/trend-chart"
 
-type TrendCardProps = {
-  overview: DashboardOverview | undefined
-  metric: "reads" | "newAccounts"
-  compare: boolean
-  title: string
-  subtitle: string
-  empty: string
-  minHeight: number
-  ticks: number
-  tone: string
-  sx: Sx
-}
-
 export function TrendCard({
   overview,
   metric,
@@ -31,7 +18,18 @@ export function TrendCard({
   ticks,
   tone,
   sx,
-}: TrendCardProps) {
+}: {
+  overview: DashboardOverview | undefined
+  metric: "reads" | "newAccounts"
+  compare: boolean
+  title: string
+  subtitle: string
+  empty: string
+  minHeight: number
+  ticks: number
+  tone: string
+  sx: Sx
+}) {
   return (
     <DashboardCard
       figure={<MetricFigure compare={compare} metric={overview?.metrics[metric]} />}

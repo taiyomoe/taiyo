@@ -58,13 +58,7 @@ const styles = stylex.create({
   },
 })
 
-type ReviewCardProps = {
-  quote: string
-  who: string
-  role: string
-}
-
-export const ReviewCard = ({ quote, who, role }: ReviewCardProps) => (
+export const ReviewCard = ({ quote, who, role }: { quote: string; who: string; role: string }) => (
   <div sx={styles.card}>
     <Stars filled={1} />
     <p sx={styles.quote}>“{quote}”</p>

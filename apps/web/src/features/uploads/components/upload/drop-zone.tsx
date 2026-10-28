@@ -11,13 +11,6 @@ import {
 } from "@/features/uploads/lib/chapter-batch/sources"
 import { m } from "@/paraglide/messages"
 
-type DropZoneProps = {
-  reading: boolean
-  unsupported: string[]
-  onFiles: (files: Promise<DroppedFile[]>) => void
-  onAddLinkOnly: () => void
-}
-
 const styles = stylex.create({
   drop: {
     borderColor: colors.border,
@@ -78,7 +71,17 @@ const styles = stylex.create({
   },
 })
 
-export function DropZone({ reading, unsupported, onFiles, onAddLinkOnly }: DropZoneProps) {
+export function DropZone({
+  reading,
+  unsupported,
+  onFiles,
+  onAddLinkOnly,
+}: {
+  reading: boolean
+  unsupported: string[]
+  onFiles: (files: Promise<DroppedFile[]>) => void
+  onAddLinkOnly: () => void
+}) {
   const [over, setOver] = useState(false)
 
   return (

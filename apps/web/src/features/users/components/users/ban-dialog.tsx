@@ -39,12 +39,7 @@ const BAN_LENGTHS = [
   { value: "forever", days: null, label: m.ban_length_forever },
 ] as const
 
-type BanDialogProps = {
-  user: ManagedUser | null
-  onClose: () => void
-}
-
-export function BanDialog({ user, onClose }: BanDialogProps) {
+export function BanDialog({ user, onClose }: { user: ManagedUser | null; onClose: () => void }) {
   const queryClient = useQueryClient()
   const ban = useMutation({
     mutationFn: async ({

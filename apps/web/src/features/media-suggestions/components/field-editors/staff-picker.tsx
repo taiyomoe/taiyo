@@ -18,11 +18,7 @@ import { m } from "@/paraglide/messages"
 
 type StaffOption = { id: string; name: string }
 
-type StaffPickerProps = {
-  onPick: (staff: StaffOption) => void
-}
-
-export function StaffPicker({ onPick }: StaffPickerProps) {
+export function StaffPicker({ onPick }: { onPick: (staff: StaffOption) => void }) {
   const [input, setInput] = useState("")
   const query = useDeferredValue(input.trim())
   const { data, isFetching } = useQuery({

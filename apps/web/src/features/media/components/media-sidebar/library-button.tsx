@@ -26,12 +26,13 @@ const styles = stylex.create({
   },
 })
 
-type LibraryButtonProps = {
+export function LibraryButton({
+  mediaId,
+  status,
+}: {
   mediaId: string
   status: LibraryStatus | null
-}
-
-export function LibraryButton({ mediaId, status }: LibraryButtonProps) {
+}) {
   const setStatus = useSetLibraryStatus(mediaId)
 
   return (

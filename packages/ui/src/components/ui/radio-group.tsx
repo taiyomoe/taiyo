@@ -117,11 +117,13 @@ const styles = stylex.create({
   },
 })
 
-export type RadioGroupProps = RadioGroupPrimitive.Props & {
+export function RadioGroup({
+  className,
+  sx,
+  ...props
+}: RadioGroupPrimitive.Props & {
   sx?: Sx
-}
-
-export function RadioGroup({ className, sx, ...props }: RadioGroupProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.group, sx)
 
   return (
@@ -134,11 +136,13 @@ export function RadioGroup({ className, sx, ...props }: RadioGroupProps): React.
   )
 }
 
-export type RadioProps = RadioPrimitive.Root.Props & {
+export function Radio({
+  className,
+  sx,
+  ...props
+}: RadioPrimitive.Root.Props & {
   sx?: Sx
-}
-
-export function Radio({ className, sx, ...props }: RadioProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.radio, sx)
   const indicatorProps = stylex.props(styles.indicator)
 

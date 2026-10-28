@@ -52,14 +52,17 @@ const styles = stylex.create({
   },
 })
 
-type UserRowProps = {
+export function UserRow({
+  user,
+  can,
+  self,
+  onBan,
+}: {
   user: ManagedUser
   can: Permissions
   self: boolean
   onBan: (user: ManagedUser) => void
-}
-
-export function UserRow({ user, can, self, onBan }: UserRowProps) {
+}) {
   return (
     <ListRow>
       <PersonAvatar person={user} />

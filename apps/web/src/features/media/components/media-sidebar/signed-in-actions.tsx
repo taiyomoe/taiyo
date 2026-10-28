@@ -21,12 +21,7 @@ const styles = stylex.create({
   },
 })
 
-type SignedInActionsProps = {
-  mediaId: string
-  canEdit: boolean
-}
-
-export function SignedInActions({ mediaId, canEdit }: SignedInActionsProps) {
+export function SignedInActions({ mediaId, canEdit }: { mediaId: string; canEdit: boolean }) {
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const progress = useQuery(readingProgressQueryOptions(mediaId, contentRatings))
   const entry = useQuery(libraryEntryQueryOptions(mediaId))

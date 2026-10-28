@@ -37,12 +37,13 @@ const styles = stylex.create({
   },
 })
 
-type UsersFiltersProps = {
+export function UsersFilters({
+  filter,
+  onChange,
+}: {
   filter: UsersFilter
   onChange: (patch: Partial<UsersFilter>) => void
-}
-
-export function UsersFilters({ filter, onChange }: UsersFiltersProps) {
+}) {
   const [input, setInput] = useState(filter.search ?? "")
 
   return (

@@ -28,7 +28,11 @@ const styles = stylex.create({
   },
 })
 
-type MyRequestRowProps = {
+export function MyRequestRow({
+  row,
+  cancelling,
+  onCancel,
+}: {
   row: {
     kind: "claim" | "creation"
     id: string
@@ -40,9 +44,7 @@ type MyRequestRowProps = {
   }
   cancelling: boolean
   onCancel: () => void
-}
-
-export function MyRequestRow({ row, cancelling, onCancel }: MyRequestRowProps) {
+}) {
   return (
     <ListRow>
       <GroupAvatar id={row.groupId ?? row.id} name={row.name} />

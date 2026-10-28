@@ -11,11 +11,7 @@ const styles = stylex.create({
   },
 })
 
-type PermissionChipsProps = {
-  permissions: readonly GroupPermission[]
-}
-
-export function PermissionChips({ permissions }: PermissionChipsProps) {
+export function PermissionChips({ permissions }: { permissions: readonly GroupPermission[] }) {
   return (
     <div sx={styles.chips}>
       {permissions.map((permission) => (

@@ -14,13 +14,15 @@ const LINK_PLACEHOLDERS: Partial<Record<string, string>> = {
   myAnimeList: "1224",
 }
 
-type LinkFieldProps = {
+export function LinkField({
+  linkKey: key,
+  links: value,
+  onChange,
+}: {
   linkKey: (typeof MEDIA_LINK_KEYS)[number]
   links: MediaEditDraft["links"]
   onChange: (links: MediaEditDraft["links"]) => void
-}
-
-export function LinkField({ linkKey: key, links: value, onChange }: LinkFieldProps) {
+}) {
   const current = value[key]
   const error = getLinkError(key, current)
 

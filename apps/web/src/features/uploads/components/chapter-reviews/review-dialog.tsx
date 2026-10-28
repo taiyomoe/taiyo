@@ -4,19 +4,21 @@ import { Dialog, DialogPopup } from "@taiyomoe/ui/components/ui/dialog"
 import type { ChapterSubmission } from "@/features/uploads/api/submissions"
 import { ReviewForm } from "@/features/uploads/components/chapter-reviews/review-form"
 
-type ReviewDialogProps = {
-  submission: ChapterSubmission | null
-  can: Permissions
-  onClose: () => void
-}
-
 const styles = stylex.create({
   popup: {
     maxWidth: "56rem",
   },
 })
 
-export function ReviewDialog({ submission, can, onClose }: ReviewDialogProps) {
+export function ReviewDialog({
+  submission,
+  can,
+  onClose,
+}: {
+  submission: ChapterSubmission | null
+  can: Permissions
+  onClose: () => void
+}) {
   return (
     <Dialog
       onOpenChange={(open) => {

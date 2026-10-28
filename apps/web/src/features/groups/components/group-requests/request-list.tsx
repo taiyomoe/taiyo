@@ -27,12 +27,13 @@ const styles = stylex.create({
   },
 })
 
-type RequestListProps<T> = {
+export function RequestList<T>({
+  items,
+  render,
+}: {
   items: T[] | undefined
   render: (item: T) => ReactNode
-}
-
-export function RequestList<T>({ items, render }: RequestListProps<T>) {
+}) {
   if (items === undefined) {
     return <Skeleton sx={styles.skeleton} />
   }

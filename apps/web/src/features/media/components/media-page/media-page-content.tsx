@@ -25,13 +25,15 @@ const styles = stylex.create({
   },
 })
 
-type MediaPageContentProps = {
+export function MediaPageContent({
+  mediaId,
+  user,
+  canEdit,
+}: {
   mediaId: string
   user: Session["user"] | null
   canEdit: boolean
-}
-
-export function MediaPageContent({ mediaId, user, canEdit }: MediaPageContentProps) {
+}) {
   const signedIn = user !== null
   const { data: media } = useSuspenseQuery(mediaQueryOptions(mediaId))
   const contentRatings = useDeferredValue(useSettings().contentRatings)

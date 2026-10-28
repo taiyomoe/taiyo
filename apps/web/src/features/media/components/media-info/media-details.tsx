@@ -50,11 +50,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaDetailsProps = {
-  media: Media
-}
-
-export function MediaDetails({ media }: MediaDetailsProps) {
+export function MediaDetails({ media }: { media: Media }) {
   const years = getMediaYears(media)
   const authors = media.staffs.filter((staff) => staff.role === "AUTHOR")
   const artists = media.staffs.filter((staff) => staff.role === "ARTIST")
@@ -92,12 +88,7 @@ export function MediaDetails({ media }: MediaDetailsProps) {
   )
 }
 
-type DetailProps = {
-  term: string
-  children: ReactNode
-}
-
-function Detail({ term, children }: DetailProps) {
+function Detail({ term, children }: { term: string; children: ReactNode }) {
   return (
     <>
       <dt sx={styles.term}>{term}</dt>

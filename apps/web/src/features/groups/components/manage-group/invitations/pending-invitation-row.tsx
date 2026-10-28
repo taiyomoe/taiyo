@@ -35,19 +35,17 @@ const styles = stylex.create({
   },
 })
 
-type PendingInvitationRowProps = {
-  invitation: GroupInvitation
-  canCancel: boolean
-  cancelling: boolean
-  onCancel: () => void
-}
-
 export function PendingInvitationRow({
   invitation,
   canCancel,
   cancelling,
   onCancel,
-}: PendingInvitationRowProps) {
+}: {
+  invitation: GroupInvitation
+  canCancel: boolean
+  cancelling: boolean
+  onCancel: () => void
+}) {
   return (
     <ListRow>
       <PersonAvatar person={invitation.invitee} />

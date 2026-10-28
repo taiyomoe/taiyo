@@ -86,13 +86,15 @@ export function ContentFilterItems() {
   })
 }
 
-type ContentFilterEmptyProps = {
+export function ContentFilterEmpty({
+  title,
+  description,
+  sx,
+}: {
   title: string
   description: string
   sx?: Sx
-}
-
-export function ContentFilterEmpty({ title, description, sx }: ContentFilterEmptyProps) {
+}) {
   return (
     <Empty sx={sx}>
       <EmptyHeader>

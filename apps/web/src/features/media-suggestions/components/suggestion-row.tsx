@@ -66,13 +66,15 @@ const styles = stylex.create({
   },
 })
 
-type SuggestionRowProps = {
+export function SuggestionRow({
+  suggestion,
+  showAuthor = false,
+  actions,
+}: {
   suggestion: MediaSuggestion
   showAuthor?: boolean
   actions?: ReactNode
-}
-
-export function SuggestionRow({ suggestion, showAuthor = false, actions }: SuggestionRowProps) {
+}) {
   return (
     <ListRow>
       <Cover src={suggestion.media.coverUrl} sx={styles.cover} />

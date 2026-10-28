@@ -49,13 +49,15 @@ const styles = stylex.create({
   },
 })
 
-type LanguageSelectProps = {
+export function LanguageSelect({
+  languages,
+  value,
+  onChange,
+}: {
   languages: MediaChapterFacets["languages"]
   value: string | undefined
   onChange: (language: string | undefined) => void
-}
-
-export function LanguageSelect({ languages, value, onChange }: LanguageSelectProps) {
+}) {
   const selected = languages.find((entry) => entry.language === value)
 
   return (

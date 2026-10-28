@@ -34,12 +34,7 @@ const styles = stylex.create({
   },
 })
 
-type ContentRatingLabelProps = {
-  rating: ContentRating
-  label: string
-}
-
-export function ContentRatingLabel({ rating, label }: ContentRatingLabelProps) {
+export function ContentRatingLabel({ rating, label }: { rating: ContentRating; label: string }) {
   if (rating === "NSFW") {
     return (
       <span sx={styles.label}>

@@ -15,12 +15,13 @@ import { fieldEditorStyles } from "@/features/media-suggestions/components/field
 import { TAG_OPTIONS } from "@/features/media-suggestions/lib/media-edit-labels"
 import { m } from "@/paraglide/messages"
 
-type TagPickerProps = {
+export function TagPicker({
+  selected,
+  onPick,
+}: {
   selected: MediaEditDraft["tags"]
   onPick: (key: string) => void
-}
-
-export function TagPicker({ selected, onPick }: TagPickerProps) {
+}) {
   const [input, setInput] = useState("")
 
   return (

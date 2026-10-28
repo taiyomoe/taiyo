@@ -10,11 +10,7 @@ const styles = stylex.create({
   },
 })
 
-type ReadButtonProps = {
-  progress: ReadingProgress | null
-}
-
-export function ReadButton({ progress }: ReadButtonProps) {
+export function ReadButton({ progress }: { progress: ReadingProgress | null }) {
   const next = progress?.next ?? null
   let label = next === null ? m.media_caught_up() : m.media_continue({ number: next.number })
 

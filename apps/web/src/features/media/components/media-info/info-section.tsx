@@ -19,12 +19,7 @@ const styles = stylex.create({
   },
 })
 
-type InfoSectionProps = {
-  title: string
-  children: ReactNode
-}
-
-export function InfoSection({ title, children }: InfoSectionProps) {
+export function InfoSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section sx={styles.section}>
       <h3 sx={styles.heading}>{title}</h3>

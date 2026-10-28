@@ -21,12 +21,13 @@ const styles = stylex.create({
   },
 })
 
-type ChapterSearchFieldProps = {
+export function ChapterSearchField({
+  value,
+  onSearch,
+}: {
   value: string
   onSearch: (q?: string) => void
-}
-
-export function ChapterSearchField({ value, onSearch }: ChapterSearchFieldProps) {
+}) {
   const [draft, setDraft] = useState<string | null>(null)
   const [synced, setSynced] = useState(value)
   const search = useEffectEvent((q: string) => {

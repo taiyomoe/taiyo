@@ -14,19 +14,21 @@ import type { UploadRow } from "@/features/uploads/lib/chapter-batch/upload-rows
 import { PagesPreview } from "@/features/uploads/components/upload/pages-preview"
 import { m } from "@/paraglide/messages"
 
-type PagesDialogProps = {
-  row: UploadRow | undefined
-  onClose: () => void
-  onRowChange: (key: string, patch: Partial<UploadRow>) => void
-}
-
 const styles = stylex.create({
   popup: {
     maxWidth: "60rem",
   },
 })
 
-export function PagesDialog({ row, onClose, onRowChange }: PagesDialogProps) {
+export function PagesDialog({
+  row,
+  onClose,
+  onRowChange,
+}: {
+  row: UploadRow | undefined
+  onClose: () => void
+  onRowChange: (key: string, patch: Partial<UploadRow>) => void
+}) {
   const chapter =
     row?.source === undefined || row.source === null
       ? null

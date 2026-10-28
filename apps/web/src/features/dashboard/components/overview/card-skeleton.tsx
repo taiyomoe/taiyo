@@ -11,10 +11,6 @@ const styles = stylex.create({
   },
 })
 
-type CardSkeletonProps = {
-  sx?: Sx
-}
-
-export function CardSkeleton({ sx }: CardSkeletonProps) {
+export function CardSkeleton({ sx }: { sx?: Sx }) {
   return <Skeleton sx={[styles.skeleton, sx]} />
 }

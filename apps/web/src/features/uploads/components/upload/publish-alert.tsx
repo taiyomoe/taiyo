@@ -4,20 +4,23 @@ import { Alert, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/
 import type { ReleaseSettings } from "@/features/uploads/lib/chapter-batch/release"
 import { m } from "@/paraglide/messages"
 
-type PublishAlertProps = {
-  publishes: boolean
-  mode: ReleaseSettings["mode"]
-  pendingCount: number | undefined
-  slotsLeft: number
-}
-
 const PUBLISH_TITLES: Record<ReleaseSettings["mode"], () => string> = {
   now: m.upload_will_publish,
   date: m.uploads_state_scheduled,
   delay: m.uploads_state_scheduled,
 }
 
-export function PublishAlert({ publishes, mode, pendingCount, slotsLeft }: PublishAlertProps) {
+export function PublishAlert({
+  publishes,
+  mode,
+  pendingCount,
+  slotsLeft,
+}: {
+  publishes: boolean
+  mode: ReleaseSettings["mode"]
+  pendingCount: number | undefined
+  slotsLeft: number
+}) {
   const scheduled = mode !== "now"
   let releaseDescription = m.upload_will_review_description()
 

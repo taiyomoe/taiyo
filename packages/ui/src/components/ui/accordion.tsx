@@ -93,11 +93,13 @@ export function Accordion(props: AccordionPrimitive.Root.Props): React.ReactElem
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />
 }
 
-export type AccordionItemProps = AccordionPrimitive.Item.Props & {
+export function AccordionItem({
+  className,
+  sx,
+  ...props
+}: AccordionPrimitive.Item.Props & {
   sx?: Sx
-}
-
-export function AccordionItem({ className, sx, ...props }: AccordionItemProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.item, sx)
 
   return (
@@ -110,16 +112,14 @@ export function AccordionItem({ className, sx, ...props }: AccordionItemProps): 
   )
 }
 
-export type AccordionTriggerProps = AccordionPrimitive.Trigger.Props & {
-  sx?: Sx
-}
-
 export function AccordionTrigger({
   className,
   children,
   sx,
   ...props
-}: AccordionTriggerProps): React.ReactElement {
+}: AccordionPrimitive.Trigger.Props & {
+  sx?: Sx
+}): React.ReactElement {
   const styleProps = stylex.props(styles.trigger, accordionTriggerMarker, sx)
 
   return (
@@ -137,16 +137,14 @@ export function AccordionTrigger({
   )
 }
 
-export type AccordionPanelProps = AccordionPrimitive.Panel.Props & {
-  sx?: Sx
-}
-
 export function AccordionPanel({
   className,
   children,
   sx,
   ...props
-}: AccordionPanelProps): React.ReactElement {
+}: AccordionPrimitive.Panel.Props & {
+  sx?: Sx
+}): React.ReactElement {
   const innerProps = stylex.props(styles.panelInner, sx)
 
   return (

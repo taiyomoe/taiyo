@@ -26,19 +26,17 @@ const styles = stylex.create({
   },
 })
 
-type FieldReviewColumnProps = {
-  label: string
-  field: MediaEditField
-  draft: MediaEditDraft
-  highlight?: boolean
-}
-
 export function FieldReviewColumn({
   label,
   field,
   draft,
   highlight = false,
-}: FieldReviewColumnProps) {
+}: {
+  label: string
+  field: MediaEditField
+  draft: MediaEditDraft
+  highlight?: boolean
+}) {
   return (
     <div sx={[styles.column, highlight && styles.suggested]}>
       <span sx={styles.columnLabel}>{label}</span>

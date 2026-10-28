@@ -13,11 +13,7 @@ const styles = stylex.create({
   },
 })
 
-type RoleBadgeProps = {
-  role: GroupMembershipRole
-}
-
-export function RoleBadge({ role }: RoleBadgeProps) {
+export function RoleBadge({ role }: { role: GroupMembershipRole }) {
   return role === "OWNER" ? (
     <Badge variant="secondary">
       <Crown {...stylex.props(styles.crown)} />

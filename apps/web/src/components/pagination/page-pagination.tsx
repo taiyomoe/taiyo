@@ -29,14 +29,17 @@ const styles = stylex.create({
   },
 })
 
-type PagePaginationProps = {
+export function PagePagination({
+  page,
+  pageCount,
+  renderLink,
+  onJump,
+}: {
   page: number
   pageCount: number
   renderLink: (page: number) => ReactElement
   onJump: (page: number) => void
-}
-
-export function PagePagination({ page, pageCount, renderLink, onJump }: PagePaginationProps) {
+}) {
   if (pageCount <= 1) {
     return null
   }

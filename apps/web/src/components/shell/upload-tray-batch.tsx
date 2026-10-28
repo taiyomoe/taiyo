@@ -36,11 +36,11 @@ const styles = stylex.create({
   },
 })
 
-type UploadTrayBatchProps = {
+export function UploadTrayBatch({
+  batch,
+}: {
   batch: ReturnType<typeof uploadStore.getSnapshot>[number]
-}
-
-export function UploadTrayBatch({ batch }: UploadTrayBatchProps) {
+}) {
   const batchSummary = summarize(batch.jobs)
   const batchActive = batchSummary.queued + batchSummary.uploading > 0
 

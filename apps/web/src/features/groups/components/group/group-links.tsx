@@ -25,11 +25,7 @@ const styles = stylex.create({
   },
 })
 
-type GroupLinksProps = {
-  group: Group
-}
-
-export function GroupLinks({ group }: GroupLinksProps) {
+export function GroupLinks({ group }: { group: Group }) {
   const links = LINKS.flatMap(([key, label]) => {
     const value = group[key]
 

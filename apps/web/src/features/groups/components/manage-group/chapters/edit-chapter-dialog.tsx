@@ -11,12 +11,13 @@ const styles = stylex.create({
   },
 })
 
-type EditChapterDialogProps = {
+export function EditChapterDialog({
+  chapter,
+  onClose,
+}: {
   chapter: EditableChapter | null
   onClose: () => void
-}
-
-export function EditChapterDialog({ chapter, onClose }: EditChapterDialogProps) {
+}) {
   return (
     <Dialog
       onOpenChange={(open) => {

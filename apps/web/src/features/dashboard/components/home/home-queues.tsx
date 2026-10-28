@@ -7,11 +7,7 @@ import { homeStyles } from "@/features/dashboard/components/home/home-styles"
 import { QueueCard } from "@/features/dashboard/components/home/queue-card"
 import { m } from "@/paraglide/messages"
 
-type HomeQueuesProps = {
-  queues: MyOverview["queues"] | undefined
-}
-
-export function HomeQueues({ queues }: HomeQueuesProps) {
+export function HomeQueues({ queues }: { queues: MyOverview["queues"] | undefined }) {
   const visible =
     queues === undefined
       ? []

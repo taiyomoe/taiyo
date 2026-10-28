@@ -66,11 +66,7 @@ const ERRORS = {
   GROUP_INVITATION_EXPIRED: m.invitation_error_expired,
 }
 
-type InvitationCardProps = {
-  invitation: MyGroupInvitation
-}
-
-export function InvitationCard({ invitation }: InvitationCardProps) {
+export function InvitationCard({ invitation }: { invitation: MyGroupInvitation }) {
   const queryClient = useQueryClient()
   const answer = useMutation({
     mutationFn: async ({ id, accept }: { id: string; accept: boolean }) =>

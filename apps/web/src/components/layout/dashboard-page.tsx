@@ -93,15 +93,19 @@ const styles = stylex.create({
   },
 })
 
-type DashboardPageProps = {
+export function DashboardPage({
+  eyebrow,
+  title,
+  subtitle,
+  actions,
+  children,
+}: {
   eyebrow?: ReactNode
   title: ReactNode
   subtitle?: ReactNode
   actions?: ReactNode
   children: ReactNode
-}
-
-export function DashboardPage({ eyebrow, title, subtitle, actions, children }: DashboardPageProps) {
+}) {
   return (
     <div sx={styles.page}>
       <div sx={styles.header}>
@@ -117,13 +121,15 @@ export function DashboardPage({ eyebrow, title, subtitle, actions, children }: D
   )
 }
 
-type DashboardSectionProps = {
+export function DashboardSection({
+  title,
+  action,
+  children,
+}: {
   title: ReactNode
   action?: ReactNode
   children: ReactNode
-}
-
-export function DashboardSection({ title, action, children }: DashboardSectionProps) {
+}) {
   return (
     <section sx={styles.section}>
       <div sx={styles.sectionHeader}>

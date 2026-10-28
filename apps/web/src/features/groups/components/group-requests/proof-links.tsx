@@ -40,11 +40,7 @@ const styles = stylex.create({
   },
 })
 
-type ProofLinksProps = {
-  links: readonly string[]
-}
-
-export function ProofLinks({ links }: ProofLinksProps) {
+export function ProofLinks({ links }: { links: readonly string[] }) {
   return (
     <div sx={styles.proof}>
       <p sx={styles.proofTitle}>{m.review_proof()}</p>

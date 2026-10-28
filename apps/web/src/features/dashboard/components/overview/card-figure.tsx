@@ -17,12 +17,7 @@ const styles = stylex.create({
   },
 })
 
-type CardFigureProps = {
-  value: string
-  children?: ReactNode
-}
-
-export function CardFigure({ value, children }: CardFigureProps) {
+export function CardFigure({ value, children }: { value: string; children?: ReactNode }) {
   return (
     <div sx={styles.figure}>
       <span sx={styles.figureValue}>{value}</span>

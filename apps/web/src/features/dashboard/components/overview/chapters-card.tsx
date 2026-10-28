@@ -8,15 +8,6 @@ import { MetricFigure } from "@/features/dashboard/components/overview/metric-fi
 import { PeriodLegend } from "@/features/dashboard/components/overview/period-legend"
 import { m } from "@/paraglide/messages"
 
-type ChaptersCardProps = {
-  overview: DashboardOverview | undefined
-  compare: boolean
-  subtitle: string
-  tone: string
-  previousTone: string
-  sx: Sx
-}
-
 export function ChaptersCard({
   overview,
   compare,
@@ -24,7 +15,14 @@ export function ChaptersCard({
   tone,
   previousTone,
   sx,
-}: ChaptersCardProps) {
+}: {
+  overview: DashboardOverview | undefined
+  compare: boolean
+  subtitle: string
+  tone: string
+  previousTone: string
+  sx: Sx
+}) {
   return (
     <DashboardCard
       figure={<MetricFigure compare={compare} metric={overview?.metrics.chaptersUploaded} />}

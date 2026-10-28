@@ -13,13 +13,6 @@ import { unwrap } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
-type BulkReviewBarProps = {
-  selection: string[]
-  allSelected: boolean
-  onToggleAll: (checked: boolean) => void
-  onClear: () => void
-}
-
 const styles = stylex.create({
   bulkBar: {
     gap: "0.75rem",
@@ -48,7 +41,12 @@ export function BulkReviewBar({
   allSelected,
   onToggleAll,
   onClear,
-}: BulkReviewBarProps) {
+}: {
+  selection: string[]
+  allSelected: boolean
+  onToggleAll: (checked: boolean) => void
+  onClear: () => void
+}) {
   const invalidate = useInvalidateReview()
   const review = useMutation({
     mutationFn: async ({ chapterIds, reason: note }: { chapterIds: string[]; reason?: string }) => {

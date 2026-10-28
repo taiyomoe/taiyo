@@ -8,12 +8,7 @@ import { myOwnershipRequestsQueryOptions } from "@/features/groups/api/groups"
 import { ClaimGroupDialog } from "@/features/groups/components/group/claim-group-dialog"
 import { m } from "@/paraglide/messages"
 
-type ClaimActionProps = {
-  group: Group
-  user: Session["user"] | null
-}
-
-export function ClaimAction({ group, user }: ClaimActionProps) {
+export function ClaimAction({ group, user }: { group: Group; user: Session["user"] | null }) {
   const requests = useQuery({ ...myOwnershipRequestsQueryOptions, enabled: user !== null })
   const pending = requests.data?.some(
     (request) => request.groupId === group.id && request.status === "PENDING",

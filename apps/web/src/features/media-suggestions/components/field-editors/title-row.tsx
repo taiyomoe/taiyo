@@ -33,16 +33,6 @@ const styles = stylex.create({
   },
 })
 
-type TitleRowProps = {
-  title: MediaEditTitle
-  first: boolean
-  last: boolean
-  onUpdate: (patch: Partial<MediaEditTitle>) => void
-  onMakeMain: () => void
-  onMove: (offset: number) => void
-  onRemove: () => void
-}
-
 export function TitleRow({
   title,
   first,
@@ -51,7 +41,15 @@ export function TitleRow({
   onMakeMain,
   onMove,
   onRemove,
-}: TitleRowProps) {
+}: {
+  title: MediaEditTitle
+  first: boolean
+  last: boolean
+  onUpdate: (patch: Partial<MediaEditTitle>) => void
+  onMakeMain: () => void
+  onMove: (offset: number) => void
+  onRemove: () => void
+}) {
   return (
     <div sx={styles.titleRow}>
       <Button

@@ -35,12 +35,13 @@ const styles = stylex.create({
 
 type ChapterSearch = ReturnType<typeof routeApi.useSearch>
 
-type MediaChaptersProps = {
+export function MediaChapters({
+  mediaId,
+  user,
+}: {
   mediaId: string
   user: Session["user"] | null
-}
-
-export function MediaChapters({ mediaId, user }: MediaChaptersProps) {
+}) {
   const signedIn = user !== null
   const search = routeApi.useSearch()
   const navigate = routeApi.useNavigate()

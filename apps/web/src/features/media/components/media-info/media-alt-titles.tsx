@@ -28,11 +28,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaAltTitlesProps = {
-  titles: ReturnType<typeof getAltTitles>
-}
-
-export function MediaAltTitles({ titles }: MediaAltTitlesProps) {
+export function MediaAltTitles({ titles }: { titles: ReturnType<typeof getAltTitles> }) {
   return (
     <ul sx={styles.titles}>
       {titles.map((title) => (

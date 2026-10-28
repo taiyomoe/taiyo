@@ -24,14 +24,17 @@ const styles = stylex.create({
   },
 })
 
-type AppShellProps = {
+export function AppShell({
+  user,
+  overlayNavbar = false,
+  sections,
+  children,
+}: {
   user: Session["user"] | null
   overlayNavbar?: boolean
   sections?: readonly AppSidebarSection[]
   children: ReactNode
-}
-
-export function AppShell({ user, overlayNavbar = false, sections, children }: AppShellProps) {
+}) {
   const { sidebarPrefs } = useRouteContext({ from: "__root__" })
 
   return (

@@ -37,12 +37,7 @@ const styles = stylex.create({
   },
 })
 
-type SessionsDialogProps = {
-  user: ManagedUser
-  onClose: () => void
-}
-
-export function SessionsDialog({ user, onClose }: SessionsDialogProps) {
+export function SessionsDialog({ user, onClose }: { user: ManagedUser; onClose: () => void }) {
   const sessions = useQuery(userSessionsQueryOptions(user.id))
   const queryClient = useQueryClient()
   const revoke = useMutation({

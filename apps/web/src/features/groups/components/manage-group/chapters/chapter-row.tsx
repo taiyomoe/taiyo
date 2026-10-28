@@ -50,13 +50,15 @@ const styles = stylex.create({
   },
 })
 
-type ChapterRowProps = {
+export function ChapterRow({
+  chapter,
+  meta,
+  actions,
+}: {
   chapter: Pick<LatestChapter, "mediaCoverUrl" | "mediaId" | "mediaTitle" | "number">
   meta: ReactNode
   actions: ReactNode
-}
-
-export function ChapterRow({ chapter, meta, actions }: ChapterRowProps) {
+}) {
   return (
     <ListRow>
       <Cover src={chapter.mediaCoverUrl} sx={styles.cover} />

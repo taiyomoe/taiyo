@@ -29,14 +29,17 @@ const styles = stylex.create({
   },
 })
 
-type ProgressFillProps = {
+export function ProgressFill({
+  running,
+  paused,
+  complete,
+  onComplete,
+}: {
   running: boolean
   paused: boolean
   complete: boolean
   onComplete: () => void
-}
-
-export function ProgressFill({ running, paused, complete, onComplete }: ProgressFillProps) {
+}) {
   return (
     <span
       onAnimationEnd={onComplete}

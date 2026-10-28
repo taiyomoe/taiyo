@@ -42,11 +42,7 @@ const styles = stylex.create({
   },
 })
 
-type InvitationGrantsProps = {
-  permissions: readonly GroupPermission[]
-}
-
-export function InvitationGrants({ permissions }: InvitationGrantsProps) {
+export function InvitationGrants({ permissions }: { permissions: readonly GroupPermission[] }) {
   return (
     <div sx={styles.grants}>
       {permissions.length === 0 ? (

@@ -32,14 +32,17 @@ const styles = stylex.create({
   },
 })
 
-type QueueCardProps = {
+export function QueueCard({
+  count,
+  label,
+  icon,
+  to,
+}: {
   count: number
   label: string
   icon: ReactNode
   to: NonNullable<LinkProps["to"]>
-}
-
-export function QueueCard({ count, label, icon, to }: QueueCardProps) {
+}) {
   return (
     <Card render={<Link to={to} />} sx={styles.queue}>
       <span sx={homeStyles.icon}>{icon}</span>

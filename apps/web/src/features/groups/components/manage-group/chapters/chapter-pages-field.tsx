@@ -6,12 +6,13 @@ import { groupChaptersStyles } from "@/features/groups/components/manage-group/c
 import { SortablePageGrid } from "@/features/uploads/components/sortable-page-grid"
 import { m } from "@/paraglide/messages"
 
-type ChapterPagesFieldProps = {
+export function ChapterPagesField({
+  pages,
+  onReorder,
+}: {
   pages: Array<{ key: string; url: string | null }> | undefined
   onReorder: (keys: string[]) => void
-}
-
-export function ChapterPagesField({ pages, onReorder }: ChapterPagesFieldProps) {
+}) {
   return (
     <Field>
       <FieldLabel>{m.upload_pages()}</FieldLabel>

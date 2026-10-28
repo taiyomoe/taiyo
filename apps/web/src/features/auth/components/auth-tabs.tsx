@@ -46,11 +46,7 @@ const styles = stylex.create({
   },
 })
 
-type AuthTabsProps = {
-  type: "sign-in" | "sign-up"
-}
-
-export const AuthTabs = ({ type }: AuthTabsProps) => (
+export const AuthTabs = ({ type }: { type: "sign-in" | "sign-up" }) => (
   <div sx={styles.tabs}>
     {TABS.map((tab) => (
       <Link

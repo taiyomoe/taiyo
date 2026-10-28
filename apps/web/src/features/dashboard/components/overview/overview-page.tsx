@@ -25,14 +25,17 @@ const styles = stylex.create({
   },
 })
 
-type OverviewPageProps = {
+export function OverviewPage({
+  user,
+  range,
+  compare,
+  queryOptions,
+}: {
   user: Session["user"]
   range: DashboardRange
   compare: boolean
   queryOptions: ReturnType<typeof dashboardOverviewQueryOptions>
-}
-
-export function OverviewPage({ user, range, compare, queryOptions }: OverviewPageProps) {
+}) {
   const query = useQuery(queryOptions)
   const overview = query.data
 

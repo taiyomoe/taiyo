@@ -9,10 +9,6 @@ import { type ChapterSubmission, chapterQueryOptions } from "@/features/uploads/
 import { reviewStyles } from "@/features/uploads/components/chapter-reviews/review-styles"
 import { m } from "@/paraglide/messages"
 
-type ReviewPreviewProps = {
-  submission: ChapterSubmission
-}
-
 const styles = stylex.create({
   pages: {
     margin: 0,
@@ -68,7 +64,7 @@ const styles = stylex.create({
   },
 })
 
-export function ReviewPreview({ submission }: ReviewPreviewProps) {
+export function ReviewPreview({ submission }: { submission: ChapterSubmission }) {
   const chapter = useQuery(chapterQueryOptions(submission.id))
   const pages = chapter.data?.pages
   let previews: ReactNode = <p sx={reviewStyles.muted}>{m.review_chapter_no_pages()}</p>

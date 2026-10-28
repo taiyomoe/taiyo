@@ -3,12 +3,13 @@ import { Alert, AlertAction, AlertDescription, AlertTitle } from "@taiyomoe/ui/c
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { m } from "@/paraglide/messages"
 
-type MediaEditPendingAlertProps = {
+export function MediaEditPendingAlert({
+  withdrawing,
+  onWithdraw,
+}: {
   withdrawing: boolean
   onWithdraw: () => void
-}
-
-export function MediaEditPendingAlert({ withdrawing, onWithdraw }: MediaEditPendingAlertProps) {
+}) {
   return (
     <Alert variant="info">
       <Info />

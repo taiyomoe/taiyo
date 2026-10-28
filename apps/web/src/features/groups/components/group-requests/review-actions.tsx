@@ -24,21 +24,19 @@ const styles = stylex.create({
   },
 })
 
-type ReviewActionsProps = {
-  approveDisabled: boolean
-  error: string | null
-  pending: boolean
-  onApprove: () => Promise<unknown>
-  onReject: (note: string) => Promise<unknown>
-}
-
 export function ReviewActions({
   approveDisabled,
   error,
   pending,
   onApprove,
   onReject,
-}: ReviewActionsProps) {
+}: {
+  approveDisabled: boolean
+  error: string | null
+  pending: boolean
+  onApprove: () => Promise<unknown>
+  onReject: (note: string) => Promise<unknown>
+}) {
   const [rejecting, setRejecting] = useState(false)
   const [note, setNote] = useState("")
   const [touched, setTouched] = useState(false)

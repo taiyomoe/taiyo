@@ -52,13 +52,15 @@ const styles = stylex.create({
 })
 const iso = (value: string | Date) => new Date(value).toISOString()
 
-type SessionItemProps = {
+export function SessionItem({
+  session,
+  revoking,
+  onRevoke,
+}: {
   session: UserSession
   revoking: boolean
   onRevoke: () => void
-}
-
-export function SessionItem({ session, revoking, onRevoke }: SessionItemProps) {
+}) {
   const device = describeUserAgent(session.userAgent)
 
   return (

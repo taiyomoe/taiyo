@@ -47,15 +47,6 @@ const styles = stylex.create({
   },
 })
 
-type DashboardCardProps = {
-  title: string
-  subtitle: string
-  figure?: ReactNode
-  settings?: boolean
-  children: ReactNode
-  sx?: Sx
-}
-
 export function DashboardCard({
   title,
   subtitle,
@@ -63,7 +54,14 @@ export function DashboardCard({
   settings = true,
   children,
   sx,
-}: DashboardCardProps) {
+}: {
+  title: string
+  subtitle: string
+  figure?: ReactNode
+  settings?: boolean
+  children: ReactNode
+  sx?: Sx
+}) {
   const titleId = useId()
 
   return (

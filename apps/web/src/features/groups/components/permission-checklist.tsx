@@ -48,19 +48,17 @@ const styles = stylex.create({
   },
 })
 
-type PermissionChecklistProps = {
-  value: readonly GroupPermission[]
-  onChange: (value: GroupPermission[]) => void
-  canToggle: (permission: GroupPermission) => boolean
-  disabled?: boolean
-}
-
 export function PermissionChecklist({
   value,
   onChange,
   canToggle,
   disabled = false,
-}: PermissionChecklistProps) {
+}: {
+  value: readonly GroupPermission[]
+  onChange: (value: GroupPermission[]) => void
+  canToggle: (permission: GroupPermission) => boolean
+  disabled?: boolean
+}) {
   return (
     <CheckboxGroup
       onValueChange={(next) => {

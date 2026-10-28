@@ -131,19 +131,17 @@ const SIZE_STYLE = {
   sm: sizeStyles.sm,
 } as const
 
-export type ToggleProps = TogglePrimitive.Props & {
-  variant?: ToggleVariant
-  size?: ToggleSize
-  sx?: Sx
-}
-
 export function Toggle({
   className,
   variant = "default",
   size = "default",
   sx,
   ...props
-}: ToggleProps): React.ReactElement {
+}: TogglePrimitive.Props & {
+  variant?: ToggleVariant
+  size?: ToggleSize
+  sx?: Sx
+}): React.ReactElement {
   const styleProps = stylex.props(
     tap.target,
     focus.control,

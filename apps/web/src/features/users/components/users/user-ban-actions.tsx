@@ -14,13 +14,15 @@ const styles = stylex.create({
   },
 })
 
-type UserBanActionsProps = {
+export function UserBanActions({
+  user,
+  canBan,
+  onBan,
+}: {
   user: ManagedUser
   canBan: boolean
   onBan: (user: ManagedUser) => void
-}
-
-export function UserBanActions({ user, canBan, onBan }: UserBanActionsProps) {
+}) {
   const queryClient = useQueryClient()
   const unban = useMutation({
     mutationFn: async (userId: string) =>

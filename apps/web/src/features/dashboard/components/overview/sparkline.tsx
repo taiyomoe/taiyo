@@ -4,13 +4,15 @@ import { scaleLinear } from "@tanstack/charts/scales/linear"
 import { useMemo } from "react"
 import { chartTheme } from "@/features/dashboard/components/overview/chart-frame"
 
-type SparklineProps = {
+export function Sparkline({
+  values,
+  tone,
+  label,
+}: {
   values: readonly number[]
   tone: string
   label: string
-}
-
-export function Sparkline({ values, tone, label }: SparklineProps) {
+}) {
   const definition = useMemo(() => {
     const min = Math.min(...values)
     const max = Math.max(...values)

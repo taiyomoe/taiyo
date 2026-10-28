@@ -38,19 +38,6 @@ const styles = stylex.create({
   },
 })
 
-type SuggestionReviewFooterProps = {
-  failure: string | null
-  note: string
-  onNoteChange: (note: string) => void
-  noteRequired: boolean
-  error: string | null
-  acceptedCount: number
-  total: number
-  pending: boolean
-  onReject: () => void
-  onAccept: () => void
-}
-
 export function SuggestionReviewFooter({
   failure,
   note,
@@ -62,7 +49,18 @@ export function SuggestionReviewFooter({
   pending,
   onReject,
   onAccept,
-}: SuggestionReviewFooterProps) {
+}: {
+  failure: string | null
+  note: string
+  onNoteChange: (note: string) => void
+  noteRequired: boolean
+  error: string | null
+  acceptedCount: number
+  total: number
+  pending: boolean
+  onReject: () => void
+  onAccept: () => void
+}) {
   return (
     <div sx={styles.footer}>
       <ErrorAlert message={failure} />

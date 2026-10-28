@@ -6,12 +6,13 @@ import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
 import { m } from "@/paraglide/messages"
 
-type MyRequestsSectionProps = {
+export function MyRequestsSection({
+  claims,
+  creations,
+}: {
   claims: MyOwnershipRequest[]
   creations: MyGroupCreationRequest[]
-}
-
-export function MyRequestsSection({ claims, creations }: MyRequestsSectionProps) {
+}) {
   const queryClient = useQueryClient()
   const cancelClaim = useMutation({
     mutationFn: async (id: string) =>

@@ -60,12 +60,13 @@ const styles = stylex.create({
   },
 })
 
-type UpcomingChapterRowProps = {
+export function UpcomingChapterRow({
+  chapter,
+  editable,
+}: {
   chapter: UpcomingChapter
   editable: boolean
-}
-
-export function UpcomingChapterRow({ chapter, editable }: UpcomingChapterRowProps) {
+}) {
   return (
     <li sx={styles.row}>
       <span sx={styles.label}>

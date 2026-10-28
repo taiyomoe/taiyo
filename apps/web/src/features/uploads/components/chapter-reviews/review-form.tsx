@@ -26,12 +26,6 @@ import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
-type ReviewFormProps = {
-  submission: ChapterSubmission
-  can: Permissions
-  onDone: () => void
-}
-
 const styles = stylex.create({
   body: {
     gap: "1.5rem",
@@ -48,7 +42,15 @@ const styles = stylex.create({
   },
 })
 
-export function ReviewForm({ submission, can, onDone }: ReviewFormProps) {
+export function ReviewForm({
+  submission,
+  can,
+  onDone,
+}: {
+  submission: ChapterSubmission
+  can: Permissions
+  onDone: () => void
+}) {
   const invalidate = useInvalidateReview()
   const review = useMutation({
     mutationFn: async ({

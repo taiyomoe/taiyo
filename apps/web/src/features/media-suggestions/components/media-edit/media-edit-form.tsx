@@ -46,12 +46,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaEditFormProps = {
-  mediaId: string
-  user: Session["user"]
-}
-
-export function MediaEditForm({ mediaId, user }: MediaEditFormProps) {
+export function MediaEditForm({ mediaId, user }: { mediaId: string; user: Session["user"] }) {
   const { data } = useSuspenseQuery(mediaEditQueryOptions(mediaId))
   const { data: media } = useSuspenseQuery(mediaQueryOptions(mediaId))
   const direct = getPermissions(user)("media.update")

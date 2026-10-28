@@ -50,14 +50,17 @@ const styles = stylex.create({
   },
 })
 
-type AuthCitationProps = {
+export const AuthCitation = ({
+  rating,
+  quote,
+  who,
+  role,
+}: {
   rating: number
   quote: string
   who: string
   role: string
-}
-
-export const AuthCitation = ({ rating, quote, who, role }: AuthCitationProps) => (
+}) => (
   <div sx={styles.slide}>
     <Stars filled={rating} />
     <p sx={styles.quote}>{`“${quote}”`}</p>

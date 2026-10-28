@@ -57,11 +57,7 @@ const styles = stylex.create({
   },
 })
 
-type MediaHeaderProps = {
-  media: Media
-}
-
-export function MediaHeader({ media }: MediaHeaderProps) {
+export function MediaHeader({ media }: { media: Media }) {
   const title = getMainTitle(media.titles)
   const eyebrow = getAltTitles(media.titles)
     .filter((alt) => !alt.isAcronym)

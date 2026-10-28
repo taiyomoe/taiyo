@@ -16,13 +16,15 @@ const styles = stylex.create({
   },
 })
 
-type PendingInvitationsProps = {
+export function PendingInvitations({
+  groupId,
+  userId,
+  can,
+}: {
   groupId: string
   userId: string
   can: Permissions
-}
-
-export function PendingInvitations({ groupId, userId, can }: PendingInvitationsProps) {
+}) {
   const queryClient = useQueryClient()
   const { data: invitations } = useSuspenseQuery({
     queryKey: ["groups", groupId, "invitations"],

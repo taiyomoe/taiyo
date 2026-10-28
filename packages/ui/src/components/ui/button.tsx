@@ -340,13 +340,6 @@ export function buttonVariants({
   return cn(props.className, className)
 }
 
-export type ButtonProps = useRender.ComponentProps<"button"> & {
-  variant?: ButtonVariant
-  size?: ButtonSize
-  loading?: boolean
-  sx?: Sx
-}
-
 export function Button({
   className,
   variant = "default",
@@ -357,7 +350,12 @@ export function Button({
   disabled: disabledProp,
   sx,
   ...props
-}: ButtonProps): React.ReactElement {
+}: useRender.ComponentProps<"button"> & {
+  variant?: ButtonVariant
+  size?: ButtonSize
+  loading?: boolean
+  sx?: Sx
+}): React.ReactElement {
   const isDisabled = Boolean(loading || disabledProp)
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
     ? undefined
