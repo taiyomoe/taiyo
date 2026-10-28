@@ -35,7 +35,9 @@ export const authConfig = {
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
   adapter: PrismaAdapter(db),
-  providers: [Discord],
+  // Discord sends an RFC 9207 "iss" on the callback; without this, Auth.js
+  // compares it to its "https://authjs.dev" placeholder and rejects sign-in.
+  providers: [Discord({ issuer: "https://discord.com" })],
   pages: { signIn: "/auth/sign-in" },
   cookies: {
     sessionToken: {
