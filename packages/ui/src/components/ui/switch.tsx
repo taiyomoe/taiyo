@@ -4,13 +4,13 @@ import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { switchRootMarker } from "../../styles/markers.stylex"
 import { focus } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 const styles = stylex.create({
   root: {
     "--thumb-size": {
       default: "1.25rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     padding: "1px",
     borderRadius: radius.full,
@@ -70,11 +70,13 @@ const styles = stylex.create({
   },
 })
 
-export type SwitchProps = SwitchPrimitive.Root.Props & {
+export function Switch({
+  className,
+  sx,
+  ...props
+}: SwitchPrimitive.Root.Props & {
   sx?: Sx
-}
-
-export function Switch({ className, sx, ...props }: SwitchProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(focus.control, styles.root, switchRootMarker, sx)
   const thumbProps = stylex.props(styles.thumb)
 

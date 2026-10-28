@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { Link, createFileRoute } from "@tanstack/react-router"
-import { LegalContact, LegalPage, prose } from "@/components/legal/legal-page"
 import { env } from "@/env/client"
+import { LegalContact, LegalPage, prose } from "@/features/legal/components/legal-page"
 
 export const Route = createFileRoute("/dmca")({
   head: () => ({

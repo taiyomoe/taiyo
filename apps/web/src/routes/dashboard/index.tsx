@@ -2,11 +2,10 @@ import { noop } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { createIsomorphicFn } from "@tanstack/react-start"
 import { z } from "zod"
-import { DashboardHome } from "@/components/dashboard/dashboard-home"
-import { OverviewPage } from "@/components/dashboard/overview/overview-page"
-import { DEFAULT_DASHBOARD_RANGE, DASHBOARD_RANGES } from "@/lib/dashboard"
+import { dashboardOverviewQueryOptions } from "@/features/dashboard/api/overview"
+import { DashboardIndexPage } from "@/features/dashboard/components/dashboard-index-page"
+import { DEFAULT_DASHBOARD_RANGE, DASHBOARD_RANGES } from "@/features/dashboard/lib/dashboard"
 import { getPermissions } from "@/lib/permissions"
-import { dashboardOverviewQueryOptions } from "@/lib/queries/dashboard"
 import { m } from "@/paraglide/messages"
 
 const searchSchema = z.object({
@@ -29,24 +28,5 @@ export const Route = createFileRoute("/dashboard/")({
       void context.queryClient.query(context.overviewQueryOptions).catch(noop)
     }
   },
-  component: Overview,
+  component: DashboardIndexPage,
 })
-
-function Overview() {
-  const { session, overviewQueryOptions } = Route.useRouteContext()
-  const { range } = Route.useLoaderDeps()
-  const { compare = true } = Route.useSearch()
-
-  if (!getPermissions(session.user)("dashboard.viewStats")) {
-    return <DashboardHome name={session.user.name} />
-  }
-
-  return (
-    <OverviewPage
-      compare={compare}
-      queryOptions={overviewQueryOptions}
-      range={range}
-      user={session.user}
-    />
-  )
-}

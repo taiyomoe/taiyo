@@ -1,7 +1,7 @@
 import type * as React from "react"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 export type AlertVariant = "default" | "error" | "info" | "success" | "warning"
@@ -37,20 +37,20 @@ const styles = stylex.create({
     gap: "0.25rem",
     alignSelf: {
       default: null,
-      [consts.sm]: "center",
+      [breakpoints.sm]: "center",
     },
     display: "flex",
     gridRowEnd: {
       default: null,
-      [consts.sm]: "3",
+      [breakpoints.sm]: "3",
     },
     gridRowStart: {
       default: null,
-      [consts.sm]: "1",
+      [breakpoints.sm]: "1",
     },
     marginTop: {
       default: "0.5rem",
-      [consts.sm]: 0,
+      [breakpoints.sm]: 0,
     },
   },
 })

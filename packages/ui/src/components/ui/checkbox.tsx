@@ -2,7 +2,7 @@ import type React from "react"
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Check } from "../icons"
 
@@ -54,11 +54,11 @@ const styles = stylex.create({
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     height: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     width: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     "::before": {
       inset: 0,
@@ -96,20 +96,22 @@ const styles = stylex.create({
   icon: {
     height: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     width: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
   },
 })
 
-export type CheckboxProps = CheckboxPrimitive.Root.Props & {
+export function Checkbox({
+  className,
+  sx,
+  ...props
+}: CheckboxPrimitive.Root.Props & {
   sx?: Sx
-}
-
-export function Checkbox({ className, sx, ...props }: CheckboxProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.base, sx)
   const indicatorProps = stylex.props(styles.indicator)
 

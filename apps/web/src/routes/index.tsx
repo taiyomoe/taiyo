@@ -1,10 +1,9 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { HomePage } from "@/components/home/home-page"
-import { LATEST_UPDATES_PER_PAGE } from "@/components/home/latest-updates"
-import { LandingPage } from "@/components/landing/landing-page"
-import { latestChaptersQueryOptions } from "@/lib/queries/chapters"
-import { featuredMediasQueryOptions } from "@/lib/queries/medias"
+import { latestChaptersQueryOptions } from "@/features/chapters/api/chapters"
+import { IndexPage } from "@/features/home/components/index-page"
+import { LATEST_UPDATES_PER_PAGE } from "@/features/home/lib/latest-updates"
+import { featuredMediasQueryOptions } from "@/features/media/api/medias"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -32,11 +31,5 @@ export const Route = createFileRoute("/")({
       }
     }
   },
-  component: Index,
+  component: IndexPage,
 })
-
-function Index() {
-  const { session } = Route.useRouteContext()
-
-  return session ? <HomePage user={session.user} /> : <LandingPage />
-}

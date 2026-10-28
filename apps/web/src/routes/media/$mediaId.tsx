@@ -1,16 +1,16 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
-import { CHAPTERS_PER_PAGE } from "@/components/media/media-chapters"
-import { getMainTitle } from "@/components/media/media-labels"
-import { MEDIA_TABS, MediaPage } from "@/components/media/media-page"
 import {
   CHAPTER_SORTS,
   mediaChapterFacetsQueryOptions,
   mediaChaptersQueryOptions,
-} from "@/lib/queries/chapters"
-import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/lib/queries/library"
-import { mediaQueryOptions } from "@/lib/queries/medias"
+} from "@/features/chapters/api/chapters"
+import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/features/media/api/library"
+import { mediaQueryOptions } from "@/features/media/api/medias"
+import { MediaPage } from "@/features/media/components/media-page/media-page"
+import { getMainTitle } from "@/features/media/lib/media-labels"
+import { CHAPTERS_PER_PAGE, MEDIA_TABS } from "@/features/media/lib/media-page"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -81,12 +81,5 @@ export const Route = createFileRoute("/media/$mediaId")({
       ],
     }
   },
-  component: Media,
+  component: MediaPage,
 })
-
-function Media() {
-  const { session } = Route.useRouteContext()
-  const { mediaId } = Route.useParams()
-
-  return <MediaPage mediaId={mediaId} user={session?.user ?? null} />
-}

@@ -10,7 +10,7 @@ import { createContext, useContext, useMemo } from "react"
 import type { Sx } from "../../styles/sx"
 import { drawerSwitchItemMarker } from "../../styles/markers.stylex"
 import { transitions } from "../../styles/recipes"
-import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import { breakpoints, colors, font, radius, shadows, text } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronRight, Close } from "../icons"
 import { Button } from "./button"
@@ -73,7 +73,7 @@ const styles = stylex.create({
   viewportInset: {
     "--inset": {
       default: "0px",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     paddingInline: "var(--inset)",
   },
@@ -277,16 +277,16 @@ const styles = stylex.create({
   popupInset: {
     borderRadius: {
       default: null,
-      [consts.sm]: radius.xxl,
+      [breakpoints.sm]: radius.xxl,
     },
     borderWidth: {
       default: null,
-      [consts.sm]: 1,
+      [breakpoints.sm]: 1,
     },
     "::after": {
       backgroundColor: {
         default: colors.popover,
-        [consts.sm]: "transparent",
+        [breakpoints.sm]: "transparent",
       },
     },
     "::before": {
@@ -308,7 +308,7 @@ const styles = stylex.create({
     flexDirection: "column",
     paddingBottom: {
       default: "1rem",
-      [consts.sm]: "1.5rem",
+      [breakpoints.sm]: "1.5rem",
     },
   },
   noSelection: {
@@ -320,11 +320,11 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: {
       default: "column-reverse",
-      [consts.sm]: "row",
+      [breakpoints.sm]: "row",
     },
     justifyContent: {
       default: null,
-      [consts.sm]: "flex-end",
+      [breakpoints.sm]: "flex-end",
     },
     paddingBottom: "var(--safe-area-inset-bottom, 0px)",
   },
@@ -415,7 +415,7 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     opacity: {
       "[data-disabled]": 0.64,
@@ -431,7 +431,7 @@ const styles = stylex.create({
     userSelect: "none",
     minHeight: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
     width: "100%",
   },
@@ -473,7 +473,7 @@ const styles = stylex.create({
   switchTrack: {
     "--thumb-size": {
       default: "1rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     padding: "1px",
     borderRadius: radius.full,
@@ -539,11 +539,11 @@ const styles = stylex.create({
   indicatorIcon: {
     height: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     width: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
   },
 })

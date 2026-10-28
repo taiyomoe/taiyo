@@ -2,7 +2,7 @@ import type React from "react"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { surface } from "../../styles/recipes"
-import { colors, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import { breakpoints, colors, font, radius, shadows, text } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 export type EmptyMediaVariant = "default" | "icon"
@@ -12,7 +12,7 @@ const styles = stylex.create({
     gap: "1.5rem",
     paddingBlock: {
       default: "3rem",
-      "@media (width >= 48rem)": "5rem",
+      [breakpoints.md]: "5rem",
     },
     paddingInline: "1.5rem",
     alignItems: "center",

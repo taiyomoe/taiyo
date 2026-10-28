@@ -132,12 +132,6 @@ export const ToggleGroupContext: React.Context<ToggleGroupContextValue> =
     variant: "default",
   })
 
-export type ToggleGroupProps = ToggleGroupPrimitive.Props & {
-  variant?: ToggleVariant
-  size?: ToggleSize
-  sx?: Sx
-}
-
 export function ToggleGroup({
   className,
   variant = "default",
@@ -146,7 +140,11 @@ export function ToggleGroup({
   children,
   sx,
   ...props
-}: ToggleGroupProps): React.ReactElement {
+}: ToggleGroupPrimitive.Props & {
+  variant?: ToggleVariant
+  size?: ToggleSize
+  sx?: Sx
+}): React.ReactElement {
   const contextValue = React.useMemo<ToggleGroupContextValue>(
     () => ({ orientation, size, variant }),
     [orientation, size, variant],
@@ -173,12 +171,6 @@ export function ToggleGroup({
   )
 }
 
-export type ToggleGroupItemProps = TogglePrimitive.Props & {
-  variant?: ToggleVariant
-  size?: ToggleSize
-  sx?: Sx
-}
-
 export function ToggleGroupItem({
   className,
   children,
@@ -186,7 +178,11 @@ export function ToggleGroupItem({
   size,
   sx,
   ...props
-}: ToggleGroupItemProps): React.ReactElement {
+}: TogglePrimitive.Props & {
+  variant?: ToggleVariant
+  size?: ToggleSize
+  sx?: Sx
+}): React.ReactElement {
   const context = React.useContext(ToggleGroupContext)
   const resolvedVariant: ToggleVariant = context.variant ?? variant ?? "default"
   const resolvedSize: ToggleSize = context.size ?? size ?? "default"

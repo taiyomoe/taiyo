@@ -10,7 +10,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { createIsomorphicFn } from "@tanstack/react-start"
 import { getCookies } from "@tanstack/react-start/server"
 import { fromEntries, map, pipe } from "remeda"
-import { sessionQueryOptions } from "@/lib/queries/session"
+import { sessionQueryOptions } from "@/lib/session"
 import {
   THEME_COOKIE,
   ThemeContext,

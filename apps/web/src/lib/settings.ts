@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { isDefined, pickBy } from "remeda"
 import { api } from "@/lib/api"
 import { unwrap } from "@/lib/envelope"
-import { type Session, sessionQueryOptions } from "@/lib/queries/session"
+import { type Session, sessionQueryOptions } from "@/lib/session"
 
 type UserSettings = Session["user"]["settings"]
 

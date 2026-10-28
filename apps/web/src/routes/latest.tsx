@@ -1,8 +1,9 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
-import { LATEST_MEDIAS_PER_PAGE, LatestPage } from "@/components/latest/latest-page"
-import { latestMediaUpdatesQueryOptions } from "@/lib/queries/chapters"
+import { latestMediaUpdatesQueryOptions } from "@/features/chapters/api/chapters"
+import { LatestPage } from "@/features/latest/components/latest-page"
+import { LATEST_MEDIAS_PER_PAGE } from "@/features/latest/lib/pagination"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -37,12 +38,5 @@ export const Route = createFileRoute("/latest")({
       await prefetch
     }
   },
-  component: Latest,
+  component: LatestPage,
 })
-
-function Latest() {
-  const { session } = Route.useRouteContext()
-  const { page } = Route.useLoaderDeps()
-
-  return <LatestPage page={page} user={session.user} />
-}

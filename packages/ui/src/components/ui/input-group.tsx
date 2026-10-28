@@ -2,7 +2,7 @@ import type * as React from "react"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { focus } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Input, type InputProps } from "./input"
 import { Textarea, type TextareaProps } from "./textarea"
@@ -29,7 +29,7 @@ const styles = stylex.create({
     display: "inline-flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     position: "relative",
     transitionProperty: "box-shadow, border-color",

@@ -31,11 +31,7 @@ const styles = stylex.create({
   },
 })
 
-type EmbersProps = {
-  count?: number
-}
-
-export const Embers = ({ count = 26 }: EmbersProps) => {
+export const Embers = ({ count = 26 }: { count?: number }) => {
   const embers = useMemo(() => build(count), [count])
   const emberProps = stylex.props(styles.ember)
 

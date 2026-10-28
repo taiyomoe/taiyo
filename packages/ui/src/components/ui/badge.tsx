@@ -4,7 +4,7 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { focus, tap } from "../../styles/recipes"
-import { colors, consts, radius } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 export type BadgeVariant =
@@ -114,45 +114,45 @@ const sizeStyles = stylex.create({
     paddingInline: "calc(0.5rem - 1px)",
     fontSize: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     height: {
       default: "1.375rem",
-      [consts.sm]: "1.125rem",
+      [breakpoints.sm]: "1.125rem",
     },
     minWidth: {
       default: "1.375rem",
-      [consts.sm]: "1.125rem",
+      [breakpoints.sm]: "1.125rem",
     },
   },
   lg: {
     paddingInline: "calc(0.625rem - 1px)",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     height: {
       default: "1.625rem",
-      [consts.sm]: "1.375rem",
+      [breakpoints.sm]: "1.375rem",
     },
     minWidth: {
       default: "1.625rem",
-      [consts.sm]: "1.375rem",
+      [breakpoints.sm]: "1.375rem",
     },
   },
   sm: {
     paddingInline: "calc(0.375rem - 1px)",
     fontSize: {
       default: "0.75rem",
-      [consts.sm]: "0.625rem",
+      [breakpoints.sm]: "0.625rem",
     },
     height: {
       default: "1.25rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     minWidth: {
       default: "1.25rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
   },
 })
@@ -178,12 +178,6 @@ const SIZE_STYLE = {
   sm: sizeStyles.sm,
 } as const
 
-export type BadgeProps = useRender.ComponentProps<"span"> & {
-  variant?: BadgeVariant
-  size?: BadgeSize
-  sx?: Sx
-}
-
 export function Badge({
   className,
   variant = "default",
@@ -191,7 +185,11 @@ export function Badge({
   render,
   sx,
   ...props
-}: BadgeProps): React.ReactElement {
+}: useRender.ComponentProps<"span"> & {
+  variant?: BadgeVariant
+  size?: BadgeSize
+  sx?: Sx
+}): React.ReactElement {
   const interactive = Boolean(render)
   const styleProps = stylex.props(
     focus.control,

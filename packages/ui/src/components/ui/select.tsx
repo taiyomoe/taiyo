@@ -6,7 +6,7 @@ import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { selectPopupMarker } from "../../styles/markers.stylex"
 import { surface, transitions } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Check, ChevronDown, ChevronUp, ChevronsUpDown } from "../icons"
 
@@ -39,7 +39,7 @@ const styles = stylex.create({
     display: "inline-flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     justifyContent: "space-between",
     opacity: {
@@ -62,7 +62,7 @@ const styles = stylex.create({
     userSelect: "none",
     minHeight: {
       default: "2.75rem",
-      [consts.sm]: "2.5rem",
+      [breakpoints.sm]: "2.5rem",
     },
     minWidth: "9rem",
     width: "100%",
@@ -100,13 +100,13 @@ const styles = stylex.create({
     paddingInline: "calc(0.625rem - 1px)",
     minHeight: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
   },
   triggerLg: {
     minHeight: {
       default: "3.25rem",
-      [consts.sm]: "3rem",
+      [breakpoints.sm]: "3rem",
     },
   },
   buttonMinWidth: {
@@ -123,11 +123,11 @@ const styles = stylex.create({
     marginInlineEnd: "-0.25rem",
     height: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     width: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
   },
   value: {
@@ -207,11 +207,11 @@ const styles = stylex.create({
     position: "relative",
     height: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     width: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
   },
   item: {
@@ -231,7 +231,7 @@ const styles = stylex.create({
     display: "grid",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     gridTemplateColumns: "1fr 1rem",
     opacity: {
@@ -245,7 +245,7 @@ const styles = stylex.create({
     },
     minHeight: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     minWidth: {
       default: null,
@@ -263,11 +263,11 @@ const styles = stylex.create({
   itemIndicatorIcon: {
     height: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     width: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
   },
   itemText: {
@@ -288,12 +288,12 @@ const styles = stylex.create({
     display: "inline-flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     fontWeight: 500,
     lineHeight: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     marginBottom: "0.5rem",
   },
@@ -312,11 +312,6 @@ const SIZE_STYLE = {
   sm: styles.triggerSm,
 } as const
 
-export type SelectButtonProps = useRender.ComponentProps<"button"> & {
-  size?: SelectSize
-  sx?: Sx
-}
-
 export function SelectButton({
   className,
   size = "default",
@@ -324,7 +319,10 @@ export function SelectButton({
   children,
   sx,
   ...props
-}: SelectButtonProps): React.ReactElement {
+}: useRender.ComponentProps<"button"> & {
+  size?: SelectSize
+  sx?: Sx
+}): React.ReactElement {
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
     ? undefined
     : "button"

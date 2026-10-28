@@ -2,7 +2,7 @@ import type React from "react"
 import { Toast } from "@base-ui/react/toast"
 import * as stylex from "@stylexjs/stylex"
 import { surface } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { AlertCircle, AlertTriangle, CheckCircle, Info, Spinner } from "../icons"
 import { buttonVariants } from "./button"
 
@@ -48,7 +48,7 @@ const styles = stylex.create({
   viewport: {
     "--toast-inset": {
       default: "1rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
     marginInline: "auto",
     display: "flex",
@@ -550,17 +550,15 @@ export type ToastPosition =
   | "bottom-center"
   | "bottom-right"
 
-export type ToastProviderProps = Toast.Provider.Props & {
-  position?: ToastPosition
-  portalProps?: React.ComponentProps<typeof Toast.Portal>
-}
-
 export function ToastProvider({
   children,
   position = "bottom-right",
   portalProps,
   ...props
-}: ToastProviderProps): React.ReactElement {
+}: Toast.Provider.Props & {
+  position?: ToastPosition
+  portalProps?: React.ComponentProps<typeof Toast.Portal>
+}): React.ReactElement {
   return (
     <Toast.Provider toastManager={toastManager} {...props}>
       {children}
@@ -572,15 +570,13 @@ export function ToastProvider({
 export const anchoredToastManager: ReturnType<typeof Toast.createToastManager> =
   Toast.createToastManager()
 
-export type AnchoredToastProviderProps = Toast.Provider.Props & {
-  portalProps?: React.ComponentProps<typeof Toast.Portal>
-}
-
 export function AnchoredToastProvider({
   children,
   portalProps,
   ...props
-}: AnchoredToastProviderProps): React.ReactElement {
+}: Toast.Provider.Props & {
+  portalProps?: React.ComponentProps<typeof Toast.Portal>
+}): React.ReactElement {
   return (
     <Toast.Provider toastManager={anchoredToastManager} {...props}>
       {children}
