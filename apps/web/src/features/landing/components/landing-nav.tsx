@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
-import { consts, font, text } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, font, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { SunLink } from "@/components/buttons/sun-link"
@@ -52,7 +52,7 @@ const styles = stylex.create({
   links: {
     gap: "1.875rem",
     alignItems: "center",
-    display: { default: "none", [consts.sm]: "flex" },
+    display: { default: "none", [breakpoints.sm]: "flex" },
   },
   link: {
     color: {
@@ -73,7 +73,7 @@ const styles = stylex.create({
   },
   signIn: {
     color: scene.paper,
-    display: { default: "none", [consts.sm]: "inline" },
+    display: { default: "none", [breakpoints.sm]: "inline" },
     fontFamily: font.sans,
     fontSize: text.base,
     fontWeight: font.weightBold,

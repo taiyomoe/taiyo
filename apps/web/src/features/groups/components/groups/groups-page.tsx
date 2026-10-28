@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { sceneFont } from "@/components/scene/scene.stylex"
@@ -14,7 +14,7 @@ const styles = stylex.create({
   page: {
     gap: "1.75rem",
     paddingBlock: "2rem",
-    paddingInline: { default: "1.25rem", "@media (width >= 48rem)": "2rem" },
+    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
     display: "flex",
     flexDirection: "column",
   },
@@ -33,7 +33,7 @@ const styles = stylex.create({
   heading: {
     margin: 0,
     fontFamily: sceneFont.display,
-    fontSize: { default: "1.75rem", "@media (width >= 48rem)": "2.25rem" },
+    fontSize: { default: "1.75rem", [breakpoints.md]: "2.25rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.02em",
   },

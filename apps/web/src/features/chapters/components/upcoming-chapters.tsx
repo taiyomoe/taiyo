@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { CalendarClock } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { useDeferredValue, useState } from "react"
 import type { Session } from "@/lib/session"
@@ -11,11 +11,10 @@ import { usePermissions } from "@/lib/permissions"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
-const DESKTOP = "@media (width >= 48rem)"
 const COLLAPSED_ROWS = 3
 const styles = stylex.create({
   card: {
-    padding: { [DESKTOP]: "0.875rem", default: "0.625rem" },
+    padding: { [breakpoints.md]: "0.875rem", default: "0.625rem" },
     borderColor: colors.border,
     borderRadius: radius.xl,
     borderStyle: "solid",
@@ -51,7 +50,7 @@ const styles = stylex.create({
     margin: 0,
     color: colors.foreground,
     fontFamily: font.heading,
-    fontSize: { [DESKTOP]: "1.125rem", default: "1rem" },
+    fontSize: { [breakpoints.md]: "1.125rem", default: "1rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.01em",
   },

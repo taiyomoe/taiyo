@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Switch } from "@taiyomoe/ui/components/ui/switch"
 import { Toggle } from "@taiyomoe/ui/components/ui/toggle"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
 import type { MediaSuggestionDetail } from "@/features/media-suggestions/api/media-suggestions"
 import { FieldEditor } from "@/features/media-suggestions/components/field-editors/field-editor"
@@ -57,7 +57,7 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "minmax(0, 1fr)",
-      "@media (width >= 56rem)": "repeat(auto-fit, minmax(0, 1fr))",
+      [breakpoints.lg]: "repeat(auto-fit, minmax(0, 1fr))",
     },
   },
   editor: {

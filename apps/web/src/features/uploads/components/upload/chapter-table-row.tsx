@@ -4,7 +4,7 @@ import { Close, Globe, Image, Link as LinkIcon } from "@taiyomoe/ui/components/i
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Field } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { ChapterRowMeta } from "@/features/uploads/components/upload/chapter-row-meta"
 import { isWebUrl, resolveLink } from "@/features/uploads/lib/chapter-batch/links"
 import {
@@ -42,7 +42,7 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "6rem 5.5rem minmax(0, 1fr)",
-      "@media (width >= 48rem)": "6rem 5.5rem minmax(0, 1fr) 6rem 2rem 2rem",
+      [breakpoints.md]: "6rem 5.5rem minmax(0, 1fr) 6rem 2rem 2rem",
     },
   },
   linkOnly: {

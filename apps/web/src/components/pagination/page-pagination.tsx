@@ -8,6 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@taiyomoe/ui/components/ui/pagination"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { PageJump } from "@/components/pagination/page-jump"
 import { paginationStyles } from "@/components/pagination/pagination-styles"
 import { getPageItems } from "@/lib/pagination"
@@ -15,12 +16,12 @@ import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   content: {
-    gap: { default: "0.125rem", "@media (width >= 40rem)": "0.25rem" },
+    gap: { default: "0.125rem", [breakpoints.sm]: "0.25rem" },
     justifyContent: "center",
   },
   edge: {
-    height: { default: null, "@media (width < 40rem)": "2rem" },
-    width: { default: null, "@media (width < 40rem)": "2rem" },
+    height: { default: null, [breakpoints.maxSm]: "2rem" },
+    width: { default: null, [breakpoints.maxSm]: "2rem" },
   },
   disabled: {
     opacity: 0.4,

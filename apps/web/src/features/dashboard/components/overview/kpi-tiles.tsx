@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Bookmark, Comment, Eye, Upload, UserAdd, Users } from "@taiyomoe/ui/components/icons"
+import { containers } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { DashboardOverview } from "@/features/dashboard/api/overview"
 import { KpiTile } from "@/features/dashboard/components/overview/kpi-tile"
 import { m } from "@/paraglide/messages"
@@ -19,8 +20,10 @@ const styles = stylex.create({
     gridColumnStart: "1",
     gridTemplateColumns: {
       default: "repeat(2, minmax(0, 1fr))",
-      "@container (36rem <= width < 62rem)": "repeat(3, minmax(0, 1fr))",
-      "@container (width >= 62rem)": "repeat(6, minmax(0, 1fr))",
+      [containers.xl]: {
+        default: "repeat(3, minmax(0, 1fr))",
+        [containers["5xl"]]: "repeat(6, minmax(0, 1fr))",
+      },
     },
   },
 })

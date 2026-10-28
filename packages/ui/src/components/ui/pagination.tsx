@@ -4,7 +4,7 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { a11y } from "../../styles/recipes"
-import { consts, motion } from "../../styles/tokens.stylex"
+import { breakpoints, consts, motion } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronLeft, ChevronRight, Ellipsis } from "../icons"
 import { type Button, buttonVariants } from "./button"
@@ -25,23 +25,23 @@ const styles = stylex.create({
   edgeLink: {
     padding: {
       default: 0,
-      [consts.sm]: null,
+      [breakpoints.sm]: null,
     },
     aspectRatio: {
       default: "1",
-      [consts.sm]: "auto",
+      [breakpoints.sm]: "auto",
     },
   },
   edgeLabel: {
     display: {
       default: "none",
-      [consts.sm]: "inline",
+      [breakpoints.sm]: "inline",
     },
   },
   edgeIcon: {
     transitionDuration: {
       default: "200ms",
-      "@media (prefers-reduced-motion: reduce)": "0s",
+      [consts.reducedMotion]: "0s",
     },
     transitionProperty: "translate",
     transitionTimingFunction: motion.easeOut,
@@ -53,7 +53,7 @@ const styles = stylex.create({
     },
     marginLeft: {
       default: null,
-      [consts.sm]: "-0.25rem",
+      [breakpoints.sm]: "-0.25rem",
     },
   },
   nextIcon: {
@@ -63,7 +63,7 @@ const styles = stylex.create({
     },
     marginRight: {
       default: null,
-      [consts.sm]: "-0.25rem",
+      [breakpoints.sm]: "-0.25rem",
     },
   },
   ellipsis: {
@@ -74,11 +74,11 @@ const styles = stylex.create({
   ellipsisIcon: {
     height: {
       default: "1.25rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     width: {
       default: "1.25rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
   },
 })

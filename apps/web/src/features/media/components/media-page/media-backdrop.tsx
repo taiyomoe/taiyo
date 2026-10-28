@@ -1,14 +1,13 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
-const DESKTOP = "@media (width >= 64rem)"
 const styles = stylex.create({
   backdrop: {
     overflow: "hidden",
     pointerEvents: "none",
     position: "absolute",
     zIndex: -1,
-    height: { [DESKTOP]: "26rem", default: "18rem" },
+    height: { [breakpoints.lg]: "26rem", default: "18rem" },
     left: 0,
     right: 0,
     top: 0,

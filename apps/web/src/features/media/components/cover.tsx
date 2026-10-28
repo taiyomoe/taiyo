@@ -2,7 +2,7 @@ import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
 import { Book } from "@taiyomoe/ui/components/icons"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, consts, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useImageLoaded } from "@/hooks/use-image-loaded"
 
 const styles = stylex.create({
@@ -36,7 +36,7 @@ const styles = stylex.create({
     },
     transitionDuration: {
       default: "700ms, 200ms",
-      "@media (prefers-reduced-motion: reduce)": "0s",
+      [consts.reducedMotion]: "0s",
     },
     transitionProperty: "transform, opacity",
     transitionTimingFunction: motion.easeOut,

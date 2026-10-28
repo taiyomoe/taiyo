@@ -4,13 +4,13 @@ import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { switchRootMarker } from "../../styles/markers.stylex"
 import { focus } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 const styles = stylex.create({
   root: {
     "--thumb-size": {
       default: "1.25rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     padding: "1px",
     borderRadius: radius.full,

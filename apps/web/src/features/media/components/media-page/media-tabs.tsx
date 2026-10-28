@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
-import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useDeferredValue } from "react"
@@ -42,7 +42,7 @@ const styles = stylex.create({
     flexShrink: 0,
   },
   soonTab: {
-    display: { default: "none", "@media (width >= 40rem)": "flex" },
+    display: { default: "none", [breakpoints.sm]: "flex" },
   },
   tabCount: {
     borderRadius: radius.full,

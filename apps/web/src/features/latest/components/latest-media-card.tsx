@@ -1,7 +1,14 @@
 import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { colors, font, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import {
+  breakpoints,
+  colors,
+  font,
+  motion,
+  radius,
+  shadows,
+} from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
@@ -15,10 +22,9 @@ import { ChapterList, ChapterListSkeleton } from "@/features/chapters/components
 import { Cover, CoverSkeleton } from "@/features/media/components/cover"
 import { m } from "@/paraglide/messages"
 
-const DESKTOP = "@media (width >= 48rem)"
 const styles = stylex.create({
   card: {
-    padding: { [DESKTOP]: "0.875rem", default: "0.625rem" },
+    padding: { [breakpoints.md]: "0.875rem", default: "0.625rem" },
     borderColor: colors.border,
     borderRadius: radius.xl,
     borderStyle: "solid",
@@ -27,13 +33,16 @@ const styles = stylex.create({
     backgroundClip: "padding-box",
     backgroundColor: colors.card,
     boxShadow: shadows.raised,
-    columnGap: { [DESKTOP]: "1.25rem", default: "0.875rem" },
+    columnGap: { [breakpoints.md]: "1.25rem", default: "0.875rem" },
     display: "grid",
-    gridTemplateColumns: { [DESKTOP]: "7rem minmax(0, 1fr)", default: "4.5rem minmax(0, 1fr)" },
+    gridTemplateColumns: {
+      [breakpoints.md]: "7rem minmax(0, 1fr)",
+      default: "4.5rem minmax(0, 1fr)",
+    },
   },
   coverLink: {
     borderRadius: {
-      [DESKTOP]: `calc(${radius.xl} - 0.875rem)`,
+      [breakpoints.md]: `calc(${radius.xl} - 0.875rem)`,
       default: `calc(${radius.xl} - 0.625rem)`,
     },
     display: "block",
@@ -41,12 +50,12 @@ const styles = stylex.create({
     outlineOffset: 2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    position: { [DESKTOP]: "sticky", default: "static" },
+    position: { [breakpoints.md]: "sticky", default: "static" },
     top: "calc(var(--navbar-height) + 1rem)",
   },
   cover: {
     borderRadius: {
-      [DESKTOP]: `calc(${radius.xl} - 0.875rem)`,
+      [breakpoints.md]: `calc(${radius.xl} - 0.875rem)`,
       default: `calc(${radius.xl} - 0.625rem)`,
     },
     width: "100%",
@@ -74,7 +83,7 @@ const styles = stylex.create({
       ":has(> a:hover)": `color-mix(in srgb, ${colors.foreground} 75%, ${colors.background})`,
     },
     fontFamily: font.heading,
-    fontSize: { [DESKTOP]: "1.125rem", default: "1rem" },
+    fontSize: { [breakpoints.md]: "1.125rem", default: "1rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.01em",
     textOverflow: "ellipsis",

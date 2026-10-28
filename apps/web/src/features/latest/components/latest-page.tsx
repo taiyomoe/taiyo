@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { ArrowLeft } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { sceneFont } from "@/components/scene/scene.stylex"
@@ -17,7 +17,7 @@ const styles = stylex.create({
   page: {
     gap: "1.5rem",
     paddingBlock: "2rem",
-    paddingInline: { default: "1.25rem", "@media (width >= 48rem)": "2rem" },
+    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
     display: "flex",
     flexDirection: "column",
   },
@@ -33,7 +33,7 @@ const styles = stylex.create({
     margin: 0,
     color: colors.foreground,
     fontFamily: sceneFont.display,
-    fontSize: { default: "1.75rem", "@media (width >= 48rem)": "2.25rem" },
+    fontSize: { default: "1.75rem", [breakpoints.md]: "2.25rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.02em",
   },

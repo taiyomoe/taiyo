@@ -3,7 +3,7 @@ import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { focus, tap } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 export type ToggleVariant = "default" | "outline"
@@ -31,7 +31,7 @@ const styles = stylex.create({
     flexShrink: 0,
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     fontWeight: 500,
     justifyContent: "center",
@@ -91,33 +91,33 @@ const sizeStyles = stylex.create({
     paddingInline: "calc(0.5rem - 1px)",
     height: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
     minWidth: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
   },
   lg: {
     paddingInline: "calc(0.625rem - 1px)",
     height: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     minWidth: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
   },
   sm: {
     paddingInline: "calc(0.375rem - 1px)",
     height: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
     minWidth: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
   },
 })

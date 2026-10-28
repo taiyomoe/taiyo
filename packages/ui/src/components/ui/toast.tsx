@@ -2,7 +2,7 @@ import type React from "react"
 import { Toast } from "@base-ui/react/toast"
 import * as stylex from "@stylexjs/stylex"
 import { surface } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { AlertCircle, AlertTriangle, CheckCircle, Info, Spinner } from "../icons"
 import { buttonVariants } from "./button"
 
@@ -48,7 +48,7 @@ const styles = stylex.create({
   viewport: {
     "--toast-inset": {
       default: "1rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
     marginInline: "auto",
     display: "flex",

@@ -1,12 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-
-const DESKTOP = "@media (width >= 48rem)"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
 export const chapterListStyles = stylex.create({
   chapter: {
     gridTemplateAreas: {
-      [DESKTOP]: '"label time" "groups uploader"',
+      [breakpoints.md]: '"label time" "groups uploader"',
       default: '"label time" "groups groups" "uploader uploader"',
     },
     paddingBlock: "0.625rem",

@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { consts } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Animated } from "@/components/scene/animated"
 import { scene } from "@/components/scene/scene.stylex"
 import { SunRays } from "@/components/scene/sun-rays"
@@ -27,7 +27,7 @@ const styles = stylex.create({
     position: "absolute",
     bottom: {
       default: "calc(20% - var(--sun-size))",
-      [consts.sm]: "calc(32% - var(--sun-size))",
+      [breakpoints.sm]: "calc(32% - var(--sun-size))",
     },
     height: "var(--sun-size)",
     left: "50%",

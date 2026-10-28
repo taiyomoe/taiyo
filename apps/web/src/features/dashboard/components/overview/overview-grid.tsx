@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, containers, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { DashboardOverview } from "@/features/dashboard/api/overview"
 import { AttentionList } from "@/features/dashboard/components/overview/attention-list"
 import { CardSkeleton } from "@/features/dashboard/components/overview/card-skeleton"
@@ -36,46 +36,43 @@ const styles = stylex.create({
   primary: {
     gridColumn: {
       default: "span 12",
-      "@container (width >= 62rem)": "span 8",
+      [containers["5xl"]]: "span 8",
     },
   },
   secondary: {
     gridColumn: {
       default: "span 12",
-      "@container (40rem <= width < 62rem)": "span 6",
-      "@container (width >= 62rem)": "span 4",
+      [containers["2xl"]]: { default: "span 6", [containers["5xl"]]: "span 4" },
     },
   },
   chapters: {
     gridColumn: {
       default: "span 12",
-      "@container (width >= 62rem)": "span 7",
+      [containers["5xl"]]: "span 7",
     },
   },
   ranking: {
     gridColumn: {
       default: "span 12",
-      "@container (40rem <= width < 62rem)": "span 6",
-      "@container (width >= 62rem)": "span 5",
+      [containers["2xl"]]: { default: "span 6", [containers["5xl"]]: "span 5" },
     },
   },
   signUps: {
     gridColumn: {
       default: "span 12",
-      "@container (40rem <= width < 62rem)": "span 6",
-      "@container (width >= 62rem)": "span 7",
+      [containers["2xl"]]: { default: "span 6", [containers["5xl"]]: "span 7" },
     },
   },
   half: {
     gridColumn: {
       default: "span 12",
-      "@container (width >= 40rem)": "span 6",
+      [containers["2xl"]]: "span 6",
     },
   },
   activity: {
     gridColumn: {
       default: "span 12",
-      "@container (width >= 62rem)": "span 4",
+      [containers["5xl"]]: "span 4",
     },
   },
 })

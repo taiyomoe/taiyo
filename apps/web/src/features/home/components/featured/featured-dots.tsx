@@ -1,6 +1,6 @@
 import type { UseEmblaCarouselType } from "embla-carousel-react"
 import * as stylex from "@stylexjs/stylex"
-import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { FeaturedMedia } from "@/features/media/api/medias"
 import { ProgressFill } from "@/features/home/components/featured/progress-fill"
 import { m } from "@/paraglide/messages"
@@ -11,13 +11,13 @@ const styles = stylex.create({
     alignItems: "center",
     display: "flex",
     position: "absolute",
-    bottom: { default: "0.375rem", "@media (width >= 48rem)": "0.5rem" },
-    right: { default: "1rem", "@media (width >= 48rem)": "2.25rem" },
+    bottom: { default: "0.375rem", [breakpoints.md]: "0.5rem" },
+    right: { default: "1rem", [breakpoints.md]: "2.25rem" },
   },
   dot: {
     borderStyle: "none",
     paddingBlock: "0.5rem",
-    paddingInline: { default: "0.1875rem", "@media (width >= 48rem)": "0.25rem" },
+    paddingInline: { default: "0.1875rem", [breakpoints.md]: "0.25rem" },
     backgroundColor: "transparent",
     cursor: "pointer",
     display: "flex",
@@ -40,7 +40,7 @@ const styles = stylex.create({
     transform: "translateZ(0)",
     transitionDuration: {
       default: "520ms",
-      "@media (prefers-reduced-motion: reduce)": "0s",
+      [consts.reducedMotion]: "0s",
     },
     transitionProperty: "width, background-color",
     transitionTimingFunction: motion.easeOut,

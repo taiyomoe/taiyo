@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { CatchBoundary } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { range } from "remeda"
@@ -19,7 +19,7 @@ const styles = stylex.create({
     paddingBlock: "2rem",
     paddingInline: {
       default: "1.25rem",
-      "@media (width >= 48rem)": "2rem",
+      [breakpoints.md]: "2rem",
     },
     display: "flex",
     flexDirection: "column",

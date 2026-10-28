@@ -5,14 +5,14 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@taiyomoe/ui/components/ui/input-group"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   search: {
-    width: { default: "100%", "@media (width >= 40rem)": "20rem" },
+    width: { default: "100%", [breakpoints.sm]: "20rem" },
   },
   searchIcon: {
     color: colors.mutedForeground,

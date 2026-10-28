@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { useDeferredValue } from "react"
 import { FeaturedCarouselView } from "@/features/home/components/featured/featured-carousel-view"
@@ -15,7 +15,7 @@ const styles = stylex.create({
     borderBottomColor: colors.border,
     borderBottomStyle: "solid",
     borderBottomWidth: 1,
-    paddingTop: { default: "var(--navbar-height)", "@media (width >= 50rem)": 0 },
+    paddingTop: { default: "var(--navbar-height)", [breakpoints.md]: 0 },
   },
 })
 

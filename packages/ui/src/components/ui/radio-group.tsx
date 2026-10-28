@@ -3,7 +3,7 @@ import { Radio as RadioPrimitive } from "@base-ui/react/radio"
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
@@ -59,11 +59,11 @@ const styles = stylex.create({
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     height: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     width: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     "::before": {
       inset: 0,
@@ -95,11 +95,11 @@ const styles = stylex.create({
     position: "absolute",
     height: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     width: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     "::before": {
       borderRadius: radius.full,
@@ -107,11 +107,11 @@ const styles = stylex.create({
       content: '""',
       height: {
         default: "0.5rem",
-        [consts.sm]: "0.375rem",
+        [breakpoints.sm]: "0.375rem",
       },
       width: {
         default: "0.5rem",
-        [consts.sm]: "0.375rem",
+        [breakpoints.sm]: "0.375rem",
       },
     },
   },

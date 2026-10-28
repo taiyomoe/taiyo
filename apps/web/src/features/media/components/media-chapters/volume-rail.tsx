@@ -1,11 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaChapterFacets } from "@/features/chapters/api/chapters"
 import { VolumeItem } from "@/features/media/components/media-chapters/volume-item"
 import { NO_VOLUME, getVolumeName } from "@/features/media/lib/chapter-volumes"
 import { m } from "@/paraglide/messages"
 
-const WIDE = "@media (width >= 72rem)"
 const styles = stylex.create({
   rail: {
     margin: 0,
@@ -19,10 +18,10 @@ const styles = stylex.create({
     backgroundColor: colors.well,
     boxShadow: shadows.sunken,
     display: "flex",
-    flexDirection: { [WIDE]: "column", default: "row" },
-    position: { [WIDE]: "sticky", default: "static" },
+    flexDirection: { [breakpoints.xl]: "column", default: "row" },
+    position: { [breakpoints.xl]: "sticky", default: "static" },
     scrollbarWidth: "none",
-    overflowX: { [WIDE]: "visible", default: "auto" },
+    overflowX: { [breakpoints.xl]: "visible", default: "auto" },
     top: "calc(var(--navbar-height) + 1rem)",
   },
 })

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { range } from "remeda"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
@@ -14,8 +14,6 @@ import { Uploader } from "@/features/chapters/components/uploader"
 import { Cover, CoverSkeleton } from "@/features/media/components/cover"
 import { m } from "@/paraglide/messages"
 
-const DESKTOP = "@media (width >= 64rem)"
-const TABLET = "@media (width >= 40rem)"
 const styles = stylex.create({
   list: {
     margin: 0,
@@ -31,7 +29,7 @@ const styles = stylex.create({
     borderStyle: "solid",
     borderWidth: 1,
     gridTemplateAreas: {
-      [DESKTOP]: '"cover main groups uploader language time"',
+      [breakpoints.lg]: '"cover main groups uploader language time"',
       default: '"cover main time" "cover meta meta"',
     },
     paddingBlock: "0.375rem",
@@ -39,10 +37,10 @@ const styles = stylex.create({
     backgroundClip: "padding-box",
     backgroundColor: colors.card,
     boxShadow: shadows.chip,
-    columnGap: { [DESKTOP]: "0.875rem", default: "0.75rem" },
+    columnGap: { [breakpoints.lg]: "0.875rem", default: "0.75rem" },
     display: "grid",
     gridTemplateColumns: {
-      [DESKTOP]: "1.6875rem minmax(0, 1fr) minmax(0, 16rem) minmax(0, 9rem) 4.75rem 4rem",
+      [breakpoints.lg]: "1.6875rem minmax(0, 1fr) minmax(0, 16rem) minmax(0, 9rem) 4.75rem 4rem",
       default: "1.6875rem minmax(0, 1fr) auto",
     },
     rowGap: "0.25rem",
@@ -75,7 +73,7 @@ const styles = stylex.create({
   rowMeta: {
     gap: "0.75rem",
     alignItems: "center",
-    display: { [DESKTOP]: "contents", default: "flex" },
+    display: { [breakpoints.lg]: "contents", default: "flex" },
     gridColumnEnd: "meta",
     gridColumnStart: "meta",
     gridRowEnd: "meta",
@@ -83,18 +81,18 @@ const styles = stylex.create({
     minWidth: 0,
   },
   rowGroups: {
-    gridArea: { [DESKTOP]: "groups", default: null },
+    gridArea: { [breakpoints.lg]: "groups", default: null },
     flexShrink: 1,
   },
   rowUploader: {
-    gridArea: { [DESKTOP]: "uploader", default: null },
-    display: { [TABLET]: "flex", default: "none" },
+    gridArea: { [breakpoints.lg]: "uploader", default: null },
+    display: { [breakpoints.sm]: "flex", default: "none" },
     flexShrink: 2,
   },
   rowLanguage: {
-    gridArea: { [DESKTOP]: "language", default: null },
+    gridArea: { [breakpoints.lg]: "language", default: null },
     justifySelf: "start",
-    order: { [DESKTOP]: 0, default: -1 },
+    order: { [breakpoints.lg]: 0, default: -1 },
   },
   rowTime: {
     gridColumnEnd: "time",

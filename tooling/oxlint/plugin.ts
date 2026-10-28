@@ -94,11 +94,42 @@ const sxRequiresStylexImport: Rule = {
     }
   },
 }
+const INLINE_QUERY = /^@(?:media|container)\b/
+const noInlineQueries: Rule = {
+  meta: {
+    type: "problem",
+    messages: {
+      inlineQuery:
+        "`{{query}}` is an inline query: use `breakpoints`, `containers` or `consts` from @taiyomoe/ui/styles/tokens.stylex, or a `defineConsts` in a `*.stylex.ts` file.",
+    },
+  },
+  create(context) {
+    if (context.filename.endsWith(".stylex.ts")) {
+      return {}
+    }
+
+    return {
+      Literal(node) {
+        if (typeof node.value === "string" && INLINE_QUERY.test(node.value)) {
+          context.report({ node, messageId: "inlineQuery", data: { query: node.value } })
+        }
+      },
+      TemplateLiteral(node) {
+        const head = node.quasis[0]?.value.cooked ?? ""
+
+        if (INLINE_QUERY.test(head)) {
+          context.report({ node, messageId: "inlineQuery", data: { query: head } })
+        }
+      },
+    }
+  },
+}
 
 export default {
   meta: { name: "taiyo" },
   rules: {
     "no-sx-on-third-party": noSxOnThirdParty,
     "sx-requires-stylex-import": sxRequiresStylexImport,
+    "no-inline-queries": noInlineQueries,
   },
 }

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
-import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Media } from "@/features/media/api/medias"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { mediaPageStyles } from "@/features/media/components/media-page/media-page-styles"
@@ -14,14 +14,13 @@ import {
 } from "@/features/media/lib/media-labels"
 import { m } from "@/paraglide/messages"
 
-const DESKTOP = "@media (width >= 64rem)"
 const MAX_EYEBROW_TITLES = 3
 const styles = stylex.create({
   eyebrow: {
     margin: 0,
     overflow: "hidden",
     color: `color-mix(in srgb, ${colors.foreground} 75%, transparent)`,
-    display: { default: "none", "@media (width >= 40rem)": "block" },
+    display: { default: "none", [breakpoints.sm]: "block" },
     fontSize: "0.75rem",
     fontWeight: 600,
     letterSpacing: "0.12em",
@@ -33,11 +32,11 @@ const styles = stylex.create({
     margin: 0,
     overflow: "hidden",
     WebkitBoxOrient: "vertical",
-    WebkitLineClamp: { [DESKTOP]: 3, default: 4 },
+    WebkitLineClamp: { [breakpoints.lg]: 3, default: 4 },
     color: colors.foreground,
     display: "-webkit-box",
     fontFamily: sceneFont.display,
-    fontSize: { [DESKTOP]: "3.25rem", default: "1.625rem", "@media (width >= 40rem)": "2.25rem" },
+    fontSize: { default: "1.625rem", [breakpoints.sm]: "2.25rem", [breakpoints.lg]: "3.25rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.02em",
     lineHeight: 1.1,

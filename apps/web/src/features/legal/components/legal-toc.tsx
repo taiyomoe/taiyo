@@ -1,10 +1,11 @@
 import * as stylex from "@stylexjs/stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { LegalSection } from "@/features/legal/components/legal-page"
 import { scene } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   toc: {
-    position: { default: "static", "@media (width >= 64rem)": "sticky" },
+    position: { default: "static", [breakpoints.lg]: "sticky" },
     top: "6.5rem",
   },
   tocLabel: {

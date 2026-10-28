@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, containers } from "@taiyomoe/ui/styles/tokens.stylex"
 import { cell, defineChart } from "@tanstack/charts"
 import { Chart } from "@tanstack/charts/react"
 import { scaleBand } from "@tanstack/charts/scales/band"
@@ -29,13 +29,13 @@ const styles = stylex.create({
   hourly: {
     display: {
       default: "none",
-      "@container (width >= 40rem)": "block",
+      [containers["2xl"]]: "block",
     },
   },
   compact: {
     display: {
       default: "block",
-      "@container (width >= 40rem)": "none",
+      [containers["2xl"]]: "none",
     },
   },
   scale: {

@@ -3,7 +3,7 @@ import { Menu } from "@taiyomoe/ui/components/icons"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { useSidebar } from "@taiyomoe/ui/components/ui/sidebar"
-import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
@@ -16,19 +16,19 @@ const styles = stylex.create({
     flexShrink: 0,
     transitionDuration: {
       default: motion.slide,
-      "@media (prefers-reduced-motion: reduce)": "0s",
+      [consts.reducedMotion]: "0s",
     },
     transitionProperty: "width",
     transitionTimingFunction: motion.easeOut,
     width: {
       default: "auto",
-      "@media (width >= 50rem)": "var(--sidebar-width)",
+      [breakpoints.md]: "var(--sidebar-width)",
     },
   },
   brandCollapsed: {
     width: {
       default: "auto",
-      "@media (width >= 50rem)": "12.5rem",
+      [breakpoints.md]: "12.5rem",
     },
   },
   instant: {
@@ -41,7 +41,7 @@ const styles = stylex.create({
     opacity: 1,
     transitionDuration: {
       default: motion.slide,
-      "@media (prefers-reduced-motion: reduce)": "0s",
+      [consts.reducedMotion]: "0s",
     },
     transitionProperty: "width, margin-right, opacity",
     transitionTimingFunction: motion.easeOut,
@@ -51,15 +51,15 @@ const styles = stylex.create({
   toggleSlotHidden: {
     opacity: {
       default: 1,
-      "@media (width >= 50rem)": 0,
+      [breakpoints.md]: 0,
     },
     marginRight: {
       default: "0.375rem",
-      "@media (width >= 50rem)": 0,
+      [breakpoints.md]: 0,
     },
     width: {
       default: "2.25rem",
-      "@media (width >= 50rem)": 0,
+      [breakpoints.md]: 0,
     },
   },
   toggle: {

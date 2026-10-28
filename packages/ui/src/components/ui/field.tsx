@@ -2,7 +2,7 @@ import type React from "react"
 import { Field as FieldPrimitive } from "@base-ui/react/field"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts } from "../../styles/tokens.stylex"
+import { breakpoints, colors } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
@@ -19,12 +19,12 @@ const styles = stylex.create({
     display: "inline-flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     fontWeight: 500,
     lineHeight: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     opacity: {
       "[data-disabled]": 0.64,

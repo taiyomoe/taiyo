@@ -1,12 +1,12 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   page: {
     gap: "2rem",
-    paddingInline: { default: "1.25rem", "@media (width >= 48rem)": "2rem" },
+    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
     display: "flex",
     flexDirection: "column",
     maxWidth: "68rem",
@@ -35,7 +35,7 @@ const styles = stylex.create({
   title: {
     margin: 0,
     fontFamily: sceneFont.display,
-    fontSize: { default: "1.75rem", "@media (width >= 48rem)": "2.25rem" },
+    fontSize: { default: "1.75rem", [breakpoints.md]: "2.25rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.02em",
     lineHeight: 1.15,
@@ -85,7 +85,7 @@ const styles = stylex.create({
     paddingInline: "1.25rem",
     alignItems: "center",
     display: "flex",
-    flexWrap: { default: "wrap", "@media (width >= 40rem)": "nowrap" },
+    flexWrap: { default: "wrap", [breakpoints.sm]: "nowrap" },
     borderTopColor: colors.border,
     borderTopStyle: "solid",
     borderTopWidth: { default: 1, ":first-child": 0 },

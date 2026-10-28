@@ -1,18 +1,19 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { featuredStyles } from "@/features/home/components/featured/featured-styles"
 import { CoverSkeleton } from "@/features/media/components/cover"
 
 const styles = stylex.create({
   skeletonLines: {
-    gap: { default: "0.5rem", "@media (width >= 48rem)": "0.75rem" },
+    gap: { default: "0.5rem", [breakpoints.md]: "0.75rem" },
     display: "flex",
     flexDirection: "column",
     flexGrow: 1,
     maxWidth: "36rem",
   },
   skeletonTitle: {
-    height: { default: "1.5rem", "@media (width >= 48rem)": "2.5rem" },
+    height: { default: "1.5rem", [breakpoints.md]: "2.5rem" },
     width: "70%",
   },
   skeletonAuthors: {

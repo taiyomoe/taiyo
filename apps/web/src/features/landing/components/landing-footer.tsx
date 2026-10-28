@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
-import { font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { Section } from "@/features/landing/components/section"
@@ -56,7 +56,7 @@ const styles = stylex.create({
   grid: {
     gap: "2.5rem",
     display: "grid",
-    gridTemplateColumns: { default: "1fr", "@media (width >= 54rem)": "1.4fr repeat(3, 1fr)" },
+    gridTemplateColumns: { default: "1fr", [breakpoints.md]: "1.4fr repeat(3, 1fr)" },
   },
   brand: {
     color: scene.paper,

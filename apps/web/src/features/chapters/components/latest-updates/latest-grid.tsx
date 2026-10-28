@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { range } from "remeda"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
@@ -20,9 +20,9 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "repeat(2, minmax(0, 1fr))",
-      "@media (width >= 36rem)": "repeat(3, minmax(0, 1fr))",
-      "@media (width >= 52rem)": "repeat(4, minmax(0, 1fr))",
-      "@media (width >= 80rem)": "repeat(6, minmax(0, 1fr))",
+      [breakpoints.sm]: "repeat(3, minmax(0, 1fr))",
+      [breakpoints.md]: "repeat(4, minmax(0, 1fr))",
+      [breakpoints.xl]: "repeat(6, minmax(0, 1fr))",
     },
     rowGap: "1.5rem",
   },

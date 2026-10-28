@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Media } from "@/features/media/api/medias"
 import { InfoSection } from "@/features/media/components/media-info/info-section"
 import { MediaAltTitles } from "@/features/media/components/media-info/media-alt-titles"
@@ -15,13 +15,12 @@ import {
 } from "@/features/media/lib/media-labels"
 import { m } from "@/paraglide/messages"
 
-const WIDE = "@media (width >= 72rem)"
 const styles = stylex.create({
   root: {
     gap: "2rem",
     alignItems: "start",
     display: "grid",
-    gridTemplateColumns: { [WIDE]: "minmax(0, 1fr) 20rem", default: "minmax(0, 1fr)" },
+    gridTemplateColumns: { [breakpoints.xl]: "minmax(0, 1fr) 20rem", default: "minmax(0, 1fr)" },
   },
   main: {
     gap: "2rem",

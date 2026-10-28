@@ -1,10 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
 export const featuredStyles = stylex.create({
   root: {
     position: "relative",
-    marginTop: { default: "calc(-1 * var(--navbar-height))", "@media (width >= 50rem)": 0 },
+    marginTop: { default: "calc(-1 * var(--navbar-height))", [breakpoints.md]: 0 },
   },
   slide: {
     overflow: "hidden",
@@ -27,18 +27,17 @@ export const featuredStyles = stylex.create({
     position: "absolute",
   },
   content: {
-    gap: { default: "1.25rem", "@media (width >= 48rem)": "2.5rem" },
-    paddingInline: { default: "1.25rem", "@media (width >= 48rem)": "2.5rem" },
+    gap: { default: "1.25rem", [breakpoints.md]: "2.5rem" },
+    paddingInline: { default: "1.25rem", [breakpoints.md]: "2.5rem" },
     display: "flex",
     position: "relative",
-    paddingBottom: { default: "2.25rem", "@media (width >= 48rem)": "2.5rem" },
+    paddingBottom: { default: "2.25rem", [breakpoints.md]: "2.5rem" },
     paddingTop: {
       default: "calc(var(--navbar-height) + 1.25rem)",
-      "@media (width >= 48rem) and (width < 50rem)": "calc(var(--navbar-height) + 2.5rem)",
-      "@media (width >= 50rem)": "2.5rem",
+      [breakpoints.md]: "2.5rem",
     },
   },
   cover: {
-    height: { default: "10.5rem", "@media (width >= 48rem)": "16.5rem" },
+    height: { default: "10.5rem", [breakpoints.md]: "16.5rem" },
   },
 })

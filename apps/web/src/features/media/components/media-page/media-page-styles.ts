@@ -1,30 +1,28 @@
 import * as stylex from "@stylexjs/stylex"
-import { radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
-
-const DESKTOP = "@media (width >= 64rem)"
+import { breakpoints, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 
 export const mediaPageStyles = stylex.create({
   layout: {
     gridTemplateAreas: {
-      [DESKTOP]: '"aside main"',
+      [breakpoints.lg]: '"aside main"',
       default: '"cover header" "actions actions" "tabs tabs"',
     },
     marginInline: "auto",
-    paddingInline: { default: "1.25rem", "@media (width >= 48rem)": "2rem" },
-    columnGap: { [DESKTOP]: "2.5rem", default: "1rem" },
+    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
+    columnGap: { [breakpoints.lg]: "2.5rem", default: "1rem" },
     display: "grid",
     gridTemplateColumns: {
-      [DESKTOP]: "16rem minmax(0, 1fr)",
+      [breakpoints.lg]: "16rem minmax(0, 1fr)",
       default: "7rem minmax(0, 1fr)",
     },
     rowGap: "1.5rem",
     maxWidth: "88rem",
     paddingBottom: "3rem",
-    paddingTop: { [DESKTOP]: "5rem", default: "2rem" },
+    paddingTop: { [breakpoints.lg]: "5rem", default: "2rem" },
   },
   aside: {
     gap: "1.25rem",
-    display: { [DESKTOP]: "flex", default: "contents" },
+    display: { [breakpoints.lg]: "flex", default: "contents" },
     flexDirection: "column",
     gridColumnEnd: "aside",
     gridColumnStart: "aside",
@@ -44,7 +42,7 @@ export const mediaPageStyles = stylex.create({
   },
   main: {
     gap: "2rem",
-    display: { [DESKTOP]: "flex", default: "contents" },
+    display: { [breakpoints.lg]: "flex", default: "contents" },
     flexDirection: "column",
     gridColumnEnd: "main",
     gridColumnStart: "main",
@@ -53,8 +51,8 @@ export const mediaPageStyles = stylex.create({
     minWidth: 0,
   },
   header: {
-    gap: { [DESKTOP]: "0.875rem", default: "0.5rem" },
-    alignSelf: { [DESKTOP]: "stretch", default: "end" },
+    gap: { [breakpoints.lg]: "0.875rem", default: "0.5rem" },
+    alignSelf: { [breakpoints.lg]: "stretch", default: "end" },
     display: "flex",
     flexDirection: "column",
     gridColumnEnd: "header",
@@ -62,7 +60,7 @@ export const mediaPageStyles = stylex.create({
     gridRowEnd: "header",
     gridRowStart: "header",
     justifyContent: "flex-end",
-    minHeight: { [DESKTOP]: "12rem", default: null },
+    minHeight: { [breakpoints.lg]: "12rem", default: null },
     minWidth: 0,
   },
 })

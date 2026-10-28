@@ -1,6 +1,6 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, consts } from "@taiyomoe/ui/styles/tokens.stylex"
 import { mascotStyles } from "@/features/settings/components/mascot-styles"
 
 const twinkle = stylex.keyframes({
@@ -21,7 +21,7 @@ const styles = stylex.create({
     animationName: twinkle,
     animationTimingFunction: "ease-out",
     color: `color-mix(in srgb, ${colors.contentNsfw} 35%, ${colors.contentNsfwShine})`,
-    display: { default: "block", "@media (prefers-reduced-motion: reduce)": "none" },
+    display: { default: "block", [consts.reducedMotion]: "none" },
     filter: `drop-shadow(0 0 2px ${colors.contentNsfw})`,
     opacity: 0,
     position: "absolute",
