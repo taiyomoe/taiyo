@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@nextui-org/button"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { PencilIcon } from "lucide-react"

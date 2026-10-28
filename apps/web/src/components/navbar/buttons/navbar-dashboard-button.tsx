@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@nextui-org/button"
 import { GaugeIcon } from "lucide-react"
 import Link from "next/link"
