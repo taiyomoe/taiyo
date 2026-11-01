@@ -62,7 +62,11 @@ const openTunnel = (port: string) =>
       shutdown(1)
     })
   })
-const main = async () => {
+
+process.once("SIGINT", () => shutdown(130))
+process.once("SIGTERM", () => shutdown(143))
+
+try {
   const rootEnvPath = join(repoRoot, ".env")
 
   if (!existsSync(rootEnvPath)) {
@@ -96,12 +100,7 @@ sign-in cookies work.
 
   children.push(dev)
   dev.once("exit", (code) => shutdown(code ?? 0))
-}
-
-process.once("SIGINT", () => shutdown(130))
-process.once("SIGTERM", () => shutdown(143))
-
-main().catch((error: unknown) => {
+} catch (error: unknown) {
   console.error(`\u001B[31m${error instanceof Error ? error.message : String(error)}\u001B[0m`)
   shutdown(1)
-})
+}

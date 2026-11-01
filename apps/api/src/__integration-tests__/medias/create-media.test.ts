@@ -4,7 +4,7 @@ import sharp from "sharp"
 import { describe, expect } from "vitest"
 import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
-import { invalidImage, jpegWithExif, tinyPng } from "../helpers/fixtures"
+import { invalidImage, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
@@ -156,8 +156,17 @@ describe("POST /medias", () => {
   test("strips EXIF metadata from uploaded covers", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
     const form = await getForm()
+    const exif = await sharp({
+      create: { width: 4, height: 4, channels: 3, background: { r: 30, g: 30, b: 200 } },
+    })
+      .withExif({ IFD0: { Copyright: "advisor-test", Make: "TestCam", Model: "TestModel" } })
+      .jpeg()
+      .toBuffer()
 
-    form.set("covers.0.file", await jpegWithExif())
+    form.set(
+      "covers.0.file",
+      new File([new Uint8Array(exif)], "with-exif.jpg", { type: "image/jpeg" }),
+    )
 
     const res = await api<{ id: string }>(app, "/medias", { method: "POST", headers, form })
 

@@ -630,9 +630,6 @@ export const MEDIA_LINK_NUMBER_KEYS = ["anilist", "myAnimeList"] as const satisf
 
 export type MediaLinkNumberKey = (typeof MEDIA_LINK_NUMBER_KEYS)[number]
 
-export const isMediaLink = (k: string): k is MediaLink =>
-  (MEDIA_LINK_KEYS as readonly string[]).includes(k)
-
 export const STAFF_LINK_KEYS = [
   "website",
   "twitter",
@@ -652,9 +649,6 @@ export const STAFF_LINK_KEYS = [
 ] as const
 
 export type StaffLink = (typeof STAFF_LINK_KEYS)[number]
-
-export const isStaffLink = (k: string): k is StaffLink =>
-  (STAFF_LINK_KEYS as readonly string[]).includes(k)
 
 export const IMAGE_MIME_TYPES = {
   "image/jpeg": "jpeg",

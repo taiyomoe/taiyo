@@ -60,13 +60,6 @@ const UTC_BUCKET_STARTS = {
   month: (now: Date, offset: number) =>
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + offset, 1),
 }
-const utcBuckets = (unit: keyof typeof UTC_BUCKET_STARTS, count: number) => {
-  const now = new Date()
-
-  return Array.from({ length: count }, (_, index) =>
-    new Date(UTC_BUCKET_STARTS[unit](now, index - count + 1)).toISOString(),
-  )
-}
 const dayAt = (daysAgo: number, hours: number) =>
   sql<Date>`date_trunc('day', now()) - make_interval(days => ${daysAgo}) + make_interval(hours => ${hours})`
 const signInAndAgeSeeds = async (services: Services) => {
@@ -206,9 +199,14 @@ describe("GET /dashboard/overview", () => {
   ] as const)("buckets %s by %s", async ([range, unit, count], { app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
     const overview = await getOverview(app, headers, `range=${range}`)
+    const now = new Date()
 
     expect(overview).toMatchObject({ range, unit, timeZone: "UTC" })
-    expect(overview.buckets).toEqual(utcBuckets(unit, count))
+    expect(overview.buckets).toEqual(
+      Array.from({ length: count }, (_, index) =>
+        new Date(UTC_BUCKET_STARTS[unit](now, index - count + 1)).toISOString(),
+      ),
+    )
 
     for (const metric of Object.values(overview.metrics)) {
       expect(metric.current).toHaveLength(count)

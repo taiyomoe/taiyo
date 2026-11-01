@@ -10,13 +10,6 @@ local value = redis.call('INCR', KEYS[1])
 if value == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end
 return value
 `
-const expectNumber = (value: unknown) => {
-  if (typeof value !== "number") {
-    throw new TypeError(`Expected a number reply, got ${typeof value}`)
-  }
-
-  return value
-}
 
 export const rawCacheClient = client
 
@@ -28,7 +21,13 @@ export const cacheClient = {
       invalidate: (id: string) => client.del(`users:auth:${id}`).then(() => null),
       getAndDelete: (id: string) => client.getdel(`users:auth:${id}`),
       increment: (id: string, ttl: number) =>
-        client.eval(INCREMENT_WITH_TTL, 1, `users:auth:${id}`, ttl).then(expectNumber),
+        client.eval(INCREMENT_WITH_TTL, 1, `users:auth:${id}`, ttl).then((value) => {
+          if (typeof value !== "number") {
+            throw new TypeError(`Expected a number reply, got ${typeof value}`)
+          }
+
+          return value
+        }),
     },
     verificationEmailSentAt: {
       set: (id: string, value: Date) =>
