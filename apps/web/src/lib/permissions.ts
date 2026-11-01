@@ -1,7 +1,7 @@
 import { createPermissions, toRole } from "@taiyomoe/permissions"
 import { useQuery } from "@tanstack/react-query"
-import type { Session } from "@/lib/queries/session"
-import { type MyGroup, myGroupsQueryOptions } from "@/lib/queries/groups"
+import type { Session } from "@/lib/session"
+import { type MyGroup, myGroupsQueryOptions } from "@/features/groups/api/groups"
 
 type User = Session["user"] | null | undefined
 

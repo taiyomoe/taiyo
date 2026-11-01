@@ -31,15 +31,13 @@ const styles = stylex.create({
 
 export const PreviewCard: typeof PreviewCardPrimitive.Root = PreviewCardPrimitive.Root
 
-export type PreviewCardTriggerProps = PreviewCardPrimitive.Trigger.Props & {
-  sx?: Sx
-}
-
 export function PreviewCardTrigger({
   className,
   sx,
   ...props
-}: PreviewCardTriggerProps): React.ReactElement {
+}: PreviewCardPrimitive.Trigger.Props & {
+  sx?: Sx
+}): React.ReactElement {
   const styleProps = stylex.props(sx)
 
   return (

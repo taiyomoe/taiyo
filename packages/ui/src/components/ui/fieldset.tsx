@@ -12,11 +12,13 @@ const styles = stylex.create({
   },
 })
 
-export type FieldsetProps = FieldsetPrimitive.Root.Props & {
+export function Fieldset({
+  className,
+  sx,
+  ...props
+}: FieldsetPrimitive.Root.Props & {
   sx?: Sx
-}
-
-export function Fieldset({ className, sx, ...props }: FieldsetProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(sx)
 
   return (
@@ -29,15 +31,13 @@ export function Fieldset({ className, sx, ...props }: FieldsetProps): React.Reac
   )
 }
 
-export type FieldsetLegendProps = FieldsetPrimitive.Legend.Props & {
-  sx?: Sx
-}
-
 export function FieldsetLegend({
   className,
   sx,
   ...props
-}: FieldsetLegendProps): React.ReactElement {
+}: FieldsetPrimitive.Legend.Props & {
+  sx?: Sx
+}): React.ReactElement {
   const styleProps = stylex.props(styles.legend, sx)
 
   return (

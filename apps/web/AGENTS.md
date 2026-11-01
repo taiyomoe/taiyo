@@ -154,9 +154,10 @@ OpenAPI-generated client.
   generic.** If either is simplified away, this whole client silently degrades to
   `any` and no test in the repo fails. The full rationale is in
   `docs/engineering-notes.md`.
-- **Query options live in `src/lib/queries/`**, one `queryOptions` factory per
-  endpoint, and are handed to routes through the route's `context` function —
-  never duplicated between a loader and a component. See **Router, query and
+- **Query options live in their feature's `api/` folder**
+  (`src/features/<feature>/api/`), one `queryOptions` factory per endpoint, and
+  are handed to routes through the route's `context` function — never
+  duplicated between a loader and a component. See **Router, query and
   prefetching** below.
 - **CORS.** The API only honours `credentials: "include"` for origins listed in
   its `CORS_ALLOWED_ORIGINS`, which `pnpm bootstrap` points at this checkout's
@@ -195,8 +196,10 @@ OpenAPI-generated client.
     validateSearch: …,
     loaderDeps: ({ search }) => ({ page: search.page }),
     context: ({ deps }) => ({ titlesQueryOptions: titlesQueryOptions(deps) }),
-    loader: ({ context }) => context.queryClient.ensureQueryData(context.titlesQueryOptions),
-    component: Titles,
+    loader: ({ context }) => {
+      void context.queryClient.query(context.titlesQueryOptions).catch(noop)
+    },
+    component: TitlesPage,
   })
   ```
 
@@ -211,11 +214,17 @@ OpenAPI-generated client.
   invalidation, no window-focus refetch, and it is eligible for garbage
   collection. Treat the loader as fire-and-forget — the page must still work if
   you delete it.
-- **Loaders use `prefetchQuery` and do not `await`.** `ensureQueryData` would
-  make the loader the thing that blocks and the thing that throws; an unawaited
-  `prefetchQuery` primes the cache and swallows its own rejection, leaving
-  `useSuspenseQuery` to own both loading and errors. Note that oxlint's
-  `no-floating-promises` requires the explicit `void` operator on that call.
+- **Loaders fire `queryClient.query(options).catch(noop)` and do not `await`
+  it on the client.** `prefetchQuery` and `ensureQueryData` are deprecated in
+  favour of `query`. Awaiting would make the loader the thing that blocks and
+  the thing that throws; the unawaited call primes the cache and swallows its
+  own rejection, leaving `useSuspenseQuery` to own both loading and errors.
+  oxlint's `no-floating-promises` requires the explicit `void` on a bare call.
+  When the page reads the query inside its own `<Suspense>` boundary (the home
+  carousel, `/latest`, `/groups`), also await it on the server:
+  `if (import.meta.env.SSR) await prefetch`. Otherwise SSR streams that
+  boundary's skeleton into the first paint instead of the content, while
+  client navigation should still show the skeleton immediately.
 - **`retry: 1`, not the React Query default of 3.** With the default, a
   completely unreachable API sits on the pending component for ~10 seconds
   before the error boundary ever renders, because of the exponential backoff.
@@ -241,9 +250,8 @@ OpenAPI-generated client.
 
 With a data route like this, a hard `GET /titles` blocks until the query
 resolves and then returns complete HTML — the list is in the initial response
-and `pendingComponent` never appears. That is true whether the loader awaits
-`ensureQueryData` or fires `prefetchQuery`, because `useSuspenseQuery` is what
-holds the render back. The pending component does render when the query is slow
+and `pendingComponent` never appears. That is true whether or not the loader
+awaits the query, because `useSuspenseQuery` is what holds the render back. The pending component does render when the query is slow
 or failing, and on client-side navigation.
 
 One consequence worth knowing: a slow API shows up as time-to-first-byte, not as

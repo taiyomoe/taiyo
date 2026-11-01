@@ -6,7 +6,7 @@ import { clamp } from "remeda"
 import type { CSSVariables, Sx } from "../../styles/sx"
 import { useMediaQuery } from "../../hooks/use-media-query"
 import { a11y } from "../../styles/recipes"
-import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { PanelLeft } from "../icons"
 import { Button } from "./button"
@@ -24,7 +24,6 @@ const SIDEBAR_WIDTH = 256
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
-const MOBILE_QUERY = "(max-width: 799px)"
 
 export type SidebarSide = "left" | "right"
 
@@ -83,7 +82,7 @@ const styles = stylex.create({
     color: colors.sidebarForeground,
     display: {
       default: "none",
-      "@media (width >= 48rem)": "block",
+      [breakpoints.md]: "block",
     },
   },
   gap: {
@@ -91,7 +90,7 @@ const styles = stylex.create({
     position: "relative",
     transitionDuration: {
       default: motion.slide,
-      "@media (prefers-reduced-motion: reduce)": "0s",
+      [consts.reducedMotion]: "0s",
     },
     transitionProperty: "width",
     transitionTimingFunction: motion.easeOut,
@@ -113,12 +112,12 @@ const styles = stylex.create({
     insetBlock: 0,
     display: {
       default: "none",
-      "@media (width >= 48rem)": "flex",
+      [breakpoints.md]: "flex",
     },
     position: "fixed",
     transitionDuration: {
       default: motion.slide,
-      "@media (prefers-reduced-motion: reduce)": "0s",
+      [consts.reducedMotion]: "0s",
     },
     transitionProperty: "translate, width",
     transitionTimingFunction: motion.easeOut,
@@ -174,7 +173,7 @@ const styles = stylex.create({
     insetBlock: 0,
     display: {
       default: "none",
-      [consts.sm]: "flex",
+      [breakpoints.sm]: "flex",
     },
     position: "absolute",
     transitionProperty: "all",
@@ -261,25 +260,25 @@ const styles = stylex.create({
   insetFloating: {
     margin: {
       default: null,
-      "@media (width >= 48rem)": "0.5rem",
+      [breakpoints.md]: "0.5rem",
     },
     borderRadius: {
       default: null,
-      "@media (width >= 48rem)": radius.xl,
+      [breakpoints.md]: radius.xl,
     },
     boxShadow: {
       default: null,
-      "@media (width >= 48rem)": shadows.raised,
+      [breakpoints.md]: shadows.raised,
     },
     marginLeft: {
       default: null,
-      "@media (width >= 48rem)": 0,
+      [breakpoints.md]: 0,
     },
   },
   insetFloatingCollapsed: {
     marginLeft: {
       default: null,
-      "@media (width >= 48rem)": "0.5rem",
+      [breakpoints.md]: "0.5rem",
     },
   },
   stack: {
@@ -523,7 +522,7 @@ const styles = stylex.create({
     translate: "-1px",
     height: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
     minWidth: 0,
   },
@@ -571,7 +570,7 @@ const styles = stylex.create({
       inset: "-0.5rem",
       content: {
         default: '""',
-        "@media (width >= 48rem)": "none",
+        [breakpoints.md]: "none",
       },
       position: "absolute",
     },
@@ -605,7 +604,7 @@ const styles = stylex.create({
       inset: "-0.5rem",
       content: {
         default: '""',
-        "@media (width >= 48rem)": "none",
+        [breakpoints.md]: "none",
       },
       position: "absolute",
     },
@@ -614,7 +613,7 @@ const styles = stylex.create({
     opacity: {
       '[data-state="open"]': 1,
       default: null,
-      "@media (width >= 48rem)": 0,
+      [breakpoints.md]: 0,
     },
   },
 })
@@ -694,7 +693,7 @@ export function SidebarProvider({
   onOpenChange?: (open: boolean) => void
   sx?: Sx
 }): React.ReactElement {
-  const isMobile = useMediaQuery(MOBILE_QUERY)
+  const isMobile = useMediaQuery(breakpoints.maxMd)
   const [openMobile, setOpenMobile] = React.useState(false)
   const [_open, _setOpen] = React.useState(defaultOpen)
   const [width, setWidth] = React.useState(defaultWidth)

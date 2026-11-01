@@ -5,7 +5,15 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { surface } from "../../styles/recipes"
-import { colors, consts, font, motion, radius, shadows, text } from "../../styles/tokens.stylex"
+import {
+  breakpoints,
+  colors,
+  font,
+  motion,
+  radius,
+  shadows,
+  text,
+} from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Close } from "../icons"
 import { Button } from "./button"
@@ -42,15 +50,15 @@ const styles = stylex.create({
   viewportBottomStick: {
     padding: {
       default: "1rem",
-      "@media (width < 40rem)": 0,
+      [breakpoints.maxSm]: 0,
     },
     gridTemplateRows: {
       default: "1fr auto 3fr",
-      "@media (width < 40rem)": "1fr auto",
+      [breakpoints.maxSm]: "1fr auto",
     },
     paddingTop: {
       default: null,
-      "@media (width < 40rem)": "3rem",
+      [breakpoints.maxSm]: "3rem",
     },
   },
   popup: {
@@ -76,7 +84,7 @@ const styles = stylex.create({
     position: "relative",
     scale: {
       default: null,
-      [consts.sm]: {
+      [breakpoints.sm]: {
         "[data-ending-style]": "98%",
         "[data-starting-style]": "98%",
         default: "calc(1 - 0.1 * var(--nested-dialogs))",
@@ -99,15 +107,15 @@ const styles = stylex.create({
   popupBottomStick: {
     borderRadius: {
       default: radius.xxl,
-      "@media (width < 40rem)": 0,
+      [breakpoints.maxSm]: 0,
     },
     transformOrigin: {
       default: "center",
-      "@media (width < 40rem)": "bottom",
+      [breakpoints.maxSm]: "bottom",
     },
     translate: {
       default: null,
-      "@media (width < 40rem)": {
+      [breakpoints.maxSm]: {
         "[data-ending-style]": "0 1rem",
         "[data-starting-style]": "0 1rem",
         default: null,
@@ -115,24 +123,24 @@ const styles = stylex.create({
     },
     borderBottomWidth: {
       default: null,
-      "@media (width < 40rem)": 0,
+      [breakpoints.maxSm]: 0,
     },
     borderLeftWidth: {
       default: null,
-      "@media (width < 40rem)": 0,
+      [breakpoints.maxSm]: 0,
     },
     borderRightWidth: {
       default: null,
-      "@media (width < 40rem)": 0,
+      [breakpoints.maxSm]: 0,
     },
     maxWidth: {
       default: "32rem",
-      "@media (width < 40rem)": "none",
+      [breakpoints.maxSm]: "none",
     },
     "::before": {
       display: {
         default: null,
-        "@media (width < 40rem)": "none",
+        [breakpoints.maxSm]: "none",
       },
     },
   },
@@ -148,7 +156,7 @@ const styles = stylex.create({
     flexDirection: "column",
     paddingBottom: {
       default: "1rem",
-      [consts.sm]: "1.5rem",
+      [breakpoints.sm]: "1.5rem",
     },
   },
   footer: {
@@ -157,19 +165,19 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: {
       default: "column-reverse",
-      [consts.sm]: "row",
+      [breakpoints.sm]: "row",
     },
     justifyContent: {
       default: null,
-      [consts.sm]: "flex-end",
+      [breakpoints.sm]: "flex-end",
     },
     borderBottomLeftRadius: {
       default: null,
-      [consts.sm]: `calc(${radius.xxl} - 1px)`,
+      [breakpoints.sm]: `calc(${radius.xxl} - 1px)`,
     },
     borderBottomRightRadius: {
       default: null,
-      [consts.sm]: `calc(${radius.xxl} - 1px)`,
+      [breakpoints.sm]: `calc(${radius.xxl} - 1px)`,
     },
   },
   footerDefault: {
