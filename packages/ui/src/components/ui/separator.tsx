@@ -20,16 +20,14 @@ const styles = stylex.create({
   },
 })
 
-export type SeparatorProps = SeparatorPrimitive.Props & {
-  sx?: Sx
-}
-
 export function Separator({
   className,
   sx,
   orientation = "horizontal",
   ...props
-}: SeparatorProps): React.ReactElement {
+}: SeparatorPrimitive.Props & {
+  sx?: Sx
+}): React.ReactElement {
   const styleProps = stylex.props(
     styles.base,
     orientation === "horizontal" ? styles.horizontal : styles.vertical,

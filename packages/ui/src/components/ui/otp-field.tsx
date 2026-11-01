@@ -2,7 +2,7 @@ import { OTPField as OTPFieldPrimitive } from "@base-ui/react/otp-field"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Separator } from "./separator"
 
@@ -36,11 +36,11 @@ const styles = stylex.create({
     color: colors.foreground,
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     lineHeight: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
     outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
     outlineStyle: {
@@ -57,12 +57,12 @@ const styles = stylex.create({
     },
     height: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
     minWidth: 0,
     width: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
     "::before": {
       inset: 0,
@@ -79,19 +79,19 @@ const styles = stylex.create({
   inputLg: {
     fontSize: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     lineHeight: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     height: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     width: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
   },
   inputInvalid: {

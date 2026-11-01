@@ -56,16 +56,6 @@ const styles = stylex.create({
   },
 })
 
-type SunRaysProps = {
-  count?: number
-  innerRadius?: string
-  minReach?: number
-  maxReach?: number
-  minWidth?: number
-  maxWidth?: number
-  spinSeconds?: number
-}
-
 export const SunRays = ({
   count = 40,
   innerRadius = "13.75rem",
@@ -74,7 +64,15 @@ export const SunRays = ({
   minWidth = 4,
   maxWidth = 9,
   spinSeconds = 120,
-}: SunRaysProps) => {
+}: {
+  count?: number
+  innerRadius?: string
+  minReach?: number
+  maxReach?: number
+  minWidth?: number
+  maxWidth?: number
+  spinSeconds?: number
+}) => {
   const rays = useMemo(
     () => build(count, minReach, maxReach, minWidth, maxWidth),
     [count, minReach, maxReach, minWidth, maxWidth],

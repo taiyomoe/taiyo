@@ -23,11 +23,13 @@ const styles = stylex.create({
   },
 })
 
-export type CollapsibleProps = CollapsiblePrimitive.Root.Props & {
+export function Collapsible({
+  className,
+  sx,
+  ...props
+}: CollapsiblePrimitive.Root.Props & {
   sx?: Sx
-}
-
-export function Collapsible({ className, sx, ...props }: CollapsibleProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(sx)
 
   return (
@@ -40,15 +42,13 @@ export function Collapsible({ className, sx, ...props }: CollapsibleProps): Reac
   )
 }
 
-export type CollapsibleTriggerProps = CollapsiblePrimitive.Trigger.Props & {
-  sx?: Sx
-}
-
 export function CollapsibleTrigger({
   className,
   sx,
   ...props
-}: CollapsibleTriggerProps): React.ReactElement {
+}: CollapsiblePrimitive.Trigger.Props & {
+  sx?: Sx
+}): React.ReactElement {
   const styleProps = stylex.props(collapsibleTriggerMarker, sx)
 
   return (
@@ -61,15 +61,13 @@ export function CollapsibleTrigger({
   )
 }
 
-export type CollapsiblePanelProps = CollapsiblePrimitive.Panel.Props & {
-  sx?: Sx
-}
-
 export function CollapsiblePanel({
   className,
   sx,
   ...props
-}: CollapsiblePanelProps): React.ReactElement {
+}: CollapsiblePrimitive.Panel.Props & {
+  sx?: Sx
+}): React.ReactElement {
   const styleProps = stylex.props(styles.panel, sx)
 
   return (

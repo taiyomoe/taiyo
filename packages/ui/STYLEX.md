@@ -42,10 +42,11 @@ writing a new component.
 3. **Tokens only.** Colors, radii, shadows, fonts come from
    `../../styles/tokens.stylex` — a relative import, because the StyleX
    compiler cannot resolve tsconfig aliases for token files (`colors`, `radius`,
-   `shadows`, `spacing`, `text`, `font`, `consts`). Never hardcode a color. A
-   component must never know which theme is live: if light and dark need
-   different values, add a semantic token pair (light value in `colors`/
-   `shadows`, dark value in `darkTheme`/`darkShadows`) instead of branching.
+   `shadows`, `spacing`, `text`, `font`, `breakpoints`, `containers`,
+   `consts`). Never hardcode a color. A component must never know which theme
+   is live: if light and dark need different values, add a semantic token pair
+   (light value in `colors`/`shadows`, dark value in `darkTheme`/`darkShadows`)
+   instead of branching.
    Existing semantic tokens: `chip` (raised chip surface), `chipHover`, `field`
    (input surface), `well` (sunken panel), and shadows `raised`, `overlay`,
    `sunken`, `edge` (1px surface edge for ::before), `emboss`, `pressed`.
@@ -187,18 +188,25 @@ same as looking the same:
   components react to another's state (e.g. drawer nesting).
 - Pseudo-elements (`"::before"`, `"::after"`, `"::placeholder"`) are namespace-
   level keys inside a style object.
-- Breakpoints: `consts.sm` / `consts.pointerCoarse` / `consts.pointerFine` from
-  tokens — use computed keys: `height: { default: "2.25rem", [consts.sm]: "2rem" }`.
-  Anything outside that set is an inline media-query string:
-  `{ default: "1fr", "@media (width >= 54rem)": "1.4fr repeat(3, 1fr)" }`.
+- Queries come from tokens as computed keys: `breakpoints` (Tailwind's screens,
+  `sm`–`2xl` plus `maxSm`–`max2xl`), `containers` (Tailwind's container sizes,
+  `3xs`–`7xl`) and `consts` (`pointerCoarse`, `pointerFine`, `reducedMotion`):
+  `height: { default: "2.25rem", [breakpoints.sm]: "2rem" }`. A query only one
+  component needs goes in a `defineConsts` in a `*.stylex.ts` file beside it;
+  `taiyo/no-inline-queries` rejects query strings anywhere else.
+  Overlapping `breakpoints` keys resolve by width whatever their order, but
+  overlapping `containers` keys resolve by declaration text, so write a
+  container range by nesting:
+  `{ default: "span 12", [containers["2xl"]]: { default: "span 6", [containers["5xl"]]: "span 4" } }`.
 - **`stylex.when.*` keys are only legal at the FIRST level of a condition
   object.** `color: { default: x, [stylex.when.ancestor(":active", m)]: y }` is
   fine; nesting one level deeper (a media query under the `when` key, or a
   `when` key under `default`) fails `valid-styles` with "Keys must be strings".
   When a `when`-driven property also needs a breakpoint, hoist the breakpoint
   into a CSS custom property on the ancestor (`"--thumb-size": { default: …,
-  [consts.sm]: … }`) and have the descendant read `var(--thumb-size)`.
-  `consts.*` keys are exempt and work at any depth.
+  [breakpoints.sm]: … }`) and have the descendant read `var(--thumb-size)`.
+  Query constants (`breakpoints`, `containers`, `consts`) are exempt and work
+  at any depth.
 - **`stylex.createTheme()` is all-or-nothing, even with a partial override.**
   The types accept `createTheme(colors, { ring: gold })`, but the class it
   produces re-declares the WHOLE group: applying it resets every other colour

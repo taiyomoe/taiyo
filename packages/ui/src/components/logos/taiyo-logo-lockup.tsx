@@ -19,11 +19,13 @@ const styles = stylex.create({
   },
 })
 
-export type TaiyoLogoLockupProps = ComponentProps<"div"> & {
+export const TaiyoLogoLockup = ({
+  className,
+  sx,
+  ...props
+}: ComponentProps<"div"> & {
   sx?: Sx
-}
-
-export const TaiyoLogoLockup = ({ className, sx, ...props }: TaiyoLogoLockupProps) => {
+}) => {
   const styleProps = stylex.props(styles.root, sx)
 
   return (

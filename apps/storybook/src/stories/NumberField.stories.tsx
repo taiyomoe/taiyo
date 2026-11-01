@@ -11,8 +11,6 @@ import {
 import { fn } from "storybook/test"
 import preview from "@/storybook/preview"
 
-type NumberFieldStoryProps = React.ComponentProps<typeof NumberField>
-
 const styles = stylex.create({
   anchor: {
     width: "14rem",
@@ -45,7 +43,7 @@ const meta = preview.meta({
     step: { control: "number" },
   },
   args: { onValueChange: fn() },
-  render: (args: NumberFieldStoryProps) => (
+  render: (args: React.ComponentProps<typeof NumberField>) => (
     <div sx={styles.anchor}>
       <NumberField {...args}>
         <NumberFieldGroup>

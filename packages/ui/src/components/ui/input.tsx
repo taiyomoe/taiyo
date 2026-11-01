@@ -2,7 +2,7 @@ import type * as React from "react"
 import { Input as InputPrimitive } from "@base-ui/react/input"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
@@ -24,7 +24,7 @@ const styles = stylex.create({
     display: "inline-flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
     outlineOffset: 0,
@@ -66,7 +66,7 @@ const styles = stylex.create({
     fontSize: "inherit",
     lineHeight: {
       default: "2.625rem",
-      [consts.sm]: "2.375rem",
+      [breakpoints.sm]: "2.375rem",
     },
     outlineStyle: "none",
     // Chrome paints its autofill background on a transition; the absurd
@@ -76,7 +76,7 @@ const styles = stylex.create({
     transitionTimingFunction: "ease-in-out",
     height: {
       default: "2.625rem",
-      [consts.sm]: "2.375rem",
+      [breakpoints.sm]: "2.375rem",
     },
     minWidth: 0,
     width: "100%",
@@ -88,21 +88,21 @@ const styles = stylex.create({
     paddingInline: "calc(0.625rem - 1px)",
     lineHeight: {
       default: "2.125rem",
-      [consts.sm]: "1.875rem",
+      [breakpoints.sm]: "1.875rem",
     },
     height: {
       default: "2.125rem",
-      [consts.sm]: "1.875rem",
+      [breakpoints.sm]: "1.875rem",
     },
   },
   inputLg: {
     lineHeight: {
       default: "3.125rem",
-      [consts.sm]: "2.875rem",
+      [breakpoints.sm]: "2.875rem",
     },
     height: {
       default: "3.125rem",
-      [consts.sm]: "2.875rem",
+      [breakpoints.sm]: "2.875rem",
     },
   },
   inputFile: {

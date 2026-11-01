@@ -3,7 +3,7 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts } from "../../styles/tokens.stylex"
+import { breakpoints, colors } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
@@ -14,21 +14,25 @@ const styles = stylex.create({
     display: "inline-flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     fontWeight: 500,
     lineHeight: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
   },
 })
 
-export type LabelProps = useRender.ComponentProps<"label"> & {
+export function Label({
+  className,
+  render,
+  sx,
+  style,
+  ...props
+}: useRender.ComponentProps<"label"> & {
   sx?: Sx
-}
-
-export function Label({ className, render, sx, style, ...props }: LabelProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.base, sx)
   const defaultProps = {
     className: cn(styleProps.className, className),
