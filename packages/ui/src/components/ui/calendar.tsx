@@ -2,7 +2,7 @@ import type * as React from "react"
 import * as stylex from "@stylexjs/stylex"
 import { DayPicker, type DayPickerProps } from "react-day-picker"
 import { calendarDayMarker } from "../../styles/markers.stylex"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronLeft, ChevronRight, ChevronsUpDown } from "../icons"
 
@@ -10,7 +10,7 @@ const styles = stylex.create({
   root: {
     "--cell-size": {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     width: "fit-content",
   },
@@ -25,7 +25,7 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     justifyContent: "center",
     opacity: {
@@ -46,7 +46,7 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     fontWeight: 500,
     height: "100%",
@@ -77,7 +77,7 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     justifyContent: "center",
     outlineColor: `color-mix(in srgb, ${colors.ring} 50%, transparent)`,
@@ -141,7 +141,7 @@ const styles = stylex.create({
     position: "relative",
     height: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
   },
   dropdowns: {
@@ -150,7 +150,7 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     justifyContent: "center",
     height: "var(--cell-size)",
@@ -178,7 +178,7 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: {
       default: "column",
-      [consts.sm]: "row",
+      [breakpoints.sm]: "row",
     },
     position: "relative",
   },
@@ -211,11 +211,11 @@ const styles = stylex.create({
     pointerEvents: "none",
     height: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     width: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
   },
 })

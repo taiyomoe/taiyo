@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { m } from "../paraglide/messages"
-import { sessionQueryOptions } from "./queries/session"
+import { sessionQueryOptions } from "./session"
 
 export type SocialProvider = "discord" | "google"
 

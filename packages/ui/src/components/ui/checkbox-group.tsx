@@ -13,11 +13,13 @@ const styles = stylex.create({
   },
 })
 
-export type CheckboxGroupProps = CheckboxGroupPrimitive.Props & {
+export function CheckboxGroup({
+  className,
+  sx,
+  ...props
+}: CheckboxGroupPrimitive.Props & {
   sx?: Sx
-}
-
-export function CheckboxGroup({ className, sx, ...props }: CheckboxGroupProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.base, sx)
 
   return (

@@ -4,11 +4,13 @@ import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { cn } from "../../utils/cn"
 
-export type FormProps = FormPrimitive.Props & {
+export function Form({
+  className,
+  sx,
+  ...props
+}: FormPrimitive.Props & {
   sx?: Sx
-}
-
-export function Form({ className, sx, ...props }: FormProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(sx)
 
   return (

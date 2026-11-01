@@ -23,11 +23,13 @@ const styles = stylex.create({
   },
 })
 
-export type SkeletonProps = React.ComponentProps<"div"> & {
+export function Skeleton({
+  className,
+  sx,
+  ...props
+}: React.ComponentProps<"div"> & {
   sx?: Sx
-}
-
-export function Skeleton({ className, sx, ...props }: SkeletonProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.base, sx)
 
   return (

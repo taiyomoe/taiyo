@@ -18,11 +18,13 @@ const styles = stylex.create({
   },
 })
 
-export type SpinnerProps = IconProps & {
+export function Spinner({
+  className,
+  sx,
+  ...props
+}: IconProps & {
   sx?: Sx
-}
-
-export function Spinner({ className, sx, ...props }: SpinnerProps): React.ReactElement {
+}): React.ReactElement {
   const styleProps = stylex.props(styles.base, sx)
 
   return (

@@ -4,7 +4,7 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { focus, tap } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Spinner } from "./spinner"
 
@@ -41,7 +41,7 @@ const styles = stylex.create({
     flexShrink: 0,
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     fontWeight: 500,
     justifyContent: "center",
@@ -186,64 +186,64 @@ const sizeStyles = stylex.create({
     paddingInline: "calc(1rem - 1px)",
     height: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
   },
   icon: {
     height: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
     width: {
       default: "2.25rem",
-      [consts.sm]: "2rem",
+      [breakpoints.sm]: "2rem",
     },
   },
   iconLg: {
     height: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     width: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
   },
   iconSm: {
     height: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
     width: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
   },
   iconXl: {
     height: {
       default: "2.75rem",
-      [consts.sm]: "2.5rem",
+      [breakpoints.sm]: "2.5rem",
     },
     width: {
       default: "2.75rem",
-      [consts.sm]: "2.5rem",
+      [breakpoints.sm]: "2.5rem",
     },
   },
   iconXs: {
     height: {
       default: "1.75rem",
-      [consts.sm]: "1.5rem",
+      [breakpoints.sm]: "1.5rem",
     },
     width: {
       default: "1.75rem",
-      [consts.sm]: "1.5rem",
+      [breakpoints.sm]: "1.5rem",
     },
   },
   lg: {
     paddingInline: "calc(1.125rem - 1px)",
     height: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
   },
   sm: {
@@ -251,18 +251,18 @@ const sizeStyles = stylex.create({
     paddingInline: "calc(0.75rem - 1px)",
     height: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
   },
   xl: {
     paddingInline: "calc(1.25rem - 1px)",
     fontSize: {
       default: "1.125rem",
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
     height: {
       default: "2.75rem",
-      [consts.sm]: "2.5rem",
+      [breakpoints.sm]: "2.5rem",
     },
   },
   xs: {
@@ -270,11 +270,11 @@ const sizeStyles = stylex.create({
     paddingInline: "calc(0.625rem - 1px)",
     fontSize: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     height: {
       default: "1.75rem",
-      [consts.sm]: "1.5rem",
+      [breakpoints.sm]: "1.5rem",
     },
   },
 })
@@ -340,13 +340,6 @@ export function buttonVariants({
   return cn(props.className, className)
 }
 
-export type ButtonProps = useRender.ComponentProps<"button"> & {
-  variant?: ButtonVariant
-  size?: ButtonSize
-  loading?: boolean
-  sx?: Sx
-}
-
 export function Button({
   className,
   variant = "default",
@@ -357,7 +350,12 @@ export function Button({
   disabled: disabledProp,
   sx,
   ...props
-}: ButtonProps): React.ReactElement {
+}: useRender.ComponentProps<"button"> & {
+  variant?: ButtonVariant
+  size?: ButtonSize
+  loading?: boolean
+  sx?: Sx
+}): React.ReactElement {
   const isDisabled = Boolean(loading || disabledProp)
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
     ? undefined
