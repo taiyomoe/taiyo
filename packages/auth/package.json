@@ -11,7 +11,7 @@
     "./env-server": "./src/env/server.ts"
   },
   "dependencies": {
-    "@better-auth/kysely-adapter": "^1.7.10",
+    "@better-auth/kysely-adapter": "^1.7.13",
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
@@ -19,7 +19,7 @@
     "@taiyomoe/email": "workspace:^",
     "@taiyomoe/permissions": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "better-auth": "^1.7.10",
+    "better-auth": "^1.7.13",
     "better-auth-harmony": "^1.3.2",
     "luxon": "^3.7.2",
     "react": "^19.3.1",
