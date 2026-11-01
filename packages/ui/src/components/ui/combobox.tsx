@@ -4,7 +4,7 @@ import * as React from "react"
 import type { Sx } from "../../styles/sx"
 import { comboboxPopupMarker } from "../../styles/markers.stylex"
 import { focus, surface, transitions } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Check, ChevronsUpDown, Close } from "../icons"
 import { Input } from "./input"
@@ -45,13 +45,13 @@ const styles = stylex.create({
   inputWithStartAddon: {
     paddingLeft: {
       default: "calc(2.125rem - 1px)",
-      [consts.sm]: "calc(2rem - 1px)",
+      [breakpoints.sm]: "calc(2rem - 1px)",
     },
   },
   inputWithStartAddonSm: {
     paddingLeft: {
       default: "calc(1.875rem - 1px)",
-      [consts.sm]: "calc(1.75rem - 1px)",
+      [breakpoints.sm]: "calc(1.75rem - 1px)",
     },
   },
   inputWithEndButton: {
@@ -83,13 +83,13 @@ const styles = stylex.create({
     translate: "0 -50%",
     height: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
     right: "0.125rem",
     top: "50%",
     width: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
     "::after": {
       content: {
@@ -110,11 +110,11 @@ const styles = stylex.create({
     pointerEvents: "none",
     height: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     width: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
   },
   chipsInput: {
@@ -122,7 +122,7 @@ const styles = stylex.create({
     backgroundColor: "transparent",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     outlineStyle: "none",
     minWidth: "3rem",
@@ -172,7 +172,7 @@ const styles = stylex.create({
     display: "grid",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     gridTemplateColumns: "1fr 1rem",
     opacity: {
@@ -186,7 +186,7 @@ const styles = stylex.create({
     },
     minHeight: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     minWidth: {
       default: null,
@@ -231,7 +231,7 @@ const styles = stylex.create({
     color: colors.mutedForeground,
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     textAlign: "center",
   },
@@ -267,13 +267,13 @@ const styles = stylex.create({
     flexWrap: "wrap",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     position: "relative",
     transitionProperty: "box-shadow, border-color",
     minHeight: {
       default: "2.75rem",
-      [consts.sm]: "2.5rem",
+      [breakpoints.sm]: "2.5rem",
     },
     width: "100%",
     "::before": {
@@ -303,13 +303,13 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     fontWeight: 500,
     outlineStyle: "none",
     minHeight: {
       default: "1.75rem",
-      [consts.sm]: "1.5rem",
+      [breakpoints.sm]: "1.5rem",
     },
     paddingLeft: "0.5rem",
   },
@@ -326,11 +326,11 @@ const styles = stylex.create({
   chipIcon: {
     height: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     width: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
   },
   status: {

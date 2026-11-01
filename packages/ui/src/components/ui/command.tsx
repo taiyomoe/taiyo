@@ -2,7 +2,7 @@ import type * as React from "react"
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, font, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, font, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Search } from "../icons"
 import {
@@ -48,7 +48,7 @@ const styles = stylex.create({
     inset: 0,
     paddingBlock: {
       default: "max(1rem, 4vh)",
-      [consts.sm]: "10vh",
+      [breakpoints.sm]: "10vh",
     },
     paddingInline: "1rem",
     alignItems: "center",
