@@ -4,15 +4,15 @@ import { rateLimiter } from "hono-rate-limiter"
 
 // hono-rate-limiter/redis expects an Upstash-style client; ioredis exposes
 // the same primitives under different method names. Wrap once at module load.
-const expectString = (value: unknown) => {
-  if (typeof value !== "string") {
-    throw new TypeError(`Expected a string reply, got ${typeof value}`)
-  }
-
-  return value
-}
 const adapter: RedisClient = {
-  scriptLoad: (script) => rawCacheClient.script("LOAD", script).then(expectString),
+  scriptLoad: (script) =>
+    rawCacheClient.script("LOAD", script).then((value) => {
+      if (typeof value !== "string") {
+        throw new TypeError(`Expected a string reply, got ${typeof value}`)
+      }
+
+      return value
+    }),
   evalsha: <TData>(sha1: string, keys: string[], args: unknown[]) =>
     // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     rawCacheClient.evalsha(sha1, keys.length, ...keys, ...args.map(String)) as Promise<TData>,

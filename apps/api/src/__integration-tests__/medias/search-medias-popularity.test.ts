@@ -17,7 +17,6 @@ type MediaHit = {
 }
 type CountField = "libraryCount" | "chapterCount"
 
-const getSearchHeaders = () => ({ "x-forwarded-for": `198.51.100.${randomUUID()}` })
 const isMonotonic = (values: number[], direction: "asc" | "desc") =>
   values.every((value, i) => {
     const previous = values[i - 1]
@@ -59,7 +58,7 @@ const waitForCount = async (
 const search = async (app: Hono, json: Record<string, unknown>) => {
   const res = await api<MediaHit[]>(app, "/medias/search", {
     method: "POST",
-    headers: getSearchHeaders(),
+    headers: { "x-forwarded-for": `198.51.100.${randomUUID()}` },
     json: { perPage: 100, ...json },
   })
 

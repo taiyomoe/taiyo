@@ -1,4 +1,4 @@
-import { isMediaLink, type MediaLinks } from "@taiyomoe/db"
+import { MEDIA_LINK_KEYS, type MediaLinks } from "@taiyomoe/db"
 
 export const toMediaLinks = (input: Record<string, unknown>): MediaLinks => {
   const links: MediaLinks = {}
@@ -14,20 +14,22 @@ export const toMediaLinks = (input: Record<string, unknown>): MediaLinks => {
       continue
     }
 
-    if (!isMediaLink(key)) {
+    const link = MEDIA_LINK_KEYS.find((candidate) => candidate === key)
+
+    if (link === undefined) {
       // oxlint-disable-next-line no-console
       console.warn(`Invalid media link key "${key}", skipping...`)
 
       continue
     }
 
-    if (key === "myAnimeList" || key === "anilist") {
-      links[key] = Number.parseInt(value.split("/").find((part) => /^\d+$/.test(part)) ?? "", 10)
+    if (link === "myAnimeList" || link === "anilist") {
+      links[link] = Number.parseInt(value.split("/").find((part) => /^\d+$/.test(part)) ?? "", 10)
 
       continue
     }
 
-    links[key] = value
+    links[link] = value
   }
 
   return links
