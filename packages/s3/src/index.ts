@@ -12,10 +12,10 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { env } from "./env"
 
-export const getS3Client = () =>
+export const getS3Client = (endpoint = env.S3_ENDPOINT) =>
   new S3Client({
     region: "auto",
-    endpoint: env.S3_ENDPOINT,
+    endpoint,
     forcePathStyle: true,
     credentials: {
       accessKeyId: env.S3_ACCESS_KEY_ID,
@@ -43,6 +43,9 @@ export const getCoverKey = (mediaId: string, fileName: string) =>
 export const getBannerKey = (mediaId: string, fileName: string) =>
   `medias/${mediaId}/banners/${fileName}`
 
+const presignClient =
+  env.S3_PRESIGN_ENDPOINT === undefined ? null : getS3Client(env.S3_PRESIGN_ENDPOINT)
+
 export const getPresignedUploadUrl = (
   s3: S3Client,
   bucket: string,
@@ -50,9 +53,11 @@ export const getPresignedUploadUrl = (
   contentType: string,
   expiresIn: number,
 ) =>
-  getSignedUrl(s3, new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: contentType }), {
-    expiresIn,
-  })
+  getSignedUrl(
+    presignClient ?? s3,
+    new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: contentType }),
+    { expiresIn },
+  )
 
 export const getChapterPageKey = (mediaId: string, chapterId: string, pageId: string) =>
   `medias/${mediaId}/chapters/${chapterId}/${pageId}.jpg`

@@ -12,6 +12,8 @@ type StylexOptions = NonNullable<Parameters<typeof stylex.vite>[0]> & {
 const config = defineConfig(({ mode }) => {
   const env = loadEnv(mode, import.meta.dirname, "")
   const apiOrigin = `http://localhost:${env.API_PORT ?? 3002}`
+  const imagesOrigin = `http://localhost:${env.IMAGES_PORT ?? 54902}`
+  const s3Origin = `http://localhost:${env.RUSTFS_PORT ?? 54900}`
   const stylexOptions: StylexOptions = {
     useCSSLayers: { before: ["base", "structural"] },
     dev: process.env.NODE_ENV === "development",
@@ -38,6 +40,11 @@ const config = defineConfig(({ mode }) => {
       proxy: {
         "/_api": { target: apiOrigin, rewrite: (path) => path.replace(/^\/_api/, "") },
         "/api/auth": { target: apiOrigin },
+        "/_images": { target: imagesOrigin, rewrite: (path) => path.replace(/^\/_images/, "") },
+        [`^/${env.S3_BUCKET_NAME ?? "taiyo"}/`]: {
+          target: s3Origin,
+          bypass: (req) => (req.method === "PUT" ? undefined : req.url),
+        },
       },
     },
     plugins: [

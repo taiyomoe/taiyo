@@ -152,7 +152,9 @@ choose one yourself.
 quick tunnels and starts `pnpm dev` behind them. One tunnel serves the web app
 and one serves the API docs. The web app reaches the API through its own origin
 (`/_api` and `/api/auth` are proxied by Vite), so sign-in cookies work over the
-tunnel too. The URLs change on every run and are never written to disk.
+tunnel too. Images take the same route through `/_images`, and chapter page uploads are
+signed for the web tunnel so Vite can forward those `PUT`s to the local RustFS.
+The URLs change on every run and are never written to disk.
 
 **HyperDX** is what production ships logs to, but locally it is opt-in: set
 `COMPOSE_PROFILES="hyperdx"` in the root `.env` and rerun `pnpm bootstrap`. Its

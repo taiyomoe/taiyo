@@ -179,16 +179,14 @@ try {
   const databaseUrl = `postgresql://${credentials}@localhost:${get("DATABASE_PORT")}/${get("DATABASE_NAME")}`
   const s3Endpoint = localUrl(get("RUSTFS_PORT"))
   const apiUrl = localUrl(get("API_PORT"))
-  const s3 = (current: EnvValues) => {
-    const bucket = current.S3_BUCKET_NAME
-
-    return {
-      S3_ENDPOINT: s3Endpoint,
-      S3_ACCESS_KEY_ID: get("RUSTFS_ACCESS_KEY"),
-      S3_SECRET_ACCESS_KEY: get("RUSTFS_SECRET_KEY"),
-      S3_PUBLIC_URL: `${localUrl(get("IMAGES_PORT"))}/${bucket === undefined || bucket === "" ? "taiyo" : bucket}`,
-    }
-  }
+  const bucketOf = ({ S3_BUCKET_NAME: bucket }: EnvValues) =>
+    bucket === undefined || bucket === "" ? "taiyo" : bucket
+  const s3 = (current: EnvValues) => ({
+    S3_ENDPOINT: s3Endpoint,
+    S3_ACCESS_KEY_ID: get("RUSTFS_ACCESS_KEY"),
+    S3_SECRET_ACCESS_KEY: get("RUSTFS_SECRET_KEY"),
+    S3_PUBLIC_URL: `${localUrl(get("IMAGES_PORT"))}/${bucketOf(current)}`,
+  })
 
   syncAppEnv("api", (current) => ({
     PORT: get("API_PORT"),
@@ -211,6 +209,9 @@ try {
   syncAppEnv("web", () => ({
     PORT: get("WEB_PORT"),
     API_PORT: get("API_PORT"),
+    IMAGES_PORT: get("IMAGES_PORT"),
+    RUSTFS_PORT: get("RUSTFS_PORT"),
+    S3_BUCKET_NAME: bucketOf(readEnvFile(join(repoRoot, "apps/api/.env"))),
     VITE_API_URL: apiUrl,
     VITE_BETTER_AUTH_URL: apiUrl,
   }))
