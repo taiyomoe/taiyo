@@ -1,6 +1,4 @@
-import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import {
   Combobox,
   ComboboxChip,
@@ -15,9 +13,10 @@ import {
 import { useQuery } from "@tanstack/react-query"
 import { useDeferredValue, useState } from "react"
 import { groupsQueryOptions, myGroupsQueryOptions } from "@/features/groups/api/groups"
+import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { m } from "@/paraglide/messages"
 
-export type GroupOption = { id: string; name: string }
+export type GroupOption = { id: string; name: string; logo?: string | null }
 
 const styles = stylex.create({
   option: {
@@ -39,11 +38,9 @@ const styles = stylex.create({
 export function GroupPicker({
   value,
   onChange,
-  can,
 }: {
   value: GroupOption[]
   onChange: (value: GroupOption[]) => void
-  can: Permissions
 }) {
   const [input, setInput] = useState("")
   const query = useDeferredValue(input.trim())
@@ -53,11 +50,9 @@ export function GroupPicker({
     enabled: query.length > 0,
   })
   const candidates: GroupOption[] =
-    query.length === 0
-      ? (mine.data ?? []).map(({ group }) => ({ id: group.id, name: group.name }))
-      : (found.data?.data ?? []).map((group) => ({ id: group.id, name: group.name }))
+    query.length === 0 ? (mine.data ?? []).map(({ group }) => group) : (found.data?.data ?? [])
   const items = [
-    ...value,
+    ...value.map((item) => candidates.find((candidate) => candidate.id === item.id) ?? item),
     ...candidates.filter((candidate) => !value.some((item) => item.id === candidate.id)),
   ]
 
@@ -95,10 +90,8 @@ export function GroupPicker({
           {(group: GroupOption) => (
             <ComboboxItem key={group.id} value={group}>
               <span sx={styles.option}>
+                <GroupAvatar id={group.id} logoUrl={group.logo ?? null} name={group.name} size="xs" />
                 <span sx={styles.optionLabel}>{group.name}</span>
-                {can("group.uploadChapters", { id: group.id }) ? (
-                  <Badge variant="success">{m.upload_group_publishes()}</Badge>
-                ) : null}
               </span>
             </ComboboxItem>
           )}

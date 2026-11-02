@@ -1,5 +1,4 @@
 import type { Language } from "@taiyomoe/db/constants"
-import type { Permissions } from "@taiyomoe/permissions"
 // StyleX only compiles the `sx` props of files that import it.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
@@ -17,7 +16,6 @@ import { NUMBER_TOKEN } from "@/features/uploads/lib/chapter-batch/links"
 import { m } from "@/paraglide/messages"
 
 export function UploadSettings({
-  can,
   attempted,
   media,
   onMediaChange,
@@ -36,7 +34,6 @@ export function UploadSettings({
   pendingCount,
   slotsLeft,
 }: {
-  can: Permissions
   attempted: boolean
   media: MediaOption | null
   onMediaChange: (media: MediaOption | null) => void
@@ -68,7 +65,7 @@ export function UploadSettings({
       </Field>
       <Field>
         <FieldLabel>{m.upload_groups()}</FieldLabel>
-        <GroupPicker can={can} onChange={onGroupsChange} value={groups} />
+        <GroupPicker onChange={onGroupsChange} value={groups} />
         <FieldDescription>{m.upload_groups_description()}</FieldDescription>
       </Field>
       <ReleaseField

@@ -40,13 +40,17 @@ const styles = stylex.create({
   },
   headerMeta: {
     gap: "0.625rem",
+    alignItems: "center",
     color: colors.mutedForeground,
     display: "flex",
     fontSize: "0.8125rem",
     fontVariantNumeric: "tabular-nums",
   },
   failed: {
+    gap: "0.25rem",
+    alignItems: "center",
     color: colors.destructive,
+    display: "inline-flex",
   },
 })
 
@@ -76,7 +80,8 @@ export function UploadTrayHeader({
           <span>{m.uploads_progress({ done: summary.done, total: summary.total })}</span>
           {summary.failed > 0 ? (
             <span sx={styles.failed}>
-              <AlertCircle size={12} /> {m.uploads_failed({ count: summary.failed })}
+              <AlertCircle size={12} />
+              {m.uploads_failed({ count: summary.failed })}
             </span>
           ) : null}
         </span>

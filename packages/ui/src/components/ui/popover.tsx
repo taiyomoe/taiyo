@@ -113,6 +113,7 @@ export function PopoverPopup({
   tooltipStyle = false,
   arrow = false,
   anchor,
+  collisionAvoidance,
   portalProps,
   sx,
   ...props
@@ -125,6 +126,7 @@ export function PopoverPopup({
   tooltipStyle?: boolean
   arrow?: boolean
   anchor?: PopoverPrimitive.Positioner.Props["anchor"]
+  collisionAvoidance?: PopoverPrimitive.Positioner.Props["collisionAvoidance"]
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
@@ -149,6 +151,7 @@ export function PopoverPopup({
         anchor={anchor}
         arrowPadding={arrow ? 20 : undefined}
         className={positionerProps.className}
+        {...(collisionAvoidance === undefined ? {} : { collisionAvoidance })}
         data-slot="popover-positioner"
         side={side}
         sideOffset={withArrowOffset(sideOffset, arrow)}

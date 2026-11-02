@@ -4,7 +4,6 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { selectPopupMarker } from "../../styles/markers.stylex"
 import { surface, transitions } from "../../styles/recipes"
 import { breakpoints, colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
@@ -159,7 +158,8 @@ const styles = stylex.create({
     boxShadow: shadows.overlay,
     position: "relative",
     height: "100%",
-    minWidth: "var(--anchor-width)",
+    maxWidth: "var(--available-width)",
+    width: "var(--anchor-width)",
   },
   list: {
     padding: "0.375rem",
@@ -233,7 +233,7 @@ const styles = stylex.create({
       default: "1rem",
       [breakpoints.sm]: "0.875rem",
     },
-    gridTemplateColumns: "1fr 1rem",
+    gridTemplateColumns: "minmax(0, 1fr) 1rem",
     opacity: {
       "[data-disabled]": 0.64,
       default: null,
@@ -246,11 +246,6 @@ const styles = stylex.create({
     minHeight: {
       default: "2.5rem",
       [breakpoints.sm]: "2.25rem",
-    },
-    minWidth: {
-      default: null,
-      [stylex.when.ancestor('[data-side="none"]', selectPopupMarker)]:
-        "calc(var(--anchor-width) + 1.25rem)",
     },
     paddingLeft: "0.75rem",
     paddingRight: "0.75rem",
@@ -415,7 +410,7 @@ export function SelectPopup({
   sideOffset = 4,
   align = "start",
   alignOffset = 0,
-  alignItemWithTrigger = true,
+  alignItemWithTrigger = false,
   anchor,
   portalProps,
   sx,
@@ -431,13 +426,7 @@ export function SelectPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(
-    transitions.popup,
-    styles.popup,
-    stylex.defaultMarker(),
-    selectPopupMarker,
-    sx,
-  )
+  const popupProps = stylex.props(transitions.popup, styles.popup, stylex.defaultMarker(), sx)
   const surfaceProps = stylex.props(surface.raisedEdge, styles.surface)
   const listProps = stylex.props(styles.list)
   const upArrowProps = stylex.props(styles.scrollArrow, styles.scrollArrowUp)

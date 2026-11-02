@@ -8,13 +8,15 @@ import {
   ComboboxPopup,
 } from "@taiyomoe/ui/components/ui/combobox"
 import { Field, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { useDeferredValue, useState } from "react"
 import { searchMediasQueryOptions } from "@/features/media/api/medias"
+import { Cover } from "@/features/media/components/cover"
+import { getSynopsis } from "@/features/media/lib/media-labels"
 import { m } from "@/paraglide/messages"
 
-export type MediaOption = { id: string; title: string; type: string }
+export type MediaOption = { id: string; title: string; coverUrl: string | null; synopsis: string }
 
 const styles = stylex.create({
   option: {
@@ -24,16 +26,31 @@ const styles = stylex.create({
     minWidth: 0,
     width: "100%",
   },
-  optionLabel: {
-    overflow: "hidden",
+  cover: {
+    borderRadius: radius.md,
+    width: "2.5rem",
+  },
+  optionText: {
+    gap: "0.125rem",
+    display: "flex",
+    flexDirection: "column",
     flexGrow: 1,
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
     minWidth: 0,
   },
-  muted: {
+  optionTitle: {
+    overflow: "hidden",
+    fontWeight: 500,
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+  optionSynopsis: {
+    overflow: "hidden",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
     color: colors.mutedForeground,
-    fontSize: "0.8125rem",
+    display: "-webkit-box",
+    fontSize: "0.75rem",
+    lineHeight: "1rem",
   },
 })
 
@@ -53,7 +70,16 @@ export function MediaField({
     enabled: mediaQuery.length > 0,
   })
   const mediaOptions: MediaOption[] = (mediaResults.data?.data ?? []).flatMap((hit) =>
-    hit.mainTitle === null ? [] : [{ id: hit.id, title: hit.mainTitle.title, type: hit.type }],
+    hit.mainTitle === null
+      ? []
+      : [
+          {
+            id: hit.id,
+            title: hit.mainTitle.title,
+            coverUrl: hit.coverUrl,
+            synopsis: getSynopsis(hit.synopsis)[0] ?? "",
+          },
+        ],
   )
   let mediaEmptyMessage = mediaResults.isFetching ? m.upload_searching() : m.upload_media_empty()
 
@@ -87,8 +113,13 @@ export function MediaField({
             {(item: MediaOption) => (
               <ComboboxItem key={item.id} value={item}>
                 <span sx={styles.option}>
-                  <span sx={styles.optionLabel}>{item.title}</span>
-                  <span sx={styles.muted}>{item.type}</span>
+                  <Cover src={item.coverUrl} sx={styles.cover} />
+                  <span sx={styles.optionText}>
+                    <span sx={styles.optionTitle}>{item.title}</span>
+                    {item.synopsis === "" ? null : (
+                      <span sx={styles.optionSynopsis}>{item.synopsis}</span>
+                    )}
+                  </span>
                 </span>
               </ComboboxItem>
             )}

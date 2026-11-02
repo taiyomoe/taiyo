@@ -1,0 +1,22 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import * as TimeInputStories from "./TimeInput.stories"
+
+<Meta title="UI/TimeInput" />
+
+# TimeInput
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/time-input.tsx)
+
+## Overview
+
+A typable 24-hour time field. Type `930`, `14:30` or `2:30 pm`, commit with Enter or by leaving the field, and unreadable text reverts. The arrow keys step by a minute, and the clock button opens hour and minute columns.
+
+<Canvas of={TimeInputStories.Default} />
+
+## Invalid
+
+<Canvas of={TimeInputStories.Invalid} />
+
+## Disabled
+
+<Canvas of={TimeInputStories.Disabled} />

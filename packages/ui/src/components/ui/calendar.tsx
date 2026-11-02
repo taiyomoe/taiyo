@@ -14,6 +14,9 @@ const styles = stylex.create({
     },
     width: "fit-content",
   },
+  rootFull: {
+    width: "100%",
+  },
   navButton: {
     borderRadius: radius.lg,
     alignItems: "center",
@@ -205,6 +208,16 @@ const styles = stylex.create({
     height: "var(--cell-size)",
     width: "var(--cell-size)",
   },
+  gridFull: {
+    tableLayout: "fixed",
+    width: "100%",
+  },
+  cellFull: {
+    width: "auto",
+  },
+  dayButtonFull: {
+    width: "100%",
+  },
   chevron: {
     flexShrink: 0,
     opacity: 0.8,
@@ -275,22 +288,26 @@ const calendarFormatters: NonNullable<DayPickerProps["formatters"]> = {
   formatMonthDropdown: (date: Date) => date.toLocaleString("default", { month: "short" }),
 }
 
-export function Calendar(props: DayPickerProps): React.ReactElement {
+export function Calendar({
+  fullWidth = false,
+  ...props
+}: DayPickerProps & { fullWidth?: boolean }): React.ReactElement {
   const { className, classNames, showOutsideDays = true, components: userComponents } = props
-  const rootProps = stylex.props(styles.root)
+  const rootProps = stylex.props(styles.root, fullWidth && styles.rootFull)
   const navButtonClassName = stylex.props(styles.navButton).className ?? ""
   const defaultClassNames = {
     button_next: navButtonClassName,
     button_previous: navButtonClassName,
     caption_label: stylex.props(styles.captionLabel).className ?? "",
-    day: stylex.props(styles.day, calendarDayMarker).className ?? "",
-    day_button: stylex.props(styles.dayButton).className ?? "",
+    day: stylex.props(styles.day, calendarDayMarker, fullWidth && styles.cellFull).className ?? "",
+    day_button: stylex.props(styles.dayButton, fullWidth && styles.dayButtonFull).className ?? "",
     dropdown: stylex.props(styles.dropdown).className ?? "",
     dropdown_root: stylex.props(styles.dropdownRoot).className ?? "",
     dropdowns: stylex.props(styles.dropdowns).className ?? "",
     hidden: stylex.props(styles.hidden).className ?? "",
     month: stylex.props(styles.month).className ?? "",
     month_caption: stylex.props(styles.monthCaption).className ?? "",
+    month_grid: stylex.props(fullWidth && styles.gridFull).className ?? "",
     months: stylex.props(styles.months).className ?? "",
     nav: stylex.props(styles.nav).className ?? "",
     outside: stylex.props(styles.outside).className ?? "",
@@ -299,7 +316,7 @@ export function Calendar(props: DayPickerProps): React.ReactElement {
     range_start: cn("range-start", stylex.props(styles.rangeStart).className),
     today: "calendar-today",
     week_number: stylex.props(styles.weekday).className ?? "",
-    weekday: stylex.props(styles.weekday).className ?? "",
+    weekday: stylex.props(styles.weekday, fullWidth && styles.cellFull).className ?? "",
   }
   const mergedClassNames = mergeClassNames(defaultClassNames, classNames)
   const mergedComponents = {

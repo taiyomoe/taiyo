@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
 import { CalendarClock } from "@taiyomoe/ui/components/icons"
 import { Calendar } from "@taiyomoe/ui/components/ui/calendar"
-import { Input } from "@taiyomoe/ui/components/ui/input"
 import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/ui/popover"
 import { SelectButton } from "@taiyomoe/ui/components/ui/select"
+import { TimeInput } from "@taiyomoe/ui/components/ui/time-input"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useNow } from "@/hooks/use-now"
 import { m } from "@/paraglide/messages"
@@ -27,8 +27,10 @@ const styles = stylex.create({
     color: colors.mutedForeground,
   },
   popup: {
+    width: "var(--anchor-width, 20rem)",
+  },
+  content: {
     gap: "0.75rem",
-    paddingInline: "0.75rem",
     display: "flex",
     flexDirection: "column",
   },
@@ -41,7 +43,8 @@ const styles = stylex.create({
     justifyContent: "space-between",
   },
   timeInput: {
-    width: "7.5rem",
+    flex: "1",
+    minWidth: 0,
   },
 })
 const pad = (value: number) => String(value).padStart(2, "0")
@@ -95,9 +98,14 @@ export function DateTimePicker({
           )}
         </span>
       </PopoverTrigger>
-      <PopoverPopup align="start">
-        <div sx={styles.popup}>
+      <PopoverPopup
+        align="start"
+        collisionAvoidance={{ fallbackAxisSide: "none" }}
+        sx={styles.popup}
+      >
+        <div sx={styles.content}>
           <Calendar
+            fullWidth
             {...(value === null ? {} : { defaultMonth: value, selected: value })}
             disabled={{ before: new Date(new Date(now).setHours(0, 0, 0, 0)) }}
             mode="single"
@@ -107,20 +115,22 @@ export function DateTimePicker({
               }
             }}
           />
-          <label sx={styles.time}>
-            {m.date_picker_time()}
-            <Input
-              onChange={(event) => {
-                if (event.target.value !== "") {
-                  onChange(withTime(value ?? nextHour(), event.target.value))
-                }
+          <div sx={styles.time}>
+            <span aria-hidden>{m.date_picker_time()}</span>
+            <TimeInput
+              labels={{
+                field: m.date_picker_time(),
+                hour: m.date_picker_hour(),
+                minute: m.date_picker_minute(),
+                open: m.date_picker_open_time(),
               }}
-              size="sm"
+              onValueChange={(next) => {
+                onChange(withTime(value ?? nextHour(), next))
+              }}
               sx={styles.timeInput}
-              type="time"
               value={time}
             />
-          </label>
+          </div>
         </div>
       </PopoverPopup>
     </Popover>

@@ -19,17 +19,13 @@ import {
 import { BulkReviewBar } from "@/features/uploads/components/chapter-reviews/bulk-review-bar"
 import { ReviewDialog } from "@/features/uploads/components/chapter-reviews/review-dialog"
 import { ReviewQueueRow } from "@/features/uploads/components/chapter-reviews/review-queue-row"
-import { usePermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
 const routeApi = getRouteApi("/dashboard/chapter-reviews")
 
 export function ChapterReviewsPage() {
-  const { session } = routeApi.useRouteContext()
   const { page } = routeApi.useLoaderDeps()
-  const { user } = session
   const { data } = useSuspenseQuery(reviewQueueQueryOptions(page))
-  const can = usePermissions(user)
   const navigate = useNavigate({ from: "/dashboard/chapter-reviews" })
   const [reviewing, setReviewing] = useState<ChapterSubmission | null>(null)
   const [selected, setSelected] = useState<string[]>([])
@@ -95,7 +91,6 @@ export function ChapterReviewsPage() {
         </>
       )}
       <ReviewDialog
-        can={can}
         onClose={() => {
           setReviewing(null)
         }}
