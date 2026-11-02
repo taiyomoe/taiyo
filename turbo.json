@@ -29,6 +29,7 @@
     "HYPERDX_INGESTION_KEY",
     "RESEND_API_KEY",
     "S3_PUBLIC_URL",
+    "S3_PRESIGN_ENDPOINT",
     "NODE_ENV"
   ],
   "globalPassThroughEnv": ["CI", "npm_lifecycle_event"]

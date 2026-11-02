@@ -74,14 +74,24 @@ try {
   }
 
   const root = readEnvFile(rootEnvPath)
+  const apiEnvPath = join(repoRoot, "apps/api/.env")
+  const webEnvPath = join(repoRoot, "apps/web/.env")
+  const imagesPath = new URL(requireEnvValue(readEnvFile(apiEnvPath), "S3_PUBLIC_URL", apiEnvPath))
+    .pathname
+  const webEnv = readEnvFile(webEnvPath)
+
+  for (const key of ["IMAGES_PORT", "RUSTFS_PORT", "S3_BUCKET_NAME"]) {
+    requireEnvValue(webEnv, key, webEnvPath)
+  }
+
   const [webUrl, apiUrl] = await Promise.all([
     openTunnel(requireEnvValue(root, "WEB_PORT", rootEnvPath)),
     openTunnel(requireEnvValue(root, "API_PORT", rootEnvPath)),
   ])
 
   console.log(`
-\u001B[1mTunnels are up.\u001B[0m The web app reaches the API through its own origin, so
-sign-in cookies work.
+\u001B[1mTunnels are up.\u001B[0m The web app reaches the API, images and uploads through
+its own origin, so sign-in, covers and uploading all work.
 
   Web       ${webUrl}
   API docs  ${apiUrl}/docs
@@ -95,6 +105,8 @@ sign-in cookies work.
       ...process.env,
       VITE_API_URL: `${webUrl}/_api`,
       VITE_BETTER_AUTH_URL: webUrl,
+      S3_PUBLIC_URL: `${webUrl}/_images${imagesPath}`,
+      S3_PRESIGN_ENDPOINT: webUrl,
     },
   })
 
