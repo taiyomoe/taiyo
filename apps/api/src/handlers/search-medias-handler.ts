@@ -14,6 +14,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
+import { getMainCoverUrls } from "../utils/latest-chapters"
 import {
   apiErrorEnvelope,
   apiSuccessEnvelope,
@@ -137,6 +138,7 @@ const mediaHitSchema = z.object({
     .uuid()
     .nullable()
     .meta({ description: "The ID of the main cover, if one exists." }),
+  coverUrl: z.url().nullable().meta({ description: "The URL of the main cover, if one exists." }),
   libraryCount: z.number().int().meta({
     description: "How many readers have this media in their library.",
     example: 12_400,
@@ -152,7 +154,7 @@ export const searchMediasHandler = new Hono().post(
   describeRoute({
     summary: "Search medias",
     description:
-      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, date, or count fields. Use `sort` to order by recency, title, chapter count, or how many readers have it in their library. Each result carries core metadata, the main title, the main cover id, and both popularity counts — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
+      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, date, or count fields. Use `sort` to order by recency, title, chapter count, or how many readers have it in their library. Each result carries core metadata, the main title, the main cover id and URL, and both popularity counts — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
     tags: ["Medias"],
     requestBody: {
       content: {
@@ -300,11 +302,18 @@ export const searchMediasHandler = new Hono().post(
       page: input.page,
       hitsPerPage: input.perPage,
     })
+    const coverUrls = await getMainCoverUrls(
+      c.var.db,
+      result.hits.map((hit) => hit.id),
+    )
 
-    return c.ok(result.hits, {
-      page: result.page,
-      perPage: result.hitsPerPage,
-      total: result.totalHits,
-    })
+    return c.ok(
+      result.hits.map((hit) => ({ ...hit, coverUrl: coverUrls.get(hit.id) ?? null })),
+      {
+        page: result.page,
+        perPage: result.hitsPerPage,
+        total: result.totalHits,
+      },
+    )
   },
 )

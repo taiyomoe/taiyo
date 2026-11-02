@@ -1,5 +1,4 @@
 import type { Language } from "@taiyomoe/db/constants"
-import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import {
   DialogDescription,
@@ -44,11 +43,9 @@ const styles = stylex.create({
 
 export function ReviewForm({
   submission,
-  can,
   onDone,
 }: {
   submission: ChapterSubmission
-  can: Permissions
   onDone: () => void
 }) {
   const invalidate = useInvalidateReview()
@@ -110,7 +107,6 @@ export function ReviewForm({
               />
             ) : (
               <ReviewFixFields
-                can={can}
                 groups={groups}
                 language={language}
                 number={number}

@@ -1,5 +1,4 @@
 import type { Language } from "@taiyomoe/db/constants"
-import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
@@ -16,7 +15,6 @@ const styles = stylex.create({
 })
 
 export function ReviewFixFields({
-  can,
   number,
   numberInvalid,
   volume,
@@ -29,7 +27,6 @@ export function ReviewFixFields({
   onLanguageChange,
   onGroupsChange,
 }: {
-  can: Permissions
   number: string
   numberInvalid: boolean
   volume: string
@@ -80,7 +77,7 @@ export function ReviewFixFields({
       </Field>
       <Field>
         <FieldLabel>{m.upload_groups()}</FieldLabel>
-        <GroupPicker can={can} onChange={onGroupsChange} value={groups} />
+        <GroupPicker onChange={onGroupsChange} value={groups} />
       </Field>
     </>
   )

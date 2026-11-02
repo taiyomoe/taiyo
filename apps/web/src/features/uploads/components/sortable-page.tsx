@@ -23,11 +23,13 @@ const styles = stylex.create({
     position: "relative",
     userSelect: "none",
   },
-  pageDragging: {
+  pageSource: {
+    opacity: 0.4,
+  },
+  pageDragged: {
     borderColor: colors.ring,
     boxShadow: shadows.overlay,
     cursor: "grabbing",
-    zIndex: 10,
   },
   pageDisabled: {
     cursor: "default",
@@ -64,6 +66,38 @@ const styles = stylex.create({
   },
 })
 
+function PageThumb({ url, eager = false }: { url: string | null; eager?: boolean }) {
+  return url === null ? (
+    <span sx={styles.placeholder} />
+  ) : (
+    <img alt="" draggable={false} loading={eager ? "eager" : "lazy"} src={url} sx={styles.thumb} />
+  )
+}
+
+export function DraggedPage({
+  page,
+  index,
+  removable,
+}: {
+  page: GridPage
+  index: number
+  removable: boolean
+}) {
+  return (
+    <div aria-hidden sx={[styles.page, styles.pageDragged]}>
+      <PageThumb eager url={page.url} />
+      <div sx={styles.meta}>
+        <span sx={styles.index}>{index + 1}</span>
+        {removable ? (
+          <Button size="icon-xs" tabIndex={-1} type="button" variant="ghost">
+            <Close />
+          </Button>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
 export function SortablePage({
   page,
   index,
@@ -87,7 +121,7 @@ export function SortablePage({
       sx={[
         styles.page,
         focus.control,
-        isDragging && styles.pageDragging,
+        isDragging && styles.pageSource,
         disabled && styles.pageDisabled,
         transform === null
           ? null
@@ -96,11 +130,7 @@ export function SortablePage({
       {...attributes}
       {...listeners}
     >
-      {page.url === null ? (
-        <span sx={styles.placeholder} />
-      ) : (
-        <img alt="" draggable={false} loading="lazy" src={page.url} sx={styles.thumb} />
-      )}
+      <PageThumb url={page.url} />
       <div sx={styles.meta}>
         <span sx={styles.index}>{index + 1}</span>
         {onRemove === undefined ? null : (

@@ -13,6 +13,15 @@ const styles = stylex.create({
     justifyContent: "center",
     letterSpacing: "-0.02em",
   },
+  logoFallback: {
+    borderRadius: "inherit",
+  },
+  xs: {
+    borderRadius: radius.sm,
+    fontSize: "0.625rem",
+    height: "1.75rem",
+    width: "1.75rem",
+  },
   sm: {
     borderRadius: radius.md,
     fontSize: "0.875rem",
@@ -42,30 +51,41 @@ const toneFor = (id: string) =>
 export function GroupAvatar({
   id,
   name,
+  logo,
   size = "sm",
 }: {
   id: string
   name: string
-  size?: "sm" | "lg"
+  logo?: string | null | undefined
+  size?: "xs" | "sm" | "lg"
 }) {
   const tone = toneFor(id)
+  const toneStyle = {
+    backgroundColor: `color-mix(in srgb, ${tone} 20%, ${colors.card})`,
+    color: `color-mix(in srgb, ${tone} 75%, ${colors.foreground})`,
+  }
+  const initials = name
+    .split(/\s+/)
+    .filter((word) => word !== "")
+    .slice(0, 2)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("")
+
+  if (logo === undefined || logo === null || logo === "") {
+    return (
+      <span aria-hidden style={toneStyle} sx={[styles.tile, styles[size]]}>
+        {initials}
+      </span>
+    )
+  }
 
   return (
-    <span
-      aria-hidden
-      style={{
-        backgroundColor: `color-mix(in srgb, ${tone} 20%, ${colors.card})`,
-        color: `color-mix(in srgb, ${tone} 75%, ${colors.foreground})`,
-      }}
-      sx={[styles.tile, size === "sm" ? styles.sm : styles.lg]}
-    >
-      {name
-        .split(/\s+/)
-        .filter((word) => word !== "")
-        .slice(0, 2)
-        .map((word) => word.charAt(0).toUpperCase())
-        .join("")}
-    </span>
+    <Avatar aria-hidden sx={[styles.tile, styles[size]]}>
+      <AvatarImage alt="" src={logo} />
+      <AvatarFallback style={toneStyle} sx={styles.logoFallback}>
+        {initials}
+      </AvatarFallback>
+    </Avatar>
   )
 }
 
