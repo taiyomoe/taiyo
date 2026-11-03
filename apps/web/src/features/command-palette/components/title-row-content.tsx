@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { TitleEntity } from "@/features/command-palette/lib/palette-command"
 import { paletteRowStyles } from "@/features/command-palette/components/palette-row-styles"
 import { Cover } from "@/features/media/components/cover"
@@ -18,6 +19,10 @@ const styles = stylex.create({
   meta: {
     flexShrink: 0,
   },
+  matched: {
+    color: colors.foreground,
+    opacity: 0.72,
+  },
 })
 
 export function TitleRowContent({ title }: { title: TitleEntity }) {
@@ -33,7 +38,14 @@ export function TitleRowContent({ title }: { title: TitleEntity }) {
           <span sx={paletteRowStyles.primary}>{title.title}</span>
           {meta === "" ? null : <span sx={[paletteRowStyles.secondary, styles.meta]}>{meta}</span>}
         </span>
-        <span sx={[paletteRowStyles.secondary, paletteRowStyles.clamp]}>
+        {title.matchedTitle === null ? null : (
+          <span sx={[paletteRowStyles.secondary, styles.matched]}>
+            {m.palette_title_matched({ title: title.matchedTitle })}
+          </span>
+        )}
+        <span
+          sx={[paletteRowStyles.secondary, title.matchedTitle === null && paletteRowStyles.clamp]}
+        >
           {title.synopsis === "" ? m.media_info_no_synopsis() : title.synopsis}
         </span>
       </span>

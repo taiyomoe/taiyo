@@ -926,6 +926,7 @@
   "palette_section_help": "Help",
   "palette_section_commands": "Commands",
   "palette_section_titles": "Titles",
+  "palette_title_matched": "Also known as {title}",
   "palette_section_groups": "Groups",
   "palette_section_users": "Users",
   "palette_footer_navigate": "Navigate",

@@ -12,6 +12,7 @@ const SYNOPSIS_LENGTH = 220
 export const toTitleEntity = (title: {
   id: string
   title: string
+  matchedTitle?: string | null
   synopsis: Partial<Record<string, string>>
   coverUrl: string | null
   type: MediaType
@@ -20,6 +21,7 @@ export const toTitleEntity = (title: {
   kind: "title",
   id: title.id,
   title: title.title,
+  matchedTitle: title.matchedTitle ?? null,
   synopsis: getSynopsis(title.synopsis).join(" ").slice(0, SYNOPSIS_LENGTH),
   coverUrl: title.coverUrl,
   type: title.type,

@@ -10,6 +10,7 @@ const entitySchema = z.discriminatedUnion("kind", [
     kind: z.literal("title"),
     id: z.string(),
     title: z.string(),
+    matchedTitle: z.null().default(null),
     synopsis: z.string(),
     coverUrl: z.string().nullable(),
     type: z.enum(MEDIA_TYPES),
@@ -79,7 +80,8 @@ const subscribe = (listener: () => void) => {
   }
 }
 
-export const rememberEntity = (entity: PaletteEntity) => {
+export const rememberEntity = (found: PaletteEntity) => {
+  const entity = found.kind === "title" ? { ...found, matchedTitle: null } : found
   const key = entityKey(entity)
   const current = read()
 

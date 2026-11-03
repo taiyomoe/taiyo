@@ -8,7 +8,13 @@ import { waitForMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
 
 type QuickSearch = {
-  titles: Array<{ id: string; title: string; coverUrl: string | null; synopsis: object }>
+  titles: Array<{
+    id: string
+    title: string
+    matchedTitle: string | null
+    coverUrl: string | null
+    synopsis: object
+  }>
   groups: Array<{ id: string; name: string; description: string | null; logoUrl: string | null }>
   users: Array<{ id: string; username: string; displayUsername: string }>
 }
@@ -23,6 +29,16 @@ const quickSearch = async (app: Parameters<typeof api>[0], query: string) => {
   }
 
   return res.body.data
+}
+const words = (value: string) =>
+  value
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter(Boolean)
+const sharesWord = (a: string, b: string) => {
+  const other = new Set(words(b))
+
+  return words(a).some((word) => other.has(word))
 }
 const indexedNormalMedia = async (services: Services) => {
   const media = defined(
@@ -58,6 +74,43 @@ describe("GET /search", () => {
     expect(hit.title).toBe(media.title)
     expect(hit.coverUrl).toContain(`/medias/${media.id}/covers/`)
     expect(hit.synopsis).toEqual(expect.any(Object))
+  })
+
+  test("reports no matched title when the query matches the main title", async ({
+    app,
+    services,
+  }) => {
+    const media = await indexedNormalMedia(services)
+    const data = await quickSearch(app, `q=${encodeURIComponent(media.title)}&limit=10`)
+
+    expect(defined(data.titles.find((title) => title.id === media.id)).matchedTitle).toBeNull()
+  })
+
+  test("reports the alternative title the query matched", async ({ app, services }) => {
+    const rows = await services.db
+      .selectFrom("titles as alt")
+      .innerJoin("titles as main", "main.mediaId", "alt.mediaId")
+      .innerJoin("medias", "medias.id", "alt.mediaId")
+      .innerJoin("covers", "covers.mediaId", "medias.id")
+      .select(["medias.id", "alt.title as alt", "main.title as main"])
+      .where("medias.deletedAt", "is", null)
+      .where("medias.contentRating", "=", "NORMAL")
+      .where("main.isMainTitle", "=", true)
+      .where("main.deletedAt", "is", null)
+      .where("alt.isMainTitle", "=", false)
+      .where("alt.deletedAt", "is", null)
+      .where("covers.isMainCover", "=", true)
+      .where("covers.deletedAt", "is", null)
+      .execute()
+    const media = defined(
+      rows.find((row) => words(row.alt).length >= 2 && !sharesWord(row.alt, row.main)),
+    )
+
+    await waitForMediaDoc(services, media.id, (doc) => doc !== null)
+
+    const data = await quickSearch(app, `q=${encodeURIComponent(media.alt)}&limit=10`)
+
+    expect(defined(data.titles.find((title) => title.id === media.id)).matchedTitle).toBe(media.alt)
   })
 
   test("leaves out titles whose content rating was not asked for", async ({ app, services }) => {
