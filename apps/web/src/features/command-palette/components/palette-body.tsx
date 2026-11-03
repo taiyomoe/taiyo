@@ -1,6 +1,6 @@
 import type { RefObject } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { ArrowLeft, Search, Spinner } from "@taiyomoe/ui/components/icons"
+import { ArrowLeft, Spinner } from "@taiyomoe/ui/components/icons"
 import {
   Command,
   CommandCollection,
@@ -91,9 +91,15 @@ const styles = stylex.create({
     color: colors.foreground,
     cursor: "pointer",
     display: "inline-flex",
+    flexShrink: 0,
     fontSize: "0.8125rem",
     fontWeight: 500,
+    marginInlineEnd: "-0.625rem",
+    marginInlineStart: "calc(0.625rem + 0.75rem)",
     maxWidth: "12rem",
+  },
+  inputAfterCrumb: {
+    paddingLeft: 0,
   },
   crumbLabel: {
     overflow: "hidden",
@@ -249,6 +255,12 @@ export function PaletteBody({
       value={query}
     >
       <div sx={styles.inputBar}>
+        {page === null ? null : (
+          <button onClick={pop} sx={styles.crumb} type="button">
+            <ArrowLeft size={14} {...stylex.props(styles.crumbIcon)} />
+            <span sx={styles.crumbLabel}>{page.title}</span>
+          </button>
+        )}
         <div sx={styles.inputField}>
           <CommandInput
             aria-label={m.palette_label()}
@@ -271,16 +283,7 @@ export function PaletteBody({
               }
             }}
             placeholder={page === null ? m.palette_placeholder() : m.palette_placeholder_page()}
-            startAddon={
-              page === null ? (
-                <Search />
-              ) : (
-                <button onClick={pop} sx={styles.crumb} type="button">
-                  <ArrowLeft size={14} {...stylex.props(styles.crumbIcon)} />
-                  <span sx={styles.crumbLabel}>{page.title}</span>
-                </button>
-              )
-            }
+            {...(page === null ? {} : { startAddon: null, sx: styles.inputAfterCrumb })}
           />
           {searching ? <Spinner {...stylex.props(styles.spinner)} /> : null}
         </div>

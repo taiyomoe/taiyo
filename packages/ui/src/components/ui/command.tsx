@@ -102,6 +102,14 @@ const styles = stylex.create({
     paddingInline: "0.625rem",
     position: "relative",
   },
+  searchIcon: {
+    marginInline: 0,
+    height: "1.125rem",
+    width: "1.125rem",
+  },
+  inputWithIcon: {
+    paddingLeft: "calc(2.5rem - 1px)",
+  },
   input: {
     borderColor: "transparent",
     backgroundColor: "transparent",
@@ -273,10 +281,12 @@ export function Command({
 export function CommandInput({
   className,
   placeholder,
+  startAddon,
   sx,
   ...props
 }: React.ComponentProps<typeof AutocompleteInput> & { sx?: Sx }): React.ReactElement {
   const rowProps = stylex.props(styles.inputRow)
+  const icon = startAddon === undefined
 
   return (
     <div className={rowProps.className} style={rowProps.style}>
@@ -285,8 +295,8 @@ export function CommandInput({
         className={className}
         placeholder={placeholder}
         size="lg"
-        startAddon={<Search />}
-        sx={[styles.input, sx]}
+        startAddon={icon ? <Search {...stylex.props(styles.searchIcon)} /> : startAddon}
+        sx={[styles.input, icon && styles.inputWithIcon, sx]}
         {...props}
       />
     </div>
