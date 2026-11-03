@@ -1,18 +1,12 @@
 import type { PaletteCommand } from "@/features/command-palette/lib/palette-command"
 
-export const normalizeText = (value: string) =>
+const toWords = (value: string) =>
   value
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
-
-const toWords = (value: string) =>
-  normalizeText(value)
     .split(/[^\p{L}\p{N}]+/u)
     .filter(Boolean)
-
-export const queryTokens = (query: string) => toWords(query)
-
 const LABEL_EXACT = 4
 const LABEL_PREFIX = 3
 const KEYWORD_PREFIX = 2
@@ -46,7 +40,7 @@ const tokenScore = (
 export type CommandMatch = { score: number; strong: boolean; weak: boolean }
 
 export const matchCommand = (query: string, command: PaletteCommand): CommandMatch | null => {
-  const tokens = queryTokens(query)
+  const tokens = toWords(query)
 
   if (tokens.length === 0) {
     return { score: 0, strong: false, weak: true }

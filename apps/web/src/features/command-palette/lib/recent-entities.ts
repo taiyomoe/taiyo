@@ -90,8 +90,4 @@ export const rememberEntity = (entity: PaletteEntity) => {
   write([entity, ...current.filter((other) => entityKey(other) !== key)].slice(0, MAX_RECENTS))
 }
 
-export const forgetEntities = () => {
-  write(EMPTY)
-}
-
 export const useRecentEntities = () => useSyncExternalStore(subscribe, read, () => EMPTY)
