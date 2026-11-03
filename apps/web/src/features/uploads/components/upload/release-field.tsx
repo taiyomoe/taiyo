@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Switch } from "@taiyomoe/ui/components/ui/switch"
 import { Tabs, TabsList, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { DateTimePicker } from "@/components/fields/date-time-picker"
 import { AmountInput } from "@/features/uploads/components/upload/amount-input"
 import {
@@ -22,7 +22,19 @@ const styles = stylex.create({
     width: "100%",
   },
   tab: {
+    paddingInline: {
+      default: "calc(0.375rem - 1px)",
+      [breakpoints.sm]: "calc(0.5rem - 1px)",
+    },
     flexGrow: 1,
+    flexShrink: 1,
+    fontSize: "0.875rem",
+    minWidth: 0,
+  },
+  tabLabel: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   },
   spacing: {
     gap: "0.625rem",
@@ -65,7 +77,7 @@ export function ReleaseField({
         <TabsList aria-label={m.upload_release_mode()} sx={styles.tabs}>
           {RELEASE_MODES.map((mode) => (
             <TabsTab key={mode} sx={styles.tab} value={mode}>
-              {MODE_LABELS[mode]()}
+              <span sx={styles.tabLabel}>{MODE_LABELS[mode]()}</span>
             </TabsTab>
           ))}
         </TabsList>

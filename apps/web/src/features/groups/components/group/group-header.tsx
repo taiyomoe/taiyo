@@ -65,7 +65,7 @@ export function GroupHeader({
   return (
     <div sx={styles.header}>
       <div sx={styles.identity}>
-        <GroupAvatar id={group.id} name={group.name} size="lg" />
+        <GroupAvatar id={group.id} logoUrl={group.logoUrl} name={group.name} size="lg" />
         <div sx={styles.titles}>
           <h1 sx={styles.name}>{group.name}</h1>
           <div sx={styles.badges}>

@@ -129,7 +129,7 @@ const styles = stylex.create({
     maxHeight: "min(var(--available-height), 23rem)",
   },
   item: {
-    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    borderRadius: `calc(${radius.xl} - 0.375rem - 1px)`,
     paddingBlock: "0.375rem",
     paddingInline: "0.75rem",
     alignItems: "center",
@@ -472,7 +472,7 @@ export function AutocompleteList({
   const styleProps = stylex.props(styles.list, sx)
 
   return (
-    <ScrollArea scrollbarGutter scrollFade sx={styles.listScrollArea}>
+    <ScrollArea horizontal={false} scrollbarGutter scrollFade sx={styles.listScrollArea}>
       <AutocompletePrimitive.List
         className={cn(styleProps.className, className)}
         data-slot="autocomplete-list"

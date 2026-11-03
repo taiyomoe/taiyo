@@ -215,7 +215,7 @@ const styles = stylex.create({
     },
   },
   item: {
-    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    borderRadius: `calc(${radius.xl} - 0.375rem - 1px)`,
     gap: "0.625rem",
     paddingBlock: "0.375rem",
     alignItems: "center",

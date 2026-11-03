@@ -6,6 +6,7 @@ import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyOverviewHandler } from "../handlers/get-my-overview-handler"
 import { getReadingProgressHandler } from "../handlers/get-reading-progress-handler"
+import { getUserProfileHandler } from "../handlers/get-user-profile-handler"
 import { listFollowersHandler } from "../handlers/list-followers-handler"
 import { listFollowingHandler } from "../handlers/list-following-handler"
 import { listMyChapterSubmissionsHandler } from "../handlers/list-my-chapter-submissions-handler"
@@ -27,6 +28,7 @@ import { upsertLibraryEntryHandler } from "../handlers/upsert-library-entry-hand
 
 export const usersRouter = new Hono()
   .route("/", listUsersHandler)
+  .route("/", getUserProfileHandler)
   .route("/", getMyOverviewHandler)
   .route("/", setUserRoleHandler)
   .route("/", banUserHandler)

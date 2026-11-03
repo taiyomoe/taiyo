@@ -16,7 +16,7 @@ const styles = stylex.create({
     backgroundColor: colors.muted,
     display: "flex",
     fontSize: "0.875rem",
-    paddingInlineEnd: "0.125rem",
+    paddingInlineEnd: "0.25rem",
     paddingInlineStart: "0.75rem",
   },
   chipLabel: {

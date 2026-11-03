@@ -90,12 +90,14 @@ export function ScrollArea({
   scrollFade = false,
   scrollbarGutter = false,
   fill = false,
+  horizontal = true,
   sx,
   ...props
 }: ScrollAreaPrimitive.Root.Props & {
   scrollFade?: boolean
   scrollbarGutter?: boolean
   fill?: boolean
+  horizontal?: boolean
   sx?: Sx
 }): React.ReactElement {
   const rootProps = stylex.props(styles.root, sx)
@@ -121,13 +123,13 @@ export function ScrollArea({
         <ScrollAreaPrimitive.Content
           className={contentProps.className}
           data-slot="scroll-area-content"
-          style={contentProps.style}
+          style={horizontal ? contentProps.style : { ...contentProps.style, minWidth: "100%" }}
         >
           {children}
         </ScrollAreaPrimitive.Content>
       </ScrollAreaPrimitive.Viewport>
       <ScrollBar orientation="vertical" />
-      <ScrollBar orientation="horizontal" />
+      {horizontal ? <ScrollBar orientation="horizontal" /> : null}
       <ScrollAreaPrimitive.Corner data-slot="scroll-area-corner" />
     </ScrollAreaPrimitive.Root>
   )

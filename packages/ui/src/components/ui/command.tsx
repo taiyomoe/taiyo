@@ -2,7 +2,7 @@ import type * as React from "react"
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { breakpoints, colors, font, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, font, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Search } from "../icons"
 import {
@@ -30,27 +30,19 @@ const styles = stylex.create({
     inset: 0,
     backdropFilter: "blur(4px)",
     backgroundColor: "rgb(0 0 0 / 32%)",
-    opacity: {
-      "[data-ending-style]": 0,
-      "[data-starting-style]": 0,
-      default: null,
-    },
     position: "fixed",
-    transitionDuration: {
-      "[data-ending-style]": motion.exitLarge,
-      default: motion.enterLarge,
-    },
-    transitionProperty: "all",
-    transitionTimingFunction: motion.easeOut,
     zIndex: 50,
   },
   viewport: {
     inset: 0,
     paddingBlock: {
-      default: "max(1rem, 4vh)",
-      [breakpoints.sm]: "10vh",
+      default: "10vh",
+      [breakpoints.maxSm]: 0,
     },
-    paddingInline: "1rem",
+    paddingInline: {
+      default: "1rem",
+      [breakpoints.maxSm]: 0,
+    },
     alignItems: "center",
     display: "flex",
     flexDirection: "column",
@@ -59,7 +51,10 @@ const styles = stylex.create({
   },
   popup: {
     borderColor: colors.border,
-    borderRadius: radius.xxl,
+    borderRadius: {
+      default: radius.xxl,
+      [breakpoints.maxSm]: 0,
+    },
     borderStyle: "solid",
     borderWidth: 1,
     backgroundClip: "border-box",
@@ -68,32 +63,27 @@ const styles = stylex.create({
     color: colors.popoverForeground,
     display: "flex",
     flexDirection: "column",
-    opacity: {
-      "[data-ending-style]": 0,
-      "[data-starting-style]": 0,
-      default: "calc(1 - 0.1 * var(--nested-dialogs))",
-    },
+    opacity: "calc(1 - 0.1 * var(--nested-dialogs))",
     outlineStyle: "none",
     position: "relative",
-    scale: {
-      "[data-ending-style]": "0.98",
-      "[data-starting-style]": "0.98",
-      default: "calc(1 - 0.1 * var(--nested-dialogs))",
-    },
+    scale: "calc(1 - 0.1 * var(--nested-dialogs))",
     transformOrigin: {
       "[data-nested-dialog-open]": "top",
       default: null,
     },
-    transitionDuration: {
-      "[data-ending-style]": motion.exitLarge,
-      default: motion.enterLarge,
-    },
-    transitionProperty: "scale, opacity, translate",
-    transitionTimingFunction: motion.easeOut,
     translate: "0 calc(-1.25rem * var(--nested-dialogs))",
-    willChange: "transform",
-    maxHeight: "26.25rem",
-    maxWidth: "36rem",
+    height: {
+      default: null,
+      [breakpoints.maxSm]: "100dvh",
+    },
+    maxHeight: {
+      default: "26.25rem",
+      [breakpoints.maxSm]: "none",
+    },
+    maxWidth: {
+      default: "36rem",
+      [breakpoints.maxSm]: "none",
+    },
     minHeight: 0,
     minWidth: 0,
     width: "100%",
@@ -111,6 +101,14 @@ const styles = stylex.create({
     paddingBlock: "0.375rem",
     paddingInline: "0.625rem",
     position: "relative",
+  },
+  searchIcon: {
+    marginInline: 0,
+    height: "1.125rem",
+    width: "1.125rem",
+  },
+  inputWithIcon: {
+    paddingLeft: "calc(2.5rem - 1px)",
   },
   input: {
     borderColor: "transparent",
@@ -159,7 +157,7 @@ const styles = stylex.create({
     },
   },
   item: {
-    borderRadius: `calc(${radius.xl} - 0.5rem)`,
+    borderRadius: `calc(${radius.xl} - 0.5rem - 1px)`,
     gap: "0.5rem",
     paddingBlock: "0.375rem",
     display: "inline-flex",
@@ -283,10 +281,12 @@ export function Command({
 export function CommandInput({
   className,
   placeholder,
+  startAddon,
   sx,
   ...props
 }: React.ComponentProps<typeof AutocompleteInput> & { sx?: Sx }): React.ReactElement {
   const rowProps = stylex.props(styles.inputRow)
+  const icon = startAddon === undefined
 
   return (
     <div className={rowProps.className} style={rowProps.style}>
@@ -295,8 +295,8 @@ export function CommandInput({
         className={className}
         placeholder={placeholder}
         size="lg"
-        startAddon={<Search />}
-        sx={[styles.input, sx]}
+        startAddon={icon ? <Search {...stylex.props(styles.searchIcon)} /> : startAddon}
+        sx={[styles.input, icon && styles.inputWithIcon, sx]}
         {...props}
       />
     </div>

@@ -34,7 +34,7 @@ const styles = stylex.create({
     width: "100%",
   },
   item: {
-    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    borderRadius: `calc(${radius.xl} - 0.375rem - 1px)`,
     gap: "0.625rem",
     paddingBlock: "0.375rem",
     alignItems: "center",
@@ -78,7 +78,7 @@ const styles = stylex.create({
     paddingRight: "0.75rem",
   },
   checkItem: {
-    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    borderRadius: `calc(${radius.xl} - 0.375rem - 1px)`,
     gap: "0.625rem",
     paddingBlock: "0.375rem",
     alignItems: "center",
@@ -234,7 +234,7 @@ const styles = stylex.create({
     paddingLeft: "1.5rem",
   },
   subTrigger: {
-    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    borderRadius: `calc(${radius.xl} - 0.375rem - 1px)`,
     gap: "0.625rem",
     paddingBlock: "0.375rem",
     alignItems: "center",

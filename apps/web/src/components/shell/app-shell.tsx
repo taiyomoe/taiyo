@@ -6,6 +6,7 @@ import type { Session } from "@/lib/session"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
 import { ImpersonationBar } from "@/components/shell/impersonation-bar"
+import { ShellCommands } from "@/components/shell/shell-commands"
 import { UploadTray } from "@/components/shell/upload-tray"
 
 const styles = stylex.create({
@@ -51,6 +52,7 @@ export function AppShell({
       </div>
       <UploadTray />
       <ImpersonationBar />
+      <ShellCommands />
     </SidebarProvider>
   )
 }

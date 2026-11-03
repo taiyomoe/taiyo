@@ -9,7 +9,7 @@ const styles = stylex.create({
   card: {
     padding: "0.875rem",
     borderColor: colors.border,
-    borderRadius: radius.xl,
+    borderRadius: `calc(${radius.md} + 0.875rem + 1px)`,
     borderStyle: "solid",
     borderWidth: 1,
     gap: "0.875rem",

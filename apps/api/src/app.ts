@@ -28,6 +28,7 @@ import { listsRouter } from "./routers/lists-router"
 import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
+import { searchRouter } from "./routers/search-router"
 import { staffsRouter } from "./routers/staffs-router"
 import { usersRouter } from "./routers/users-router"
 import { type ErrorCode, errors } from "./utils/errors"
@@ -160,6 +161,7 @@ export const createApp = (services: Services) => {
     .route("/users", usersRouter)
     .route("/lists", listsRouter)
     .route("/dashboard", dashboardRouter)
+    .route("/search", searchRouter)
 
   app
     .get(
@@ -176,6 +178,11 @@ export const createApp = (services: Services) => {
               name: "Medias",
               description:
                 "Manga, manhwa, manhua, light novels and other long-form comics. These endpoints create and curate the entries themselves along with everything attached to them — titles, covers, banners, external links and staff credits.",
+            },
+            {
+              name: "Search",
+              description:
+                "Type-ahead search across titles, groups and users at once, for quick-open UIs.",
             },
             {
               name: "Covers",

@@ -1,5 +1,5 @@
 import { sql } from "@taiyomoe/db"
-import { getStaffImageUrl } from "@taiyomoe/s3"
+import { getPublicImageUrl } from "@taiyomoe/s3"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -70,7 +70,7 @@ export const listStaffsHandler = new Hono().get(
     return c.ok(
       items.map(({ image, ...staff }) => ({
         ...staff,
-        imageUrl: image === null ? null : getStaffImageUrl(image),
+        imageUrl: image === null ? null : getPublicImageUrl(image),
       })),
       { page, perPage, total: Number(totalRow.count) },
     )

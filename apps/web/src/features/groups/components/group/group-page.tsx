@@ -12,6 +12,7 @@ import { GroupHeader } from "@/features/groups/components/group/group-header"
 import { GroupLinks } from "@/features/groups/components/group/group-links"
 import { GroupMembers } from "@/features/groups/components/group/group-members"
 import { groupStyles } from "@/features/groups/components/group/group-styles"
+import { useGroupCommands } from "@/features/groups/hooks/use-group-commands"
 import { usePermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
@@ -51,6 +52,8 @@ export function GroupPage() {
   const can = usePermissions(user)
   const canManage =
     can("group.manageMembers", { id: group.id }) || can("group.update", { id: group.id })
+
+  useGroupCommands(group)
 
   return (
     <AppShell user={user}>
