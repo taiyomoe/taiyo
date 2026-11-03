@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { m } from "@/paraglide/messages"
 
@@ -8,7 +8,10 @@ const styles = stylex.create({
   footer: {
     padding: "0.75rem",
     borderColor: colors.border,
-    borderRadius: radius.xxl,
+    borderRadius: {
+      default: "calc(1.125rem + 0.75rem + 1px)",
+      [breakpoints.sm]: "calc(1rem + 0.75rem + 1px)",
+    },
     borderStyle: "solid",
     borderWidth: 1,
     gap: "0.75rem",

@@ -2,11 +2,23 @@ import { ViewIcon, ViewOffSlashIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { type ComponentProps, useState } from "react"
+import { radius } from "../../styles/tokens.stylex"
 import { Button } from "./button"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./input-group"
 import { Tooltip, TooltipPopup, TooltipTrigger } from "./tooltip"
 
 const styles = stylex.create({
+  addon: {
+    paddingBlock: "calc(0.375rem - 1px)",
+    alignSelf: "stretch",
+    paddingRight: "calc(0.375rem - 1px)",
+  },
+  toggle: {
+    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    aspectRatio: "1",
+    height: "100%",
+    width: "auto",
+  },
   icon: {
     height: "1rem",
     width: "1rem",
@@ -26,7 +38,7 @@ export const PasswordInput = ({ startIcon, containerClassName, ...props }: Passw
     <InputGroup className={containerClassName}>
       <InputGroupInput type={showPassword ? "text" : "password"} {...props} />
       {Boolean(startIcon) && <InputGroupAddon align="inline-start">{startIcon}</InputGroupAddon>}
-      <InputGroupAddon align="inline-end">
+      <InputGroupAddon align="inline-end" sx={styles.addon}>
         <Tooltip>
           <TooltipTrigger
             render={
@@ -36,6 +48,7 @@ export const PasswordInput = ({ startIcon, containerClassName, ...props }: Passw
                   setShowPassword(!showPassword)
                 }}
                 size="icon-xs"
+                sx={styles.toggle}
                 variant="ghost"
               />
             }

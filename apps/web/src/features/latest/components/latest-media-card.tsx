@@ -42,8 +42,8 @@ const styles = stylex.create({
   },
   coverLink: {
     borderRadius: {
-      [breakpoints.md]: `calc(${radius.xl} - 0.875rem)`,
-      default: `calc(${radius.xl} - 0.625rem)`,
+      [breakpoints.md]: `calc(${radius.xl} - 0.875rem - 1px)`,
+      default: `calc(${radius.xl} - 0.625rem - 1px)`,
     },
     display: "block",
     outlineColor: colors.ring,
@@ -55,8 +55,8 @@ const styles = stylex.create({
   },
   cover: {
     borderRadius: {
-      [breakpoints.md]: `calc(${radius.xl} - 0.875rem)`,
-      default: `calc(${radius.xl} - 0.625rem)`,
+      [breakpoints.md]: `calc(${radius.xl} - 0.875rem - 1px)`,
+      default: `calc(${radius.xl} - 0.625rem - 1px)`,
     },
     width: "100%",
   },

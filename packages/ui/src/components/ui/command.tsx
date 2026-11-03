@@ -149,7 +149,7 @@ const styles = stylex.create({
     },
   },
   item: {
-    borderRadius: `calc(${radius.xl} - 0.5rem)`,
+    borderRadius: `calc(${radius.xl} - 0.5rem - 1px)`,
     gap: "0.5rem",
     paddingBlock: "0.375rem",
     display: "inline-flex",

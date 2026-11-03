@@ -13,7 +13,7 @@ const styles = stylex.create({
     flexShrink: 0,
   },
   volume: {
-    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    borderRadius: `calc(${radius.xl} - 0.375rem - 1px)`,
     borderWidth: 0,
     paddingBlock: "0.625rem",
     paddingInline: "0.875rem",
