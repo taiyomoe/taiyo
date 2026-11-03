@@ -18,6 +18,7 @@ import { Fragment, useEffect, useState, useSyncExternalStore } from "react"
 import { quickSearchQueryOptions } from "@/features/command-palette/api/quick-search"
 import { PaletteFooter } from "@/features/command-palette/components/palette-footer"
 import { PaletteRow } from "@/features/command-palette/components/palette-row"
+import { PalettePreview } from "@/features/command-palette/components/preview/palette-preview"
 import { useDebouncedValue } from "@/features/command-palette/hooks/use-debounced-value"
 import { useEntityActions } from "@/features/command-palette/hooks/use-entity-actions"
 import { useGlobalCommands } from "@/features/command-palette/hooks/use-global-commands"
@@ -37,6 +38,7 @@ import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
 const SEARCH_DEBOUNCE_MS = 120
+const PREVIEW_DEBOUNCE_MS = 90
 const FOOTER_LABELS: Record<PaletteRun["type"], () => string> = {
   navigate: m.palette_footer_open,
   external: m.palette_footer_open,
@@ -112,7 +114,14 @@ const styles = stylex.create({
   panel: {
     flex: "1",
     display: "flex",
+    minHeight: 0,
+  },
+  results: {
+    flex: "1",
+    display: "flex",
     flexDirection: "column",
+    minHeight: 0,
+    minWidth: 0,
   },
   empty: {
     color: colors.mutedForeground,
@@ -170,6 +179,7 @@ export function PaletteBody({
     recents,
     results: page === null && query.trim() !== "" ? search.data : undefined,
   })
+  const previewKey = useDebouncedValue(highlightedKey, PREVIEW_DEBOUNCE_MS)
   const highlighted = groups
     .flatMap((group) => group.items)
     .find((item) => item.key === highlightedKey)
@@ -292,31 +302,36 @@ export function PaletteBody({
         </button>
       </div>
       <CommandPanel sx={styles.panel}>
-        <CommandEmpty sx={styles.empty}>
-          {searching ? m.palette_searching() : m.palette_empty({ query: query.trim() })}
-        </CommandEmpty>
-        <CommandList>
-          {(group: PaletteGroup) => (
-            <Fragment key={group.value}>
-              <CommandGroup items={group.items}>
-                {group.label === "" ? null : <CommandGroupLabel>{group.label}</CommandGroupLabel>}
-                <CommandCollection>
-                  {(item: PaletteItem) => (
-                    <PaletteRow
-                      item={item}
-                      key={item.key}
-                      onActivate={activate}
-                      onOpenActions={(target) => {
-                        openActions(target)
-                      }}
-                    />
-                  )}
-                </CommandCollection>
-              </CommandGroup>
-              <CommandSeparator />
-            </Fragment>
-          )}
-        </CommandList>
+        <div sx={styles.results}>
+          <CommandEmpty sx={styles.empty}>
+            {searching ? m.palette_searching() : m.palette_empty({ query: query.trim() })}
+          </CommandEmpty>
+          <CommandList>
+            {(group: PaletteGroup) => (
+              <Fragment key={group.value}>
+                <CommandGroup items={group.items}>
+                  {group.label === "" ? null : <CommandGroupLabel>{group.label}</CommandGroupLabel>}
+                  <CommandCollection>
+                    {(item: PaletteItem) => (
+                      <PaletteRow
+                        item={item}
+                        key={item.key}
+                        onActivate={activate}
+                        onOpenActions={(target) => {
+                          openActions(target)
+                        }}
+                      />
+                    )}
+                  </CommandCollection>
+                </CommandGroup>
+                <CommandSeparator />
+              </Fragment>
+            )}
+          </CommandList>
+        </div>
+        <PalettePreview
+          item={groups.flatMap((group) => group.items).find((item) => item.key === previewKey)}
+        />
       </CommandPanel>
       <PaletteFooter
         hasActions={highlighted !== undefined && actionsPage(highlighted) !== null}
