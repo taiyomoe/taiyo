@@ -46,7 +46,7 @@ export function MediaField({
   value: MediaOption | null
   onChange: (media: MediaOption | null) => void
 }) {
-  const [mediaSearch, setMediaSearch] = useState("")
+  const [mediaSearch, setMediaSearch] = useState(media?.title ?? "")
   const mediaQuery = useDeferredValue(mediaSearch.trim())
   const mediaResults = useQuery({
     ...searchMediasQueryOptions({ q: mediaQuery, page: 1, perPage: 10 }),

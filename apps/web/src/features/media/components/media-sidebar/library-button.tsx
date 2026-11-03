@@ -33,7 +33,7 @@ export function LibraryButton({
   mediaId: string
   status: LibraryStatus | null
 }) {
-  const setStatus = useSetLibraryStatus(mediaId)
+  const setStatus = useSetLibraryStatus()
 
   return (
     <Menu>
@@ -51,7 +51,7 @@ export function LibraryButton({
       <MenuPopup align="center" sx={styles.menu}>
         <MenuRadioGroup
           onValueChange={(value: LibraryStatus) => {
-            setStatus.mutate(value)
+            setStatus.mutate({ mediaId, status: value })
           }}
           value={status}
         >
@@ -66,7 +66,7 @@ export function LibraryButton({
             <MenuSeparator />
             <MenuItem
               onClick={() => {
-                setStatus.mutate(null)
+                setStatus.mutate({ mediaId, status: null })
               }}
               variant="destructive"
             >

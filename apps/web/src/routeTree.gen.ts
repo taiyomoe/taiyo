@@ -30,6 +30,7 @@ import { Route as DashboardUsersRouteImport } from './routes/dashboard/users'
 import { Route as GroupsIndexRouteImport } from './routes/groups/index'
 import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
+import { Route as UsersUsernameRouteImport } from './routes/users/$username'
 import { Route as ChaptersChapterIdSourceRouteImport } from './routes/chapters/$chapterId.source'
 import { Route as DashboardGroupsIndexRouteImport } from './routes/dashboard/groups/index'
 import { Route as DashboardGroupsGroupIdRouteImport } from './routes/dashboard/groups/$groupId'
@@ -142,6 +143,11 @@ const MediaMediaIdRoute = MediaMediaIdRouteImport.update({
   path: '/media/$mediaId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UsersUsernameRoute = UsersUsernameRouteImport.update({
+  id: '/users/$username',
+  path: '/users/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChaptersChapterIdSourceRoute = ChaptersChapterIdSourceRouteImport.update({
   id: '/chapters/$chapterId/source',
   path: '/chapters/$chapterId/source',
@@ -195,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
+  '/users/$username': typeof UsersUsernameRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
@@ -223,6 +230,7 @@ export interface FileRoutesByTo {
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
+  '/users/$username': typeof UsersUsernameRoute
   '/dashboard': typeof DashboardIndexRoute
   '/groups': typeof GroupsIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
+  '/users/$username': typeof UsersUsernameRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
     | '/dashboard/users'
     | '/groups/$groupId'
     | '/media/$mediaId'
+    | '/users/$username'
     | '/dashboard/'
     | '/groups/'
     | '/chapters/$chapterId/source'
@@ -312,6 +322,7 @@ export interface FileRouteTypes {
     | '/dashboard/users'
     | '/groups/$groupId'
     | '/media/$mediaId'
+    | '/users/$username'
     | '/dashboard'
     | '/groups'
     | '/chapters/$chapterId/source'
@@ -341,6 +352,7 @@ export interface FileRouteTypes {
     | '/dashboard/users'
     | '/groups/$groupId'
     | '/media/$mediaId'
+    | '/users/$username'
     | '/dashboard/'
     | '/groups/'
     | '/chapters/$chapterId/source'
@@ -362,6 +374,7 @@ export interface RootRouteChildren {
   TitlesRoute: typeof TitlesRoute
   GroupsGroupIdRoute: typeof GroupsGroupIdRoute
   MediaMediaIdRoute: typeof MediaMediaIdRoute
+  UsersUsernameRoute: typeof UsersUsernameRoute
   GroupsIndexRoute: typeof GroupsIndexRoute
   ChaptersChapterIdSourceRoute: typeof ChaptersChapterIdSourceRoute
   MediaMediaIdEditRoute: typeof MediaMediaIdEditRoute
@@ -516,6 +529,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MediaMediaIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/users/$username': {
+      id: '/users/$username'
+      path: '/users/$username'
+      fullPath: '/users/$username'
+      preLoaderRoute: typeof UsersUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chapters/$chapterId/source': {
       id: '/chapters/$chapterId/source'
       path: '/chapters/$chapterId/source'
@@ -620,6 +640,7 @@ const rootRouteChildren: RootRouteChildren = {
   TitlesRoute: TitlesRoute,
   GroupsGroupIdRoute: GroupsGroupIdRoute,
   MediaMediaIdRoute: MediaMediaIdRoute,
+  UsersUsernameRoute: UsersUsernameRoute,
   GroupsIndexRoute: GroupsIndexRoute,
   ChaptersChapterIdSourceRoute: ChaptersChapterIdSourceRoute,
   MediaMediaIdEditRoute: MediaMediaIdEditRoute,

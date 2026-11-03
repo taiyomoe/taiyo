@@ -9,6 +9,7 @@ import { MediaHeader } from "@/features/media/components/media-page/media-header
 import { mediaPageStyles } from "@/features/media/components/media-page/media-page-styles"
 import { MediaTabs } from "@/features/media/components/media-page/media-tabs"
 import { ReadingActions } from "@/features/media/components/media-sidebar/reading-actions"
+import { useMediaCommands } from "@/features/media/hooks/use-media-commands"
 import { getMainTitle } from "@/features/media/lib/media-labels"
 import { useSettings } from "@/lib/settings"
 
@@ -36,6 +37,9 @@ export function MediaPageContent({
 }) {
   const signedIn = user !== null
   const { data: media } = useSuspenseQuery(mediaQueryOptions(mediaId))
+
+  useMediaCommands(media, signedIn)
+
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const backdrop =
     media.banners.find((banner) => contentRatings.includes(banner.contentRating))?.url ??

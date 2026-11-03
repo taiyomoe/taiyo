@@ -68,6 +68,11 @@ import {
   CalendarClockIcon,
   Globe02Icon,
   Key01Icon,
+  Copy01Icon,
+  Login01Icon,
+  RefreshIcon,
+  SourceCodeIcon,
+  LegalDocument01Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -228,6 +233,16 @@ export const Upload: (props: IconProps) => React.ReactElement = icon(Upload04Ico
 export const UserAdd: (props: IconProps) => React.ReactElement = icon(UserAdd01Icon)
 
 export const UserCheck: (props: IconProps) => React.ReactElement = icon(UserCheck01Icon)
+
+export const Copy: (props: IconProps) => React.ReactElement = icon(Copy01Icon)
+
+export const Login: (props: IconProps) => React.ReactElement = icon(Login01Icon)
+
+export const Refresh: (props: IconProps) => React.ReactElement = icon(RefreshIcon)
+
+export const Code: (props: IconProps) => React.ReactElement = icon(SourceCodeIcon)
+
+export const LegalDocument: (props: IconProps) => React.ReactElement = icon(LegalDocument01Icon)
 
 function caret(
   path: string,

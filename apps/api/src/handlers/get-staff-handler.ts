@@ -1,4 +1,4 @@
-import { getStaffImageUrl } from "@taiyomoe/s3"
+import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -44,7 +44,7 @@ export const getStaffHandler = new Hono().get(
       name: staff.name,
       bio: staff.bio,
       links: staff.links,
-      imageUrl: staff.image === null ? null : getStaffImageUrl(staff.image),
+      imageUrl: staff.image === null ? null : getPublicImageUrl(staff.image),
       createdAt: staff.createdAt,
       updatedAt: staff.updatedAt,
     })

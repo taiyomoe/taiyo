@@ -37,12 +37,11 @@ export const readingProgressQueryOptions = (
       ),
   })
 
-export function useSetLibraryStatus(mediaId: string) {
+export function useSetLibraryStatus() {
   const queryClient = useQueryClient()
-  const { queryKey } = libraryEntryQueryOptions(mediaId)
 
   return useMutation({
-    mutationFn: async (status: LibraryStatus | null) => {
+    mutationFn: async ({ mediaId, status }: { mediaId: string; status: LibraryStatus | null }) => {
       if (status === null) {
         const response = await api.users.me.library[":mediaId"].$delete({ param: { mediaId } })
 
@@ -56,7 +55,9 @@ export function useSetLibraryStatus(mediaId: string) {
 
       return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
     },
-    onMutate: async (status) => {
+    onMutate: async ({ mediaId, status }) => {
+      const { queryKey } = libraryEntryQueryOptions(mediaId)
+
       await queryClient.cancelQueries({ queryKey })
 
       const previous = queryClient.getQueryData(queryKey)
@@ -76,9 +77,10 @@ export function useSetLibraryStatus(mediaId: string) {
 
       return { previous }
     },
-    onError: (_error, _status, context) => {
-      queryClient.setQueryData(queryKey, context?.previous)
+    onError: (_error, { mediaId }, context) => {
+      queryClient.setQueryData(libraryEntryQueryOptions(mediaId).queryKey, context?.previous)
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey }),
+    onSettled: (_data, _error, { mediaId }) =>
+      queryClient.invalidateQueries({ queryKey: libraryEntryQueryOptions(mediaId).queryKey }),
   })
 }

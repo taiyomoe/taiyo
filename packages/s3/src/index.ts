@@ -65,4 +65,4 @@ export const getCoverUrl = (mediaId: string, coverId: string, extension: string)
 export const getBannerUrl = (mediaId: string, bannerId: string, extension: string) =>
   `${S3_PUBLIC_BASE}/${getBannerKey(mediaId, `${bannerId}.${extension}`)}`
 
-export const getStaffImageUrl = (key: string) => `${S3_PUBLIC_BASE}/${key}`
+export const getPublicImageUrl = (key: string) => `${S3_PUBLIC_BASE}/${key}`

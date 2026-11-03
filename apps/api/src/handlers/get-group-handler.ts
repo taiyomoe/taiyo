@@ -1,3 +1,4 @@
+import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -10,6 +11,7 @@ const groupDetailSchema = z.object({
   name: z.string().meta({ description: "Name of the group." }),
   description: z.string().nullable(),
   logo: z.string().nullable(),
+  logoUrl: z.url().nullable().meta({ description: "Public URL of the group logo, if any." }),
   banner: z.string().nullable(),
   website: z.string().nullable(),
   discord: z.string().nullable(),
@@ -59,6 +61,7 @@ export const getGroupHandler = new Hono().get(
       name: group.name,
       description: group.description,
       logo: group.logo,
+      logoUrl: group.logo === null ? null : getPublicImageUrl(group.logo),
       banner: group.banner,
       website: group.website,
       discord: group.discord,

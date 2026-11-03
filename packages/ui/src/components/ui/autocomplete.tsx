@@ -472,7 +472,7 @@ export function AutocompleteList({
   const styleProps = stylex.props(styles.list, sx)
 
   return (
-    <ScrollArea scrollbarGutter scrollFade sx={styles.listScrollArea}>
+    <ScrollArea horizontal={false} scrollbarGutter scrollFade sx={styles.listScrollArea}>
       <AutocompletePrimitive.List
         className={cn(styleProps.className, className)}
         data-slot="autocomplete-list"

@@ -49,11 +49,12 @@ const styles = stylex.create({
 
 export function UploadPage() {
   const { session } = routeApi.useRouteContext()
+  const prefill = routeApi.useLoaderData()
   const { user } = session
   const can = usePermissions(user)
-  const [media, setMedia] = useState<MediaOption | null>(null)
+  const [media, setMedia] = useState<MediaOption | null>(prefill.media)
   const [language, setLanguage] = useState<Language>("en")
-  const [groups, setGroups] = useState<GroupOption[]>([])
+  const [groups, setGroups] = useState<GroupOption[]>(prefill.group === null ? [] : [prefill.group])
   const [attempted, setAttempted] = useState(false)
   const [editing, setEditing] = useState<string | null>(null)
   const [release, setRelease] = useState<ReleaseSettings>(DEFAULT_RELEASE)

@@ -3,13 +3,15 @@ import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal
 import ptSerifLatinBold from "@fontsource/pt-serif/files/pt-serif-latin-700-normal.woff2?url"
 import ptSerifLatinExtBold from "@fontsource/pt-serif/files/pt-serif-latin-ext-700-normal.woff2?url"
 import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
+import { ToastProvider } from "@taiyomoe/ui/components/ui/toast"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
-import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
+import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { createIsomorphicFn } from "@tanstack/react-start"
 import { getCookies } from "@tanstack/react-start/server"
 import { fromEntries, map, pipe } from "remeda"
+import { CommandPaletteProvider } from "@/features/command-palette/components/command-palette-provider"
 import { sessionQueryOptions } from "@/lib/session"
 import {
   THEME_COOKIE,
@@ -90,7 +92,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: import.meta.env.DEV ? [{ type: "module", src: "/@id/virtual:stylex:runtime" }] : [],
   }),
   shellComponent: RootDocument,
+  component: RootComponent,
 })
+
+function RootComponent() {
+  return (
+    <ToastProvider>
+      <CommandPaletteProvider>
+        <Outlet />
+      </CommandPaletteProvider>
+    </ToastProvider>
+  )
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { themePreference } = Route.useRouteContext()
