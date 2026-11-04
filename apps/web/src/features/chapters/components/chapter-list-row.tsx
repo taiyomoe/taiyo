@@ -144,7 +144,13 @@ export function ChapterListRow({ chapter }: { chapter: ChapterListItem }) {
         </Link>
       ) : (
         <span sx={[styles.label, read && styles.labelRead]}>
-          {label}
+          <Link
+            params={{ chapterId: chapter.id }}
+            to="/chapters/$chapterId"
+            {...stylex.props(styles.label, styles.labelLink, read && styles.labelRead)}
+          >
+            {label}
+          </Link>
           {chapter.externalUrl === null ? null : (
             <Link
               aria-label={m.chapter_source_link()}

@@ -1,4 +1,4 @@
-import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
+import { GetObjectCommand, ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
 import { sql } from "@taiyomoe/db"
 import { processChapterUpload } from "@taiyomoe/queue"
 import sharp from "sharp"
@@ -86,6 +86,11 @@ describe("processChapterUpload", () => {
     const listed = await s3.send(new ListObjectsV2Command({ Bucket: s3Bucket, Prefix: finalKey }))
 
     expect(listed.Contents).toHaveLength(1)
+
+    const stored = await s3.send(new GetObjectCommand({ Bucket: s3Bucket, Key: finalKey }))
+    const bytes = await stored.Body?.transformToByteArray()
+
+    expect((await sharp(Buffer.from(bytes ?? [])).metadata()).isProgressive).toBe(true)
   })
 
   test("publishes an uploading chapter as just released, schedules it, or keeps a submission pending", async ({

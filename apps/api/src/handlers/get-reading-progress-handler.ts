@@ -23,12 +23,18 @@ const progressSchema = z.object({
   readCount: z.int().meta({ description: "How many distinct chapter numbers you have read." }),
   totalCount: z.int().meta({ description: "How many distinct chapter numbers the media has." }),
   lastRead: chapterRefSchema
-    .extend({ readAt: z.iso.datetime().meta({ description: "When you last opened it." }) })
+    .extend({
+      readAt: z.iso.datetime().meta({ description: "When you last opened it." }),
+      completed: z.boolean().meta({ description: "Whether you finished it." }),
+      page: z.int().nullable().meta({
+        description: "The 1-based page you were last on, or null when none was recorded.",
+      }),
+    })
     .nullable()
     .meta({ description: "The chapter you opened most recently, if any." }),
   next: chapterRefSchema.nullable().meta({
     description:
-      "The first unread chapter after the one you read last, in its language when available, or the first chapter if you have read none. Null once you are caught up.",
+      "The first chapter after the one you read last whose number you have not finished, in its language when available, or the first chapter if you have read none. Null once you are caught up.",
   }),
 })
 
@@ -78,7 +84,16 @@ export const getReadingProgressHandler = new Hono().get(
       visible
         .innerJoin("userHistories", "userHistories.chapterId", "chapters.id")
         .where("userHistories.userId", "=", user.id)
-        .select([...chapterRef, "userHistories.updatedAt as readAt"])
+        .select([
+          ...chapterRef,
+          "userHistories.updatedAt as readAt",
+          "userHistories.completed",
+          sql<
+            number | null
+          >`(select ${sql.ref("p.ord")}::int from unnest(${sql.ref("chapters.pages")}) with ordinality as p(page, ord) where ${sql.ref("p.page")}->>'id' = ${sql.ref("userHistories.pageId")}::text)`.as(
+            "page",
+          ),
+        ])
         .orderBy("userHistories.updatedAt", "desc")
         .orderBy("chapters.id", "desc")
         .limit(1)
@@ -89,7 +104,13 @@ export const getReadingProgressHandler = new Hono().get(
         ? visible
         : visible
             .where("chapters.number", ">", lastRead.number)
-            .where((eb) => eb.not(eb.exists(selectReadChapterNumber(db, user.id))))
+            .where((eb) =>
+              eb.not(
+                eb.exists(
+                  selectReadChapterNumber(db, user.id).where("userHistories.completed", "=", true),
+                ),
+              ),
+            )
     const next = await candidates
       .select(chapterRef)
       .orderBy("chapters.number", "asc")

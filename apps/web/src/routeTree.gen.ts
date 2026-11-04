@@ -32,6 +32,7 @@ import { Route as GroupsIndexRouteImport } from './routes/groups/index'
 import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
 import { Route as UsersUsernameRouteImport } from './routes/users/$username'
+import { Route as ChaptersChapterIdIndexRouteImport } from './routes/chapters/$chapterId.index'
 import { Route as ChaptersChapterIdSourceRouteImport } from './routes/chapters/$chapterId.source'
 import { Route as DashboardGroupsIndexRouteImport } from './routes/dashboard/groups/index'
 import { Route as DashboardGroupsGroupIdRouteImport } from './routes/dashboard/groups/$groupId'
@@ -154,6 +155,11 @@ const UsersUsernameRoute = UsersUsernameRouteImport.update({
   path: '/users/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChaptersChapterIdIndexRoute = ChaptersChapterIdIndexRouteImport.update({
+  id: '/chapters/$chapterId/',
+  path: '/chapters/$chapterId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChaptersChapterIdSourceRoute = ChaptersChapterIdSourceRouteImport.update({
   id: '/chapters/$chapterId/source',
   path: '/chapters/$chapterId/source',
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/media/$mediaId/edit': typeof MediaMediaIdEditRoute
+  '/chapters/$chapterId/': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups/': typeof DashboardGroupsIndexRoute
   '/dashboard/suggestions/': typeof DashboardSuggestionsIndexRoute
 }
@@ -245,6 +252,7 @@ export interface FileRoutesByTo {
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/media/$mediaId/edit': typeof MediaMediaIdEditRoute
+  '/chapters/$chapterId': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups': typeof DashboardGroupsIndexRoute
   '/dashboard/suggestions': typeof DashboardSuggestionsIndexRoute
 }
@@ -277,6 +285,7 @@ export interface FileRoutesById {
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/media/$mediaId_/edit': typeof MediaMediaIdEditRoute
+  '/chapters/$chapterId/': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups/': typeof DashboardGroupsIndexRoute
   '/dashboard/suggestions/': typeof DashboardSuggestionsIndexRoute
 }
@@ -310,6 +319,7 @@ export interface FileRouteTypes {
     | '/dashboard/groups/$groupId'
     | '/dashboard/suggestions/$suggestionId'
     | '/media/$mediaId/edit'
+    | '/chapters/$chapterId/'
     | '/dashboard/groups/'
     | '/dashboard/suggestions/'
   fileRoutesByTo: FileRoutesByTo
@@ -340,6 +350,7 @@ export interface FileRouteTypes {
     | '/dashboard/groups/$groupId'
     | '/dashboard/suggestions/$suggestionId'
     | '/media/$mediaId/edit'
+    | '/chapters/$chapterId'
     | '/dashboard/groups'
     | '/dashboard/suggestions'
   id:
@@ -371,6 +382,7 @@ export interface FileRouteTypes {
     | '/dashboard/groups/$groupId'
     | '/dashboard/suggestions/$suggestionId'
     | '/media/$mediaId_/edit'
+    | '/chapters/$chapterId/'
     | '/dashboard/groups/'
     | '/dashboard/suggestions/'
   fileRoutesById: FileRoutesById
@@ -390,6 +402,7 @@ export interface RootRouteChildren {
   GroupsIndexRoute: typeof GroupsIndexRoute
   ChaptersChapterIdSourceRoute: typeof ChaptersChapterIdSourceRoute
   MediaMediaIdEditRoute: typeof MediaMediaIdEditRoute
+  ChaptersChapterIdIndexRoute: typeof ChaptersChapterIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -555,6 +568,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chapters/$chapterId/': {
+      id: '/chapters/$chapterId/'
+      path: '/chapters/$chapterId'
+      fullPath: '/chapters/$chapterId/'
+      preLoaderRoute: typeof ChaptersChapterIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chapters/$chapterId/source': {
       id: '/chapters/$chapterId/source'
       path: '/chapters/$chapterId/source'
@@ -665,6 +685,7 @@ const rootRouteChildren: RootRouteChildren = {
   GroupsIndexRoute: GroupsIndexRoute,
   ChaptersChapterIdSourceRoute: ChaptersChapterIdSourceRoute,
   MediaMediaIdEditRoute: MediaMediaIdEditRoute,
+  ChaptersChapterIdIndexRoute: ChaptersChapterIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

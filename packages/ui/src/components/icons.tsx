@@ -78,6 +78,12 @@ import {
   SearchAddIcon,
   SearchMinusIcon,
   SourceCodeIcon,
+  PlayIcon,
+  PauseIcon,
+  FullScreenIcon,
+  MinimizeScreenIcon,
+  Undo02Icon,
+  PipetteIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -248,6 +254,18 @@ export const Refresh: (props: IconProps) => React.ReactElement = icon(RefreshIco
 export const Code: (props: IconProps) => React.ReactElement = icon(SourceCodeIcon)
 
 export const LegalDocument: (props: IconProps) => React.ReactElement = icon(LegalDocument01Icon)
+
+export const Play: (props: IconProps) => React.ReactElement = icon(PlayIcon)
+
+export const Pause: (props: IconProps) => React.ReactElement = icon(PauseIcon)
+
+export const Fullscreen: (props: IconProps) => React.ReactElement = icon(FullScreenIcon)
+
+export const ExitFullscreen: (props: IconProps) => React.ReactElement = icon(MinimizeScreenIcon)
+
+export const Undo: (props: IconProps) => React.ReactElement = icon(Undo02Icon)
+
+export const Pipette: (props: IconProps) => React.ReactElement = icon(PipetteIcon)
 
 function caret(
   path: string,

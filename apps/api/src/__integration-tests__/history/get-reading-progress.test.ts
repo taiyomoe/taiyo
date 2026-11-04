@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
 import type { Services } from "../../services"
 import { signInAs } from "../helpers/auth"
@@ -17,7 +18,7 @@ type ChapterRef = {
 type Progress = {
   readCount: number
   totalCount: number
-  lastRead: (ChapterRef & { readAt: string }) | null
+  lastRead: (ChapterRef & { readAt: string; completed: boolean; page: number | null }) | null
   next: ChapterRef | null
 }
 
@@ -129,6 +130,8 @@ describe("GET /users/me/progress/:mediaId", () => {
       title: null,
       language: "pt_br",
       readAt: at(20).toISOString(),
+      completed: false,
+      page: null,
     })
     expect(progress.readCount).toBe(2)
   })
@@ -177,7 +180,23 @@ describe("GET /users/me/progress/:mediaId", () => {
     })
   })
 
-  test("skips numbers already read after the last read chapter", async ({ app, services }) => {
+  test("skips numbers already finished after the last read chapter", async ({ app, services }) => {
+    const catalog = await seedCatalog(services)
+    const { headers, userId } = await signInAs(services)
+
+    await services.db
+      .insertInto("userHistories")
+      .values({ userId, chapterId: catalog.threeEn, completed: true, updatedAt: at(10) })
+      .execute()
+    await seedHistory(services, userId, catalog.twoPt, at(20))
+
+    const progress = await getProgress(app, catalog.mediaId, headers)
+
+    expect(progress.lastRead?.id).toBe(catalog.twoPt)
+    expect(progress.next?.id).toBe(catalog.fourPt)
+  })
+
+  test("still offers a chapter that was opened but not finished", async ({ app, services }) => {
     const catalog = await seedCatalog(services)
     const { headers, userId } = await signInAs(services)
 
@@ -186,8 +205,7 @@ describe("GET /users/me/progress/:mediaId", () => {
 
     const progress = await getProgress(app, catalog.mediaId, headers)
 
-    expect(progress.lastRead?.id).toBe(catalog.twoPt)
-    expect(progress.next?.id).toBe(catalog.fourPt)
+    expect(progress.next?.id).toBe(catalog.threeEn)
   })
 
   test("does not go back to unread chapters before the last read one", async ({
@@ -254,6 +272,34 @@ describe("GET /users/me/progress/:mediaId", () => {
     const progress = await getProgress(app, catalog.mediaId, headers, "contentRating=NORMAL,NSFW")
 
     expect(progress.next?.id).toBe(catalog.fiveNsfw)
+  })
+
+  test("reports the page and completion of the last read chapter", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+    const mediaId = await seedMedia(services, userId)
+    const pages = [{ id: randomUUID() }, { id: randomUUID() }, { id: randomUUID() }]
+    const chapterId = await seedChapter(services, { mediaId, uploaderId: userId, number: 1, pages })
+
+    await services.db
+      .insertInto("userHistories")
+      .values({ userId, chapterId, pageId: pages[1]?.id ?? null })
+      .execute()
+
+    expect((await getProgress(app, mediaId, headers)).lastRead).toMatchObject({
+      completed: false,
+      page: 2,
+    })
+
+    await services.db
+      .updateTable("userHistories")
+      .set({ completed: true, pageId: randomUUID() })
+      .where("chapterId", "=", chapterId)
+      .execute()
+
+    expect((await getProgress(app, mediaId, headers)).lastRead).toMatchObject({
+      completed: true,
+      page: null,
+    })
   })
 
   test("ignores history of deleted chapters", async ({ app, services }) => {

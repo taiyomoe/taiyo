@@ -52,6 +52,8 @@ export * from "./models/media-staff-model"
 
 export * from "./models/media-suggestion-model"
 
+export * from "./models/reading-reward-model"
+
 export * from "./models/staff-model"
 
 export * from "./models/task-model"

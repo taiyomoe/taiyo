@@ -5,6 +5,7 @@ import { createChapterUploadSessionHandler } from "../handlers/create-chapter-up
 import { deleteChapterHandler } from "../handlers/delete-chapter-handler"
 import { finalizeChapterUploadHandler } from "../handlers/finalize-chapter-upload-handler"
 import { getChapterHandler } from "../handlers/get-chapter-handler"
+import { getChapterReaderHandler } from "../handlers/get-chapter-reader-handler"
 import { getChapterUploadStatusHandler } from "../handlers/get-chapter-upload-status-handler"
 import { linkChapterGroupHandler } from "../handlers/link-chapter-group-handler"
 import { listChapterGroupsHandler } from "../handlers/list-chapter-groups-handler"
@@ -27,6 +28,7 @@ export const chaptersRouter = new Hono()
   .route("/", listUpcomingChaptersHandler)
   .route("/", listChapterReviewQueueHandler)
   .route("/", getChapterHandler)
+  .route("/", getChapterReaderHandler)
   .route("/", updateChapterHandler)
   .route("/", deleteChapterHandler)
   .route("/", listChapterGroupsHandler)

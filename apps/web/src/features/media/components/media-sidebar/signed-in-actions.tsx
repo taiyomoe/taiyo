@@ -31,7 +31,7 @@ export function SignedInActions({ mediaId, canEdit }: { mediaId: string; canEdit
       {progress.data === undefined ? (
         <Skeleton sx={styles.skeletonButton} />
       ) : (
-        <ReadButton progress={progress.data} />
+        <ReadButton mediaId={mediaId} progress={progress.data} />
       )}
       {entry.data === undefined ? (
         <Skeleton sx={styles.skeletonButton} />

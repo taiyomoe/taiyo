@@ -42,12 +42,12 @@ const styles = stylex.create({
   },
 })
 
-export function SignedOutActions() {
+export function SignedOutActions({ mediaId }: { mediaId: string }) {
   const href = useCurrentHref()
 
   return (
     <div sx={mediaSidebarStyles.actions}>
-      <ReadButton progress={null} />
+      <ReadButton mediaId={mediaId} progress={null} />
       <Popover>
         <PopoverTrigger render={<Button sx={mediaSidebarStyles.library} variant="outline" />}>
           <Bookmark />

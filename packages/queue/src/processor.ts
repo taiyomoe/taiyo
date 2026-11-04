@@ -61,7 +61,7 @@ export const processChapterUpload = async (
 
       const processed = await sharp(buffer)
         .rotate()
-        .jpeg({ quality: config.images.chapterPageQuality })
+        .jpeg({ quality: config.images.chapterPageQuality, progressive: true })
         .toBuffer()
 
       await s3.send(

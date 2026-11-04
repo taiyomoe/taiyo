@@ -13,6 +13,7 @@ import type { GroupOwnershipRequest } from "./models/group-ownership-request-mod
 import type { Media } from "./models/media-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
+import type { ReadingReward } from "./models/reading-reward-model"
 import type { SearchOutboxEntry } from "./models/search-outbox-model"
 import type { Session } from "./models/session-model"
 import type { Staff } from "./models/staff-model"
@@ -43,6 +44,7 @@ export type DB = {
   mediaStaffs: MediaStaff
   mediaSuggestions: MediaSuggestion
   medias: Media
+  readingRewards: ReadingReward
   searchOutbox: SearchOutboxEntry
   sessions: Session
   staffs: Staff
