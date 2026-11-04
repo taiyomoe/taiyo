@@ -34,7 +34,10 @@ export const Route = createFileRoute("/media/$mediaId")({
   loader: async ({ context, params: { mediaId }, deps }) => {
     const contentRatings = getContentRatings(context.session)
     const filters = { contentRatings, language: deps.lang }
-    const media = context.queryClient.query(mediaQueryOptions(mediaId))
+    const title = context.queryClient
+      .query(mediaQueryOptions(mediaId))
+      .then((data) => getMainTitle(data.titles))
+      .catch(() => null)
     const prefetch = Promise.all(
       [
         context.queryClient.query(mediaChapterFacetsQueryOptions(mediaId, filters)),
@@ -66,9 +69,7 @@ export const Route = createFileRoute("/media/$mediaId")({
       await prefetch
     }
 
-    const title = await media.then((data) => getMainTitle(data.titles)).catch(() => null)
-
-    return { title }
+    return { title: await title }
   },
   head: ({ loaderData }) => {
     const title = loaderData?.title ?? null
