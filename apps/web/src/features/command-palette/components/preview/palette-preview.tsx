@@ -2,10 +2,10 @@ import * as stylex from "@stylexjs/stylex"
 import { Eye } from "@taiyomoe/ui/components/icons"
 import { ScrollArea } from "@taiyomoe/ui/components/ui/scroll-area"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { type PaletteEntity, entityKey } from "@/features/command-palette/lib/palette-command"
 import { GroupPreview } from "@/features/command-palette/components/preview/group-preview"
 import { TitlePreview } from "@/features/command-palette/components/preview/title-preview"
 import { UserPreview } from "@/features/command-palette/components/preview/user-preview"
+import { type PaletteEntity, entityKey } from "@/features/command-palette/lib/palette-command"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
