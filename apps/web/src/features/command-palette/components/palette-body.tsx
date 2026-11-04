@@ -180,9 +180,9 @@ export function PaletteBody({
     results: page === null && query.trim() !== "" ? search.data : undefined,
   })
   const previewKey = useDebouncedValue(highlightedKey, PREVIEW_DEBOUNCE_MS)
-  const highlighted = groups
-    .flatMap((group) => group.items)
-    .find((item) => item.key === highlightedKey)
+  const items = groups.flatMap((group) => group.items)
+  const highlighted = items.find((item) => item.key === highlightedKey)
+  const previewed = items.find((item) => item.key === previewKey)
   const searching =
     page === null && query.trim() !== "" && (search.isFetching || term !== query.trim())
   const push = (next: PalettePage) => {
@@ -329,9 +329,9 @@ export function PaletteBody({
             )}
           </CommandList>
         </div>
-        <PalettePreview
-          item={groups.flatMap((group) => group.items).find((item) => item.key === previewKey)}
-        />
+        {items.some((item) => item.kind === "entity") ? (
+          <PalettePreview entity={previewed?.kind === "entity" ? previewed.entity : undefined} />
+        ) : null}
       </CommandPanel>
       <PaletteFooter
         hasActions={highlighted !== undefined && actionsPage(highlighted) !== null}

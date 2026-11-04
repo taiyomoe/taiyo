@@ -77,6 +77,27 @@ test.describe("command palette", () => {
     await expect(preview).toContainText("Synopsis")
   })
 
+  test("shows no preview panel for a list of commands", async ({ page }) => {
+    await openPalette(page)
+    await search(page, TITLE)
+    await expect(option(page, new RegExp(TITLE))).toBeVisible()
+    await page.keyboard.press("Tab")
+    await expect(option(page, "Copy link")).toBeVisible()
+
+    await expect(page.locator('[data-slot="palette-preview"]')).toHaveCount(0)
+  })
+
+  test("does not preview a command next to recent titles", async ({ page }) => {
+    await openTitle(page)
+    await visit(page, "/")
+    await openPalette(page)
+    await option(page, "Latest updates").hover()
+
+    await expect(page.locator('[data-slot="palette-preview"]')).toContainText(
+      "Highlight a title, group or user to preview it",
+    )
+  })
+
   test("offers both upload commands on a title page", async ({ page }) => {
     await openTitle(page)
     await openPalette(page)
