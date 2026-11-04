@@ -31,6 +31,7 @@ const config = defineConfig(({ mode }) => {
 
   return {
     resolve: { tsconfigPaths: true },
+    optimizeDeps: { entries: ["src/routes/**/*.tsx", "src/features/**/*.tsx"] },
     server: {
       port: Number(env.PORT ?? 3000),
       strictPort: true,
