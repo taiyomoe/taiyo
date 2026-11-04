@@ -27,6 +27,10 @@ const quickSearchSchema = z.object({
     .object({
       id: z.uuid(),
       title: z.string().meta({ description: "The main title of the media." }),
+      matchedTitle: z.string().nullable().meta({
+        description:
+          "The alternative title the query matched best, when it matched one better than the main title.",
+      }),
       synopsis: z
         .record(z.string(), z.string())
         .meta({ description: "The synopsis of the media, keyed by language." }),
@@ -84,7 +88,16 @@ export const quickSearchHandler = new Hono().get(
     const [titleHits, groups, users] = await Promise.all([
       meili.index<MediaDocument>(mediasIndex).search(q, {
         filter: `contentRating IN [${contentRating.map((rating) => `"${rating}"`).join(", ")}]`,
-        attributesToRetrieve: ["id", "mainTitle", "synopsis", "type", "status", "startDate"],
+        attributesToRetrieve: [
+          "id",
+          "mainTitle",
+          "titles",
+          "synopsis",
+          "type",
+          "status",
+          "startDate",
+        ],
+        showMatchesPosition: true,
         limit,
       }),
       db
@@ -121,21 +134,48 @@ export const quickSearchHandler = new Hono().get(
     )
 
     return c.ok({
-      titles: titleHits.hits.flatMap((hit) =>
-        hit.mainTitle === null
-          ? []
-          : [
-              {
-                id: hit.id,
-                title: hit.mainTitle.title,
-                synopsis: hit.synopsis,
-                type: hit.type,
-                status: hit.status,
-                startDate: hit.startDate,
-                coverUrl: covers.get(hit.id) ?? null,
-              },
-            ],
-      ),
+      titles: titleHits.hits.flatMap((hit) => {
+        if (hit.mainTitle === null) {
+          return []
+        }
+
+        const main = hit.mainTitle.title
+        const squash = (value: string) => value.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "")
+        const positions: Partial<Record<string, ReadonlyArray<{ indices?: number[] }>>> =
+          hit._matchesPosition ?? {}
+        const counts = new Map<number, number>()
+
+        for (const position of positions.titles ?? []) {
+          for (const index of position.indices ?? []) {
+            counts.set(index, (counts.get(index) ?? 0) + 1)
+          }
+        }
+
+        const best = [...counts.entries()]
+          .filter(([index]) => {
+            const title = hit.titles[index]
+
+            return title !== undefined && squash(title) !== squash(main)
+          })
+          .sort(([, a], [, b]) => b - a)[0]
+        const matchedTitle =
+          best !== undefined && best[1] > (positions["mainTitle.title"]?.length ?? 0)
+            ? (hit.titles[best[0]] ?? null)
+            : null
+
+        return [
+          {
+            id: hit.id,
+            title: main,
+            matchedTitle,
+            synopsis: hit.synopsis,
+            type: hit.type,
+            status: hit.status,
+            startDate: hit.startDate,
+            coverUrl: covers.get(hit.id) ?? null,
+          },
+        ]
+      }),
       groups: groups.map((group) => ({
         id: group.id,
         name: group.name,

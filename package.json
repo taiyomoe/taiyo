@@ -17,7 +17,8 @@
     "test:unit": "vitest run --config vitest.config.unit.ts",
     "test:unit:watch": "vitest --config vitest.config.unit.ts",
     "test:integration": "vitest run --config vitest.config.integration.ts",
-    "test:integration:watch": "vitest --config vitest.config.integration.ts"
+    "test:integration:watch": "vitest --config vitest.config.integration.ts",
+    "test:e2e": "pnpm -F @taiyomoe/web test:e2e"
   },
   "devDependencies": {
     "@stylexjs/eslint-plugin": "^0.19.1",

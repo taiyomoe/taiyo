@@ -9,5 +9,6 @@
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["${configDir}/*.ts", "${configDir}/src", "${configDir}/e2e"]
 }

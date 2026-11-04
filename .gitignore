@@ -28,6 +28,11 @@ storybook-static
 .vinxi
 *.local
 
+# playwright (apps/web)
+apps/web/e2e/.auth
+apps/web/test-results
+apps/web/playwright-report
+
 # env
 .env*
 !.env.example

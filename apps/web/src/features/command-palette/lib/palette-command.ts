@@ -40,6 +40,7 @@ export type TitleEntity = {
   kind: "title"
   id: string
   title: string
+  matchedTitle: string | null
   synopsis: string
   coverUrl: string | null
   type: MediaType

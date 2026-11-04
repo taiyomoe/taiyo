@@ -8,7 +8,11 @@ import { m } from "@/paraglide/messages"
 const styles = stylex.create({
   popup: {
     maxHeight: { default: "min(36rem, 80dvh)", [breakpoints.maxSm]: "none" },
-    maxWidth: { default: "42rem", [breakpoints.maxSm]: "none" },
+    maxWidth: {
+      default: "42rem",
+      [breakpoints.lg]: { default: "42rem", ":has([data-slot=palette-preview])": "62rem" },
+      [breakpoints.maxSm]: "none",
+    },
   },
 })
 
