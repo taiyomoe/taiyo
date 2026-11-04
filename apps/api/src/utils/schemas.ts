@@ -29,6 +29,21 @@ export const apiErrorEnvelope = z.object({
   details: z.unknown().optional(),
 })
 
+const TIME_ZONES = new Set(["UTC", ...Intl.supportedValuesOf("timeZone")])
+const canonicalTimeZone = (value: string) => {
+  try {
+    return new Intl.DateTimeFormat("en", { timeZone: value }).resolvedOptions().timeZone
+  } catch {
+    return value
+  }
+}
+
+export const timeZoneSchema = z
+  .string()
+  .transform(canonicalTimeZone)
+  .refine((value) => TIME_ZONES.has(value), "Unknown time zone.")
+  .default("UTC")
+
 export const languageSchema = (description: string) =>
   z.enum(LANGUAGES).meta({ description, example: "en" })
 

@@ -1,13 +1,16 @@
+import { listAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { USER_LIST_VISIBILITIES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkList } from "../middlewares/check-list-middleware"
 import { requireListOwner } from "../middlewares/require-list-owner-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -46,6 +49,7 @@ export const updateListHandler = new Hono().patch(
       }),
     },
   }),
+  audited(listAudit.UPDATE),
   withAuth(),
   validateJson(updateListSchema),
   checkList(),
@@ -61,6 +65,8 @@ export const updateListHandler = new Hono().patch(
         updates[key] = body[key]
       }
     }
+
+    c.var.audit.set({ changes: auditChanges(list, updates) })
 
     await db.updateTable("userLists").set(updates).where("id", "=", list.id).execute()
 

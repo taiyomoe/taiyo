@@ -94,4 +94,5 @@ export type PermissionsDefinition = ValidateDefinition<{
     { name: "setPassword"; type: UserTarget; required: true },
     { name: "manageSessions"; type: UserTarget; required: true },
   ]
+  auditLog: ["read"]
 }>

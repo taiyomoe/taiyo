@@ -1,3 +1,4 @@
+import { groupInvitationAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
@@ -11,6 +12,7 @@ import {
   normalizeGroupPermissions,
   withGroupLock,
 } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -55,6 +57,7 @@ export const createGroupInvitationHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupInvitationAudit.CREATE, (c) => ({ groupId: c.req.param("id") })),
   withAuth(),
   rateLimit({ prefix: "group-invitation", windowMs: 60_000, limit: 30 }),
   validateJson(createInvitationSchema),
@@ -131,6 +134,7 @@ export const createGroupInvitationHandler = new Hono().post(
     }
 
     log.set({ invitation: { id: result.id, inviteeId: invitee.id } })
+    c.var.audit.set({ target: { id: result.id, inviteeId: invitee.id, permissions } })
 
     if (invitee.email !== null && invitee.email !== "" && invitee.emailVerified) {
       const email = invitee.email

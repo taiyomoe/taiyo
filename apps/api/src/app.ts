@@ -1,5 +1,7 @@
 import { Scalar } from "@scalar/hono-api-reference"
+import { createAuditLogDrain } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
+import { auditRedactPreset, drainPlugin } from "evlog"
 import { evlog } from "evlog/hono"
 import { createHyperDXDrain } from "evlog/hyperdx"
 import { Hono } from "hono"
@@ -17,6 +19,8 @@ import type {
 import type { Services } from "./services"
 import packageJson from "../package.json"
 import { corsAllowedOrigins, env } from "./env"
+import { auditAuthRequest } from "./middlewares/audit-auth-middleware"
+import { auditLogsRouter } from "./routers/audit-logs-router"
 import { bannersRouter } from "./routers/banners-router"
 import { chaptersRouter } from "./routers/chapters-router"
 import { coversRouter } from "./routers/covers-router"
@@ -31,6 +35,7 @@ import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { searchRouter } from "./routers/search-router"
 import { staffsRouter } from "./routers/staffs-router"
 import { usersRouter } from "./routers/users-router"
+import { enrichAudit } from "./utils/audit"
 import { type ErrorCode, errors } from "./utils/errors"
 
 declare module "hono" {
@@ -46,16 +51,19 @@ const hyperdxIngestionKey = env.HYPERDX_INGESTION_KEY ?? ""
 export const createApp = (services: Services) => {
   const app = new Hono()
     .use(
-      evlog(
-        (process.env.TEST ?? "") !== "" || hyperdxEndpoint === "" || hyperdxIngestionKey === ""
+      evlog({
+        ...((process.env.TEST ?? "") !== "" || hyperdxEndpoint === "" || hyperdxIngestionKey === ""
           ? {}
           : {
               drain: createHyperDXDrain({
                 endpoint: hyperdxEndpoint,
                 apiKey: hyperdxIngestionKey,
               }),
-            },
-      ),
+            }),
+        enrich: enrichAudit,
+        redact: { ...auditRedactPreset, builtins: false },
+        plugins: [drainPlugin("audit-logs", createAuditLogDrain(services.db))],
+      }),
     )
     .use(secureHeaders())
     .use(
@@ -108,6 +116,7 @@ export const createApp = (services: Services) => {
         c.fail = (errorCode: ErrorCode, details?: unknown) => {
           const error = errors[errorCode]
 
+          c.set("errorCode", errorCode)
           c.status(error.code)
 
           const response: {
@@ -146,7 +155,7 @@ export const createApp = (services: Services) => {
           : { error: err.message, stack: err.stack },
       )
     })
-    .on(["GET", "POST"], "/api/auth/*", (c) => services.auth.handler(c.req.raw))
+    .on(["GET", "POST"], "/api/auth/*", auditAuthRequest, (c) => services.auth.handler(c.req.raw))
     .get("/ping", (c) => c.json({ version: packageJson.version }))
     .route("/medias", mediasRouter)
     .route("/covers", coversRouter)
@@ -162,6 +171,7 @@ export const createApp = (services: Services) => {
     .route("/lists", listsRouter)
     .route("/dashboard", dashboardRouter)
     .route("/search", searchRouter)
+    .route("/audit-logs", auditLogsRouter)
 
   app
     .get(
@@ -261,6 +271,11 @@ export const createApp = (services: Services) => {
               name: "Settings",
               description:
                 "Preferences of the signed-in user, stored on their account so every device shares them.",
+            },
+            {
+              name: "Audit logs",
+              description:
+                "Every recorded action: who did what, on which resource, when, from where, and whether it succeeded, failed or was denied.",
             },
             {
               name: "Custom lists",

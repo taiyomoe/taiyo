@@ -310,6 +310,12 @@ const chapterUploadErrors = {
     code: 404,
   },
 } as const
+const auditLogErrors = {
+  AUDIT_LOG_NOT_FOUND: {
+    message: "The requested audit log entry was not found.",
+    code: 404,
+  },
+} as const
 
 export const errors = {
   ...genericErrors,
@@ -330,6 +336,7 @@ export const errors = {
   ...listErrors,
   ...imageErrors,
   ...chapterUploadErrors,
+  ...auditLogErrors,
 } as const
 
 export type ErrorCode = keyof typeof errors

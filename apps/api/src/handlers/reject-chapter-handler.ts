@@ -1,8 +1,10 @@
+import { chapterReviewAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { deleteChapterPages } from "../chapter-pages"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -40,12 +42,16 @@ export const rejectChapterHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterReviewAudit.REJECT),
   withAuth("chapter.review"),
   validateJson(rejectSchema),
   checkChapter({ unpublished: true }),
   withTransaction,
   async (c) => {
     const { chapter, db, s3, s3Bucket, user } = c.var
+
+    c.var.audit.set({ target: { mediaId: chapter.mediaId }, reason: c.var.json.reason })
+
     const locked = await db
       .selectFrom("chapters")
       .select(["id", "mediaId", "status", "pages"])

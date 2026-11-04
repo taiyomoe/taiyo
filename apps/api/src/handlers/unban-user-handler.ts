@@ -1,8 +1,11 @@
+import { adminAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -28,6 +31,7 @@ export const unbanUserHandler = new Hono().post(
       }),
     },
   }),
+  audited(adminAudit.USER_UNBAN),
   withAuth(),
   checkUser({ includeBanned: true }),
   async (c) => {
@@ -36,6 +40,10 @@ export const unbanUserHandler = new Hono().post(
     if (!can("user.ban", { id: targetUser.id, role: targetUser.role })) {
       return c.fail("FORBIDDEN")
     }
+
+    c.var.audit.set({
+      changes: auditChanges(targetUser, { banned: false, banReason: null, banExpires: null }),
+    })
 
     await db
       .updateTable("users")

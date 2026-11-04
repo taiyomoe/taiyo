@@ -1,11 +1,14 @@
+import { mediaSuggestionAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMediaSuggestion } from "../middlewares/check-media-suggestion-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import {
   applyMediaEdit,
   checkMediaEdit,
@@ -58,6 +61,7 @@ export const acceptMediaSuggestionHandler = new Hono().post(
       }),
     },
   }),
+  audited(mediaSuggestionAudit.ACCEPT),
   withAuth("mediaSuggestion.review"),
   validateJson(acceptSchema),
   checkMediaSuggestion(),
@@ -87,10 +91,8 @@ export const acceptMediaSuggestionHandler = new Hono().post(
       return c.fail("MEDIA_NOT_FOUND")
     }
 
-    const edit = diffMediaEdit(
-      await readMediaEdit(db, mediaSuggestion.mediaId),
-      normalizeMediaEdit(body.changes),
-    )
+    const current = await readMediaEdit(db, mediaSuggestion.mediaId)
+    const edit = diffMediaEdit(current, normalizeMediaEdit(body.changes))
     const error = await checkMediaEdit(db, mediaSuggestion.mediaId, edit)
 
     if (error?.code === "MEDIA_LINK_CONFLICT") {
@@ -100,6 +102,12 @@ export const acceptMediaSuggestionHandler = new Hono().post(
     if (error !== null) {
       return c.fail(error.code)
     }
+
+    c.var.audit.set({
+      target: { mediaId: mediaSuggestion.mediaId, authorId: locked.authorId },
+      changes: auditChanges(current, edit),
+      ...(body.note === undefined || body.note === null ? {} : { reason: body.note }),
+    })
 
     await applyMediaEdit(db, { mediaId: mediaSuggestion.mediaId, actorId: locked.authorId, edit })
     await db

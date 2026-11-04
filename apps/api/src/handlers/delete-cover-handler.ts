@@ -1,6 +1,8 @@
+import { coverAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkCover } from "../middlewares/check-cover-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -36,11 +38,14 @@ export const deleteCoverHandler = new Hono().delete(
       }),
     },
   }),
+  audited(coverAudit.DELETE),
   withAuth("media.update"),
   checkCover(),
   withTransaction,
   async (c) => {
     const { db, cover, user } = c.var
+
+    c.var.audit.set({ target: { mediaId: cover.mediaId } })
 
     if (cover.isMainCover) {
       return c.fail("COVER_IS_MAIN")

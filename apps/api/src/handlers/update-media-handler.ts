@@ -1,10 +1,13 @@
+import { mediaAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import {
   applyMediaEdit,
   checkMediaEdit,
@@ -53,6 +56,7 @@ export const updateMediaHandler = new Hono().patch(
       }),
     },
   }),
+  audited(mediaAudit.UPDATE),
   withAuth("media.update"),
   validateJson(updateMediaSchema),
   checkMedia(),
@@ -64,7 +68,8 @@ export const updateMediaHandler = new Hono().patch(
       return c.fail("MEDIA_NOT_FOUND")
     }
 
-    const edit = diffMediaEdit(await readMediaEdit(db, media.id), normalizeMediaEdit(c.var.json))
+    const current = await readMediaEdit(db, media.id)
+    const edit = diffMediaEdit(current, normalizeMediaEdit(c.var.json))
     const error = await checkMediaEdit(db, media.id, edit)
 
     if (error?.code === "MEDIA_LINK_CONFLICT") {
@@ -74,6 +79,8 @@ export const updateMediaHandler = new Hono().patch(
     if (error !== null) {
       return c.fail(error.code)
     }
+
+    c.var.audit.set({ changes: auditChanges(current, edit) })
 
     await applyMediaEdit(db, { mediaId: media.id, actorId: user.id, edit })
 

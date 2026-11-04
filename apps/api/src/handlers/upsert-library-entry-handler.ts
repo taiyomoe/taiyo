@@ -1,7 +1,9 @@
+import { libraryAudit } from "@taiyomoe/audit"
 import { USER_LIBRARY_STATUSES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -50,6 +52,7 @@ export const upsertLibraryEntryHandler = new Hono().put(
       }),
     },
   }),
+  audited(libraryAudit.ENTRY_SET, (c) => ({ id: c.req.param("mediaId") })),
   withAuth(),
   validateParam(paramSchema),
   validateJson(bodySchema),
@@ -58,6 +61,9 @@ export const upsertLibraryEntryHandler = new Hono().put(
     const { db, user } = c.var
     const { mediaId } = c.var.param
     const { status } = c.var.json
+
+    c.var.audit.set({ target: { status } })
+
     const media = await db
       .selectFrom("medias")
       .select("id")

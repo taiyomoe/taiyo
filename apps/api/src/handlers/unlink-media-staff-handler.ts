@@ -1,7 +1,9 @@
+import { mediaStaffAudit } from "@taiyomoe/audit"
 import { STAFF_ROLES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -45,6 +47,11 @@ export const unlinkMediaStaffHandler = new Hono().delete(
       }),
     },
   }),
+  audited(mediaStaffAudit.UNLINK, (c) => ({
+    id: c.req.param("id"),
+    staffId: c.req.param("staffId"),
+    role: c.req.param("role"),
+  })),
   withAuth("media.update"),
   validateParam(paramSchema),
   checkMedia(),

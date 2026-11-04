@@ -1,7 +1,9 @@
+import { mediaSuggestionAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMediaSuggestion } from "../middlewares/check-media-suggestion-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -39,12 +41,16 @@ export const rejectMediaSuggestionHandler = new Hono().post(
       }),
     },
   }),
+  audited(mediaSuggestionAudit.REJECT),
   withAuth("mediaSuggestion.review"),
   validateJson(rejectSchema),
   checkMediaSuggestion(),
   withTransaction,
   async (c) => {
     const { db, mediaSuggestion, user } = c.var
+
+    c.var.audit.set({ target: { mediaId: mediaSuggestion.mediaId }, reason: c.var.json.note })
+
     const locked = await db
       .selectFrom("mediaSuggestions")
       .select("status")

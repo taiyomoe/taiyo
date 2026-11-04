@@ -19,6 +19,9 @@ export const withAuth = (path?: StaticPermissionPath) =>
       return c.fail("UNAUTHORIZED")
     }
 
+    c.set("user", result.user)
+    c.set("session", result.session)
+
     const actor = await loadActor(c.var.db, result.user.id)
 
     if (actor === null) {
@@ -29,8 +32,6 @@ export const withAuth = (path?: StaticPermissionPath) =>
       return c.fail("FORBIDDEN")
     }
 
-    c.set("user", result.user)
-    c.set("session", result.session)
     c.set("actor", actor)
     c.set("can", createPermissions(actor))
 

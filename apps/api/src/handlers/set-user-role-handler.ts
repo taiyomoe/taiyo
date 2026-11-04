@@ -1,10 +1,13 @@
+import { adminAudit } from "@taiyomoe/audit"
 import { ROLES } from "@taiyomoe/permissions"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -37,6 +40,7 @@ export const setUserRoleHandler = new Hono().patch(
       }),
     },
   }),
+  audited(adminAudit.ROLE_SET),
   withAuth(),
   validateJson(roleSchema),
   checkUser({ includeBanned: true }),
@@ -47,6 +51,8 @@ export const setUserRoleHandler = new Hono().patch(
     if (!can("user.setRole", { id: targetUser.id, role: targetUser.role })) {
       return c.fail("FORBIDDEN")
     }
+
+    c.var.audit.set({ changes: auditChanges(targetUser, { role }) })
 
     await db.updateTable("users").set({ role }).where("id", "=", targetUser.id).execute()
 
