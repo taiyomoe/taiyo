@@ -56,9 +56,10 @@ export type LatestMediaUpdate = InferResponseType<
 export const mediaLatestChaptersQueryOptions = (
   mediaId: string,
   contentRatings: readonly ContentRating[],
+  groupId?: string,
 ) =>
   queryOptions({
-    queryKey: ["chapters", "latest", { mediaId, contentRatings }],
+    queryKey: ["chapters", "latest", { mediaId, contentRatings, groupId }],
     queryFn: async ({ signal }) => {
       const chapters: LatestChapter[] = []
 
@@ -69,6 +70,7 @@ export const mediaLatestChaptersQueryOptions = (
               query: {
                 contentRating: contentRatings.join(","),
                 mediaId,
+                ...(groupId === undefined ? {} : { groupId }),
                 page: String(page),
                 perPage: String(MAX_PER_PAGE),
               },

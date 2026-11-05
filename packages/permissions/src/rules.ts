@@ -174,7 +174,12 @@ export const buildRules = (actor: Actor | null) => {
       create: active !== null,
       review: is("ADMIN"),
     },
+    groupReport: {
+      create: active !== null,
+      review: is("MODERATOR", "ADMIN"),
+    },
     comment: {
+      create: active !== null,
       delete: is("MODERATOR", "ADMIN"),
     },
     user: {

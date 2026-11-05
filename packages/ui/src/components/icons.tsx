@@ -1,5 +1,12 @@
 import type * as React from "react"
 import {
+  Share08Icon,
+  Copy01Icon,
+  Calendar03Icon,
+  Delete02Icon,
+  FavouriteIcon,
+  AtIcon,
+  SentIcon,
   Alert02Icon,
   AlertCircleIcon,
   Book02Icon,
@@ -280,3 +287,17 @@ export const CalendarClock: (props: IconProps) => React.ReactElement = icon(Cale
 export const Globe: (props: IconProps) => React.ReactElement = icon(Globe02Icon)
 
 export const Key: (props: IconProps) => React.ReactElement = icon(Key01Icon)
+
+export const Share: (props: IconProps) => React.ReactElement = icon(Share08Icon)
+
+export const Copy: (props: IconProps) => React.ReactElement = icon(Copy01Icon)
+
+export const Calendar: (props: IconProps) => React.ReactElement = icon(Calendar03Icon)
+
+export const Trash: (props: IconProps) => React.ReactElement = icon(Delete02Icon)
+
+export const Heart: (props: IconProps) => React.ReactElement = icon(FavouriteIcon)
+
+export const At: (props: IconProps) => React.ReactElement = icon(AtIcon)
+
+export const Send: (props: IconProps) => React.ReactElement = icon(SentIcon)

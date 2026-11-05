@@ -121,13 +121,15 @@ const styles = stylex.create({
 export function LatestMediaCard({
   media,
   contentRatings,
+  groupId,
 }: {
   media: LatestMediaUpdate
   contentRatings: readonly ContentRating[]
+  groupId?: string
 }) {
   const [expanded, setExpanded] = useState(false)
   const all = useQuery({
-    ...mediaLatestChaptersQueryOptions(media.id, contentRatings),
+    ...mediaLatestChaptersQueryOptions(media.id, contentRatings, groupId),
     enabled: expanded,
   })
   const chapters = expanded && all.data !== undefined ? all.data : media.chapters
