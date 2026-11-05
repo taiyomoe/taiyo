@@ -1,6 +1,6 @@
+import type { ReaderDirection } from "@taiyomoe/schemas/reader-settings"
 import * as stylex from "@stylexjs/stylex"
 import { colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import type { ReaderDirection } from "@/features/reader/lib/reader-settings"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

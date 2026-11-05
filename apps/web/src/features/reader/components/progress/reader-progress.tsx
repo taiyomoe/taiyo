@@ -1,5 +1,5 @@
+import type { ProgressStyle, ReaderDirection } from "@taiyomoe/schemas/reader-settings"
 import * as stylex from "@stylexjs/stylex"
-import type { ReaderDirection, ProgressStyle } from "@/features/reader/lib/reader-settings"
 import { BarProgress } from "@/features/reader/components/progress/bar-progress"
 import { SegmentedProgress } from "@/features/reader/components/progress/segmented-progress"
 import { TextProgress } from "@/features/reader/components/progress/text-progress"

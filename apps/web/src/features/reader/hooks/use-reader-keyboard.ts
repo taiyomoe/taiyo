@@ -13,6 +13,10 @@ export type ReaderKeyAction =
   | "fullscreen"
   | "cycleMode"
   | "autoScroll"
+  | "zoomIn"
+  | "zoomOut"
+  | "zoomReset"
+  | "bookmark"
 
 const KEYS: Record<string, ReaderKeyAction> = {
   ArrowLeft: "left",
@@ -30,6 +34,11 @@ const KEYS: Record<string, ReaderKeyAction> = {
   f: "fullscreen",
   l: "cycleMode",
   s: "autoScroll",
+  "+": "zoomIn",
+  "=": "zoomIn",
+  "-": "zoomOut",
+  "0": "zoomReset",
+  b: "bookmark",
 }
 const isTyping = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
@@ -88,4 +97,7 @@ export const READER_SHORTCUTS = [
   { keys: ["F"], action: "fullscreen" },
   { keys: ["L"], action: "layout" },
   { keys: ["S"], action: "autoScroll" },
+  { keys: ["+", "-"], action: "zoom" },
+  { keys: ["0"], action: "zoomReset" },
+  { keys: ["B"], action: "bookmark" },
 ] as const

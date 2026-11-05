@@ -3,6 +3,7 @@ import { breakpoints, colors, font, radius, shadows } from "@taiyomoe/ui/styles/
 import { Link, getRouteApi } from "@tanstack/react-router"
 import { useEffect, useRef } from "react"
 import type { MediaChapter } from "@/features/chapters/api/chapters"
+import type { ChapterListItem } from "@/features/chapters/components/chapter-list-row"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { MediaChapterListBody } from "@/features/media/components/media-chapters/media-chapter-list-body"
 import { CHAPTERS_PER_PAGE } from "@/features/media/lib/media-page"
@@ -69,6 +70,7 @@ export function MediaChapterList({
   stale,
   filtered,
   onClear,
+  onToggleRead,
 }: {
   title: string
   chapters: MediaChapter[] | undefined
@@ -77,6 +79,7 @@ export function MediaChapterList({
   stale: boolean
   filtered: boolean
   onClear: () => void
+  onToggleRead: ((chapter: ChapterListItem, read: boolean) => void) | undefined
 }) {
   const ref = useRef<HTMLElement>(null)
   const previousPage = useRef(page)
@@ -110,6 +113,7 @@ export function MediaChapterList({
           chapters={chapters}
           filtered={filtered}
           onClear={onClear}
+          onToggleRead={onToggleRead}
           stale={stale}
         />
       </div>

@@ -1,6 +1,6 @@
+import type { ReaderSettings } from "@taiyomoe/schemas/reader-settings"
 import { type RefObject, useLayoutEffect, useMemo, useState } from "react"
 import type { ReaderStep } from "@/features/reader/lib/reader-input"
-import type { ReaderSettings } from "@/features/reader/lib/reader-settings"
 import { buildSpreads, findSpreadIndex } from "@/features/reader/lib/reader-spreads"
 
 const WIDE_ASPECT = 1.1

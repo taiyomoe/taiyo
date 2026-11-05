@@ -13,6 +13,8 @@ import {
 } from "@taiyomoe/ui/components/ui/sheet"
 import { type ComponentProps, useRef } from "react"
 import type { ReaderSettingsControls } from "@/features/reader/hooks/use-reader-settings"
+import { OfflineSection } from "@/features/offline/components/offline-section"
+import { BookmarksSection } from "@/features/reader/components/sheet/bookmarks-section"
 import { ChapterSection } from "@/features/reader/components/sheet/chapter-section"
 import { ControlsSection } from "@/features/reader/components/sheet/controls-section"
 import { ImageSection } from "@/features/reader/components/sheet/image-section"
@@ -42,12 +44,16 @@ export function ReaderSheet({
   controls,
   signedIn,
   chapter,
+  bookmarks,
+  offline,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   controls: ReaderSettingsControls
   signedIn: boolean
   chapter: ComponentProps<typeof ChapterSection>
+  bookmarks: ComponentProps<typeof BookmarksSection> | null
+  offline: ComponentProps<typeof OfflineSection>["source"]
 }) {
   const popup = useRef<HTMLDivElement | null>(null)
 
@@ -62,10 +68,20 @@ export function ReaderSheet({
       >
         <SheetHeader sx={styles.header}>
           <SheetTitle>{m.reader_sheet_title()}</SheetTitle>
-          <SheetDescription>{m.reader_sheet_description()}</SheetDescription>
+          <SheetDescription>
+            {signedIn ? m.reader_sheet_description_account() : m.reader_sheet_description()}
+          </SheetDescription>
         </SheetHeader>
         <SheetPanel sx={styles.panel}>
           <ChapterSection {...chapter} />
+          <Separator />
+          {bookmarks === null ? null : (
+            <>
+              <BookmarksSection {...bookmarks} />
+              <Separator />
+            </>
+          )}
+          <OfflineSection source={offline} />
           <Separator />
           <LayoutSection
             longStrip={controls.longStrip}

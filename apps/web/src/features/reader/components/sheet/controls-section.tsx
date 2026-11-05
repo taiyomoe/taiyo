@@ -35,6 +35,14 @@ export function ControlsSection({
         }}
       />
       <SettingSwitch
+        checked={settings.doubleTapZoom}
+        hint={m.reader_double_tap_zoom_hint()}
+        label={m.reader_double_tap_zoom()}
+        onChange={(doubleTapZoom) => {
+          update({ doubleTapZoom })
+        }}
+      />
+      <SettingSwitch
         checked={settings.cursorHints}
         label={m.reader_cursor_hints()}
         onChange={(cursorHints) => {

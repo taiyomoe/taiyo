@@ -1,4 +1,4 @@
-import type { ClickZones, ReaderDirection } from "@/features/reader/lib/reader-settings"
+import type { ClickZones, ReaderDirection } from "@taiyomoe/schemas/reader-settings"
 
 export type ReaderStep = "prev" | "next"
 

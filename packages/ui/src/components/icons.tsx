@@ -84,6 +84,15 @@ import {
   MinimizeScreenIcon,
   Undo02Icon,
   PipetteIcon,
+  ViewOffSlashIcon,
+  BookmarkAdd02Icon,
+  BookmarkRemove02Icon,
+  Download04Icon,
+  ZoomInIcon,
+  ZoomOutIcon,
+  Delete02Icon,
+  WifiOffIcon,
+  TickDouble02Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -328,3 +337,21 @@ export const FilterOut: (props: IconProps) => React.ReactElement = icon(SearchMi
 export const ArrowUpDown: (props: IconProps) => React.ReactElement = icon(ArrowUpDownIcon)
 
 export const Robot: (props: IconProps) => React.ReactElement = icon(Robot01Icon)
+
+export const EyeOff: (props: IconProps) => React.ReactElement = icon(ViewOffSlashIcon)
+
+export const BookmarkAdd: (props: IconProps) => React.ReactElement = icon(BookmarkAdd02Icon)
+
+export const BookmarkRemove: (props: IconProps) => React.ReactElement = icon(BookmarkRemove02Icon)
+
+export const Download: (props: IconProps) => React.ReactElement = icon(Download04Icon)
+
+export const ZoomIn: (props: IconProps) => React.ReactElement = icon(ZoomInIcon)
+
+export const ZoomOut: (props: IconProps) => React.ReactElement = icon(ZoomOutIcon)
+
+export const Trash: (props: IconProps) => React.ReactElement = icon(Delete02Icon)
+
+export const Offline: (props: IconProps) => React.ReactElement = icon(WifiOffIcon)
+
+export const CheckAll: (props: IconProps) => React.ReactElement = icon(TickDouble02Icon)

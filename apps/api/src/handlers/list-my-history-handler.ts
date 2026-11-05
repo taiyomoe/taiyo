@@ -5,6 +5,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { isOpenedHistory } from "../utils/media-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -24,7 +25,7 @@ export const listMyHistoryHandler = new Hono().get(
   describeRoute({
     summary: "List my reading history",
     description:
-      "Returns your reading-history feed in reverse-chronological order. Entries whose chapter has been deleted are excluded.\n\n**Authentication:** signed-in user.",
+      "Returns your reading-history feed in reverse-chronological order. Entries whose chapter has been deleted, and chapters you only marked as read, are excluded.\n\n**Authentication:** signed-in user.",
     tags: ["Reading history"],
     responses: {
       200: {
@@ -52,6 +53,7 @@ export const listMyHistoryHandler = new Hono().get(
         .where("userHistories.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
         .where("chapters.status", "=", "PUBLISHED")
+        .where(isOpenedHistory)
         .select([
           "userHistories.chapterId",
           "chapters.number as chapterNumber",
@@ -72,6 +74,7 @@ export const listMyHistoryHandler = new Hono().get(
         .where("userHistories.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
         .where("chapters.status", "=", "PUBLISHED")
+        .where(isOpenedHistory)
         .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])

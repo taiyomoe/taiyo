@@ -1,6 +1,7 @@
+import { readerSettingsSchema } from "@taiyomoe/schemas/reader-settings"
 import { describe, expect, it } from "vitest"
 import { getImageFilter } from "../reader-filter"
-import { DEFAULT_READER_SETTINGS, readerSettingsSchema } from "../reader-settings"
+import { DEFAULT_READER_SETTINGS } from "../reader-settings"
 
 describe("readerSettingsSchema", () => {
   it("defaults to a single page fitted to the screen, and a long strip for manhwa and manhua", () => {

@@ -7,7 +7,10 @@ import { chapterReaderQueryOptions } from "@/features/reader/api/reader"
 import { Reader } from "@/features/reader/components/reader"
 import { ReaderEmpty } from "@/features/reader/components/reader-empty"
 import { ReaderSplash } from "@/features/reader/components/reader-splash"
-import { useReaderSettings } from "@/features/reader/hooks/use-reader-settings"
+import {
+  useReaderSettings,
+  useReaderSettingsSync,
+} from "@/features/reader/hooks/use-reader-settings"
 import { chapterQueryOptions } from "@/features/uploads/api/submissions"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
@@ -33,7 +36,10 @@ export function ChapterReader({
   const { data } = useSuspenseQuery(chapterReaderQueryOptions(chapterId, contentRatings))
   const media = useQuery(mediaQueryOptions(chapter.mediaId))
   const longStrip = media.data?.type === "MANHWA" || media.data?.type === "MANHUA"
-  const { settings } = useReaderSettings(longStrip)
+  const { settings } = useReaderSettings(longStrip, signedIn)
+
+  useReaderSettingsSync(signedIn)
+
   const pages = chapter.pages ?? []
 
   if (chapter.isExternal) {

@@ -15,6 +15,9 @@ const LABELS = {
   fullscreen: m.reader_shortcut_fullscreen,
   layout: m.reader_shortcut_layout,
   autoScroll: m.reader_shortcut_auto_scroll,
+  zoom: m.reader_shortcut_zoom,
+  zoomReset: m.reader_shortcut_zoom_reset,
+  bookmark: m.reader_shortcut_bookmark,
 } satisfies Record<(typeof READER_SHORTCUTS)[number]["action"], () => string>
 const styles = stylex.create({
   list: {

@@ -1,5 +1,5 @@
+import type { ReaderSettings } from "@taiyomoe/schemas/reader-settings"
 import * as stylex from "@stylexjs/stylex"
-import type { ReaderSettings } from "@/features/reader/lib/reader-settings"
 import { PageImage } from "@/features/reader/components/stage/page-image"
 
 const styles = stylex.create({

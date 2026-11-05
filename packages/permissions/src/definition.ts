@@ -83,6 +83,7 @@ export type PermissionsDefinition = ValidateDefinition<{
     { name: "promoteMember"; type: MemberTarget; required: true },
     { name: "demoteMember"; type: MemberTarget; required: true },
   ]
+  pageReport: ["create", "review"]
   ownershipRequest: ["create", "review"]
   groupCreationRequest: ["create", "review"]
   comment: ["delete"]

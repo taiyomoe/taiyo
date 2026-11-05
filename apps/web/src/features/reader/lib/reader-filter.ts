@@ -1,4 +1,4 @@
-import type { ReaderSettings } from "@/features/reader/lib/reader-settings"
+import type { ReaderSettings } from "@taiyomoe/schemas/reader-settings"
 
 export const getImageFilter = ({
   brightness,

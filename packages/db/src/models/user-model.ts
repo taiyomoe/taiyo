@@ -19,6 +19,7 @@ export type User = {
   banReason: string | null
   banExpires: Timestamp | null
   settings: Generated<UserSettings>
+  readerSettings: Record<string, unknown> | null
 }
 
 export type NewUser = Insertable<User>

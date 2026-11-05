@@ -12,6 +12,7 @@ import type { KnipConfig } from "knip"
 const importMatcher = /@import\s+(?:url\(\s*)?["']([^"']+)["']/g
 const config: KnipConfig = {
   ignoreWorkspaces: ["./packages/db"],
+  ignore: ["apps/web/public/**"],
   ignoreBinaries: ["cloudflared"],
   compilers: {
     css: (text: string) =>

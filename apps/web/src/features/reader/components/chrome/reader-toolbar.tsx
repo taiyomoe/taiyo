@@ -1,7 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
 import {
   ArrowLeft,
+  BookmarkAdd,
+  BookmarkRemove,
   ExitFullscreen,
+  Flag,
   Fullscreen,
   Pause,
   Play,
@@ -86,8 +89,11 @@ export function ReaderToolbar({
   chapterLabel,
   strip,
   autoScrolling,
+  bookmarked,
   onMenu,
   onAutoScroll,
+  onToggleBookmark,
+  onReport,
 }: {
   visible: boolean
   mediaId: string
@@ -95,8 +101,11 @@ export function ReaderToolbar({
   chapterLabel: string
   strip: boolean
   autoScrolling: boolean
+  bookmarked: boolean | null
   onMenu: () => void
   onAutoScroll: () => void
+  onToggleBookmark: () => void
+  onReport: (() => void) | null
 }) {
   const fullscreen = useFullscreen()
 
@@ -127,6 +136,29 @@ export function ReaderToolbar({
         </div>
       </div>
       <div sx={[styles.group, !visible && styles.groupHidden]}>
+        {bookmarked === null ? null : (
+          <Button
+            aria-label={bookmarked ? m.reader_bookmark_remove() : m.reader_bookmark_add()}
+            aria-pressed={bookmarked}
+            onClick={onToggleBookmark}
+            size="icon"
+            title={bookmarked ? m.reader_bookmark_remove() : m.reader_bookmark_add()}
+            variant="ghost"
+          >
+            {bookmarked ? <BookmarkRemove /> : <BookmarkAdd />}
+          </Button>
+        )}
+        {onReport === null ? null : (
+          <Button
+            aria-label={m.reader_report_open()}
+            onClick={onReport}
+            size="icon"
+            title={m.reader_report_open()}
+            variant="ghost"
+          >
+            <Flag />
+          </Button>
+        )}
         {strip ? (
           <Button
             aria-label={autoScrolling ? m.reader_auto_scroll_stop() : m.reader_auto_scroll_start()}

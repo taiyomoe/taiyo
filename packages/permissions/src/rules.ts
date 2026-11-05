@@ -166,6 +166,10 @@ export const buildRules = (actor: Actor | null) => {
         member.role === "OWNER" &&
         (is("ADMIN") || (isOwner(member.groupId) && isSelf(member.userId))),
     },
+    pageReport: {
+      create: active !== null,
+      review: managesChapters,
+    },
     ownershipRequest: {
       create: active !== null,
       review: is("ADMIN"),

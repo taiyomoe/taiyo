@@ -16,6 +16,7 @@ import { listChaptersHandler } from "../handlers/list-chapters-handler"
 import { listCoversHandler } from "../handlers/list-covers-handler"
 import { listFeaturedMediasHandler } from "../handlers/list-featured-medias-handler"
 import { listMediaStaffsHandler } from "../handlers/list-media-staffs-handler"
+import { markMediaReadHandler } from "../handlers/mark-media-read-handler"
 import { reindexMediaHandler } from "../handlers/reindex-media-handler"
 import { restoreMediaHandler } from "../handlers/restore-media-handler"
 import { searchMediasHandler } from "../handlers/search-medias-handler"
@@ -41,6 +42,7 @@ export const mediasRouter = new Hono()
   .route("/", listChapterFacetsHandler)
   .route("/", listChaptersHandler)
   .route("/", listChapterNumbersHandler)
+  .route("/", markMediaReadHandler)
   .route("/", createChapterHandler)
   .route("/", listMediaStaffsHandler)
   .route("/", linkMediaStaffHandler)

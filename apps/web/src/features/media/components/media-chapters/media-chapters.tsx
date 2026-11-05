@@ -8,6 +8,7 @@ import {
   mediaChapterFacetsQueryOptions,
   mediaChaptersQueryOptions,
 } from "@/features/chapters/api/chapters"
+import { useSetChapterRead } from "@/features/chapters/api/read-markers"
 import { UpcomingChapters } from "@/features/chapters/components/upcoming-chapters"
 import { ChaptersToolbar } from "@/features/media/components/media-chapters/chapters-toolbar"
 import { MediaChapterList } from "@/features/media/components/media-chapters/media-chapter-list"
@@ -29,6 +30,9 @@ const styles = stylex.create({
     gap: "1.25rem",
     alignItems: "start",
     display: "grid",
+    gridTemplateColumns: "minmax(0, 1fr)",
+  },
+  bodyWithRail: {
     gridTemplateColumns: { [breakpoints.xl]: "15rem minmax(0, 1fr)", default: "minmax(0, 1fr)" },
   },
 })
@@ -66,6 +70,7 @@ export function MediaChapters({
     }),
     placeholderData: keepPreviousData,
   })
+  const setRead = useSetChapterRead(mediaId)
   const update = (patch: Partial<ChapterSearch>) => {
     void navigate({
       replace: true,
@@ -77,6 +82,7 @@ export function MediaChapters({
     search.lang !== undefined || search.volume !== undefined || search.q !== undefined || unread
   const languages = facets.data?.languages ?? []
   const upcoming = <UpcomingChapters mediaId={mediaId} user={user} />
+  const hasVolumes = facets.data?.volumes.some(({ volume }) => volume !== null) === true
 
   if (facets.data?.total === 0 && search.lang === undefined) {
     return (
@@ -94,6 +100,7 @@ export function MediaChapters({
     <div sx={styles.root}>
       {upcoming}
       <ChaptersToolbar
+        mediaId={mediaId}
         language={search.lang}
         languages={languages}
         onLanguageChange={(lang) => {
@@ -113,8 +120,8 @@ export function MediaChapters({
         sort={sort}
         unread={unread}
       />
-      <div sx={styles.body}>
-        {facets.data !== undefined && facets.data.volumes.some(({ volume }) => volume !== null) ? (
+      <div sx={[styles.body, hasVolumes && styles.bodyWithRail]}>
+        {hasVolumes && facets.data !== undefined ? (
           <VolumeRail
             facets={facets.data}
             onSelect={(volume) => {
@@ -129,6 +136,13 @@ export function MediaChapters({
           onClear={() => {
             update({ lang: undefined, q: undefined, unread: undefined, volume: undefined })
           }}
+          onToggleRead={
+            signedIn
+              ? (chapter, read) => {
+                  setRead.mutate({ chapter, read })
+                }
+              : undefined
+          }
           page={page}
           stale={chapters.isPlaceholderData}
           title={

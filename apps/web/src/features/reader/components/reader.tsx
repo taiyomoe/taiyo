@@ -1,3 +1,4 @@
+import { READER_MODES } from "@taiyomoe/schemas/reader-settings"
 import { noop, useQueryClient } from "@tanstack/react-query"
 import { useNavigate, useRouter } from "@tanstack/react-router"
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
@@ -14,14 +15,17 @@ import {
 import { ReaderToolbar } from "@/features/reader/components/chrome/reader-toolbar"
 import { ReaderProgress } from "@/features/reader/components/progress/reader-progress"
 import { ReaderHistoryTracker } from "@/features/reader/components/reader-history-tracker"
+import { ReportPageDialog } from "@/features/reader/components/report-page-dialog"
 import { ReaderSheet } from "@/features/reader/components/sheet/reader-sheet"
 import { PagedView } from "@/features/reader/components/stage/paged-view"
 import { ReaderStage } from "@/features/reader/components/stage/reader-stage"
 import { getPageKey, StripView } from "@/features/reader/components/stage/strip-view"
 import { useAutoScroll } from "@/features/reader/hooks/use-auto-scroll"
+import { useBookmarks } from "@/features/reader/hooks/use-bookmarks"
 import { useFullscreen } from "@/features/reader/hooks/use-fullscreen"
 import { useIdle } from "@/features/reader/hooks/use-idle"
 import { usePagePreloader } from "@/features/reader/hooks/use-page-preloader"
+import { usePageZoom } from "@/features/reader/hooks/use-page-zoom"
 import { useReaderKeyboard } from "@/features/reader/hooks/use-reader-keyboard"
 import { useReaderNavigation } from "@/features/reader/hooks/use-reader-navigation"
 import { useReaderSettings } from "@/features/reader/hooks/use-reader-settings"
@@ -32,11 +36,11 @@ import {
   getChapterVersions,
   hasChapterGap,
 } from "@/features/reader/lib/reader-navigation"
-import { READER_MODES } from "@/features/reader/lib/reader-settings"
 import { chapterQueryOptions } from "@/features/uploads/api/submissions"
 
 const IDLE_TIMEOUT = 2500
 const KEPT_PREVIOUS_CHAPTERS = 1
+const ZOOM_STEP = 1.5
 
 type ReaderSegment = ReaderChapterDetail & { pages: NonNullable<ReaderChapterDetail["pages"]> }
 
@@ -61,7 +65,7 @@ export function Reader({
   onSheetOpenChange: (open: boolean) => void
   onSessionChapters: (chapters: readonly string[]) => void
 }) {
-  const controls = useReaderSettings(longStrip)
+  const controls = useReaderSettings(longStrip, signedIn)
   const { settings, update } = controls
   const navigate = useNavigate()
   const router = useRouter()
@@ -79,6 +83,12 @@ export function Reader({
   >(null)
   const [boundaryOpen, setBoundaryOpen] = useState(false)
   const [autoScrolling, setAutoScrolling] = useState(false)
+  const [reporting, setReporting] = useState<{
+    chapterId: string
+    pageId: string
+    page: number
+    chapterLabel: string
+  } | null>(null)
   const chapter = segments.find((segment) => segment.id === activeId) ?? entry
   const urls = useMemo(() => chapter.pages.map((page) => page.url), [chapter.pages])
   const pageCount = urls.length
@@ -174,6 +184,18 @@ export function Reader({
   })
   const first = Math.min(...navigation.visible)
   const last = Math.max(...navigation.visible)
+  const currentPageId = chapter.pages[navigation.page]?.id
+  const bookmarks = useBookmarks({
+    mediaId: chapter.mediaId,
+    chapterId: chapter.id,
+    pageId: currentPageId,
+    signedIn,
+  })
+  const zoom = usePageZoom({
+    stage,
+    enabled: !strip,
+    resetKey: `${chapter.id}:${navigation.visible.join(",")}`,
+  })
   const idle = useIdle(IDLE_TIMEOUT, settings.autoHideControls && !sheetOpen && !boundaryOpen)
   const markLoaded = (chapterId: string, index: number, aspect: number) => {
     const key = getPageKey(chapterId, index)
@@ -232,7 +254,7 @@ export function Reader({
     },
   })
   useReaderKeyboard({
-    enabled: !sheetOpen && !boundaryOpen,
+    enabled: !sheetOpen && !boundaryOpen && reporting === null,
     onAction: (action, event) => {
       const element = stage.current
 
@@ -312,6 +334,27 @@ export function Reader({
           if (strip) {
             setAutoScrolling((value) => !value)
           }
+
+          break
+        }
+
+        case "zoomIn":
+
+        case "zoomOut": {
+          event.preventDefault()
+          zoom.zoomBy(action === "zoomIn" ? ZOOM_STEP : 1 / ZOOM_STEP)
+
+          break
+        }
+
+        case "zoomReset": {
+          zoom.reset()
+
+          break
+        }
+
+        case "bookmark": {
+          bookmarks.toggle()
 
           break
         }
@@ -405,6 +448,7 @@ export function Reader({
         ref={stage}
         settings={settings}
         strip={strip}
+        zoom={zoom}
       >
         {strip ? (
           <StripView
@@ -455,6 +499,7 @@ export function Reader({
       })}
       <ReaderToolbar
         autoScrolling={autoScrolling}
+        bookmarked={signedIn && currentPageId !== undefined ? bookmarks.bookmarked : null}
         chapterLabel={current.title === null ? currentLabel : `${currentLabel} – ${current.title}`}
         mediaId={chapter.mediaId}
         mediaTitle={mediaTitle}
@@ -464,6 +509,20 @@ export function Reader({
         onMenu={() => {
           onSheetOpenChange(true)
         }}
+        onReport={
+          signedIn && currentPageId !== undefined
+            ? () => {
+                setAutoScrolling(false)
+                setReporting({
+                  chapterId: chapter.id,
+                  pageId: currentPageId,
+                  page: navigation.page + 1,
+                  chapterLabel: currentLabel,
+                })
+              }
+            : null
+        }
+        onToggleBookmark={bookmarks.toggle}
         strip={strip}
         visible={!idle}
       />
@@ -496,10 +555,44 @@ export function Reader({
           },
           onSelectPage: navigation.goTo,
         }}
+        bookmarks={
+          signedIn
+            ? {
+                bookmarks: bookmarks.bookmarks,
+                chapterId: chapter.id,
+                onOpen: (bookmark) => {
+                  onSheetOpenChange(false)
+
+                  if (bookmark.chapterId === chapter.id) {
+                    navigation.goTo(bookmark.page - 1)
+                  } else {
+                    openChapter(
+                      data.chapters.find((row) => row.id === bookmark.chapterId) ?? null,
+                      bookmark.page,
+                    )
+                  }
+                },
+                onRemove: bookmarks.remove,
+              }
+            : null
+        }
         controls={controls}
+        offline={{
+          id: chapter.id,
+          mediaId: chapter.mediaId,
+          mediaTitle,
+          label: current.title === null ? currentLabel : `${currentLabel} – ${current.title}`,
+          pageUrls: urls,
+        }}
         onOpenChange={onSheetOpenChange}
         open={sheetOpen}
         signedIn={signedIn}
+      />
+      <ReportPageDialog
+        onClose={() => {
+          setReporting(null)
+        }}
+        target={reporting}
       />
       <ChapterBoundaryDialog
         boundary={boundary}

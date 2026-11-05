@@ -9,6 +9,7 @@ import {
 } from "@/features/chapters/api/chapters"
 import { ChapterSearchField } from "@/features/media/components/media-chapters/chapter-search-field"
 import { LanguageSelect } from "@/features/media/components/media-chapters/language-select"
+import { MarkAllReadButton } from "@/features/media/components/media-chapters/mark-all-read-button"
 import { m } from "@/paraglide/messages"
 
 const MIN_LANGUAGES_FOR_FILTER = 3
@@ -35,9 +36,13 @@ const styles = stylex.create({
     userSelect: "none",
     whiteSpace: "nowrap",
   },
+  end: {
+    marginInlineStart: "auto",
+  },
 })
 
 export function ChaptersToolbar({
+  mediaId,
   query,
   language,
   languages,
@@ -49,6 +54,7 @@ export function ChaptersToolbar({
   onSortChange,
   onUnreadChange,
 }: {
+  mediaId: string
   query: string | undefined
   language: string | undefined
   languages: MediaChapterFacets["languages"]
@@ -90,6 +96,11 @@ export function ChaptersToolbar({
           />
           {m.media_chapters_unread()}
         </label>
+      ) : null}
+      {signedIn ? (
+        <span sx={styles.end}>
+          <MarkAllReadButton mediaId={mediaId} />
+        </span>
       ) : null}
     </div>
   )

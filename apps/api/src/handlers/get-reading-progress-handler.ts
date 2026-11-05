@@ -6,7 +6,7 @@ import { validateParam } from "../middlewares/validate-param-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { selectVisibleChapters } from "../utils/latest-chapters"
-import { selectReadChapterNumber } from "../utils/media-chapters"
+import { isOpenedHistory, selectReadChapterNumber } from "../utils/media-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, contentRatingsQuerySchema } from "../utils/schemas"
 
@@ -84,6 +84,7 @@ export const getReadingProgressHandler = new Hono().get(
       visible
         .innerJoin("userHistories", "userHistories.chapterId", "chapters.id")
         .where("userHistories.userId", "=", user.id)
+        .where(isOpenedHistory)
         .select([
           ...chapterRef,
           "userHistories.updatedAt as readAt",
@@ -99,19 +100,15 @@ export const getReadingProgressHandler = new Hono().get(
         .limit(1)
         .executeTakeFirst(),
     ])
-    const candidates =
-      lastRead === undefined
-        ? visible
-        : visible
-            .where("chapters.number", ">", lastRead.number)
-            .where((eb) =>
-              eb.not(
-                eb.exists(
-                  selectReadChapterNumber(db, user.id).where("userHistories.completed", "=", true),
-                ),
-              ),
-            )
-    const next = await candidates
+    const next = await visible
+      .$if(lastRead !== undefined, (qb) => qb.where("chapters.number", ">", lastRead?.number ?? 0))
+      .where((eb) =>
+        eb.not(
+          eb.exists(
+            selectReadChapterNumber(db, user.id).where("userHistories.completed", "=", true),
+          ),
+        ),
+      )
       .select(chapterRef)
       .orderBy("chapters.number", "asc")
       .$if(lastRead !== undefined, (qb) =>

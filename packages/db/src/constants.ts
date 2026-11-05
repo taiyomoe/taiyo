@@ -44,6 +44,20 @@ export const CHAPTER_STATUSES = [
 
 export type ChapterStatus = (typeof CHAPTER_STATUSES)[number]
 
+export const PAGE_REPORT_REASONS = [
+  "BROKEN",
+  "WRONG_ORDER",
+  "WRONG_CHAPTER",
+  "LOW_QUALITY",
+  "OTHER",
+] as const
+
+export type PageReportReason = (typeof PAGE_REPORT_REASONS)[number]
+
+export const PAGE_REPORT_STATUSES = ["OPEN", "RESOLVED", "DISMISSED"] as const
+
+export type PageReportStatus = (typeof PAGE_REPORT_STATUSES)[number]
+
 export const MEDIA_SUGGESTION_STATUSES = ["PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN"] as const
 
 export type MediaSuggestionStatus = (typeof MEDIA_SUGGESTION_STATUSES)[number]

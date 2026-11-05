@@ -32,11 +32,19 @@ const styles = stylex.create({
   },
 })
 
-export function ChapterList({ chapters, sx }: { chapters: ChapterListItem[]; sx?: Sx }) {
+export function ChapterList({
+  chapters,
+  sx,
+  onToggleRead,
+}: {
+  chapters: ChapterListItem[]
+  sx?: Sx
+  onToggleRead?: ((chapter: ChapterListItem, read: boolean) => void) | undefined
+}) {
   return (
     <ul sx={[styles.chapters, sx]}>
       {chapters.map((chapter) => (
-        <ChapterListRow key={chapter.id} chapter={chapter} />
+        <ChapterListRow key={chapter.id} chapter={chapter} onToggleRead={onToggleRead} />
       ))}
     </ul>
   )
