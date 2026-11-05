@@ -1,6 +1,8 @@
+import { bookmarkAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -33,6 +35,7 @@ export const putPageBookmarkHandler = new Hono().put(
       }),
     },
   }),
+  audited(bookmarkAudit.ADD, (c) => ({ id: c.req.param("id"), pageId: c.req.param("pageId") })),
   withAuth(),
   validateParam(paramSchema),
   checkChapter(),

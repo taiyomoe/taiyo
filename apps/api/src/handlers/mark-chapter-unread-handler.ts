@@ -1,6 +1,8 @@
+import { historyAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -29,6 +31,7 @@ export const markChapterUnreadHandler = new Hono().delete(
       }),
     },
   }),
+  audited(historyAudit.CHAPTER_MARK_UNREAD),
   withAuth(),
   checkChapter(),
   withTransaction,

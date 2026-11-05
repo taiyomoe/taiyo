@@ -1,8 +1,10 @@
+import { userAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { readerSettingsSchema } from "@taiyomoe/schemas/reader-settings"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -32,6 +34,7 @@ export const updateMyReaderSettingsHandler = new Hono().put(
       }),
     },
   }),
+  audited(userAudit.READER_SETTINGS_UPDATE, (c) => ({ id: c.var.user?.id })),
   withAuth(),
   validateJson(readerSettingsSchema),
   async (c) => {

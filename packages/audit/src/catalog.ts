@@ -43,6 +43,7 @@ export const adminAudit = defineAuditCatalog("admin", {
 export const userAudit = defineAuditCatalog("user", {
   PROFILE_UPDATE: { target: "user", severity: "medium", requiresChanges: true },
   SETTINGS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
+  READER_SETTINGS_UPDATE: { target: "user", severity: "low" },
   DELETE: { target: "user", severity: "critical" },
   FOLLOW: { target: "user", severity: "low" },
   UNFOLLOW: { target: "user", severity: "low" },
@@ -172,6 +173,19 @@ export const historyAudit = defineAuditCatalog("history", {
   CHAPTER_OPEN: { target: "chapter", severity: "low" },
   PROGRESS_UPDATE: { target: "chapter", severity: "low" },
   ENTRY_DELETE: { target: "chapter", severity: "low" },
+  CHAPTER_MARK_READ: { target: "chapter", severity: "low" },
+  CHAPTER_MARK_UNREAD: { target: "chapter", severity: "low" },
+  MEDIA_MARK_READ: { target: "media", severity: "low" },
+})
+
+export const bookmarkAudit = defineAuditCatalog("bookmark", {
+  ADD: { target: "chapter", severity: "low" },
+  REMOVE: { target: "chapter", severity: "low" },
+})
+
+export const chapterReportAudit = defineAuditCatalog("chapter.report", {
+  CREATE: { target: "chapter", severity: "low" },
+  CLOSE: { target: "pageReport", severity: "medium" },
 })
 
 export const auditLogAudit = defineAuditCatalog("audit.log", {
@@ -201,6 +215,8 @@ export const auditCatalogs = [
   listAudit,
   libraryAudit,
   historyAudit,
+  bookmarkAudit,
+  chapterReportAudit,
   auditLogAudit,
 ]
 
@@ -228,6 +244,8 @@ declare module "evlog" {
     list: typeof listAudit
     library: typeof libraryAudit
     history: typeof historyAudit
+    bookmark: typeof bookmarkAudit
+    chapterReport: typeof chapterReportAudit
     auditLog: typeof auditLogAudit
   }
 }

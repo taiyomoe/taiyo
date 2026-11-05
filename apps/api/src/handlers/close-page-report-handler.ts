@@ -1,7 +1,9 @@
+import { chapterReportAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -49,6 +51,7 @@ export const closePageReportHandler = new Hono().patch(
       }),
     },
   }),
+  audited(chapterReportAudit.CLOSE, (c) => ({ id: c.req.param("reportId") })),
   withAuth("pageReport.review"),
   validateParam(paramSchema),
   validateJson(bodySchema),

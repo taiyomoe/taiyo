@@ -6,6 +6,7 @@ import * as stylex from "@stylexjs/stylex"
 import {
   Banner,
   CloudUpload,
+  Flag,
   History,
   Image,
   Library,
@@ -41,6 +42,7 @@ const TARGET_ICONS: Record<string, (props: IconProps) => ReactElement> = {
   staff: PenTool,
   list: List,
   auditLog: History,
+  pageReport: Flag,
 }
 
 export function TargetThumb({

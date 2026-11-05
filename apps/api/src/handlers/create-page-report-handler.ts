@@ -1,7 +1,9 @@
+import { chapterReportAudit } from "@taiyomoe/audit"
 import { PAGE_REPORT_REASONS } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -54,6 +56,10 @@ export const createPageReportHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterReportAudit.CREATE, (c) => ({
+    id: c.req.param("id"),
+    pageId: c.req.param("pageId"),
+  })),
   withAuth("pageReport.create"),
   rateLimit({ prefix: "page-report", windowMs: 60_000, limit: 10 }),
   validateParam(paramSchema),

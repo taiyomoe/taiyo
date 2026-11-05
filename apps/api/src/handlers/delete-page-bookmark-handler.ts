@@ -1,6 +1,8 @@
+import { bookmarkAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -31,6 +33,7 @@ export const deletePageBookmarkHandler = new Hono().delete(
       }),
     },
   }),
+  audited(bookmarkAudit.REMOVE, (c) => ({ id: c.req.param("id"), pageId: c.req.param("pageId") })),
   withAuth(),
   validateParam(paramSchema),
   async (c) => {
