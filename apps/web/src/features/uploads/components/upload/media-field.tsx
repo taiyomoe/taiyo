@@ -11,6 +11,7 @@ import { Field, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { useDeferredValue, useState } from "react"
+import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { searchMediasQueryOptions } from "@/features/media/api/medias"
 import { Cover } from "@/features/media/components/cover"
 import { getSynopsis } from "@/features/media/lib/media-labels"
@@ -77,7 +78,9 @@ export function MediaField({
             id: hit.id,
             title: hit.mainTitle.title,
             coverUrl: hit.coverUrl,
-            synopsis: getSynopsis(hit.synopsis)[0] ?? "",
+            synopsis: (
+              getRichTextParagraphs(parseRichText(getSynopsis(hit.synopsis)))[0] ?? ""
+            ).replace(/\s+/g, " "),
           },
         ],
   )

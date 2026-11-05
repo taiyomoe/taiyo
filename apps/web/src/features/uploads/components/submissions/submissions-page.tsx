@@ -10,7 +10,9 @@ import {
 } from "@taiyomoe/ui/components/ui/empty"
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
+import { Suspense } from "react"
 import { DashboardPage, ListCard } from "@/components/layout/dashboard-page"
+import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import {
   mySubmissionsQueryOptions,
@@ -25,16 +27,6 @@ import { m } from "@/paraglide/messages"
 const routeApi = getRouteApi("/dashboard/submissions")
 
 export function SubmissionsPage() {
-  const { page } = routeApi.useLoaderDeps()
-  const { data } = useSuspenseQuery(mySubmissionsQueryOptions(page))
-  const invalidate = useInvalidateReview()
-  const withdraw = useMutation({
-    mutationFn: async (id: string) =>
-      ensureSuccess(await api.chapters[":id"].withdraw.$post({ param: { id } })),
-    onSuccess: invalidate,
-  })
-  const navigate = useNavigate({ from: "/dashboard/submissions" })
-
   return (
     <DashboardPage
       actions={
@@ -46,50 +38,63 @@ export function SubmissionsPage() {
       subtitle={m.submissions_subtitle()}
       title={m.submissions_title()}
     >
-      {data.data.length === 0 ? (
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <CloudUpload />
-            </EmptyMedia>
-            <EmptyTitle>{m.submissions_empty_title()}</EmptyTitle>
-            <EmptyDescription>{m.submissions_empty_description()}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button render={<Link to="/dashboard/upload" />} variant="outline">
-              {m.dashboard_nav_upload()}
-            </Button>
-          </EmptyContent>
-        </Empty>
-      ) : (
-        <>
-          <ListCard>
-            {data.data.map((submission) => (
-              <MySubmissionRow
-                key={submission.id}
-                onWithdraw={() => {
-                  withdraw.mutate(submission.id)
-                }}
-                submission={submission}
-                withdrawing={withdraw.isPending}
-              />
-            ))}
-          </ListCard>
-          <PagePagination
-            onJump={(target) => {
-              void navigate({ search: { page: target === 1 ? undefined : target } })
-            }}
-            page={page}
-            pageCount={Math.ceil(data.meta.total / SUBMISSIONS_PER_PAGE)}
-            renderLink={(target) => (
-              <Link
-                search={{ page: target === 1 ? undefined : target }}
-                to="/dashboard/submissions"
-              />
-            )}
-          />
-        </>
-      )}
+      <Suspense fallback={<ListCardSkeleton actions={["6rem"]} media="cover" />}>
+        <SubmissionsContent />
+      </Suspense>
     </DashboardPage>
+  )
+}
+
+function SubmissionsContent() {
+  const { page } = routeApi.useLoaderDeps()
+  const { data } = useSuspenseQuery(mySubmissionsQueryOptions(page))
+  const invalidate = useInvalidateReview()
+  const withdraw = useMutation({
+    mutationFn: async (id: string) =>
+      ensureSuccess(await api.chapters[":id"].withdraw.$post({ param: { id } })),
+    onSuccess: invalidate,
+  })
+  const navigate = useNavigate({ from: "/dashboard/submissions" })
+
+  return data.data.length === 0 ? (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <CloudUpload />
+        </EmptyMedia>
+        <EmptyTitle>{m.submissions_empty_title()}</EmptyTitle>
+        <EmptyDescription>{m.submissions_empty_description()}</EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button render={<Link to="/dashboard/upload" />} variant="outline">
+          {m.dashboard_nav_upload()}
+        </Button>
+      </EmptyContent>
+    </Empty>
+  ) : (
+    <>
+      <ListCard>
+        {data.data.map((submission) => (
+          <MySubmissionRow
+            key={submission.id}
+            onWithdraw={() => {
+              withdraw.mutate(submission.id)
+            }}
+            submission={submission}
+            withdrawing={withdraw.isPending}
+          />
+        ))}
+      </ListCard>
+      <PagePagination
+        onJump={(target) => {
+          void navigate({ search: { page: target === 1 ? undefined : target } })
+        }}
+        page={page}
+        pageCount={Math.ceil(data.meta.total / SUBMISSIONS_PER_PAGE)}
+        renderLink={(target) => (
+          <Link search={{ page: target === 1 ? undefined : target }} to="/dashboard/submissions" />
+        )}
+      />
+    </>
   )
 }

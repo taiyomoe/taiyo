@@ -1,11 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Media } from "@/features/media/api/medias"
+import { RichText } from "@/components/rich-text/rich-text"
+import { parseRichText } from "@/components/rich-text/rich-text-document"
 import { InfoSection } from "@/features/media/components/media-info/info-section"
 import { MediaAltTitles } from "@/features/media/components/media-info/media-alt-titles"
 import { MediaDetails } from "@/features/media/components/media-info/media-details"
 import { MediaLinks } from "@/features/media/components/media-info/media-links"
-import { MediaSynopsis } from "@/features/media/components/media-info/media-synopsis"
 import { MediaTagList } from "@/features/media/components/media-info/media-tag-list"
 import {
   getAltTitles,
@@ -36,7 +37,7 @@ const styles = stylex.create({
 })
 
 export function MediaInfo({ media }: { media: Media }) {
-  const synopsis = getSynopsis(media.synopsis)
+  const synopsis = parseRichText(getSynopsis(media.synopsis))
   const tags = getMediaTags(media.tags)
   const altTitles = getAltTitles(media.titles)
   const links = getMediaLinks(media.links)
@@ -45,10 +46,10 @@ export function MediaInfo({ media }: { media: Media }) {
     <div sx={styles.root}>
       <div sx={styles.main}>
         <InfoSection title={m.media_info_synopsis()}>
-          {synopsis.length === 0 ? (
+          {synopsis.children.length === 0 ? (
             <p sx={styles.muted}>{m.media_info_no_synopsis()}</p>
           ) : (
-            <MediaSynopsis paragraphs={synopsis} />
+            <RichText collapsible document={synopsis} />
           )}
         </InfoSection>
         {tags.length === 0 ? null : (

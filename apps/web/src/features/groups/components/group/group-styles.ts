@@ -10,12 +10,13 @@ export const groupStyles = stylex.create({
   },
   note: {
     margin: 0,
-    padding: "1rem",
+    borderColor: colors.border,
+    borderRadius: radius.xl,
+    borderStyle: "dashed",
+    borderWidth: 1,
+    paddingBlock: "0.875rem",
+    paddingInline: "1.25rem",
     color: colors.mutedForeground,
     fontSize: "0.9375rem",
-  },
-  skeleton: {
-    borderRadius: radius.xl,
-    height: "4.5rem",
   },
 })

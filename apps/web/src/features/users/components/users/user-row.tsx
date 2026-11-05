@@ -1,7 +1,7 @@
 import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { ManagedUser } from "@/features/users/api/users"
 import { ListRow } from "@/components/layout/dashboard-page"
 import { TimeAgo } from "@/components/time/time-ago"
@@ -49,6 +49,9 @@ const styles = stylex.create({
     alignItems: "center",
     display: "flex",
     flexShrink: 0,
+    flexWrap: { default: "wrap", [breakpoints.sm]: "nowrap" },
+    justifyContent: { default: "flex-end", [breakpoints.sm]: "flex-start" },
+    width: { default: "100%", [breakpoints.sm]: "auto" },
   },
 })
 

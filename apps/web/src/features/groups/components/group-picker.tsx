@@ -90,7 +90,12 @@ export function GroupPicker({
           {(group: GroupOption) => (
             <ComboboxItem key={group.id} value={group}>
               <span sx={styles.option}>
-                <GroupAvatar id={group.id} logoUrl={group.logo ?? null} name={group.name} size="xs" />
+                <GroupAvatar
+                  id={group.id}
+                  logoUrl={group.logo ?? null}
+                  name={group.name}
+                  size="xs"
+                />
                 <span sx={styles.optionLabel}>{group.name}</span>
               </span>
             </ComboboxItem>

@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
+import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { groupQueryOptions } from "@/features/groups/api/groups"
 import { mediaQueryOptions } from "@/features/media/api/medias"
-import { getMainTitle } from "@/features/media/lib/media-labels"
+import { getMainTitle, getSynopsis } from "@/features/media/lib/media-labels"
 import { UploadPage } from "@/features/uploads/components/upload/upload-page"
 import { m } from "@/paraglide/messages"
 
@@ -25,7 +26,10 @@ export const Route = createFileRoute("/dashboard/upload")({
             .then((data) => ({
               id: data.id,
               title: getMainTitle(data.titles) ?? "",
-              type: data.type,
+              coverUrl: data.covers.find((cover) => cover.isMainCover)?.url ?? null,
+              synopsis: (
+                getRichTextParagraphs(parseRichText(getSynopsis(data.synopsis)))[0] ?? ""
+              ).replace(/\s+/g, " "),
             }))
             .catch(() => null),
       deps.groupId === undefined

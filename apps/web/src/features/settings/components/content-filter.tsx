@@ -99,7 +99,7 @@ export function ContentFilterEmpty({
     <Empty sx={sx}>
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <Eye size={18} />
+          <Eye />
         </EmptyMedia>
         <EmptyTitle>{title}</EmptyTitle>
         <EmptyDescription>{description}</EmptyDescription>

@@ -3,6 +3,7 @@ import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { useQuery } from "@tanstack/react-query"
 import type { TitleEntity } from "@/features/command-palette/lib/palette-command"
+import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { previewStyles } from "@/features/command-palette/components/preview/preview-styles"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { Cover } from "@/features/media/components/cover"
@@ -59,7 +60,10 @@ export function TitlePreview({ title }: { title: TitleEntity }) {
     },
   ].filter((fact) => fact.value !== "")
   const tags = getMediaTags(media?.tags ?? null).filter((tag) => !tag.isSpoiler)
-  const synopsis = media === undefined ? [title.synopsis] : getSynopsis(media.synopsis)
+  const synopsis =
+    media === undefined
+      ? [title.synopsis]
+      : getRichTextParagraphs(parseRichText(getSynopsis(media.synopsis)))
 
   return (
     <div sx={previewStyles.root}>

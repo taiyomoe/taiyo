@@ -45,10 +45,6 @@ const styles = stylex.create({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
-  searchIcon: {
-    height: "1.125rem",
-    width: "1.125rem",
-  },
   shortcutAddon: {
     paddingRight: "calc(0.5625rem - 1px)",
   },
@@ -69,7 +65,7 @@ export function AppNavbarSearch() {
       <div role="search" sx={styles.search}>
         <InputGroup sx={styles.field}>
           <InputGroupAddon>
-            <Search {...stylex.props(styles.searchIcon)} />
+            <Search />
           </InputGroupAddon>
           <button
             aria-haspopup="dialog"

@@ -1,13 +1,15 @@
+import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { ExternalLink } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
-import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { DashboardPage } from "@/components/layout/dashboard-page"
+import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import { groupQueryOptions } from "@/features/groups/api/groups"
 import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { GroupChaptersPanel } from "@/features/groups/components/manage-group/chapters/group-chapters-panel"
@@ -38,13 +40,22 @@ const styles = stylex.create({
     borderRadius: radius.xxl,
     height: "12rem",
   },
+  avatarSkeleton: {
+    borderRadius: radius.lg,
+    flexShrink: 0,
+    height: "2.5rem",
+    width: "2.5rem",
+  },
+  nameSkeleton: {
+    height: { default: "1.75rem", [breakpoints.md]: "2.25rem" },
+    width: "12rem",
+  },
 })
 
 export function ManageGroupPage() {
   const { session } = routeApi.useRouteContext()
   const { groupId } = routeApi.useParams()
   const { user } = session
-  const { data: group } = useSuspenseQuery(groupQueryOptions(groupId))
   const can = usePermissions(user)
   const canInvite = can("group.inviteMember", { groupId, permissions: [] })
   const canEdit = can("group.update", { id: groupId })
@@ -61,10 +72,16 @@ export function ManageGroupPage() {
         </Button>
       }
       title={
-        <span sx={styles.title}>
-          <GroupAvatar id={group.id} name={group.name} />
-          {group.name}
-        </span>
+        <Suspense
+          fallback={
+            <span aria-hidden sx={styles.title}>
+              <Skeleton sx={styles.avatarSkeleton} />
+              <Skeleton sx={styles.nameSkeleton} />
+            </span>
+          }
+        >
+          <ManageGroupTitle groupId={groupId} />
+        </Suspense>
       }
     >
       <Tabs defaultValue="members" sx={styles.tabs}>
@@ -75,8 +92,8 @@ export function ManageGroupPage() {
           {canEdit ? <TabsTab value="settings">{m.manage_tab_settings()}</TabsTab> : null}
         </TabsList>
         <TabsPanel sx={styles.panel} value="members">
-          <Suspense fallback={<Skeleton sx={styles.skeleton} />}>
-            <GroupMembersPanel can={can} group={group} userId={user.id} />
+          <Suspense fallback={<ListCardSkeleton actions={["2rem"]} media="person" rows={3} />}>
+            <ManageGroupMembers can={can} groupId={groupId} userId={user.id} />
           </Suspense>
         </TabsPanel>
         {canManageChapters ? (
@@ -95,10 +112,43 @@ export function ManageGroupPage() {
         ) : null}
         {canEdit ? (
           <TabsPanel sx={styles.panel} value="settings">
-            <GroupSettingsPanel group={group} />
+            <Suspense fallback={<Skeleton sx={styles.skeleton} />}>
+              <ManageGroupSettings groupId={groupId} />
+            </Suspense>
           </TabsPanel>
         ) : null}
       </Tabs>
     </DashboardPage>
   )
+}
+
+function ManageGroupTitle({ groupId }: { groupId: string }) {
+  const { data: group } = useSuspenseQuery(groupQueryOptions(groupId))
+
+  return (
+    <span sx={styles.title}>
+      <GroupAvatar id={group.id} name={group.name} />
+      {group.name}
+    </span>
+  )
+}
+
+function ManageGroupMembers({
+  can,
+  groupId,
+  userId,
+}: {
+  can: Permissions
+  groupId: string
+  userId: string
+}) {
+  const { data: group } = useSuspenseQuery(groupQueryOptions(groupId))
+
+  return <GroupMembersPanel can={can} group={group} userId={userId} />
+}
+
+function ManageGroupSettings({ groupId }: { groupId: string }) {
+  const { data: group } = useSuspenseQuery(groupQueryOptions(groupId))
+
+  return <GroupSettingsPanel group={group} />
 }

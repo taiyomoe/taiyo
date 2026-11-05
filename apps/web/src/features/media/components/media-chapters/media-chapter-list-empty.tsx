@@ -28,7 +28,7 @@ export function MediaChapterListEmpty({
     <Empty sx={styles.empty}>
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <Search size={18} />
+          <Search />
         </EmptyMedia>
         <EmptyTitle>{m.media_chapters_empty_title()}</EmptyTitle>
         <EmptyDescription>{m.media_chapters_empty_description()}</EmptyDescription>

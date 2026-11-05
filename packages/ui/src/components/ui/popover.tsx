@@ -94,7 +94,7 @@ export function PopoverTrigger({
   return (
     <PopoverPrimitive.Trigger
       className={cn(styleProps.className, className)}
-      data-slot="popover-trigger"
+      {...(props.render === undefined && { "data-slot": "popover-trigger" })}
       style={styleProps.style}
       {...props}
     >

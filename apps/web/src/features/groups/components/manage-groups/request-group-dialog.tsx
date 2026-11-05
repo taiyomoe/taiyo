@@ -20,7 +20,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 import type { GroupCreationInput } from "@/features/groups/api/groups"
 import { ErrorAlert } from "@/components/feedback/error-alert"
-import { InputField, TextareaField } from "@/components/fields/form-field"
+import { InputField, RichTextField, TextareaField } from "@/components/fields/form-field"
 import { ProofLinksFields, proofLinksSchema } from "@/features/groups/components/proof-links-fields"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
@@ -110,7 +110,7 @@ export function RequestGroupDialog() {
                   name="name"
                   placeholder="Akira Scans"
                 />
-                <TextareaField
+                <RichTextField
                   control={form.control}
                   label={m.request_group_about()}
                   name="description"

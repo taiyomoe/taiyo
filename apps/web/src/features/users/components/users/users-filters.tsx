@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { ROLES } from "@taiyomoe/permissions"
-import { Search } from "@taiyomoe/ui/components/icons"
+import { Search, Users } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   InputGroup,
@@ -14,9 +14,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@taiyomoe/ui/components/ui/select"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
 import type { UsersFilter } from "@/features/users/api/users"
-import { ROLE_LABELS } from "@/features/users/lib/role-labels"
+import { RoleOption } from "@/features/users/components/users/role-option"
+import { ROLE_ICONS, ROLE_LABELS } from "@/features/users/lib/role-labels"
 import { m } from "@/paraglide/messages"
 
 const ALL = "ALL"
@@ -33,7 +35,13 @@ const styles = stylex.create({
     minWidth: "14rem",
   },
   filter: {
-    width: "11rem",
+    width: "13rem",
+  },
+  toggle: {
+    height: {
+      default: "2.75rem",
+      [breakpoints.sm]: "2.5rem",
+    },
   },
 })
 
@@ -75,14 +83,22 @@ export function UsersFilters({
         >
           <SelectTrigger aria-label={m.users_role()}>
             <SelectValue>
-              {() => (filter.role === undefined ? m.users_all_roles() : ROLE_LABELS[filter.role]())}
+              {() =>
+                filter.role === undefined ? (
+                  <RoleOption icon={Users} label={m.users_all_roles()} />
+                ) : (
+                  <RoleOption icon={ROLE_ICONS[filter.role]} label={ROLE_LABELS[filter.role]()} />
+                )
+              }
             </SelectValue>
           </SelectTrigger>
           <SelectPopup>
-            <SelectItem value={ALL}>{m.users_all_roles()}</SelectItem>
+            <SelectItem value={ALL}>
+              <RoleOption icon={Users} label={m.users_all_roles()} />
+            </SelectItem>
             {ROLES.map((role) => (
               <SelectItem key={role} value={role}>
-                {ROLE_LABELS[role]()}
+                <RoleOption icon={ROLE_ICONS[role]} label={ROLE_LABELS[role]()} />
               </SelectItem>
             ))}
           </SelectPopup>
@@ -93,6 +109,7 @@ export function UsersFilters({
         onClick={() => {
           onChange({ banned: filter.banned === true ? undefined : true })
         }}
+        sx={styles.toggle}
         variant={filter.banned === true ? "secondary" : "outline"}
       >
         {m.users_only_banned()}

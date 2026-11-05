@@ -16,6 +16,7 @@ import {
 import { PasswordInput, type PasswordInputProps } from "@taiyomoe/ui/components/ui/password-input"
 import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
 import { Controller } from "react-hook-form"
+import { RichTextEditor } from "@/components/rich-text/rich-text-editor"
 import { m } from "@/paraglide/messages"
 
 type Bound<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = {
@@ -106,6 +107,21 @@ export const TextareaField = <
 }: Omit<ComponentProps<typeof Textarea>, "name"> & Bound<TFieldValues, TName>) => (
   <BoundField name={name} control={control} label={label} description={description}>
     {(field) => <Textarea {...field} {...props} />}
+  </BoundField>
+)
+
+export const RichTextField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  name,
+  control,
+  label,
+  description,
+  ...props
+}: Omit<ComponentProps<typeof RichTextEditor>, "name"> & Bound<TFieldValues, TName>) => (
+  <BoundField name={name} control={control} label={label} description={description}>
+    {(field) => <RichTextEditor {...field} {...props} />}
   </BoundField>
 )
 

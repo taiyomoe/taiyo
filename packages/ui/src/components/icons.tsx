@@ -93,6 +93,11 @@ import {
   Delete02Icon,
   WifiOffIcon,
   TickDouble02Icon,
+  Mortarboard01Icon,
+  TextBoldIcon,
+  TextItalicIcon,
+  TextStrikethroughIcon,
+  TextUnderlineIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -355,3 +360,13 @@ export const Trash: (props: IconProps) => React.ReactElement = icon(Delete02Icon
 export const Offline: (props: IconProps) => React.ReactElement = icon(WifiOffIcon)
 
 export const CheckAll: (props: IconProps) => React.ReactElement = icon(TickDouble02Icon)
+
+export const GraduationCap: (props: IconProps) => React.ReactElement = icon(Mortarboard01Icon)
+
+export const Bold: (props: IconProps) => React.ReactElement = icon(TextBoldIcon)
+
+export const Italic: (props: IconProps) => React.ReactElement = icon(TextItalicIcon)
+
+export const Underline: (props: IconProps) => React.ReactElement = icon(TextUnderlineIcon)
+
+export const Strikethrough: (props: IconProps) => React.ReactElement = icon(TextStrikethroughIcon)

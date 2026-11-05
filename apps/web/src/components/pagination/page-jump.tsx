@@ -74,7 +74,7 @@ export function PageJump({
           />
         }
       >
-        <Ellipsis />
+        <Ellipsis size={18} />
       </PopoverTrigger>
       <PopoverPopup arrow initialFocus={inputRef} side="top">
         <form
