@@ -29,11 +29,16 @@ const styles = stylex.create({
     minWidth: 0,
   },
   tabList: {
+    boxShadow: `inset 0 -1px 0 ${colors.border}`,
+    justifyContent: "flex-start",
     scrollbarWidth: "none",
-    maxWidth: "100%",
     overflowX: "auto",
+    paddingBottom: { '[data-orientation="horizontal"]': "1px", default: null },
+    paddingTop: { '[data-orientation="horizontal"]': 0, default: null },
+    width: "100%",
   },
   tab: {
+    flexGrow: 0,
     flexShrink: 0,
   },
   count: {

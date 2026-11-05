@@ -13,7 +13,7 @@ const styles = stylex.create({
     aspectRatio: "3 / 1",
     backgroundColor: colors.muted,
     position: "relative",
-    maxHeight: "22rem",
+    maxHeight: "18rem",
     width: "100%",
   },
   image: {
@@ -67,8 +67,8 @@ const styles = stylex.create({
     transitionDuration: motion.enter,
     transitionProperty: "opacity, transform, background-color",
     transitionTimingFunction: motion.easeOut,
-    right: { default: "0.875rem", [breakpoints.md]: "2rem" },
-    top: "0.875rem",
+    right: { default: "1rem", [breakpoints.md]: "2rem" },
+    top: "1rem",
   },
 })
 

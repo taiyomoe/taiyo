@@ -83,15 +83,17 @@ const styles = stylex.create({
     minWidth: 0,
   },
   tabList: {
+    boxShadow: `inset 0 -1px 0 ${colors.border}`,
+    justifyContent: "flex-start",
     scrollbarWidth: "none",
-    maxWidth: "100%",
     overflowX: "auto",
+    paddingBottom: { '[data-orientation="horizontal"]': "1px", default: null },
+    paddingTop: { '[data-orientation="horizontal"]': 0, default: null },
+    width: "100%",
   },
   tab: {
+    flexGrow: 0,
     flexShrink: 0,
-  },
-  tabIcon: {
-    color: colors.mutedForeground,
   },
   skeleton: {
     borderRadius: radius.xxl,
@@ -141,7 +143,7 @@ export function SettingsPage() {
 
               return (
                 <TabsTab key={value} sx={styles.tab} value={value}>
-                  <Icon size={16} sx={styles.tabIcon} />
+                  <Icon size={16} />
                   {label()}
                 </TabsTab>
               )

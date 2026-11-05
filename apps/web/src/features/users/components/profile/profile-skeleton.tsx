@@ -7,31 +7,36 @@ const styles = stylex.create({
   banner: {
     borderRadius: 0,
     aspectRatio: "3 / 1",
-    maxHeight: "22rem",
+    maxHeight: "18rem",
     width: "100%",
   },
+  header: {
+    gap: "1rem",
+    display: "flex",
+    flexDirection: "column",
+  },
   avatarFrame: {
-    padding: { default: "0.25rem", [breakpoints.lg]: "0.375rem" },
+    padding: "0.25rem",
     borderRadius: radius.full,
     backgroundColor: colors.background,
     display: "inline-block",
+    position: "relative",
+    zIndex: 1,
+    marginTop: { default: "-3rem", [breakpoints.md]: "-4.25rem" },
+    width: "fit-content",
   },
   avatar: {
     borderRadius: radius.full,
-    height: { default: "6rem", [breakpoints.lg]: "11rem" },
-    width: { default: "6rem", [breakpoints.lg]: "11rem" },
+    height: { default: "5.5rem", [breakpoints.md]: "8rem" },
+    width: { default: "5.5rem", [breakpoints.md]: "8rem" },
   },
   name: {
-    height: { default: "1.75rem", [breakpoints.lg]: "2.75rem" },
-    width: "min(20rem, 80%)",
+    height: { default: "1.75rem", [breakpoints.md]: "2.25rem" },
+    width: "min(18rem, 70%)",
   },
-  badges: {
-    height: "1.25rem",
-    width: "min(12rem, 60%)",
-  },
-  counts: {
-    borderRadius: radius.xl,
-    height: "4rem",
+  line: {
+    height: "1rem",
+    width: "min(24rem, 85%)",
   },
   tabs: {
     height: "2.5rem",
@@ -43,26 +48,16 @@ export function ProfileSkeleton() {
   return (
     <div aria-hidden sx={profileStyles.root}>
       <Skeleton sx={styles.banner} />
-      <div sx={profileStyles.layout}>
-        <aside sx={profileStyles.aside}>
-          <div sx={profileStyles.avatarSlot}>
-            <span sx={styles.avatarFrame}>
-              <Skeleton sx={styles.avatar} />
-            </span>
-          </div>
-          <div sx={profileStyles.actionsSlot}>
-            <Skeleton sx={styles.counts} />
-          </div>
-        </aside>
-        <div sx={profileStyles.main}>
-          <div sx={profileStyles.header}>
-            <Skeleton sx={styles.name} />
-            <Skeleton sx={styles.badges} />
-          </div>
-          <div sx={profileStyles.tabsSlot}>
-            <Skeleton sx={styles.tabs} />
-          </div>
+      <div sx={profileStyles.container}>
+        <div sx={styles.header}>
+          <span sx={styles.avatarFrame}>
+            <Skeleton sx={styles.avatar} />
+          </span>
+          <Skeleton sx={styles.name} />
+          <Skeleton sx={styles.line} />
+          <Skeleton sx={styles.line} />
         </div>
+        <Skeleton sx={styles.tabs} />
       </div>
     </div>
   )

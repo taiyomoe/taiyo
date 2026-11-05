@@ -59,7 +59,7 @@ export function TwoFactorSection({
                 onClick={() => {
                   setDialog("disable")
                 }}
-                variant="destructive"
+                variant="destructive-outline"
               >
                 {m.user_settings_2fa_disable()}
               </Button>

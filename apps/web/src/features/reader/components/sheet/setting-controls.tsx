@@ -33,6 +33,7 @@ const styles = stylex.create({
     alignItems: "center",
     display: "flex",
     fontSize: "0.875rem",
+    fontWeight: 500,
     justifyContent: "space-between",
   },
   value: {
@@ -53,6 +54,7 @@ const styles = stylex.create({
     cursor: "pointer",
     display: "flex",
     fontSize: "0.875rem",
+    fontWeight: 500,
     justifyContent: "space-between",
   },
 })

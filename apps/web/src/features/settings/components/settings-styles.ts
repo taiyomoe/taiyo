@@ -47,6 +47,10 @@ export const settingsStyles = stylex.create({
     display: "flex",
     minWidth: 0,
   },
+  itemSkeleton: {
+    borderRadius: radius.xl,
+    height: "4.375rem",
+  },
   itemIcon: {
     color: colors.mutedForeground,
     flexShrink: 0,

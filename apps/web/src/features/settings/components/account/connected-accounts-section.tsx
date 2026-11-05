@@ -5,7 +5,6 @@ import { GoogleLogo } from "@taiyomoe/ui/components/logos/google-logo"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { TimeAgo } from "@/components/time/time-ago"
@@ -30,12 +29,8 @@ const PROVIDERS = [
 const styles = stylex.create({
   logo: {
     flexShrink: 0,
-    height: "1.5rem",
-    width: "1.5rem",
-  },
-  skeleton: {
-    borderRadius: radius.xl,
-    height: "4rem",
+    height: "1.25rem",
+    width: "1.25rem",
   },
 })
 
@@ -60,7 +55,7 @@ export function ConnectedAccountsSection() {
             if (accounts.data === undefined) {
               return (
                 <li key={id}>
-                  <Skeleton sx={styles.skeleton} />
+                  <Skeleton sx={settingsStyles.itemSkeleton} />
                 </li>
               )
             }
@@ -106,7 +101,7 @@ export function ConnectedAccountsSection() {
                     }}
                     size="sm"
                     title={total <= 1 ? m.user_settings_disconnect_last() : undefined}
-                    variant="ghost"
+                    variant="outline"
                   >
                     {m.user_settings_disconnect()}
                   </Button>

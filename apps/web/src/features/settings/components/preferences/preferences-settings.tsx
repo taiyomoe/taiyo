@@ -34,11 +34,14 @@ const styles = stylex.create({
     gap: "0.25rem",
     display: "flex",
     flexDirection: "column",
-    fontWeight: 600,
     minWidth: 0,
   },
+  ratingLabel: {
+    fontSize: "0.875rem",
+    fontWeight: 500,
+  },
   checkbox: {
-    marginTop: "0.125rem",
+    marginTop: "0.3125rem",
   },
 })
 
@@ -105,7 +108,9 @@ export function PreferencesSettings() {
                     sx={styles.checkbox}
                   />
                   <span sx={styles.ratingText}>
-                    <ContentRatingLabel label={CONTENT_RATING_LABELS[value]()} rating={value} />
+                    <span sx={styles.ratingLabel}>
+                      <ContentRatingLabel label={CONTENT_RATING_LABELS[value]()} rating={value} />
+                    </span>
                     <span sx={settingsStyles.muted}>{hint()}</span>
                   </span>
                 </label>

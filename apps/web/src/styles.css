@@ -23,6 +23,10 @@ html:has([data-app-shell]) body {
   padding-inline: 1rem;
 }
 
+[data-auth-fields] [data-slot="input-group-addon"]:has(> button) {
+  padding-inline: 0.625rem;
+}
+
 [data-auth-fields] [data-slot="input-group-addon"] svg {
   color: color-mix(in srgb, var(--muted-foreground) 72%, transparent);
   height: 1.25rem !important;

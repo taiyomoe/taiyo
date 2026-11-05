@@ -9,22 +9,21 @@ import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   frame: {
-    padding: { default: "0.25rem", [breakpoints.lg]: "0.375rem" },
+    padding: "0.25rem",
     borderRadius: radius.full,
     backgroundColor: colors.background,
-    boxShadow: "0 10px 30px -12px rgb(0 0 0 / 45%)",
     display: "inline-block",
     position: "relative",
   },
   avatar: {
-    height: { default: "6rem", [breakpoints.lg]: "11rem" },
-    width: { default: "6rem", [breakpoints.lg]: "11rem" },
+    height: { default: "5.5rem", [breakpoints.md]: "8rem" },
+    width: { default: "5.5rem", [breakpoints.md]: "8rem" },
   },
   fallback: {
-    fontSize: { default: "2.25rem", [breakpoints.lg]: "4rem" },
+    fontSize: { default: "2rem", [breakpoints.md]: "3rem" },
   },
   overlay: {
-    inset: { default: "0.25rem", [breakpoints.lg]: "0.375rem" },
+    inset: "0.25rem",
     borderRadius: radius.full,
     borderStyle: "none",
     gap: "0.375rem",
@@ -68,10 +67,10 @@ const styles = stylex.create({
     display: { default: "none", [consts.pointerCoarse]: "flex" },
     justifyContent: "center",
     position: "absolute",
-    bottom: { default: "0.125rem", [breakpoints.lg]: "0.75rem" },
-    height: "2.25rem",
-    right: { default: "0.125rem", [breakpoints.lg]: "0.75rem" },
-    width: "2.25rem",
+    bottom: { default: "0", [breakpoints.md]: "0.375rem" },
+    height: "2rem",
+    right: { default: "0", [breakpoints.md]: "0.375rem" },
+    width: "2rem",
   },
 })
 

@@ -1,7 +1,9 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { Calendar, Crown, Globe, Sparkles, Tag, User } from "@taiyomoe/ui/components/icons"
+import { Calendar, Crown, Edit, Globe, Sparkles, Tag, User } from "@taiyomoe/ui/components/icons"
+import { Button } from "@taiyomoe/ui/components/ui/button"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { Link } from "@tanstack/react-router"
 import type { UserProfile } from "@/features/users/api/profile"
 import { LazyCountryFlag } from "@/components/flags/lazy-country-flag"
 import { RichText } from "@/components/rich-text/rich-text"
@@ -21,7 +23,7 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "minmax(0, 1fr)",
-      [breakpoints.xl]: "minmax(0, 1fr) 20rem",
+      [breakpoints.lg]: "minmax(0, 1fr) 20rem",
     },
   },
   column: {
@@ -31,7 +33,13 @@ const styles = stylex.create({
     minWidth: 0,
   },
   section: {
+    gap: "1rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  emptyAbout: {
     gap: "0.875rem",
+    alignItems: "flex-start",
     display: "flex",
     flexDirection: "column",
   },
@@ -45,25 +53,25 @@ const styles = stylex.create({
     gap: "0.75rem",
     alignItems: "center",
     display: "flex",
+    fontSize: "0.9375rem",
+    justifyContent: "space-between",
     minWidth: 0,
   },
-  icon: {
-    color: colors.mutedForeground,
-    flexShrink: 0,
-  },
   term: {
+    gap: "0.625rem",
+    alignItems: "center",
     color: colors.mutedForeground,
+    display: "flex",
     flexShrink: 0,
-    fontSize: "0.875rem",
-    minWidth: "5.5rem",
   },
   value: {
     margin: 0,
     gap: "0.5rem",
     alignItems: "center",
     display: "flex",
-    fontSize: "0.9375rem",
-    fontWeight: 550,
+    fontWeight: 500,
+    justifyContent: "flex-end",
+    textAlign: "end",
     minWidth: 0,
   },
   points: {
@@ -84,10 +92,10 @@ const getAge = (birthDate: string) => {
 function Detail({ icon, term, children }: { icon: ReactNode; term: string; children: ReactNode }) {
   return (
     <div sx={styles.detail}>
-      <span aria-hidden sx={styles.icon}>
+      <dt sx={styles.term}>
         {icon}
-      </span>
-      <dt sx={styles.term}>{term}</dt>
+        {term}
+      </dt>
       <dd sx={styles.value}>{children}</dd>
     </div>
   )
@@ -111,31 +119,36 @@ export function AboutTab({ profile, isOwner }: { profile: UserProfile; isOwner: 
         <section sx={[profileStyles.card, styles.section]}>
           <h2 sx={profileStyles.sectionTitle}>{m.profile_about()}</h2>
           {about === undefined || about === "" ? (
-            <p sx={profileStyles.empty}>
-              {isOwner
-                ? m.profile_about_empty_self()
-                : m.profile_about_empty({ name: profile.displayUsername })}
-            </p>
+            <div sx={styles.emptyAbout}>
+              <p sx={profileStyles.empty}>
+                {isOwner
+                  ? m.profile_about_empty_self()
+                  : m.profile_about_empty({ name: profile.displayUsername })}
+              </p>
+              {isOwner ? (
+                <Button render={<Link to="/settings" />} size="sm" variant="outline">
+                  <Edit />
+                  {m.profile_about_add()}
+                </Button>
+              ) : null}
+            </div>
           ) : (
             <RichText collapsible document={parseRichText(about)} />
           )}
         </section>
-        <section sx={styles.section}>
-          <h2 sx={profileStyles.sectionTitle}>{m.profile_groups()}</h2>
-          <ProfileGroups groups={profile.groups} />
-        </section>
+        <ProfileGroups groups={profile.groups} />
       </div>
       <section sx={[profileStyles.card, styles.section]}>
         <h2 sx={profileStyles.sectionTitle}>{m.profile_details()}</h2>
         <dl sx={styles.details}>
           {location === "" ? null : (
-            <Detail icon={<Globe size={18} />} term={m.profile_detail_location()}>
+            <Detail icon={<Globe size={16} />} term={m.profile_detail_location()}>
               {profile.country === null ? null : <LazyCountryFlag country={profile.country} />}
               {location}
             </Detail>
           )}
           {profile.birthDate === null ? null : (
-            <Detail icon={<Calendar size={18} />} term={m.profile_detail_birthday()}>
+            <Detail icon={<Calendar size={16} />} term={m.profile_detail_birthday()}>
               {new Intl.DateTimeFormat(locale, {
                 day: "numeric",
                 month: "long",
@@ -146,26 +159,26 @@ export function AboutTab({ profile, isOwner }: { profile: UserProfile; isOwner: 
             </Detail>
           )}
           {profile.gender === "NOT_SPECIFIED" ? null : (
-            <Detail icon={<User size={18} />} term={m.profile_detail_gender()}>
+            <Detail icon={<User size={16} />} term={m.profile_detail_gender()}>
               {GENDER_LABELS[profile.gender]()}
             </Detail>
           )}
-          <Detail icon={<Calendar size={18} />} term={m.profile_detail_joined()}>
+          <Detail icon={<Calendar size={16} />} term={m.profile_detail_joined()}>
             {new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
               new Date(profile.createdAt),
             )}
           </Detail>
           {profile.role === "USER" ? null : (
-            <Detail icon={<Crown size={18} />} term={m.profile_detail_role()}>
+            <Detail icon={<Crown size={16} />} term={m.profile_detail_role()}>
               {ROLE_LABELS[profile.role]()}
             </Detail>
           )}
           {profile.title === null ? null : (
-            <Detail icon={<Tag size={18} />} term={m.profile_detail_title()}>
+            <Detail icon={<Tag size={16} />} term={m.profile_detail_title()}>
               <TitleBadge size="sm" title={profile.title} />
             </Detail>
           )}
-          <Detail icon={<Sparkles size={18} />} term={m.profile_detail_points()}>
+          <Detail icon={<Sparkles size={16} />} term={m.profile_detail_points()}>
             <span sx={styles.points}>{profile.points.toLocaleString(locale)}</span>
           </Detail>
         </dl>

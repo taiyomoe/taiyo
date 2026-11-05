@@ -41,6 +41,7 @@ export function CosmeticsSection({ profile }: { profile: UserProfile }) {
             setOpen(true)
           }}
           size="sm"
+          variant="outline"
         >
           <Sparkles />
           {m.profile_customize()}

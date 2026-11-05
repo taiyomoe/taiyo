@@ -2,22 +2,22 @@ import { ViewIcon, ViewOffSlashIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { type ComponentProps, useState } from "react"
-import { radius } from "../../styles/tokens.stylex"
+import { breakpoints, radius } from "../../styles/tokens.stylex"
 import { Button } from "./button"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./input-group"
 import { Tooltip, TooltipPopup, TooltipTrigger } from "./tooltip"
 
 const styles = stylex.create({
   addon: {
-    paddingBlock: "calc(0.375rem - 1px)",
-    alignSelf: "stretch",
-    paddingRight: "calc(0.375rem - 1px)",
+    marginInline: 0,
+    flexShrink: 0,
+    paddingRight: { default: "calc(0.5rem - 1px)", [breakpoints.sm]: "calc(0.375rem - 1px)" },
   },
   toggle: {
-    borderRadius: `calc(${radius.xl} - 0.375rem)`,
-    aspectRatio: "1",
-    height: "100%",
-    width: "auto",
+    borderRadius: radius.full,
+    flexShrink: 0,
+    height: "1.75rem",
+    width: "1.75rem",
   },
   icon: {
     height: "1rem",

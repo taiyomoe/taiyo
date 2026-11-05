@@ -12,7 +12,11 @@ import {
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
 const styles = stylex.create({
+  panel: {
+    paddingTop: 0,
+  },
   footer: {
+    paddingBlock: "1rem",
     borderTopColor: colors.border,
     borderTopStyle: "solid",
     borderTopWidth: 1,
@@ -39,7 +43,7 @@ export function SettingsSection({
         {description === undefined ? null : <CardDescription>{description}</CardDescription>}
         {action === undefined ? null : <CardAction>{action}</CardAction>}
       </CardHeader>
-      {children === undefined ? null : <CardPanel>{children}</CardPanel>}
+      {children === undefined ? null : <CardPanel sx={styles.panel}>{children}</CardPanel>}
       {footer === undefined ? null : <CardFooter sx={styles.footer}>{footer}</CardFooter>}
     </Card>
   )

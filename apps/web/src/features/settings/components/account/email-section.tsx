@@ -47,7 +47,7 @@ export function EmailSection({ user }: { user: Session["user"] }) {
         description={m.user_settings_email_description()}
         footer={
           <div sx={settingsStyles.actions}>
-            <Button loading={change.isPending} type="submit">
+            <Button disabled={!form.formState.isDirty} loading={change.isPending} type="submit">
               {m.user_settings_email_change()}
             </Button>
           </div>

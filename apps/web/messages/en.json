@@ -1651,5 +1651,6 @@
   "auth_2fa_use_backup": "Use a backup code",
   "auth_2fa_use_app": "Use your app",
   "auth_2fa_verify": "Verify",
-  "auth_2fa_back": "Back to sign in"
+  "auth_2fa_back": "Back to sign in",
+  "profile_about_add": "Write a bio"
 }

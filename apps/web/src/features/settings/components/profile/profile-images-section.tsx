@@ -100,7 +100,7 @@ export function ProfileImagesSection({ profile }: { profile: UserProfile }) {
                   disabled={avatar.removing}
                   onClick={avatar.remove}
                   size="sm"
-                  variant="ghost"
+                  variant="outline"
                 >
                   <Trash />
                   {m.profile_remove_avatar()}
@@ -121,7 +121,7 @@ export function ProfileImagesSection({ profile }: { profile: UserProfile }) {
                   disabled={banner.removing}
                   onClick={banner.remove}
                   size="sm"
-                  variant="ghost"
+                  variant="outline"
                 >
                   <Trash />
                   {m.profile_remove_banner()}

@@ -49,7 +49,7 @@ export function SessionsSection({ currentToken }: { currentToken: string }) {
       <div sx={settingsStyles.form}>
         <ErrorAlert message={error === null ? null : getErrorMessage(error)} />
         {sessions.data === undefined ? (
-          <Skeleton sx={settingsStyles.item} />
+          <Skeleton sx={settingsStyles.itemSkeleton} />
         ) : (
           <ul sx={settingsStyles.list}>
             {list.map((session) => {
@@ -86,7 +86,7 @@ export function SessionsSection({ currentToken }: { currentToken: string }) {
                         revoke.mutate(session.token)
                       }}
                       size="sm"
-                      variant="ghost"
+                      variant="outline"
                     >
                       {m.sessions_revoke()}
                     </Button>

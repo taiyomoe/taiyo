@@ -45,7 +45,7 @@ export const EDITOR_KINDS = {
  * the banner height: its diameter, its left inset, and how much of it overlaps
  * the banner (half its diameter). The editor draws it as a hint and the preview mocks it.
  */
-export const AVATAR_OVER_BANNER = { diameter: 0.53, inset: 0.09, overlap: 0.265 } as const
+export const AVATAR_OVER_BANNER = { diameter: 0.47, inset: 0.18, overlap: 0.235 } as const
 
 export const MAX_ZOOM = 8
 

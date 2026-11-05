@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-// oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { config } from "@taiyomoe/config"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
+import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { ErrorAlert } from "@/components/feedback/error-alert"
@@ -17,6 +17,12 @@ import { AUTH_SETTINGS_MESSAGES } from "@/features/settings/lib/auth-messages"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
+const styles = stylex.create({
+  skeleton: {
+    borderRadius: radius.xl,
+    height: "2.5rem",
+  },
+})
 const newPasswordSchema = z
   .string()
   .min(config.auth.password.minLength, m.user_settings_password_short())
@@ -42,8 +48,11 @@ const setSchema = z
 export function PasswordSection({ hasPassword }: { hasPassword: boolean | null }) {
   if (hasPassword === null) {
     return (
-      <SettingsSection title={m.user_settings_password_title()}>
-        <Skeleton sx={settingsStyles.item} />
+      <SettingsSection
+        description={m.user_settings_password_description()}
+        title={m.user_settings_password_title()}
+      >
+        <Skeleton sx={styles.skeleton} />
       </SettingsSection>
     )
   }
@@ -85,7 +94,7 @@ function ChangePasswordForm() {
         description={m.user_settings_password_description()}
         footer={
           <div sx={settingsStyles.actions}>
-            <Button loading={change.isPending} type="submit">
+            <Button disabled={!form.formState.isDirty} loading={change.isPending} type="submit">
               {m.user_settings_password_change()}
             </Button>
           </div>
@@ -153,7 +162,7 @@ function SetPasswordForm() {
         description={m.user_settings_password_set_description()}
         footer={
           <div sx={settingsStyles.actions}>
-            <Button loading={set.isPending} type="submit">
+            <Button disabled={!form.formState.isDirty} loading={set.isPending} type="submit">
               {m.user_settings_password_set()}
             </Button>
           </div>

@@ -46,6 +46,9 @@ const styles = stylex.create({
     alignItems: "center",
     display: "flex",
   },
+  modeItem: {
+    height: "2rem",
+  },
   language: {
     width: "11rem",
   },
@@ -86,6 +89,21 @@ export function AboutSection({ profile }: { profile: UserProfile }) {
   const [gender, setGender] = useState<Gender>(profile.gender)
   const [birthDate, setBirthDate] = useState(profile.birthDate ?? "")
   const text = about[language] ?? ""
+  const trimmed = (record: Partial<Record<Language, string | undefined>>) =>
+    JSON.stringify(
+      Object.fromEntries(
+        Object.entries(record)
+          .map(([code, value]) => [code, value?.trim() ?? ""])
+          .filter(([, value]) => value !== "")
+          .sort(([a = ""], [b = ""]) => a.localeCompare(b)),
+      ),
+    )
+  const dirty =
+    trimmed(about) !== trimmed(profile.about) ||
+    city.trim() !== (profile.city ?? "") ||
+    country !== profile.country ||
+    gender !== profile.gender ||
+    birthDate !== (profile.birthDate ?? "")
   const document = mode === "preview" ? parseRichText(text) : null
 
   return (
@@ -114,7 +132,7 @@ export function AboutSection({ profile }: { profile: UserProfile }) {
         description={m.profile_edit_description()}
         footer={
           <div sx={settingsStyles.actions}>
-            <Button loading={update.isPending} type="submit">
+            <Button disabled={!dirty} loading={update.isPending} type="submit">
               {m.profile_edit_save()}
             </Button>
           </div>
@@ -134,10 +152,10 @@ export function AboutSection({ profile }: { profile: UserProfile }) {
                   }}
                   value={mode}
                 >
-                  <SegmentedControlItem size="sm" value="write">
+                  <SegmentedControlItem size="sm" sx={styles.modeItem} value="write">
                     {m.user_settings_about_write()}
                   </SegmentedControlItem>
-                  <SegmentedControlItem size="sm" value="preview">
+                  <SegmentedControlItem size="sm" sx={styles.modeItem} value="preview">
                     {m.user_settings_about_preview()}
                   </SegmentedControlItem>
                 </SegmentedControl>

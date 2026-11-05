@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+// oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { config } from "@taiyomoe/config"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
-import { font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useNavigate } from "@tanstack/react-router"
 import { useForm, useWatch } from "react-hook-form"
 import { z } from "zod"
@@ -23,11 +23,6 @@ const schema = z.object({
     .trim()
     .regex(config.auth.displayName.regex, m.user_settings_display_name_invalid()),
   username: z.string().trim().regex(config.auth.username.regex, m.user_settings_username_invalid()),
-})
-const styles = stylex.create({
-  url: {
-    fontFamily: font.mono,
-  },
 })
 
 export function IdentitySection({ user }: { user: Session["user"] }) {
@@ -69,7 +64,7 @@ export function IdentitySection({ user }: { user: Session["user"] }) {
         footer={
           <div sx={settingsStyles.actions}>
             <Button disabled={!form.formState.isDirty} loading={update.isPending} type="submit">
-              {m.save()}
+              {m.profile_edit_save()}
             </Button>
           </div>
         }
@@ -104,7 +99,6 @@ export function IdentitySection({ user }: { user: Session["user"] }) {
               label={m.user_settings_username()}
               maxLength={config.auth.username.maxLength}
               name="username"
-              sx={styles.url}
             />
           </div>
         </div>
