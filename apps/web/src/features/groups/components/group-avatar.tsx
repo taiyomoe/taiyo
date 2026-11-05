@@ -1,3 +1,4 @@
+import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
@@ -36,16 +37,18 @@ const styles = stylex.create({
   },
   person: {
     flexShrink: 0,
+    fontSize: "0.875rem",
     height: "2.25rem",
     width: "2.25rem",
   },
   personFallback: {
     color: colors.background,
-    fontSize: "0.875rem",
+    fontSize: "inherit",
     fontWeight: 700,
   },
 })
-const toneFor = (id: string) =>
+
+export const toneFor = (id: string) =>
   TONES[Number.parseInt(id.replace(/-/g, "").slice(0, 8), 16) % TONES.length] ?? colors.primary
 
 export function GroupAvatar({
@@ -91,11 +94,13 @@ export function GroupAvatar({
 
 export function PersonAvatar({
   person,
+  sx,
 }: {
   person: { id: string; displayUsername: string; image: string | null }
+  sx?: Sx
 }) {
   return (
-    <Avatar sx={styles.person}>
+    <Avatar sx={[styles.person, sx]}>
       {person.image === null || person.image === "" ? null : (
         <AvatarImage alt="" src={person.image} />
       )}

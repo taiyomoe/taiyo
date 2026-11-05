@@ -8,12 +8,13 @@ type ChapterFilters = {
   contentRatings: ContentRating[]
   mediaId?: string | undefined
   groupId?: string | undefined
+  search?: string | undefined
   status?: "PUBLISHED" | "SCHEDULED"
 }
 
 export const selectVisibleChapters = (
   db: Kysely<DB>,
-  { contentRatings, mediaId, groupId, status = "PUBLISHED" }: ChapterFilters,
+  { contentRatings, mediaId, groupId, search, status = "PUBLISHED" }: ChapterFilters,
 ) =>
   db
     .selectFrom("chapters")
@@ -34,6 +35,27 @@ export const selectVisibleChapters = (
               .where("chapterGroups.groupId", "=", groupId),
           ),
     )
+    .where((eb) => {
+      if (search === undefined) {
+        return eb.and([])
+      }
+
+      const pattern = `%${search.replace(/[\\%_]/g, "\\$&")}%`
+      const number = /^(?:ch(?:apter)?\.?\s*)?(\d+(?:\.\d+)?)$/i.exec(search)?.[1]
+
+      return eb.or([
+        eb("chapters.title", "ilike", pattern),
+        ...(number === undefined ? [] : [eb("chapters.number", "=", Number(number))]),
+        eb.exists(
+          eb
+            .selectFrom("titles")
+            .select("titles.mediaId")
+            .whereRef("titles.mediaId", "=", "chapters.mediaId")
+            .where("titles.deletedAt", "is", null)
+            .where("titles.title", "ilike", pattern),
+        ),
+      ])
+    })
 
 export const selectLatestChapters = (db: Kysely<DB>, filters: ChapterFilters) =>
   selectVisibleChapters(db, filters)

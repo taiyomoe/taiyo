@@ -34,11 +34,17 @@ export * from "./models/group-creation-request-model"
 
 export * from "./models/group-invitation-model"
 
+export * from "./models/group-comment-model"
+
+export * from "./models/group-follow-model"
+
 export * from "./models/group-membership-model"
 
 export * from "./models/group-model"
 
 export * from "./models/group-ownership-request-model"
+
+export * from "./models/group-report-model"
 
 export * from "./models/media-model"
 

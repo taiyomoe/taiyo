@@ -85,7 +85,8 @@ export type PermissionsDefinition = ValidateDefinition<{
   ]
   ownershipRequest: ["create", "review"]
   groupCreationRequest: ["create", "review"]
-  comment: ["delete"]
+  groupReport: ["create", "review"]
+  comment: ["create", "delete"]
   user: [
     "list",
     { name: "ban"; type: UserTarget; required: true },

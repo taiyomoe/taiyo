@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
@@ -28,12 +29,13 @@ const styles = stylex.create({
   },
 })
 
-export function MediaBackdrop({ src }: { src: string | null }) {
+export function MediaBackdrop({ src, children }: { src: string | null; children?: ReactNode }) {
   return (
     <div aria-hidden sx={styles.backdrop}>
       {src === null ? null : (
         <img alt="" decoding="async" draggable={false} src={src} sx={styles.backdropImage} />
       )}
+      {children}
       <div sx={styles.shade} />
     </div>
   )

@@ -24,6 +24,7 @@ import { Route as DashboardChapterReviewsRouteImport } from './routes/dashboard/
 import { Route as DashboardGroupRequestsRouteImport } from './routes/dashboard/group-requests'
 import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/invitations'
 import { Route as DashboardMySuggestionsRouteImport } from './routes/dashboard/my-suggestions'
+import { Route as DashboardReportsRouteImport } from './routes/dashboard/reports'
 import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard/submissions'
 import { Route as DashboardUploadRouteImport } from './routes/dashboard/upload'
 import { Route as DashboardUsersRouteImport } from './routes/dashboard/users'
@@ -112,6 +113,11 @@ const DashboardMySuggestionsRoute = DashboardMySuggestionsRouteImport.update({
   path: '/my-suggestions',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardReportsRoute = DashboardReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardSubmissionsRoute = DashboardSubmissionsRouteImport.update({
   id: '/submissions',
   path: '/submissions',
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
@@ -248,6 +256,7 @@ export interface FileRoutesById {
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
@@ -279,6 +288,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
     | '/dashboard/my-suggestions'
+    | '/dashboard/reports'
     | '/dashboard/submissions'
     | '/dashboard/upload'
     | '/dashboard/users'
@@ -307,6 +317,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
     | '/dashboard/my-suggestions'
+    | '/dashboard/reports'
     | '/dashboard/submissions'
     | '/dashboard/upload'
     | '/dashboard/users'
@@ -336,6 +347,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
     | '/dashboard/my-suggestions'
+    | '/dashboard/reports'
     | '/dashboard/submissions'
     | '/dashboard/upload'
     | '/dashboard/users'
@@ -474,6 +486,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardMySuggestionsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/reports': {
+      id: '/dashboard/reports'
+      path: '/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof DashboardReportsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/submissions': {
       id: '/dashboard/submissions'
       path: '/submissions'
@@ -580,6 +599,7 @@ interface DashboardRouteRouteChildren {
   DashboardGroupRequestsRoute: typeof DashboardGroupRequestsRoute
   DashboardInvitationsRoute: typeof DashboardInvitationsRoute
   DashboardMySuggestionsRoute: typeof DashboardMySuggestionsRoute
+  DashboardReportsRoute: typeof DashboardReportsRoute
   DashboardSubmissionsRoute: typeof DashboardSubmissionsRoute
   DashboardUploadRoute: typeof DashboardUploadRoute
   DashboardUsersRoute: typeof DashboardUsersRoute
@@ -595,6 +615,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardGroupRequestsRoute: DashboardGroupRequestsRoute,
   DashboardInvitationsRoute: DashboardInvitationsRoute,
   DashboardMySuggestionsRoute: DashboardMySuggestionsRoute,
+  DashboardReportsRoute: DashboardReportsRoute,
   DashboardSubmissionsRoute: DashboardSubmissionsRoute,
   DashboardUploadRoute: DashboardUploadRoute,
   DashboardUsersRoute: DashboardUsersRoute,
