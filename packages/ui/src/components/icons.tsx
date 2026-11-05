@@ -1,5 +1,9 @@
 import type * as React from "react"
 import {
+  Share08Icon,
+  FavouriteIcon,
+  AtIcon,
+  SentIcon,
   Alert02Icon,
   AlertCircleIcon,
   Book02Icon,
@@ -446,3 +450,11 @@ export const Reply: (props: IconProps) => React.ReactElement = icon(ArrowTurnBac
 export const ImageAdd: (props: IconProps) => React.ReactElement = icon(ImageAdd02Icon)
 
 export const ImageMissing: (props: IconProps) => React.ReactElement = icon(ImageNotFound01Icon)
+
+export const Share: (props: IconProps) => React.ReactElement = icon(Share08Icon)
+
+export const Heart: (props: IconProps) => React.ReactElement = icon(FavouriteIcon)
+
+export const At: (props: IconProps) => React.ReactElement = icon(AtIcon)
+
+export const Send: (props: IconProps) => React.ReactElement = icon(SentIcon)

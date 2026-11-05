@@ -25,6 +25,7 @@ import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardActivityLogRouteImport } from './routes/dashboard/activity-log'
 import { Route as DashboardChapterReviewsRouteImport } from './routes/dashboard/chapter-reviews'
 import { Route as DashboardCommentReportsRouteImport } from './routes/dashboard/comment-reports'
+import { Route as DashboardGroupReportsRouteImport } from './routes/dashboard/group-reports'
 import { Route as DashboardGroupRequestsRouteImport } from './routes/dashboard/group-requests'
 import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/invitations'
 import { Route as DashboardMySuggestionsRouteImport } from './routes/dashboard/my-suggestions'
@@ -122,6 +123,11 @@ const DashboardChapterReviewsRoute = DashboardChapterReviewsRouteImport.update({
 const DashboardCommentReportsRoute = DashboardCommentReportsRouteImport.update({
   id: '/comment-reports',
   path: '/comment-reports',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardGroupReportsRoute = DashboardGroupReportsRouteImport.update({
+  id: '/group-reports',
+  path: '/group-reports',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardGroupRequestsRoute = DashboardGroupRequestsRouteImport.update({
@@ -233,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/comment-reports': typeof DashboardCommentReportsRoute
+  '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
@@ -268,6 +275,7 @@ export interface FileRoutesByTo {
   '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/comment-reports': typeof DashboardCommentReportsRoute
+  '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
@@ -305,6 +313,7 @@ export interface FileRoutesById {
   '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/comment-reports': typeof DashboardCommentReportsRoute
+  '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
@@ -343,6 +352,7 @@ export interface FileRouteTypes {
     | '/dashboard/activity-log'
     | '/dashboard/chapter-reviews'
     | '/dashboard/comment-reports'
+    | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
     | '/dashboard/my-suggestions'
@@ -378,6 +388,7 @@ export interface FileRouteTypes {
     | '/dashboard/activity-log'
     | '/dashboard/chapter-reviews'
     | '/dashboard/comment-reports'
+    | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
     | '/dashboard/my-suggestions'
@@ -414,6 +425,7 @@ export interface FileRouteTypes {
     | '/dashboard/activity-log'
     | '/dashboard/chapter-reviews'
     | '/dashboard/comment-reports'
+    | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
     | '/dashboard/my-suggestions'
@@ -569,6 +581,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCommentReportsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/group-reports': {
+      id: '/dashboard/group-reports'
+      path: '/group-reports'
+      fullPath: '/dashboard/group-reports'
+      preLoaderRoute: typeof DashboardGroupReportsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/group-requests': {
       id: '/dashboard/group-requests'
       path: '/group-requests'
@@ -716,6 +735,7 @@ interface DashboardRouteRouteChildren {
   DashboardActivityLogRoute: typeof DashboardActivityLogRoute
   DashboardChapterReviewsRoute: typeof DashboardChapterReviewsRoute
   DashboardCommentReportsRoute: typeof DashboardCommentReportsRoute
+  DashboardGroupReportsRoute: typeof DashboardGroupReportsRoute
   DashboardGroupRequestsRoute: typeof DashboardGroupRequestsRoute
   DashboardInvitationsRoute: typeof DashboardInvitationsRoute
   DashboardMySuggestionsRoute: typeof DashboardMySuggestionsRoute
@@ -734,6 +754,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardActivityLogRoute: DashboardActivityLogRoute,
   DashboardChapterReviewsRoute: DashboardChapterReviewsRoute,
   DashboardCommentReportsRoute: DashboardCommentReportsRoute,
+  DashboardGroupReportsRoute: DashboardGroupReportsRoute,
   DashboardGroupRequestsRoute: DashboardGroupRequestsRoute,
   DashboardInvitationsRoute: DashboardInvitationsRoute,
   DashboardMySuggestionsRoute: DashboardMySuggestionsRoute,

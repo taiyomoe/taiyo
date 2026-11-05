@@ -132,6 +132,18 @@ const groupErrors = {
     message: "You already have a pending request for a group with this name.",
     code: 409,
   },
+  GROUP_REPORT_EXISTS: {
+    message: "You already reported this group. Our moderators will look into it.",
+    code: 409,
+  },
+  GROUP_REPORT_NOT_FOUND: {
+    message: "The requested group report was not found.",
+    code: 404,
+  },
+  GROUP_REPORT_NOT_PENDING: {
+    message: "This report was already reviewed.",
+    code: 409,
+  },
   GROUP_CREATION_REQUEST_LIMIT: {
     message: "You have too many pending group creation requests. Wait for them to be reviewed.",
     code: 409,

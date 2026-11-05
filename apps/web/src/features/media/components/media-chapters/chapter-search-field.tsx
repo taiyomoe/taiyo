@@ -24,9 +24,11 @@ const styles = stylex.create({
 export function ChapterSearchField({
   value,
   onSearch,
+  placeholder = m.media_chapters_search(),
 }: {
   value: string
   onSearch: (q?: string) => void
+  placeholder?: string
 }) {
   const [draft, setDraft] = useState<string | null>(null)
   const [synced, setSynced] = useState(value)
@@ -61,13 +63,13 @@ export function ChapterSearchField({
         <Search {...stylex.props(styles.searchIcon)} />
       </InputGroupAddon>
       <InputGroupInput
-        aria-label={m.media_chapters_search()}
+        aria-label={placeholder}
         enterKeyHint="search"
         maxLength={100}
         onChange={(event) => {
           setDraft(event.target.value)
         }}
-        placeholder={m.media_chapters_search()}
+        placeholder={placeholder}
         type="search"
         value={draft ?? value}
       />

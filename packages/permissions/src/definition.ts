@@ -86,6 +86,7 @@ export type PermissionsDefinition = ValidateDefinition<{
   pageReport: ["create", "review"]
   ownershipRequest: ["create", "review"]
   groupCreationRequest: ["create", "review"]
+  groupReport: ["create", "review"]
   comment: ["create", "delete", "review", "removeImage"]
   user: [
     "list",

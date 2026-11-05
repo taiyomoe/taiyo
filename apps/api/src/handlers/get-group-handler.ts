@@ -1,8 +1,11 @@
+import { LANGUAGES, sql } from "@taiyomoe/db"
 import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkGroup } from "../middlewares/check-group-middleware"
+import { countThreadComments, findThreadId } from "../utils/comments"
+import { publishedChapters } from "../utils/group-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -22,6 +25,17 @@ const groupDetailSchema = z.object({
   youtube: z.string().nullable(),
   email: z.string().nullable(),
   owned: z.boolean().meta({ description: "Whether the group has an owner." }),
+  chapterCount: z.int().meta({ description: "Published chapters credited to the group." }),
+  mediaCount: z.int().meta({ description: "Medias with at least one chapter by the group." }),
+  memberCount: z.int(),
+  followerCount: z.int(),
+  commentCount: z.int(),
+  languages: z.enum(LANGUAGES).array().meta({
+    description: "Languages of the group's chapters, most used first.",
+  }),
+  lastUploadAt: z.iso.datetime().nullable().meta({
+    description: "When the group's latest chapter was released.",
+  }),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 })
@@ -48,13 +62,36 @@ export const getGroupHandler = new Hono().get(
   checkGroup(),
   async (c) => {
     const { db, group } = c.var
-    const owner = await db
-      .selectFrom("groupMemberships")
-      .select("userId")
-      .where("groupId", "=", group.id)
-      .where("role", "=", "OWNER")
-      .limit(1)
-      .executeTakeFirst()
+    const [members, chapters, languages, followers, commentCount] = await Promise.all([
+      db
+        .selectFrom("groupMemberships")
+        .where("groupId", "=", group.id)
+        .select((eb) => [
+          eb.fn.countAll<string>().as("count"),
+          eb.fn.countAll<string>().filterWhere("role", "=", "OWNER").as("owners"),
+        ])
+        .executeTakeFirstOrThrow(),
+      publishedChapters(db, group.id)
+        .select((eb) => [
+          eb.fn.countAll<string>().as("count"),
+          eb.fn.count<string>("chapters.mediaId").distinct().as("medias"),
+          eb.fn.max<Date | null>("chapters.createdAt").as("lastUploadAt"),
+        ])
+        .executeTakeFirstOrThrow(),
+      publishedChapters(db, group.id)
+        .groupBy("chapters.language")
+        .select(["chapters.language", sql<string>`count(*)`.as("count")])
+        .orderBy("count", "desc")
+        .execute(),
+      db
+        .selectFrom("groupFollows")
+        .where("groupId", "=", group.id)
+        .select((eb) => eb.fn.countAll<string>().as("count"))
+        .executeTakeFirstOrThrow(),
+      findThreadId(db, { type: "GROUP", id: group.id }).then((threadId) =>
+        countThreadComments(db, threadId),
+      ),
+    ])
 
     return c.ok({
       id: group.id,
@@ -71,7 +108,14 @@ export const getGroupHandler = new Hono().get(
       telegram: group.telegram,
       youtube: group.youtube,
       email: group.email,
-      owned: owner !== undefined,
+      owned: Number(members.owners) > 0,
+      chapterCount: Number(chapters.count),
+      mediaCount: Number(chapters.medias),
+      memberCount: Number(members.count),
+      followerCount: Number(followers.count),
+      commentCount,
+      languages: languages.map((row) => row.language),
+      lastUploadAt: chapters.lastUploadAt,
       createdAt: group.createdAt,
       updatedAt: group.updatedAt,
     })
