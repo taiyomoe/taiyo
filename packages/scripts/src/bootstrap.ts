@@ -23,6 +23,22 @@ const PORT_KEYS = [
   "RUSTFS_CONSOLE_PORT",
   "IMAGES_PORT",
 ] as const
+const RENAMED_MIGRATIONS = [
+  ["1780043078212_harmonize-ids", "1780049376194_harmonize-ids"],
+  ["1780044678212_refactor-users", "1780086468012_refactor-users"],
+  ["1780048678212_refactor-scans", "1780094442307_refactor-scans"],
+  [
+    "1781682265000_add-missing-indexes-and-invariants",
+    "1781674670477_add-missing-indexes-and-invariants",
+  ],
+  ["1781700000000_refactor-user-features", "1781735550001_refactor-user-features"],
+  ["1791883825000_add-search-outbox", "1791856194299_add-search-outbox"],
+  ["1792421146000_add-uploading-chapter-status", "1792423052343_add-uploading-chapter-status"],
+  [
+    "1792640123000_add-chapter-scheduling-and-links",
+    "1792709729434_add-chapter-scheduling-and-links",
+  ],
+] as const
 const SLOT_STRIDE = 10
 const SLOT_COUNT = 10
 const rootEnvPath = join(repoRoot, ".env")
@@ -227,22 +243,30 @@ try {
     step("Creating the S3 bucket")
     run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-s3"])
 
+    const psql = (query: string) =>
+      capture("docker", [
+        "compose",
+        "exec",
+        "-T",
+        "postgres",
+        "psql",
+        "-U",
+        requireEnvValue(root, "DATABASE_USERNAME", rootEnvPath),
+        "-d",
+        requireEnvValue(root, "DATABASE_NAME", rootEnvPath),
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-tAc",
+        query,
+      ])
+
     step("Migrating the database")
+    psql(
+      `DO $$ BEGIN IF to_regclass('kysely_migration') IS NOT NULL THEN UPDATE kysely_migration AS m SET name = r.new FROM (VALUES ${RENAMED_MIGRATIONS.map(([from, to]) => `('${from}', '${to}')`).join(", ")}) AS r(old, new) WHERE m.name = r.old; END IF; END $$`,
+    )
     run("pnpm", ["-F", "@taiyomoe/db", "kysely", "migrate", "latest"])
 
-    const userCount = capture("docker", [
-      "compose",
-      "exec",
-      "-T",
-      "postgres",
-      "psql",
-      "-U",
-      requireEnvValue(root, "DATABASE_USERNAME", rootEnvPath),
-      "-d",
-      requireEnvValue(root, "DATABASE_NAME", rootEnvPath),
-      "-tAc",
-      "select count(*) from users",
-    ])
+    const userCount = psql("select count(*) from users")
 
     if (userCount === "0") {
       step("Seeding the database")
