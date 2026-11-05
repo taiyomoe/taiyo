@@ -29,6 +29,11 @@ export const cacheClient = {
           return value
         }),
     },
+    stats: {
+      set: (key: string, value: unknown, ttl: number) =>
+        client.setex(`users:stats:${key}`, ttl, SuperJSON.stringify(value)),
+      get: <T>(key: string) => parseCache<T>(client.get(`users:stats:${key}`)),
+    },
     verificationEmailSentAt: {
       set: (id: string, value: Date) =>
         client.setex(`users:verification-email-sent-at:${id}`, HOUR, SuperJSON.stringify(value)),

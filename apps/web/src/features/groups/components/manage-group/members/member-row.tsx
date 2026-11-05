@@ -4,6 +4,8 @@ import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Confirmation } from "@/components/dialogs/confirm-dialog"
 import type { Group, GroupMember } from "@/features/groups/api/groups"
 import { ListRow } from "@/components/layout/dashboard-page"
+import { UserName } from "@/components/user-name/user-name"
+import { renderWithName } from "@/components/user-name/with-name"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { MemberActionsMenu } from "@/features/groups/components/manage-group/members/member-actions-menu"
 import { MemberPermissions } from "@/features/groups/components/member-permissions"
@@ -81,7 +83,7 @@ export function MemberRow({
           label: m.member_promote(),
           onClick: () => {
             onConfirm({
-              title: m.member_promote_title({ name: member.displayUsername }),
+              title: renderWithName(m.member_promote_title, member),
               description: m.member_promote_description(),
               confirmLabel: m.member_promote(),
               run: () => onAction("promote"),
@@ -126,7 +128,7 @@ export function MemberRow({
           destructive: true,
           onClick: () => {
             onConfirm({
-              title: m.member_remove_title({ name: member.displayUsername }),
+              title: renderWithName(m.member_remove_title, member),
               description: m.member_remove_description(),
               confirmLabel: m.member_remove(),
               destructive: true,
@@ -148,7 +150,9 @@ export function MemberRow({
       />
       <div sx={styles.main}>
         <div sx={styles.titleLine}>
-          <span sx={styles.name}>{member.displayUsername}</span>
+          <span sx={styles.name}>
+            <UserName effect={member.nameEffect} name={member.displayUsername} />
+          </span>
           <span sx={styles.username}>@{member.username}</span>
           <RoleBadge role={member.role} />
           {self ? <span sx={styles.muted}>· {m.member_you()}</span> : null}

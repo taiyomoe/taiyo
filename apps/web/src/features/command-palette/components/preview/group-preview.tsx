@@ -3,6 +3,7 @@ import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import type { GroupEntity } from "@/features/command-palette/lib/palette-command"
+import { UserName } from "@/components/user-name/user-name"
 import { previewStyles } from "@/features/command-palette/components/preview/preview-styles"
 import { groupMembersQueryOptions, groupQueryOptions } from "@/features/groups/api/groups"
 import { GroupAvatar, PersonAvatar } from "@/features/groups/components/group-avatar"
@@ -106,7 +107,9 @@ export function GroupPreview({ group }: { group: GroupEntity }) {
                   person={{ ...member, id: member.userId }}
                   sx={styles.memberAvatar}
                 />
-                <span sx={styles.memberName}>{member.displayUsername}</span>
+                <span sx={styles.memberName}>
+                  <UserName effect={member.nameEffect} name={member.displayUsername} />
+                </span>
                 {member.role === "OWNER" ? (
                   <span sx={previewStyles.subtle}>{m.group_role_owner()}</span>
                 ) : null}

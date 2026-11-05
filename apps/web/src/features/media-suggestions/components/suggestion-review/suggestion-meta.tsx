@@ -3,6 +3,7 @@ import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaSuggestionDetail } from "@/features/media-suggestions/api/media-suggestions"
 import { TimeAgo } from "@/components/time/time-ago"
+import { renderWithName } from "@/components/user-name/with-name"
 import { Uploader } from "@/features/chapters/components/uploader"
 import { SUGGESTION_STATUS } from "@/features/media-suggestions/lib/suggestion-status"
 import { m } from "@/paraglide/messages"
@@ -27,7 +28,7 @@ export function SuggestionMeta({ suggestion }: { suggestion: MediaSuggestionDeta
       <Uploader uploader={suggestion.author} />
       <TimeAgo date={suggestion.createdAt} />
       {suggestion.reviewer === null ? null : (
-        <span>{m.suggestion_reviewed_by({ name: suggestion.reviewer.displayUsername })}</span>
+        <span>{renderWithName(m.suggestion_reviewed_by, suggestion.reviewer)}</span>
       )}
     </div>
   )

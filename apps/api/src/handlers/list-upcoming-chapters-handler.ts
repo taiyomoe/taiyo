@@ -83,6 +83,7 @@ export const listUpcomingChaptersHandler = new Hono().get(
         "users.username as uploaderUsername",
         "users.displayUsername as uploaderDisplayUsername",
         "users.image as uploaderImage",
+        "users.nameEffect as uploaderNameEffect",
       ])
       .orderBy("chapters.publishAt", "asc")
       .orderBy("chapters.number", "asc")

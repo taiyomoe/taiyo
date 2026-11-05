@@ -264,6 +264,20 @@ const followErrors = {
     code: 404,
   },
 } as const
+const profileErrors = {
+  COSMETIC_LOCKED: {
+    message: "You haven't unlocked this cosmetic yet.",
+    code: 403,
+  },
+  INVALID_CROP: {
+    message: "The crop area is invalid for this image.",
+    code: 422,
+  },
+  PROFILE_COMMENT_NOT_FOUND: {
+    message: "The requested comment was not found.",
+    code: 404,
+  },
+} as const
 const historyErrors = {
   HISTORY_ENTRY_NOT_FOUND: {
     message: "No history entry exists for this chapter.",
@@ -349,6 +363,7 @@ export const errors = {
   ...ownershipErrors,
   ...userErrors,
   ...followErrors,
+  ...profileErrors,
   ...historyErrors,
   ...pageErrors,
   ...libraryErrors,

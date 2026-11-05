@@ -61,6 +61,7 @@ export const getMediaSuggestionHandler = new Hono().get(
               username: row.reviewerUsername,
               displayUsername: row.reviewerDisplayUsername,
               image: row.reviewerImage,
+              nameEffect: row.reviewerNameEffect,
             },
     })
   },

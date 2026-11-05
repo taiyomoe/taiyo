@@ -75,6 +75,7 @@ export const auditLogSchema = z.object({
         username: z.string(),
         displayUsername: z.string(),
         image: z.string().nullable(),
+        nameEffect: z.string().nullable(),
       })
       .nullable()
       .meta({ description: "The actor's current account, when the actor is an existing user." }),
@@ -121,6 +122,10 @@ export const auditLogSchema = z.object({
       id: z.uuid(),
       label: z.string().nullable(),
       image: z.url().nullable(),
+      nameEffect: z
+        .string()
+        .nullable()
+        .meta({ description: "The user's equipped name effect, for a user preview." }),
     })
     .nullable()
     .meta({
@@ -184,6 +189,7 @@ export const selectAuditLogs = (query: ReturnType<typeof fromAuditLogs>) =>
     "users.username as actorUsername",
     "users.displayUsername as actorDisplayUsername",
     "users.image as actorImage",
+    "users.nameEffect as actorNameEffect",
     sql<string | null>`"auditLogs".event->'audit'->'actor'->>'displayName'`.as("actorDisplayName"),
     sql<string | null>`"auditLogs".event->'audit'->'actor'->>'impersonating'`.as(
       "actorImpersonating",
@@ -217,6 +223,7 @@ export const toAuditLog = (row: AuditLogRow) => ({
             username: row.actorUsername,
             displayUsername: row.actorDisplayUsername,
             image: row.actorImage,
+            nameEffect: row.actorNameEffect,
           },
   },
   target: row.target,

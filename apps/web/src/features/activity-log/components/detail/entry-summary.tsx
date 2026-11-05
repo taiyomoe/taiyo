@@ -2,8 +2,13 @@ import * as stylex from "@stylexjs/stylex"
 import { ArrowRight } from "@taiyomoe/ui/components/icons"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { AuditLogEntry } from "@/features/activity-log/api/audit-logs"
+import { UserName } from "@/components/user-name/user-name"
 import { ActorAvatar, TargetThumb } from "@/features/activity-log/components/entity-avatar"
-import { getCategory, getTargetLabel } from "@/features/activity-log/lib/activity-log"
+import {
+  getCategory,
+  getTargetLabel,
+  getTargetNameEffect,
+} from "@/features/activity-log/lib/activity-log"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -59,7 +64,9 @@ export function EntrySummary({ entry }: { entry: AuditLogEntry }) {
       <div sx={styles.summaryPart}>
         <ActorAvatar actor={entry.actor} size="2.5rem" />
         <div sx={styles.summaryText}>
-          <span sx={styles.summaryName}>{name}</span>
+          <span sx={styles.summaryName}>
+            <UserName effect={entry.actor.user?.nameEffect} name={name} />
+          </span>
           <span sx={styles.summaryAction}>{entry.action}</span>
         </div>
       </div>
@@ -74,7 +81,9 @@ export function EntrySummary({ entry }: { entry: AuditLogEntry }) {
               targetType={entry.target.type}
             />
             <div sx={styles.summaryText}>
-              <span sx={styles.summaryName}>{getTargetLabel(entry)}</span>
+              <span sx={styles.summaryName}>
+                <UserName effect={getTargetNameEffect(entry)} name={getTargetLabel(entry)} />
+              </span>
               <span sx={styles.summaryAction}>{entry.target.type}</span>
             </div>
           </div>

@@ -59,6 +59,14 @@ function RouteComponent() {
                 when you ask to take ownership of a group or to create one.
               </p>
               <p sx={prose.p}>
+                <strong sx={prose.strong}>Your public profile.</strong> The avatar and banner you
+                upload, and whatever you choose to add about yourself: an about text, your city,
+                country, gender and birth date. Everything here is optional and shown publicly on
+                your profile, along with the title and name effect you pick and the comments you
+                leave on other people&apos;s profiles. Your reading and library statistics are shown
+                there too, unless you hide your library.
+              </p>
+              <p sx={prose.p}>
                 <strong sx={prose.strong}>Technical information.</strong> Your IP address, browser
                 and device type, and the pages you request, recorded in server logs. We use this to
                 keep the Service running, to investigate abuse, and to diagnose faults.

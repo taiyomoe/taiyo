@@ -25,6 +25,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import type { ManagedUser } from "@/features/users/api/users"
 import { ErrorAlert } from "@/components/feedback/error-alert"
+import { renderWithName } from "@/components/user-name/with-name"
 import { dialogStyles } from "@/features/users/components/users/dialog-styles"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
@@ -81,7 +82,11 @@ export function BanDialog({ user, onClose }: { user: ManagedUser | null; onClose
     >
       <DialogPopup>
         <DialogHeader>
-          <DialogTitle>{m.users_ban_title({ name: user?.displayUsername ?? "" })}</DialogTitle>
+          <DialogTitle>
+            {user === null
+              ? m.users_ban_title({ name: "" })
+              : renderWithName(m.users_ban_title, user)}
+          </DialogTitle>
           <DialogDescription>{m.users_ban_description()}</DialogDescription>
         </DialogHeader>
         <DialogPanel>

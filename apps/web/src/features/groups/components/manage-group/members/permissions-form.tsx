@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import type { GroupMember } from "@/features/groups/api/groups"
 import { ErrorAlert } from "@/components/feedback/error-alert"
+import { renderWithName } from "@/components/user-name/with-name"
 import { PermissionChecklist } from "@/features/groups/components/permission-checklist"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
@@ -62,9 +63,9 @@ export function PermissionsForm({
   return (
     <>
       <DialogHeader>
-        <DialogTitle>{m.member_permissions_title({ name: member.displayUsername })}</DialogTitle>
+        <DialogTitle>{renderWithName(m.member_permissions_title, member)}</DialogTitle>
         <DialogDescription>
-          {m.member_permissions_description({ name: member.displayUsername })}
+          {renderWithName(m.member_permissions_description, member)}
         </DialogDescription>
       </DialogHeader>
       <DialogPanel>

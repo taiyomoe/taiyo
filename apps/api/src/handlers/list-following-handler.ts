@@ -12,6 +12,7 @@ const followingItemSchema = z.object({
   username: z.string(),
   displayUsername: z.string(),
   image: z.string().nullable(),
+  nameEffect: z.string().nullable(),
 })
 
 export const listFollowingHandler = new Hono().get(
@@ -46,7 +47,13 @@ export const listFollowingHandler = new Hono().get(
         .innerJoin("users", "users.id", "userFollows.followingId")
         .where("userFollows.followerId", "=", targetUser.id)
         .where((eb) => eb.or([eb("users.banned", "is", null), eb("users.banned", "=", false)]))
-        .select(["users.id", "users.username", "users.displayUsername", "users.image"])
+        .select([
+          "users.id",
+          "users.username",
+          "users.displayUsername",
+          "users.image",
+          "users.nameEffect",
+        ])
         .orderBy("users.username", "asc")
         .limit(perPage)
         .offset((page - 1) * perPage)

@@ -16,6 +16,7 @@ export function useProfileCommands(profile: UserProfile, viewer: Session["user"]
     username: profile.username,
     displayUsername: profile.displayUsername,
     image: profile.image,
+    nameEffect: profile.nameEffect,
   }
   const following = profile.viewerFollows === true
   const follow: PaletteCommand[] =

@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { DashboardOverview } from "@/features/dashboard/api/overview"
+import { UserName } from "@/components/user-name/user-name"
 import { CardNote } from "@/features/dashboard/components/overview/card-note"
 import { formatTime } from "@/features/dashboard/lib/format"
 import { useNow } from "@/hooks/use-now"
@@ -95,7 +96,10 @@ export function RecentActivity({ overview: { recentActivity } }: { overview: Das
             </AvatarFallback>
           </Avatar>
           <p sx={styles.text}>
-            <span sx={styles.actor}>{activity.actor.displayUsername}</span> {describe(activity)}
+            <span sx={styles.actor}>
+              <UserName effect={activity.actor.nameEffect} name={activity.actor.displayUsername} />
+            </span>{" "}
+            {describe(activity)}
           </p>
           <time dateTime={activity.at} sx={styles.time}>
             {formatTime(activity.at, now)}

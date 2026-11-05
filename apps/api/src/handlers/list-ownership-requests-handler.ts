@@ -84,6 +84,7 @@ export const listOwnershipRequestsHandler = new Hono().get(
           "users.username",
           "users.displayUsername",
           "users.image",
+          "users.nameEffect",
         ])
         .orderBy("groupOwnershipRequests.createdAt", status === "PENDING" ? "asc" : "desc")
         .orderBy("groupOwnershipRequests.id", "asc")
@@ -111,6 +112,7 @@ export const listOwnershipRequestsHandler = new Hono().get(
           username: row.username,
           displayUsername: row.displayUsername,
           image: row.image,
+          nameEffect: row.nameEffect,
         },
         createdAt: row.createdAt,
         updatedAt: row.updatedAt,

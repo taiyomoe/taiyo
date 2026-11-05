@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { KqlSuggestion } from "@/features/activity-log/lib/kql-suggestions"
+import { UserName } from "@/components/user-name/user-name"
 import { PersonAvatar } from "@/features/activity-log/components/entity-avatar"
 import { FieldTypeChip } from "@/features/activity-log/components/fields"
 
@@ -75,7 +76,11 @@ export function KqlSuggestionOption({
         <FieldTypeChip kind={suggestion.kind} type={suggestion.field?.type ?? null} />
       )}
       <span sx={styles.optionLabel}>{suggestion.label}</span>
-      <span sx={styles.optionDescription}>{suggestion.description}</span>
+      <span sx={styles.optionDescription}>
+        {suggestion.description === null ? null : (
+          <UserName effect={suggestion.nameEffect} name={suggestion.description} />
+        )}
+      </span>
     </li>
   )
 }

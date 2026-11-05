@@ -1,34 +1,17 @@
+// StyleX only compiles the `sx` props of files that import it.
+// oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import type { Session } from "@/lib/session"
+import { MediaBackdrop } from "@/features/media/components/media-page/media-backdrop"
 import { userProfileQueryOptions } from "@/features/users/api/profile"
-import { ProfileGroups } from "@/features/users/components/profile/profile-groups"
+import { ProfileActions } from "@/features/users/components/profile/profile-actions"
+import { ProfileAvatar } from "@/features/users/components/profile/profile-avatar"
+import { ProfileBanner } from "@/features/users/components/profile/profile-banner"
 import { ProfileHeader } from "@/features/users/components/profile/profile-header"
+import { profileStyles } from "@/features/users/components/profile/profile-styles"
+import { ProfileTabs } from "@/features/users/components/profile/profile-tabs"
 import { useProfileCommands } from "@/features/users/hooks/use-profile-commands"
-import { m } from "@/paraglide/messages"
-import { getLocale } from "@/paraglide/runtime"
-
-const styles = stylex.create({
-  section: {
-    gap: "1rem",
-    display: "flex",
-    flexDirection: "column",
-  },
-  title: {
-    margin: 0,
-    fontSize: "1.125rem",
-    fontWeight: 600,
-  },
-  about: {
-    margin: 0,
-    color: colors.mutedForeground,
-    fontSize: "1rem",
-    lineHeight: 1.6,
-    whiteSpace: "pre-line",
-    maxWidth: "48rem",
-  },
-})
 
 export function ProfileContent({
   username,
@@ -38,21 +21,34 @@ export function ProfileContent({
   viewer: Session["user"] | null
 }) {
   const { data: profile } = useSuspenseQuery(userProfileQueryOptions(username))
-  const about =
-    profile.about[getLocale()] ??
-    profile.about.en ??
-    Object.values(profile.about).find((value) => value !== "")
+  const isOwner = viewer?.id === profile.id
 
   useProfileCommands(profile, viewer)
 
   return (
-    <>
-      <ProfileHeader profile={profile} viewer={viewer} />
-      {about === undefined || about === "" ? null : <p sx={styles.about}>{about}</p>}
-      <section sx={styles.section}>
-        <h2 sx={styles.title}>{m.profile_groups()}</h2>
-        <ProfileGroups groups={profile.groups} />
-      </section>
-    </>
+    <div sx={profileStyles.root}>
+      <div sx={profileStyles.backdrop}>
+        <MediaBackdrop src={profile.bannerUrl} />
+      </div>
+      <div sx={profileStyles.container}>
+        <ProfileBanner isOwner={isOwner} profile={profile} />
+      </div>
+      <div sx={profileStyles.layout}>
+        <aside sx={profileStyles.aside}>
+          <div sx={profileStyles.avatarSlot}>
+            <ProfileAvatar isOwner={isOwner} profile={profile} />
+          </div>
+          <div sx={profileStyles.actionsSlot}>
+            <ProfileActions profile={profile} viewer={viewer} />
+          </div>
+        </aside>
+        <div sx={profileStyles.main}>
+          <ProfileHeader profile={profile} />
+          <div sx={profileStyles.tabsSlot}>
+            <ProfileTabs profile={profile} viewer={viewer} />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

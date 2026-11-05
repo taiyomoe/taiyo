@@ -6,7 +6,8 @@ import {
   PutObjectCommand,
   type S3Client,
 } from "@taiyomoe/s3"
-import sharp from "sharp"
+import sharp, { type Sharp } from "sharp"
+import type { ImageCrop } from "./utils/image-crop"
 
 export type ImageExtension = "gif" | "jpg"
 
@@ -14,6 +15,8 @@ export type ImageTarget =
   | { kind: "cover"; mediaId: string; id: string }
   | { kind: "banner"; mediaId: string; id: string }
   | { kind: "staff"; staffId: string }
+  | { kind: "avatar"; userId: string }
+  | { kind: "profileBanner"; userId: string }
 
 export type ImageStoreDeps = {
   s3: S3Client
@@ -31,23 +34,97 @@ const deleteKeys = async ({ s3, s3Bucket }: ImageStoreDeps, keys: string[]) => {
   )
 }
 
+type CropRequest = { area: ImageCrop; width: number; height: number }
+
+/**
+ * Turns the crop's fractions of the transformed image into a pixel rectangle,
+ * clamped so rounding can never step outside the image.
+ */
+const toPixels = (area: ImageCrop, width: number, height: number) => {
+  const left = Math.min(Math.max(Math.round(area.x * width), 0), width - 1)
+  const top = Math.min(Math.max(Math.round(area.y * height), 0), height - 1)
+
+  return {
+    left,
+    top,
+    width: Math.max(Math.min(Math.round(area.width * width), width - left), 1),
+    height: Math.max(Math.min(Math.round(area.height * height), height - top), 1),
+  }
+}
+const mirror = (image: Sharp, area: ImageCrop) => image.flip(area.flipY).flop(area.flipX)
+// Each stage is materialised so the next one sees the real dimensions: libvips
+// rounds the bounding box of an arbitrary rotation its own way.
+const cropStill = async (input: Buffer, { area, width, height }: CropRequest) => {
+  const oriented = await mirror(sharp(input).autoOrient(), area).png().toBuffer()
+  const rotated = await sharp(oriented)
+    .rotate(area.rotation, { background: "#000" })
+    .png()
+    .toBuffer({ resolveWithObject: true })
+
+  return sharp(rotated.data)
+    .extract(toPixels(area, rotated.info.width, rotated.info.height))
+    .resize(width, height, { fit: "cover" })
+}
+const cropAnimated = async (input: Buffer, { area, width, height }: CropRequest) => {
+  const metadata = await sharp(input, { animated: true }).metadata()
+  const rect = toPixels(area, metadata.width, metadata.pageHeight ?? metadata.height)
+
+  if (!area.flipY) {
+    return sharp(input, { animated: true })
+      .flop(area.flipX)
+      .extract(rect)
+      .resize(width, height, { fit: "cover" })
+  }
+
+  // libvips stores the frames as one tall strip, so flipping it vertically
+  // would also play the animation backwards: flip each frame on its own.
+  const frames = await Promise.all(
+    Array.from({ length: metadata.pages ?? 1 }, (_, page) =>
+      sharp(input, { page })
+        .flip()
+        .flop(area.flipX)
+        .extract(rect)
+        .resize(width, height, { fit: "cover" })
+        .png()
+        .toBuffer(),
+    ),
+  )
+
+  return sharp(frames, { join: { animated: true } }).gif({
+    ...(metadata.delay === undefined ? {} : { delay: metadata.delay }),
+    ...(metadata.loop === undefined ? {} : { loop: metadata.loop }),
+  })
+}
+
 export const putImage = async (
   deps: ImageStoreDeps,
   target: ImageTarget,
   file: File,
-  { replaces }: { replaces?: string | null } = {},
+  {
+    replaces,
+    crop,
+  }: {
+    replaces?: string | null
+    crop?: { area: ImageCrop; width: number; height: number }
+  } = {},
 ): Promise<{ key: string; extension: ImageExtension }> => {
   const input = Buffer.from(await file.arrayBuffer())
   const { format } = await sharp(input).metadata()
   const { body, contentType, extension } =
     format === "gif"
       ? {
-          body: await sharp(input, { animated: true }).gif().toBuffer(),
+          body: await (
+            crop === undefined ? sharp(input, { animated: true }) : await cropAnimated(input, crop)
+          )
+            .gif()
+            .toBuffer(),
           contentType: "image/gif",
           extension: "gif" as const,
         }
       : {
-          body: await sharp(input).rotate().jpeg({ quality: config.images.quality }).toBuffer(),
+          body: await (crop === undefined ? sharp(input).rotate() : await cropStill(input, crop))
+            .jpeg({ quality: config.images.quality })
+            .toBuffer(),
           contentType: "image/jpeg",
           extension: "jpg" as const,
         }
@@ -55,6 +132,10 @@ export const putImage = async (
 
   if (target.kind === "staff") {
     key = `staffs/${target.staffId}/${crypto.randomUUID()}.${extension}`
+  } else if (target.kind === "avatar") {
+    key = `users/${target.userId}/avatars/${crypto.randomUUID()}.${extension}`
+  } else if (target.kind === "profileBanner") {
+    key = `users/${target.userId}/banners/${crypto.randomUUID()}.${extension}`
   } else if (target.kind === "cover") {
     key = getCoverKey(target.mediaId, `${target.id}.${extension}`)
   } else {
@@ -72,4 +153,9 @@ export const putImage = async (
   }
 
   return { key, extension }
+}
+
+/** Deletes a stored image once the surrounding transaction commits. */
+export const removeImage = (deps: ImageStoreDeps, key: string) => {
+  deps.afterCommit(() => deleteKeys(deps, [key]))
 }

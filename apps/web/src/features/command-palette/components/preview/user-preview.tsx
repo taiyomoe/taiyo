@@ -4,6 +4,7 @@ import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import type { UserEntity } from "@/features/command-palette/lib/palette-command"
+import { UserName } from "@/components/user-name/user-name"
 import { previewStyles } from "@/features/command-palette/components/preview/preview-styles"
 import { GroupAvatar, PersonAvatar } from "@/features/groups/components/group-avatar"
 import { userProfileQueryOptions } from "@/features/users/api/profile"
@@ -94,7 +95,9 @@ export function UserPreview({ user }: { user: UserEntity }) {
       <div sx={previewStyles.header}>
         <PersonAvatar fallbackSx={styles.avatarFallback} person={user} sx={styles.avatar} />
         <div sx={previewStyles.headerText}>
-          <span sx={previewStyles.heading}>{user.displayUsername}</span>
+          <span sx={previewStyles.heading}>
+            <UserName effect={profile?.nameEffect ?? user.nameEffect} name={user.displayUsername} />
+          </span>
           <span sx={previewStyles.subtle}>@{user.username}</span>
           {profile === undefined || profile.role === "USER" ? null : (
             <Badge size="sm" sx={styles.role} variant="outline">

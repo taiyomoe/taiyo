@@ -10,6 +10,7 @@ export type AuditLogPreview = {
   id: string
   label: string | null
   image: string | null
+  nameEffect: string | null
 }
 
 const UUID = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i
@@ -86,7 +87,7 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
       ? []
       : db
           .selectFrom("users")
-          .select(["id", "displayUsername", "image"])
+          .select(["id", "displayUsername", "image", "nameEffect"])
           .where("id", "in", userIds)
           .execute(),
   ])
@@ -97,6 +98,7 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
         kind: "group",
         id: group.id,
         label: group.name,
+        nameEffect: null,
         image:
           group.logo === null || /^https?:\/\//.test(group.logo)
             ? group.logo
@@ -110,11 +112,18 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
         id: staff.id,
         label: staff.name,
         image: staff.image === null ? null : getPublicImageUrl(staff.image),
+        nameEffect: null,
       },
     ]),
     ...users.map((user): [string, AuditLogPreview] => [
       `user:${user.id}`,
-      { kind: "user", id: user.id, label: user.displayUsername, image: user.image },
+      {
+        kind: "user",
+        id: user.id,
+        label: user.displayUsername,
+        image: user.image,
+        nameEffect: user.nameEffect,
+      },
     ]),
   ])
   const mediaPreview = (id: string): AuditLogPreview => ({
@@ -122,6 +131,7 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
     id,
     label: titles.get(id) ?? null,
     image: covers.get(id) ?? null,
+    nameEffect: null,
   })
   const previewOf = (reference: Reference | null): AuditLogPreview | null => {
     if (reference === null) {

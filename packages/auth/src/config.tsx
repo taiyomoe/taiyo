@@ -92,7 +92,10 @@ export const createAuth = ({
     },
     account: { accountLinking: { enabled: false } },
     user: {
-      additionalFields: { settings: { fieldName: "settings", type: "string", input: false } },
+      additionalFields: {
+        settings: { fieldName: "settings", type: "string", input: false },
+        nameEffect: { fieldName: "nameEffect", type: "string", required: false, input: false },
+      },
     },
     socialProviders: {
       discord: {
@@ -300,6 +303,7 @@ export const createAuth = ({
               banExpires: Date | null | undefined
               role: Role
               settings: UserSettings
+              nameEffect: string | null | undefined
             }),
           },
         }),

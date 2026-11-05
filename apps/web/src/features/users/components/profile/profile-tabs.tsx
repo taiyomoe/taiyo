@@ -1,0 +1,112 @@
+import * as stylex from "@stylexjs/stylex"
+import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
+import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { getRouteApi } from "@tanstack/react-router"
+import { lazy, Suspense } from "react"
+import type { UserProfile } from "@/features/users/api/profile"
+import type { ProfileTab } from "@/features/users/lib/profile-page"
+import type { Session } from "@/lib/session"
+import { AboutTab } from "@/features/users/components/profile/tabs/about-tab"
+import {
+  CommentsTab,
+  CommentsTabSkeleton,
+} from "@/features/users/components/profile/tabs/comments-tab"
+import { StatsTabSkeleton } from "@/features/users/components/profile/tabs/stats-skeleton"
+import {
+  UploadsTab,
+  UploadsTabSkeleton,
+} from "@/features/users/components/profile/tabs/uploads-tab"
+import { m } from "@/paraglide/messages"
+
+// Stats is the heaviest tab to render and the least visited: split it out.
+const StatsTab = lazy(async () => ({
+  default: (await import("@/features/users/components/profile/tabs/stats-tab")).StatsTab,
+}))
+const routeApi = getRouteApi("/users/$username")
+const styles = stylex.create({
+  tabs: {
+    gap: "1.5rem",
+    minWidth: 0,
+  },
+  tabList: {
+    scrollbarWidth: "none",
+    maxWidth: "100%",
+    overflowX: "auto",
+  },
+  tab: {
+    flexShrink: 0,
+  },
+  count: {
+    borderRadius: radius.full,
+    paddingInline: "0.4375rem",
+    backgroundColor: `color-mix(in srgb, ${colors.foreground} 8%, transparent)`,
+    color: colors.mutedForeground,
+    fontFamily: font.mono,
+    fontSize: "0.6875rem",
+    fontWeight: 600,
+    lineHeight: "1.125rem",
+    marginInlineStart: "0.375rem",
+  },
+})
+
+export function ProfileTabs({
+  profile,
+  viewer,
+}: {
+  profile: UserProfile
+  viewer: Session["user"] | null
+}) {
+  const { tab = "profile", page = 1 } = routeApi.useSearch()
+  const navigate = routeApi.useNavigate()
+
+  return (
+    <Tabs
+      onValueChange={(value: ProfileTab) => {
+        void navigate({
+          replace: true,
+          resetScroll: false,
+          search: { tab: value === "profile" ? undefined : value },
+        })
+      }}
+      sx={styles.tabs}
+      value={tab}
+    >
+      <TabsList sx={styles.tabList} variant="underline">
+        <TabsTab sx={styles.tab} value="profile">
+          {m.profile_tab_profile()}
+        </TabsTab>
+        <TabsTab sx={styles.tab} value="stats">
+          {m.profile_tab_stats()}
+        </TabsTab>
+        <TabsTab sx={styles.tab} value="uploads">
+          {m.profile_tab_uploads()}
+          {profile.uploadCount === 0 ? null : <span sx={styles.count}>{profile.uploadCount}</span>}
+        </TabsTab>
+        <TabsTab sx={styles.tab} value="comments">
+          {m.profile_tab_comments()}
+          {profile.commentCount === 0 ? null : (
+            <span sx={styles.count}>{profile.commentCount}</span>
+          )}
+        </TabsTab>
+      </TabsList>
+      <TabsPanel value="profile">
+        <AboutTab isOwner={viewer?.id === profile.id} profile={profile} />
+      </TabsPanel>
+      <TabsPanel value="stats">
+        <Suspense fallback={<StatsTabSkeleton />}>
+          <StatsTab profile={profile} />
+        </Suspense>
+      </TabsPanel>
+      <TabsPanel value="uploads">
+        <Suspense fallback={<UploadsTabSkeleton />}>
+          <UploadsTab page={page} profile={profile} />
+        </Suspense>
+      </TabsPanel>
+      <TabsPanel value="comments">
+        <Suspense fallback={<CommentsTabSkeleton />}>
+          <CommentsTab page={page} profile={profile} viewer={viewer} />
+        </Suspense>
+      </TabsPanel>
+    </Tabs>
+  )
+}

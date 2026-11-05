@@ -14,6 +14,8 @@ export * from "kysely"
 
 export * from "./constants"
 
+export * from "./cosmetics"
+
 export type { DB }
 
 export * from "./json-types"
@@ -64,6 +66,8 @@ export * from "./models/task-model"
 
 export * from "./models/title-model"
 
+export * from "./models/user-cosmetic-model"
+
 export * from "./models/user-follow-model"
 
 export * from "./models/user-history-model"
@@ -73,6 +77,8 @@ export * from "./models/user-library-entry-model"
 export * from "./models/user-list-item-model"
 
 export * from "./models/user-list-model"
+
+export * from "./models/user-profile-comment-model"
 
 export * from "./models/user-profile-model"
 

@@ -6,6 +6,7 @@ import { Link, useNavigate } from "@tanstack/react-router"
 import type { MyGroupInvitation } from "@/features/groups/api/groups"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { TimeAgo } from "@/components/time/time-ago"
+import { renderWithName } from "@/components/user-name/with-name"
 import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { InvitationGrants } from "@/features/groups/components/invitations/invitation-grants"
 import { api } from "@/lib/api"
@@ -96,7 +97,7 @@ export function InvitationCard({ invitation }: { invitation: MyGroupInvitation }
             {invitation.group.name}
           </Link>
           <div sx={styles.meta}>
-            <span>{m.invitation_invited_by({ name: invitation.inviter.displayUsername })}</span>
+            <span>{renderWithName(m.invitation_invited_by, invitation.inviter)}</span>
             <span aria-hidden>·</span>
             <span>
               <TimeAgo date={invitation.createdAt} />

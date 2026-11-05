@@ -7,6 +7,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
 import { DashboardPage } from "@/components/layout/dashboard-page"
+import { renderWithName } from "@/components/user-name/with-name"
 import {
   PageBodySkeleton,
   PageEyebrowSkeleton,
@@ -118,7 +119,7 @@ function SuggestionReview() {
     >
       <SuggestionMeta suggestion={suggestion} />
       {suggestion.note === null ? null : (
-        <SuggestionNote label={m.suggestion_note_from({ name: suggestion.author.displayUsername })}>
+        <SuggestionNote label={renderWithName(m.suggestion_note_from, suggestion.author)}>
           {suggestion.note}
         </SuggestionNote>
       )}

@@ -61,6 +61,7 @@ export type UserEntity = {
   username: string
   displayUsername: string
   image: string | null
+  nameEffect: string | null
 }
 
 export type PaletteEntity = TitleEntity | GroupEntity | UserEntity

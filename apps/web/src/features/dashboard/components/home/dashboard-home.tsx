@@ -22,12 +22,22 @@ const styles = stylex.create({
   },
 })
 
-export function DashboardHome({ name }: { name: string }) {
+export function DashboardHome({
+  name,
+  nameEffect,
+}: {
+  name: string
+  nameEffect: string | null | undefined
+}) {
   const { data } = useQuery(myOverviewQueryOptions)
 
   return (
     <div sx={styles.page}>
-      <DashboardIntro name={name} subtitle={m.dashboard_personal_subtitle()} />
+      <DashboardIntro
+        name={name}
+        nameEffect={nameEffect}
+        subtitle={m.dashboard_personal_subtitle()}
+      />
       <HomeQueues queues={data?.queues} />
       <HomeOverview data={data} />
     </div>

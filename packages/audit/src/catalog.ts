@@ -47,6 +47,16 @@ export const userAudit = defineAuditCatalog("user", {
   DELETE: { target: "user", severity: "critical" },
   FOLLOW: { target: "user", severity: "low" },
   UNFOLLOW: { target: "user", severity: "low" },
+  AVATAR_UPDATE: { target: "user", severity: "low" },
+  AVATAR_REMOVE: { target: "user", severity: "low" },
+  BANNER_UPDATE: { target: "user", severity: "low" },
+  BANNER_REMOVE: { target: "user", severity: "low" },
+  COSMETICS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
+})
+
+export const profileCommentAudit = defineAuditCatalog("user.comment", {
+  CREATE: { target: "user", severity: "low" },
+  DELETE: { target: "user", severity: "medium" },
 })
 
 export const mediaAudit = defineAuditCatalog("media", {
@@ -197,6 +207,7 @@ export const auditCatalogs = [
   authAudit,
   adminAudit,
   userAudit,
+  profileCommentAudit,
   mediaAudit,
   mediaSuggestionAudit,
   coverAudit,
@@ -226,6 +237,7 @@ declare module "evlog" {
     auth: typeof authAudit
     admin: typeof adminAudit
     user: typeof userAudit
+    profileComment: typeof profileCommentAudit
     media: typeof mediaAudit
     mediaSuggestion: typeof mediaSuggestionAudit
     cover: typeof coverAudit

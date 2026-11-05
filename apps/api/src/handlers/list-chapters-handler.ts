@@ -116,6 +116,7 @@ export const listChaptersHandler = new Hono().get(
         "users.username as uploaderUsername",
         "users.displayUsername as uploaderDisplayUsername",
         "users.image as uploaderImage",
+        "users.nameEffect as uploaderNameEffect",
         userId === undefined
           ? sql<boolean>`false`.as("read")
           : eb.exists(selectReadChapterNumber(db, userId)).$castTo<boolean>().as("read"),

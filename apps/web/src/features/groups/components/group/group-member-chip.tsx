@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Crown } from "@taiyomoe/ui/components/icons"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { GroupMember } from "@/features/groups/api/groups"
+import { UserName } from "@/components/user-name/user-name"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { m } from "@/paraglide/messages"
 
@@ -40,7 +41,9 @@ export function GroupMemberChip({ member }: { member: GroupMember }) {
           image: member.image,
         }}
       />
-      <span sx={styles.memberName}>{member.displayUsername}</span>
+      <span sx={styles.memberName}>
+        <UserName effect={member.nameEffect} name={member.displayUsername} />
+      </span>
       {member.role === "OWNER" ? (
         <Crown aria-label={m.group_role_owner()} {...stylex.props(styles.crown)} />
       ) : null}

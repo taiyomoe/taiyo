@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import type { ManagedUser } from "@/features/users/api/users"
 import { ErrorAlert } from "@/components/feedback/error-alert"
+import { renderWithName } from "@/components/user-name/with-name"
 import { sessionsKey, unwrapAuth } from "@/features/users/api/user-admin"
 import { dialogStyles } from "@/features/users/components/users/dialog-styles"
 import { getErrorMessage } from "@/lib/errors"
@@ -72,7 +73,7 @@ export function SetPasswordDialog({ user, onClose }: { user: ManagedUser; onClos
     >
       <DialogPopup>
         <DialogHeader>
-          <DialogTitle>{m.set_password_title({ name: user.displayUsername })}</DialogTitle>
+          <DialogTitle>{renderWithName(m.set_password_title, user)}</DialogTitle>
           <DialogDescription>{m.set_password_description()}</DialogDescription>
         </DialogHeader>
         <DialogPanel>

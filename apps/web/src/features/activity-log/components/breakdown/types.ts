@@ -8,4 +8,5 @@ export type FacetValue = {
   type?: string
   displayName?: string | null
   image?: string | null
+  nameEffect?: string | null
 }
