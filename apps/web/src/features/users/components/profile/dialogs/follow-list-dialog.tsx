@@ -79,10 +79,12 @@ const styles = stylex.create({
 export function FollowListDialog({
   userId,
   direction,
+  hiddenFor,
   onClose,
 }: {
   userId: string
   direction: "followers" | "following" | null
+  hiddenFor: string | null
   onClose: () => void
 }) {
   return (
@@ -102,7 +104,12 @@ export function FollowListDialog({
         </DialogHeader>
         <DialogPanel>
           {direction === null ? null : (
-            <FollowList direction={direction} onNavigate={onClose} userId={userId} />
+            <FollowList
+              direction={direction}
+              hiddenFor={direction === "following" ? hiddenFor : null}
+              onNavigate={onClose}
+              userId={userId}
+            />
           )}
         </DialogPanel>
       </DialogPopup>
@@ -113,14 +120,23 @@ export function FollowListDialog({
 function FollowList({
   userId,
   direction,
+  hiddenFor,
   onNavigate,
 }: {
   userId: string
   direction: "followers" | "following"
+  hiddenFor: string | null
   onNavigate: () => void
 }) {
-  const query = useInfiniteQuery(followListQueryOptions(userId, direction))
+  const query = useInfiniteQuery({
+    ...followListQueryOptions(userId, direction),
+    enabled: hiddenFor === null,
+  })
   const users = query.data?.pages.flatMap((page) => page.data) ?? []
+
+  if (hiddenFor !== null) {
+    return <p sx={styles.empty}>{m.profile_following_hidden({ name: hiddenFor })}</p>
+  }
 
   if (query.isPending) {
     return (

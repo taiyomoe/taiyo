@@ -48,7 +48,9 @@ function RouteComponent() {
                 <strong sx={prose.strong}>Account information.</strong> Your display name, email
                 address, and a hashed form of your password. We never store your password in a form
                 we can read. If you sign in with Google or Discord instead, we receive your email
-                address and basic profile information from them, not your password.
+                address and basic profile information from them, not your password. If you turn on
+                two-factor authentication, we store the secret your authenticator app uses and your
+                backup codes in encrypted form, and a cookie on any device you choose to trust.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Content you submit.</strong> Your library entries and

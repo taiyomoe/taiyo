@@ -23,6 +23,13 @@ export const authFormStyles = stylex.create({
     fontWeight: 700,
     textDecorationLine: { default: "none", ":hover": "underline" },
   },
+  textButton: {
+    padding: 0,
+    borderStyle: "none",
+    backgroundColor: "transparent",
+    cursor: "pointer",
+    fontFamily: "inherit",
+  },
   linkNoWrap: {
     fontSize: "0.875rem",
     whiteSpace: "nowrap",

@@ -4,6 +4,8 @@ import { Calendar, Crown, Globe, Sparkles, Tag, User } from "@taiyomoe/ui/compon
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UserProfile } from "@/features/users/api/profile"
 import { LazyCountryFlag } from "@/components/flags/lazy-country-flag"
+import { RichText } from "@/components/rich-text/rich-text"
+import { parseRichText } from "@/components/rich-text/rich-text-document"
 import { ProfileGroups } from "@/features/users/components/profile/profile-groups"
 import { profileStyles } from "@/features/users/components/profile/profile-styles"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
@@ -32,13 +34,6 @@ const styles = stylex.create({
     gap: "0.875rem",
     display: "flex",
     flexDirection: "column",
-  },
-  about: {
-    margin: 0,
-    fontSize: "1rem",
-    lineHeight: 1.65,
-    overflowWrap: "anywhere",
-    whiteSpace: "pre-line",
   },
   details: {
     margin: 0,
@@ -122,7 +117,7 @@ export function AboutTab({ profile, isOwner }: { profile: UserProfile; isOwner: 
                 : m.profile_about_empty({ name: profile.displayUsername })}
             </p>
           ) : (
-            <p sx={styles.about}>{about}</p>
+            <RichText collapsible document={parseRichText(about)} />
           )}
         </section>
         <section sx={styles.section}>

@@ -29,14 +29,16 @@ import { listMyMediaSuggestionsHandler } from "../handlers/list-my-media-suggest
 import { listProfileCommentsHandler } from "../handlers/list-profile-comments-handler"
 import { listUsersHandler } from "../handlers/list-users-handler"
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
+import { setMyPasswordHandler } from "../handlers/set-my-password-handler"
 import { setUserRoleHandler } from "../handlers/set-user-role-handler"
 import { unbanUserHandler } from "../handlers/unban-user-handler"
 import { unfollowUserHandler } from "../handlers/unfollow-user-handler"
-import { updateMyReaderSettingsHandler } from "../handlers/update-my-reader-settings-handler"
+import { updateMyAccountHandler } from "../handlers/update-my-account-handler"
 import { updateMyAvatarHandler } from "../handlers/update-my-avatar-handler"
 import { updateMyBannerHandler } from "../handlers/update-my-banner-handler"
 import { updateMyCosmeticsHandler } from "../handlers/update-my-cosmetics-handler"
 import { updateMyProfileHandler } from "../handlers/update-my-profile-handler"
+import { updateMyReaderSettingsHandler } from "../handlers/update-my-reader-settings-handler"
 import { updateMySettingsHandler } from "../handlers/update-my-settings-handler"
 import { upsertLibraryEntryHandler } from "../handlers/upsert-library-entry-handler"
 
@@ -71,6 +73,8 @@ export const usersRouter = new Hono()
   .route("/", listMyChapterSubmissionsHandler)
   .route("/", listMyMediaSuggestionsHandler)
   .route("/", updateMyProfileHandler)
+  .route("/", updateMyAccountHandler)
+  .route("/", setMyPasswordHandler)
   .route("/", getMyCosmeticsHandler)
   .route("/", updateMyCosmeticsHandler)
   .route("/", updateMyAvatarHandler)

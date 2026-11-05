@@ -8,6 +8,8 @@ export type AuthError = { code?: string | undefined; status: number }
 
 type AuthResponse = { error: AuthError | null }
 
+type TwoFactorBody = { code: string; trustDevice: boolean }
+
 export type AuthClient = {
   signIn: {
     email: (body: {
@@ -15,7 +17,7 @@ export type AuthClient = {
       password: string
       rememberMe: boolean
       callbackURL: string
-    }) => Promise<AuthResponse>
+    }) => Promise<AuthResponse & { data?: unknown }>
     social: (body: { provider: SocialProvider; callbackURL: string }) => Promise<AuthResponse>
   }
   signUp: {
@@ -25,6 +27,10 @@ export type AuthClient = {
     ) => Promise<AuthResponse>
   }
   signOut: () => Promise<AuthResponse>
+  twoFactor: {
+    verifyTotp: (body: TwoFactorBody) => Promise<AuthResponse>
+    verifyBackupCode: (body: TwoFactorBody) => Promise<AuthResponse>
+  }
 }
 
 export type AuthRouter = {
@@ -32,13 +38,18 @@ export type AuthRouter = {
   navigate: (options: { href: string }) => Promise<void>
 }
 
-export type AuthResult = { ok: true } | { ok: false; message: string }
+export type AuthResult = { ok: true; twoFactor?: true } | { ok: false; message: string }
 
 const messagesByCode: Record<string, () => string> = {
   INVALID_EMAIL_OR_PASSWORD: m.auth_error_invalid_credentials,
   EMAIL_NOT_VERIFIED: m.auth_error_email_not_verified,
   USER_ALREADY_EXISTS: m.auth_error_email_taken,
   USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: m.auth_error_email_taken,
+  INVALID_CODE: m.user_settings_2fa_invalid_code,
+  INVALID_BACKUP_CODE: m.user_settings_2fa_invalid_backup_code,
+  TOO_MANY_ATTEMPTS_REQUEST_NEW_CODE: m.user_settings_2fa_too_many_attempts,
+  ACCOUNT_TEMPORARILY_LOCKED: m.user_settings_2fa_locked,
+  INVALID_TWO_FACTOR_COOKIE: m.user_settings_2fa_expired,
   MISSING_RESPONSE: m.auth_error_captcha,
   VERIFICATION_FAILED: m.auth_error_captcha,
 }
@@ -55,6 +66,11 @@ export const getAuthErrorMessage = (error: AuthError) => {
 
 const toResult = ({ error }: AuthResponse): AuthResult =>
   error === null ? { ok: true } : { ok: false, message: getAuthErrorMessage(error) }
+const needsTwoFactor = (data: unknown) =>
+  typeof data === "object" &&
+  data !== null &&
+  "twoFactorRedirect" in data &&
+  data.twoFactorRedirect === true
 
 export const createAuthActions = ({
   client,
@@ -71,18 +87,41 @@ export const createAuthActions = ({
     queryClient.removeQueries({ queryKey: sessionQueryOptions.queryKey })
     await router.invalidate()
   }
+  const finishSignIn = async (result: AuthResult) => {
+    if (result.ok) {
+      await refreshSession()
+      await router.navigate({ href: callbackURL })
+    }
+
+    return result
+  }
 
   return {
     signIn: async (values: { email: string; password: string; rememberMe: boolean }) => {
-      const result = toResult(await client.signIn.email({ ...values, callbackURL }))
+      const response = await client.signIn.email({ ...values, callbackURL })
 
-      if (result.ok) {
-        await refreshSession()
-        await router.navigate({ href: callbackURL })
+      if (response.error === null && needsTwoFactor(response.data)) {
+        return { ok: true, twoFactor: true } satisfies AuthResult
       }
 
-      return result
+      return finishSignIn(toResult(response))
     },
+    verifyTwoFactor: async ({
+      code,
+      backup,
+      trustDevice,
+    }: {
+      code: string
+      backup: boolean
+      trustDevice: boolean
+    }) =>
+      finishSignIn(
+        toResult(
+          await (backup
+            ? client.twoFactor.verifyBackupCode({ code, trustDevice })
+            : client.twoFactor.verifyTotp({ code, trustDevice })),
+        ),
+      ),
     signUp: async (
       values: { name: string; email: string; password: string },
       { captchaToken }: { captchaToken: string | null },

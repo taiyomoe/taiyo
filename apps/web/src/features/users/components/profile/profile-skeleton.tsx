@@ -5,7 +5,7 @@ import { profileStyles } from "@/features/users/components/profile/profile-style
 
 const styles = stylex.create({
   banner: {
-    borderRadius: { default: 0, [breakpoints.md]: radius.xxl },
+    borderRadius: 0,
     aspectRatio: "3 / 1",
     maxHeight: "22rem",
     width: "100%",
@@ -42,9 +42,7 @@ const styles = stylex.create({
 export function ProfileSkeleton() {
   return (
     <div aria-hidden sx={profileStyles.root}>
-      <div sx={profileStyles.container}>
-        <Skeleton sx={styles.banner} />
-      </div>
+      <Skeleton sx={styles.banner} />
       <div sx={profileStyles.layout}>
         <aside sx={profileStyles.aside}>
           <div sx={profileStyles.avatarSlot}>

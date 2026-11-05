@@ -3,7 +3,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import type { Session } from "@/lib/session"
-import { MediaBackdrop } from "@/features/media/components/media-page/media-backdrop"
 import { userProfileQueryOptions } from "@/features/users/api/profile"
 import { ProfileActions } from "@/features/users/components/profile/profile-actions"
 import { ProfileAvatar } from "@/features/users/components/profile/profile-avatar"
@@ -27,12 +26,7 @@ export function ProfileContent({
 
   return (
     <div sx={profileStyles.root}>
-      <div sx={profileStyles.backdrop}>
-        <MediaBackdrop src={profile.bannerUrl} />
-      </div>
-      <div sx={profileStyles.container}>
-        <ProfileBanner isOwner={isOwner} profile={profile} />
-      </div>
+      <ProfileBanner isOwner={isOwner} profile={profile} />
       <div sx={profileStyles.layout}>
         <aside sx={profileStyles.aside}>
           <div sx={profileStyles.avatarSlot}>

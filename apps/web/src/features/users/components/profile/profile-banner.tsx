@@ -1,13 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Image } from "@taiyomoe/ui/components/icons"
-import {
-  breakpoints,
-  colors,
-  consts,
-  motion,
-  radius,
-  shadows,
-} from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, consts, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UserProfile } from "@/features/users/api/profile"
 import { ProfileImageMenu } from "@/features/users/components/profile/profile-image-menu"
 import { useProfileImageUpload } from "@/features/users/components/profile/use-profile-image-upload"
@@ -16,11 +9,9 @@ import { m } from "@/paraglide/messages"
 const TONES = ["#f59e0b", "#f43f5e", "#8b5cf6", "#0ea5e9", "#10b981"]
 const styles = stylex.create({
   banner: {
-    borderRadius: { default: 0, [breakpoints.md]: radius.xxl },
     overflow: "hidden",
     aspectRatio: "3 / 1",
     backgroundColor: colors.muted,
-    boxShadow: { default: "none", [breakpoints.md]: shadows.raised },
     position: "relative",
     maxHeight: "22rem",
     width: "100%",
@@ -36,7 +27,7 @@ const styles = stylex.create({
   },
   shade: {
     inset: 0,
-    backgroundImage: "linear-gradient(to bottom, transparent 55%, rgb(0 0 0 / 28%))",
+    backgroundImage: `linear-gradient(to bottom, transparent 60%, color-mix(in srgb, ${colors.background} 45%, transparent))`,
     pointerEvents: "none",
     position: "absolute",
   },
@@ -76,7 +67,7 @@ const styles = stylex.create({
     transitionDuration: motion.enter,
     transitionProperty: "opacity, transform, background-color",
     transitionTimingFunction: motion.easeOut,
-    right: "0.875rem",
+    right: { default: "0.875rem", [breakpoints.md]: "2rem" },
     top: "0.875rem",
   },
 })

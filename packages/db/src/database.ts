@@ -21,6 +21,7 @@ import type { Session } from "./models/session-model"
 import type { Staff } from "./models/staff-model"
 import type { Task } from "./models/task-model"
 import type { Title } from "./models/title-model"
+import type { TwoFactor } from "./models/two-factor-model"
 import type { UserCosmetic } from "./models/user-cosmetic-model"
 import type { UserFollow } from "./models/user-follow-model"
 import type { UserHistory } from "./models/user-history-model"
@@ -56,6 +57,7 @@ export type DB = {
   staffs: Staff
   tasks: Task
   titles: Title
+  twoFactors: TwoFactor
   userCosmetics: UserCosmetic
   userFollows: UserFollow
   userHistories: UserHistory

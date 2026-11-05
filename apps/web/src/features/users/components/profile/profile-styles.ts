@@ -6,15 +6,6 @@ export const profileStyles = stylex.create({
     isolation: "isolate",
     position: "relative",
   },
-  backdrop: {
-    display: { default: "none", [breakpoints.md]: "contents" },
-  },
-  container: {
-    marginInline: "auto",
-    paddingInline: { default: 0, [breakpoints.md]: "2rem" },
-    maxWidth: "88rem",
-    paddingTop: { default: 0, [breakpoints.md]: "1.25rem" },
-  },
   layout: {
     gridTemplateAreas: {
       [breakpoints.lg]: '"aside main"',
@@ -43,7 +34,7 @@ export const profileStyles = stylex.create({
     gridArea: { [breakpoints.lg]: null, default: "avatar" },
     position: "relative",
     zIndex: 1,
-    marginTop: { default: "-3.25rem", [breakpoints.lg]: "-7.5rem" },
+    marginTop: { default: "-3.25rem", [breakpoints.lg]: "-5.875rem" },
   },
   actionsSlot: {
     gridArea: { [breakpoints.lg]: null, default: "actions" },

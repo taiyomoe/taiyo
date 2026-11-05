@@ -11,6 +11,7 @@ export const authAudit = defineAuditCatalog("auth", {
   PASSWORD_RESET_REQUEST: { target: "user", severity: "high" },
   PASSWORD_RESET: { target: "user", severity: "high" },
   PASSWORD_CHANGE: { target: "user", severity: "high" },
+  PASSWORD_SET: { target: "user", severity: "high" },
   PASSWORD_VERIFY: { target: "user", severity: "medium" },
   EMAIL_CHANGE: { target: "user", severity: "high", requiresChanges: true },
   SESSION_UPDATE: { target: "user", severity: "low" },
@@ -19,6 +20,10 @@ export const authAudit = defineAuditCatalog("auth", {
   OTHER_SESSIONS_REVOKE: { target: "user", severity: "medium" },
   ACCOUNT_LINK: { target: "user", severity: "high" },
   ACCOUNT_UNLINK: { target: "user", severity: "high" },
+  TWO_FACTOR_ENABLE: { target: "user", severity: "high" },
+  TWO_FACTOR_DISABLE: { target: "user", severity: "high" },
+  TWO_FACTOR_VERIFY: { target: "user", severity: "medium" },
+  BACKUP_CODES_GENERATE: { target: "user", severity: "high" },
   TOKEN_REFRESH: { target: "user", severity: "low" },
   ACCESS_TOKEN_READ: { target: "user", severity: "medium" },
 })
@@ -42,6 +47,7 @@ export const adminAudit = defineAuditCatalog("admin", {
 
 export const userAudit = defineAuditCatalog("user", {
   PROFILE_UPDATE: { target: "user", severity: "medium", requiresChanges: true },
+  ACCOUNT_UPDATE: { target: "user", severity: "high", requiresChanges: true },
   SETTINGS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
   READER_SETTINGS_UPDATE: { target: "user", severity: "low" },
   DELETE: { target: "user", severity: "critical" },

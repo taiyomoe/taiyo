@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Edit, Sparkles } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { breakpoints, colors, font, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { getRouteApi } from "@tanstack/react-router"
+import { getRouteApi, Link } from "@tanstack/react-router"
 import { lazy, Suspense, useState } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { Session } from "@/lib/session"
@@ -10,11 +10,7 @@ import { FollowListDialog } from "@/features/users/components/profile/dialogs/fo
 import { FollowButton } from "@/features/users/components/profile/follow-button"
 import { m } from "@/paraglide/messages"
 
-// The owner-only dialogs are code-split: visitors never download them.
-const EditProfileDialog = lazy(async () => ({
-  default: (await import("@/features/users/components/profile/dialogs/edit-profile-dialog"))
-    .EditProfileDialog,
-}))
+// The owner-only dialog is code-split: visitors never download it.
 const CustomizeDialog = lazy(async () => ({
   default: (await import("@/features/users/components/profile/dialogs/customize-dialog"))
     .CustomizeDialog,
@@ -111,7 +107,7 @@ export function ProfileActions({
 }) {
   const navigate = routeApi.useNavigate()
   const [followList, setFollowList] = useState<"followers" | "following" | null>(null)
-  const [dialog, setDialog] = useState<"edit" | "customize" | null>(null)
+  const [customizing, setCustomizing] = useState(false)
   const isOwner = viewer?.id === profile.id
   const openTab = (tab: "uploads" | "comments") => {
     void navigate({ search: { tab }, replace: true, resetScroll: false })
@@ -121,18 +117,13 @@ export function ProfileActions({
     <div sx={styles.root}>
       {isOwner ? (
         <div sx={styles.buttons}>
-          <Button
-            onClick={() => {
-              setDialog("edit")
-            }}
-            variant="outline"
-          >
+          <Button render={<Link to="/settings" />} variant="outline">
             <Edit />
             {m.profile_edit()}
           </Button>
           <Button
             onClick={() => {
-              setDialog("customize")
+              setCustomizing(true)
             }}
           >
             <Sparkles />
@@ -189,28 +180,20 @@ export function ProfileActions({
       </div>
       <FollowListDialog
         direction={followList}
+        hiddenFor={profile.followingHidden ? profile.displayUsername : null}
         onClose={() => {
           setFollowList(null)
         }}
         userId={profile.id}
       />
-      {isOwner && dialog !== null ? (
+      {isOwner && customizing ? (
         <Suspense>
-          {dialog === "edit" ? (
-            <EditProfileDialog
-              onClose={() => {
-                setDialog(null)
-              }}
-              profile={profile}
-            />
-          ) : (
-            <CustomizeDialog
-              onClose={() => {
-                setDialog(null)
-              }}
-              profile={profile}
-            />
-          )}
+          <CustomizeDialog
+            onClose={() => {
+              setCustomizing(false)
+            }}
+            profile={profile}
+          />
         </Suspense>
       ) : null}
     </div>

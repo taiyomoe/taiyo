@@ -249,6 +249,18 @@ const userErrors = {
     message: "The requested user was not found.",
     code: 404,
   },
+  USERNAME_TAKEN: {
+    message: "This username is already taken.",
+    code: 409,
+  },
+  DISPLAY_NAME_TAKEN: {
+    message: "This display name is already taken.",
+    code: 409,
+  },
+  PASSWORD_ALREADY_SET: {
+    message: "Your account already has a password. Change it instead.",
+    code: 409,
+  },
 } as const
 const followErrors = {
   FOLLOW_SELF: {

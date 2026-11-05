@@ -33,6 +33,9 @@ const userProfileSchema = z.object({
   points: z.number().int(),
   followerCount: z.number().int(),
   followingCount: z.number().int(),
+  followingHidden: z
+    .boolean()
+    .meta({ description: "Whether the user hides who they follow from you." }),
   uploadCount: z.number().int().meta({ description: "Published chapters the user uploaded." }),
   commentCount: z.number().int().meta({ description: "Comments left on this profile." }),
   viewerFollows: z
@@ -89,6 +92,7 @@ export const getUserProfileHandler = new Hono().get(
         "users.image",
         "users.nameEffect",
         "users.role",
+        "users.settings",
         "userProfiles.banner",
         "userProfiles.about",
         "userProfiles.city",
@@ -194,6 +198,7 @@ export const getUserProfileHandler = new Hono().get(
       points: user.points ?? 0,
       followerCount: Number(counts.followers ?? 0),
       followingCount: Number(counts.following ?? 0),
+      followingHidden: user.settings.showFollowing === false && viewerId !== user.id,
       uploadCount: Number(counts.uploads ?? 0),
       commentCount: Number(counts.comments ?? 0),
       viewerFollows: viewer === null ? null : counts.viewerFollows === true,

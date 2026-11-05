@@ -1,6 +1,7 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
+import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { latestMediaUpdatesQueryOptions } from "@/features/chapters/api/chapters"
 import {
   profileCommentsQueryOptions,
@@ -44,10 +45,14 @@ export const Route = createFileRoute("/users/$username")({
     }
 
     const loaded = await profile.catch(() => null)
+    const about = loaded === null ? undefined : Object.values(loaded.about).find(Boolean)
 
     return {
       name: loaded?.displayUsername ?? null,
-      about: loaded === null ? null : (Object.values(loaded.about).find(Boolean) ?? null),
+      about:
+        about === undefined
+          ? null
+          : getRichTextParagraphs(parseRichText(about)).join(" ").trim() || null,
       image: loaded?.image ?? null,
     }
   },

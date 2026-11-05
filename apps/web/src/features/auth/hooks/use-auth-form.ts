@@ -36,6 +36,8 @@ export const useAuthForm = () => {
     onSocial,
     disabled: socialPending !== null,
     signIn: (values: Parameters<typeof actions.signIn>[0]) => run(() => actions.signIn(values)),
+    verifyTwoFactor: (values: Parameters<typeof actions.verifyTwoFactor>[0]) =>
+      run(() => actions.verifyTwoFactor(values)),
     signUp: (...args: Parameters<typeof actions.signUp>) => run(() => actions.signUp(...args)),
   }
 }

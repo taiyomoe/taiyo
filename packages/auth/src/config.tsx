@@ -2,12 +2,18 @@ import type { DB, Kysely, Role, UserSettings } from "@taiyomoe/db"
 import { kyselyAdapter } from "@better-auth/kysely-adapter"
 import { cacheClient } from "@taiyomoe/cache"
 import { config } from "@taiyomoe/config"
-import { MagicLinkEmail, ResetPasswordEmail, resend, SignUpEmail } from "@taiyomoe/email"
+import {
+  ChangeEmailEmail,
+  MagicLinkEmail,
+  ResetPasswordEmail,
+  resend,
+  SignUpEmail,
+} from "@taiyomoe/email"
 import { createPermissions, toRole } from "@taiyomoe/permissions"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
 import { APIError, createAuthMiddleware } from "better-auth/api"
-import { admin, captcha, customSession, magicLink, username } from "better-auth/plugins"
+import { admin, captcha, customSession, magicLink, twoFactor, username } from "better-auth/plugins"
 import { DateTime } from "luxon"
 import { z } from "zod"
 import { adminPluginRoles } from "./admin-roles"
@@ -90,8 +96,23 @@ export const createAuth = ({
         })
       },
     },
-    account: { accountLinking: { enabled: false } },
+    account: {
+      accountLinking: { enabled: true, disableImplicitLinking: true, allowDifferentEmails: true },
+    },
     user: {
+      changeEmail: {
+        enabled: true,
+        sendChangeEmailConfirmation: async (data) => {
+          await resend.emails.send({
+            from: "Taiyō <no-reply@taiyo.moe>",
+            to: data.user.email,
+            subject: "Confirm your email change",
+            react: (
+              <ChangeEmailEmail name={data.user.name} newEmail={data.newEmail} url={data.url} />
+            ),
+          })
+        },
+      },
       additionalFields: {
         settings: { fieldName: "settings", type: "string", input: false },
         nameEffect: { fieldName: "nameEffect", type: "string", required: false, input: false },
@@ -289,6 +310,7 @@ export const createAuth = ({
         endpoints: captchaEndpoints,
       }),
       admin({ defaultRole: "USER", adminRoles: ["ADMIN"], roles: adminPluginRoles }),
+      twoFactor({ issuer: "Taiyō", allowPasswordless: true }),
       customSession(({ session, user }) =>
         Promise.resolve({
           session,
@@ -304,6 +326,7 @@ export const createAuth = ({
               role: Role
               settings: UserSettings
               nameEffect: string | null | undefined
+              twoFactorEnabled: boolean | null | undefined
             }),
           },
         }),

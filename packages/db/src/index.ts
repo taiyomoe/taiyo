@@ -66,6 +66,8 @@ export * from "./models/task-model"
 
 export * from "./models/title-model"
 
+export * from "./models/two-factor-model"
+
 export * from "./models/user-cosmetic-model"
 
 export * from "./models/user-follow-model"

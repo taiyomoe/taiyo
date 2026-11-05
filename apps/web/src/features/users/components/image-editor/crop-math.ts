@@ -42,11 +42,10 @@ export const EDITOR_KINDS = {
 
 /**
  * Where the avatar sits over the banner on the profile page, as fractions of
- * the banner height: the editor draws it as a hint and the preview mocks it.
+ * the banner height: its diameter, its left inset, and how much of it overlaps
+ * the banner (half its diameter). The editor draws it as a hint and the preview mocks it.
  */
-// Where the profile avatar sits over the banner, as fractions of its height:
-// the avatar's diameter, its left inset, and how much of it overlaps the banner.
-export const AVATAR_OVER_BANNER = { diameter: 0.53, inset: 0.02, overlap: 0.34 } as const
+export const AVATAR_OVER_BANNER = { diameter: 0.53, inset: 0.09, overlap: 0.265 } as const
 
 export const MAX_ZOOM = 8
 

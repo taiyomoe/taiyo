@@ -7,12 +7,12 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
 import { DashboardPage } from "@/components/layout/dashboard-page"
-import { renderWithName } from "@/components/user-name/with-name"
 import {
   PageBodySkeleton,
   PageEyebrowSkeleton,
   PageTitleSkeleton,
 } from "@/components/layout/page-body-skeleton"
+import { renderWithName } from "@/components/user-name/with-name"
 import {
   suggestionQueryOptions,
   useReviewSuggestion,

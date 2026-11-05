@@ -4,20 +4,24 @@ import { m } from "../../paraglide/messages"
 import { type AuthClient, type AuthError, createAuthActions, getAuthErrorMessage } from "../auth"
 import { sessionQueryOptions } from "../session"
 
-const setup = (error: AuthError | null = null, callbackURL?: string) => {
+const setup = (error: AuthError | null = null, callbackURL?: string, signInData?: unknown) => {
   const calls: Array<{ method: string; args: unknown[] }> = []
   const navigation: string[] = []
   const respond =
-    (method: string) =>
+    (method: string, data?: unknown) =>
     (...args: unknown[]) => {
       calls.push({ method, args })
 
-      return Promise.resolve({ error })
+      return Promise.resolve({ error, data })
     }
   const client = {
-    signIn: { email: respond("signIn.email"), social: respond("signIn.social") },
+    signIn: { email: respond("signIn.email", signInData), social: respond("signIn.social") },
     signUp: { email: respond("signUp.email") },
     signOut: respond("signOut"),
+    twoFactor: {
+      verifyTotp: respond("twoFactor.verifyTotp"),
+      verifyBackupCode: respond("twoFactor.verifyBackupCode"),
+    },
   } satisfies AuthClient
   const queryClient = new QueryClient()
 
@@ -82,6 +86,51 @@ describe("createAuthActions", () => {
       message: m.auth_error_invalid_credentials(),
     })
     expect(hasCachedSession()).toBe(true)
+    expect(navigation).toEqual([])
+  })
+
+  it("stops before the session when the account asks for a second factor", async () => {
+    const { actions, navigation, hasCachedSession } = setup(null, "/settings", {
+      twoFactorRedirect: true,
+      twoFactorMethods: ["totp"],
+    })
+
+    expect(await actions.signIn(credentials)).toEqual({ ok: true, twoFactor: true })
+    expect(hasCachedSession()).toBe(true)
+    expect(navigation).toEqual([])
+  })
+
+  it("finishes the sign-in with an authenticator or backup code", async () => {
+    const { actions, calls, navigation, hasCachedSession } = setup(null, "/settings")
+
+    expect(
+      await actions.verifyTwoFactor({ code: "123456", backup: false, trustDevice: true }),
+    ).toEqual({ ok: true })
+    expect(
+      await actions.verifyTwoFactor({ code: "abcde-fghij", backup: true, trustDevice: false }),
+    ).toEqual({ ok: true })
+    expect(calls).toEqual([
+      { method: "twoFactor.verifyTotp", args: [{ code: "123456", trustDevice: true }] },
+      {
+        method: "twoFactor.verifyBackupCode",
+        args: [{ code: "abcde-fghij", trustDevice: false }],
+      },
+    ])
+    expect(hasCachedSession()).toBe(false)
+    expect(navigation).toEqual([
+      "invalidate",
+      "navigate /settings",
+      "invalidate",
+      "navigate /settings",
+    ])
+  })
+
+  it("explains a wrong second-factor code", async () => {
+    const { actions, navigation } = setup({ code: "INVALID_CODE", status: 401 })
+
+    expect(
+      await actions.verifyTwoFactor({ code: "000000", backup: false, trustDevice: false }),
+    ).toEqual({ ok: false, message: m.user_settings_2fa_invalid_code() })
     expect(navigation).toEqual([])
   })
 
