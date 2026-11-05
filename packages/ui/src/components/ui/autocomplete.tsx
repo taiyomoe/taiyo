@@ -119,7 +119,7 @@ const styles = stylex.create({
     display: "flex",
     position: "relative",
     maxWidth: "var(--available-width)",
-    minWidth: "var(--anchor-width)",
+    width: "var(--anchor-width)",
   },
   popup: {
     flex: "1",

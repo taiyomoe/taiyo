@@ -1,8 +1,11 @@
+// StyleX only compiles the `sx` props of files that import it.
+// oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { AlertTriangle } from "@taiyomoe/ui/components/icons"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { GroupCreationRequest } from "@/features/groups/api/groups"
+import { RichText } from "@/components/rich-text/rich-text"
+import { parseRichText } from "@/components/rich-text/rich-text-document"
 import { TimeAgo } from "@/components/time/time-ago"
 import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { ProofLinks } from "@/features/groups/components/group-requests/proof-links"
@@ -13,16 +16,6 @@ import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
-
-const styles = stylex.create({
-  about: {
-    margin: 0,
-    color: colors.mutedForeground,
-    fontSize: "0.9375rem",
-    lineHeight: 1.6,
-    whiteSpace: "pre-line",
-  },
-})
 
 export function CreationCard({ request }: { request: GroupCreationRequest }) {
   const queryClient = useQueryClient()
@@ -53,7 +46,9 @@ export function CreationCard({ request }: { request: GroupCreationRequest }) {
         <GroupAvatar id={request.id} name={request.name} />
         <span sx={requestCardStyles.targetName}>{request.name}</span>
       </div>
-      {request.description === null ? null : <p sx={styles.about}>{request.description}</p>}
+      {request.description === null ? null : (
+        <RichText collapsible document={parseRichText(request.description)} size="sm" />
+      )}
       <p sx={requestCardStyles.quote}>{request.message}</p>
       <ProofLinks links={request.proofLinks} />
       {request.nameTaken ? (

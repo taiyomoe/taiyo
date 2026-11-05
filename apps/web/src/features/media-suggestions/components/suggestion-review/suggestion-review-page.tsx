@@ -5,8 +5,13 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { DashboardPage } from "@/components/layout/dashboard-page"
+import {
+  PageBodySkeleton,
+  PageEyebrowSkeleton,
+  PageTitleSkeleton,
+} from "@/components/layout/page-body-skeleton"
 import {
   suggestionQueryOptions,
   useReviewSuggestion,
@@ -48,6 +53,20 @@ const styles = stylex.create({
 })
 
 export function SuggestionReviewPage() {
+  return (
+    <Suspense
+      fallback={
+        <DashboardPage eyebrow={<PageEyebrowSkeleton />} title={<PageTitleSkeleton />}>
+          <PageBodySkeleton blocks={["4rem", "16rem", "16rem"]} />
+        </DashboardPage>
+      }
+    >
+      <SuggestionReview />
+    </Suspense>
+  )
+}
+
+function SuggestionReview() {
   const { session } = routeApi.useRouteContext()
   const { suggestionId } = routeApi.useParams()
   const { user } = session

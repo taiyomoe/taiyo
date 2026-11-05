@@ -97,7 +97,6 @@ export function UploadPage() {
       <div sx={styles.layout}>
         <UploadSettings
           attempted={attempted}
-          can={can}
           groups={groups}
           language={language}
           media={media}

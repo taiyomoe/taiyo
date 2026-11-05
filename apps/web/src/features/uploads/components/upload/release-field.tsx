@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { DateTimePicker } from "@/components/fields/date-time-picker"
 import { AmountInput } from "@/features/uploads/components/upload/amount-input"
+import { releaseFieldQueries } from "@/features/uploads/components/upload/release-field.stylex"
 import {
   RELEASE_MODES,
   type ReleaseMode,
@@ -25,10 +26,14 @@ const styles = stylex.create({
     paddingInline: {
       default: "calc(0.375rem - 1px)",
       [breakpoints.sm]: "calc(0.5rem - 1px)",
+      [releaseFieldQueries.narrow]: "calc(0.25rem - 1px)",
     },
     flexGrow: 1,
     flexShrink: 1,
-    fontSize: "0.875rem",
+    fontSize: {
+      default: "0.875rem",
+      [releaseFieldQueries.narrow]: "0.75rem",
+    },
     minWidth: 0,
   },
   tabLabel: {

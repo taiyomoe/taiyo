@@ -5,6 +5,8 @@ import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaEditDraft } from "@/features/media-suggestions/lib/media-edit-model"
 import { getLanguageName, LanguageFlag } from "@/components/flags/flags"
+import { RichText } from "@/components/rich-text/rich-text"
+import { parseRichText } from "@/components/rich-text/rich-text-document"
 import { getTagName, STAFF_ROLE_LABELS } from "@/features/media-suggestions/lib/media-edit-labels"
 import {
   CONTENT_RATING_LABELS,
@@ -35,18 +37,6 @@ const styles = stylex.create({
   },
   text: {
     margin: 0,
-    overflowWrap: "anywhere",
-    whiteSpace: "pre-wrap",
-  },
-  synopsis: {
-    margin: 0,
-    overflow: "hidden",
-    WebkitBoxOrient: "vertical",
-    WebkitLineClamp: 8,
-    color: colors.foreground,
-    display: "-webkit-box",
-    fontSize: "0.9375rem",
-    lineHeight: 1.6,
     overflowWrap: "anywhere",
     whiteSpace: "pre-wrap",
   },
@@ -130,7 +120,7 @@ export const FIELD_PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => R
               <LanguageFlag language={language} />
               {getLanguageName(language)}
             </div>
-            <p sx={styles.synopsis}>{text}</p>
+            <RichText collapsible document={parseRichText(text)} size="sm" />
           </li>
         ))}
       </ul>

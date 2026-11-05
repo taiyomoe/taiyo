@@ -9,6 +9,7 @@ import {
 } from "@taiyomoe/ui/components/ui/empty"
 import type { ManagedUser } from "@/features/users/api/users"
 import { ListCard } from "@/components/layout/dashboard-page"
+import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import { UserRow } from "@/features/users/components/users/user-row"
 import { m } from "@/paraglide/messages"
 
@@ -23,10 +24,14 @@ export function UsersList({
   selfId: string
   onBan: (user: ManagedUser) => void
 }) {
-  if (users === undefined || users.length > 0) {
+  if (users === undefined) {
+    return <ListCardSkeleton actions={["13rem", "3.25rem", "2rem"]} media="person" rows={8} />
+  }
+
+  if (users.length > 0) {
     return (
       <ListCard>
-        {(users ?? []).map((row) => (
+        {users.map((row) => (
           <UserRow can={can} key={row.id} onBan={onBan} self={row.id === selfId} user={row} />
         ))}
       </ListCard>

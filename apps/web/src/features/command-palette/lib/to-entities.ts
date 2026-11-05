@@ -5,6 +5,7 @@ import type {
   TitleEntity,
   UserEntity,
 } from "@/features/command-palette/lib/palette-command"
+import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { getSynopsis } from "@/features/media/lib/media-labels"
 
 const SYNOPSIS_LENGTH = 220
@@ -22,7 +23,10 @@ export const toTitleEntity = (title: {
   id: title.id,
   title: title.title,
   matchedTitle: title.matchedTitle ?? null,
-  synopsis: getSynopsis(title.synopsis).join(" ").slice(0, SYNOPSIS_LENGTH),
+  synopsis: getRichTextParagraphs(parseRichText(getSynopsis(title.synopsis)))
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .slice(0, SYNOPSIS_LENGTH),
   coverUrl: title.coverUrl,
   type: title.type,
   year: title.startDate === null ? null : new Date(title.startDate).getUTCFullYear(),

@@ -242,7 +242,12 @@ export const Sheet: typeof SheetPrimitive.Root = SheetPrimitive.Root
 export const SheetPortal: typeof SheetPrimitive.Portal = SheetPrimitive.Portal
 
 export function SheetTrigger(props: SheetPrimitive.Trigger.Props): React.ReactElement {
-  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
+  return (
+    <SheetPrimitive.Trigger
+      {...(props.render === undefined && { "data-slot": "sheet-trigger" })}
+      {...props}
+    />
+  )
 }
 
 export function SheetClose(props: SheetPrimitive.Close.Props): React.ReactElement {

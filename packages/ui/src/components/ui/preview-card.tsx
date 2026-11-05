@@ -43,7 +43,7 @@ export function PreviewCardTrigger({
   return (
     <PreviewCardPrimitive.Trigger
       className={cn(styleProps.className, className)}
-      data-slot="preview-card-trigger"
+      {...(props.render === undefined && { "data-slot": "preview-card-trigger" })}
       style={styleProps.style}
       {...props}
     />

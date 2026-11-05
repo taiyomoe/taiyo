@@ -9,7 +9,9 @@ import {
 } from "@taiyomoe/ui/components/ui/empty"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
+import { Suspense } from "react"
 import { DashboardPage, ListCard } from "@/components/layout/dashboard-page"
+import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import {
   mySuggestionsQueryOptions,
@@ -21,12 +23,22 @@ import { m } from "@/paraglide/messages"
 const routeApi = getRouteApi("/dashboard/my-suggestions")
 
 export function MySuggestionsPage() {
+  return (
+    <DashboardPage subtitle={m.my_suggestions_subtitle()} title={m.dashboard_nav_my_suggestions()}>
+      <Suspense fallback={<ListCardSkeleton actions={["4.5rem"]} media="cover" />}>
+        <MySuggestionsContent />
+      </Suspense>
+    </DashboardPage>
+  )
+}
+
+function MySuggestionsContent() {
   const { page } = routeApi.useLoaderDeps()
   const { data } = useSuspenseQuery(mySuggestionsQueryOptions(page))
   const navigate = useNavigate({ from: "/dashboard/my-suggestions" })
 
   return (
-    <DashboardPage subtitle={m.my_suggestions_subtitle()} title={m.dashboard_nav_my_suggestions()}>
+    <>
       {data.data.length === 0 ? (
         <Empty>
           <EmptyHeader>
@@ -88,6 +100,6 @@ export function MySuggestionsPage() {
           />
         </>
       )}
-    </DashboardPage>
+    </>
   )
 }

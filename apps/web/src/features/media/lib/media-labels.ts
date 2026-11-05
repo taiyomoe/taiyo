@@ -128,16 +128,7 @@ const pickLocalized = (values: Partial<Record<string, string>>) =>
   values[getLocale()] ?? values.en ?? Object.values(values).find((value) => value !== undefined)
 
 export const getSynopsis = (synopsis: Media["synopsis"]) =>
-  (pickLocalized(synopsis)?.split(/\n\s*(?:-{3,}|_{3,}|\*{3,})\s*\n/)[0] ?? "")
-    .split(/\n\s*\n/)
-    .map((paragraph) =>
-      paragraph
-        .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-        .replace(/[*_`#>~]+/g, "")
-        .replace(/\s+/g, " ")
-        .trim(),
-    )
-    .filter((paragraph) => paragraph !== "")
+  pickLocalized(synopsis)?.split(/\n\s*(?:-{3,}|_{3,}|\*{3,})\s*\n/)[0] ?? ""
 
 export const getMainTitle = (titles: Media["titles"]) =>
   titles.find((title) => title.isMainTitle)?.title ?? null

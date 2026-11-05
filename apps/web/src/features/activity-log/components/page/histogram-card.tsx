@@ -42,7 +42,6 @@ export function HistogramCard({
 
   return (
     <DashboardCard
-      settings={false}
       subtitle={m.activity_histogram_subtitle({
         range: rangeLabel,
         interval: describeInterval(histogram?.interval ?? interval),

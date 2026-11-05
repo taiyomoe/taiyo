@@ -10,8 +10,6 @@ export const calendarDayMarker: Marker = stylex.defineMarker()
 
 export const comboboxPopupMarker: Marker = stylex.defineMarker()
 
-export const selectPopupMarker: Marker = stylex.defineMarker()
-
 export const menuPopupMarker: Marker = stylex.defineMarker()
 
 export const menuSwitchItemMarker: Marker = stylex.defineMarker()

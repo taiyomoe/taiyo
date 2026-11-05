@@ -301,7 +301,7 @@ export function MenuTrigger({
   return (
     <MenuPrimitive.Trigger
       className={cn(styleProps.className, className)}
-      data-slot="menu-trigger"
+      {...(props.render === undefined && { "data-slot": "menu-trigger" })}
       style={styleProps.style}
       {...props}
     >

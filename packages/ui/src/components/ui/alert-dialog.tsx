@@ -204,7 +204,12 @@ export const AlertDialog: typeof AlertDialogPrimitive.Root = AlertDialogPrimitiv
 export const AlertDialogPortal: typeof AlertDialogPrimitive.Portal = AlertDialogPrimitive.Portal
 
 export function AlertDialogTrigger(props: AlertDialogPrimitive.Trigger.Props): React.ReactElement {
-  return <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
+  return (
+    <AlertDialogPrimitive.Trigger
+      {...(props.render === undefined && { "data-slot": "alert-dialog-trigger" })}
+      {...props}
+    />
+  )
 }
 
 export function AlertDialogBackdrop({

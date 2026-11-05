@@ -8,8 +8,9 @@ import {
 } from "@taiyomoe/ui/components/ui/empty"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { DashboardPage, ListCard } from "@/components/layout/dashboard-page"
+import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import {
   type ChapterSubmission,
@@ -19,17 +20,23 @@ import {
 import { BulkReviewBar } from "@/features/uploads/components/chapter-reviews/bulk-review-bar"
 import { ReviewDialog } from "@/features/uploads/components/chapter-reviews/review-dialog"
 import { ReviewQueueRow } from "@/features/uploads/components/chapter-reviews/review-queue-row"
-import { usePermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
 const routeApi = getRouteApi("/dashboard/chapter-reviews")
 
 export function ChapterReviewsPage() {
-  const { session } = routeApi.useRouteContext()
+  return (
+    <DashboardPage subtitle={m.review_chapters_subtitle()} title={m.review_chapters_title()}>
+      <Suspense fallback={<ListCardSkeleton actions={["5rem"]} media="cover" />}>
+        <ChapterReviewsContent />
+      </Suspense>
+    </DashboardPage>
+  )
+}
+
+function ChapterReviewsContent() {
   const { page } = routeApi.useLoaderDeps()
-  const { user } = session
   const { data } = useSuspenseQuery(reviewQueueQueryOptions(page))
-  const can = usePermissions(user)
   const navigate = useNavigate({ from: "/dashboard/chapter-reviews" })
   const [reviewing, setReviewing] = useState<ChapterSubmission | null>(null)
   const [selected, setSelected] = useState<string[]>([])
@@ -37,7 +44,7 @@ export function ChapterReviewsPage() {
   const selection = selected.filter((id) => pageIds.includes(id))
 
   return (
-    <DashboardPage subtitle={m.review_chapters_subtitle()} title={m.review_chapters_title()}>
+    <>
       {data.data.length === 0 ? (
         <Empty>
           <EmptyHeader>
@@ -95,12 +102,11 @@ export function ChapterReviewsPage() {
         </>
       )}
       <ReviewDialog
-        can={can}
         onClose={() => {
           setReviewing(null)
         }}
         submission={reviewing}
       />
-    </DashboardPage>
+    </>
   )
 }

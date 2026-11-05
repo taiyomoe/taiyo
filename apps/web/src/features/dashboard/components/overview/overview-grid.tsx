@@ -156,7 +156,6 @@ export function OverviewGrid({
         {overview === undefined ? <CardSkeleton /> : <CatalogMix overview={overview} />}
       </DashboardCard>
       <DashboardCard
-        settings={false}
         subtitle={m.dashboard_attention_subtitle()}
         sx={styles.half}
         title={m.dashboard_attention_title()}
@@ -167,7 +166,6 @@ export function OverviewGrid({
         {overview === undefined ? <CardSkeleton /> : <ReadingHeatmap overview={overview} />}
       </DashboardCard>
       <DashboardCard
-        settings={false}
         subtitle={m.dashboard_activity_subtitle()}
         sx={styles.activity}
         title={m.dashboard_activity_title()}

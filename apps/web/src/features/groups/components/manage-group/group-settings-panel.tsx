@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import type { Group, GroupUpdateInput } from "@/features/groups/api/groups"
 import { ErrorAlert } from "@/components/feedback/error-alert"
-import { InputField, TextareaField } from "@/components/fields/form-field"
+import { InputField, RichTextField } from "@/components/fields/form-field"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
@@ -138,7 +138,7 @@ export function GroupSettingsPanel({ group }: { group: Group }) {
       </div>
       <ErrorAlert message={update.isError ? getErrorMessage(update.error) : null} />
       <InputField control={form.control} label={m.settings_name()} name="name" />
-      <TextareaField
+      <RichTextField
         control={form.control}
         label={m.settings_description_label()}
         name="description"

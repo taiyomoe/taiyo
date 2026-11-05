@@ -4,6 +4,7 @@ import { getRouteApi } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { AppShell } from "@/components/shell/app-shell"
 import { ChapterSource } from "@/features/chapters/components/chapter-source/chapter-source"
+import { ChapterSourceSkeleton } from "@/features/chapters/components/chapter-source/chapter-source-skeleton"
 
 const routeApi = getRouteApi("/chapters/$chapterId/source")
 const styles = stylex.create({
@@ -22,7 +23,7 @@ export function ChapterSourcePage() {
   return (
     <AppShell user={session?.user ?? null}>
       <div sx={styles.root}>
-        <Suspense>
+        <Suspense fallback={<ChapterSourceSkeleton />}>
           <ChapterSource chapterId={chapterId} />
         </Suspense>
       </div>

@@ -569,7 +569,12 @@ export function Drawer({
 export const DrawerPortal: typeof DrawerPrimitive.Portal = DrawerPrimitive.Portal
 
 export function DrawerTrigger(props: DrawerPrimitive.Trigger.Props): React.ReactElement {
-  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />
+  return (
+    <DrawerPrimitive.Trigger
+      {...(props.render === undefined && { "data-slot": "drawer-trigger" })}
+      {...props}
+    />
+  )
 }
 
 export function DrawerClose(props: DrawerPrimitive.Close.Props): React.ReactElement {

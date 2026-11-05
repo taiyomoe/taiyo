@@ -2,6 +2,7 @@ import {
   type Announcements,
   closestCenter,
   DndContext,
+  DragOverlay,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
@@ -16,8 +17,14 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable"
 import * as stylex from "@stylexjs/stylex"
-import { useId } from "react"
-import { type GridPage, SortablePage } from "@/features/uploads/components/sortable-page"
+import { useHydrated } from "@tanstack/react-router"
+import { useId, useState } from "react"
+import { createPortal } from "react-dom"
+import {
+  DraggedPage,
+  type GridPage,
+  SortablePage,
+} from "@/features/uploads/components/sortable-page"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -43,6 +50,8 @@ export function SortablePageGrid({
   onRemove?: (key: string) => void
 }) {
   const dndId = useId()
+  const hydrated = useHydrated()
+  const [activeKey, setActiveKey] = useState<string | null>(null)
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 180, tolerance: 6 } }),
@@ -50,6 +59,8 @@ export function SortablePageGrid({
   )
   const keys = pages.map((page) => page.key)
   const position = (id: UniqueIdentifier) => keys.indexOf(String(id)) + 1
+  const activeIndex = activeKey === null ? -1 : keys.indexOf(activeKey)
+  const activePage = pages[activeIndex]
   const announcements: Announcements = {
     onDragStart: ({ active }) => m.upload_pages_drag_start({ page: position(active.id) }),
     onDragOver: ({ active, over }) =>
@@ -71,10 +82,18 @@ export function SortablePageGrid({
       }}
       collisionDetection={closestCenter}
       id={dndId}
+      onDragCancel={() => {
+        setActiveKey(null)
+      }}
       onDragEnd={({ active, over }) => {
+        setActiveKey(null)
+
         if (over !== null && active.id !== over.id) {
           onReorder(arrayMove(keys, position(active.id) - 1, position(over.id) - 1))
         }
+      }}
+      onDragStart={({ active }) => {
+        setActiveKey(String(active.id))
       }}
       sensors={sensors}
     >
@@ -97,6 +116,20 @@ export function SortablePageGrid({
           ))}
         </ol>
       </SortableContext>
+      {hydrated
+        ? createPortal(
+            <DragOverlay>
+              {activePage === undefined ? null : (
+                <DraggedPage
+                  index={activeIndex}
+                  page={activePage}
+                  removable={onRemove !== undefined}
+                />
+              )}
+            </DragOverlay>,
+            document.body,
+          )
+        : null}
     </DndContext>
   )
 }

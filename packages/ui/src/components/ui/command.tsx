@@ -196,7 +196,12 @@ const styles = stylex.create({
 export function CommandDialogTrigger(
   props: CommandDialogPrimitive.Trigger.Props,
 ): React.ReactElement {
-  return <CommandDialogPrimitive.Trigger data-slot="command-dialog-trigger" {...props} />
+  return (
+    <CommandDialogPrimitive.Trigger
+      {...(props.render === undefined && { "data-slot": "command-dialog-trigger" })}
+      {...props}
+    />
+  )
 }
 
 export function CommandDialogBackdrop({

@@ -150,4 +150,4 @@ export function Textarea({
   )
 }
 
-export { FieldPrimitive }
+export { FieldPrimitive, mergeProps }

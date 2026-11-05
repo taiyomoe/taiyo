@@ -24,6 +24,12 @@ const styles = stylex.create({
     height: "100%",
     width: "100%",
   },
+  xs: {
+    borderRadius: radius.sm,
+    fontSize: "0.625rem",
+    height: "1.75rem",
+    width: "1.75rem",
+  },
   sm: {
     borderRadius: radius.md,
     fontSize: "0.875rem",
@@ -60,7 +66,7 @@ export function GroupAvatar({
   id: string
   name: string
   logoUrl?: string | null
-  size?: "sm" | "lg"
+  size?: "xs" | "sm" | "lg"
   sx?: Sx
 }) {
   const tone = toneFor(id)
@@ -73,7 +79,7 @@ export function GroupAvatar({
         backgroundColor: `color-mix(in srgb, ${tone} 20%, ${colors.card})`,
         color: `color-mix(in srgb, ${tone} 75%, ${colors.foreground})`,
       }}
-      sx={[styles.tile, size === "sm" ? styles.sm : styles.lg, sx]}
+      sx={[styles.tile, styles[size], sx]}
     >
       {name
         .split(/\s+/)

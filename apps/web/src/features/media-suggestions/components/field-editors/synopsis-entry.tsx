@@ -4,8 +4,8 @@ import { config } from "@taiyomoe/config"
 import { Close } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
-import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
 import { getLanguageName, LanguageFlag } from "@/components/flags/flags"
+import { RichTextEditor } from "@/components/rich-text/rich-text-editor"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -53,7 +53,7 @@ export function SynopsisEntry({
           <Close />
         </Button>
       </div>
-      <Textarea
+      <RichTextEditor
         maxLength={config.input.maxSynopsisLength}
         onChange={(event) => {
           onChange(event.target.value)

@@ -7,7 +7,7 @@ import {
   groupQueryOptions,
 } from "@/features/groups/api/groups"
 import { GROUP_CHAPTERS_PER_PAGE } from "@/features/groups/components/group/group-chapters"
-import { GroupPage } from "@/features/groups/components/group/group-page"
+import { GroupPage, GroupPageSkeleton } from "@/features/groups/components/group/group-page"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -52,4 +52,5 @@ export const Route = createFileRoute("/groups/$groupId")({
     ],
   }),
   component: GroupPage,
+  pendingComponent: GroupPageSkeleton,
 })

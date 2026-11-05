@@ -4,6 +4,7 @@ import { Close, Globe, Image, Link as LinkIcon } from "@taiyomoe/ui/components/i
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Field } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@taiyomoe/ui/components/ui/tooltip"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { ChapterRowMeta } from "@/features/uploads/components/upload/chapter-row-meta"
 import { isWebUrl, resolveLink } from "@/features/uploads/lib/chapter-batch/links"
@@ -123,26 +124,44 @@ export function ChapterTableRow({
         {row.source === null ? (
           <span />
         ) : (
-          <Button
-            aria-label={m.upload_row_link_toggle()}
-            aria-pressed={linkVisible}
-            onClick={() => {
-              onChange(linkVisible ? { link: "", linkOpen: false } : { linkOpen: true })
-            }}
-            size="icon-sm"
-            variant="ghost"
-          >
-            <LinkIcon />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger
+              delay={300}
+              render={
+                <Button
+                  aria-label={m.upload_row_link_toggle()}
+                  aria-pressed={linkVisible}
+                  onClick={() => {
+                    onChange(linkVisible ? { link: "", linkOpen: false } : { linkOpen: true })
+                  }}
+                  size="icon-sm"
+                  variant="ghost"
+                />
+              }
+            >
+              <LinkIcon />
+            </TooltipTrigger>
+            <TooltipPopup>
+              {linkVisible ? m.upload_row_link_remove() : m.upload_row_link_toggle()}
+            </TooltipPopup>
+          </Tooltip>
         )}
-        <Button
-          aria-label={m.upload_remove_chapter()}
-          onClick={onRemove}
-          size="icon-sm"
-          variant="ghost"
-        >
-          <Close />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger
+            delay={300}
+            render={
+              <Button
+                aria-label={m.upload_remove_chapter()}
+                onClick={onRemove}
+                size="icon-sm"
+                variant="ghost"
+              />
+            }
+          >
+            <Close />
+          </TooltipTrigger>
+          <TooltipPopup>{m.upload_remove_chapter()}</TooltipPopup>
+        </Tooltip>
       </div>
       {linkVisible ? (
         <Field invalid={linkInvalid}>

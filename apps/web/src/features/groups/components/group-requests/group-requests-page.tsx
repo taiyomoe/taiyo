@@ -22,6 +22,9 @@ const styles = stylex.create({
     fontVariantNumeric: "tabular-nums",
     marginInlineStart: "0.375rem",
   },
+  countPending: {
+    visibility: "hidden",
+  },
 })
 
 export function GroupRequestsPage() {
@@ -52,13 +55,21 @@ export function GroupRequestsPage() {
         <TabsList variant="underline">
           <TabsTab value="claims">
             {m.review_tab_claims()}
-            {claims.data === undefined ? null : (
+            {claims.data === undefined ? (
+              <span aria-hidden sx={[styles.count, styles.countPending]}>
+                0
+              </span>
+            ) : (
               <span sx={styles.count}>{claims.data.meta.total}</span>
             )}
           </TabsTab>
           <TabsTab value="creations">
             {m.review_tab_new_groups()}
-            {creations.data === undefined ? null : (
+            {creations.data === undefined ? (
+              <span aria-hidden sx={[styles.count, styles.countPending]}>
+                0
+              </span>
+            ) : (
               <span sx={styles.count}>{creations.data.meta.total}</span>
             )}
           </TabsTab>

@@ -3,8 +3,9 @@ import { config } from "@taiyomoe/config"
 import { breakpoints, colors, font, motion, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { FeaturedMedia } from "@/features/media/api/medias"
+import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { synopsisLines } from "@/features/home/components/featured/synopsis-lines.stylex"
-import { getLocale } from "@/paraglide/runtime"
+import { getSynopsis } from "@/features/media/lib/media-labels"
 
 const MAX_GENRES = 8
 const styles = stylex.create({
@@ -109,17 +110,6 @@ const styles = stylex.create({
     overflowWrap: "anywhere",
   },
 })
-const toPlainText = (markdown: string) =>
-  (markdown.split(/\n\s*(?:-{3,}|_{3,}|\*{3,})\s*\n/)[0] ?? "")
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/[*_`#>~]+/g, "")
-    .replace(/\s+/g, " ")
-    .trim()
-const getSynopsis = (synopsis: FeaturedMedia["synopsis"]) => {
-  const localized = synopsis[getLocale()] ?? synopsis.en ?? Object.values(synopsis)[0]
-
-  return localized === undefined ? "" : toPlainText(localized)
-}
 const isTagKey = (key: string): key is keyof typeof config.tags => key in config.tags
 const getGenres = (tags: string[]) =>
   tags
@@ -130,7 +120,9 @@ const getGenres = (tags: string[]) =>
     .map((tag) => tag.name.en)
 
 export function FeaturedSlideDetails({ media }: { media: FeaturedMedia }) {
-  const synopsis = getSynopsis(media.synopsis)
+  const synopsis = getRichTextParagraphs(parseRichText(getSynopsis(media.synopsis)))
+    .join(" ")
+    .replace(/\s+/g, " ")
   const genres = getGenres(media.tags)
 
   return (

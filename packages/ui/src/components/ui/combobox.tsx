@@ -126,10 +126,10 @@ const styles = stylex.create({
     },
     outlineStyle: "none",
     minWidth: "3rem",
-    paddingLeft: "0.5rem",
+    paddingLeft: "0.375rem",
   },
   chipsInputSm: {
-    paddingLeft: "0.375rem",
+    paddingLeft: "0.25rem",
   },
   positioner: {
     userSelect: "none",
@@ -146,7 +146,7 @@ const styles = stylex.create({
     display: "flex",
     position: "relative",
     maxWidth: "var(--available-width)",
-    minWidth: "var(--anchor-width)",
+    width: "var(--anchor-width)",
   },
   popup: {
     flex: "1",
@@ -174,7 +174,7 @@ const styles = stylex.create({
       default: "1rem",
       [breakpoints.sm]: "0.875rem",
     },
-    gridTemplateColumns: "1fr 1rem",
+    gridTemplateColumns: "minmax(0, 1fr) 1rem",
     opacity: {
       "[data-disabled]": 0.64,
       default: null,
@@ -248,7 +248,7 @@ const styles = stylex.create({
     scrollPaddingTop: "0.25rem",
   },
   chips: {
-    padding: "calc(0.25rem - 1px)",
+    padding: "calc(0.375rem - 1px)",
     borderColor: {
       default: colors.input,
       ":focus-within": colors.ring,
@@ -257,6 +257,7 @@ const styles = stylex.create({
     borderStyle: "solid",
     borderWidth: 1,
     gap: "0.25rem",
+    alignItems: "center",
     backgroundClip: "padding-box",
     backgroundColor: colors.field,
     boxShadow: {
@@ -296,7 +297,8 @@ const styles = stylex.create({
     paddingLeft: "0.5rem",
   },
   chip: {
-    borderRadius: "calc(0.7rem - 1px)",
+    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    gap: "0.25rem",
     alignItems: "center",
     backgroundColor: colors.accent,
     color: colors.accentForeground,
@@ -307,16 +309,19 @@ const styles = stylex.create({
     },
     fontWeight: 500,
     outlineStyle: "none",
-    minHeight: {
-      default: "1.75rem",
-      [breakpoints.sm]: "1.5rem",
+    height: {
+      default: "2rem",
+      [breakpoints.sm]: "1.75rem",
     },
-    paddingLeft: "0.5rem",
+    paddingLeft: "0.625rem",
+    paddingRight: "0.375rem",
   },
   chipRemove: {
-    paddingInline: "0.375rem",
+    alignItems: "center",
     cursor: "pointer",
+    display: "inline-flex",
     flexShrink: 0,
+    justifyContent: "center",
     opacity: {
       default: 0.8,
       ":hover": 1,
@@ -513,8 +518,8 @@ export function ComboboxPopup({
   portalProps?: ComboboxPrimitive.Portal.Props
   sx?: Sx
 }): React.ReactElement {
-  const { chipsRef } = React.useContext(ComboboxContext)
-  const anchor = anchorProp ?? chipsRef
+  const { chipsRef, multiple } = React.useContext(ComboboxContext)
+  const anchor = anchorProp ?? (multiple ? chipsRef : undefined)
   const positionerProps = stylex.props(styles.positioner)
   const popupProps = stylex.props(
     transitions.popup,

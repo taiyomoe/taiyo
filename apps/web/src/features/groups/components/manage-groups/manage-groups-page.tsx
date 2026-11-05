@@ -2,7 +2,9 @@ import { Search } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
-import { DashboardPage } from "@/components/layout/dashboard-page"
+import { Suspense } from "react"
+import { DashboardPage, DashboardSection } from "@/components/layout/dashboard-page"
+import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import {
   myGroupCreationRequestsQueryOptions,
   myGroupsQueryOptions,
@@ -14,10 +16,6 @@ import { RequestGroupDialog } from "@/features/groups/components/manage-groups/r
 import { m } from "@/paraglide/messages"
 
 export function ManageGroupsPage() {
-  const { data: groups } = useSuspenseQuery(myGroupsQueryOptions)
-  const { data: claims } = useSuspenseQuery(myOwnershipRequestsQueryOptions)
-  const { data: creations } = useSuspenseQuery(myGroupCreationRequestsQueryOptions)
-
   return (
     <DashboardPage
       actions={
@@ -32,8 +30,28 @@ export function ManageGroupsPage() {
       subtitle={m.my_groups_subtitle()}
       title={m.my_groups_title()}
     >
+      <Suspense
+        fallback={
+          <DashboardSection title={m.my_groups_section()}>
+            <ListCardSkeleton actions={["5rem"]} media="group" rows={2} />
+          </DashboardSection>
+        }
+      >
+        <ManageGroupsContent />
+      </Suspense>
+    </DashboardPage>
+  )
+}
+
+function ManageGroupsContent() {
+  const { data: groups } = useSuspenseQuery(myGroupsQueryOptions)
+  const { data: claims } = useSuspenseQuery(myOwnershipRequestsQueryOptions)
+  const { data: creations } = useSuspenseQuery(myGroupCreationRequestsQueryOptions)
+
+  return (
+    <>
       <MyGroupsSection groups={groups} />
       <MyRequestsSection claims={claims} creations={creations} />
-    </DashboardPage>
+    </>
   )
 }
