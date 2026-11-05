@@ -6,7 +6,7 @@ import { validateParam } from "../middlewares/validate-param-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { selectVisibleChapters } from "../utils/latest-chapters"
-import { selectReadChapterNumber } from "../utils/media-chapters"
+import { isOpenedHistory, selectReadChapterNumber } from "../utils/media-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, contentRatingsQuerySchema } from "../utils/schemas"
 
@@ -23,12 +23,18 @@ const progressSchema = z.object({
   readCount: z.int().meta({ description: "How many distinct chapter numbers you have read." }),
   totalCount: z.int().meta({ description: "How many distinct chapter numbers the media has." }),
   lastRead: chapterRefSchema
-    .extend({ readAt: z.iso.datetime().meta({ description: "When you last opened it." }) })
+    .extend({
+      readAt: z.iso.datetime().meta({ description: "When you last opened it." }),
+      completed: z.boolean().meta({ description: "Whether you finished it." }),
+      page: z.int().nullable().meta({
+        description: "The 1-based page you were last on, or null when none was recorded.",
+      }),
+    })
     .nullable()
     .meta({ description: "The chapter you opened most recently, if any." }),
   next: chapterRefSchema.nullable().meta({
     description:
-      "The first unread chapter after the one you read last, in its language when available, or the first chapter if you have read none. Null once you are caught up.",
+      "The first chapter after the one you read last whose number you have not finished, in its language when available, or the first chapter if you have read none. Null once you are caught up.",
   }),
 })
 
@@ -78,19 +84,31 @@ export const getReadingProgressHandler = new Hono().get(
       visible
         .innerJoin("userHistories", "userHistories.chapterId", "chapters.id")
         .where("userHistories.userId", "=", user.id)
-        .select([...chapterRef, "userHistories.updatedAt as readAt"])
+        .where(isOpenedHistory)
+        .select([
+          ...chapterRef,
+          "userHistories.updatedAt as readAt",
+          "userHistories.completed",
+          sql<
+            number | null
+          >`(select ${sql.ref("p.ord")}::int from unnest(${sql.ref("chapters.pages")}) with ordinality as p(page, ord) where ${sql.ref("p.page")}->>'id' = ${sql.ref("userHistories.pageId")}::text)`.as(
+            "page",
+          ),
+        ])
         .orderBy("userHistories.updatedAt", "desc")
         .orderBy("chapters.id", "desc")
         .limit(1)
         .executeTakeFirst(),
     ])
-    const candidates =
-      lastRead === undefined
-        ? visible
-        : visible
-            .where("chapters.number", ">", lastRead.number)
-            .where((eb) => eb.not(eb.exists(selectReadChapterNumber(db, user.id))))
-    const next = await candidates
+    const next = await visible
+      .$if(lastRead !== undefined, (qb) => qb.where("chapters.number", ">", lastRead?.number ?? 0))
+      .where((eb) =>
+        eb.not(
+          eb.exists(
+            selectReadChapterNumber(db, user.id).where("userHistories.completed", "=", true),
+          ),
+        ),
+      )
       .select(chapterRef)
       .orderBy("chapters.number", "asc")
       .$if(lastRead !== undefined, (qb) =>

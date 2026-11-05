@@ -6,6 +6,7 @@ import { range } from "remeda"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
+import { ChapterLink } from "@/features/chapters/components/chapter-link"
 import { ChapterNumber } from "@/features/chapters/components/chapter-number"
 import { MediaTitleLink } from "@/features/chapters/components/latest-updates/media-title-link"
 import { Cover, CoverSkeleton } from "@/features/media/components/cover"
@@ -102,7 +103,9 @@ export function LatestGrid({ chapters }: { chapters: LatestChapter[] }) {
           <div sx={styles.cardBody}>
             <MediaTitleLink chapter={chapter} sx={styles.cardTitle} />
             <div sx={styles.cardMeta}>
-              <ChapterNumber number={chapter.number} />
+              <ChapterLink chapter={chapter}>
+                <ChapterNumber number={chapter.number} />
+              </ChapterLink>
               <TimeAgo date={chapter.createdAt} />
             </div>
           </div>

@@ -7,6 +7,7 @@ import type { LatestChapter } from "@/features/chapters/api/chapters"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { ChapterGroups } from "@/features/chapters/components/chapter-groups"
+import { ChapterLink } from "@/features/chapters/components/chapter-link"
 import { ChapterNumber } from "@/features/chapters/components/chapter-number"
 import { latestStyles } from "@/features/chapters/components/latest-updates/latest-styles"
 import { MediaTitleLink } from "@/features/chapters/components/latest-updates/media-title-link"
@@ -123,7 +124,9 @@ export function LatestList({ chapters }: { chapters: LatestChapter[] }) {
           </Link>
           <div sx={[latestStyles.inline, styles.rowMain]}>
             <MediaTitleLink chapter={chapter} />
-            <ChapterNumber number={chapter.number} />
+            <ChapterLink chapter={chapter}>
+              <ChapterNumber number={chapter.number} />
+            </ChapterLink>
             {chapter.title === null ? null : (
               <span sx={latestStyles.chapterTitle}>{chapter.title}</span>
             )}

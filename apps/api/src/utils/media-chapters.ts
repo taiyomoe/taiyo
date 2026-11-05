@@ -52,3 +52,5 @@ export const selectReadChapterNumber = (db: Kysely<DB>, userId: string) =>
     .where("read.status", "=", "PUBLISHED")
     .where("read.mediaId", "=", sql.ref<string>("chapters.mediaId"))
     .where("read.number", "=", sql.ref<number>("chapters.number"))
+
+export const isOpenedHistory = sql<boolean>`(not ${sql.ref("userHistories.completed")} or ${sql.ref("userHistories.pageId")} is not null)`

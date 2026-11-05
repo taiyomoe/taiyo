@@ -300,6 +300,7 @@ export function SheetPopup({
   className,
   children,
   showCloseButton = true,
+  showBackdrop = true,
   side = "right",
   variant = "default",
   closeProps,
@@ -308,6 +309,7 @@ export function SheetPopup({
   ...props
 }: SheetPrimitive.Popup.Props & {
   showCloseButton?: boolean
+  showBackdrop?: boolean
   side?: SheetSide
   variant?: SheetVariant
   closeProps?: SheetPrimitive.Close.Props
@@ -323,7 +325,7 @@ export function SheetPopup({
 
   return (
     <SheetPortal {...portalProps}>
-      <SheetBackdrop />
+      {showBackdrop ? <SheetBackdrop /> : null}
       <SheetViewport side={side} variant={variant}>
         <SheetPrimitive.Popup
           className={cn(styleProps.className, className)}

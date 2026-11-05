@@ -5,10 +5,12 @@ import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyOverviewHandler } from "../handlers/get-my-overview-handler"
+import { getMyReaderSettingsHandler } from "../handlers/get-my-reader-settings-handler"
 import { getReadingProgressHandler } from "../handlers/get-reading-progress-handler"
 import { getUserProfileHandler } from "../handlers/get-user-profile-handler"
 import { listFollowersHandler } from "../handlers/list-followers-handler"
 import { listFollowingHandler } from "../handlers/list-following-handler"
+import { listMyBookmarksHandler } from "../handlers/list-my-bookmarks-handler"
 import { listMyChapterSubmissionsHandler } from "../handlers/list-my-chapter-submissions-handler"
 import { listMyFeedHandler } from "../handlers/list-my-feed-handler"
 import { listMyGroupCreationRequestsHandler } from "../handlers/list-my-group-creation-requests-handler"
@@ -23,6 +25,7 @@ import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-hand
 import { setUserRoleHandler } from "../handlers/set-user-role-handler"
 import { unbanUserHandler } from "../handlers/unban-user-handler"
 import { unfollowUserHandler } from "../handlers/unfollow-user-handler"
+import { updateMyReaderSettingsHandler } from "../handlers/update-my-reader-settings-handler"
 import { updateMySettingsHandler } from "../handlers/update-my-settings-handler"
 import { upsertLibraryEntryHandler } from "../handlers/upsert-library-entry-handler"
 
@@ -48,6 +51,9 @@ export const usersRouter = new Hono()
   .route("/", createListHandler)
   .route("/", listMyListsHandler)
   .route("/", updateMySettingsHandler)
+  .route("/", getMyReaderSettingsHandler)
+  .route("/", listMyBookmarksHandler)
+  .route("/", updateMyReaderSettingsHandler)
   .route("/", listMyGroupsHandler)
   .route("/", listMyGroupInvitationsHandler)
   .route("/", listMyGroupCreationRequestsHandler)

@@ -13,6 +13,9 @@ import type { GroupOwnershipRequest } from "./models/group-ownership-request-mod
 import type { Media } from "./models/media-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
+import type { PageBookmark } from "./models/page-bookmark-model"
+import type { PageReport } from "./models/page-report-model"
+import type { ReadingReward } from "./models/reading-reward-model"
 import type { SearchOutboxEntry } from "./models/search-outbox-model"
 import type { Session } from "./models/session-model"
 import type { Staff } from "./models/staff-model"
@@ -43,6 +46,9 @@ export type DB = {
   mediaStaffs: MediaStaff
   mediaSuggestions: MediaSuggestion
   medias: Media
+  pageBookmarks: PageBookmark
+  pageReports: PageReport
+  readingRewards: ReadingReward
   searchOutbox: SearchOutboxEntry
   sessions: Session
   staffs: Staff

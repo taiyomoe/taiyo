@@ -270,6 +270,24 @@ const historyErrors = {
     code: 404,
   },
 } as const
+const pageErrors = {
+  PAGE_NOT_FOUND: {
+    message: "The chapter has no page with this id.",
+    code: 404,
+  },
+  PAGE_REPORT_EXISTS: {
+    message: "You already reported this page, and the report is still open.",
+    code: 409,
+  },
+  PAGE_REPORT_NOT_FOUND: {
+    message: "The requested page report was not found.",
+    code: 404,
+  },
+  PAGE_REPORT_CLOSED: {
+    message: "This page report is already closed.",
+    code: 409,
+  },
+} as const
 const libraryErrors = {
   LIBRARY_ENTRY_NOT_FOUND: {
     message: "No library entry exists for this media.",
@@ -332,6 +350,7 @@ export const errors = {
   ...userErrors,
   ...followErrors,
   ...historyErrors,
+  ...pageErrors,
   ...libraryErrors,
   ...listErrors,
   ...imageErrors,

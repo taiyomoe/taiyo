@@ -55,14 +55,18 @@ export default async (config: FullConfig) => {
   const browser = await chromium.launch()
   const page = await browser.newPage(baseURL === undefined ? {} : { baseURL })
 
-  for (const path of ["/", "/media/00000000-0000-0000-0000-000000000000"]) {
+  for (const [path, root] of [
+    ["/", "header"],
+    ["/media/00000000-0000-0000-0000-000000000000", "header"],
+    ["/chapters/2a512ed1-dee2-4742-b0c1-f5979ad6b289", "main"],
+  ] as const) {
     await page.goto(path, { timeout: 180_000 })
     await page.waitForFunction(
-      () =>
-        Object.keys(document.querySelector("header") ?? {}).some((key) =>
+      (selector) =>
+        Object.keys(document.querySelector(selector) ?? {}).some((key) =>
           key.startsWith("__react"),
         ),
-      null,
+      root,
       { timeout: 180_000 },
     )
   }

@@ -21,7 +21,7 @@ export default defineConfig({
   categories: {
     correctness: "error",
   },
-  ignorePatterns: [".claude/**", "apps/web/src/routeTree.gen.ts"],
+  ignorePatterns: [".claude/**", "apps/web/public/**", "apps/web/src/routeTree.gen.ts"],
   overrides: [
     {
       files: ["./packages/scripts/src/**/*.ts"],

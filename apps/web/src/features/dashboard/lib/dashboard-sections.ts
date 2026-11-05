@@ -67,6 +67,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/chapter-reviews",
         visible: (can) => can("chapter.review"),
       },
+      {
+        label: m.dashboard_nav_page_reports,
+        icon: Flag,
+        to: "/dashboard/page-reports",
+        visible: (can) => can("pageReport.review"),
+      },
     ],
   },
   {

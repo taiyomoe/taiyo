@@ -29,6 +29,7 @@
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/permissions": "workspace:^",
+    "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/ui": "workspace:^",
     "@tanstack/charts": "^1.1.0",
     "@tanstack/react-devtools": "^0.10.13",

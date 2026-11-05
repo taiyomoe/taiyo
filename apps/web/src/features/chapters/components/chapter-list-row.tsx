@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { Check, Clock, ExternalLink, Globe } from "@taiyomoe/ui/components/icons"
+import { Check, Clock, ExternalLink, Eye, EyeOff, Globe } from "@taiyomoe/ui/components/icons"
 import { breakpoints, colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
@@ -64,6 +64,31 @@ const styles = stylex.create({
     color: colors.mutedForeground,
     flexShrink: 0,
   },
+  readToggle: {
+    margin: 0,
+    padding: 0,
+    borderRadius: "0.375rem",
+    borderWidth: 0,
+    alignItems: "center",
+    backgroundColor: "transparent",
+    color: {
+      default: colors.mutedForeground,
+      ":hover": `color-mix(in srgb, ${colors.mutedForeground} 60%, ${colors.foreground})`,
+    },
+    cursor: "pointer",
+    display: "inline-flex",
+    flexShrink: 0,
+    justifyContent: "center",
+    marginInlineStart: "-0.25rem",
+    outlineColor: colors.ring,
+    outlineOffset: 1,
+    outlineStyle: { default: "none", ":focus-visible": "solid" },
+    outlineWidth: 2,
+    transitionDuration: motion.enter,
+    transitionProperty: "color",
+    height: "1.5rem",
+    width: "1.5rem",
+  },
   groups: {
     gridColumnEnd: "groups",
     gridColumnStart: "groups",
@@ -108,8 +133,30 @@ export type ChapterListItem = Pick<
   | "isExternal"
 > & { read?: boolean }
 
-export function ChapterListRow({ chapter }: { chapter: ChapterListItem }) {
+export function ChapterListRow({
+  chapter,
+  onToggleRead,
+}: {
+  chapter: ChapterListItem
+  onToggleRead?: ((chapter: ChapterListItem, read: boolean) => void) | undefined
+}) {
   const read = chapter.read === true
+  const toggleLabel = read ? m.media_chapter_mark_unread() : m.media_chapter_mark_read()
+  const toggle =
+    onToggleRead === undefined ? null : (
+      <button
+        aria-label={toggleLabel}
+        aria-pressed={read}
+        onClick={() => {
+          onToggleRead(chapter, !read)
+        }}
+        sx={styles.readToggle}
+        title={toggleLabel}
+        type="button"
+      >
+        {read ? <EyeOff size={16} /> : <Eye size={16} />}
+      </button>
+    )
   const label = (
     <>
       <LanguageFlag language={chapter.language} />
@@ -122,7 +169,7 @@ export function ChapterListRow({ chapter }: { chapter: ChapterListItem }) {
           </span>
         )}
       </span>
-      {read ? (
+      {read && toggle === null ? (
         <span title={m.media_chapter_read()}>
           <Check height={14} sx={styles.readIcon} width={14} />
         </span>
@@ -133,18 +180,28 @@ export function ChapterListRow({ chapter }: { chapter: ChapterListItem }) {
   return (
     <li sx={chapterListStyles.chapter}>
       {chapter.isExternal ? (
-        <Link
-          params={{ chapterId: chapter.id }}
-          title={m.chapter_external()}
-          to="/chapters/$chapterId/source"
-          {...stylex.props(styles.label, styles.labelLink, read && styles.labelRead)}
-        >
-          {label}
-          <Globe size={14} {...stylex.props(styles.readIcon)} />
-        </Link>
+        <span sx={[styles.label, read && styles.labelRead]}>
+          {toggle}
+          <Link
+            params={{ chapterId: chapter.id }}
+            title={m.chapter_external()}
+            to="/chapters/$chapterId/source"
+            {...stylex.props(styles.label, styles.labelLink, read && styles.labelRead)}
+          >
+            {label}
+            <Globe size={14} {...stylex.props(styles.readIcon)} />
+          </Link>
+        </span>
       ) : (
         <span sx={[styles.label, read && styles.labelRead]}>
-          {label}
+          {toggle}
+          <Link
+            params={{ chapterId: chapter.id }}
+            to="/chapters/$chapterId"
+            {...stylex.props(styles.label, styles.labelLink, read && styles.labelRead)}
+          >
+            {label}
+          </Link>
           {chapter.externalUrl === null ? null : (
             <Link
               aria-label={m.chapter_source_link()}

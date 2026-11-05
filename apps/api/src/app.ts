@@ -70,7 +70,7 @@ export const createApp = (services: Services) => {
       cors({
         origin: corsAllowedOrigins.length > 0 ? corsAllowedOrigins : [],
         credentials: corsAllowedOrigins.length > 0,
-        allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+        allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowHeaders: ["Content-Type", "Authorization", "Cookie"],
         maxAge: 600,
       }),

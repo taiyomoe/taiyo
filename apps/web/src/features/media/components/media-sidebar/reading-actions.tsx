@@ -10,5 +10,9 @@ export function ReadingActions({
   signedIn: boolean
   canEdit: boolean
 }) {
-  return signedIn ? <SignedInActions canEdit={canEdit} mediaId={mediaId} /> : <SignedOutActions />
+  return signedIn ? (
+    <SignedInActions canEdit={canEdit} mediaId={mediaId} />
+  ) : (
+    <SignedOutActions mediaId={mediaId} />
+  )
 }

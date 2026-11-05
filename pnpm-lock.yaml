@@ -253,6 +253,9 @@ importers:
       '@taiyomoe/permissions':
         specifier: workspace:^
         version: link:../../packages/permissions
+      '@taiyomoe/schemas':
+        specifier: workspace:^
+        version: link:../../packages/schemas
       '@taiyomoe/ui':
         specifier: workspace:^
         version: link:../../packages/ui
