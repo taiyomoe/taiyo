@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
 export const statsStyles = stylex.create({
   root: {
@@ -7,33 +7,11 @@ export const statsStyles = stylex.create({
     display: "flex",
     flexDirection: "column",
   },
-  tiles: {
-    gap: "0.75rem",
-    display: "grid",
-    gridTemplateColumns: {
-      default: "repeat(2, minmax(0, 1fr))",
-      [breakpoints.md]: "repeat(4, minmax(0, 1fr))",
-    },
-  },
   tile: {
     gap: "0.25rem",
     display: "flex",
     flexDirection: "column",
     minWidth: 0,
-  },
-  tileValue: {
-    fontFamily: font.mono,
-    fontSize: { default: "1.5rem", [breakpoints.md]: "1.875rem" },
-    fontVariantNumeric: "tabular-nums",
-    fontWeight: 700,
-    letterSpacing: "-0.02em",
-    lineHeight: 1.1,
-  },
-  tileUnit: {
-    color: colors.mutedForeground,
-    fontSize: "0.875rem",
-    fontWeight: 500,
-    marginInlineStart: "0.25rem",
   },
   tileLabel: {
     color: colors.mutedForeground,
@@ -65,8 +43,13 @@ export const statsStyles = stylex.create({
     color: colors.mutedForeground,
     fontSize: "0.8125rem",
   },
-  skeletonTile: {
-    height: "5.25rem",
+  skeletonTop: {
+    gap: "1.25rem",
+    display: "grid",
+    gridTemplateColumns: {
+      default: "minmax(0, 1fr)",
+      [breakpoints.lg]: "minmax(0, 2fr) minmax(0, 1fr)",
+    },
   },
   skeletonCard: {
     height: "12rem",

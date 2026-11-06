@@ -47,6 +47,27 @@ export const userStatsQueryOptions = (userId: string, contentRatings: readonly C
 
 export type UserStats = InferResponseType<(typeof api.users)[":id"]["stats"]["$get"], 200>["data"]
 
+export const readingHistoryQueryOptions = (
+  userId: string,
+  contentRatings: readonly ContentRating[],
+  timeZone: string,
+) =>
+  queryOptions({
+    queryKey: ["users", "reading-history", userId, { contentRatings, timeZone }],
+    queryFn: async ({ signal }) =>
+      unwrap(
+        await api.users[":id"]["reading-history"].$get(
+          { param: { id: userId }, query: { contentRating: contentRatings.join(","), timeZone } },
+          { init: { signal } },
+        ),
+      ),
+  })
+
+export type ReadingHistoryEntry = InferResponseType<
+  (typeof api.users)[":id"]["reading-history"]["$get"],
+  200
+>["data"]["entries"][number]
+
 export const profileCommentsQueryOptions = (userId: string, page: number) =>
   queryOptions({
     queryKey: ["users", "comments", userId, { page }],

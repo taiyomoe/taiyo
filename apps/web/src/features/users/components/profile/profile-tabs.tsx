@@ -6,11 +6,11 @@ import { lazy, Suspense } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { ProfileTab } from "@/features/users/lib/profile-page"
 import type { Session } from "@/lib/session"
-import { AboutTab } from "@/features/users/components/profile/tabs/about-tab"
 import {
   CommentsTab,
   CommentsTabSkeleton,
 } from "@/features/users/components/profile/tabs/comments-tab"
+import { OverviewTab } from "@/features/users/components/profile/tabs/overview/overview-tab"
 import { StatsTabSkeleton } from "@/features/users/components/profile/tabs/stats-skeleton"
 import {
   UploadsTab,
@@ -95,7 +95,9 @@ export function ProfileTabs({
         </TabsTab>
       </TabsList>
       <TabsPanel value="profile">
-        <AboutTab isOwner={viewer?.id === profile.id} profile={profile} />
+        <Suspense fallback={<StatsTabSkeleton />}>
+          <OverviewTab isOwner={viewer?.id === profile.id} profile={profile} />
+        </Suspense>
       </TabsPanel>
       <TabsPanel value="stats">
         <Suspense fallback={<StatsTabSkeleton />}>

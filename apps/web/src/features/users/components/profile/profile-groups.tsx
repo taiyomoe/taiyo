@@ -63,40 +63,38 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
     minWidth: 0,
   },
-  empty: {
-    paddingInline: gutter,
-    paddingBottom: gutter,
-  },
 })
 
 export function ProfileGroups({ groups }: { groups: UserProfile["groups"] }) {
+  if (groups.length === 0) {
+    return null
+  }
+
   return (
     <section sx={[profileStyles.card, styles.card]}>
       <div sx={styles.head}>
         <h2 sx={profileStyles.sectionTitle}>{m.profile_groups()}</h2>
-        {groups.length === 0 ? null : <span sx={styles.count}>{groups.length}</span>}
+        <span sx={styles.count}>{groups.length}</span>
       </div>
-      {groups.length === 0 ? (
-        <p sx={[profileStyles.empty, styles.empty]}>{m.profile_groups_empty()}</p>
-      ) : (
-        <ul sx={styles.list}>
-          {groups.map((group) => (
-            <li key={group.id}>
-              <Link
-                params={{ groupId: group.id }}
-                {...stylex.props(styles.row)}
-                to="/groups/$groupId"
-              >
-                <GroupAvatar id={group.id} logoUrl={group.logoUrl} name={group.name} />
-                <span sx={styles.name}>{group.name}</span>
-                <Badge variant={group.role === "OWNER" ? "success" : "outline"}>
-                  {group.role === "OWNER" ? m.group_role_owner() : m.group_role_member()}
-                </Badge>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul sx={styles.list}>
+        {groups.map((group) => (
+          <li key={group.id}>
+            <Link
+              params={{ groupId: group.id }}
+              {...stylex.props(styles.row)}
+              to="/groups/$groupId"
+            >
+              <GroupAvatar id={group.id} logoUrl={group.logoUrl} name={group.name} />
+              <span sx={styles.name} title={group.name}>
+                {group.name}
+              </span>
+              {group.role === "OWNER" ? (
+                <Badge variant="success">{m.group_role_owner()}</Badge>
+              ) : null}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }

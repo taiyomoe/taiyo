@@ -28,13 +28,13 @@ export const Route = createFileRoute("/users/$username")({
     // Only the open tab's data is fetched; the others load when opened.
     const tabData = profile
       .then(async ({ id }) => {
-        if (deps.tab === "stats") {
+        if (deps.tab === "stats" || deps.tab === "profile") {
           await queryClient.query(userStatsQueryOptions(id, contentRatings))
         } else if (deps.tab === "uploads") {
           await queryClient.query(
             latestMediaUpdatesQueryOptions(contentRatings, deps.page, PROFILE_UPLOADS_PER_PAGE, id),
           )
-        } else if (deps.tab === "comments") {
+        } else {
           await queryClient.query(profileCommentsQueryOptions(id, deps.page))
         }
       })

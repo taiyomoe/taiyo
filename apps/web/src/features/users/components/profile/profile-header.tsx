@@ -79,12 +79,17 @@ const styles = stylex.create({
   handle: {
     color: colors.mutedForeground,
     fontSize: "0.9375rem",
+    overflowWrap: "anywhere",
     marginTop: "-0.25rem",
   },
   metaItem: {
     gap: "0.375rem",
     alignItems: "center",
     display: "inline-flex",
+    minWidth: 0,
+  },
+  metaText: {
+    overflowWrap: "anywhere",
     minWidth: 0,
   },
 })
@@ -140,12 +145,12 @@ export function ProfileHeader({
               ) : (
                 <LazyCountryFlag country={profile.country} />
               )}
-              {location}
+              <span sx={styles.metaText}>{location}</span>
             </li>
           )}
           <li sx={styles.metaItem}>
             <Calendar size={16} />
-            {m.profile_joined({ date: joined })}
+            <span sx={styles.metaText}>{m.profile_joined({ date: joined })}</span>
           </li>
         </ul>
         <ProfileStats profile={profile} />

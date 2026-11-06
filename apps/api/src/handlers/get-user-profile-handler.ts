@@ -31,6 +31,10 @@ const userProfileSchema = z.object({
   gender: z.enum(GENDERS),
   birthDate: z.iso.date().nullable().meta({ description: "Birth date, as YYYY-MM-DD." }),
   points: z.number().int(),
+  xp: z
+    .number()
+    .int()
+    .meta({ description: "Lifetime experience: one point per page read and credited." }),
   followerCount: z.number().int(),
   followingCount: z.number().int(),
   followingHidden: z
@@ -139,6 +143,15 @@ export const getUserProfileHandler = new Hono().get(
             .select(eb.fn.countAll<string>().as("count"))
             .as("uploads"),
           eb
+            .selectFrom("readingRewards")
+            .where("readingRewards.userId", "=", user.id)
+            .select((inner) =>
+              inner.fn
+                .coalesce(inner.fn.sum<string>("readingRewards.pages"), sql<string>`0`)
+                .as("xp"),
+            )
+            .as("xp"),
+          eb
             .selectFrom("userProfileComments")
             .innerJoin("users", "users.id", "userProfileComments.authorId")
             .where("userProfileComments.profileId", "=", user.id)
@@ -196,6 +209,7 @@ export const getUserProfileHandler = new Hono().get(
       gender: user.gender ?? "NOT_SPECIFIED",
       birthDate: user.birthDate,
       points: user.points ?? 0,
+      xp: Number(counts.xp ?? 0),
       followerCount: Number(counts.followers ?? 0),
       followingCount: Number(counts.following ?? 0),
       followingHidden: user.settings.showFollowing === false && viewerId !== user.id,

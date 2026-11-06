@@ -50,7 +50,7 @@ export function ProfileStats({ profile }: { profile: UserProfile }) {
   const stats = [
     {
       value: profile.followerCount,
-      label: m.profile_followers_title(),
+      label: profile.followerCount === 1 ? m.profile_follower_title() : m.profile_followers_title(),
       onClick: () => {
         setFollowList("followers")
       },

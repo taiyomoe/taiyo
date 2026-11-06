@@ -9,6 +9,7 @@
     "./constants": "./src/constants.ts",
     "./cosmetics": "./src/cosmetics.ts",
     "./env": "./src/env.ts",
+    "./levels": "./src/levels.ts",
     "./sample": "./src/sample.ts"
   },
   "scripts": {

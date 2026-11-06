@@ -1,4 +1,5 @@
 import { cacheClient } from "@taiyomoe/cache"
+import { config } from "@taiyomoe/config"
 import {
   type ContentRating,
   type DB,
@@ -24,6 +25,9 @@ const UPLOAD_MONTHS = 12
 const TOP_MEDIAS = 6
 const TOP_LANGUAGES = 6
 const DAY_MS = 86_400_000
+const GENRE_KEYS = Object.entries(config.tags)
+  .filter(([, tag]) => tag.category === "Genre")
+  .map(([key]) => key)
 const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
 const readingSchema = z.object({
   chaptersRead: z.number().int(),
@@ -33,11 +37,10 @@ const readingSchema = z.object({
     .int()
     .meta({ description: "Consecutive days with a read, up to today." }),
   longestStreak: z.number().int().meta({ description: "Longest run of consecutive reading days." }),
-  activeDays: z.number().int().meta({ description: "Days with at least one read in the window." }),
-  activity: z
-    .object({ date: z.iso.date(), count: z.number().int() })
+  genres: z
+    .object({ genre: z.string(), count: z.number().int() })
     .array()
-    .meta({ description: `Chapters finished per UTC day over the last ${ACTIVITY_DAYS} days.` }),
+    .meta({ description: "Titles read per genre tag, most read first." }),
   byType: z.object({ type: z.enum(MEDIA_TYPES), count: z.number().int() }).array(),
   byLanguage: z.object({ language: z.enum(LANGUAGES), count: z.number().int() }).array(),
   topMedias: z
@@ -110,7 +113,7 @@ const getReading = async (db: Kysely<DB>, userId: string, contentRatings: Conten
     .where("userHistories.userId", "=", userId)
     .where("userHistories.completed", "=", true)
   const since = new Date(Date.now() - ACTIVITY_DAYS * DAY_MS)
-  const [totals, activity, byType, byLanguage, top] = await Promise.all([
+  const [totals, activity, byType, byLanguage, top, genres] = await Promise.all([
     completed
       .select((eb) => [
         eb.fn.countAll<string>().as("chapters"),
@@ -149,6 +152,20 @@ const getReading = async (db: Kysely<DB>, userId: string, contentRatings: Conten
       .orderBy("medias.id", "asc")
       .limit(TOP_MEDIAS)
       .execute(),
+    sql<{ genre: string; count: string }>`
+      select "tag"->>'key' as "genre", count(distinct "medias"."id") as "count"
+      from "userHistories"
+      inner join "chapters" on "chapters"."id" = "userHistories"."chapterId"
+      inner join "medias" on "medias"."id" = "chapters"."mediaId"
+      cross join lateral unnest("medias"."tags") as "tags"("tag")
+      where "userHistories"."userId" = ${userId}
+        and "userHistories"."completed"
+        and "medias"."deletedAt" is null
+        and "medias"."contentRating"::text = any(${contentRatings})
+        and "tag"->>'key' = any(${GENRE_KEYS})
+      group by "genre"
+      order by "count" desc, "genre" asc
+    `.execute(db),
   ])
   const topIds = top.map((row) => row.id)
   const [titles, covers] = await Promise.all([
@@ -160,8 +177,7 @@ const getReading = async (db: Kysely<DB>, userId: string, contentRatings: Conten
     chaptersRead: Number(totals.chapters),
     mediasRead: Number(totals.medias),
     ...getStreaks(activity.map((row) => row.date)),
-    activeDays: activity.length,
-    activity: activity.map((row) => ({ date: row.date, count: Number(row.count) })),
+    genres: genres.rows.map((row) => ({ genre: row.genre, count: Number(row.count) })),
     byType: byType.map((row) => ({ type: row.type, count: Number(row.count) })),
     byLanguage: byLanguage.map((row) => ({ language: row.language, count: Number(row.count) })),
     topMedias: top.map((row) => ({

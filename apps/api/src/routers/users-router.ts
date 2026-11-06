@@ -27,6 +27,7 @@ import { listMyLibraryHandler } from "../handlers/list-my-library-handler"
 import { listMyListsHandler } from "../handlers/list-my-lists-handler"
 import { listMyMediaSuggestionsHandler } from "../handlers/list-my-media-suggestions-handler"
 import { listProfileCommentsHandler } from "../handlers/list-profile-comments-handler"
+import { listUserReadingHistoryHandler } from "../handlers/list-user-reading-history-handler"
 import { listUsersHandler } from "../handlers/list-users-handler"
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
 import { setMyPasswordHandler } from "../handlers/set-my-password-handler"
@@ -82,6 +83,7 @@ export const usersRouter = new Hono()
   .route("/", updateMyBannerHandler)
   .route("/", deleteMyBannerHandler)
   .route("/", getUserStatsHandler)
+  .route("/", listUserReadingHistoryHandler)
   .route("/", listProfileCommentsHandler)
   .route("/", createProfileCommentHandler)
   .route("/", deleteProfileCommentHandler)

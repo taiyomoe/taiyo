@@ -16,8 +16,8 @@ import {
   userStatsQueryOptions,
 } from "@/features/users/api/profile"
 import { profileStyles } from "@/features/users/components/profile/profile-styles"
-import { ActivityCalendar } from "@/features/users/components/profile/tabs/activity-calendar"
 import { BarList } from "@/features/users/components/profile/tabs/bar-list"
+import { GenreDonut } from "@/features/users/components/profile/tabs/genre-donut"
 import { useHoverTip } from "@/features/users/components/profile/tabs/hover-tip"
 import { statsStyles } from "@/features/users/components/profile/tabs/stats-styles"
 import { useSettings } from "@/lib/settings"
@@ -25,6 +25,40 @@ import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
+  top: {
+    gap: "1.25rem",
+    display: "grid",
+    gridTemplateColumns: {
+      default: "minmax(0, 1fr)",
+      [breakpoints.lg]: "minmax(0, 2fr) minmax(0, 1fr)",
+    },
+  },
+  totals: {
+    margin: 0,
+    gap: "1rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  total: {
+    gap: "0.75rem",
+    alignItems: "baseline",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  totalValue: {
+    margin: 0,
+    fontFamily: font.mono,
+    fontSize: "1.375rem",
+    fontVariantNumeric: "tabular-nums",
+    fontWeight: 700,
+  },
+  totalUnit: {
+    color: colors.mutedForeground,
+    fontFamily: font.sans,
+    fontSize: "0.8125rem",
+    fontWeight: 500,
+    marginInlineStart: "0.3125rem",
+  },
   covers: {
     margin: 0,
     padding: 0,
@@ -133,18 +167,6 @@ const styles = stylex.create({
   },
 })
 
-function Tile({ value, unit, label }: { value: string; unit?: string; label: string }) {
-  return (
-    <div sx={[profileStyles.card, statsStyles.tile]}>
-      <span sx={statsStyles.tileValue}>
-        {value}
-        {unit === undefined ? null : <span sx={statsStyles.tileUnit}>{unit}</span>}
-      </span>
-      <span sx={statsStyles.tileLabel}>{label}</span>
-    </div>
-  )
-}
-
 function Card({
   title,
   note,
@@ -179,15 +201,44 @@ function Reading({
 
   return (
     <>
-      <div sx={statsStyles.tiles}>
-        <Tile label={m.profile_stats_chapters_read()} value={format(reading.chaptersRead)} />
-        <Tile label={m.profile_stats_titles_read()} value={format(reading.mediasRead)} />
-        <Tile label={m.profile_stats_current_streak()} value={days(reading.currentStreak)} />
-        <Tile label={m.profile_stats_longest_streak()} value={days(reading.longestStreak)} />
+      <div sx={styles.top}>
+        <Card
+          note={m.profile_stats_genres_note({ count: format(reading.mediasRead) })}
+          title={m.profile_stats_genres()}
+        >
+          {reading.genres.length === 0 ? (
+            <p sx={profileStyles.empty}>{m.profile_stats_no_reading()}</p>
+          ) : (
+            <GenreDonut genres={reading.genres} />
+          )}
+        </Card>
+        <Card
+          note={m.profile_stats_streak_note({ days: days(reading.longestStreak) })}
+          title={m.profile_stats_totals()}
+        >
+          <dl sx={styles.totals}>
+            <div sx={styles.total}>
+              <dt sx={statsStyles.tileLabel}>{m.profile_stats_chapters_read()}</dt>
+              <dd sx={styles.totalValue}>{format(reading.chaptersRead)}</dd>
+            </div>
+            <div sx={styles.total}>
+              <dt sx={statsStyles.tileLabel}>{m.profile_stats_titles_read()}</dt>
+              <dd sx={styles.totalValue}>{format(reading.mediasRead)}</dd>
+            </div>
+            <div sx={styles.total}>
+              <dt sx={statsStyles.tileLabel}>{m.profile_stats_current_streak()}</dt>
+              <dd sx={styles.totalValue}>
+                {format(reading.currentStreak)}
+                <span sx={styles.totalUnit}>
+                  {reading.currentStreak === 1
+                    ? m.profile_highlight_day()
+                    : m.profile_highlight_days()}
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </Card>
       </div>
-      <Card title={m.profile_stats_activity()}>
-        <ActivityCalendar activity={reading} />
-      </Card>
       <div sx={statsStyles.grid}>
         {library === null ? null : (
           <Card
@@ -255,7 +306,9 @@ function Reading({
                   <Cover alt={media.title ?? ""} src={media.coverUrl} sx={styles.cover} />
                   <span sx={styles.coverTitle}>{media.title ?? m.media_untitled()}</span>
                   <span sx={styles.coverMeta}>
-                    {m.profile_stats_top_chapters({ count: format(media.chapters) })}
+                    {media.chapters === 1
+                      ? m.profile_stats_top_chapters_one()
+                      : m.profile_stats_top_chapters({ count: format(media.chapters) })}
                   </span>
                 </Link>
               </li>
