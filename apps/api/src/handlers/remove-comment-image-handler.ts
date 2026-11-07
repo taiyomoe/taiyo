@@ -63,7 +63,7 @@ export const removeCommentImageHandler = new Hono().delete(
       .set({ removedAt: sql<Date>`CURRENT_TIMESTAMP`, removerId: user.id })
       .where("id", "=", id)
       .where("removedAt", "is", null)
-      .returning(["id", "key", "sha256", "dhash", "uploaderId"])
+      .returning(["id", "key", "sha256", "dhash", "uploaderId", "width", "height"])
       .executeTakeFirst()
 
     if (image === undefined) {
@@ -75,7 +75,14 @@ export const removeCommentImageHandler = new Hono().delete(
     if (block) {
       await db
         .insertInto("blockedCommentImages")
-        .values({ sha256: image.sha256, dhash: image.dhash, imageId: id, blockerId: user.id })
+        .values({
+          sha256: image.sha256,
+          dhash: image.dhash,
+          width: image.width,
+          height: image.height,
+          imageId: id,
+          blockerId: user.id,
+        })
         .onConflict((oc) => oc.column("sha256").doNothing())
         .execute()
     }

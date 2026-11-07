@@ -231,6 +231,8 @@ export async function up(db: Kysely<unknown>) {
     .addColumn("id", "uuid", (c) => c.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("sha256", "text", (c) => c.notNull().unique())
     .addColumn("dhash", "bigint", (c) => c.notNull())
+    .addColumn("width", "integer", (c) => c.notNull().check(sql`"width" > 0`))
+    .addColumn("height", "integer", (c) => c.notNull().check(sql`"height" > 0`))
     .addColumn("imageId", "uuid", (c) =>
       c.references("commentImages.id").onDelete("set null").onUpdate("cascade"),
     )

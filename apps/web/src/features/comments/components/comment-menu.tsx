@@ -15,6 +15,7 @@ import { type Comment, useDeleteComment } from "@/features/comments/api/comments
 import { CommentRevisionsDialog } from "@/features/comments/components/comment-revisions-dialog"
 import { ReportCommentDialog } from "@/features/comments/components/report-comment-dialog"
 import { useCommentsContext } from "@/features/comments/lib/comments-context"
+import { copyText } from "@/lib/copy-text"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -39,11 +40,19 @@ export function CommentMenu({ comment, onEdit }: { comment: Comment; onEdit: () 
             {visible ? (
               <MenuItem
                 onClick={() => {
-                  void navigator.clipboard
-                    .writeText(new URL(getPermalink(comment.id), window.location.origin).href)
-                    .then(() => {
-                      toastManager.add({ title: m.comments_link_copied(), type: "success" })
-                    })
+                  const link = new URL(getPermalink(comment.id), window.location.origin).href
+
+                  void copyText(link).then((copied) => {
+                    toastManager.add(
+                      copied
+                        ? { title: m.comments_link_copied(), type: "success" }
+                        : {
+                            title: m.comments_link_copy_failed(),
+                            description: link,
+                            type: "error",
+                          },
+                    )
+                  })
                 }}
               >
                 {m.comments_copy_link()}

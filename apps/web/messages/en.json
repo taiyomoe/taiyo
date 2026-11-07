@@ -1877,5 +1877,6 @@
   "comment_reports_removed_moderator": "Deleted by a moderator",
   "comment_reports_removed_account": "Account deleted",
   "comment_reports_removed_hidden": "Author banned",
-  "comments_emoji_credit_prefix": "Emoji graphics by"
+  "comments_emoji_credit_prefix": "Emoji graphics by",
+  "comments_link_copy_failed": "Couldn't copy the link. Here it is:"
 }

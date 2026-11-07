@@ -203,6 +203,18 @@ describe("removing images", () => {
     expect(sameFile.body).toMatchObject({ code: "COMMENT_IMAGE_BLOCKED" })
     expect(reencoded.body).toMatchObject({ code: "COMMENT_IMAGE_BLOCKED" })
     expect(unrelated.status).toBe(201)
+
+    const stretched = await sharp(Buffer.from(await (await patternedImage(5)).arrayBuffer()))
+      .resize(128, 64, { fit: "fill" })
+      .png()
+      .toBuffer()
+    const otherShape = await uploadImage(
+      app,
+      fan.headers,
+      new File([new Uint8Array(stretched)], "wide.png", { type: "image/png" }),
+    )
+
+    expect(otherShape.status).toBe(201)
   })
 })
 

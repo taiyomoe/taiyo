@@ -157,7 +157,12 @@ export const processCommentImage = (input: Buffer) =>
 
 export const isCommentImageBlocked = async (
   db: Kysely<DB>,
-  { sha256, dhash }: { sha256: string; dhash: string },
+  {
+    sha256,
+    dhash,
+    width,
+    height,
+  }: { sha256: string; dhash: string; width: number; height: number },
 ) => {
   const blocked = await db
     .selectFrom("blockedCommentImages")
@@ -165,7 +170,9 @@ export const isCommentImageBlocked = async (
     .where((eb) =>
       eb.or([
         eb("sha256", "=", sha256),
-        sql<boolean>`bit_count("dhash"::bit(64)) between 8 and 56 and bit_count(("dhash" # ${dhash}::bigint)::bit(64)) <= ${config.comments.blockedImageHammingDistance}`,
+        sql<boolean>`bit_count("dhash"::bit(64)) between 8 and 56
+          and bit_count(("dhash" # ${dhash}::bigint)::bit(64)) <= ${config.comments.blockedImageHammingDistance}
+          and abs(("width"::float8 / "height") / (${width}::float8 / ${height}) - 1) <= 0.05`,
       ]),
     )
     .limit(1)
