@@ -185,7 +185,7 @@ export function AboutSection({ profile }: { profile: UserProfile }) {
             )}
             <FieldDescription>{m.user_settings_about_markdown()}</FieldDescription>
             <span sx={styles.counter}>
-              {m.profile_comments_counter({ count: text.length, max: ABOUT_MAX })}
+              {m.comments_counter({ count: text.length, max: ABOUT_MAX })}
             </span>
           </Field>
           <div sx={settingsStyles.row}>

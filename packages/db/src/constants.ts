@@ -58,6 +58,29 @@ export const PAGE_REPORT_STATUSES = ["OPEN", "RESOLVED", "DISMISSED"] as const
 
 export type PageReportStatus = (typeof PAGE_REPORT_STATUSES)[number]
 
+export const COMMENT_TARGET_TYPES = ["MEDIA", "CHAPTER", "GROUP", "USER"] as const
+
+export type CommentTargetType = (typeof COMMENT_TARGET_TYPES)[number]
+
+export const COMMENT_DELETIONS = ["AUTHOR", "PAGE_OWNER", "MODERATOR"] as const
+
+export type CommentDeletion = (typeof COMMENT_DELETIONS)[number]
+
+export const COMMENT_REPORT_REASONS = [
+  "SPAM",
+  "HARASSMENT",
+  "SPOILER",
+  "NSFW",
+  "ILLEGAL",
+  "OTHER",
+] as const
+
+export type CommentReportReason = (typeof COMMENT_REPORT_REASONS)[number]
+
+export const COMMENT_REPORT_STATUSES = ["OPEN", "RESOLVED", "DISMISSED"] as const
+
+export type CommentReportStatus = (typeof COMMENT_REPORT_STATUSES)[number]
+
 export const MEDIA_SUGGESTION_STATUSES = ["PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN"] as const
 
 export type MediaSuggestionStatus = (typeof MEDIA_SUGGESTION_STATUSES)[number]

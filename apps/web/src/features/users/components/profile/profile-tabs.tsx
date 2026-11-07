@@ -6,10 +6,8 @@ import { lazy, Suspense } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { ProfileTab } from "@/features/users/lib/profile-page"
 import type { Session } from "@/lib/session"
-import {
-  CommentsTab,
-  CommentsTabSkeleton,
-} from "@/features/users/components/profile/tabs/comments-tab"
+import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
+import { CommentsTab } from "@/features/users/components/profile/tabs/comments-tab"
 import { OverviewTab } from "@/features/users/components/profile/tabs/overview/overview-tab"
 import { StatsTabSkeleton } from "@/features/users/components/profile/tabs/stats-skeleton"
 import {
@@ -63,6 +61,7 @@ export function ProfileTabs({
 }) {
   const { tab = "profile", page = 1 } = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
+  const commentCount = useCommentCount({ type: "USER", id: profile.id }, profile.commentCount)
 
   return (
     <Tabs
@@ -89,8 +88,8 @@ export function ProfileTabs({
         </TabsTab>
         <TabsTab sx={styles.tab} value="comments">
           {m.profile_tab_comments()}
-          {profile.commentCount === 0 ? null : (
-            <span sx={styles.count}>{profile.commentCount}</span>
+          {commentCount === undefined || commentCount === 0 ? null : (
+            <span sx={styles.count}>{commentCount}</span>
           )}
         </TabsTab>
       </TabsList>
@@ -110,9 +109,7 @@ export function ProfileTabs({
         </Suspense>
       </TabsPanel>
       <TabsPanel value="comments">
-        <Suspense fallback={<CommentsTabSkeleton />}>
-          <CommentsTab page={page} profile={profile} viewer={viewer} />
-        </Suspense>
+        <CommentsTab profile={profile} viewer={viewer} />
       </TabsPanel>
     </Tabs>
   )

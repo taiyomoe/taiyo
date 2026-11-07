@@ -147,10 +147,12 @@ export function RichText({
   document,
   collapsible = false,
   size = "default",
+  extraComponents,
 }: {
   document: MarkdownDocument
   collapsible?: boolean
   size?: "default" | "sm"
+  extraComponents?: MarkdownComponents
 }) {
   const [expanded, setExpanded] = useState(false)
   const paragraphs = getRichTextParagraphs(document)
@@ -169,7 +171,13 @@ export function RichText({
           long && !expanded && styles.collapsed,
         ]}
       >
-        <Markdown components={components}>{document}</Markdown>
+        <Markdown
+          components={
+            extraComponents === undefined ? components : { ...components, ...extraComponents }
+          }
+        >
+          {document}
+        </Markdown>
       </div>
       {long ? (
         <Button

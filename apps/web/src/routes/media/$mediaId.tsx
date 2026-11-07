@@ -6,6 +6,7 @@ import {
   mediaChapterFacetsQueryOptions,
   mediaChaptersQueryOptions,
 } from "@/features/chapters/api/chapters"
+import { commentsQueryOptions } from "@/features/comments/api/comments"
 import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/features/media/api/library"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { MediaPage } from "@/features/media/components/media-page/media-page"
@@ -26,6 +27,7 @@ const searchSchema = z.object({
   volume: z.string().trim().min(1).max(32).optional().catch(undefined),
   q: z.string().trim().min(1).max(100).optional().catch(undefined),
   unread: z.boolean().optional().catch(undefined),
+  comment: z.uuid().optional().catch(undefined),
 })
 
 export const Route = createFileRoute("/media/$mediaId")({
@@ -53,6 +55,13 @@ export const Route = createFileRoute("/media/$mediaId")({
                   search: deps.q,
                   unread: context.session !== null && deps.unread === true,
                 }),
+              ),
+            ]
+          : []),
+        ...(deps.tab === "comments"
+          ? [
+              context.queryClient.infiniteQuery(
+                commentsQueryOptions({ type: "MEDIA", id: mediaId }, "newest"),
               ),
             ]
           : []),

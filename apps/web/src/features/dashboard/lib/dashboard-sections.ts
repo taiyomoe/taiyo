@@ -141,7 +141,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         visible: (can) => can("user.list"),
       },
       { label: m.dashboard_nav_comments, icon: Comment, visible: (can) => can("comment.delete") },
-      { label: m.dashboard_nav_reports, icon: Flag, visible: (can) => can("comment.delete") },
+      {
+        label: m.dashboard_nav_reports,
+        icon: Flag,
+        to: "/dashboard/comment-reports",
+        visible: (can) => can("comment.review"),
+      },
     ],
   },
   {

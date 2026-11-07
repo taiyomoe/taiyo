@@ -30,6 +30,24 @@ export * from "./models/chapter-group-model"
 
 export * from "./models/chapter-model"
 
+export * from "./models/blocked-comment-image-model"
+
+export * from "./models/comment-image-favorite-model"
+
+export * from "./models/comment-image-model"
+
+export * from "./models/comment-image-usage-model"
+
+export * from "./models/comment-model"
+
+export * from "./models/comment-report-model"
+
+export * from "./models/comment-revision-model"
+
+export * from "./models/comment-thread-model"
+
+export * from "./models/comment-vote-model"
+
 export * from "./models/cover-model"
 
 export * from "./models/featured-media-model"
@@ -79,8 +97,6 @@ export * from "./models/user-library-entry-model"
 export * from "./models/user-list-item-model"
 
 export * from "./models/user-list-model"
-
-export * from "./models/user-profile-comment-model"
 
 export * from "./models/user-profile-model"
 

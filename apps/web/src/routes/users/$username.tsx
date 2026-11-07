@@ -3,11 +3,8 @@ import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
 import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { latestMediaUpdatesQueryOptions } from "@/features/chapters/api/chapters"
-import {
-  profileCommentsQueryOptions,
-  userProfileQueryOptions,
-  userStatsQueryOptions,
-} from "@/features/users/api/profile"
+import { commentsQueryOptions } from "@/features/comments/api/comments"
+import { userProfileQueryOptions, userStatsQueryOptions } from "@/features/users/api/profile"
 import { ProfilePage } from "@/features/users/components/profile/profile-page"
 import { PROFILE_TABS, PROFILE_UPLOADS_PER_PAGE } from "@/features/users/lib/profile-page"
 import { getContentRatings } from "@/lib/settings"
@@ -16,6 +13,7 @@ import { m } from "@/paraglide/messages"
 const searchSchema = z.object({
   tab: z.enum(PROFILE_TABS).optional().catch(undefined),
   page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),
+  comment: z.uuid().optional().catch(undefined),
 })
 
 export const Route = createFileRoute("/users/$username")({
@@ -35,7 +33,7 @@ export const Route = createFileRoute("/users/$username")({
             latestMediaUpdatesQueryOptions(contentRatings, deps.page, PROFILE_UPLOADS_PER_PAGE, id),
           )
         } else {
-          await queryClient.query(profileCommentsQueryOptions(id, deps.page))
+          await queryClient.infiniteQuery(commentsQueryOptions({ type: "USER", id }, "newest"))
         }
       })
       .catch(noop)

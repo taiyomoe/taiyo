@@ -285,9 +285,68 @@ const profileErrors = {
     message: "The crop area is invalid for this image.",
     code: 422,
   },
-  PROFILE_COMMENT_NOT_FOUND: {
+} as const
+const commentErrors = {
+  COMMENT_NOT_FOUND: {
     message: "The requested comment was not found.",
     code: 404,
+  },
+  COMMENT_EMPTY: {
+    message: "A comment needs some text or at least one image.",
+    code: 422,
+  },
+  COMMENT_TOO_LONG: {
+    message: "The comment's text is too long.",
+    code: 422,
+  },
+  COMMENT_TOO_MANY_IMAGES: {
+    message: "The comment has too many images.",
+    code: 422,
+  },
+  COMMENT_IMAGE_UNAVAILABLE: {
+    message:
+      "One of the images is not available to you. Upload it or add it to your favorites first.",
+    code: 422,
+  },
+  COMMENT_PARENT_NOT_FOUND: {
+    message: "The comment you are replying to no longer exists.",
+    code: 404,
+  },
+  COMMENT_DELETED: {
+    message: "This comment was deleted.",
+    code: 409,
+  },
+  COMMENT_SELF_VOTE: {
+    message: "You can't upvote your own comment.",
+    code: 409,
+  },
+  COMMENT_REPORT_EXISTS: {
+    message: "You already reported this comment, and the report is still open.",
+    code: 409,
+  },
+  COMMENT_REPORT_NOT_FOUND: {
+    message: "The requested comment report was not found.",
+    code: 404,
+  },
+  COMMENT_REPORT_CLOSED: {
+    message: "This comment report is already closed.",
+    code: 409,
+  },
+  COMMENT_IMAGE_NOT_FOUND: {
+    message: "The requested image was not found.",
+    code: 404,
+  },
+  COMMENT_IMAGE_BLOCKED: {
+    message: "This image was removed by a moderator and can't be uploaded again.",
+    code: 422,
+  },
+  COMMENT_IMAGE_TOO_COMPLEX: {
+    message: "The image is too large: it has too many pixels or animation frames.",
+    code: 422,
+  },
+  COMMENT_FAVORITES_FULL: {
+    message: "You have reached the maximum number of favorite images.",
+    code: 409,
   },
 } as const
 const historyErrors = {
@@ -376,6 +435,7 @@ export const errors = {
   ...userErrors,
   ...followErrors,
   ...profileErrors,
+  ...commentErrors,
   ...historyErrors,
   ...pageErrors,
   ...libraryErrors,

@@ -12,6 +12,7 @@ import { m } from "@/paraglide/messages"
 
 const searchSchema = z.object({
   page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),
+  comment: z.uuid().optional().catch(undefined),
 })
 
 export const Route = createFileRoute("/chapters/$chapterId/")({

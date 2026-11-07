@@ -179,7 +179,10 @@ export const buildRules = (actor: Actor | null) => {
       review: is("ADMIN"),
     },
     comment: {
+      create: active !== null,
       delete: is("MODERATOR", "ADMIN"),
+      review: is("MODERATOR", "ADMIN"),
+      removeImage: is("MODERATOR", "ADMIN"),
     },
     user: {
       list: is("MODERATOR", "ADMIN"),

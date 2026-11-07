@@ -11,8 +11,6 @@ import { api } from "@/lib/api"
 import { ensureSuccess, unwrap, unwrapEnvelope } from "@/lib/envelope"
 import { sessionQueryOptions } from "@/lib/session"
 
-export const PROFILE_COMMENTS_PER_PAGE = 10
-
 const FOLLOWS_PER_PAGE = 30
 
 export const userProfileQueryOptions = (username: string) =>
@@ -67,26 +65,6 @@ export type ReadingHistoryEntry = InferResponseType<
   (typeof api.users)[":id"]["reading-history"]["$get"],
   200
 >["data"]["entries"][number]
-
-export const profileCommentsQueryOptions = (userId: string, page: number) =>
-  queryOptions({
-    queryKey: ["users", "comments", userId, { page }],
-    queryFn: async ({ signal }) =>
-      unwrapEnvelope(
-        await api.users[":id"].comments.$get(
-          {
-            param: { id: userId },
-            query: { page: String(page), perPage: String(PROFILE_COMMENTS_PER_PAGE) },
-          },
-          { init: { signal } },
-        ),
-      ),
-  })
-
-export type ProfileComment = InferResponseType<
-  (typeof api.users)[":id"]["comments"]["$get"],
-  200
->["data"][number]
 
 export const followListQueryOptions = (userId: string, direction: "followers" | "following") =>
   infiniteQueryOptions({
@@ -289,38 +267,4 @@ export function useProfileImage(username: string, kind: ProfileImageKind) {
   })
 
   return { upload, remove }
-}
-
-export function useCreateProfileComment(profile: Pick<UserProfile, "id" | "username">) {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (content: string) =>
-      unwrap(
-        await api.users[":id"].comments.$post({ param: { id: profile.id }, json: { content } }),
-      ),
-    onSuccess: () =>
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["users", "comments", profile.id] }),
-        queryClient.invalidateQueries({ queryKey: profileKey(profile.username) }),
-      ]),
-  })
-}
-
-export function useDeleteProfileComment(profile: Pick<UserProfile, "id" | "username">) {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (commentId: string) =>
-      ensureSuccess(
-        await api.users[":id"].comments[":commentId"].$delete({
-          param: { id: profile.id, commentId },
-        }),
-      ),
-    onSuccess: () =>
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["users", "comments", profile.id] }),
-        queryClient.invalidateQueries({ queryKey: profileKey(profile.username) }),
-      ]),
-  })
 }

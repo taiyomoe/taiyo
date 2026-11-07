@@ -1,4 +1,6 @@
-export type RichTextMark = "bold" | "italic" | "underline" | "strike" | "spoiler" | "link"
+import { COMMENT_IMAGE_LINE } from "@taiyomoe/schemas/comment-content"
+
+export type RichTextMark = "bold" | "italic" | "underline" | "strike" | "spoiler" | "link" | "image"
 
 type RichTextSegment = {
   start: number
@@ -23,7 +25,7 @@ const SPACE = /\s/
 const PARAGRAPH_BREAK = /\n[^\S\n]*\n/g
 const LINK = /\[([^\]\n]{1,500})\]\(https?:\/\/[^\s)]{1,2000}\)/y
 
-export function highlightRichText(source: string) {
+export function highlightRichText(source: string, { images = false }: { images?: boolean } = {}) {
   const segments: RichTextSegment[] = []
   const nextCache = new Map<string, { from: number; at: number }>()
   const next = (token: string, from: number) => {
@@ -151,14 +153,32 @@ export function highlightRichText(source: string) {
 
     push(plain, to, marks, false)
   }
-  let paragraphStart = 0
+  const scanText = (from: number, to: number) => {
+    let paragraphStart = from
 
-  for (const { index } of source.matchAll(PARAGRAPH_BREAK)) {
-    scan(paragraphStart, index, [])
-    paragraphStart = index
+    for (const { index } of source.slice(from, to).matchAll(PARAGRAPH_BREAK)) {
+      scan(paragraphStart, from + index, [])
+      paragraphStart = from + index
+    }
+
+    scan(paragraphStart, to, [])
+  }
+  let textStart = 0
+  let lineStart = 0
+
+  for (const line of images ? source.split("\n") : []) {
+    const lineEnd = lineStart + line.length
+
+    if (COMMENT_IMAGE_LINE.test(line)) {
+      scanText(textStart, lineStart)
+      push(lineStart, lineEnd, ["image"], false)
+      textStart = lineEnd
+    }
+
+    lineStart = lineEnd + 1
   }
 
-  scan(paragraphStart, source.length, [])
+  scanText(textStart, source.length)
 
   return segments
 }
