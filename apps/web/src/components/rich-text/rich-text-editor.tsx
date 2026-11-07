@@ -10,8 +10,10 @@ import {
   type ChangeEvent,
   type ClipboardEvent,
   type ComponentProps,
+  type DragEvent,
   type KeyboardEvent,
   type ReactElement,
+  type ReactNode,
   type Ref,
   useRef,
   useState,
@@ -178,7 +180,58 @@ const styles = stylex.create({
     backgroundColor: `color-mix(in srgb, ${colors.foreground} 16%, transparent)`,
     boxDecorationBreak: "clone",
   },
+  image: {
+    borderRadius: "0.25rem",
+    backgroundColor: `color-mix(in srgb, ${colors.primary} 14%, transparent)`,
+    boxDecorationBreak: "clone",
+    color: `color-mix(in srgb, ${colors.primary} 70%, ${colors.foreground})`,
+  },
+  toolbarEnd: {
+    gap: "0.125rem",
+    alignItems: "center",
+    display: "flex",
+    marginInlineStart: "auto",
+  },
+  frameDragging: {
+    borderColor: colors.ring,
+  },
 })
+const replaceRange = (
+  textarea: HTMLTextAreaElement,
+  from: number,
+  to: number,
+  insert: string,
+  selection: [number, number],
+) => {
+  textarea.focus()
+  textarea.setSelectionRange(from, to)
+
+  // execCommand is the only way to edit a textarea that keeps the native undo history.
+  // oxlint-disable-next-line typescript/no-deprecated
+  if (!document.execCommand("insertText", false, insert)) {
+    textarea.setRangeText(insert, from, to, "end")
+    textarea.dispatchEvent(new Event("input", { bubbles: true }))
+  }
+
+  textarea.setSelectionRange(...selection)
+}
+
+export const insertAtCursor = (
+  textarea: HTMLTextAreaElement,
+  text: string,
+  { block = false }: { block?: boolean } = {},
+) => {
+  const { selectionStart: start, selectionEnd: end, value } = textarea
+  const before = block && start > 0 && value[start - 1] !== "\n" ? "\n" : ""
+  const after = block && value[end] !== "\n" ? "\n" : ""
+  const insert = `${before}${text}${after}`
+  const caret = start + insert.length
+
+  replaceRange(textarea, start, end, insert, [caret, caret])
+}
+
+const imageFiles = (list: FileList | null) =>
+  Array.from(list ?? []).filter((file) => file.type.startsWith("image/"))
 
 function ShortcutHint({ shortcut, shift }: { shortcut: string; shift: boolean }) {
   const mac = /Mac|iPhone|iPad/.test(navigator.platform)
@@ -199,14 +252,23 @@ export function RichTextEditor({
   onChange,
   onKeyDown,
   rows = 6,
+  images = false,
+  toolbarEnd,
+  onFiles,
   ...props
-}: ComponentProps<"textarea"> & { ref?: Ref<HTMLTextAreaElement> }) {
+}: ComponentProps<"textarea"> & {
+  ref?: Ref<HTMLTextAreaElement>
+  images?: boolean
+  toolbarEnd?: ReactNode
+  onFiles?: (files: File[]) => void
+}) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const [dragging, setDragging] = useState(false)
   const [uncontrolled, setUncontrolled] = useState(
     typeof defaultValue === "string" ? defaultValue : "",
   )
   const text = typeof value === "string" ? value : uncontrolled
-  const segments = highlightRichText(text)
+  const segments = highlightRichText(text, { images })
   const setRef = (node: HTMLTextAreaElement | null) => {
     textareaRef.current = node
 
@@ -215,25 +277,6 @@ export function RichTextEditor({
     } else if (ref !== null && ref !== undefined) {
       ref.current = node
     }
-  }
-  const replace = (
-    textarea: HTMLTextAreaElement,
-    from: number,
-    to: number,
-    insert: string,
-    selection: [number, number],
-  ) => {
-    textarea.focus()
-    textarea.setSelectionRange(from, to)
-
-    // execCommand is the only way to edit a textarea that keeps the native undo history.
-    // oxlint-disable-next-line typescript/no-deprecated
-    if (!document.execCommand("insertText", false, insert)) {
-      textarea.setRangeText(insert, from, to, "end")
-      textarea.dispatchEvent(new Event("input", { bubbles: true }))
-    }
-
-    textarea.setSelectionRange(...selection)
   }
   const toggle = (token: string) => {
     const textarea = textareaRef.current
@@ -253,11 +296,11 @@ export function RichTextEditor({
       selected.length > size * 2 && selected.startsWith(token) && selected.endsWith(token)
 
     if (outside) {
-      replace(textarea, start - size, end + size, selected, [start - size, end - size])
+      replaceRange(textarea, start - size, end + size, selected, [start - size, end - size])
     } else if (inside) {
-      replace(textarea, start, end, selected.slice(size, -size), [start, end - size * 2])
+      replaceRange(textarea, start, end, selected.slice(size, -size), [start, end - size * 2])
     } else {
-      replace(textarea, start, end, `${token}${selected}${token}`, [start + size, end + size])
+      replaceRange(textarea, start, end, `${token}${selected}${token}`, [start + size, end + size])
     }
   }
   const insertLink = () => {
@@ -271,13 +314,13 @@ export function RichTextEditor({
     const selected = current.slice(start, end)
 
     if (URL_ONLY.test(selected)) {
-      replace(textarea, start, end, `[](${selected})`, [start + 1, start + 1])
+      replaceRange(textarea, start, end, `[](${selected})`, [start + 1, start + 1])
     } else if (selected === "") {
-      replace(textarea, start, end, "[](https://)", [start + 1, start + 1])
+      replaceRange(textarea, start, end, "[](https://)", [start + 1, start + 1])
     } else {
       const urlStart = start + selected.length + 3
 
-      replace(textarea, start, end, `[${selected}](https://)`, [urlStart, urlStart + 8])
+      replaceRange(textarea, start, end, `[${selected}](https://)`, [urlStart, urlStart + 8])
     }
   }
   const markStyle = (marks: RichTextMark[]) => {
@@ -291,11 +334,37 @@ export function RichTextEditor({
       strike && !underline && styles.strike,
       underline && strike && styles.underlineStrike,
       marks.includes("spoiler") && styles.spoiler,
+      marks.includes("image") && styles.image,
     ]
   }
 
   return (
-    <div sx={[styles.frame, props.disabled === true && styles.frameDisabled]}>
+    <div
+      onDragLeave={() => {
+        setDragging(false)
+      }}
+      onDragOver={(event: DragEvent<HTMLDivElement>) => {
+        if (onFiles !== undefined && event.dataTransfer.types.includes("Files")) {
+          event.preventDefault()
+          setDragging(true)
+        }
+      }}
+      onDrop={(event: DragEvent<HTMLDivElement>) => {
+        setDragging(false)
+
+        const files = imageFiles(event.dataTransfer.files)
+
+        if (onFiles !== undefined && files.length > 0) {
+          event.preventDefault()
+          onFiles(files)
+        }
+      }}
+      sx={[
+        styles.frame,
+        props.disabled === true && styles.frameDisabled,
+        dragging && styles.frameDragging,
+      ]}
+    >
       <div aria-label={m.rich_text_toolbar()} role="toolbar" sx={styles.toolbar}>
         {FORMATS.map((format) => (
           <Tooltip key={format.mark}>
@@ -346,6 +415,7 @@ export function RichTextEditor({
           </TooltipTrigger>
           <TooltipPopup>{m.rich_text_link()}</TooltipPopup>
         </Tooltip>
+        {toolbarEnd === undefined ? null : <div sx={styles.toolbarEnd}>{toolbarEnd}</div>}
       </div>
       <div
         sx={[
@@ -396,6 +466,15 @@ export function RichTextEditor({
                   }
                 },
                 onPaste: (event: ClipboardEvent<HTMLTextAreaElement>) => {
+                  const files = imageFiles(event.clipboardData.files)
+
+                  if (onFiles !== undefined && files.length > 0) {
+                    event.preventDefault()
+                    onFiles(files)
+
+                    return
+                  }
+
                   const textarea = event.currentTarget
                   const pasted = event.clipboardData.getData("text/plain").trim()
                   const { selectionStart: start, selectionEnd: end, value: current } = textarea
@@ -409,7 +488,10 @@ export function RichTextEditor({
 
                   const link = `[${selected}](${pasted})`
 
-                  replace(textarea, start, end, link, [start + link.length, start + link.length])
+                  replaceRange(textarea, start, end, link, [
+                    start + link.length,
+                    start + link.length,
+                  ])
                 },
               })}
               {...stylex.props(styles.surface, styles.textarea)}

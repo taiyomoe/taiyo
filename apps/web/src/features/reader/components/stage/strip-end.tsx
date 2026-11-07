@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { ArrowLeft, ChevronRight } from "@taiyomoe/ui/components/icons"
+import { ArrowLeft, ChevronRight, Comment } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { type RefObject, useEffect, useEffectEvent, useRef } from "react"
 import { m } from "@/paraglide/messages"
@@ -34,6 +34,7 @@ export function StripEnd({
   onVisible,
   onNext,
   onBack,
+  comments,
 }: {
   root: RefObject<HTMLElement | null>
   chapterLabel: string
@@ -41,6 +42,7 @@ export function StripEnd({
   onVisible: () => void
   onNext: () => void
   onBack: () => void
+  comments: { count: number | undefined; onOpen: () => void } | null
 }) {
   const element = useRef<HTMLDivElement | null>(null)
   const visible = useEffectEvent(onVisible)
@@ -82,6 +84,14 @@ export function StripEnd({
           <ArrowLeft />
           {m.reader_back_to_title()}
         </Button>
+        {comments === null ? null : (
+          <Button onClick={comments.onOpen} variant="secondary">
+            <Comment />
+            {comments.count === undefined || comments.count === 0
+              ? m.reader_comments_open()
+              : m.reader_comments_open_count({ count: comments.count })}
+          </Button>
+        )}
         {nextLabel === null ? null : (
           <Button onClick={onNext}>
             {m.reader_end_next({ chapter: nextLabel })}

@@ -1,11 +1,9 @@
 import { Hono } from "hono"
 import { banUserHandler } from "../handlers/ban-user-handler"
 import { createListHandler } from "../handlers/create-list-handler"
-import { createProfileCommentHandler } from "../handlers/create-profile-comment-handler"
 import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-handler"
 import { deleteMyAvatarHandler } from "../handlers/delete-my-avatar-handler"
 import { deleteMyBannerHandler } from "../handlers/delete-my-banner-handler"
-import { deleteProfileCommentHandler } from "../handlers/delete-profile-comment-handler"
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
@@ -26,7 +24,6 @@ import { listMyHistoryHandler } from "../handlers/list-my-history-handler"
 import { listMyLibraryHandler } from "../handlers/list-my-library-handler"
 import { listMyListsHandler } from "../handlers/list-my-lists-handler"
 import { listMyMediaSuggestionsHandler } from "../handlers/list-my-media-suggestions-handler"
-import { listProfileCommentsHandler } from "../handlers/list-profile-comments-handler"
 import { listUserReadingHistoryHandler } from "../handlers/list-user-reading-history-handler"
 import { listUsersHandler } from "../handlers/list-users-handler"
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
@@ -84,6 +81,3 @@ export const usersRouter = new Hono()
   .route("/", deleteMyBannerHandler)
   .route("/", getUserStatsHandler)
   .route("/", listUserReadingHistoryHandler)
-  .route("/", listProfileCommentsHandler)
-  .route("/", createProfileCommentHandler)
-  .route("/", deleteProfileCommentHandler)

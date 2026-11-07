@@ -1,6 +1,7 @@
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { Navigate } from "@tanstack/react-router"
 import { useState } from "react"
+import type { Session } from "@/lib/session"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { getMainTitle } from "@/features/media/lib/media-labels"
 import { chapterReaderQueryOptions } from "@/features/reader/api/reader"
@@ -22,6 +23,8 @@ export function ChapterReader({
   sheetOpen,
   onSheetOpenChange,
   onSessionChapters,
+  viewer,
+  linkedCommentId,
 }: {
   chapterId: string
   requestedPage: number | undefined
@@ -29,6 +32,8 @@ export function ChapterReader({
   sheetOpen: boolean
   onSheetOpenChange: (open: boolean) => void
   onSessionChapters: (chapters: readonly string[]) => void
+  viewer: Session["user"] | null
+  linkedCommentId: string | null
 }) {
   const [chapterId] = useState(routeChapterId)
   const { contentRatings } = useSettings()
@@ -69,6 +74,7 @@ export function ChapterReader({
       data={data}
       entry={{ ...chapter, pages }}
       initialPage={initialPage}
+      linkedCommentId={linkedCommentId}
       longStrip={longStrip}
       mediaTitle={
         (media.data === undefined ? null : getMainTitle(media.data.titles)) ?? m.media_untitled()
@@ -77,6 +83,7 @@ export function ChapterReader({
       onSheetOpenChange={onSheetOpenChange}
       sheetOpen={sheetOpen}
       signedIn={signedIn}
+      viewer={viewer}
     />
   )
 }

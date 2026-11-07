@@ -100,3 +100,26 @@ describe("highlightRichText", () => {
     }
   })
 })
+
+describe("highlightRichText image tokens", () => {
+  const ID = "7f0c6a8e-1b2c-4d3e-8f90-123456789abc"
+
+  it("marks whole image lines only when images are enabled", () => {
+    const source = `a **b**\n![](image:${ID})\nc`
+    const token = `![](image:${ID})`
+    const start = source.indexOf(token)
+
+    expect(highlightRichText(source, { images: true })).toContainEqual({
+      start,
+      end: start + token.length,
+      marks: ["image"],
+      syntax: false,
+    })
+    expect(highlightRichText(source).some((segment) => segment.marks.includes("image"))).toBe(false)
+    expect(
+      highlightRichText(source, { images: true }).filter((segment) =>
+        segment.marks.includes("bold"),
+      ),
+    ).toHaveLength(1)
+  })
+})

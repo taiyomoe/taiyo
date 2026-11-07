@@ -8,6 +8,8 @@ import type { Media } from "@/features/media/api/medias"
 import type { MEDIA_TABS } from "@/features/media/lib/media-page"
 import type { Session } from "@/lib/session"
 import { mediaChapterFacetsQueryOptions } from "@/features/chapters/api/chapters"
+import { CommentSection } from "@/features/comments/components/comment-section"
+import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
 import { MediaChapters } from "@/features/media/components/media-chapters/media-chapters"
 import { MediaInfo } from "@/features/media/components/media-info/media-info"
 import { useSettings } from "@/lib/settings"
@@ -19,7 +21,6 @@ const DISABLED_TABS = [
   { value: "covers", label: m.media_tab_covers },
   { value: "characters", label: m.media_tab_characters },
   { value: "related", label: m.media_tab_related },
-  { value: "comments", label: m.media_tab_comments },
   { value: "banners", label: m.media_tab_banners },
   { value: "stats", label: m.media_tab_stats },
 ] as const
@@ -58,12 +59,13 @@ const styles = stylex.create({
 })
 
 export function MediaTabs({ media, user }: { media: Media; user: Session["user"] | null }) {
-  const { tab = "chapters", lang } = routeApi.useSearch()
+  const { tab = "chapters", lang, comment } = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const facets = useQuery(
     mediaChapterFacetsQueryOptions(media.id, { contentRatings, language: lang }),
   )
+  const commentCount = useCommentCount({ type: "MEDIA", id: media.id })
 
   return (
     <Tabs
@@ -85,6 +87,12 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
           {m.media_tab_chapters()}
           {facets.data === undefined ? null : <span sx={styles.tabCount}>{facets.data.total}</span>}
         </TabsTab>
+        <TabsTab sx={styles.tab} value="comments">
+          {m.media_tab_comments()}
+          {commentCount === undefined || commentCount === 0 ? null : (
+            <span sx={styles.tabCount}>{commentCount}</span>
+          )}
+        </TabsTab>
         {DISABLED_TABS.map(({ value, label }) => (
           <TabsTab
             key={value}
@@ -102,6 +110,14 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
       </TabsPanel>
       <TabsPanel value="chapters">
         <MediaChapters mediaId={media.id} user={user} />
+      </TabsPanel>
+      <TabsPanel value="comments">
+        <CommentSection
+          getPermalink={(id) => `/media/${media.id}?tab=comments&comment=${id}`}
+          linkedCommentId={comment ?? null}
+          target={{ type: "MEDIA", id: media.id }}
+          viewer={user}
+        />
       </TabsPanel>
     </Tabs>
   )

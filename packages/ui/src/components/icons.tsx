@@ -113,6 +113,12 @@ import {
   SkullIcon,
   BookOpenTextIcon,
   MoreHorizontalCircle01Icon,
+  StarIcon,
+  SmileIcon,
+  ThumbsUpIcon,
+  ArrowTurnBackwardIcon,
+  ImageAdd02Icon,
+  ImageNotFound01Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -416,3 +422,15 @@ export const Skull: (props: IconProps) => React.ReactElement = icon(SkullIcon)
 export const BookOpenText: (props: IconProps) => React.ReactElement = icon(BookOpenTextIcon)
 
 export const MoreCircle: (props: IconProps) => React.ReactElement = icon(MoreHorizontalCircle01Icon)
+
+export const Star: (props: IconProps) => React.ReactElement = icon(StarIcon)
+
+export const Smile: (props: IconProps) => React.ReactElement = icon(SmileIcon)
+
+export const ThumbsUp: (props: IconProps) => React.ReactElement = icon(ThumbsUpIcon)
+
+export const Reply: (props: IconProps) => React.ReactElement = icon(ArrowTurnBackwardIcon)
+
+export const ImageAdd: (props: IconProps) => React.ReactElement = icon(ImageAdd02Icon)
+
+export const ImageMissing: (props: IconProps) => React.ReactElement = icon(ImageNotFound01Icon)

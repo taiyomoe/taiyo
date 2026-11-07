@@ -60,9 +60,26 @@ export const userAudit = defineAuditCatalog("user", {
   COSMETICS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
 })
 
-export const profileCommentAudit = defineAuditCatalog("user.comment", {
-  CREATE: { target: "user", severity: "low" },
-  DELETE: { target: "user", severity: "medium" },
+export const commentAudit = defineAuditCatalog("comment", {
+  CREATE: { target: "comment", severity: "low" },
+  UPDATE: { target: "comment", severity: "low" },
+  DELETE: { target: "comment", severity: "medium" },
+  VOTE: { target: "comment", severity: "low" },
+  UNVOTE: { target: "comment", severity: "low" },
+  REVISIONS_LIST: { target: "comment", severity: "low" },
+})
+
+export const commentReportAudit = defineAuditCatalog("comment.report", {
+  CREATE: { target: "comment", severity: "low" },
+  CLOSE: { target: "commentReport", severity: "medium" },
+})
+
+export const commentImageAudit = defineAuditCatalog("comment.image", {
+  UPLOAD: { target: "commentImage", severity: "low" },
+  FAVORITE: { target: "commentImage", severity: "low" },
+  UNFAVORITE: { target: "commentImage", severity: "low" },
+  REMOVE: { target: "commentImage", severity: "high" },
+  REAP: { target: "commentImage", severity: "low" },
 })
 
 export const mediaAudit = defineAuditCatalog("media", {
@@ -213,7 +230,9 @@ export const auditCatalogs = [
   authAudit,
   adminAudit,
   userAudit,
-  profileCommentAudit,
+  commentAudit,
+  commentReportAudit,
+  commentImageAudit,
   mediaAudit,
   mediaSuggestionAudit,
   coverAudit,
@@ -243,7 +262,9 @@ declare module "evlog" {
     auth: typeof authAudit
     admin: typeof adminAudit
     user: typeof userAudit
-    profileComment: typeof profileCommentAudit
+    comment: typeof commentAudit
+    commentReport: typeof commentReportAudit
+    commentImage: typeof commentImageAudit
     media: typeof mediaAudit
     mediaSuggestion: typeof mediaSuggestionAudit
     cover: typeof coverAudit

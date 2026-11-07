@@ -1,5 +1,5 @@
 import { READER_MODES } from "@taiyomoe/schemas/reader-settings"
-import { noop, useQueryClient } from "@tanstack/react-query"
+import { noop, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate, useRouter } from "@tanstack/react-router"
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import type {
@@ -7,12 +7,15 @@ import type {
   ReaderChapter,
   ReaderChapterDetail,
 } from "@/features/reader/api/reader"
+import type { Session } from "@/lib/session"
 import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
+import { commentCountQueryOptions } from "@/features/comments/api/comments"
 import {
   type ChapterBoundary,
   ChapterBoundaryDialog,
 } from "@/features/reader/components/chapter-boundary-dialog"
 import { ReaderToolbar } from "@/features/reader/components/chrome/reader-toolbar"
+import { ReaderCommentsSheet } from "@/features/reader/components/comments/reader-comments-sheet"
 import { ReaderProgress } from "@/features/reader/components/progress/reader-progress"
 import { ReaderHistoryTracker } from "@/features/reader/components/reader-history-tracker"
 import { ReportPageDialog } from "@/features/reader/components/report-page-dialog"
@@ -54,6 +57,8 @@ export function Reader({
   sheetOpen,
   onSheetOpenChange,
   onSessionChapters,
+  viewer,
+  linkedCommentId,
 }: {
   entry: ReaderSegment
   data: ChapterReaderData
@@ -64,6 +69,8 @@ export function Reader({
   sheetOpen: boolean
   onSheetOpenChange: (open: boolean) => void
   onSessionChapters: (chapters: readonly string[]) => void
+  viewer: Session["user"] | null
+  linkedCommentId: string | null
 }) {
   const controls = useReaderSettings(longStrip, signedIn)
   const { settings, update } = controls
@@ -83,6 +90,7 @@ export function Reader({
   >(null)
   const [boundaryOpen, setBoundaryOpen] = useState(false)
   const [autoScrolling, setAutoScrolling] = useState(false)
+  const [commentsOpen, setCommentsOpen] = useState(linkedCommentId !== null)
   const [reporting, setReporting] = useState<{
     chapterId: string
     pageId: string
@@ -117,6 +125,17 @@ export function Reader({
     [data.chapters, current],
   )
   const currentLabel = getChapterLabel(current)
+  const commentCount = useQuery({
+    ...commentCountQueryOptions({ type: "CHAPTER", id: chapter.id }),
+    enabled: chapter.status === "PUBLISHED",
+  }).data?.total
+  const openComments =
+    chapter.status === "PUBLISHED"
+      ? () => {
+          setAutoScrolling(false)
+          setCommentsOpen(true)
+        }
+      : null
   const lastSegmentId = segments.at(-1)?.id ?? chapter.id
   const endNext =
     lastSegmentId === current.id
@@ -452,6 +471,7 @@ export function Reader({
       >
         {strip ? (
           <StripView
+            comments={openComments === null ? null : { count: commentCount, onOpen: openComments }}
             initial={{ chapterId: chapter.id, page: navigation.page }}
             nextLabel={endNext === null ? null : getChapterLabel(endNext)}
             onBack={() => {
@@ -522,6 +542,8 @@ export function Reader({
               }
             : null
         }
+        commentCount={commentCount}
+        onComments={openComments}
         onToggleBookmark={bookmarks.toggle}
         strip={strip}
         visible={!idle}
@@ -588,6 +610,16 @@ export function Reader({
         open={sheetOpen}
         signedIn={signedIn}
       />
+      {chapter.status === "PUBLISHED" ? (
+        <ReaderCommentsSheet
+          chapterId={chapter.id}
+          chapterLabel={currentLabel}
+          linkedCommentId={chapter.id === entry.id ? linkedCommentId : null}
+          onOpenChange={setCommentsOpen}
+          open={commentsOpen}
+          viewer={viewer}
+        />
+      ) : null}
       <ReportPageDialog
         onClose={() => {
           setReporting(null)

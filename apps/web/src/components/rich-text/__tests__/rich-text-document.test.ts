@@ -1,7 +1,14 @@
 import { renderHtml } from "@tanstack/markdown/html"
 import { range } from "remeda"
 import { describe, expect, it } from "vitest"
-import { getRichTextParagraphs, parseRichText, SPOILER_TAG } from "../rich-text-document"
+import {
+  EMOJI_TAG,
+  getRichTextParagraphs,
+  IMAGE_TAG,
+  parseCommentText,
+  parseRichText,
+  SPOILER_TAG,
+} from "../rich-text-document"
 
 const ALLOWED_TAGS = new Set(["p", "strong", "em", "del", "u", "a", SPOILER_TAG])
 const char = (codePoint: number) => String.fromCodePoint(codePoint)
@@ -225,5 +232,54 @@ describe("parseRichText under stress", () => {
 
   it("truncates sources past the hard limit", () => {
     expect(getRichTextParagraphs(parseRichText("a".repeat(50_000)))[0]).toHaveLength(20_000)
+  })
+})
+
+describe("parseCommentText", () => {
+  const ID = "7f0c6a8e-1b2c-4d3e-8f90-123456789abc"
+  const blocks = (source: string) => parseCommentText(source).children
+
+  it("turns image lines into image blocks between paragraphs", () => {
+    expect(blocks(`Bla bla\n![](image:${ID})\nBla bla`)).toEqual([
+      { type: "paragraph", children: [{ type: "text", value: "Bla bla" }] },
+      {
+        type: "component",
+        name: "image",
+        tagName: IMAGE_TAG,
+        attributes: {},
+        properties: { "data-id": ID, "data-spoiler": "false" },
+        children: [],
+      },
+      { type: "paragraph", children: [{ type: "text", value: "Bla bla" }] },
+    ])
+  })
+
+  it("marks spoiler images and drops inline or foreign image syntax", () => {
+    expect(blocks(`||![](image:${ID})||`)[0]).toMatchObject({
+      properties: { "data-spoiler": "true" },
+    })
+    expect(render(`a ![](image:${ID}) b`)).toBe("<p>a  b</p>")
+    expect(blocks("![](https://evil.example/x.png)")).toEqual([])
+  })
+
+  it("keeps images out of other rich text", () => {
+    expect(blocks(`![](image:${ID})`)).toHaveLength(1)
+    expect(parseRichText(`![](image:${ID})`).children).toEqual([])
+  })
+
+  it("wraps emoji, including sequences, for Twemoji", () => {
+    const [paragraph] = blocks("hi 👋🏽 👨‍👩‍👧 ❤️!")
+
+    expect(paragraph).toMatchObject({
+      children: [
+        { type: "text", value: "hi " },
+        { tagName: EMOJI_TAG, properties: { "data-emoji": "👋🏽" } },
+        { type: "text", value: " " },
+        { tagName: EMOJI_TAG, properties: { "data-emoji": "👨‍👩‍👧" } },
+        { type: "text", value: " " },
+        { tagName: EMOJI_TAG, properties: { "data-emoji": "❤️" } },
+        { type: "text", value: "!" },
+      ],
+    })
   })
 })

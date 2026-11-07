@@ -4,6 +4,7 @@ import type {
   MarkdownExtension,
   ParseOptions,
 } from "@tanstack/markdown"
+import { COMMENT_IMAGE_LINE, parseCommentImageLine } from "@taiyomoe/schemas/comment-content"
 import { parseMarkdown } from "@tanstack/markdown/parser"
 
 const MAX_SOURCE_LENGTH = 20_000
@@ -14,6 +15,11 @@ const SPOOFABLE_LABEL =
 
 export const SPOILER_TAG = "rt-spoiler"
 
+export const IMAGE_TAG = "rt-image"
+
+export const EMOJI_TAG = "rt-emoji"
+
+const EMOJI = /\p{RGI_Emoji}/gv
 const inlineText = (nodes: InlineNode[], spoilers: "keep" | "mask" = "keep"): string =>
   nodes
     .map((node) => {
@@ -119,7 +125,7 @@ const flatten = (nodes: InlineNode[], inLink = false): InlineNode[] =>
 
     return []
   })
-const paragraphs: MarkdownExtension = {
+const createParagraphs = (images: boolean): MarkdownExtension => ({
   name: "paragraphs",
   parseBlock(context) {
     const { lines, index } = context
@@ -135,9 +141,29 @@ const paragraphs: MarkdownExtension = {
       return { type: "paragraph", children: [] }
     }
 
-    const kept: string[] = []
+    const image = images ? parseCommentImageLine(lines[cursor] ?? "") : null
 
-    while (cursor < lines.length && !BLANK.test(lines[cursor] ?? "")) {
+    if (image !== null) {
+      context.consume(1)
+
+      return {
+        type: "component",
+        name: "image",
+        tagName: IMAGE_TAG,
+        attributes: {},
+        properties: { "data-id": image.id, "data-spoiler": image.spoiler ? "true" : "false" },
+        children: [],
+      }
+    }
+
+    const kept: string[] = []
+    const startsImage = (line: string) => images && COMMENT_IMAGE_LINE.test(line)
+
+    while (
+      cursor < lines.length &&
+      !BLANK.test(lines[cursor] ?? "") &&
+      !(cursor > index && startsImage(lines[cursor] ?? ""))
+    ) {
       const line = lines[cursor] ?? ""
 
       cursor += 1
@@ -159,7 +185,7 @@ const paragraphs: MarkdownExtension = {
       children: kept.length === 0 ? [] : context.parseInline(kept.join("\n")),
     }
   },
-}
+})
 const underline: MarkdownExtension = {
   name: "underline",
   inlineParser: {
@@ -238,30 +264,81 @@ const allowlist: MarkdownExtension = {
     type: "root",
     children: document.children.filter(
       (node) =>
-        node.type === "paragraph" &&
-        node.children.some((child) => child.type !== "text" || !BLANK.test(child.value)),
+        (node.type === "component" && node.tagName === IMAGE_TAG) ||
+        (node.type === "paragraph" &&
+          node.children.some((child) => child.type !== "text" || !BLANK.test(child.value))),
     ),
   }),
 }
-const OPTIONS = {
-  allowHtml: false,
-  frontmatter: false,
-  headingIds: false,
-  urlTransform: (_url, kind, defaultUrl) => (kind === "link" ? toSafeHref(defaultUrl) : null),
-  extensions: [paragraphs, underline, spoiler, singleTilde, allowlist],
-} satisfies ParseOptions
+const toEmoji = (nodes: InlineNode[]): InlineNode[] =>
+  nodes.flatMap((node): InlineNode[] => {
+    if (node.type !== "text") {
+      return "children" in node ? [{ ...node, children: toEmoji(node.children) }] : [node]
+    }
 
-export const parseRichText = (source: string) =>
-  parseMarkdown(
-    source
-      .slice(0, MAX_SOURCE_LENGTH)
-      .replace(/[\u202A-\u202E\u2066-\u2069]/g, "")
-      .replace(/(\p{M}{3})\p{M}+/gu, "$1")
-      .replace(/!\[[^\]\n]{0,500}\]\([^)\n]{0,2000}\)/g, "")
-      .replace(/\[\]\([^)\n]{0,2000}\)/g, "")
-      .replace(/^([^\S\n]{0,3})\[(?=[^\]\n]{1,1000}\]:)/gm, "$1\\["),
-    OPTIONS,
-  )
+    const parts: InlineNode[] = []
+    let last = 0
+
+    for (const match of node.value.matchAll(EMOJI)) {
+      if (match.index > last) {
+        parts.push({ type: "text", value: node.value.slice(last, match.index) })
+      }
+
+      parts.push({
+        type: "inlineComponent",
+        name: "emoji",
+        tagName: EMOJI_TAG,
+        attributes: {},
+        properties: { "data-emoji": match[0] },
+        children: [{ type: "text", value: match[0] }],
+      })
+      last = match.index + match[0].length
+    }
+
+    if (last < node.value.length) {
+      parts.push({ type: "text", value: node.value.slice(last) })
+    }
+
+    return parts
+  })
+const emoji: MarkdownExtension = { name: "emoji", transformInline: toEmoji }
+const createOptions = (comment: boolean) =>
+  ({
+    allowHtml: false,
+    frontmatter: false,
+    headingIds: false,
+    urlTransform: (_url, kind, defaultUrl) => (kind === "link" ? toSafeHref(defaultUrl) : null),
+    extensions: [
+      createParagraphs(comment),
+      underline,
+      spoiler,
+      singleTilde,
+      allowlist,
+      ...(comment ? [emoji] : []),
+    ],
+  }) satisfies ParseOptions
+const OPTIONS = createOptions(false)
+const COMMENT_OPTIONS = createOptions(true)
+const sanitize = (source: string, keepImageLines: boolean) =>
+  source
+    .slice(0, MAX_SOURCE_LENGTH)
+    .replace(/[\u202A-\u202E\u2066-\u2069]/g, "")
+    .replace(/(\p{M}{3})\p{M}+/gu, "$1")
+    .split("\n")
+    .map((line) =>
+      keepImageLines && COMMENT_IMAGE_LINE.test(line)
+        ? line
+        : line
+            .replace(/!\[[^\]\n]{0,500}\]\([^)\n]{0,2000}\)/g, "")
+            .replace(/\[\]\([^)\n]{0,2000}\)/g, ""),
+    )
+    .join("\n")
+    .replace(/^([^\S\n]{0,3})\[(?=[^\]\n]{1,1000}\]:)/gm, "$1\\[")
+
+export const parseRichText = (source: string) => parseMarkdown(sanitize(source, false), OPTIONS)
+
+export const parseCommentText = (source: string) =>
+  parseMarkdown(sanitize(source, true), COMMENT_OPTIONS)
 
 export const getRichTextParagraphs = (document: MarkdownDocument) =>
   document.children.flatMap((node) =>

@@ -4,6 +4,7 @@ import {
   BookmarkAdd,
   BookmarkRemove,
   ExitFullscreen,
+  Comment,
   Flag,
   Fullscreen,
   Pause,
@@ -11,7 +12,14 @@ import {
   Sliders,
 } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { breakpoints, colors, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import {
+  breakpoints,
+  colors,
+  font,
+  motion,
+  radius,
+  shadows,
+} from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useFullscreen } from "@/features/reader/hooks/use-fullscreen"
 import { m } from "@/paraglide/messages"
@@ -72,6 +80,11 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
     maxWidth: "22rem",
   },
+  commentCount: {
+    fontFamily: font.mono,
+    fontSize: "0.75rem",
+    fontVariantNumeric: "tabular-nums",
+  },
   chapter: {
     overflow: "hidden",
     fontSize: "0.8125rem",
@@ -94,6 +107,8 @@ export function ReaderToolbar({
   onAutoScroll,
   onToggleBookmark,
   onReport,
+  onComments,
+  commentCount,
 }: {
   visible: boolean
   mediaId: string
@@ -106,6 +121,8 @@ export function ReaderToolbar({
   onAutoScroll: () => void
   onToggleBookmark: () => void
   onReport: (() => void) | null
+  onComments: (() => void) | null
+  commentCount: number | undefined
 }) {
   const fullscreen = useFullscreen()
 
@@ -136,6 +153,20 @@ export function ReaderToolbar({
         </div>
       </div>
       <div sx={[styles.group, !visible && styles.groupHidden]}>
+        {onComments === null ? null : (
+          <Button
+            aria-label={m.reader_comments_open()}
+            onClick={onComments}
+            size={commentCount === undefined || commentCount === 0 ? "icon" : "default"}
+            title={m.reader_comments_open()}
+            variant="ghost"
+          >
+            <Comment />
+            {commentCount === undefined || commentCount === 0 ? null : (
+              <span sx={styles.commentCount}>{commentCount}</span>
+            )}
+          </Button>
+        )}
         {bookmarked === null ? null : (
           <Button
             aria-label={bookmarked ? m.reader_bookmark_remove() : m.reader_bookmark_add()}
