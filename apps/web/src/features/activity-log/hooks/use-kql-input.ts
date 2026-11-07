@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { auditLogSuggestionsQueryOptions } from "@/features/activity-log/api/audit-logs"
 import { describeField, describeOperator } from "@/features/activity-log/components/fields"
-import { useDebounced } from "@/features/activity-log/hooks/use-debounced"
 import {
   getKqlContext,
   getOperatorSuggestions,
@@ -12,6 +11,7 @@ import {
   getValueSuggestions,
   type KqlSuggestion,
 } from "@/features/activity-log/lib/kql-suggestions"
+import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import { m } from "@/paraglide/messages"
 
 export const useKqlInput = ({
@@ -34,7 +34,7 @@ export const useKqlInput = ({
     context.kind === "value" && context.field.values === undefined && context.field.suggest === true
       ? context.field
       : null
-  const remotePrefix = useDebounced(context.kind === "value" ? context.prefix : "", 150)
+  const remotePrefix = useDebouncedValue(context.kind === "value" ? context.prefix : "", 150)
   const remote = useQuery({
     ...auditLogSuggestionsQueryOptions(remoteField?.name ?? "", remotePrefix),
     enabled: open && remoteField !== null,

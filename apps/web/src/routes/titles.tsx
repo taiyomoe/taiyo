@@ -1,30 +1,36 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { z } from "zod"
+import { AdvancedSearchPage } from "@/features/advanced-search/components/advanced-search-page"
+import {
+  advancedSearchSchema,
+  parseAdvancedSearch,
+  toSearchBody,
+} from "@/features/advanced-search/lib/advanced-search"
 import { searchMediasQueryOptions } from "@/features/media/api/medias"
-import { TitlesPage } from "@/features/titles/components/titles-page"
+import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
-
-const PER_PAGE = 20
-const FIRST_PAGE = 1
-const searchSchema = z.object({
-  page: z.coerce.number().int().min(FIRST_PAGE).optional(),
-})
 
 export const Route = createFileRoute("/titles")({
   head: () => ({
     meta: [
-      { title: m.titles_meta_title() },
-      { name: "description", content: m.titles_meta_description() },
+      { title: m.search_meta_title() },
+      { name: "description", content: m.search_meta_description() },
     ],
   }),
-  validateSearch: searchSchema,
-  loaderDeps: ({ search: { page } }) => ({ page }),
-  context: ({ deps: { page } }) => ({
-    titlesQueryOptions: searchMediasQueryOptions({ page: page ?? FIRST_PAGE, perPage: PER_PAGE }),
-  }),
-  loader: ({ context }) => {
-    void context.queryClient.query(context.titlesQueryOptions).catch(noop)
+  validateSearch: advancedSearchSchema,
+  loaderDeps: ({ search: { view: _view, ...deps } }) => deps,
+  loader: async ({ context, deps }) => {
+    const prefetch = context.queryClient
+      .query(
+        searchMediasQueryOptions(
+          toSearchBody(parseAdvancedSearch(deps), getContentRatings(context.session)),
+        ),
+      )
+      .catch(noop)
+
+    if (import.meta.env.SSR) {
+      await prefetch
+    }
   },
-  component: TitlesPage,
+  component: AdvancedSearchPage,
 })

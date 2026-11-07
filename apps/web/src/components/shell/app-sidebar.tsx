@@ -44,7 +44,7 @@ const SECTIONS: AppSidebarSection[] = [
     label: m.shell_nav_browse,
     items: [
       { label: m.shell_nav_home, icon: Home, to: "/" },
-      { label: m.shell_nav_advanced_search, icon: Sliders },
+      { label: m.shell_nav_advanced_search, icon: Sliders, to: "/titles" },
       { label: m.shell_nav_recently_added, icon: Sparkles },
       { label: m.shell_nav_popular_titles, icon: Flame },
       { label: m.shell_nav_random_title, icon: Shuffle },
