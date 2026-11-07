@@ -333,61 +333,57 @@ function Uploads({ uploads }: { uploads: UserStats["uploads"] }) {
 
   return (
     <Card title={m.profile_stats_uploads()}>
-      {uploads.chapters === 0 ? (
-        <p sx={profileStyles.empty}>{m.profile_stats_no_uploads()}</p>
-      ) : (
-        <div sx={styles.uploadsLayout}>
-          <div sx={styles.uploadTiles}>
-            <div sx={statsStyles.tile}>
-              <span sx={styles.smallValue}>{uploads.chapters.toLocaleString(locale)}</span>
-              <span sx={statsStyles.tileLabel}>{m.profile_stats_uploaded_chapters()}</span>
-            </div>
-            <div sx={statsStyles.tile}>
-              <span sx={styles.smallValue}>{uploads.medias.toLocaleString(locale)}</span>
-              <span sx={statsStyles.tileLabel}>{m.profile_stats_uploaded_titles()}</span>
-            </div>
-            <div sx={statsStyles.tile}>
-              <span sx={styles.smallValue}>{uploads.languages.toLocaleString(locale)}</span>
-              <span sx={statsStyles.tileLabel}>{m.profile_stats_upload_languages()}</span>
-            </div>
-            {uploads.lastAt === null ? null : (
-              <div sx={statsStyles.tile}>
-                <span sx={styles.smallValue}>
-                  {new Intl.DateTimeFormat(locale, { month: "short", day: "numeric" }).format(
-                    new Date(uploads.lastAt),
-                  )}
-                </span>
-                <span sx={statsStyles.tileLabel}>{m.profile_stats_last_upload()}</span>
-              </div>
-            )}
+      <div sx={styles.uploadsLayout}>
+        <div sx={styles.uploadTiles}>
+          <div sx={statsStyles.tile}>
+            <span sx={styles.smallValue}>{uploads.chapters.toLocaleString(locale)}</span>
+            <span sx={statsStyles.tileLabel}>{m.profile_stats_uploaded_chapters()}</span>
           </div>
-          <div sx={statsStyles.cardBody}>
-            <span sx={statsStyles.cardNote}>{m.profile_stats_monthly()}</span>
-            <div role="list" sx={[styles.columns, styles.baseline]} {...tip.handlers}>
-              {uploads.monthly.map((month) => {
-                const date = new Date(`${month.month}-01T00:00:00Z`)
-                const label = m.profile_stats_uploads_month({
-                  count: month.count.toLocaleString(locale),
-                  month: monthLong.format(date),
-                })
-
-                return (
-                  <div key={month.month} aria-label={label} role="listitem" sx={styles.column}>
-                    <div
-                      data-tip={label}
-                      style={{ height: `${(month.count / max) * 100}%` }}
-                      sx={[styles.bar, month.count === 0 && styles.barEmpty]}
-                    />
-                    <span aria-hidden sx={styles.monthLabel}>
-                      {monthShort.format(date)}
-                    </span>
-                  </div>
-                )
-              })}
+          <div sx={statsStyles.tile}>
+            <span sx={styles.smallValue}>{uploads.medias.toLocaleString(locale)}</span>
+            <span sx={statsStyles.tileLabel}>{m.profile_stats_uploaded_titles()}</span>
+          </div>
+          <div sx={statsStyles.tile}>
+            <span sx={styles.smallValue}>{uploads.languages.toLocaleString(locale)}</span>
+            <span sx={statsStyles.tileLabel}>{m.profile_stats_upload_languages()}</span>
+          </div>
+          {uploads.lastAt === null ? null : (
+            <div sx={statsStyles.tile}>
+              <span sx={styles.smallValue}>
+                {new Intl.DateTimeFormat(locale, { month: "short", day: "numeric" }).format(
+                  new Date(uploads.lastAt),
+                )}
+              </span>
+              <span sx={statsStyles.tileLabel}>{m.profile_stats_last_upload()}</span>
             </div>
+          )}
+        </div>
+        <div sx={statsStyles.cardBody}>
+          <span sx={statsStyles.cardNote}>{m.profile_stats_monthly()}</span>
+          <div role="list" sx={[styles.columns, styles.baseline]} {...tip.handlers}>
+            {uploads.monthly.map((month) => {
+              const date = new Date(`${month.month}-01T00:00:00Z`)
+              const label = m.profile_stats_uploads_month({
+                count: month.count.toLocaleString(locale),
+                month: monthLong.format(date),
+              })
+
+              return (
+                <div key={month.month} aria-label={label} role="listitem" sx={styles.column}>
+                  <div
+                    data-tip={label}
+                    style={{ height: `${(month.count / max) * 100}%` }}
+                    sx={[styles.bar, month.count === 0 && styles.barEmpty]}
+                  />
+                  <span aria-hidden sx={styles.monthLabel}>
+                    {monthShort.format(date)}
+                  </span>
+                </div>
+              )
+            })}
           </div>
         </div>
-      )}
+      </div>
       {tip.element}
     </Card>
   )
@@ -406,7 +402,7 @@ export function StatsTab({ profile }: { profile: UserProfile }) {
       ) : (
         <Reading library={stats.library} reading={stats.reading} />
       )}
-      <Uploads uploads={stats.uploads} />
+      {stats.uploads.chapters === 0 ? null : <Uploads uploads={stats.uploads} />}
     </div>
   )
 }
