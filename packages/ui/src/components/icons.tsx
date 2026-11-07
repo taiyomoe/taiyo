@@ -98,6 +98,21 @@ import {
   TextItalicIcon,
   TextStrikethroughIcon,
   TextUnderlineIcon,
+  SortByDown02Icon,
+  SortByUp02Icon,
+  ClockArrowDownIcon,
+  ClockArrowUpIcon,
+  SortingAZ01Icon,
+  SortingZA01Icon,
+  SortingNineOneIcon,
+  SortingOneNineIcon,
+  CalendarArrowDownIcon,
+  CalendarArrowUpIcon,
+  ShieldCheckIcon,
+  KissingIcon,
+  SkullIcon,
+  BookOpenTextIcon,
+  MoreHorizontalCircle01Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -370,3 +385,34 @@ export const Italic: (props: IconProps) => React.ReactElement = icon(TextItalicI
 export const Underline: (props: IconProps) => React.ReactElement = icon(TextUnderlineIcon)
 
 export const Strikethrough: (props: IconProps) => React.ReactElement = icon(TextStrikethroughIcon)
+
+export const SortDescending: (props: IconProps) => React.ReactElement = icon(SortByDown02Icon)
+
+export const SortAscending: (props: IconProps) => React.ReactElement = icon(SortByUp02Icon)
+
+export const ClockArrowDown: (props: IconProps) => React.ReactElement = icon(ClockArrowDownIcon)
+
+export const ClockArrowUp: (props: IconProps) => React.ReactElement = icon(ClockArrowUpIcon)
+
+export const SortAZ: (props: IconProps) => React.ReactElement = icon(SortingAZ01Icon)
+
+export const SortZA: (props: IconProps) => React.ReactElement = icon(SortingZA01Icon)
+
+export const SortNineOne: (props: IconProps) => React.ReactElement = icon(SortingNineOneIcon)
+
+export const SortOneNine: (props: IconProps) => React.ReactElement = icon(SortingOneNineIcon)
+
+export const CalendarArrowDown: (props: IconProps) => React.ReactElement =
+  icon(CalendarArrowDownIcon)
+
+export const CalendarArrowUp: (props: IconProps) => React.ReactElement = icon(CalendarArrowUpIcon)
+
+export const ShieldCheck: (props: IconProps) => React.ReactElement = icon(ShieldCheckIcon)
+
+export const Kissing: (props: IconProps) => React.ReactElement = icon(KissingIcon)
+
+export const Skull: (props: IconProps) => React.ReactElement = icon(SkullIcon)
+
+export const BookOpenText: (props: IconProps) => React.ReactElement = icon(BookOpenTextIcon)
+
+export const MoreCircle: (props: IconProps) => React.ReactElement = icon(MoreHorizontalCircle01Icon)

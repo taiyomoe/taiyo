@@ -108,6 +108,7 @@ export function PageReportsPage() {
             pageCount={Math.ceil((reports.data?.meta.total ?? 0) / PAGE_REPORTS_PER_PAGE)}
             renderLink={(target) => (
               <Link
+                from="/dashboard/page-reports"
                 search={(previous) => ({ ...previous, page: target === 1 ? undefined : target })}
                 to="/dashboard/page-reports"
               />

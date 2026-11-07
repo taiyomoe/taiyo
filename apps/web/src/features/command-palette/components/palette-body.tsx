@@ -19,7 +19,6 @@ import { quickSearchQueryOptions } from "@/features/command-palette/api/quick-se
 import { PaletteFooter } from "@/features/command-palette/components/palette-footer"
 import { PaletteRow } from "@/features/command-palette/components/palette-row"
 import { PalettePreview } from "@/features/command-palette/components/preview/palette-preview"
-import { useDebouncedValue } from "@/features/command-palette/hooks/use-debounced-value"
 import { useEntityActions } from "@/features/command-palette/hooks/use-entity-actions"
 import { useGlobalCommands } from "@/features/command-palette/hooks/use-global-commands"
 import { useRunPaletteCommand } from "@/features/command-palette/hooks/use-run-palette-command"
@@ -34,6 +33,7 @@ import {
 } from "@/features/command-palette/lib/palette-command"
 import { usePalette } from "@/features/command-palette/lib/palette-context"
 import { rememberEntity, useRecentEntities } from "@/features/command-palette/lib/recent-entities"
+import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
