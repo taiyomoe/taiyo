@@ -25,6 +25,14 @@ const bodySchema = z.object({
     .enum(LATEST_UPDATES_LAYOUTS)
     .optional()
     .meta({ description: "How the latest updates are laid out.", example: "LIST" }),
+  showFollowing: z
+    .boolean()
+    .optional()
+    .meta({ description: "Whether others can see who you follow.", example: true }),
+  showLibrary: z
+    .boolean()
+    .optional()
+    .meta({ description: "Whether others can see your library and reading stats.", example: true }),
 })
 const settingsSchema = z.object({
   contentRating: z.enum(CONTENT_RATINGS).array().optional(),

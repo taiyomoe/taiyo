@@ -41,7 +41,11 @@ export function OverviewPage({
 
   return (
     <div sx={styles.page}>
-      <DashboardIntro name={user.name} subtitle={m.dashboard_overview_subtitle()} />
+      <DashboardIntro
+        name={user.name}
+        nameEffect={user.nameEffect}
+        subtitle={m.dashboard_overview_subtitle()}
+      />
       <OverviewControls compare={compare} range={range} />
       {query.isError && overview === undefined ? (
         <OverviewError

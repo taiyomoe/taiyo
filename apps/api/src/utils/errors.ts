@@ -249,6 +249,18 @@ const userErrors = {
     message: "The requested user was not found.",
     code: 404,
   },
+  USERNAME_TAKEN: {
+    message: "This username is already taken.",
+    code: 409,
+  },
+  DISPLAY_NAME_TAKEN: {
+    message: "This display name is already taken.",
+    code: 409,
+  },
+  PASSWORD_ALREADY_SET: {
+    message: "Your account already has a password. Change it instead.",
+    code: 409,
+  },
 } as const
 const followErrors = {
   FOLLOW_SELF: {
@@ -261,6 +273,20 @@ const followErrors = {
   },
   NOT_FOLLOWING: {
     message: "You don't follow this user.",
+    code: 404,
+  },
+} as const
+const profileErrors = {
+  COSMETIC_LOCKED: {
+    message: "You haven't unlocked this cosmetic yet.",
+    code: 403,
+  },
+  INVALID_CROP: {
+    message: "The crop area is invalid for this image.",
+    code: 422,
+  },
+  PROFILE_COMMENT_NOT_FOUND: {
+    message: "The requested comment was not found.",
     code: 404,
   },
 } as const
@@ -349,6 +375,7 @@ export const errors = {
   ...ownershipErrors,
   ...userErrors,
   ...followErrors,
+  ...profileErrors,
   ...historyErrors,
   ...pageErrors,
   ...libraryErrors,

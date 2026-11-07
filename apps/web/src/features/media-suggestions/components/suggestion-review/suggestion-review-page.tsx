@@ -12,6 +12,7 @@ import {
   PageEyebrowSkeleton,
   PageTitleSkeleton,
 } from "@/components/layout/page-body-skeleton"
+import { renderWithName } from "@/components/user-name/with-name"
 import {
   suggestionQueryOptions,
   useReviewSuggestion,
@@ -118,7 +119,7 @@ function SuggestionReview() {
     >
       <SuggestionMeta suggestion={suggestion} />
       {suggestion.note === null ? null : (
-        <SuggestionNote label={m.suggestion_note_from({ name: suggestion.author.displayUsername })}>
+        <SuggestionNote label={renderWithName(m.suggestion_note_from, suggestion.author)}>
           {suggestion.note}
         </SuggestionNote>
       )}

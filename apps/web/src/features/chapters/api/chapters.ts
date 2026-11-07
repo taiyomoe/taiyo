@@ -30,18 +30,23 @@ export const latestMediaUpdatesQueryOptions = (
   contentRatings: readonly ContentRating[],
   page: number,
   perPage: number,
+  uploaderId?: string,
 ) =>
   queryOptions({
-    queryKey: ["chapters", "latest", "medias", { contentRatings, page, perPage }],
+    queryKey: ["chapters", "latest", "medias", { contentRatings, page, perPage, uploaderId }],
     queryFn: async ({ signal }) =>
       unwrapEnvelope(
         await api.chapters.latest.medias.$get(
           {
-            query: {
-              contentRating: contentRatings.join(","),
-              page: String(page),
-              perPage: String(perPage),
-            },
+            query: pickBy(
+              {
+                contentRating: contentRatings.join(","),
+                page: String(page),
+                perPage: String(perPage),
+                uploaderId,
+              },
+              isDefined,
+            ),
           },
           { init: { signal } },
         ),
@@ -56,9 +61,10 @@ export type LatestMediaUpdate = InferResponseType<
 export const mediaLatestChaptersQueryOptions = (
   mediaId: string,
   contentRatings: readonly ContentRating[],
+  uploaderId?: string,
 ) =>
   queryOptions({
-    queryKey: ["chapters", "latest", { mediaId, contentRatings }],
+    queryKey: ["chapters", "latest", { mediaId, contentRatings, uploaderId }],
     queryFn: async ({ signal }) => {
       const chapters: LatestChapter[] = []
 
@@ -66,12 +72,16 @@ export const mediaLatestChaptersQueryOptions = (
         const { data, meta } = await unwrapEnvelope(
           await api.chapters.latest.$get(
             {
-              query: {
-                contentRating: contentRatings.join(","),
-                mediaId,
-                page: String(page),
-                perPage: String(MAX_PER_PAGE),
-              },
+              query: pickBy(
+                {
+                  contentRating: contentRatings.join(","),
+                  mediaId,
+                  uploaderId,
+                  page: String(page),
+                  perPage: String(MAX_PER_PAGE),
+                },
+                isDefined,
+              ),
             },
             { init: { signal } },
           ),

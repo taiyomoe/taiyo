@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import type { AuditLogEntry } from "@/features/activity-log/api/audit-logs"
+import { UserName } from "@/components/user-name/user-name"
 import { ActorAvatar } from "@/features/activity-log/components/entity-avatar"
 import { tableStyles } from "@/features/activity-log/components/table/table-styles"
 import { m } from "@/paraglide/messages"
@@ -37,7 +38,9 @@ export function ActorCell({ entry: { actor, context } }: { entry: AuditLogEntry 
     <div sx={styles.actor}>
       <ActorAvatar actor={actor} />
       <span sx={styles.actorText}>
-        <span sx={tableStyles.ellipsis}>{name}</span>
+        <span sx={tableStyles.ellipsis}>
+          <UserName effect={actor.user?.nameEffect} name={name} />
+        </span>
         <span sx={[tableStyles.muted, tableStyles.ellipsis]}>{detail}</span>
       </span>
     </div>

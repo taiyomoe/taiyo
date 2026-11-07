@@ -54,6 +54,7 @@ const quickSearchSchema = z.object({
       username: z.string(),
       displayUsername: z.string(),
       image: z.string().nullable(),
+      nameEffect: z.string().nullable(),
     })
     .array(),
 })
@@ -113,7 +114,13 @@ export const quickSearchHandler = new Hono().get(
         .execute(),
       db
         .selectFrom("users")
-        .select(["users.id", "users.username", "users.displayUsername", "users.image"])
+        .select([
+          "users.id",
+          "users.username",
+          "users.displayUsername",
+          "users.image",
+          "users.nameEffect",
+        ])
         .where((eb) =>
           eb.or([
             eb("users.username", "ilike", pattern),

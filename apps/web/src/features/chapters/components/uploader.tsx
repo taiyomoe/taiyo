@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
+import { UserName } from "@/components/user-name/user-name"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -44,7 +45,11 @@ export function Uploader({ uploader, sx }: { uploader: LatestChapter["uploader"]
           {uploader.displayUsername.charAt(0).toUpperCase()}
         </AvatarFallback>
       </Avatar>
-      <span sx={styles.uploaderName}>{uploader.displayUsername}</span>
+      <UserName
+        effect={uploader.nameEffect}
+        name={uploader.displayUsername}
+        sx={styles.uploaderName}
+      />
     </span>
   )
 }

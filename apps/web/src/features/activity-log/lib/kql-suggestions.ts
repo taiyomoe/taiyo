@@ -18,6 +18,7 @@ export type KqlSuggestion = {
   description: string | null
   field: AuditLogField | null
   image: string | null
+  nameEffect?: string | null
   insert: string
   start: number
   end: number
@@ -102,7 +103,12 @@ export const getOperatorSuggestions = (
 
 export const getValueSuggestions = (
   context: Extract<KqlContext, { kind: "value" }>,
-  values: ReadonlyArray<{ value: string; label: string | null; image: string | null }>,
+  values: ReadonlyArray<{
+    value: string
+    label: string | null
+    image: string | null
+    nameEffect?: string | null
+  }>,
   anyValueDescription: string,
 ) => {
   const matching = byRank(values, context.prefix, (value) => `${value.value} ${value.label ?? ""}`)
@@ -120,6 +126,7 @@ export const getValueSuggestions = (
         description: value.label,
         field: context.field,
         image: value.image,
+        nameEffect: value.nameEffect ?? null,
         insert: `${bare ? value.value : quoteKqlValue(value.value)} `,
         start: context.start,
         end: context.end,

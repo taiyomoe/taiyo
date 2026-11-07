@@ -21,12 +21,15 @@ import type { Session } from "./models/session-model"
 import type { Staff } from "./models/staff-model"
 import type { Task } from "./models/task-model"
 import type { Title } from "./models/title-model"
+import type { TwoFactor } from "./models/two-factor-model"
+import type { UserCosmetic } from "./models/user-cosmetic-model"
 import type { UserFollow } from "./models/user-follow-model"
 import type { UserHistory } from "./models/user-history-model"
 import type { UserLibraryEntry } from "./models/user-library-entry-model"
 import type { UserListItem } from "./models/user-list-item-model"
 import type { UserList } from "./models/user-list-model"
 import type { User } from "./models/user-model"
+import type { UserProfileComment } from "./models/user-profile-comment-model"
 import type { UserProfile } from "./models/user-profile-model"
 import type { Verification } from "./models/verification-model"
 
@@ -54,11 +57,14 @@ export type DB = {
   staffs: Staff
   tasks: Task
   titles: Title
+  twoFactors: TwoFactor
+  userCosmetics: UserCosmetic
   userFollows: UserFollow
   userHistories: UserHistory
   userLibraryEntries: UserLibraryEntry
   userListItems: UserListItem
   userLists: UserList
+  userProfileComments: UserProfileComment
   userProfiles: UserProfile
   users: User
   verifications: Verification

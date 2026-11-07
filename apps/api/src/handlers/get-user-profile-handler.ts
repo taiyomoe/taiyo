@@ -1,4 +1,4 @@
-import { sql } from "@taiyomoe/db"
+import { COUNTRIES, GENDERS, LANGUAGES, sql } from "@taiyomoe/db"
 import { GROUP_MEMBERSHIP_ROLES, ROLES } from "@taiyomoe/permissions"
 import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
@@ -18,16 +18,38 @@ const userProfileSchema = z.object({
   username: z.string(),
   displayUsername: z.string(),
   image: z.string().nullable(),
+  nameEffect: z.string().nullable().meta({ description: "The equipped name effect, if any." }),
+  title: z.string().nullable().meta({ description: "The equipped profile title, if any." }),
   role: z.enum(ROLES),
   createdAt: z.iso.datetime(),
   bannerUrl: z.url().nullable(),
-  about: z.record(z.string(), z.string()).meta({ description: "About text, keyed by language." }),
+  about: z
+    .partialRecord(z.enum(LANGUAGES), z.string())
+    .meta({ description: "About text, keyed by language." }),
+  city: z.string().nullable(),
+  country: z.enum(COUNTRIES).nullable(),
+  gender: z.enum(GENDERS),
+  birthDate: z.iso.date().nullable().meta({ description: "Birth date, as YYYY-MM-DD." }),
+  points: z.number().int(),
+  xp: z
+    .number()
+    .int()
+    .meta({ description: "Lifetime experience: one point per page read and credited." }),
   followerCount: z.number().int(),
   followingCount: z.number().int(),
+  followingHidden: z
+    .boolean()
+    .meta({ description: "Whether the user hides who they follow from you." }),
+  uploadCount: z.number().int().meta({ description: "Published chapters the user uploaded." }),
+  commentCount: z.number().int().meta({ description: "Comments left on this profile." }),
   viewerFollows: z
     .boolean()
     .nullable()
     .meta({ description: "Whether you follow this user, or null when signed out." }),
+  followsViewer: z
+    .boolean()
+    .nullable()
+    .meta({ description: "Whether this user follows you, or null when signed out." }),
   groups: z
     .object({
       id: z.uuid(),
@@ -72,9 +94,17 @@ export const getUserProfileHandler = new Hono().get(
         "users.username",
         "users.displayUsername",
         "users.image",
+        "users.nameEffect",
         "users.role",
+        "users.settings",
         "userProfiles.banner",
         "userProfiles.about",
+        "userProfiles.city",
+        "userProfiles.country",
+        "userProfiles.gender",
+        "userProfiles.points",
+        "userProfiles.title",
+        sql<string | null>`to_char("userProfiles"."birthDate", 'YYYY-MM-DD')`.as("birthDate"),
         sql<string>`to_char("users"."createdAt", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`.as("createdAt"),
       ])
       .where(sql`lower("users"."username")`, "=", username.toLowerCase())
@@ -85,29 +115,74 @@ export const getUserProfileHandler = new Hono().get(
       return c.fail("USER_NOT_FOUND")
     }
 
-    const [followers, following, viewerFollow, groups] = await Promise.all([
+    const viewerId = viewer?.id ?? null
+    const [counts, groups] = await Promise.all([
       db
-        .selectFrom("userFollows")
-        .innerJoin("users", "users.id", "userFollows.followerId")
-        .where("userFollows.followingId", "=", user.id)
-        .where(notBanned)
-        .select(db.fn.countAll<string>().as("count"))
-        .executeTakeFirstOrThrow(),
-      db
-        .selectFrom("userFollows")
-        .innerJoin("users", "users.id", "userFollows.followingId")
-        .where("userFollows.followerId", "=", user.id)
-        .where(notBanned)
-        .select(db.fn.countAll<string>().as("count"))
-        .executeTakeFirstOrThrow(),
-      viewer === null
-        ? null
-        : db
+        .selectNoFrom((eb) => [
+          eb
             .selectFrom("userFollows")
-            .select("followerId")
-            .where("followerId", "=", viewer.id)
-            .where("followingId", "=", user.id)
-            .executeTakeFirst(),
+            .innerJoin("users", "users.id", "userFollows.followerId")
+            .where("userFollows.followingId", "=", user.id)
+            .where(notBanned)
+            .select(eb.fn.countAll<string>().as("count"))
+            .as("followers"),
+          eb
+            .selectFrom("userFollows")
+            .innerJoin("users", "users.id", "userFollows.followingId")
+            .where("userFollows.followerId", "=", user.id)
+            .where(notBanned)
+            .select(eb.fn.countAll<string>().as("count"))
+            .as("following"),
+          eb
+            .selectFrom("chapters")
+            .innerJoin("medias", "medias.id", "chapters.mediaId")
+            .where("chapters.uploaderId", "=", user.id)
+            .where("chapters.deletedAt", "is", null)
+            .where("chapters.status", "=", "PUBLISHED")
+            .where("medias.deletedAt", "is", null)
+            .select(eb.fn.countAll<string>().as("count"))
+            .as("uploads"),
+          eb
+            .selectFrom("readingRewards")
+            .where("readingRewards.userId", "=", user.id)
+            .select((inner) =>
+              inner.fn
+                .coalesce(inner.fn.sum<string>("readingRewards.pages"), sql<string>`0`)
+                .as("xp"),
+            )
+            .as("xp"),
+          eb
+            .selectFrom("userProfileComments")
+            .innerJoin("users", "users.id", "userProfileComments.authorId")
+            .where("userProfileComments.profileId", "=", user.id)
+            .where("userProfileComments.deletedAt", "is", null)
+            .where(notBanned)
+            .select(eb.fn.countAll<string>().as("count"))
+            .as("comments"),
+          viewerId === null
+            ? sql<boolean>`false`.as("viewerFollows")
+            : eb
+                .exists(
+                  eb
+                    .selectFrom("userFollows")
+                    .select("followerId")
+                    .where("followerId", "=", viewerId)
+                    .where("followingId", "=", user.id),
+                )
+                .as("viewerFollows"),
+          viewerId === null
+            ? sql<boolean>`false`.as("followsViewer")
+            : eb
+                .exists(
+                  eb
+                    .selectFrom("userFollows")
+                    .select("followerId")
+                    .where("followerId", "=", user.id)
+                    .where("followingId", "=", viewerId),
+                )
+                .as("followsViewer"),
+        ])
+        .executeTakeFirstOrThrow(),
       db
         .selectFrom("groupMemberships")
         .innerJoin("groups", "groups.id", "groupMemberships.groupId")
@@ -123,13 +198,25 @@ export const getUserProfileHandler = new Hono().get(
       username: user.username,
       displayUsername: user.displayUsername,
       image: user.image,
+      nameEffect: user.nameEffect,
+      title: user.title,
       role: user.role,
       createdAt: user.createdAt,
       bannerUrl: user.banner === null ? null : getPublicImageUrl(user.banner),
       about: user.about ?? {},
-      followerCount: Number(followers.count),
-      followingCount: Number(following.count),
-      viewerFollows: viewer === null ? null : viewerFollow !== undefined,
+      city: user.city,
+      country: user.country,
+      gender: user.gender ?? "NOT_SPECIFIED",
+      birthDate: user.birthDate,
+      points: user.points ?? 0,
+      xp: Number(counts.xp ?? 0),
+      followerCount: Number(counts.followers ?? 0),
+      followingCount: Number(counts.following ?? 0),
+      followingHidden: user.settings.showFollowing === false && viewerId !== user.id,
+      uploadCount: Number(counts.uploads ?? 0),
+      commentCount: Number(counts.comments ?? 0),
+      viewerFollows: viewer === null ? null : counts.viewerFollows === true,
+      followsViewer: viewer === null ? null : counts.followsViewer === true,
       groups: groups.map((group) => ({
         id: group.id,
         name: group.name,

@@ -222,6 +222,10 @@ export const latestChapterSchema = chapterFeedItemSchema
           .string()
           .meta({ description: "The display name of the user.", example: "Kaito" }),
         image: z.string().nullable().meta({ description: "URL of the user's avatar, if any." }),
+        nameEffect: z
+          .string()
+          .nullable()
+          .meta({ description: "The name effect the user has equipped, if any.", example: "gold" }),
       })
       .meta({ description: "The user who uploaded the chapter." }),
   })
@@ -289,6 +293,7 @@ export const userSummarySchema = z.object({
   username: z.string(),
   displayUsername: z.string(),
   image: z.string().nullable(),
+  nameEffect: z.string().nullable(),
 })
 
 export const groupSummarySchema = z.object({

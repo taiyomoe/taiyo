@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
 import type { GroupOption } from "@/features/groups/components/group-picker"
 import { ErrorAlert } from "@/components/feedback/error-alert"
+import { renderWithName } from "@/components/user-name/with-name"
 import {
   type ApproveFixes,
   type ChapterSubmission,
@@ -87,7 +88,7 @@ export function ReviewForm({
           })}
         </DialogTitle>
         <DialogDescription>
-          {m.review_chapter_description({ name: submission.uploader.displayUsername })}
+          {renderWithName(m.review_chapter_description, submission.uploader)}
         </DialogDescription>
       </DialogHeader>
       <DialogPanel>

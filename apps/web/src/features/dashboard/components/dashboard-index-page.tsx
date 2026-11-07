@@ -11,7 +11,7 @@ export function DashboardIndexPage() {
   const { compare = true } = routeApi.useSearch()
 
   if (!getPermissions(session.user)("dashboard.viewStats")) {
-    return <DashboardHome name={session.user.name} />
+    return <DashboardHome name={session.user.name} nameEffect={session.user.nameEffect} />
   }
 
   return (

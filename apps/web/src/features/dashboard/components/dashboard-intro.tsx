@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
+import { renderWithName } from "@/components/user-name/with-name"
 import { useClientValue } from "@/hooks/use-client-value"
 import { m } from "@/paraglide/messages"
 
@@ -29,21 +30,29 @@ const styles = stylex.create({
   },
 })
 
-export function DashboardIntro({ name, subtitle }: { name: string; subtitle: string }) {
+export function DashboardIntro({
+  name,
+  nameEffect,
+  subtitle,
+}: {
+  name: string
+  nameEffect: string | null | undefined
+  subtitle: string
+}) {
   const hour = useClientValue(() => new Date().getHours())
-  let greeting = m.dashboard_greeting({ name })
+  let greeting = m.dashboard_greeting
 
   if (hour !== null && hour >= 5 && hour < 12) {
-    greeting = m.dashboard_greeting_morning({ name })
+    greeting = m.dashboard_greeting_morning
   } else if (hour !== null && hour >= 12 && hour < 18) {
-    greeting = m.dashboard_greeting_afternoon({ name })
+    greeting = m.dashboard_greeting_afternoon
   } else if (hour !== null) {
-    greeting = m.dashboard_greeting_evening({ name })
+    greeting = m.dashboard_greeting_evening
   }
 
   return (
     <div sx={styles.intro}>
-      <h1 sx={styles.title}>{greeting}</h1>
+      <h1 sx={styles.title}>{renderWithName(greeting, { displayUsername: name, nameEffect })}</h1>
       <p sx={styles.subtitle}>{subtitle}</p>
     </div>
   )

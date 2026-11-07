@@ -4,6 +4,7 @@ import { Eye } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import { renderWithName } from "@/components/user-name/with-name"
 import { unwrapAuth } from "@/features/users/api/user-admin"
 import { sessionQueryOptions } from "@/lib/session"
 import { m } from "@/paraglide/messages"
@@ -58,7 +59,10 @@ export function ImpersonationBar() {
     <div role="status" sx={styles.bar}>
       <Eye size={16} {...stylex.props(styles.icon)} />
       <span sx={styles.name}>
-        {m.impersonation_active({ name: current.user.displayUsername ?? current.user.name })}
+        {renderWithName(m.impersonation_active, {
+          displayUsername: current.user.displayUsername ?? current.user.name,
+          nameEffect: current.user.nameEffect,
+        })}
       </span>
       <Button
         disabled={stopImpersonating.isPending}

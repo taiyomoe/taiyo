@@ -8,6 +8,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { Form } from "@taiyomoe/ui/components/ui/form"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { SunButton } from "@/components/buttons/sun-button"
@@ -17,6 +18,7 @@ import { authFormStyles as sx } from "@/features/auth/components/auth-form-style
 import { AuthHeading } from "@/features/auth/components/auth-heading"
 import { AuthSocialButtons } from "@/features/auth/components/auth-social-buttons"
 import { AuthSwitchLink } from "@/features/auth/components/auth-switch-link"
+import { TwoFactorForm } from "@/features/auth/components/two-factor-form"
 import { useAuthForm } from "@/features/auth/hooks/use-auth-form"
 import { m } from "@/paraglide/messages"
 
@@ -28,6 +30,7 @@ const signInSchema = z.object({
 
 export const SignInForm = () => {
   const auth = useAuthForm()
+  const [twoFactor, setTwoFactor] = useState(false)
   const form = useForm({
     resolver: zodResolver(signInSchema),
     mode: "onTouched",
@@ -37,8 +40,25 @@ export const SignInForm = () => {
   const isSubmitting = form.formState.isSubmitting
   const isBusy = isSubmitting || auth.disabled
   const onSubmit = form.handleSubmit(async (values) => {
-    await auth.signIn(values)
+    const result = await auth.signIn(values)
+
+    if (result.ok && result.twoFactor === true) {
+      setTwoFactor(true)
+    }
   })
+
+  if (twoFactor) {
+    return (
+      <TwoFactorForm
+        auth={auth}
+        onBack={() => {
+          auth.clearError()
+          form.resetField("password")
+          setTwoFactor(false)
+        }}
+      />
+    )
+  }
 
   return (
     <>

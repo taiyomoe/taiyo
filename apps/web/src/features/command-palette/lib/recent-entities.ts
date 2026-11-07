@@ -29,6 +29,7 @@ const entitySchema = z.discriminatedUnion("kind", [
     username: z.string(),
     displayUsername: z.string(),
     image: z.string().nullable(),
+    nameEffect: z.string().nullable().default(null),
   }),
 ])
 const listeners = new Set<() => void>()

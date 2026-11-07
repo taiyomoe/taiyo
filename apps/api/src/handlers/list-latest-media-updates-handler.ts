@@ -25,6 +25,10 @@ const querySchema = paginationQuerySchema.extend({
     description: "How many of each media's latest chapters to include (1-20).",
     example: 5,
   }),
+  uploaderId: z
+    .uuid()
+    .optional()
+    .meta({ description: "Only list the chapters uploaded by this user." }),
 })
 
 export const listLatestMediaUpdatesHandler = new Hono().get(
@@ -53,8 +57,8 @@ export const listLatestMediaUpdatesHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage, contentRating, chaptersPerMedia } = c.var.query
-    const filters = { contentRatings: contentRating }
+    const { page, perPage, contentRating, chaptersPerMedia, uploaderId } = c.var.query
+    const filters = { contentRatings: contentRating, uploaderId }
     const [updates, totalRow] = await Promise.all([
       selectVisibleChapters(db, filters)
         .groupBy(["medias.id", "medias.countryOfOrigin", "medias.contentRating"])

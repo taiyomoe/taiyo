@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { FilterIn, FilterOut } from "@taiyomoe/ui/components/icons"
 import { colors, font, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { FacetKey, FacetValue } from "@/features/activity-log/components/breakdown/types"
+import { UserName } from "@/components/user-name/user-name"
 import { ActorGlyph } from "@/features/activity-log/components/breakdown/actor-glyph"
 import { getCategoryTone } from "@/features/activity-log/components/entity-avatar"
 import { formatCount } from "@/features/activity-log/lib/format"
@@ -137,7 +138,9 @@ export function FacetRow({
       >
         <span sx={styles.label}>
           {facetKey === "actor" ? <ActorGlyph entry={entry} /> : null}
-          <span sx={styles.value}>{label}</span>
+          <span sx={styles.value}>
+            <UserName effect={entry.nameEffect} name={label} />
+          </span>
           <span sx={styles.count}>{formatCount(entry.count)}</span>
         </span>
         <span aria-hidden sx={styles.rail}>

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import {
   AlertDialog,
   AlertDialogClose,
@@ -12,7 +13,7 @@ import { ErrorAlert } from "@/components/feedback/error-alert"
 import { m } from "@/paraglide/messages"
 
 export type Confirmation = {
-  title: string
+  title: ReactNode
   description: string
   confirmLabel: string
   destructive?: boolean

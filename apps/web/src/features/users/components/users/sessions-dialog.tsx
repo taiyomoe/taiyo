@@ -15,6 +15,7 @@ import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { ManagedUser } from "@/features/users/api/users"
 import { ErrorAlert } from "@/components/feedback/error-alert"
+import { renderWithName } from "@/components/user-name/with-name"
 import { sessionsKey, unwrapAuth, userSessionsQueryOptions } from "@/features/users/api/user-admin"
 import { dialogStyles } from "@/features/users/components/users/dialog-styles"
 import { SessionItem } from "@/features/users/components/users/session-item"
@@ -65,7 +66,7 @@ export function SessionsDialog({ user, onClose }: { user: ManagedUser; onClose: 
     >
       <DialogPopup>
         <DialogHeader>
-          <DialogTitle>{m.sessions_title({ name: user.displayUsername })}</DialogTitle>
+          <DialogTitle>{renderWithName(m.sessions_title, user)}</DialogTitle>
           <DialogDescription>{m.sessions_description()}</DialogDescription>
         </DialogHeader>
         <DialogPanel>

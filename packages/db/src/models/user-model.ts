@@ -20,6 +20,8 @@ export type User = {
   banExpires: Timestamp | null
   settings: Generated<UserSettings>
   readerSettings: Record<string, unknown> | null
+  nameEffect: string | null
+  twoFactorEnabled: Generated<boolean>
 }
 
 export type NewUser = Insertable<User>

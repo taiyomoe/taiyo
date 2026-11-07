@@ -8,12 +8,13 @@ type ChapterFilters = {
   contentRatings: ContentRating[]
   mediaId?: string | undefined
   groupId?: string | undefined
+  uploaderId?: string | undefined
   status?: "PUBLISHED" | "SCHEDULED"
 }
 
 export const selectVisibleChapters = (
   db: Kysely<DB>,
-  { contentRatings, mediaId, groupId, status = "PUBLISHED" }: ChapterFilters,
+  { contentRatings, mediaId, groupId, uploaderId, status = "PUBLISHED" }: ChapterFilters,
 ) =>
   db
     .selectFrom("chapters")
@@ -23,6 +24,9 @@ export const selectVisibleChapters = (
     .where("medias.deletedAt", "is", null)
     .where(effectiveContentRating, "in", contentRatings)
     .where((eb) => (mediaId === undefined ? eb.and([]) : eb("chapters.mediaId", "=", mediaId)))
+    .where((eb) =>
+      uploaderId === undefined ? eb.and([]) : eb("chapters.uploaderId", "=", uploaderId),
+    )
     .where((eb) =>
       groupId === undefined
         ? eb.and([])
@@ -53,6 +57,7 @@ export const selectLatestChapters = (db: Kysely<DB>, filters: ChapterFilters) =>
       "users.username as uploaderUsername",
       "users.displayUsername as uploaderDisplayUsername",
       "users.image as uploaderImage",
+      "users.nameEffect as uploaderNameEffect",
     ])
 
 type LatestChapterRow = {
@@ -61,6 +66,7 @@ type LatestChapterRow = {
   uploaderUsername: string
   uploaderDisplayUsername: string
   uploaderImage: string | null
+  uploaderNameEffect: string | null
 }
 
 export const withChapterDetails = async <T extends LatestChapterRow>(db: Kysely<DB>, rows: T[]) => {
@@ -82,7 +88,14 @@ export const withChapterDetails = async <T extends LatestChapterRow>(db: Kysely<
   const groupsByChapter = group(credits, (credit) => credit.chapterId)
 
   return rows.map(
-    ({ uploaderId, uploaderUsername, uploaderDisplayUsername, uploaderImage, ...row }) => ({
+    ({
+      uploaderId,
+      uploaderUsername,
+      uploaderDisplayUsername,
+      uploaderImage,
+      uploaderNameEffect,
+      ...row
+    }) => ({
       ...row,
       groups: (groupsByChapter[row.id] ?? []).map(({ id, name }) => ({ id, name })),
       uploader: {
@@ -90,6 +103,7 @@ export const withChapterDetails = async <T extends LatestChapterRow>(db: Kysely<
         username: uploaderUsername,
         displayUsername: uploaderDisplayUsername,
         image: uploaderImage,
+        nameEffect: uploaderNameEffect,
       },
     }),
   )

@@ -1,5 +1,14 @@
 import * as stylex from "@stylexjs/stylex"
-import { Dashboard, Eye, Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
+import {
+  Dashboard,
+  Eye,
+  Logout,
+  Monitor,
+  Moon,
+  Settings,
+  Sun,
+  User,
+} from "@taiyomoe/ui/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import {
   Menu,
@@ -118,15 +127,23 @@ export function UserMenu({ user }: { user: Session["user"] }) {
         </Avatar>
       </MenuTrigger>
       <MenuPopup align="end" sideOffset={8} sx={styles.popup}>
-        {canOpenDashboard(user) ? (
-          <>
-            <MenuItem render={<Link to="/dashboard" />}>
-              <Dashboard />
-              {m.dashboard_name()}
-            </MenuItem>
-            <MenuSeparator />
-          </>
+        {typeof user.username === "string" && user.username !== "" ? (
+          <MenuItem render={<Link params={{ username: user.username }} to="/users/$username" />}>
+            <User />
+            {m.shell_my_profile()}
+          </MenuItem>
         ) : null}
+        <MenuItem render={<Link to="/settings" />}>
+          <Settings />
+          {m.user_settings_title()}
+        </MenuItem>
+        {canOpenDashboard(user) ? (
+          <MenuItem render={<Link to="/dashboard" />}>
+            <Dashboard />
+            {m.dashboard_name()}
+          </MenuItem>
+        ) : null}
+        <MenuSeparator />
         <MenuSub>
           <MenuSubTrigger>
             <ThemeIcon />

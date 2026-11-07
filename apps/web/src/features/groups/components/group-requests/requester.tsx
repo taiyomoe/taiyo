@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { OwnershipRequest } from "@/features/groups/api/groups"
+import { UserName } from "@/components/user-name/user-name"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 
 const styles = stylex.create({
@@ -32,7 +33,9 @@ export function Requester({
     <>
       <PersonAvatar person={person} />
       <div sx={styles.sentence}>
-        <span sx={styles.strong}>{person.displayUsername}</span>
+        <span sx={styles.strong}>
+          <UserName effect={person.nameEffect} name={person.displayUsername} />
+        </span>
         <span sx={styles.verb}>{verb}</span>
       </div>
     </>

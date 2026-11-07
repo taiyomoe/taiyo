@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
 import type { ManagedUser } from "@/features/users/api/users"
 import { ConfirmDialog } from "@/components/dialogs/confirm-dialog"
+import { renderWithName } from "@/components/user-name/with-name"
 import { unwrapAuth } from "@/features/users/api/user-admin"
 import { SessionsDialog } from "@/features/users/components/users/sessions-dialog"
 import { SetPasswordDialog } from "@/features/users/components/users/set-password-dialog"
@@ -93,7 +94,7 @@ export function UserMoreMenu({ user, can }: { user: ManagedUser; can: Permission
             confirmation={
               open === "impersonate"
                 ? {
-                    title: m.impersonate_title({ name: user.displayUsername }),
+                    title: renderWithName(m.impersonate_title, user),
                     description: m.impersonate_description(),
                     confirmLabel: m.impersonate_confirm({ name: user.displayUsername }),
                     run: () => impersonate.mutateAsync(user.id),

@@ -48,7 +48,9 @@ function RouteComponent() {
                 <strong sx={prose.strong}>Account information.</strong> Your display name, email
                 address, and a hashed form of your password. We never store your password in a form
                 we can read. If you sign in with Google or Discord instead, we receive your email
-                address and basic profile information from them, not your password.
+                address and basic profile information from them, not your password. If you turn on
+                two-factor authentication, we store the secret your authenticator app uses and your
+                backup codes in encrypted form, and a cookie on any device you choose to trust.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Content you submit.</strong> Your library entries and
@@ -57,6 +59,14 @@ function RouteComponent() {
                 the note you attach to them, the groups you belong to and the permissions you hold
                 in them, the invitations you send and receive, and the message and links you provide
                 when you ask to take ownership of a group or to create one.
+              </p>
+              <p sx={prose.p}>
+                <strong sx={prose.strong}>Your public profile.</strong> The avatar and banner you
+                upload, and whatever you choose to add about yourself: an about text, your city,
+                country, gender and birth date. Everything here is optional and shown publicly on
+                your profile, along with the title and name effect you pick and the comments you
+                leave on other people&apos;s profiles. Your reading and library statistics are shown
+                there too, unless you hide your library.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Technical information.</strong> Your IP address, browser

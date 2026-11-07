@@ -23,6 +23,10 @@ const actorValueSchema = valueSchema.extend({
   type: z.string().meta({ description: "The kind of actor." }),
   displayName: z.string().nullable().meta({ description: "The actor's display name." }),
   image: z.string().nullable().meta({ description: "The actor's avatar, if a user." }),
+  nameEffect: z
+    .string()
+    .nullable()
+    .meta({ description: "The actor's equipped name effect, if a user." }),
 })
 const facetsSchema = z.object({
   total: z.int().meta({ description: "How many entries match." }),
@@ -88,6 +92,7 @@ export const getAuditLogFacetsHandler = new Hono().get(
               "displayName",
             ),
             sql<string | null>`max(${sql.ref("users.image")})`.as("image"),
+            sql<string | null>`max(${sql.ref("users.nameEffect")})`.as("nameEffect"),
             sql<number>`count(*)::int`.as("count"),
           ])
           .groupBy(["auditLogs.actorId", "auditLogs.actorType"])

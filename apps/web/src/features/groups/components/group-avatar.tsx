@@ -83,6 +83,7 @@ export function GroupAvatar({
     >
       {name
         .split(/\s+/)
+        .map((word) => word.replace(/[^\p{L}\p{N}]/gu, ""))
         .filter((word) => word !== "")
         .slice(0, 2)
         .map((word) => word.charAt(0).toUpperCase())
@@ -92,6 +93,11 @@ export function GroupAvatar({
           alt=""
           onError={() => {
             setFailedUrl(logoUrl)
+          }}
+          ref={(image) => {
+            if (image?.complete === true && image.naturalWidth === 0) {
+              setFailedUrl(logoUrl)
+            }
           }}
           src={logoUrl}
           sx={styles.logo}

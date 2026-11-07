@@ -121,6 +121,10 @@ const dashboardOverviewSchema = z.object({
         .string()
         .meta({ description: "The display name of the user.", example: "Kaito" }),
       image: z.string().nullable().meta({ description: "URL of the user's avatar, if any." }),
+      nameEffect: z
+        .string()
+        .nullable()
+        .meta({ description: "The user's equipped name effect, if any." }),
       chapters: z.int().meta({
         description: "Chapters the user uploaded in the current window, not deleted.",
         example: 42,
@@ -173,6 +177,10 @@ const dashboardOverviewSchema = z.object({
             .string()
             .meta({ description: "The display name of the user.", example: "Kaito" }),
           image: z.string().nullable().meta({ description: "URL of the user's avatar, if any." }),
+          nameEffect: z
+            .string()
+            .nullable()
+            .meta({ description: "The user's equipped name effect, if any." }),
         })
         .meta({ description: "The user behind the activity." }),
       media: z
@@ -320,6 +328,7 @@ export const getDashboardOverviewHandler = new Hono().get(
               "users.username as actorUsername",
               "users.displayUsername as actorDisplayUsername",
               "users.image as actorImage",
+              "users.nameEffect as actorNameEffect",
               sql<Date>`max(${eb.ref("event.createdAt")}) at time zone 'UTC'`.as("at"),
               eb.fn.countAll<string>().as("count"),
             ])
@@ -346,6 +355,7 @@ export const getDashboardOverviewHandler = new Hono().get(
               username: row.actorUsername,
               displayUsername: row.actorDisplayUsername,
               image: row.actorImage,
+              nameEffect: row.actorNameEffect,
             },
             media: { id: row.mediaId, title: titles.get(row.mediaId) ?? null },
           }))

@@ -14,6 +14,7 @@ export type UserProfile = {
   country: Country | null
   about: Generated<LocalizedText>
   points: Generated<number>
+  title: string | null
   userId: string
 }
 

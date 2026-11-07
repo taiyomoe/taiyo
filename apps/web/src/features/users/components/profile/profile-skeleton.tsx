@@ -1,41 +1,63 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { profileStyles } from "@/features/users/components/profile/profile-styles"
 
 const styles = stylex.create({
+  banner: {
+    borderRadius: 0,
+    aspectRatio: "3 / 1",
+    maxHeight: "18rem",
+    width: "100%",
+  },
   header: {
-    gap: "1.25rem",
-    alignItems: "center",
+    gap: "1rem",
     display: "flex",
+    flexDirection: "column",
+  },
+  avatarFrame: {
+    padding: "0.25rem",
+    borderRadius: radius.full,
+    backgroundColor: colors.background,
+    display: "inline-block",
+    position: "relative",
+    zIndex: 1,
+    marginTop: { default: "-3rem", [breakpoints.md]: "-4.25rem" },
+    width: "fit-content",
   },
   avatar: {
     borderRadius: radius.full,
-    flexShrink: 0,
-    height: "5.5rem",
-    width: "5.5rem",
-  },
-  lines: {
-    gap: "0.75rem",
-    display: "flex",
-    flexDirection: "column",
-    width: "16rem",
+    height: { default: "5.5rem", [breakpoints.md]: "8rem" },
+    width: { default: "5.5rem", [breakpoints.md]: "8rem" },
   },
   name: {
-    height: "2.25rem",
+    height: { default: "1.75rem", [breakpoints.md]: "2.25rem" },
+    width: "min(18rem, 70%)",
   },
-  meta: {
+  line: {
     height: "1rem",
-    width: "60%",
+    width: "min(24rem, 85%)",
+  },
+  tabs: {
+    height: "2.5rem",
+    width: "min(24rem, 100%)",
   },
 })
 
 export function ProfileSkeleton() {
   return (
-    <div sx={styles.header}>
-      <Skeleton sx={styles.avatar} />
-      <div sx={styles.lines}>
-        <Skeleton sx={styles.name} />
-        <Skeleton sx={styles.meta} />
+    <div aria-hidden sx={profileStyles.root}>
+      <Skeleton sx={styles.banner} />
+      <div sx={profileStyles.container}>
+        <div sx={styles.header}>
+          <span sx={styles.avatarFrame}>
+            <Skeleton sx={styles.avatar} />
+          </span>
+          <Skeleton sx={styles.name} />
+          <Skeleton sx={styles.line} />
+          <Skeleton sx={styles.line} />
+        </div>
+        <Skeleton sx={styles.tabs} />
       </div>
     </div>
   )

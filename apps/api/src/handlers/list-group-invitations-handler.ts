@@ -55,10 +55,12 @@ export const listGroupInvitationsHandler = new Hono().get(
         "invitee.username as inviteeUsername",
         "invitee.displayUsername as inviteeDisplayUsername",
         "invitee.image as inviteeImage",
+        "invitee.nameEffect as inviteeNameEffect",
         "inviter.id as inviterId",
         "inviter.username as inviterUsername",
         "inviter.displayUsername as inviterDisplayUsername",
         "inviter.image as inviterImage",
+        "inviter.nameEffect as inviterNameEffect",
       ])
       .where("groupInvitations.groupId", "=", group.id)
       .where("groupInvitations.status", "=", "PENDING")
@@ -75,12 +77,14 @@ export const listGroupInvitationsHandler = new Hono().get(
           username: row.inviteeUsername,
           displayUsername: row.inviteeDisplayUsername,
           image: row.inviteeImage,
+          nameEffect: row.inviteeNameEffect,
         },
         inviter: {
           id: row.inviterId,
           username: row.inviterUsername,
           displayUsername: row.inviterDisplayUsername,
           image: row.inviterImage,
+          nameEffect: row.inviterNameEffect,
         },
         expiresAt: row.expiresAt,
         createdAt: row.createdAt,
