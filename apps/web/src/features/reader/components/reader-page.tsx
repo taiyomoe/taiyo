@@ -8,7 +8,7 @@ const routeApi = getRouteApi("/chapters/$chapterId/")
 
 export function ReaderPage() {
   const { chapterId } = routeApi.useParams()
-  const { page } = routeApi.useSearch()
+  const { page, comment } = routeApi.useSearch()
   const { session: authSession } = routeApi.useRouteContext()
   const [sheetOpen, setSheetOpen] = useState(false)
   const [session, setSession] = useState(() => ({
@@ -37,6 +37,7 @@ export function ReaderPage() {
       <ChapterReader
         chapterId={chapterId}
         key={session.key}
+        linkedCommentId={comment ?? null}
         onSessionChapters={(chapters) => {
           setSession((previous) => ({ ...previous, chapters: new Set(chapters) }))
         }}
@@ -44,6 +45,7 @@ export function ReaderPage() {
         requestedPage={page}
         sheetOpen={sheetOpen}
         signedIn={authSession !== null}
+        viewer={authSession?.user ?? null}
       />
     </Suspense>
   )

@@ -4,6 +4,7 @@ import { devtools } from "@tanstack/devtools-vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import viteReact from "@vitejs/plugin-react"
 import { defineConfig, loadEnv, type PluginOption } from "vite"
+import { twemojiAssets } from "./twemoji-assets"
 
 type StylexOptions = NonNullable<Parameters<typeof stylex.vite>[0]> & {
   externalPackages?: string[]
@@ -54,6 +55,7 @@ const config = defineConfig(({ mode }) => {
       stylexPlugin,
       tanstackStart(),
       viteReact({ compiler: true }),
+      twemojiAssets(),
       paraglideVitePlugin({
         project: "./project.inlang",
         outdir: "./src/paraglide",

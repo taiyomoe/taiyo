@@ -1,3 +1,4 @@
+import { type CommentImageReaperDeps, reapOrphanCommentImages } from "./comment-image-reaper"
 import { createBullConnection } from "./connection"
 import { processChapterUpload, type ProcessorDeps } from "./processor"
 import { publishScheduledChapters, type PublisherDeps } from "./publisher"
@@ -16,6 +17,7 @@ export {
   getChapterUploadProducer,
   processChapterUpload,
   publishScheduledChapters,
+  reapOrphanCommentImages,
   reapStaleChapterUploads,
 }
 
@@ -23,6 +25,7 @@ export type {
   ChapterUploadJobData,
   ChapterUploadManifest,
   ChapterUploadProducer,
+  CommentImageReaperDeps,
   ProcessorDeps,
   PublisherDeps,
   ReaperDeps,

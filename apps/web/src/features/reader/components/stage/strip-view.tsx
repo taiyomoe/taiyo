@@ -40,6 +40,7 @@ export function StripView({
   stage,
   pageElements,
   nextLabel,
+  comments,
   onPageVisible,
   onLoad,
   onNext,
@@ -53,6 +54,7 @@ export function StripView({
   stage: RefObject<HTMLElement | null>
   pageElements: RefObject<Map<string, HTMLElement>>
   nextLabel: string | null
+  comments: { count: number | undefined; onOpen: () => void } | null
   onPageVisible: (chapterId: string, index: number) => void
   onLoad: (chapterId: string, index: number, aspect: number) => void
   onNext: () => void
@@ -149,6 +151,7 @@ export function StripView({
       {last === undefined ? null : (
         <StripEnd
           chapterLabel={last.label}
+          comments={comments}
           nextLabel={nextLabel}
           onBack={onBack}
           onNext={onNext}

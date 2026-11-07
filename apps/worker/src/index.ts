@@ -1,4 +1,10 @@
-import { chapterAudit, chapterUploadAudit, createAuditLogDrain, systemActor } from "@taiyomoe/audit"
+import {
+  chapterAudit,
+  chapterUploadAudit,
+  commentImageAudit,
+  createAuditLogDrain,
+  systemActor,
+} from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { getDb } from "@taiyomoe/db"
 import {
@@ -7,6 +13,7 @@ import {
   createBullConnection,
   processChapterUpload,
   publishScheduledChapters,
+  reapOrphanCommentImages,
   reapStaleChapterUploads,
 } from "@taiyomoe/queue"
 import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from "@taiyomoe/s3"
@@ -20,8 +27,11 @@ const REAP_JOB = "reap-stale-uploads"
 const PUBLISH_JOB = "publish-scheduled-chapters"
 const SEARCH_MAINTENANCE_QUEUE = "search-maintenance"
 const DRAIN_JOB = "drain-search-outbox"
+const COMMENT_MAINTENANCE_QUEUE = "comment-maintenance"
+const REAP_COMMENT_IMAGES_JOB = "reap-orphan-comment-images"
 const chapterUploadActor = systemActor("chapter-upload-worker")
 const maintenanceActor = systemActor("chapter-maintenance-worker")
+const commentMaintenanceActor = systemActor("comment-maintenance-worker")
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const searchDeps = { db: deps.db, meili: getMeiliClient(), mediasIndex: SEARCH_INDEXES.MEDIAS }
 
@@ -133,6 +143,23 @@ const searchWorker = new Worker(
   },
   { connection: createBullConnection(), concurrency: 1 },
 )
+const commentWorker = new Worker(
+  COMMENT_MAINTENANCE_QUEUE,
+  async () => {
+    const reaped = await reapOrphanCommentImages(deps)
+
+    for (const { id, uploaderId } of reaped) {
+      audit(
+        commentImageAudit.REAP({
+          actor: commentMaintenanceActor,
+          target: { id, uploaderId },
+          outcome: "success",
+        }),
+      )
+    }
+  },
+  { connection: createBullConnection(), concurrency: 1 },
+)
 
 chapterWorker.on("ready", () => {
   // oxlint-disable-next-line no-console
@@ -170,8 +197,29 @@ await searchMaintenanceQueue
     console.warn("search maintenance schedule not applied (store may not support it):", err)
   })
 
+const commentMaintenanceQueue = new Queue(COMMENT_MAINTENANCE_QUEUE, {
+  connection: createBullConnection(),
+})
+
+await commentMaintenanceQueue
+  .upsertJobScheduler(
+    REAP_COMMENT_IMAGES_JOB,
+    { pattern: "30 * * * *" },
+    { name: REAP_COMMENT_IMAGES_JOB },
+  )
+  .then(() => commentMaintenanceQueue.close())
+  .catch((err: unknown) => {
+    // oxlint-disable-next-line no-console
+    console.warn("comment maintenance schedule not applied (store may not support it):", err)
+  })
+
 const handleShutdownSignal = () => {
-  Promise.all([chapterWorker.close(), maintenanceWorker.close(), searchWorker.close()])
+  Promise.all([
+    chapterWorker.close(),
+    maintenanceWorker.close(),
+    searchWorker.close(),
+    commentWorker.close(),
+  ])
     .then(() => {
       process.exit(0)
     })

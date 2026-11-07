@@ -8,6 +8,7 @@ import { RichText } from "@/components/rich-text/rich-text"
 import { parseRichText } from "@/components/rich-text/rich-text-document"
 import { AppShell } from "@/components/shell/app-shell"
 import { LatestListSkeleton } from "@/features/chapters/components/latest-updates/latest-list"
+import { CommentSection } from "@/features/comments/components/comment-section"
 import { groupQueryOptions } from "@/features/groups/api/groups"
 import { GroupChapters } from "@/features/groups/components/group/group-chapters"
 import { GroupHeader } from "@/features/groups/components/group/group-header"
@@ -45,6 +46,7 @@ export function GroupPage() {
   const { session } = routeApi.useRouteContext()
   const { groupId } = routeApi.useParams()
   const { page } = routeApi.useLoaderDeps()
+  const { comment } = routeApi.useSearch()
   const user = session?.user ?? null
   const can = usePermissions(user)
   const canManage =
@@ -56,6 +58,14 @@ export function GroupPage() {
         <Suspense fallback={<LatestListSkeleton count={10} />}>
           <GroupChapters groupId={groupId} page={page} />
         </Suspense>
+      }
+      comments={
+        <CommentSection
+          getPermalink={(id) => `/groups/${groupId}?comment=${id}`}
+          linkedCommentId={comment ?? null}
+          target={{ type: "GROUP", id: groupId }}
+          viewer={user}
+        />
       }
       members={
         <Suspense fallback={<GroupMembersSkeleton />}>
@@ -78,6 +88,7 @@ export function GroupPageSkeleton() {
   return (
     <GroupLayout
       chapters={<LatestListSkeleton count={10} />}
+      comments={null}
       members={<GroupMembersSkeleton />}
       overview={<GroupHeaderSkeleton />}
       user={session?.user ?? null}
@@ -90,11 +101,13 @@ function GroupLayout({
   overview,
   members,
   chapters,
+  comments,
 }: {
   user: Session["user"] | null
   overview: ReactNode
   members: ReactNode
   chapters: ReactNode
+  comments: ReactNode
 }) {
   return (
     <AppShell user={user}>
@@ -108,6 +121,7 @@ function GroupLayout({
           <h2 sx={styles.sectionTitle}>{m.group_chapters()}</h2>
           {chapters}
         </section>
+        {comments === null ? null : <div sx={groupStyles.column}>{comments}</div>}
       </div>
     </AppShell>
   )

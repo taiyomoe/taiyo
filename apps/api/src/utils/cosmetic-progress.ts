@@ -27,9 +27,9 @@ export const getCosmeticProgress = async (db: Kysely<DB>, userId: string) => {
         .select(eb.fn.countAll<string>().as("count"))
         .as("followers"),
       eb
-        .selectFrom("userProfileComments")
-        .where("userProfileComments.authorId", "=", userId)
-        .where("userProfileComments.deletedAt", "is", null)
+        .selectFrom("comments")
+        .where("comments.authorId", "=", userId)
+        .where("comments.deletedAt", "is", null)
         .select(eb.fn.countAll<string>().as("count"))
         .as("commentsWritten"),
     ])

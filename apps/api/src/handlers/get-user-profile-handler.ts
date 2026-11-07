@@ -6,6 +6,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
+import { liveCommentSql } from "../utils/comments"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 import { isBannedSql } from "../utils/user-moderation"
@@ -152,11 +153,11 @@ export const getUserProfileHandler = new Hono().get(
             )
             .as("xp"),
           eb
-            .selectFrom("userProfileComments")
-            .innerJoin("users", "users.id", "userProfileComments.authorId")
-            .where("userProfileComments.profileId", "=", user.id)
-            .where("userProfileComments.deletedAt", "is", null)
-            .where(notBanned)
+            .selectFrom("comments as c")
+            .innerJoin("commentThreads as t", "t.id", "c.threadId")
+            .leftJoin("users as u", "u.id", "c.authorId")
+            .where("t.profileId", "=", user.id)
+            .where(liveCommentSql("c", "u"))
             .select(eb.fn.countAll<string>().as("count"))
             .as("comments"),
           viewerId === null

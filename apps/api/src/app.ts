@@ -23,6 +23,9 @@ import { auditAuthRequest } from "./middlewares/audit-auth-middleware"
 import { auditLogsRouter } from "./routers/audit-logs-router"
 import { bannersRouter } from "./routers/banners-router"
 import { chaptersRouter } from "./routers/chapters-router"
+import { commentImagesRouter } from "./routers/comment-images-router"
+import { commentReportsRouter } from "./routers/comment-reports-router"
+import { commentsRouter } from "./routers/comments-router"
 import { coversRouter } from "./routers/covers-router"
 import { dashboardRouter } from "./routers/dashboard-router"
 import { groupCreationRequestsRouter } from "./routers/group-creation-requests-router"
@@ -169,6 +172,9 @@ export const createApp = (services: Services) => {
     .route("/media-suggestions", mediaSuggestionsRouter)
     .route("/users", usersRouter)
     .route("/lists", listsRouter)
+    .route("/comments", commentsRouter)
+    .route("/comment-images", commentImagesRouter)
+    .route("/comment-reports", commentReportsRouter)
     .route("/dashboard", dashboardRouter)
     .route("/search", searchRouter)
     .route("/audit-logs", auditLogsRouter)

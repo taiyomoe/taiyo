@@ -82,10 +82,10 @@ describe("GET /users/by-username/:username", () => {
     })
     await api(app, `/users/${owner.userId}/follow`, { method: "POST", headers: viewer.headers })
     await api(app, `/users/${viewer.userId}/follow`, { method: "POST", headers: owner.headers })
-    await api(app, `/users/${owner.userId}/comments`, {
+    await api(app, "/comments", {
       method: "POST",
       headers: viewer.headers,
-      json: { content: "hi" },
+      json: { targetType: "USER", targetId: owner.userId, content: "hi" },
     })
 
     const res = await api<Record<string, unknown>>(app, `/users/by-username/u${username}`, {
