@@ -22,9 +22,14 @@ export const getCommentText = (content: string) => content.replace(COMMENT_IMAGE
 
 const BLANK = /^[\s­ᅟᅠ​-‍⁠⠀ㅤ﻿]*$/u
 
-export const normalizeCommentContent = (content: string) =>
-  content
+export const sanitizeUserText = (text: string) =>
+  text
+    .replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "\uFFFD")
     .replace(/\r\n?/g, "\n")
+    .replace(/[^\P{Cc}\n\t]/gu, "")
+
+export const normalizeCommentContent = (content: string) =>
+  sanitizeUserText(content)
     .replace(/[^\S\n]+$/gm, "")
     .replace(/\n{3,}/g, "\n\n")
     .trim()

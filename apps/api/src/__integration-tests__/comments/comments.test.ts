@@ -234,6 +234,24 @@ describe("editing", () => {
   })
 })
 
+describe("hostile input", () => {
+  test("strips control characters instead of failing on them", async ({ app, services }) => {
+    const user = await signInAs(services)
+    const target = { type: "MEDIA", id: await seedMedia(services, user.userId) }
+    const comment = await postComment(app, user.headers, target, "nul\u0000byte\u0007 here")
+
+    expect(comment.content).toBe("nulbyte here")
+
+    const report = await api(app, `/comments/${comment.id}/reports`, {
+      method: "POST",
+      headers: (await signInAs(services)).headers,
+      json: { reason: "OTHER", details: "bad\u0000details" },
+    })
+
+    expect(report.status).toBe(201)
+  })
+})
+
 describe("deleting", () => {
   test("keeps a placeholder while replies exist and drops it afterwards", async ({
     app,

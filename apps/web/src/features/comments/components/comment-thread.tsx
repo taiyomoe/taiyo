@@ -3,7 +3,7 @@ import { ChevronDown } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { memo, useState } from "react"
 import { uniqueBy } from "remeda"
 import {
   type Comment,
@@ -19,6 +19,8 @@ import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   thread: {
+    containIntrinsicSize: "auto 9rem",
+    contentVisibility: "auto",
     display: "flex",
     flexDirection: "column",
     borderTopColor: { default: colors.border, ":first-child": "transparent" },
@@ -40,7 +42,7 @@ const styles = stylex.create({
   },
 })
 
-export function CommentThread({
+export const CommentThread = memo(function CommentThread({
   root,
   highlightedId = null,
 }: {
@@ -127,4 +129,4 @@ export function CommentThread({
       ) : null}
     </div>
   )
-}
+})

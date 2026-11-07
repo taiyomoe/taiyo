@@ -1,6 +1,7 @@
 import { commentReportAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { COMMENT_REPORT_REASONS } from "@taiyomoe/db"
+import { sanitizeUserText } from "@taiyomoe/schemas/comment-content"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -20,8 +21,8 @@ const bodySchema = z.object({
   }),
   details: z
     .string()
-    .trim()
-    .max(config.comments.maxReportDetailsLength)
+    .transform(sanitizeUserText)
+    .pipe(z.string().trim().max(config.comments.maxReportDetailsLength))
     .optional()
     .transform((value) => (value === "" ? undefined : value))
     .meta({ description: "Anything moderators should know, up to 500 characters." }),

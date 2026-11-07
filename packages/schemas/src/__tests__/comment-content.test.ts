@@ -38,4 +38,9 @@ describe("normalizeCommentContent", () => {
   it("normalizes line endings, trailing spaces and blank runs", () => {
     expect(normalizeCommentContent("  a  \r\n\r\n\r\n\r\nb\t\n")).toBe("a\n\nb")
   })
+
+  it("drops control characters and repairs lone surrogates", () => {
+    expect(normalizeCommentContent("a\u0000b\u0007c\u001Bd\te")).toBe("abcd\te")
+    expect(normalizeCommentContent("x\uD800y")).toBe("x\uFFFDy")
+  })
 })

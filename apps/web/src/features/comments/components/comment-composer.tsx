@@ -20,6 +20,7 @@ import { ImagePickerButton } from "@/features/comments/components/image-picker-b
 import { useCommentImageUploads } from "@/features/comments/hooks/use-comment-image-uploads"
 import { m } from "@/paraglide/messages"
 
+const MAX_SOURCE_LENGTH = 4000
 const styles = stylex.create({
   root: {
     gap: "0.625rem",
@@ -168,6 +169,7 @@ export function CommentComposer({
       <RichTextEditor
         ref={textarea}
         aria-label={placeholder}
+        maxLength={MAX_SOURCE_LENGTH}
         autoFocus={autoFocus}
         images
         onChange={(event) => {
