@@ -21,14 +21,13 @@ const styles = stylex.create({
     },
   },
   tile: {
-    padding: "1rem",
     gap: "0.875rem",
     alignItems: "center",
     display: "flex",
     minWidth: 0,
   },
   icon: {
-    borderRadius: `calc(${radius.xxl} - 1rem - 1px)`,
+    borderRadius: radius.lg,
     alignItems: "center",
     backgroundColor: `color-mix(in srgb, ${colors.primary} 12%, transparent)`,
     color: `color-mix(in srgb, ${colors.primary} 80%, ${colors.foreground})`,
@@ -82,7 +81,7 @@ function Tile({
   unit?: string
 }) {
   return (
-    <li sx={[profileStyles.card, styles.tile]}>
+    <li sx={[profileStyles.card, profileStyles.flush, styles.tile]}>
       <span aria-hidden sx={styles.icon}>
         <Icon size={20} />
       </span>

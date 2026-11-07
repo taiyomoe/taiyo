@@ -10,11 +10,6 @@ import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
-  card: {
-    overflow: "hidden",
-    backgroundImage: `radial-gradient(120% 160% at 0% 0%, color-mix(in srgb, ${colors.primary} 14%, transparent), transparent 60%)`,
-    position: "relative",
-  },
   layout: {
     gap: { default: "1rem", [breakpoints.sm]: "1.5rem" },
     alignItems: "center",
@@ -143,7 +138,7 @@ export function LevelCard({ profile }: { profile: UserProfile }) {
   const percent = new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 })
 
   return (
-    <section aria-label={m.profile_level_title()} sx={[profileStyles.card, styles.card]}>
+    <section aria-label={m.profile_level_title()} sx={profileStyles.card}>
       <div sx={styles.layout}>
         <div sx={styles.medal}>
           <span sx={styles.medalLabel}>{m.profile_level_label()}</span>

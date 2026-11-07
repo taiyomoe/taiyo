@@ -171,7 +171,7 @@ function Composer({ profile, viewer }: { profile: UserProfile; viewer: Session["
         event.preventDefault()
         submit()
       }}
-      sx={[profileStyles.card, styles.composer]}
+      sx={[profileStyles.card, profileStyles.flush, styles.composer]}
     >
       <PersonAvatar
         person={{

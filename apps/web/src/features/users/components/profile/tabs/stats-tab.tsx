@@ -170,14 +170,16 @@ const styles = stylex.create({
 function Card({
   title,
   note,
+  flush = false,
   children,
 }: {
   title: string
   note?: string
+  flush?: boolean
   children: React.ReactNode
 }) {
   return (
-    <section sx={[profileStyles.card, statsStyles.cardBody]}>
+    <section sx={[profileStyles.card, flush && profileStyles.flush, statsStyles.cardBody]}>
       <div sx={statsStyles.cardHead}>
         <h3 sx={profileStyles.sectionTitle}>{title}</h3>
         {note === undefined ? null : <span sx={statsStyles.cardNote}>{note}</span>}
@@ -203,6 +205,7 @@ function Reading({
     <>
       <div sx={styles.top}>
         <Card
+          flush
           note={m.profile_stats_genres_note({ count: format(reading.mediasRead) })}
           title={m.profile_stats_genres()}
         >
@@ -213,6 +216,7 @@ function Reading({
           )}
         </Card>
         <Card
+          flush
           note={m.profile_stats_streak_note({ days: days(reading.longestStreak) })}
           title={m.profile_stats_totals()}
         >
@@ -396,7 +400,7 @@ export function StatsTab({ profile }: { profile: UserProfile }) {
   return (
     <div sx={statsStyles.root}>
       {stats.reading === null ? (
-        <p sx={[profileStyles.card, profileStyles.empty]}>
+        <p sx={[profileStyles.card, profileStyles.flush, profileStyles.empty]}>
           {m.profile_stats_private({ name: profile.displayUsername })}
         </p>
       ) : (

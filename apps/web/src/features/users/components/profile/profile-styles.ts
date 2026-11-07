@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { breakpoints, colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
 export const profileStyles = stylex.create({
   root: {
@@ -17,14 +17,14 @@ export const profileStyles = stylex.create({
     width: "100%",
   },
   card: {
-    padding: { default: "1.25rem", [breakpoints.md]: "1.5rem" },
-    borderColor: colors.border,
-    borderRadius: radius.xxl,
-    borderStyle: "solid",
-    borderWidth: 1,
-    backgroundClip: "padding-box",
-    backgroundColor: colors.card,
-    boxShadow: shadows.raised,
+    borderTopColor: colors.border,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+    paddingTop: "1.25rem",
+  },
+  flush: {
+    borderTopWidth: 0,
+    paddingTop: 0,
   },
   sectionTitle: {
     margin: 0,

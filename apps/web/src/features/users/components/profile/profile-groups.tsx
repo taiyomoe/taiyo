@@ -1,31 +1,24 @@
 import * as stylex from "@stylexjs/stylex"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
-import { breakpoints, colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { UserProfile } from "@/features/users/api/profile"
 import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { profileStyles } from "@/features/users/components/profile/profile-styles"
 import { m } from "@/paraglide/messages"
 
-const LIST_INSET = "0.5rem"
-const gutter = {
-  default: `calc(1.25rem - ${LIST_INSET})`,
-  [breakpoints.md]: `calc(1.5rem - ${LIST_INSET})`,
-}
+const ROW_BLEED = "0.75rem"
 const styles = stylex.create({
   card: {
-    padding: LIST_INSET,
     gap: "0.25rem",
     display: "flex",
     flexDirection: "column",
   },
   head: {
     gap: "0.5rem",
-    paddingInline: gutter,
     alignItems: "baseline",
     display: "flex",
     paddingBottom: "0.5rem",
-    paddingTop: gutter,
   },
   count: {
     color: colors.mutedForeground,
@@ -39,10 +32,11 @@ const styles = stylex.create({
     flexDirection: "column",
   },
   row: {
-    borderRadius: `calc(${radius.xxl} - ${LIST_INSET} - 1px)`,
+    borderRadius: radius.lg,
     gap: "0.875rem",
+    marginInline: `calc(-1 * ${ROW_BLEED})`,
     paddingBlock: "0.625rem",
-    paddingInline: gutter,
+    paddingInline: ROW_BLEED,
     textDecoration: "none",
     alignItems: "center",
     backgroundColor: {

@@ -17,22 +17,15 @@ import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
-const LIST_INSET = "0.5rem"
+const ROW_BLEED = "0.75rem"
 const styles = stylex.create({
   card: {
-    padding: LIST_INSET,
     gap: "0.25rem",
     display: "flex",
     flexDirection: "column",
   },
   head: {
-    paddingInline: `calc(1.5rem - ${LIST_INSET})`,
     paddingBottom: "0.25rem",
-    paddingTop: `calc(1.5rem - ${LIST_INSET})`,
-  },
-  note: {
-    paddingInline: `calc(1.5rem - ${LIST_INSET})`,
-    paddingBottom: `calc(1.5rem - ${LIST_INSET})`,
   },
   days: {
     margin: 0,
@@ -43,7 +36,6 @@ const styles = stylex.create({
   },
   dayHead: {
     gap: "1rem",
-    paddingInline: `calc(1.5rem - ${LIST_INSET})`,
     alignItems: "baseline",
     display: "flex",
     justifyContent: "space-between",
@@ -67,10 +59,11 @@ const styles = stylex.create({
     flexDirection: "column",
   },
   row: {
-    borderRadius: `calc(${radius.xxl} - ${LIST_INSET} - 1px)`,
+    borderRadius: radius.lg,
     gap: "0.875rem",
+    marginInline: `calc(-1 * ${ROW_BLEED})`,
     paddingBlock: "0.5rem",
-    paddingInline: `calc(1.5rem - ${LIST_INSET})`,
+    paddingInline: ROW_BLEED,
     textDecoration: "none",
     alignItems: "center",
     backgroundColor: {
@@ -148,7 +141,6 @@ const styles = stylex.create({
   skeletonRow: {
     gap: "0.875rem",
     paddingBlock: "0.5rem",
-    paddingInline: `calc(1.5rem - ${LIST_INSET})`,
     alignItems: "center",
     display: "flex",
   },
@@ -298,14 +290,12 @@ function HistoryContent({ profile }: { profile: UserProfile }) {
 
   if (history.data.hidden) {
     return (
-      <p sx={[profileStyles.empty, styles.note]}>
-        {m.profile_history_private({ name: profile.displayUsername })}
-      </p>
+      <p sx={profileStyles.empty}>{m.profile_history_private({ name: profile.displayUsername })}</p>
     )
   }
 
   if (history.data.entries.length === 0) {
-    return <p sx={[profileStyles.empty, styles.note]}>{m.profile_history_empty()}</p>
+    return <p sx={profileStyles.empty}>{m.profile_history_empty()}</p>
   }
 
   return <HistoryDays entries={history.data.entries} timeZone={timeZone} />
