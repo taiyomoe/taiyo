@@ -10,21 +10,21 @@
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.3.5",
     "@hugeicons/react": "^1.1.10",
-    "@storybook/addon-a11y": "^10.6.3",
-    "@storybook/addon-docs": "^10.6.3",
-    "@storybook/addon-themes": "^10.6.3",
-    "@storybook/react-vite": "^10.6.3",
+    "@storybook/addon-a11y": "^10.6.5",
+    "@storybook/addon-docs": "^10.6.5",
+    "@storybook/addon-themes": "^10.6.5",
+    "@storybook/react-vite": "^10.6.5",
     "@taiyomoe/ui": "workspace:^",
     "@vitejs/plugin-react": "^6.1.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "storybook": "^10.6.3",
+    "storybook": "^10.6.5",
     "vite": "^8.3.5"
   },
   "devDependencies": {
     "@stylexjs/stylex": "^0.19.1",
     "@stylexjs/unplugin": "^0.19.1",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0"
   }

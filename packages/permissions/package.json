@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "@taiyomoe/db": "workspace:^",
-    "permix": "^4.4.0"
+    "permix": "^4.4.1"
   }
 }
