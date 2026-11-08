@@ -116,6 +116,7 @@ export const createAuth = ({
       additionalFields: {
         settings: { fieldName: "settings", type: "string", input: false },
         nameEffect: { fieldName: "nameEffect", type: "string", required: false, input: false },
+        avatarBorder: { fieldName: "avatarBorder", type: "string", required: false, input: false },
       },
     },
     socialProviders: {
@@ -327,6 +328,7 @@ export const createAuth = ({
               settings: UserSettings
               nameEffect: string | null | undefined
               twoFactorEnabled: boolean | null | undefined
+              avatarBorder: string | null | undefined
             }),
           },
         }),

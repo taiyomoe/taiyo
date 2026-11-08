@@ -67,6 +67,7 @@ export function KqlSuggestionOption({
     >
       {suggestion.image !== null && suggestion.image !== "" ? (
         <PersonAvatar
+          border={suggestion.avatarBorder}
           image={suggestion.image}
           name={suggestion.label}
           seed={suggestion.key}

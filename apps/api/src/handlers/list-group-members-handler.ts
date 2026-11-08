@@ -13,6 +13,7 @@ const memberItemSchema = z.object({
   displayUsername: z.string(),
   image: z.string().nullable(),
   nameEffect: z.string().nullable(),
+  avatarBorder: z.string().nullable(),
   role: z.enum(GROUP_MEMBERSHIP_ROLES),
   permissions: z.enum(GROUP_PERMISSIONS).array().nullable().meta({
     description:
@@ -58,6 +59,7 @@ export const listGroupMembersHandler = new Hono().get(
         "users.displayUsername",
         "users.image",
         "users.nameEffect",
+        "users.avatarBorder",
         "groupMemberships.role",
         "groupMemberships.permissions",
         "groupMemberships.createdAt",

@@ -60,6 +60,11 @@ export const userAudit = defineAuditCatalog("user", {
   COSMETICS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
 })
 
+export const shopAudit = defineAuditCatalog("shop", {
+  ITEM_PURCHASE: { target: "user", severity: "medium" },
+  LOOT_BOX_OPEN: { target: "user", severity: "medium" },
+})
+
 export const commentAudit = defineAuditCatalog("comment", {
   CREATE: { target: "comment", severity: "low" },
   UPDATE: { target: "comment", severity: "low" },
@@ -233,6 +238,7 @@ export const auditCatalogs = [
   commentAudit,
   commentReportAudit,
   commentImageAudit,
+  shopAudit,
   mediaAudit,
   mediaSuggestionAudit,
   coverAudit,
@@ -265,6 +271,7 @@ declare module "evlog" {
     comment: typeof commentAudit
     commentReport: typeof commentReportAudit
     commentImage: typeof commentImageAudit
+    shop: typeof shopAudit
     media: typeof mediaAudit
     mediaSuggestion: typeof mediaSuggestionAudit
     cover: typeof coverAudit

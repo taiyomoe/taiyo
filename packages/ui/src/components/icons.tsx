@@ -68,6 +68,11 @@ import {
   CalendarClockIcon,
   Globe02Icon,
   Key01Icon,
+  Coins01Icon,
+  Package01Icon,
+  Store01Icon,
+  VolumeHighIcon,
+  VolumeOffIcon,
   ArrowUpDownIcon,
   Calendar03Icon,
   Copy01Icon,
@@ -353,6 +358,16 @@ export const CalendarClock: (props: IconProps) => React.ReactElement = icon(Cale
 export const Globe: (props: IconProps) => React.ReactElement = icon(Globe02Icon)
 
 export const Key: (props: IconProps) => React.ReactElement = icon(Key01Icon)
+
+export const Coins: (props: IconProps) => React.ReactElement = icon(Coins01Icon)
+
+export const Package: (props: IconProps) => React.ReactElement = icon(Package01Icon)
+
+export const Store: (props: IconProps) => React.ReactElement = icon(Store01Icon)
+
+export const Volume: (props: IconProps) => React.ReactElement = icon(VolumeHighIcon)
+
+export const VolumeOff: (props: IconProps) => React.ReactElement = icon(VolumeOffIcon)
 
 export const Calendar: (props: IconProps) => React.ReactElement = icon(Calendar03Icon)
 

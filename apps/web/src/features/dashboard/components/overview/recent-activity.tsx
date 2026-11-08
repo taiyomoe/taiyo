@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { DashboardOverview } from "@/features/dashboard/api/overview"
+import { AvatarBorder } from "@/components/avatar-border/avatar-border"
 import { UserName } from "@/components/user-name/user-name"
 import { CardNote } from "@/features/dashboard/components/overview/card-note"
 import { formatTime } from "@/features/dashboard/lib/format"
@@ -84,17 +85,19 @@ export function RecentActivity({ overview: { recentActivity } }: { overview: Das
     <ol sx={styles.list}>
       {recentActivity.map((activity) => (
         <li key={`${activity.kind}-${activity.actor.id}-${activity.at}`} sx={styles.row}>
-          <Avatar sx={styles.avatar}>
-            {activity.actor.image === null || activity.actor.image === "" ? null : (
-              <AvatarImage alt="" src={activity.actor.image} />
-            )}
-            <AvatarFallback
-              style={{ backgroundColor: toneFor(activity.actor.id) }}
-              sx={styles.fallback}
-            >
-              {activity.actor.displayUsername.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <AvatarBorder border={activity.actor.avatarBorder}>
+            <Avatar sx={styles.avatar}>
+              {activity.actor.image === null || activity.actor.image === "" ? null : (
+                <AvatarImage alt="" src={activity.actor.image} />
+              )}
+              <AvatarFallback
+                style={{ backgroundColor: toneFor(activity.actor.id) }}
+                sx={styles.fallback}
+              >
+                {activity.actor.displayUsername.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </AvatarBorder>
           <p sx={styles.text}>
             <span sx={styles.actor}>
               <UserName effect={activity.actor.nameEffect} name={activity.actor.displayUsername} />

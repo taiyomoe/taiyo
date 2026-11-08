@@ -16,6 +16,7 @@ import { Route as DmcaRouteImport } from './routes/dmca'
 import { Route as LatestRouteImport } from './routes/latest'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TitlesRouteImport } from './routes/titles'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
@@ -76,6 +77,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -219,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/latest': typeof LatestRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -253,6 +260,7 @@ export interface FileRoutesByTo {
   '/latest': typeof LatestRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/latest': typeof LatestRoute
   '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -326,6 +335,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/privacy'
     | '/settings'
+    | '/shop'
     | '/terms'
     | '/titles'
     | '/auth/sign-in'
@@ -360,6 +370,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/privacy'
     | '/settings'
+    | '/shop'
     | '/terms'
     | '/titles'
     | '/auth/sign-in'
@@ -395,6 +406,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/privacy'
     | '/settings'
+    | '/shop'
     | '/terms'
     | '/titles'
     | '/auth/sign-in'
@@ -431,6 +443,7 @@ export interface RootRouteChildren {
   LatestRoute: typeof LatestRoute
   PrivacyRoute: typeof PrivacyRoute
   SettingsRoute: typeof SettingsRoute
+  ShopRoute: typeof ShopRoute
   TermsRoute: typeof TermsRoute
   TitlesRoute: typeof TitlesRoute
   GroupsGroupIdRoute: typeof GroupsGroupIdRoute
@@ -491,6 +504,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -740,6 +760,7 @@ const rootRouteChildren: RootRouteChildren = {
   LatestRoute: LatestRoute,
   PrivacyRoute: PrivacyRoute,
   SettingsRoute: SettingsRoute,
+  ShopRoute: ShopRoute,
   TermsRoute: TermsRoute,
   TitlesRoute: TitlesRoute,
   GroupsGroupIdRoute: GroupsGroupIdRoute,

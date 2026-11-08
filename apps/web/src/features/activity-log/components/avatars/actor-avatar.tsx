@@ -42,6 +42,7 @@ export function ActorAvatar({
 
   return (
     <PersonAvatar
+      border={actor.user?.avatarBorder}
       image={actor.user?.image ?? null}
       name={actor.user?.displayUsername ?? actor.displayName ?? actor.id}
       seed={actor.id}

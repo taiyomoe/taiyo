@@ -32,6 +32,7 @@ export const selectSubmissionColumns = (query: ReturnType<typeof selectSubmissio
     "users.displayUsername as uploaderDisplayUsername",
     "users.image as uploaderImage",
     "users.nameEffect as uploaderNameEffect",
+    "users.avatarBorder as uploaderAvatarBorder",
   ])
 
 export const withSubmissionDetails = async (

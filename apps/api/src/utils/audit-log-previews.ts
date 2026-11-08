@@ -11,6 +11,7 @@ export type AuditLogPreview = {
   label: string | null
   image: string | null
   nameEffect: string | null
+  avatarBorder: string | null
 }
 
 const UUID = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i
@@ -87,7 +88,7 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
       ? []
       : db
           .selectFrom("users")
-          .select(["id", "displayUsername", "image", "nameEffect"])
+          .select(["id", "displayUsername", "image", "nameEffect", "avatarBorder"])
           .where("id", "in", userIds)
           .execute(),
   ])
@@ -99,6 +100,7 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
         id: group.id,
         label: group.name,
         nameEffect: null,
+        avatarBorder: null,
         image:
           group.logo === null || /^https?:\/\//.test(group.logo)
             ? group.logo
@@ -113,6 +115,7 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
         label: staff.name,
         image: staff.image === null ? null : getPublicImageUrl(staff.image),
         nameEffect: null,
+        avatarBorder: null,
       },
     ]),
     ...users.map((user): [string, AuditLogPreview] => [
@@ -123,6 +126,7 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
         label: user.displayUsername,
         image: user.image,
         nameEffect: user.nameEffect,
+        avatarBorder: user.avatarBorder,
       },
     ]),
   ])
@@ -132,6 +136,7 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
     label: titles.get(id) ?? null,
     image: covers.get(id) ?? null,
     nameEffect: null,
+    avatarBorder: null,
   })
   const previewOf = (reference: Reference | null): AuditLogPreview | null => {
     if (reference === null) {

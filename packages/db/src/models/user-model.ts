@@ -22,6 +22,7 @@ export type User = {
   readerSettings: Record<string, unknown> | null
   nameEffect: string | null
   twoFactorEnabled: Generated<boolean>
+  avatarBorder: string | null
 }
 
 export type NewUser = Insertable<User>

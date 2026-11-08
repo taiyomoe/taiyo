@@ -27,6 +27,7 @@ import type { PageReport } from "./models/page-report-model"
 import type { ReadingReward } from "./models/reading-reward-model"
 import type { SearchOutboxEntry } from "./models/search-outbox-model"
 import type { Session } from "./models/session-model"
+import type { ShopPurchase } from "./models/shop-purchase-model"
 import type { Staff } from "./models/staff-model"
 import type { Task } from "./models/task-model"
 import type { Title } from "./models/title-model"
@@ -71,6 +72,7 @@ export type DB = {
   readingRewards: ReadingReward
   searchOutbox: SearchOutboxEntry
   sessions: Session
+  shopPurchases: ShopPurchase
   staffs: Staff
   tasks: Task
   titles: Title

@@ -86,6 +86,7 @@ export const listGroupCreationRequestsHandler = new Hono().get(
           "users.displayUsername",
           "users.image",
           "users.nameEffect",
+          "users.avatarBorder",
         ])
         .orderBy("groupCreationRequests.createdAt", status === "PENDING" ? "asc" : "desc")
         .orderBy("groupCreationRequests.id", "asc")
@@ -96,11 +97,22 @@ export const listGroupCreationRequestsHandler = new Hono().get(
     ])
 
     return c.ok(
-      rows.map(({ userId, username, displayUsername, image, nameEffect, nameTaken, ...row }) => ({
-        ...row,
-        nameTaken: Boolean(nameTaken),
-        requester: { id: userId, username, displayUsername, image, nameEffect },
-      })),
+      rows.map(
+        ({
+          userId,
+          username,
+          displayUsername,
+          image,
+          nameEffect,
+          avatarBorder,
+          nameTaken,
+          ...row
+        }) => ({
+          ...row,
+          nameTaken: Boolean(nameTaken),
+          requester: { id: userId, username, displayUsername, image, nameEffect, avatarBorder },
+        }),
+      ),
       { page, perPage, total: Number(totalRow.count) },
     )
   },

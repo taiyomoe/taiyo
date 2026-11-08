@@ -58,6 +58,7 @@ export const selectLatestChapters = (db: Kysely<DB>, filters: ChapterFilters) =>
       "users.displayUsername as uploaderDisplayUsername",
       "users.image as uploaderImage",
       "users.nameEffect as uploaderNameEffect",
+      "users.avatarBorder as uploaderAvatarBorder",
     ])
 
 type LatestChapterRow = {
@@ -67,6 +68,7 @@ type LatestChapterRow = {
   uploaderDisplayUsername: string
   uploaderImage: string | null
   uploaderNameEffect: string | null
+  uploaderAvatarBorder: string | null
 }
 
 export const withChapterDetails = async <T extends LatestChapterRow>(db: Kysely<DB>, rows: T[]) => {
@@ -94,6 +96,7 @@ export const withChapterDetails = async <T extends LatestChapterRow>(db: Kysely<
       uploaderDisplayUsername,
       uploaderImage,
       uploaderNameEffect,
+      uploaderAvatarBorder,
       ...row
     }) => ({
       ...row,
@@ -104,6 +107,7 @@ export const withChapterDetails = async <T extends LatestChapterRow>(db: Kysely<
         displayUsername: uploaderDisplayUsername,
         image: uploaderImage,
         nameEffect: uploaderNameEffect,
+        avatarBorder: uploaderAvatarBorder,
       },
     }),
   )

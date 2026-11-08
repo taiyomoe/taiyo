@@ -1,5 +1,12 @@
 import type { Gender } from "@taiyomoe/db/constants"
-import type { CosmeticRarity, CosmeticUnlock, NameEffect, UserTitle } from "@taiyomoe/db/cosmetics"
+import type {
+  AvatarBorder,
+  CosmeticKind,
+  CosmeticRarity,
+  CosmeticUnlock,
+  NameEffect,
+  UserTitle,
+} from "@taiyomoe/db/cosmetics"
 import { ROLE_LABELS } from "@/features/users/lib/role-labels"
 import { m } from "@/paraglide/messages"
 
@@ -23,6 +30,7 @@ export const NAME_EFFECT_LABELS: Record<NameEffect, Label> = {
   inferno: m.name_effect_inferno,
   galaxy: m.name_effect_galaxy,
   prism: m.name_effect_prism,
+  opal: m.name_effect_opal,
 }
 
 export const USER_TITLE_LABELS: Record<UserTitle, Label> = {
@@ -42,6 +50,39 @@ export const USER_TITLE_LABELS: Record<UserTitle, Label> = {
   sunChaser: m.user_title_sun_chaser,
   sensei: m.user_title_sensei,
   legend: m.user_title_legend,
+  treasureHunter: m.user_title_treasure_hunter,
+  fortunesFavorite: m.user_title_fortunes_favorite,
+}
+
+export const AVATAR_BORDER_LABELS: Record<AvatarBorder, Label> = {
+  halo: m.avatar_border_halo,
+  dusk: m.avatar_border_dusk,
+  petals: m.avatar_border_petals,
+  tidal: m.avatar_border_tidal,
+  circuit: m.avatar_border_circuit,
+  orbit: m.avatar_border_orbit,
+  frostbite: m.avatar_border_frostbite,
+  thorns: m.avatar_border_thorns,
+  solar: m.avatar_border_solar,
+  phoenix: m.avatar_border_phoenix,
+  nebula: m.avatar_border_nebula,
+  eclipse: m.avatar_border_eclipse,
+}
+
+export const COSMETIC_KIND_LABELS: Record<CosmeticKind, Label> = {
+  NAME_EFFECT: m.shop_kind_name_effect,
+  TITLE: m.shop_kind_title,
+  AVATAR_BORDER: m.shop_kind_avatar_border,
+}
+
+export const getCosmeticLabel = (kind: CosmeticKind, key: string) => {
+  const labels: Record<string, Label> = {
+    NAME_EFFECT: NAME_EFFECT_LABELS,
+    TITLE: USER_TITLE_LABELS,
+    AVATAR_BORDER: AVATAR_BORDER_LABELS,
+  }[kind]
+
+  return Object.hasOwn(labels, key) ? (labels[key]?.() ?? key) : key
 }
 
 export const RARITY_LABELS: Record<CosmeticRarity, Label> = {
@@ -65,6 +106,10 @@ export const describeUnlock = (unlock: CosmeticUnlock) => {
         unlock.roles.map((role) => ROLE_LABELS[role]()),
       ),
     })
+  }
+
+  if (unlock.type === "lootBox") {
+    return m.profile_unlock_loot_box()
   }
 
   if (unlock.type === "shop") {

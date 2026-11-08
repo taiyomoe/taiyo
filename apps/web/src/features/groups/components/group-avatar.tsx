@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
+import { AvatarBorder } from "@/components/avatar-border/avatar-border"
 
 const TONES = [colors.chart1, colors.chart5, colors.chart3, colors.chart2, colors.chart4]
 const styles = stylex.create({
@@ -112,21 +113,28 @@ export function PersonAvatar({
   sx,
   fallbackSx,
 }: {
-  person: { id: string; displayUsername: string; image: string | null }
+  person: {
+    id: string
+    displayUsername: string
+    image: string | null
+    avatarBorder?: string | null | undefined
+  }
   sx?: Sx
   fallbackSx?: Sx
 }) {
   return (
-    <Avatar sx={[styles.person, sx]}>
-      {person.image === null || person.image === "" ? null : (
-        <AvatarImage alt="" src={person.image} />
-      )}
-      <AvatarFallback
-        style={{ backgroundColor: toneFor(person.id) }}
-        sx={[styles.personFallback, fallbackSx]}
-      >
-        {person.displayUsername.charAt(0).toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
+    <AvatarBorder border={person.avatarBorder}>
+      <Avatar sx={[styles.person, sx]}>
+        {person.image === null || person.image === "" ? null : (
+          <AvatarImage alt="" src={person.image} />
+        )}
+        <AvatarFallback
+          style={{ backgroundColor: toneFor(person.id) }}
+          sx={[styles.personFallback, fallbackSx]}
+        >
+          {person.displayUsername.charAt(0).toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+    </AvatarBorder>
   )
 }

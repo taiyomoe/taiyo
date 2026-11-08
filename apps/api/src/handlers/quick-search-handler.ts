@@ -55,6 +55,7 @@ const quickSearchSchema = z.object({
       displayUsername: z.string(),
       image: z.string().nullable(),
       nameEffect: z.string().nullable(),
+      avatarBorder: z.string().nullable(),
     })
     .array(),
 })
@@ -120,6 +121,7 @@ export const quickSearchHandler = new Hono().get(
           "users.displayUsername",
           "users.image",
           "users.nameEffect",
+          "users.avatarBorder",
         ])
         .where((eb) =>
           eb.or([

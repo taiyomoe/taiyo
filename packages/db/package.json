@@ -10,6 +10,7 @@
     "./cosmetics": "./src/cosmetics.ts",
     "./env": "./src/env.ts",
     "./levels": "./src/levels.ts",
+    "./loot-boxes": "./src/loot-boxes.ts",
     "./sample": "./src/sample.ts"
   },
   "scripts": {

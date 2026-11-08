@@ -158,11 +158,15 @@ type CosmeticsPatch = InferRequestType<(typeof api.users.me.cosmetics)["$patch"]
 
 // The shell reads the session from the router context, a snapshot taken when
 // the route loaded: re-run it so the patched session reaches the navbar.
-const useRefreshSession = () => {
+export const useRefreshSession = () => {
   const queryClient = useQueryClient()
   const router = useRouter()
 
-  return (patch: { image?: string | null; nameEffect?: string | null }) => {
+  return (patch: {
+    image?: string | null
+    nameEffect?: string | null
+    avatarBorder?: string | null
+  }) => {
     queryClient.setQueryData(sessionQueryOptions.queryKey, (session) =>
       session ? { ...session, user: { ...session.user, ...patch } } : session,
     )
@@ -187,7 +191,7 @@ export function useEquipCosmetics(username: string) {
       queryClient.setQueryData(myCosmeticsQueryOptions.queryKey, (current) =>
         current === undefined ? current : { ...current, ...equipped },
       )
-      refreshSession({ nameEffect: equipped.nameEffect })
+      refreshSession({ nameEffect: equipped.nameEffect, avatarBorder: equipped.avatarBorder })
     },
     // Every list that shows this user's name carries their effect.
     onSettled: () =>

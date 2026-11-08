@@ -78,6 +78,8 @@ export * from "./models/page-report-model"
 
 export * from "./models/reading-reward-model"
 
+export * from "./models/shop-purchase-model"
+
 export * from "./models/staff-model"
 
 export * from "./models/task-model"

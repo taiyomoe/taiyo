@@ -14,6 +14,7 @@ const followingItemSchema = z.object({
   displayUsername: z.string(),
   image: z.string().nullable(),
   nameEffect: z.string().nullable(),
+  avatarBorder: z.string().nullable(),
 })
 
 export const listFollowingHandler = new Hono().get(
@@ -61,6 +62,7 @@ export const listFollowingHandler = new Hono().get(
           "users.displayUsername",
           "users.image",
           "users.nameEffect",
+          "users.avatarBorder",
         ])
         .orderBy("users.username", "asc")
         .limit(perPage)

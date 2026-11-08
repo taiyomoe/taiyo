@@ -5,6 +5,7 @@ import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { lazy, Suspense, useState } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import { UserName } from "@/components/user-name/user-name"
+import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { SettingsSection } from "@/features/settings/components/settings-section"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
 import { m } from "@/paraglide/messages"
@@ -19,6 +20,10 @@ const styles = stylex.create({
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
+  },
+  avatar: {
+    height: "2.75rem",
+    width: "2.75rem",
   },
   name: {
     fontSize: "1.25rem",
@@ -51,6 +56,7 @@ export function CosmeticsSection({ profile }: { profile: UserProfile }) {
       title={m.user_settings_cosmetics_title()}
     >
       <div sx={styles.preview}>
+        <PersonAvatar person={profile} sx={styles.avatar} />
         <UserName effect={profile.nameEffect} name={profile.displayUsername} sx={styles.name} />
         {profile.title === null ? (
           <span sx={styles.empty}>{m.profile_customize_no_title()}</span>
