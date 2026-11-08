@@ -311,8 +311,8 @@ importers:
         specifier: ^7.91.0
         version: 7.91.0(@types/react@19.3.0)(react@19.3.1)
       remeda:
-        specifier: ^2.54.1
-        version: 2.54.1
+        specifier: ^2.58.0
+        version: 2.58.0
       three:
         specifier: 0.186.1
         version: 0.186.1
@@ -730,8 +730,8 @@ importers:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
       remeda:
-        specifier: ^2.54.1
-        version: 2.54.1
+        specifier: ^2.58.0
+        version: 2.58.0
     devDependencies:
       '@types/react':
         specifier: ^19.3.0
@@ -3380,7 +3380,9 @@ packages:
   '@smithy/core@3.36.2':
     resolution: {integrity: sha512-oRw0rB9QSUiCZfEs23G5F4Af+b2rQt1lItIICWu5IejFNd+uPM8SWqiKLMpQ6bX1Q7slsLbjuoE2niErFtkVPQ==}
     engines: {node: '>=18.0.0'}
-    deprecated: Deprecated due to a bug in custom logger data redaction. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
+    deprecated: |-
+      Deprecated due to a bug in custom logger data redaction. Upgrade to the latest version. If you used a custom logger with this
+        version, review your logs and rotate any credentials or other secrets. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
 
   '@smithy/credential-provider-imds@4.5.2':
     resolution: {integrity: sha512-A9uSdn72ozbRUSit0eib0TW7nXuNPlaeM0zcGkJ+nE6tFcSDbnmtwoxbTCFBukVQcszDAyvsd7+rTduPTXpygg==}
@@ -6017,8 +6019,8 @@ packages:
     resolution: {integrity: sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==}
     engines: {node: '>=4'}
 
-  remeda@2.54.1:
-    resolution: {integrity: sha512-l3pxw2Hz5V2FG3RaU9C6z121H8dF5VYjj3z6lnHoN3SCRLoxr+pZS2dq8dDe3NA+9kyKm56A1BB2Ejr+DrLlJw==}
+  remeda@2.58.0:
+    resolution: {integrity: sha512-uCy/WL+c+IF/oAb+sjgZ4Y7XPsW58wP8EWiYpIcqWQZBnNEcb8RnLh9PHsERA97ONpkebGw4S6qNcOtFQ+HG7A==}
     engines: {node: '>=18.0.0'}
 
   remove-accents@0.5.0:
@@ -11180,7 +11182,7 @@ snapshots:
 
   redis-errors@1.2.0: {}
 
-  remeda@2.54.1: {}
+  remeda@2.58.0: {}
 
   remove-accents@0.5.0: {}
 
