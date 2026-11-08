@@ -19,7 +19,6 @@ type MediaTab = (typeof MEDIA_TABS)[number]
 
 const DISABLED_TABS = [
   { value: "covers", label: m.media_tab_covers },
-  { value: "characters", label: m.media_tab_characters },
   { value: "related", label: m.media_tab_related },
   { value: "banners", label: m.media_tab_banners },
   { value: "stats", label: m.media_tab_stats },
