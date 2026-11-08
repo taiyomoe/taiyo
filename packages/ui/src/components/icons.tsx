@@ -48,7 +48,6 @@ import {
   ImageCompositionIcon,
   LeftToRightListNumberIcon,
   LibraryIcon,
-  MaskTheater01Icon,
   Notification01Icon,
   PenTool02Icon,
   Settings01Icon,
@@ -266,8 +265,6 @@ export const Banner: (props: IconProps) => React.ReactElement = icon(ImageCompos
 export const Tag: (props: IconProps) => React.ReactElement = icon(Tag01Icon)
 
 export const PenTool: (props: IconProps) => React.ReactElement = icon(PenTool02Icon)
-
-export const Mask: (props: IconProps) => React.ReactElement = icon(MaskTheater01Icon)
 
 export const Comment: (props: IconProps) => React.ReactElement = icon(Comment01Icon)
 

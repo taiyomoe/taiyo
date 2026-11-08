@@ -12,7 +12,6 @@ import {
   Library,
   Mail,
   ListNumbered,
-  Mask,
   NoteEdit,
   PenTool,
   Settings,
@@ -126,10 +125,7 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
   },
   {
     label: m.dashboard_nav_people,
-    items: [
-      { label: m.dashboard_nav_staff, icon: PenTool, visible: (can) => can("staff.update") },
-      { label: m.dashboard_nav_characters, icon: Mask, visible: (can) => can("media.update") },
-    ],
+    items: [{ label: m.dashboard_nav_staff, icon: PenTool, visible: (can) => can("staff.update") }],
   },
   {
     label: m.dashboard_nav_community,
