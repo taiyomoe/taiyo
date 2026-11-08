@@ -51,8 +51,6 @@ export type EmitOptions = {
 
 const between = ([min, max]: [number, number]) => min + Math.random() * (max - min)
 
-export type ParticleField = ReturnType<typeof createParticleField>
-
 export const createParticleField = (capacity: number, pixelRatio: number) => {
   const positions = new Float32Array(capacity * 3)
   const colors = new Float32Array(capacity * 3)

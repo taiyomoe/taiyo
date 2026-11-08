@@ -1,12 +1,7 @@
 import type { Session } from "@taiyomoe/auth/server"
 import type { CosmeticKind } from "@taiyomoe/db/cosmetics"
 import { type DB, type Kysely, sql } from "@taiyomoe/db"
-import {
-  ACHIEVEMENT_METRICS,
-  COSMETIC_KINDS,
-  COSMETIC_RARITIES,
-  type CosmeticDefinition,
-} from "@taiyomoe/db/cosmetics"
+import { ACHIEVEMENT_METRICS, COSMETIC_KINDS, COSMETIC_RARITIES } from "@taiyomoe/db/cosmetics"
 import z from "zod"
 
 export const isImpersonating = (session: Session["session"]) =>
@@ -79,9 +74,4 @@ export const cosmeticRefSchema = z.object({
   kind: z.enum(COSMETIC_KINDS),
   key: z.string(),
   rarity: z.enum(COSMETIC_RARITIES),
-})
-
-export const describeCosmetic = (definition: CosmeticDefinition) => ({
-  rarity: definition.rarity,
-  unlock: definition.unlock,
 })

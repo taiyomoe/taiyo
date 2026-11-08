@@ -25,7 +25,7 @@ const styles = stylex.create({
   },
 })
 
-export function AvatarBorderArt({ border, sx }: { border: string | null | undefined; sx?: Sx }) {
+function AvatarBorderArt({ border, sx }: { border: string | null | undefined; sx?: Sx }) {
   if (!isAvatarBorder(border)) {
     return null
   }

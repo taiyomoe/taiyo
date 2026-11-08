@@ -88,8 +88,6 @@ const additive = (
     side: DoubleSide,
   })
 
-export type Beams = ReturnType<typeof createBeams>
-
 export const createBeams = (mouthHeight: number) => {
   const group = new Group()
   const color = new Color("#ffffff")

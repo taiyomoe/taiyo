@@ -25,8 +25,6 @@ void main() {
 }
 `
 
-export type Stage = ReturnType<typeof createStage>
-
 export const createStage = (base: string) => {
   const baseColor = new Color(base)
   const spot = new Color("#ffffff")

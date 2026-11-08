@@ -1,6 +1,6 @@
 import type { LootBoxKey } from "@taiyomoe/db/loot-boxes"
 
-export type BodyFinish = "metal" | "wood" | "crystal" | "obsidian"
+type BodyFinish = "metal" | "wood" | "crystal" | "obsidian"
 
 export type ChestPalette = {
   finish: BodyFinish

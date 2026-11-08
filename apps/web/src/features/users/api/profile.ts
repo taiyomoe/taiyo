@@ -158,7 +158,7 @@ type CosmeticsPatch = InferRequestType<(typeof api.users.me.cosmetics)["$patch"]
 
 // The shell reads the session from the router context, a snapshot taken when
 // the route loaded: re-run it so the patched session reaches the navbar.
-export const useRefreshSession = () => {
+const useRefreshSession = () => {
   const queryClient = useQueryClient()
   const router = useRouter()
 
