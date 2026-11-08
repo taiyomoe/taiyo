@@ -381,6 +381,7 @@ export const getWindowedOverview = async (
         "users.displayUsername",
         "users.image",
         "users.nameEffect",
+        "users.avatarBorder",
         "uploads.chapters",
         "uploads.previousChapters",
       ])

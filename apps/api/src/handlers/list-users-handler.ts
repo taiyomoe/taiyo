@@ -59,6 +59,7 @@ export const listUsersHandler = new Hono().get(
         "users.displayUsername",
         "users.image",
         "users.nameEffect",
+        "users.avatarBorder",
         "users.role",
         "users.banReason",
         "users.email",

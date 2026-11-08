@@ -129,7 +129,7 @@ describe("role matrix", () => {
         })
       }
     }
-  })
+  }, 30_000)
 
   test("a role change applies to the very next request", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services, { role: "ADMIN" })

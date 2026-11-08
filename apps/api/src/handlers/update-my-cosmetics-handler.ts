@@ -1,5 +1,7 @@
 import { userAudit } from "@taiyomoe/audit"
 import {
+  AVATAR_BORDER_KEYS,
+  AVATAR_BORDERS,
   type CosmeticKind,
   isCosmeticUnlocked,
   NAME_EFFECT_KEYS,
@@ -31,10 +33,16 @@ const bodySchema = z.object({
     .nullable()
     .optional()
     .meta({ description: "The profile title to equip, or null for none." }),
+  avatarBorder: z
+    .enum(AVATAR_BORDER_KEYS)
+    .nullable()
+    .optional()
+    .meta({ description: "The avatar border to equip, or null for none." }),
 })
 const equippedSchema = z.object({
   nameEffect: z.enum(NAME_EFFECT_KEYS).nullable(),
   title: z.enum(USER_TITLE_KEYS).nullable(),
+  avatarBorder: z.enum(AVATAR_BORDER_KEYS).nullable(),
 })
 
 export const updateMyCosmeticsHandler = new Hono().patch(
@@ -42,7 +50,7 @@ export const updateMyCosmeticsHandler = new Hono().patch(
   describeRoute({
     summary: "Equip cosmetics",
     description:
-      "Equips a name effect and/or a profile title you have unlocked. A name effect shows wherever your name does.\n\n**Authentication:** signed-in user.",
+      "Equips a name effect, a profile title and/or an avatar border you have unlocked. A name effect shows wherever your name does, and a border wherever your avatar does.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
     requestBody: {
       content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
@@ -64,7 +72,7 @@ export const updateMyCosmeticsHandler = new Hono().patch(
   withTransaction,
   async (c) => {
     const { auth, db, user, actor } = c.var
-    const { nameEffect, title } = c.var.json
+    const { nameEffect, title, avatarBorder } = c.var.json
     const requested = [
       ...(nameEffect === undefined || nameEffect === null
         ? []
@@ -74,6 +82,15 @@ export const updateMyCosmeticsHandler = new Hono().patch(
       ...(title === undefined || title === null
         ? []
         : [{ kind: "TITLE" as CosmeticKind, key: title, def: USER_TITLES[title] }]),
+      ...(avatarBorder === undefined || avatarBorder === null
+        ? []
+        : [
+            {
+              kind: "AVATAR_BORDER" as CosmeticKind,
+              key: avatarBorder,
+              def: AVATAR_BORDERS[avatarBorder],
+            },
+          ]),
     ]
 
     if (requested.length > 0) {
@@ -102,12 +119,19 @@ export const updateMyCosmeticsHandler = new Hono().patch(
     const before = await db
       .selectFrom("users")
       .leftJoin("userProfiles", "userProfiles.userId", "users.id")
-      .select(["users.nameEffect", "userProfiles.title"])
+      .select(["users.nameEffect", "users.avatarBorder", "userProfiles.title"])
       .where("users.id", "=", user.id)
       .executeTakeFirstOrThrow()
 
-    if (nameEffect !== undefined) {
-      await db.updateTable("users").set({ nameEffect }).where("id", "=", user.id).execute()
+    if (nameEffect !== undefined || avatarBorder !== undefined) {
+      await db
+        .updateTable("users")
+        .set({
+          ...(nameEffect === undefined ? {} : { nameEffect }),
+          ...(avatarBorder === undefined ? {} : { avatarBorder }),
+        })
+        .where("id", "=", user.id)
+        .execute()
     }
 
     if (title !== undefined) {
@@ -121,24 +145,28 @@ export const updateMyCosmeticsHandler = new Hono().patch(
     const after = {
       nameEffect: nameEffect === undefined ? before.nameEffect : nameEffect,
       title: title === undefined ? before.title : title,
+      avatarBorder: avatarBorder === undefined ? before.avatarBorder : avatarBorder,
     }
 
     c.var.audit.set({
       changes: auditChanges(
         before,
         Object.fromEntries(
-          Object.entries({ nameEffect, title }).filter(([, value]) => value !== undefined),
+          Object.entries({ nameEffect, title, avatarBorder }).filter(
+            ([, value]) => value !== undefined,
+          ),
         ),
       ),
     })
 
-    if (nameEffect !== undefined) {
+    if (nameEffect !== undefined || avatarBorder !== undefined) {
       c.var.afterCommit(() => refreshUserSessions(auth, user.id))
     }
 
     return c.ok({
       nameEffect: NAME_EFFECT_KEYS.find((key) => key === after.nameEffect) ?? null,
       title: USER_TITLE_KEYS.find((key) => key === after.title) ?? null,
+      avatarBorder: AVATAR_BORDER_KEYS.find((key) => key === after.avatarBorder) ?? null,
     })
   },
 )

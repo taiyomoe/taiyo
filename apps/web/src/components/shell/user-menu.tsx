@@ -29,6 +29,7 @@ import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
 import { use } from "react"
 import { filter, isTruthy, join, map, pipe, take } from "remeda"
 import type { Session } from "@/lib/session"
+import { AvatarBorder } from "@/components/avatar-border/avatar-border"
 import { canOpenDashboard } from "@/features/dashboard/lib/dashboard"
 import { ContentFilterItems } from "@/features/settings/components/content-filter"
 import { useAuthActions } from "@/hooks/use-auth-actions"
@@ -111,20 +112,22 @@ export function UserMenu({ user }: { user: Session["user"] }) {
   return (
     <Menu>
       <MenuTrigger aria-label={m.shell_user_menu()} sx={styles.trigger}>
-        <Avatar sx={styles.avatar}>
-          {user.image !== undefined && user.image !== null && user.image !== "" ? (
-            <AvatarImage alt="" src={user.image} />
-          ) : null}
-          <AvatarFallback sx={styles.fallback}>
-            {pipe(
-              user.name.split(/\s+/),
-              filter(isTruthy),
-              take(2),
-              map((part) => part.charAt(0).toUpperCase()),
-              join(""),
-            )}
-          </AvatarFallback>
-        </Avatar>
+        <AvatarBorder border={user.avatarBorder}>
+          <Avatar sx={styles.avatar}>
+            {user.image !== undefined && user.image !== null && user.image !== "" ? (
+              <AvatarImage alt="" src={user.image} />
+            ) : null}
+            <AvatarFallback sx={styles.fallback}>
+              {pipe(
+                user.name.split(/\s+/),
+                filter(isTruthy),
+                take(2),
+                map((part) => part.charAt(0).toUpperCase()),
+                join(""),
+              )}
+            </AvatarFallback>
+          </Avatar>
+        </AvatarBorder>
       </MenuTrigger>
       <MenuPopup align="end" sideOffset={8} sx={styles.popup}>
         {typeof user.username === "string" && user.username !== "" ? (

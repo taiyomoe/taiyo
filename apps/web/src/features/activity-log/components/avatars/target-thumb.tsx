@@ -71,6 +71,7 @@ export function TargetThumb({
   if (preview?.kind === "user" || preview?.kind === "staff") {
     return (
       <PersonAvatar
+        border={preview.avatarBorder}
         image={preview.image}
         name={preview.label ?? "?"}
         seed={preview.id}

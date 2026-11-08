@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
+import { AvatarBorder } from "@/components/avatar-border/avatar-border"
 import { UserName } from "@/components/user-name/user-name"
 import { m } from "@/paraglide/messages"
 
@@ -39,12 +40,14 @@ export function Uploader({ uploader, sx }: { uploader: LatestChapter["uploader"]
       sx={[styles.uploader, sx]}
       title={m.chapter_uploaded_by({ name: uploader.displayUsername })}
     >
-      <Avatar sx={styles.avatar}>
-        {uploader.image === null ? null : <AvatarImage alt="" src={uploader.image} />}
-        <AvatarFallback sx={styles.avatarFallback}>
-          {uploader.displayUsername.charAt(0).toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
+      <AvatarBorder border={uploader.avatarBorder}>
+        <Avatar sx={styles.avatar}>
+          {uploader.image === null ? null : <AvatarImage alt="" src={uploader.image} />}
+          <AvatarFallback sx={styles.avatarFallback}>
+            {uploader.displayUsername.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+      </AvatarBorder>
       <UserName
         effect={uploader.nameEffect}
         name={uploader.displayUsername}

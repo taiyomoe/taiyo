@@ -1,4 +1,4 @@
-import type { CosmeticUnlock, NameEffect, UserTitle } from "@taiyomoe/db/cosmetics"
+import type { AvatarBorder, CosmeticUnlock, NameEffect, UserTitle } from "@taiyomoe/db/cosmetics"
 import * as stylex from "@stylexjs/stylex"
 import { CheckCircle, Key } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
@@ -17,6 +17,7 @@ import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/t
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { breakpoints, colors, font, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
 import { type ReactNode, useState } from "react"
 import { range } from "remeda"
 import { ErrorAlert } from "@/components/feedback/error-alert"
@@ -31,6 +32,7 @@ import {
 import { RARITY_STYLES } from "@/features/users/components/profile/rarity-styles"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
 import {
+  AVATAR_BORDER_LABELS,
   describeUnlock,
   NAME_EFFECT_LABELS,
   RARITY_LABELS,
@@ -190,8 +192,34 @@ const styles = stylex.create({
     fontWeight: 500,
   },
   count: {
+    gap: "0.75rem",
     color: colors.mutedForeground,
+    display: "flex",
     fontSize: "0.8125rem",
+    justifyContent: "space-between",
+    marginBottom: "0.75rem",
+  },
+  shopLink: {
+    color: {
+      default: colors.mutedForeground,
+      ":hover": `color-mix(in srgb, ${colors.foreground} 75%, ${colors.background})`,
+    },
+    fontWeight: 600,
+    textDecorationLine: "none",
+    transitionDuration: "150ms",
+    transitionProperty: "color",
+  },
+  borderOption: {
+    alignItems: "center",
+  },
+  borderPreview: {
+    paddingBlock: "0.75rem",
+    display: "flex",
+    justifyContent: "center",
+  },
+  borderAvatar: {
+    height: "3rem",
+    width: "3rem",
   },
   skeleton: {
     borderRadius: radius.lg,
@@ -199,7 +227,10 @@ const styles = stylex.create({
   },
 })
 
-type Item = MyCosmetics["nameEffects"][number] | MyCosmetics["titles"][number]
+type Item =
+  | MyCosmetics["nameEffects"][number]
+  | MyCosmetics["titles"][number]
+  | MyCosmetics["avatarBorders"][number]
 
 function Unlock({ item, progress }: { item: Item; progress: MyCosmetics["progress"] }) {
   const unlock: CosmeticUnlock = item.unlock
@@ -209,7 +240,6 @@ function Unlock({ item, progress }: { item: Item; progress: MyCosmetics["progres
       <span sx={styles.unlock}>
         {item.unlocked ? null : <Key size={12} />}
         {describeUnlock(unlock)}
-        {!item.unlocked && unlock.type === "shop" ? ` · ${m.profile_customize_shop_soon()}` : ""}
       </span>
     )
   }
@@ -274,9 +304,19 @@ function Picker({ profile, cosmetics }: { profile: UserProfile; cosmetics: MyCos
   const equip = useEquipCosmetics(profile.username)
   const [effect, setEffect] = useState<NameEffect | null>(cosmetics.nameEffect)
   const [title, setTitle] = useState<UserTitle | null>(cosmetics.title)
-  const changed = effect !== cosmetics.nameEffect || title !== cosmetics.title
+  const [border, setBorder] = useState<AvatarBorder | null>(cosmetics.avatarBorder)
+  const changed =
+    effect !== cosmetics.nameEffect ||
+    title !== cosmetics.title ||
+    border !== cosmetics.avatarBorder
   const unlockedEffects = cosmetics.nameEffects.filter((item) => item.unlocked).length
   const unlockedTitles = cosmetics.titles.filter((item) => item.unlocked).length
+  const unlockedBorders = cosmetics.avatarBorders.filter((item) => item.unlocked).length
+  const shopLink = (
+    <Link {...stylex.props(styles.shopLink)} to="/shop">
+      {m.profile_customize_visit_shop()}
+    </Link>
+  )
   // Unlocked first, then by rarity as the catalog orders it.
   const sorted = <T extends Item>(items: T[]) =>
     [...items].sort((a, b) => Number(b.unlocked) - Number(a.unlocked))
@@ -286,7 +326,7 @@ function Picker({ profile, cosmetics }: { profile: UserProfile; cosmetics: MyCos
       <DialogPanel>
         <ErrorAlert message={equip.isError ? getErrorMessage(equip.error) : null} />
         <div sx={styles.preview}>
-          <PersonAvatar person={profile} sx={styles.previewAvatar} />
+          <PersonAvatar person={{ ...profile, avatarBorder: border }} sx={styles.previewAvatar} />
           <div sx={styles.previewText}>
             <UserName effect={effect} name={profile.displayUsername} sx={styles.previewName} />
             <TitleBadge size="sm" title={title} />
@@ -296,6 +336,7 @@ function Picker({ profile, cosmetics }: { profile: UserProfile; cosmetics: MyCos
           <TabsList variant="underline">
             <TabsTab value="effects">{m.profile_customize_tab_effects()}</TabsTab>
             <TabsTab value="titles">{m.profile_customize_tab_titles()}</TabsTab>
+            <TabsTab value="borders">{m.profile_customize_tab_borders()}</TabsTab>
           </TabsList>
           <TabsPanel value="effects">
             <p sx={styles.count}>
@@ -303,6 +344,7 @@ function Picker({ profile, cosmetics }: { profile: UserProfile; cosmetics: MyCos
                 count: unlockedEffects,
                 total: cosmetics.nameEffects.length,
               })}
+              {shopLink}
             </p>
             <div sx={styles.grid}>
               <Option
@@ -344,6 +386,7 @@ function Picker({ profile, cosmetics }: { profile: UserProfile; cosmetics: MyCos
                 count: unlockedTitles,
                 total: cosmetics.titles.length,
               })}
+              {shopLink}
             </p>
             <div sx={styles.grid}>
               <Option
@@ -378,6 +421,55 @@ function Picker({ profile, cosmetics }: { profile: UserProfile; cosmetics: MyCos
               ))}
             </div>
           </TabsPanel>
+          <TabsPanel value="borders">
+            <p sx={styles.count}>
+              {m.profile_customize_unlocked_count({
+                count: unlockedBorders,
+                total: cosmetics.avatarBorders.length,
+              })}
+              {shopLink}
+            </p>
+            <div sx={styles.grid}>
+              <Option
+                locked={false}
+                onSelect={() => {
+                  setBorder(null)
+                }}
+                selected={border === null}
+                sx={styles.borderOption}
+              >
+                <span sx={styles.borderPreview}>
+                  <PersonAvatar person={profile} sx={styles.borderAvatar} />
+                </span>
+                <span sx={[styles.optionLabel, styles.plain]}>
+                  {m.profile_customize_no_border()}
+                </span>
+              </Option>
+              {sorted(cosmetics.avatarBorders).map((item) => (
+                <Option
+                  key={item.key}
+                  locked={!item.unlocked}
+                  onSelect={() => {
+                    setBorder(item.key)
+                  }}
+                  selected={border === item.key}
+                  sx={styles.borderOption}
+                >
+                  <span sx={styles.borderPreview}>
+                    <PersonAvatar
+                      person={{ ...profile, avatarBorder: item.key }}
+                      sx={styles.borderAvatar}
+                    />
+                  </span>
+                  <span sx={styles.optionMeta}>
+                    <span sx={styles.optionLabel}>{AVATAR_BORDER_LABELS[item.key]()}</span>
+                    <Rarity rarity={item.rarity} />
+                  </span>
+                  <Unlock item={item} progress={cosmetics.progress} />
+                </Option>
+              ))}
+            </div>
+          </TabsPanel>
         </Tabs>
       </DialogPanel>
       <DialogFooter>
@@ -390,6 +482,7 @@ function Picker({ profile, cosmetics }: { profile: UserProfile; cosmetics: MyCos
               {
                 ...(effect === cosmetics.nameEffect ? {} : { nameEffect: effect }),
                 ...(title === cosmetics.title ? {} : { title }),
+                ...(border === cosmetics.avatarBorder ? {} : { avatarBorder: border }),
               },
               {
                 onSuccess: () => {

@@ -20,6 +20,7 @@ export function ActorGlyph({ entry }: { entry: FacetValue }) {
 
   return (
     <PersonAvatar
+      border={entry.avatarBorder}
       image={entry.image ?? null}
       name={entry.displayName ?? entry.value}
       seed={entry.value}

@@ -157,6 +157,7 @@ export const selectComments = (db: Kysely<DB>, viewerId: string | null) =>
       "u.displayUsername as authorDisplayUsername",
       "u.image as authorImage",
       "u.nameEffect as authorNameEffect",
+      "u.avatarBorder as authorAvatarBorder",
       "u.role as authorRole",
       "up.title as authorTitle",
       liveCommentSql("rt", "rtu").as("replyToLive"),
@@ -313,6 +314,7 @@ export const toComment = (
             displayUsername: row.authorDisplayUsername ?? "",
             image: row.authorImage ?? null,
             nameEffect: row.authorNameEffect ?? null,
+            avatarBorder: row.authorAvatarBorder ?? null,
             title: row.authorTitle ?? null,
             role: row.authorRole ?? "USER",
           }

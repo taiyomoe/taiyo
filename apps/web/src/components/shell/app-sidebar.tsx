@@ -11,6 +11,7 @@ import {
   Shuffle,
   Sliders,
   Sparkles,
+  Store,
   User,
   Users,
 } from "@taiyomoe/ui/components/icons"
@@ -64,6 +65,7 @@ const SECTIONS: AppSidebarSection[] = [
       { label: m.shell_nav_groups, icon: Users, to: "/groups" },
       { label: m.shell_nav_forums, icon: Forum },
       { label: m.shell_nav_users, icon: User },
+      { label: m.shell_nav_shop, icon: Store, to: "/shop" },
     ],
   },
 ]

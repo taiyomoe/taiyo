@@ -63,6 +63,20 @@ const ember = stylex.keyframes({
   "40%": { filter: "drop-shadow(0 0 6px rgb(249 115 22 / 70%))" },
   "70%": { filter: "drop-shadow(0 0 2px rgb(249 115 22 / 35%))" },
 })
+const opal = stylex.keyframes({
+  "0%": {
+    backgroundPosition: "0% 50%",
+    filter: "hue-rotate(0deg) drop-shadow(0 0 6px rgb(167 243 208 / 35%))",
+  },
+  "50%": {
+    backgroundPosition: "100% 50%",
+    filter: "hue-rotate(40deg) drop-shadow(0 0 9px rgb(196 181 253 / 45%))",
+  },
+  "100%": {
+    backgroundPosition: "0% 50%",
+    filter: "hue-rotate(0deg) drop-shadow(0 0 6px rgb(167 243 208 / 35%))",
+  },
+})
 const gradientText = {
   WebkitBackgroundClip: "text",
   backgroundClip: "text",
@@ -222,6 +236,16 @@ const styles = stylex.create({
     backgroundImage:
       "linear-gradient(90deg, #ef4444, #f59e0b, #eab308, #22c55e, #06b6d4, #3b82f6, #a855f7, #ec4899, #ef4444)",
     backgroundSize: "200% 100%",
+  },
+  opal: {
+    ...gradientText,
+    animationDuration: "7s",
+    animationIterationCount: "infinite",
+    animationName: { default: opal, [consts.reducedMotion]: "none" },
+    animationTimingFunction: "ease-in-out",
+    backgroundImage:
+      "linear-gradient(115deg, #e0f2fe, #a7f3d0 20%, #fbcfe8 40%, #ddd6fe 60%, #fef3c7 80%, #bae6fd)",
+    backgroundSize: "250% 100%",
   },
 })
 

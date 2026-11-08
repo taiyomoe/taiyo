@@ -125,6 +125,10 @@ const dashboardOverviewSchema = z.object({
         .string()
         .nullable()
         .meta({ description: "The user's equipped name effect, if any." }),
+      avatarBorder: z
+        .string()
+        .nullable()
+        .meta({ description: "The user's equipped avatar border, if any." }),
       chapters: z.int().meta({
         description: "Chapters the user uploaded in the current window, not deleted.",
         example: 42,
@@ -181,6 +185,10 @@ const dashboardOverviewSchema = z.object({
             .string()
             .nullable()
             .meta({ description: "The user's equipped name effect, if any." }),
+          avatarBorder: z
+            .string()
+            .nullable()
+            .meta({ description: "The user's equipped avatar border, if any." }),
         })
         .meta({ description: "The user behind the activity." }),
       media: z
@@ -329,6 +337,7 @@ export const getDashboardOverviewHandler = new Hono().get(
               "users.displayUsername as actorDisplayUsername",
               "users.image as actorImage",
               "users.nameEffect as actorNameEffect",
+              "users.avatarBorder as actorAvatarBorder",
               sql<Date>`max(${eb.ref("event.createdAt")}) at time zone 'UTC'`.as("at"),
               eb.fn.countAll<string>().as("count"),
             ])
@@ -356,6 +365,7 @@ export const getDashboardOverviewHandler = new Hono().get(
               displayUsername: row.actorDisplayUsername,
               image: row.actorImage,
               nameEffect: row.actorNameEffect,
+              avatarBorder: row.actorAvatarBorder,
             },
             media: { id: row.mediaId, title: titles.get(row.mediaId) ?? null },
           }))

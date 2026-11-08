@@ -226,6 +226,10 @@ export const latestChapterSchema = chapterFeedItemSchema
           .string()
           .nullable()
           .meta({ description: "The name effect the user has equipped, if any.", example: "gold" }),
+        avatarBorder: z
+          .string()
+          .nullable()
+          .meta({ description: "The avatar border the user has equipped, if any." }),
       })
       .meta({ description: "The user who uploaded the chapter." }),
   })
@@ -294,6 +298,7 @@ export const userSummarySchema = z.object({
   displayUsername: z.string(),
   image: z.string().nullable(),
   nameEffect: z.string().nullable(),
+  avatarBorder: z.string().nullable(),
 })
 
 export const groupSummarySchema = z.object({

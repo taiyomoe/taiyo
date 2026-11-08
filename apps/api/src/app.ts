@@ -36,6 +36,7 @@ import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { searchRouter } from "./routers/search-router"
+import { shopRouter } from "./routers/shop-router"
 import { staffsRouter } from "./routers/staffs-router"
 import { usersRouter } from "./routers/users-router"
 import { enrichAudit } from "./utils/audit"
@@ -177,6 +178,7 @@ export const createApp = (services: Services) => {
     .route("/comment-reports", commentReportsRouter)
     .route("/dashboard", dashboardRouter)
     .route("/search", searchRouter)
+    .route("/shop", shopRouter)
     .route("/audit-logs", auditLogsRouter)
 
   app
@@ -263,6 +265,11 @@ export const createApp = (services: Services) => {
               name: "Follows",
               description:
                 "Following relationships between users. Each follow is a one-directional edge (A → B); reciprocity is two edges.",
+            },
+            {
+              name: "Shop",
+              description:
+                "Spending reading points on cosmetics: direct purchases and loot boxes with published odds.",
             },
             {
               name: "Reading history",

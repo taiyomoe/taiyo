@@ -349,6 +349,28 @@ const commentErrors = {
     code: 409,
   },
 } as const
+const shopErrors = {
+  NOT_FOR_SALE: {
+    message: "This cosmetic can't be bought directly.",
+    code: 409,
+  },
+  ALREADY_OWNED: {
+    message: "You already own this cosmetic.",
+    code: 409,
+  },
+  INSUFFICIENT_POINTS: {
+    message: "You don't have enough points.",
+    code: 409,
+  },
+  LOOT_BOX_EXHAUSTED: {
+    message: "You already own everything this loot box can drop.",
+    code: 409,
+  },
+  SHOP_IMPERSONATION: {
+    message: "Points can't be spent while impersonating a user.",
+    code: 403,
+  },
+} as const
 const historyErrors = {
   HISTORY_ENTRY_NOT_FOUND: {
     message: "No history entry exists for this chapter.",
@@ -436,6 +458,7 @@ export const errors = {
   ...followErrors,
   ...profileErrors,
   ...commentErrors,
+  ...shopErrors,
   ...historyErrors,
   ...pageErrors,
   ...libraryErrors,

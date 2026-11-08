@@ -2,9 +2,13 @@ import { type Kysely, sql } from "kysely"
 
 export async function up(db: Kysely<unknown>) {
   await db.schema.alterTable("users").addColumn("nameEffect", "text").execute()
+  await db.schema.alterTable("users").addColumn("avatarBorder", "text").execute()
   await db.schema.alterTable("userProfiles").addColumn("title", "text").execute()
 
-  await db.schema.createType("UserCosmeticKind").asEnum(["NAME_EFFECT", "TITLE"]).execute()
+  await db.schema
+    .createType("UserCosmeticKind")
+    .asEnum(["NAME_EFFECT", "TITLE", "AVATAR_BORDER"])
+    .execute()
 
   await db.schema
     .createTable("userCosmetics")
@@ -31,5 +35,6 @@ export async function down(db: Kysely<unknown>) {
   await db.schema.dropTable("userCosmetics").execute()
   await db.schema.dropType("UserCosmeticKind").execute()
   await db.schema.alterTable("userProfiles").dropColumn("title").execute()
+  await db.schema.alterTable("users").dropColumn("avatarBorder").execute()
   await db.schema.alterTable("users").dropColumn("nameEffect").execute()
 }

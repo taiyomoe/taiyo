@@ -31,6 +31,10 @@ const suggestionSchema = z.object({
     .string()
     .nullable()
     .meta({ description: "The user's equipped name effect, for users." }),
+  avatarBorder: z
+    .string()
+    .nullable()
+    .meta({ description: "The user's equipped avatar border, for users." }),
 })
 const event = sql.ref("auditLogs.event")
 const columns: Record<string, RawBuilder<unknown>> = {
@@ -51,7 +55,7 @@ const plain = (values: readonly string[], query: string) =>
   values
     .filter(matches(query))
     .slice(0, 50)
-    .map((value) => ({ value, label: null, image: null, nameEffect: null }))
+    .map((value) => ({ value, label: null, image: null, nameEffect: null, avatarBorder: null }))
 
 export const listAuditLogSuggestionsHandler = new Hono().get(
   "/suggestions",
@@ -108,7 +112,7 @@ export const listAuditLogSuggestionsHandler = new Hono().get(
       const [users, others] = await Promise.all([
         db
           .selectFrom("users")
-          .select(["id", "username", "displayUsername", "image", "nameEffect"])
+          .select(["id", "username", "displayUsername", "image", "nameEffect", "avatarBorder"])
           .where((eb) =>
             eb.or([eb("username", "ilike", pattern), eb("displayUsername", "ilike", pattern)]),
           )
@@ -132,6 +136,7 @@ export const listAuditLogSuggestionsHandler = new Hono().get(
           label: user.displayUsername,
           image: user.image,
           nameEffect: user.nameEffect,
+          avatarBorder: user.avatarBorder,
         })),
         ...plain(["anonymous", ...others.map(({ actorId }) => actorId)], query),
       ])
@@ -152,6 +157,14 @@ export const listAuditLogSuggestionsHandler = new Hono().get(
       limit ${LIMIT}
     `.execute(db)
 
-    return c.ok(rows.map(({ value }) => ({ value, label: null, image: null, nameEffect: null })))
+    return c.ok(
+      rows.map(({ value }) => ({
+        value,
+        label: null,
+        image: null,
+        nameEffect: null,
+        avatarBorder: null,
+      })),
+    )
   },
 )

@@ -89,11 +89,13 @@ export const selectSuggestionColumns = (query: ReturnType<typeof selectSuggestio
     "authors.displayUsername as authorDisplayUsername",
     "authors.image as authorImage",
     "authors.nameEffect as authorNameEffect",
+    "authors.avatarBorder as authorAvatarBorder",
     "reviewers.id as reviewerId",
     "reviewers.username as reviewerUsername",
     "reviewers.displayUsername as reviewerDisplayUsername",
     "reviewers.image as reviewerImage",
     "reviewers.nameEffect as reviewerNameEffect",
+    "reviewers.avatarBorder as reviewerAvatarBorder",
   ])
 
 type SuggestionRow = Awaited<ReturnType<ReturnType<typeof selectSuggestionColumns>["execute"]>>
@@ -125,6 +127,7 @@ export const summarize = (
     displayUsername: row.authorDisplayUsername,
     image: row.authorImage,
     nameEffect: row.authorNameEffect,
+    avatarBorder: row.authorAvatarBorder,
   },
 })
 

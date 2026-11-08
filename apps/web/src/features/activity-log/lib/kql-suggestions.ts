@@ -19,6 +19,7 @@ export type KqlSuggestion = {
   field: AuditLogField | null
   image: string | null
   nameEffect?: string | null
+  avatarBorder?: string | null
   insert: string
   start: number
   end: number
@@ -108,6 +109,7 @@ export const getValueSuggestions = (
     label: string | null
     image: string | null
     nameEffect?: string | null
+    avatarBorder?: string | null
   }>,
   anyValueDescription: string,
 ) => {
@@ -127,6 +129,7 @@ export const getValueSuggestions = (
         field: context.field,
         image: value.image,
         nameEffect: value.nameEffect ?? null,
+        avatarBorder: value.avatarBorder ?? null,
         insert: `${bare ? value.value : quoteKqlValue(value.value)} `,
         start: context.start,
         end: context.end,
