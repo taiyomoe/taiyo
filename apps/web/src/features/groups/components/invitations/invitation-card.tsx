@@ -97,7 +97,9 @@ export function InvitationCard({ invitation }: { invitation: MyGroupInvitation }
             {invitation.group.name}
           </Link>
           <div sx={styles.meta}>
-            <span>{renderWithName(m.invitation_invited_by, invitation.inviter)}</span>
+            <span>
+              {renderWithName(m.invitation_invited_by, invitation.inviter, { link: true })}
+            </span>
             <span aria-hidden>·</span>
             <span>
               <TimeAgo date={invitation.createdAt} />

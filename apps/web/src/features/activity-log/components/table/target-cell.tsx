@@ -1,14 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { LogGroup } from "@/features/activity-log/lib/activity-log"
-import { UserName } from "@/components/user-name/user-name"
 import { TargetThumb } from "@/features/activity-log/components/entity-avatar"
 import { tableStyles } from "@/features/activity-log/components/table/table-styles"
-import {
-  getCategory,
-  getTargetLabel,
-  getTargetNameEffect,
-} from "@/features/activity-log/lib/activity-log"
+import { TargetName } from "@/features/activity-log/components/target-name"
+import { getCategory } from "@/features/activity-log/lib/activity-log"
 import { formatCount } from "@/features/activity-log/lib/format"
 import { m } from "@/paraglide/messages"
 
@@ -49,7 +45,7 @@ export function TargetCell({ group: { entry, count, targets } }: { group: LogGro
           {many ? (
             m.activity_group_targets({ count: formatCount(targets) })
           ) : (
-            <UserName effect={getTargetNameEffect(entry)} name={getTargetLabel(entry)} />
+            <TargetName entry={entry} />
           )}
         </span>
         <span sx={[tableStyles.muted, tableStyles.ellipsis]}>{entry.target.type}</span>

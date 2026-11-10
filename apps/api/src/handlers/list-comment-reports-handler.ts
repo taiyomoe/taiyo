@@ -32,7 +32,12 @@ const reportSchema = z.object({
   reason: z.enum(COMMENT_REPORT_REASONS),
   details: z.string().nullable(),
   createdAt: z.iso.datetime(),
-  reporter: z.object({ id: z.uuid(), username: z.string(), displayUsername: z.string() }),
+  reporter: z.object({
+    id: z.uuid(),
+    username: z.string(),
+    displayUsername: z.string(),
+    nameEffect: z.string().nullable(),
+  }),
 })
 const reportedCommentSchema = z.object({
   reportId: z.uuid().meta({ description: "The report to close; closing it closes its siblings." }),
@@ -147,6 +152,7 @@ export const listCommentReportsHandler = new Hono().get(
               "ru.id as reporterId",
               "ru.username",
               "ru.displayUsername",
+              "ru.nameEffect",
               sql<string>`row_number() over (partition by "r"."commentId" order by "r"."createdAt" desc)`.as(
                 "rank",
               ),
@@ -221,6 +227,7 @@ export const listCommentReportsHandler = new Hono().get(
                   id: report.reporterId,
                   username: report.username,
                   displayUsername: report.displayUsername,
+                  nameEffect: report.nameEffect,
                 },
               })),
             reportCount: Number(group.reportCount),

@@ -5,7 +5,7 @@ import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { api } from "@/lib/api"
 import { ListRow } from "@/components/layout/dashboard-page"
 import { TimeAgo } from "@/components/time/time-ago"
-import { UserName } from "@/components/user-name/user-name"
+import { UserLink } from "@/components/user-name/user-link"
 import { renderWithName } from "@/components/user-name/with-name"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { PermissionChips } from "@/features/groups/components/permission-chips"
@@ -53,13 +53,10 @@ export function PendingInvitationRow({
       <PersonAvatar person={invitation.invitee} />
       <div sx={styles.main}>
         <span sx={styles.name}>
-          <UserName
-            effect={invitation.invitee.nameEffect}
-            name={invitation.invitee.displayUsername}
-          />
+          <UserLink user={invitation.invitee} />
         </span>
         <div sx={styles.meta}>
-          <span>{renderWithName(m.invitation_invited_by, invitation.inviter)}</span>
+          <span>{renderWithName(m.invitation_invited_by, invitation.inviter, { link: true })}</span>
           <span aria-hidden>·</span>
           <TimeAgo date={invitation.createdAt} />
         </div>

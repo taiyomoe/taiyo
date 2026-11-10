@@ -119,7 +119,9 @@ function SuggestionReview() {
     >
       <SuggestionMeta suggestion={suggestion} />
       {suggestion.note === null ? null : (
-        <SuggestionNote label={renderWithName(m.suggestion_note_from, suggestion.author)}>
+        <SuggestionNote
+          label={renderWithName(m.suggestion_note_from, suggestion.author, { link: true })}
+        >
           {suggestion.note}
         </SuggestionNote>
       )}

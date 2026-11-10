@@ -4,7 +4,7 @@ import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Confirmation } from "@/components/dialogs/confirm-dialog"
 import type { Group, GroupMember } from "@/features/groups/api/groups"
 import { ListRow } from "@/components/layout/dashboard-page"
-import { UserName } from "@/components/user-name/user-name"
+import { UserLink } from "@/components/user-name/user-link"
 import { renderWithName } from "@/components/user-name/with-name"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { MemberActionsMenu } from "@/features/groups/components/manage-group/members/member-actions-menu"
@@ -151,7 +151,7 @@ export function MemberRow({
       <div sx={styles.main}>
         <div sx={styles.titleLine}>
           <span sx={styles.name}>
-            <UserName effect={member.nameEffect} name={member.displayUsername} />
+            <UserLink user={member} />
           </span>
           <span sx={styles.username}>@{member.username}</span>
           <RoleBadge role={member.role} />
