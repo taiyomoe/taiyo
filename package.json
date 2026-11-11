@@ -27,7 +27,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "knip": "^6.44.1",
     "lefthook": "^2.2.2",
-    "oxfmt": "^0.74.0",
+    "oxfmt": "^0.75.0",
     "oxlint": "^1.89.0",
     "oxlint-tsgolint": "^7.0.2005",
     "sherif": "^1.13.0",

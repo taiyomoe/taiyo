@@ -78,18 +78,16 @@ export function useFavoriteCommentImage() {
           }
         : comment,
     )
-    queryClient.setQueriesData<InfiniteData<ImagesPage>>(
-      { queryKey: ["comment-images"] },
-      (data) =>
-        data === undefined
-          ? data
-          : {
-              ...data,
-              pages: data.pages.map((page) => ({
-                ...page,
-                data: page.data.map((image) => (image.id === id ? { ...image, favorited } : image)),
-              })),
-            },
+    queryClient.setQueriesData<InfiniteData<ImagesPage>>({ queryKey: ["comment-images"] }, (data) =>
+      data === undefined
+        ? data
+        : {
+            ...data,
+            pages: data.pages.map((page) => ({
+              ...page,
+              data: page.data.map((image) => (image.id === id ? { ...image, favorited } : image)),
+            })),
+          },
     )
   }
 
