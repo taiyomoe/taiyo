@@ -24,6 +24,8 @@ import type { GroupReport } from "./models/group-report-model"
 import type { Media } from "./models/media-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
+import type { Notification } from "./models/notification-model"
+import type { NotificationOutboxEntry } from "./models/notification-outbox-model"
 import type { PageBookmark } from "./models/page-bookmark-model"
 import type { PageReport } from "./models/page-report-model"
 import type { ReadingReward } from "./models/reading-reward-model"
@@ -71,6 +73,8 @@ export type DB = {
   mediaStaffs: MediaStaff
   mediaSuggestions: MediaSuggestion
   medias: Media
+  notificationOutbox: NotificationOutboxEntry
+  notifications: Notification
   pageBookmarks: PageBookmark
   pageReports: PageReport
   readingRewards: ReadingReward

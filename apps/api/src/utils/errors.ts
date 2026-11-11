@@ -303,6 +303,10 @@ const commentErrors = {
     message: "The requested comment was not found.",
     code: 404,
   },
+  NOTIFICATION_NOT_FOUND: {
+    message: "The requested notification was not found.",
+    code: 404,
+  },
   COMMENT_EMPTY: {
     message: "A comment needs some text or at least one image.",
     code: 422,

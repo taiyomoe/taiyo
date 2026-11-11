@@ -127,9 +127,17 @@ const bannedSql = (alias: string) =>
 export const liveCommentSql = (comment: string, author: string) =>
   sql<boolean>`(${sql.ref(`${comment}.deletedAt`)} is null and ${sql.ref(`${author}.id`)} is not null and not ${bannedSql(author)})`
 
+export const visibleThreadTargetSql = (thread: string) => sql<boolean>`(
+  exists (select 1 from "medias" as "m" where "m"."id" = ${sql.ref(`${thread}.mediaId`)} and "m"."deletedAt" is null)
+  or exists (select 1 from "chapters" as "ch" where "ch"."id" = ${sql.ref(`${thread}.chapterId`)} and "ch"."deletedAt" is null and "ch"."status" = 'PUBLISHED')
+  or exists (select 1 from "groups" as "g" where "g"."id" = ${sql.ref(`${thread}.groupId`)} and "g"."deletedAt" is null)
+  or exists (select 1 from "users" as "pu" where "pu"."id" = ${sql.ref(`${thread}.profileId`)} and not coalesce("pu"."banned", false))
+)`
+
 const liveRepliesOf = (root: string) =>
   sql`from "comments" as "r" left join "users" as "ru" on "ru"."id" = "r"."authorId" where "r"."parentId" = ${sql.ref(`${root}.id`)} and ${liveCommentSql("r", "ru")}`
-const timestampSql = (column: string) =>
+
+export const timestampSql = (column: string) =>
   sql<string>`to_char(${sql.ref(column)}, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`
 
 export const selectComments = (db: Kysely<DB>, viewerId: string | null) =>

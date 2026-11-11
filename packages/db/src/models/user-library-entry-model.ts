@@ -6,6 +6,7 @@ export type UserLibraryEntry = {
   userId: string
   mediaId: string
   status: UserLibraryStatus
+  notify: Generated<boolean>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
 }

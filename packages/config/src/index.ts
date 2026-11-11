@@ -60,6 +60,12 @@ export const config = {
     repliesPerPage: 10,
     previewReplies: 3,
   },
+  notifications: {
+    drainBatchSize: 50,
+    maxChapterAgeDays: 7,
+    readRetentionDays: 90,
+    unreadRetentionDays: 365,
+  },
   tags,
   pagination: {
     defaultPage: 1,

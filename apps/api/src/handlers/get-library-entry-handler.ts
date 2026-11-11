@@ -11,6 +11,7 @@ const paramSchema = z.object({ mediaId: z.uuid() })
 const libraryEntrySchema = z.object({
   mediaId: z.uuid(),
   status: z.enum(USER_LIBRARY_STATUSES),
+  notify: z.boolean().meta({ description: "Whether new chapters of the media notify you." }),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 })
@@ -43,7 +44,7 @@ export const getLibraryEntryHandler = new Hono().get(
     const { mediaId } = c.var.param
     const entry = await db
       .selectFrom("userLibraryEntries")
-      .select(["mediaId", "status", "createdAt", "updatedAt"])
+      .select(["mediaId", "status", "notify", "createdAt", "updatedAt"])
       .where("userId", "=", user.id)
       .where("mediaId", "=", mediaId)
       .executeTakeFirst()

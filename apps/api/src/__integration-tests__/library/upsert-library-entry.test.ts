@@ -76,6 +76,29 @@ describe("PUT /users/me/library/:mediaId", () => {
     expect(row.status).toBe("COMPLETED")
   })
 
+  test("turns notifications off and keeps the choice when only the status changes", async ({
+    app,
+    services,
+  }) => {
+    const { headers } = await signInAs(services)
+    const path = `/users/me/library/${SEEDED_MEDIA_ID}`
+    const created = await api(app, path, { method: "PUT", headers, json: { status: "READING" } })
+
+    expect(created.body).toMatchObject({ data: { status: "READING", notify: true } })
+
+    const muted = await api(app, path, {
+      method: "PUT",
+      headers,
+      json: { status: "READING", notify: false },
+    })
+
+    expect(muted.body).toMatchObject({ data: { notify: false } })
+
+    const moved = await api(app, path, { method: "PUT", headers, json: { status: "ON_HOLD" } })
+
+    expect(moved.body).toMatchObject({ data: { status: "ON_HOLD", notify: false } })
+  })
+
   test("returns MEDIA_NOT_FOUND for an unknown media", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const res = await api(app, `/users/me/library/${randomUUID()}`, {

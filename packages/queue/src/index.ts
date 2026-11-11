@@ -1,5 +1,6 @@
 import { type CommentImageReaperDeps, reapOrphanCommentImages } from "./comment-image-reaper"
 import { createBullConnection } from "./connection"
+import { drainNotificationOutbox, purgeNotifications } from "./notifier"
 import { processChapterUpload, type ProcessorDeps } from "./processor"
 import { publishScheduledChapters, type PublisherDeps } from "./publisher"
 import { CHAPTER_UPLOAD_QUEUE, type ChapterUploadProducer, getChapterUploadProducer } from "./queue"
@@ -14,9 +15,11 @@ export {
   CHAPTER_UPLOAD_QUEUE,
   chapterUploadManifestSchema,
   createBullConnection,
+  drainNotificationOutbox,
   getChapterUploadProducer,
   processChapterUpload,
   publishScheduledChapters,
+  purgeNotifications,
   reapOrphanCommentImages,
   reapStaleChapterUploads,
 }

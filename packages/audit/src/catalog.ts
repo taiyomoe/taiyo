@@ -223,6 +223,11 @@ export const historyAudit = defineAuditCatalog("history", {
   MEDIA_MARK_READ: { target: "media", severity: "low" },
 })
 
+export const notificationAudit = defineAuditCatalog("notification", {
+  READ: { target: "notification", severity: "low" },
+  READ_ALL: { severity: "low" },
+})
+
 export const bookmarkAudit = defineAuditCatalog("bookmark", {
   ADD: { target: "chapter", severity: "low" },
   REMOVE: { target: "chapter", severity: "low" },
@@ -265,6 +270,7 @@ export const auditCatalogs = [
   listAudit,
   libraryAudit,
   historyAudit,
+  notificationAudit,
   bookmarkAudit,
   chapterReportAudit,
   auditLogAudit,
@@ -299,6 +305,7 @@ declare module "evlog" {
     list: typeof listAudit
     library: typeof libraryAudit
     history: typeof historyAudit
+    notification: typeof notificationAudit
     bookmark: typeof bookmarkAudit
     chapterReport: typeof chapterReportAudit
     auditLog: typeof auditLogAudit

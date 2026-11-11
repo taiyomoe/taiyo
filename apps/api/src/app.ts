@@ -283,6 +283,11 @@ export const createApp = (services: Services) => {
                 "Per-user library — manga the user is reading / has read / etc., scoped to the signed-in user.",
             },
             {
+              name: "Notifications",
+              description:
+                "The signed-in user's notifications — new chapters of followed medias and groups, and replies to their comments.",
+            },
+            {
               name: "Settings",
               description:
                 "Preferences of the signed-in user, stored on their account so every device shares them.",

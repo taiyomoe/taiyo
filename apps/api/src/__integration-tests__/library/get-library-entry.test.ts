@@ -9,6 +9,7 @@ const OTHER_MEDIA_ID = "7a99da64-56e7-4bf6-8159-8db0d3b4f231"
 type LibraryEntry = {
   mediaId: string
   status: string
+  notify: boolean
   createdAt: string
   updatedAt: string
 }
@@ -46,6 +47,7 @@ describe("GET /users/me/library/:mediaId", () => {
     expect(res.body.data).toEqual({
       mediaId: SEEDED_MEDIA_ID,
       status: "ON_HOLD",
+      notify: true,
       createdAt: createdAt.toISOString(),
       updatedAt: updatedAt.toISOString(),
     })

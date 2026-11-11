@@ -16,6 +16,7 @@ const querySchema = paginationQuerySchema.extend({
 const libraryItemSchema = z.object({
   mediaId: z.uuid(),
   status: z.enum(USER_LIBRARY_STATUSES),
+  notify: z.boolean().meta({ description: "Whether new chapters of the media notify you." }),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 })
@@ -54,7 +55,7 @@ export const listMyLibraryHandler = new Hono().get(
 
     const [items, totalRow] = await Promise.all([
       base
-        .select(["mediaId", "status", "createdAt", "updatedAt"])
+        .select(["mediaId", "status", "notify", "createdAt", "updatedAt"])
         .orderBy("updatedAt", "desc")
         .limit(perPage)
         .offset((page - 1) * perPage)
