@@ -60,7 +60,7 @@ export const createSunScene = ({
   const sphereGeometry = new SphereGeometry(1, 96, 64)
   const planeGeometry = new PlaneGeometry(1, 1)
   const plasma = new ShaderMaterial({
-    uniforms,
+    uniforms: { uTime: uniforms.uTime },
     vertexShader: SPHERE_VERTEX,
     fragmentShader: PLASMA_FRAGMENT,
   })
@@ -78,7 +78,6 @@ export const createSunScene = ({
   const axis = new Vector3()
   const up = new Vector3(0, 1, 0)
   const drag = { pointer: -1, x: 0, y: 0, time: 0, velocityX: 0, velocityY: 0, held: 0, radius: 1 }
-  const bounce = { x: 0, velocity: 0 }
   let disc = { x: 0, y: 0, radius: 0 }
   let layoutKey = ""
   let breathPhase = 0
@@ -232,16 +231,6 @@ export const createSunScene = ({
       uniforms.uTime.value += delta
       breathPhase += delta / BREATH_SECONDS
       uniforms.uBreath.value = 0.5 - 0.5 * Math.cos(breathPhase * Math.PI * 2)
-
-      // An underdamped spring chasing the breath: the sun bounces in at mid-inhale, out at mid-exhale.
-      const goal = uniforms.uBreath.value > 0.5 ? 1 : 0
-
-      for (let step = 0; step < 4; step += 1) {
-        bounce.velocity += (-170 * (bounce.x - goal) - 9 * bounce.velocity) * (delta / 4)
-        bounce.x += bounce.velocity * (delta / 4)
-      }
-
-      spin.scale.setScalar(1 + 0.015 * bounce.x)
 
       if (!dragging && !coasting) {
         spin.quaternion.premultiply(turn.setFromAxisAngle(up, delta * AUTO_SPIN))

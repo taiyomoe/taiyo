@@ -70,7 +70,6 @@ void main() {
 
 export const PLASMA_FRAGMENT = `
 uniform float uTime;
-uniform float uBreath;
 varying vec3 vPosition;
 varying vec3 vNormal;
 varying vec3 vView;
@@ -98,7 +97,6 @@ void main() {
   vec3 c = sunRamp(clamp(1.0 - heat * 0.95 - pow(mu, 1.5) * 0.12 + 0.15, 0.0, 1.0));
   c *= 0.62 + 0.38 * pow(mu, 0.45);
   c += vec3(1.0, 0.55, 0.15) * pow(1.0 - mu, 3.5) * 0.4;
-  c *= 1.0 + 0.06 * uBreath;
   gl_FragColor = vec4(c, 1.0);
 }
 `
@@ -112,9 +110,10 @@ void main() {
 }
 `
 
-// The disc's fixed glow plus soft beams that reach further on each breath.
-// Distances are in sun radii; uSize (sun radius / 235px) keeps the light around
-// a large sun from growing as fast as the sun itself.
+// The disc's fixed glow plus soft beams that reach further on each breath,
+// turn slowly around the sun and carry pulses of light outwards, with thin
+// sparkling rays on top. Distances are in sun radii; uSize (sun radius / 235px)
+// keeps the light around a large sun from growing as fast as the sun itself.
 export const BEAMS_FRAGMENT = `
 uniform float uTime;
 uniform float uBreath;
@@ -133,18 +132,26 @@ void main() {
   float f = inversesqrt(uSize);
   float r = length(p);
   float theta = atan(p.y, p.x);
-  vec2 direction = vec2(cos(theta), sin(theta));
+  float away = max(r - 1.0, 0.0) / f;
 
   float inner = 0.55 * exp(-pow(max(r - 1.0 - 0.17 * f, 0.0) / (0.34 * f), 2.0));
   float outer = 0.30 * exp(-pow(max(r - 1.0 - 0.47 * f, 0.0) / (0.62 * f), 2.0));
   vec4 light = over(vec4(1.0, 0.55, 0.16, inner), vec3(1.0, 0.72, 0.13), outer);
 
+  vec2 direction = vec2(cos(theta + uTime * 0.03), sin(theta + uTime * 0.03));
   float n1 = snoise(vec3(direction * 2.0, uTime * 0.05));
   float n2 = snoise(vec3(direction * 5.5, uTime * 0.09 + 4.0));
   float streak = pow(clamp(0.5 + 0.5 * (0.65 * n1 + 0.45 * n2), 0.0, 1.0), 2.2);
+  float pulse = snoise(vec3(direction * 3.0, away * 1.6 - uTime * 0.55));
   float reach = 0.9 + 1.3 * uBreath;
-  float beam = streak * exp(-max(r - 1.0, 0.0) * (2.1 / (reach * f))) * 0.8;
-  light = over(light, mix(vec3(0.949, 0.271, 0.176), vec3(1.0, 0.79, 0.30), streak), beam);
+  float beam = streak * exp(-away * 2.1 / reach) * 0.8;
+  beam *= 0.6 + 0.6 * smoothstep(-0.25, 0.75, pulse);
+  light = over(light, mix(vec3(0.949, 0.271, 0.176), vec3(1.0, 0.79, 0.30), streak), min(beam, 1.0));
+
+  vec2 counter = vec2(cos(theta - uTime * 0.02), sin(theta - uTime * 0.02));
+  float glint = pow(clamp(0.5 + 0.5 * snoise(vec3(counter * 16.0, uTime * 0.3)), 0.0, 1.0), 7.0);
+  float sparkle = glint * exp(-away * 1.3 / reach) * smoothstep(0.0, 0.08, away) * 0.9;
+  light = over(light, vec3(1.0, 0.86, 0.55), min(sparkle, 1.0));
 
   float alpha = light.a * smoothstep(0.985, 1.01, r) * (1.0 - smoothstep(uExtent * 0.86, uExtent, r));
   gl_FragColor = vec4(light.rgb, clamp(alpha, 0.0, 1.0));

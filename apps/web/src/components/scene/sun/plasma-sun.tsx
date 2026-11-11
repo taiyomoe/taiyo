@@ -2,7 +2,6 @@ import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
 import { type CSSProperties, type RefObject, useEffect, useRef, useState } from "react"
 import type { SunScene } from "@/components/scene/sun/sun-scene"
-import { Animated } from "@/components/scene/animated"
 import { scene } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
@@ -90,10 +89,7 @@ export const PlasmaSun = ({
     <>
       <canvas ref={canvasRef} aria-hidden sx={[styles.canvas, ready && styles.shown]} />
       <div ref={anchorRef} sx={orbit} style={orbitStyle}>
-        <Animated
-          sx={[styles.disc, ready && styles.hidden]}
-          animation="scene-sun-breathe 5s ease-in-out infinite"
-        />
+        <div sx={[styles.disc, ready && styles.hidden]} />
       </div>
     </>
   )
