@@ -5,6 +5,7 @@ import {
   createAuditLogDrain,
   systemActor,
 } from "@taiyomoe/audit"
+import { createNotificationEvents } from "@taiyomoe/cache/notification-events"
 import { config } from "@taiyomoe/config"
 import { getDb } from "@taiyomoe/db"
 import {
@@ -38,6 +39,7 @@ const chapterUploadActor = systemActor("chapter-upload-worker")
 const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
+const notificationEvents = createNotificationEvents()
 const searchDeps = { db: deps.db, meili: getMeiliClient(), mediasIndex: SEARCH_INDEXES.MEDIAS }
 
 initLogger({
@@ -174,7 +176,9 @@ const notificationWorker = new Worker(
       return
     }
 
-    await drainNotificationOutbox(deps)
+    const { userIds } = await drainNotificationOutbox(deps)
+
+    await notificationEvents.publish(userIds)
   },
   { connection: createBullConnection(), concurrency: 1 },
 )

@@ -42,7 +42,7 @@ describe("drainNotificationOutbox", () => {
       groupIds: [groupId],
     })
 
-    expect(await drainNotificationOutbox(services)).toEqual({ chapters: 1, notifications: 4 })
+    expect(await drainNotificationOutbox(services)).toMatchObject({ chapters: 1, notifications: 4 })
     expect(await readNotifiedUsers(services, chapterId)).toEqual(
       [reader.userId, planner.userId, follower.userId, both.userId].sort(),
     )
@@ -69,7 +69,7 @@ describe("drainNotificationOutbox", () => {
       status: "PUBLISHED",
     })
 
-    expect(await drainNotificationOutbox(services)).toEqual({ chapters: 1, notifications: 0 })
+    expect(await drainNotificationOutbox(services)).toMatchObject({ chapters: 1, notifications: 0 })
     expect(await readNotifiedUsers(services, chapterId)).toEqual([])
   })
 
@@ -138,7 +138,7 @@ describe("drainNotificationOutbox", () => {
       .where("id", "=", chapterId)
       .execute()
 
-    expect(await drainNotificationOutbox(services)).toEqual({ chapters: 1, notifications: 0 })
+    expect(await drainNotificationOutbox(services)).toMatchObject({ chapters: 1, notifications: 0 })
     expect(await readNotificationOutbox(services)).toEqual([])
   })
 
@@ -167,7 +167,7 @@ describe("drainNotificationOutbox", () => {
       .where("id", "=", chapterId)
       .execute()
 
-    expect(await drainNotificationOutbox(services)).toEqual({ chapters: 1, notifications: 0 })
+    expect(await drainNotificationOutbox(services)).toMatchObject({ chapters: 1, notifications: 0 })
     expect(await readNotifiedUsers(services, chapterId)).toEqual([reader.userId])
   })
 })

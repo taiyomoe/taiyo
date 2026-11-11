@@ -36,7 +36,11 @@ export function SignedInActions({ mediaId, canEdit }: { mediaId: string; canEdit
       {entry.data === undefined ? (
         <Skeleton sx={styles.skeletonButton} />
       ) : (
-        <LibraryButton mediaId={mediaId} status={entry.data?.status ?? null} />
+        <LibraryButton
+          mediaId={mediaId}
+          notify={entry.data?.notify ?? true}
+          status={entry.data?.status ?? null}
+        />
       )}
       {progress.data === undefined || progress.data.lastRead === null ? null : (
         <ProgressCard progress={progress.data} />

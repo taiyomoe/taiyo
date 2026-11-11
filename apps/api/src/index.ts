@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server"
 import { createAuth } from "@taiyomoe/auth/server"
+import { createNotificationEvents } from "@taiyomoe/cache/notification-events"
 import { getDb } from "@taiyomoe/db"
 import { sendGroupInvitationEmail } from "@taiyomoe/email"
 import { getChapterUploadProducer } from "@taiyomoe/queue"
@@ -26,6 +27,7 @@ if ((process.env.TEST ?? "") === "") {
       sendGroupInvitation:
         process.env.NODE_ENV === "production" ? sendGroupInvitationEmail : () => Promise.resolve(),
     },
+    notificationEvents: createNotificationEvents(),
     cacheNamespace: "",
   })
 

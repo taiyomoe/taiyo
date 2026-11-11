@@ -97,6 +97,7 @@ export const createApp = (services: Services) => {
         c.set("auth", services.auth)
         c.set("chapterUploadQueue", services.chapterUploadQueue)
         c.set("mailer", services.mailer)
+        c.set("notificationEvents", services.notificationEvents)
         c.set("cacheNamespace", services.cacheNamespace)
 
         function ok<T>(data: T): JsonResponse<SuccessEnvelope<T>, 200 | 201>

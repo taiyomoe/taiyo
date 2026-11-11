@@ -40,7 +40,13 @@ export const notificationSchema = z.discriminatedUnion("type", [
         .string()
         .meta({ description: "The start of the reply's text, without its images." }),
       target: z
-        .object({ type: z.enum(COMMENT_TARGET_TYPES), id: z.uuid() })
+        .object({
+          type: z.enum(COMMENT_TARGET_TYPES),
+          id: z.uuid(),
+          username: z.string().nullable().meta({
+            description: "The profile owner's username when the thread is on a profile.",
+          }),
+        })
         .meta({ description: "What the comment thread is about." }),
       author: userSummarySchema,
     }),
@@ -78,11 +84,12 @@ export const listNotifications = async (
   { page, perPage }: { page: number; perPage: number },
 ) => {
   const rows = await selectVisibleNotifications(db, userId)
+    .leftJoin("users as pu", "pu.id", "t.profileId")
     .select([
       "n.id",
       "n.type",
       timestampSql("n.createdAt").as("createdAt"),
-      timestampSql("n.readAt").as("readAt"),
+      timestampSql("n.readAt").$castTo<string | null>().as("readAt"),
       "ch.id as chapterId",
       "ch.title as chapterTitle",
       "ch.number as chapterNumber",
@@ -95,6 +102,7 @@ export const listNotifications = async (
       "t.chapterId as threadChapterId",
       "t.groupId as threadGroupId",
       "t.profileId as threadProfileId",
+      "pu.username as threadProfileUsername",
       "u.id as authorId",
       "u.username as authorUsername",
       "u.displayUsername as authorDisplayUsername",
@@ -178,7 +186,7 @@ export const listNotifications = async (
           )
             .slice(0, EXCERPT_LENGTH)
             .join(""),
-          target: { type: targetType, id: targetId },
+          target: { type: targetType, id: targetId, username: row.threadProfileUsername },
           author: {
             id: row.authorId,
             username: row.authorUsername ?? "",

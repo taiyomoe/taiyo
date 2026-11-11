@@ -3,6 +3,7 @@ import { Bookmark, Check } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Menu,
+  MenuCheckboxItem,
   MenuItem,
   MenuPopup,
   MenuRadioGroup,
@@ -25,12 +26,15 @@ const styles = stylex.create({
     minWidth: "14rem",
   },
 })
+const SILENT_STATUSES: ReadonlySet<LibraryStatus> = new Set(["DROPPED", "COMPLETED"])
 
 export function LibraryButton({
   mediaId,
+  notify,
   status,
 }: {
   mediaId: string
+  notify: boolean
   status: LibraryStatus | null
 }) {
   const setStatus = useSetLibraryStatus()
@@ -63,6 +67,18 @@ export function LibraryButton({
         </MenuRadioGroup>
         {status === null ? null : (
           <>
+            <MenuSeparator />
+            <MenuCheckboxItem
+              checked={notify && !SILENT_STATUSES.has(status)}
+              closeOnClick={false}
+              disabled={SILENT_STATUSES.has(status)}
+              onCheckedChange={(checked) => {
+                setStatus.mutate({ mediaId, status, notify: checked })
+              }}
+              variant="switch"
+            >
+              {m.media_library_notify()}
+            </MenuCheckboxItem>
             <MenuSeparator />
             <MenuItem
               onClick={() => {

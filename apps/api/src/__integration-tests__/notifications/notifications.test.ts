@@ -156,7 +156,12 @@ describe("reply notifications", () => {
     expect(rest).toEqual([])
     expect(authorNotification).toMatchObject({
       type: "COMMENT_REPLY",
-      comment: { id: reply.id, excerpt: "Nice take", target, author: { id: replier.userId } },
+      comment: {
+        id: reply.id,
+        excerpt: "Nice take",
+        target: { ...target, username: null },
+        author: { id: replier.userId },
+      },
     })
 
     const replierNotifications = await listNotifications(app, replier.headers)

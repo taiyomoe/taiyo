@@ -33,6 +33,7 @@ import { readMyNotificationHandler } from "../handlers/read-my-notification-hand
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
 import { setMyPasswordHandler } from "../handlers/set-my-password-handler"
 import { setUserRoleHandler } from "../handlers/set-user-role-handler"
+import { streamMyNotificationsHandler } from "../handlers/stream-my-notifications-handler"
 import { unbanUserHandler } from "../handlers/unban-user-handler"
 import { unfollowUserHandler } from "../handlers/unfollow-user-handler"
 import { updateMyAccountHandler } from "../handlers/update-my-account-handler"
@@ -67,6 +68,7 @@ export const usersRouter = new Hono()
   .route("/", countMyUnreadNotificationsHandler)
   .route("/", readAllMyNotificationsHandler)
   .route("/", readMyNotificationHandler)
+  .route("/", streamMyNotificationsHandler)
   .route("/", createListHandler)
   .route("/", listMyListsHandler)
   .route("/", updateMySettingsHandler)

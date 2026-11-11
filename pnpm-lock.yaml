@@ -371,6 +371,9 @@ importers:
       '@taiyomoe/audit':
         specifier: workspace:^
         version: link:../../packages/audit
+      '@taiyomoe/cache':
+        specifier: workspace:^
+        version: link:../../packages/cache
       '@taiyomoe/config':
         specifier: workspace:^
         version: link:../../packages/config

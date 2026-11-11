@@ -6,6 +6,7 @@ import type { Session } from "@/lib/session"
 import { AppNavbarBrand } from "@/components/shell/app-navbar-brand"
 import { AppNavbarSearch } from "@/components/shell/app-navbar-search"
 import { UserMenu } from "@/components/shell/user-menu"
+import { NotificationBell } from "@/features/notifications/components/notification-bell"
 import { useCurrentHref } from "@/hooks/use-current-href"
 import { useWindowScrolled } from "@/hooks/use-window-scrolled"
 import { m } from "@/paraglide/messages"
@@ -71,7 +72,14 @@ export function AppNavbar({
       <AppNavbarBrand />
       <div sx={styles.actions}>
         <AppNavbarSearch />
-        {user === null ? <SignInButton /> : <UserMenu user={user} />}
+        {user === null ? (
+          <SignInButton />
+        ) : (
+          <>
+            <NotificationBell />
+            <UserMenu user={user} />
+          </>
+        )}
       </div>
     </header>
   )

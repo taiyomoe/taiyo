@@ -1696,7 +1696,6 @@
   "user_settings_show_following": "Show who I follow",
   "user_settings_show_following_hint": "The list behind your Following count.",
   "profile_following_hidden": "{name} keeps this list private.",
-  "shell_my_profile": "My profile",
   "palette_nav_settings": "Settings",
   "auth_2fa_title": "One more step",
   "auth_2fa_subtitle": "Enter the 6-digit code from your authenticator app.",
@@ -2064,5 +2063,19 @@
   "reports_subtitle": "Groups that readers reported. Resolve a report once you've acted on it, or dismiss it.",
   "reports_reported": "reported",
   "reports_dismiss": "Dismiss",
-  "reports_resolve": "Resolve"
+  "reports_resolve": "Resolve",
+  "media_library_notify": "Notify me of new chapters",
+  "notifications_title": "Notifications",
+  "notifications_title_unread": "Notifications, {count} unread",
+  "notifications_meta_title": "Taiyō — Notifications",
+  "notifications_mark_all_read": "Mark all as read",
+  "notifications_see_all": "See all notifications",
+  "notifications_empty": "You're all caught up",
+  "notifications_empty_description": "New chapters of the titles and groups you follow, and replies to your comments, will show up here.",
+  "notifications_unread": "Unread",
+  "notifications_untitled_media": "Untitled media",
+  "notifications_new_chapter": "New chapter {number}",
+  "notifications_new_chapter_by": "New chapter {number} by {groups}",
+  "notifications_comment_reply": "{name} replied to your comment",
+  "notifications_reply_image": "Sent an image"
 }
