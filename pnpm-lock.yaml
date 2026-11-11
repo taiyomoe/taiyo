@@ -117,8 +117,8 @@ importers:
         specifier: ^1.13.1
         version: 1.13.1
       radashi:
-        specifier: ^12.9.6
-        version: 12.9.6
+        specifier: ^13.0.1
+        version: 13.0.1
       sharp:
         specifier: ^0.35.5
         version: 0.35.5(@types/node@26.6.6)
@@ -514,8 +514,8 @@ importers:
         specifier: ^8.23.1
         version: 8.23.1
       radashi:
-        specifier: ^12.9.6
-        version: 12.9.6
+        specifier: ^13.0.1
+        version: 13.0.1
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -687,8 +687,8 @@ importers:
         specifier: ^0.62.0
         version: 0.62.0
       radashi:
-        specifier: ^12.9.6
-        version: 12.9.6
+        specifier: ^13.0.1
+        version: 13.0.1
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -5951,9 +5951,9 @@ packages:
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
 
-  radashi@12.9.6:
-    resolution: {integrity: sha512-0xf53IXAtaJEQ9VSy7npEDIRZKyKBNtNFRYycdtejzHXb0/pbKXj/nFVeJbv1Sbzzzj7aaR+Ttu9c5KTrSmGzw==}
-    engines: {node: '>=16.0.0'}
+  radashi@13.0.1:
+    resolution: {integrity: sha512-rn7Rg2qfyRl64XMraDtAQenu5UdTAayne8QKe4pmTAKMgkD5C6crAol00ho3THqwgYCm8xgWdmYND1WYP9VrfA==}
+    engines: {node: '>=18.0.0'}
 
   rc9@3.0.1:
     resolution: {integrity: sha512-gMDyleLWVE+i6Sgtc0QbbY6pEKqYs97NGi6isHQPqYlLemPoO8dxQ3uGi0f4NiP98c+jMW6cG1Kx9dDwfvqARQ==}
@@ -11112,7 +11112,7 @@ snapshots:
 
   quansync@0.2.11: {}
 
-  radashi@12.9.6: {}
+  radashi@13.0.1: {}
 
   rc9@3.0.1:
     dependencies:
