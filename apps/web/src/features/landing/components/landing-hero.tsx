@@ -2,7 +2,7 @@ import { ArrowDown01Icon, Compass01Icon, Sun03Icon } from "@hugeicons/core-free-
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { font, text } from "@taiyomoe/ui/styles/tokens.stylex"
-import { type MouseEvent, useState } from "react"
+import { type MouseEvent, useRef, useState } from "react"
 import { GhostAnchor } from "@/components/buttons/ghost-anchor"
 import { SunLink } from "@/components/buttons/sun-link"
 import { Embers } from "@/components/scene/embers"
@@ -23,6 +23,7 @@ const styles = stylex.create({
     justifyContent: "center",
     position: "relative",
     textAlign: "center",
+    touchAction: "pan-y pinch-zoom",
     minHeight: "100vh",
     paddingBottom: "clamp(10rem, 28vh, 20rem)",
     paddingTop: "7.5rem",
@@ -101,6 +102,7 @@ const styles = stylex.create({
 })
 
 export const LandingHero = () => {
+  const heroRef = useRef<HTMLElement>(null)
   const [parallax, setParallax] = useState<Parallax>({ x: 0, y: 0 })
   const onMouseMove = (event: MouseEvent<HTMLElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -112,8 +114,8 @@ export const LandingHero = () => {
   }
 
   return (
-    <section sx={styles.hero} onMouseMove={onMouseMove}>
-      <LandingSun parallax={parallax} />
+    <section ref={heroRef} sx={styles.hero} onMouseMove={onMouseMove}>
+      <LandingSun parallax={parallax} surfaceRef={heroRef} />
       <Embers count={30} />
       <div sx={styles.scrim} />
 
