@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { latestChaptersQueryOptions } from "@/features/chapters/api/chapters"
 import { IndexPage } from "@/features/home/components/index-page"
 import { LATEST_UPDATES_PER_PAGE } from "@/features/home/lib/latest-updates"
-import { featuredMediasQueryOptions } from "@/features/media/api/medias"
+import { featuredMediasQueryOptions, showcaseMediasQueryOptions } from "@/features/media/api/medias"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -17,18 +17,18 @@ export const Route = createFileRoute("/")({
         ],
   }),
   loader: async ({ context }) => {
-    if (context.session) {
-      const contentRatings = getContentRatings(context.session)
-      const prefetch = Promise.all([
-        context.queryClient.query(featuredMediasQueryOptions(contentRatings)).catch(noop),
-        context.queryClient
-          .query(latestChaptersQueryOptions(contentRatings, LATEST_UPDATES_PER_PAGE))
-          .catch(noop),
-      ])
+    const { queryClient, session } = context
+    const prefetch = session
+      ? Promise.all([
+          queryClient.query(featuredMediasQueryOptions(getContentRatings(session))).catch(noop),
+          queryClient
+            .query(latestChaptersQueryOptions(getContentRatings(session), LATEST_UPDATES_PER_PAGE))
+            .catch(noop),
+        ])
+      : queryClient.query(showcaseMediasQueryOptions()).catch(noop)
 
-      if (import.meta.env.SSR) {
-        await prefetch
-      }
+    if (import.meta.env.SSR) {
+      await prefetch
     }
   },
   component: IndexPage,

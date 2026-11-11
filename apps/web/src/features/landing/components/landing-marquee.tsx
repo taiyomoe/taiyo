@@ -1,13 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
-import { font } from "@taiyomoe/ui/styles/tokens.stylex"
-import { scene } from "@/components/scene/scene.stylex"
-import { Stars } from "@/components/scene/stars"
-import { CoverArt } from "@/features/landing/components/cover-art"
-import { TITLES } from "@/features/landing/lib/landing-data"
+import { config } from "@taiyomoe/config"
+import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useQuery } from "@tanstack/react-query"
+import { scene, sceneFont } from "@/components/scene/scene.stylex"
+import { type ShowcaseMedia, showcaseMediasQueryOptions } from "@/features/media/api/medias"
+import { Cover } from "@/features/media/components/cover"
+import { m } from "@/paraglide/messages"
 
-const STRIP = ["a", "b"].flatMap((copy) =>
-  TITLES.map((title) => ({ ...title, key: `${title.id}-${copy}` })),
-)
 const styles = stylex.create({
   band: {
     overflow: "hidden",
@@ -29,51 +28,80 @@ const styles = stylex.create({
     width: "max-content",
   },
   slot: {
+    borderRadius: radius.md,
+    overflow: "hidden",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
     flexShrink: 0,
+    position: "relative",
     width: "9.375rem",
   },
-  scrim: {
+  cover: {
+    borderRadius: 0,
+    width: "100%",
+  },
+  caption: {
     inset: 0,
-    backgroundImage: "linear-gradient(180deg, transparent 55%, rgba(8,4,2,0.85))",
+    padding: "0.875rem",
+    gap: "0.25rem",
+    backgroundImage: "linear-gradient(180deg, transparent 45%, rgba(8,4,2,0.9))",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-end",
     position: "absolute",
   },
-  metaLine: {
+  title: {
+    color: scene.paper,
+    fontFamily: sceneFont.display,
+    fontSize: text.base,
+    fontWeight: 700,
+    lineHeight: 1.15,
+    textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+    textWrap: "balance",
+  },
+  meta: {
     color: `color-mix(in srgb, ${scene.paper} 70%, transparent)`,
     fontFamily: font.mono,
     fontSize: "0.6875rem",
-    marginTop: "0.25rem",
   },
 })
+const isTagKey = (key: string): key is keyof typeof config.tags => key in config.tags
+const getGenre = (tags: string[]) => {
+  const known = tags.filter(isTagKey).map((key) => config.tags[key])
+
+  return (known.find((tag) => tag.category === "Genre") ?? known[0])?.name.en
+}
+const getMeta = (media: ShowcaseMedia) =>
+  [m.landing_marquee_chapters({ count: media.chapterCount }), getGenre(media.tags)]
+    .filter(Boolean)
+    .join(" · ")
 
 export const LandingMarquee = () => {
+  const { data: medias = [] } = useQuery(showcaseMediasQueryOptions())
   const trackProps = stylex.props(styles.track)
+  // Two copies side by side: the track slides by half its width and loops.
+  const strip = ["a", "b"].flatMap((copy) =>
+    medias.map((media) => ({ media, key: `${media.id}-${copy}`, copy })),
+  )
 
   return (
     <section id="titles" sx={styles.band}>
       <div sx={styles.fade} />
-      <div
-        className={trackProps.className}
-        style={{ ...trackProps.style, animation: "scene-marquee 48s linear infinite" }}
-      >
-        {STRIP.map((title) => (
-          <div key={title.key} sx={styles.slot}>
-            <CoverArt
-              title={title.title}
-              style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.5)" }}
-              footer={
-                <div>
-                  <Stars filled={Math.round(title.rating)} size={12} />
-                  <div sx={styles.metaLine}>
-                    {title.chapters} ch · {title.tag}
-                  </div>
-                </div>
-              }
-            >
-              <div sx={styles.scrim} />
-            </CoverArt>
-          </div>
-        ))}
-      </div>
+      {medias.length > 0 ? (
+        <div
+          className={trackProps.className}
+          style={{ ...trackProps.style, animation: "scene-marquee 64s linear infinite" }}
+        >
+          {strip.map(({ media, key, copy }) => (
+            <div key={key} aria-hidden={copy === "b"} sx={styles.slot}>
+              <Cover src={media.coverUrl} priority="low" sx={styles.cover} />
+              <div sx={styles.caption}>
+                <span sx={styles.title}>{media.title}</span>
+                <span sx={styles.meta}>{getMeta(media)}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </section>
   )
 }
