@@ -440,7 +440,7 @@ export default defineCommand({
         LIMIT 10
       ) ranked
     `.execute(trx)
-      await sql`TRUNCATE "searchOutbox", "notificationOutbox", notifications, tasks, sessions, accounts, verifications`.execute(
+      await sql`TRUNCATE "searchOutbox", "notificationOutbox", notifications, "pushSubscriptions", tasks, sessions, accounts, verifications`.execute(
         trx,
       )
 

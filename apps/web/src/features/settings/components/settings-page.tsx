@@ -2,6 +2,7 @@ import type { IconProps } from "@taiyomoe/ui/components/icons"
 import type { ReactElement } from "react"
 import * as stylex from "@stylexjs/stylex"
 import {
+  Bell,
   Book,
   ExternalLink,
   Eye,
@@ -19,6 +20,7 @@ import { lazy, Suspense } from "react"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 import { AccountSettings } from "@/features/settings/components/account/account-settings"
+import { NotificationSettings } from "@/features/settings/components/notifications/notification-settings"
 import { PreferencesSettings } from "@/features/settings/components/preferences/preferences-settings"
 import { PrivacySettings } from "@/features/settings/components/privacy/privacy-settings"
 import { ProfileSettings } from "@/features/settings/components/profile/profile-settings"
@@ -38,6 +40,7 @@ const TABS = {
   security: { label: m.user_settings_tab_security, icon: Shield },
   preferences: { label: m.user_settings_tab_preferences, icon: Sliders },
   reader: { label: m.user_settings_tab_reader, icon: Book },
+  notifications: { label: m.user_settings_tab_notifications, icon: Bell },
   privacy: { label: m.user_settings_tab_privacy, icon: Eye },
 } satisfies Record<SettingsTab, { label: () => string; icon: (props: IconProps) => ReactElement }>
 const routeApi = getRouteApi("/settings")
@@ -169,6 +172,9 @@ export function SettingsPage() {
             <Suspense fallback={fallback}>
               <ReaderSettings />
             </Suspense>
+          </TabsPanel>
+          <TabsPanel value="notifications">
+            <NotificationSettings user={session.user} />
           </TabsPanel>
           <TabsPanel value="privacy">
             <PrivacySettings user={session.user} />

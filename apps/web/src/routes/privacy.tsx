@@ -20,7 +20,7 @@ function RouteComponent() {
     <LegalPage
       eyebrow="Legal"
       title="Privacy Policy"
-      updated="19 September 2026"
+      updated="11 November 2026"
       intro="This policy explains what Taiyō collects, why we collect it, who else sees it, and the control you have over it. We have tried to write it in plain language rather than in the shape of a liability shield."
       sections={[
         {
@@ -75,6 +75,14 @@ function RouteComponent() {
                 public too, on the page you posted them, and so are the lists you make public, on
                 your profile and on the lists page. Your reading and library statistics are shown on
                 your profile, unless you hide your library.
+              </p>
+              <p sx={prose.p}>
+                <strong sx={prose.strong}>Notifications.</strong> The notifications we create for
+                you — new chapters of the titles in your library and of the groups you follow, and
+                replies to your comments — and when you read them, kept for up to a year. If you
+                turn on push notifications on a device, we store the address its browser gives us
+                for delivering them and the keys that encrypt them, until you turn them off, sign
+                out there, or the browser stops accepting them.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Technical information.</strong> Your IP address, browser
@@ -155,6 +163,11 @@ function RouteComponent() {
                 <li>
                   our transactional email provider, for verification, password-reset and group
                   invitation mail;
+                </li>
+                <li>
+                  the push service your browser uses, such as Google, Mozilla, Apple or Microsoft,
+                  if and only if you turn on push notifications on a device; the notifications are
+                  encrypted so that only that device can read them;
                 </li>
                 <li>Google and Discord, if and only if you choose to sign in with one of them.</li>
               </ul>

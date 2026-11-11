@@ -10,6 +10,7 @@ export type Notification = {
   commentId: string | null
   createdAt: Generated<Timestamp>
   readAt: Timestamp | null
+  pushedAt: Timestamp | null
 }
 
 export type NewNotification = Insertable<Notification>

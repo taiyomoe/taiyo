@@ -12,13 +12,16 @@
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/schemas": "workspace:^",
     "bullmq": "^6.6.0",
     "kysely": "^0.29.8",
     "magic-bytes.js": "^1.13.1",
     "sharp": "^0.35.5",
+    "web-push": "^3.6.7",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@types/node": "^26.6.6"
+    "@types/node": "^26.6.6",
+    "@types/web-push": "^3.6.4"
   }
 }

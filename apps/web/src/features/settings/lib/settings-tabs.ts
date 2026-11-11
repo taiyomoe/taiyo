@@ -4,6 +4,7 @@ export const SETTINGS_TABS = [
   "security",
   "preferences",
   "reader",
+  "notifications",
   "privacy",
 ] as const
 

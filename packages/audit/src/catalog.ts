@@ -228,6 +228,9 @@ export const historyAudit = defineAuditCatalog("history", {
 export const notificationAudit = defineAuditCatalog("notification", {
   READ: { target: "notification", severity: "low" },
   READ_ALL: { severity: "low" },
+  PUSH_SUBSCRIBE: { target: "pushSubscription", severity: "low" },
+  PUSH_UNSUBSCRIBE: { target: "pushSubscription", severity: "low" },
+  PUSH_TEST: { target: "pushSubscription", severity: "low" },
 })
 
 export const bookmarkAudit = defineAuditCatalog("bookmark", {

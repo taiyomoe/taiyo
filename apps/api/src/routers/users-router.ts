@@ -5,11 +5,13 @@ import { createListHandler } from "../handlers/create-list-handler"
 import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-handler"
 import { deleteMyAvatarHandler } from "../handlers/delete-my-avatar-handler"
 import { deleteMyBannerHandler } from "../handlers/delete-my-banner-handler"
+import { deletePushSubscriptionHandler } from "../handlers/delete-push-subscription-handler"
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
 import { getMyOverviewHandler } from "../handlers/get-my-overview-handler"
 import { getMyReaderSettingsHandler } from "../handlers/get-my-reader-settings-handler"
+import { getPushPublicKeyHandler } from "../handlers/get-push-public-key-handler"
 import { getReadingProgressHandler } from "../handlers/get-reading-progress-handler"
 import { getUserProfileHandler } from "../handlers/get-user-profile-handler"
 import { getUserStatsHandler } from "../handlers/get-user-stats-handler"
@@ -35,6 +37,7 @@ import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-hand
 import { setMyPasswordHandler } from "../handlers/set-my-password-handler"
 import { setUserRoleHandler } from "../handlers/set-user-role-handler"
 import { streamMyNotificationsHandler } from "../handlers/stream-my-notifications-handler"
+import { testPushSubscriptionHandler } from "../handlers/test-push-subscription-handler"
 import { unbanUserHandler } from "../handlers/unban-user-handler"
 import { unfollowUserHandler } from "../handlers/unfollow-user-handler"
 import { updateMyAccountHandler } from "../handlers/update-my-account-handler"
@@ -45,6 +48,7 @@ import { updateMyProfileHandler } from "../handlers/update-my-profile-handler"
 import { updateMyReaderSettingsHandler } from "../handlers/update-my-reader-settings-handler"
 import { updateMySettingsHandler } from "../handlers/update-my-settings-handler"
 import { upsertLibraryEntryHandler } from "../handlers/upsert-library-entry-handler"
+import { upsertPushSubscriptionHandler } from "../handlers/upsert-push-subscription-handler"
 
 export const usersRouter = new Hono()
   .route("/", listUsersHandler)
@@ -70,6 +74,10 @@ export const usersRouter = new Hono()
   .route("/", readAllMyNotificationsHandler)
   .route("/", readMyNotificationHandler)
   .route("/", streamMyNotificationsHandler)
+  .route("/", getPushPublicKeyHandler)
+  .route("/", upsertPushSubscriptionHandler)
+  .route("/", deletePushSubscriptionHandler)
+  .route("/", testPushSubscriptionHandler)
   .route("/", createListHandler)
   .route("/", listMyListsHandler)
   .route("/", updateMySettingsHandler)

@@ -45,6 +45,7 @@ import { Route as ListsIndexRouteImport } from './routes/lists/index'
 import { Route as ListsListIdRouteImport } from './routes/lists/$listId'
 import { Route as ListsNewRouteImport } from './routes/lists/new'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
+import { Route as NotificationsOpenRouteImport } from './routes/notifications_.open'
 import { Route as UsersUsernameRouteImport } from './routes/users/$username'
 import { Route as ChaptersChapterIdIndexRouteImport } from './routes/chapters/$chapterId.index'
 import { Route as ChaptersChapterIdSourceRouteImport } from './routes/chapters/$chapterId.source'
@@ -235,6 +236,11 @@ const MediaMediaIdRoute = MediaMediaIdRouteImport.update({
   path: '/media/$mediaId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsOpenRoute = NotificationsOpenRouteImport.update({
+  id: '/notifications_/open',
+  path: '/notifications/open',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsersUsernameRoute = UsersUsernameRouteImport.update({
   id: '/users/$username',
   path: '/users/$username',
@@ -317,6 +323,7 @@ export interface FileRoutesByFullPath {
   '/lists/$listId': typeof ListsListIdRoute
   '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
+  '/notifications/open': typeof NotificationsOpenRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
@@ -363,6 +370,7 @@ export interface FileRoutesByTo {
   '/lists/$listId': typeof ListsListIdRoute
   '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
+  '/notifications/open': typeof NotificationsOpenRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard': typeof DashboardIndexRoute
   '/groups': typeof GroupsIndexRoute
@@ -411,6 +419,7 @@ export interface FileRoutesById {
   '/lists/$listId': typeof ListsListIdRoute
   '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
+  '/notifications_/open': typeof NotificationsOpenRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
@@ -460,6 +469,7 @@ export interface FileRouteTypes {
     | '/lists/$listId'
     | '/lists/new'
     | '/media/$mediaId'
+    | '/notifications/open'
     | '/users/$username'
     | '/dashboard/'
     | '/groups/'
@@ -506,6 +516,7 @@ export interface FileRouteTypes {
     | '/lists/$listId'
     | '/lists/new'
     | '/media/$mediaId'
+    | '/notifications/open'
     | '/users/$username'
     | '/dashboard'
     | '/groups'
@@ -553,6 +564,7 @@ export interface FileRouteTypes {
     | '/lists/$listId'
     | '/lists/new'
     | '/media/$mediaId'
+    | '/notifications_/open'
     | '/users/$username'
     | '/dashboard/'
     | '/groups/'
@@ -584,6 +596,7 @@ export interface RootRouteChildren {
   ListsListIdRoute: typeof ListsListIdRoute
   ListsNewRoute: typeof ListsNewRoute
   MediaMediaIdRoute: typeof MediaMediaIdRoute
+  NotificationsOpenRoute: typeof NotificationsOpenRoute
   UsersUsernameRoute: typeof UsersUsernameRoute
   GroupsIndexRoute: typeof GroupsIndexRoute
   ListsIndexRoute: typeof ListsIndexRoute
@@ -847,6 +860,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MediaMediaIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications_/open': {
+      id: '/notifications_/open'
+      path: '/notifications/open'
+      fullPath: '/notifications/open'
+      preLoaderRoute: typeof NotificationsOpenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/users/$username': {
       id: '/users/$username'
       path: '/users/$username'
@@ -994,6 +1014,7 @@ const rootRouteChildren: RootRouteChildren = {
   ListsListIdRoute: ListsListIdRoute,
   ListsNewRoute: ListsNewRoute,
   MediaMediaIdRoute: MediaMediaIdRoute,
+  NotificationsOpenRoute: NotificationsOpenRoute,
   UsersUsernameRoute: UsersUsernameRoute,
   GroupsIndexRoute: GroupsIndexRoute,
   ListsIndexRoute: ListsIndexRoute,

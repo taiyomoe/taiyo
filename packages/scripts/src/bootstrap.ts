@@ -1,4 +1,5 @@
 import { execFileSync, spawnSync } from "node:child_process"
+import { generateKeyPairSync } from "node:crypto"
 import { copyFileSync, existsSync } from "node:fs"
 import { createServer } from "node:net"
 import { join, relative } from "node:path"
@@ -111,6 +112,18 @@ const findFreeSlot = async (base: EnvValues) => {
   )
 }
 const localUrl = (port: string) => `http://localhost:${port}`
+const generateVapidKeys = () => {
+  const { publicKey, privateKey } = generateKeyPairSync("ec", { namedCurve: "prime256v1" })
+  const { x = "", y = "" } = publicKey.export({ format: "jwk" })
+  const { d = "" } = privateKey.export({ format: "jwk" })
+  const point = Buffer.concat([
+    Buffer.from([4]),
+    Buffer.from(x, "base64url"),
+    Buffer.from(y, "base64url"),
+  ])
+
+  return { VAPID_PUBLIC_KEY: point.toString("base64url"), VAPID_PRIVATE_KEY: d }
+}
 const isHyperdxEnabled = (root: EnvValues) =>
   (process.env.COMPOSE_PROFILES ?? root.COMPOSE_PROFILES ?? "")
     .split(",")
@@ -173,12 +186,30 @@ try {
     console.log(`.env ${exists ? "moved to" : "created on"} port slot ${slot}`)
   }
 
+  const pushEnv = readEnvFile(rootEnvPath)
+
+  if ((pushEnv.VAPID_PRIVATE_KEY ?? "") === "") {
+    writeEnvValues(rootEnvPath, generateVapidKeys())
+    console.log(".env: generated a VAPID key pair for push notifications")
+  }
+
+  if ((pushEnv.VAPID_SUBJECT ?? "") === "") {
+    writeEnvValues(rootEnvPath, {
+      VAPID_SUBJECT: requireEnvValue(base, "VAPID_SUBJECT", rootExamplePath),
+    })
+  }
+
   const root = readEnvFile(rootEnvPath)
   const get = (key: string) => requireEnvValue(root, key, rootEnvPath)
   const credentials = `${encodeURIComponent(get("DATABASE_USERNAME"))}:${encodeURIComponent(get("DATABASE_PASSWORD"))}`
   const databaseUrl = `postgresql://${credentials}@localhost:${get("DATABASE_PORT")}/${get("DATABASE_NAME")}`
   const s3Endpoint = localUrl(get("RUSTFS_PORT"))
   const apiUrl = localUrl(get("API_PORT"))
+  const vapid = {
+    VAPID_PUBLIC_KEY: get("VAPID_PUBLIC_KEY"),
+    VAPID_PRIVATE_KEY: get("VAPID_PRIVATE_KEY"),
+    VAPID_SUBJECT: get("VAPID_SUBJECT"),
+  }
   const bucketOf = ({ S3_BUCKET_NAME: bucket }: EnvValues) =>
     bucket === undefined || bucket === "" ? "taiyo" : bucket
   const s3 = (current: EnvValues) => ({
@@ -198,6 +229,7 @@ try {
     MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
     VITE_BETTER_AUTH_URL: apiUrl,
     CORS_ALLOWED_ORIGINS: localUrl(get("WEB_PORT")),
+    ...vapid,
   }))
   syncAppEnv("worker", (current) => ({
     DATABASE_URL: databaseUrl,
@@ -205,6 +237,7 @@ try {
     ...s3(current),
     MEILISEARCH_HOST: localUrl(get("MEILISEARCH_PORT")),
     MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
+    ...vapid,
   }))
   syncAppEnv("web", () => ({
     PORT: get("WEB_PORT"),

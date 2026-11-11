@@ -65,4 +65,7 @@ export type UserSettings = {
   showLibrary?: boolean
   homeLayout?: "ROWS" | "COLUMNS"
   latestUpdatesLayout?: LatestUpdatesLayout
+  pushLibraryChapters?: boolean
+  pushGroupChapters?: boolean
+  pushReplies?: boolean
 }
