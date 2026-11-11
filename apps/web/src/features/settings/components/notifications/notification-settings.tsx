@@ -1,9 +1,11 @@
 import * as stylex from "@stylexjs/stylex"
 import { config } from "@taiyomoe/config"
+import { AlertCircle, Bell, Download, Info, Monitor } from "@taiyomoe/ui/components/icons"
+import { Alert, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
+import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { Session } from "@/lib/session"
 import {
@@ -22,28 +24,9 @@ import { m } from "@/paraglide/messages"
 
 const PUSH_STATE_KEY = ["push", "state"] as const
 const styles = stylex.create({
-  device: {
-    gap: "0.75rem",
-    alignItems: "center",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  status: {
-    margin: 0,
-    color: colors.mutedForeground,
-    fontSize: "0.875rem",
-    lineHeight: 1.5,
-    maxWidth: "34rem",
-  },
-  actions: {
-    gap: "0.5rem",
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  skeleton: {
-    height: "2.25rem",
-    width: "100%",
+  badgeSkeleton: {
+    height: "1.25rem",
+    width: "3rem",
   },
 })
 
@@ -63,63 +46,124 @@ function PushDevice() {
       toastManager.add({ title: m.user_settings_push_test_sent(), type: "success" })
     },
   })
+  const busy = enable.isPending || disable.isPending
 
-  if (state.data === undefined) {
-    return <Skeleton sx={styles.skeleton} />
+  return (
+    <SettingsSection
+      action={
+        state.data === undefined ? (
+          <Skeleton sx={styles.badgeSkeleton} />
+        ) : (
+          {
+            on: <Badge variant="success">{m.user_settings_push_badge_on()}</Badge>,
+            off: <Badge variant="secondary">{m.user_settings_push_badge_off()}</Badge>,
+            denied: <Badge variant="warning">{m.user_settings_push_badge_blocked()}</Badge>,
+            "needs-install": (
+              <Badge variant="secondary">{m.user_settings_push_badge_unavailable()}</Badge>
+            ),
+            unsupported: (
+              <Badge variant="secondary">{m.user_settings_push_badge_unavailable()}</Badge>
+            ),
+          }[state.data]
+        )
+      }
+      description={m.user_settings_push_device_description()}
+      footer={
+        state.data === "on" || state.data === "off" ? (
+          <div sx={settingsStyles.actions}>
+            {state.data === "on" ? (
+              <>
+                <Button
+                  disabled={busy}
+                  loading={test.isPending}
+                  onClick={() => {
+                    test.mutate()
+                  }}
+                  variant="outline"
+                >
+                  {m.user_settings_push_test()}
+                </Button>
+                <Button
+                  disabled={test.isPending}
+                  loading={disable.isPending}
+                  onClick={() => {
+                    disable.mutate()
+                  }}
+                  variant="destructive-outline"
+                >
+                  {m.user_settings_push_disable()}
+                </Button>
+              </>
+            ) : (
+              <Button
+                loading={enable.isPending}
+                onClick={() => {
+                  enable.mutate()
+                }}
+              >
+                <Bell />
+                {m.user_settings_push_enable()}
+              </Button>
+            )}
+          </div>
+        ) : undefined
+      }
+      title={m.user_settings_push_device_title()}
+    >
+      <PushDeviceState state={state.data} />
+    </SettingsSection>
+  )
+}
+
+function PushDeviceState({
+  state,
+}: {
+  state: Awaited<ReturnType<typeof getPushState>> | undefined
+}) {
+  if (state === undefined) {
+    return <Skeleton sx={settingsStyles.itemSkeleton} />
   }
 
-  if (state.data === "on") {
+  if (state === "denied") {
     return (
-      <div sx={styles.device}>
-        <p sx={styles.status}>{m.user_settings_push_on()}</p>
-        <div sx={styles.actions}>
-          <Button
-            loading={test.isPending}
-            onClick={() => {
-              test.mutate()
-            }}
-            variant="outline"
-          >
-            {m.user_settings_push_test()}
-          </Button>
-          <Button
-            loading={disable.isPending}
-            onClick={() => {
-              disable.mutate()
-            }}
-            variant="ghost"
-          >
-            {m.user_settings_push_disable()}
-          </Button>
-        </div>
-      </div>
+      <Alert variant="warning">
+        <AlertCircle />
+        <AlertTitle>{m.user_settings_push_denied_title()}</AlertTitle>
+        <AlertDescription>{m.user_settings_push_denied()}</AlertDescription>
+      </Alert>
     )
   }
 
-  if (state.data === "off") {
+  if (state === "needs-install") {
     return (
-      <div sx={styles.device}>
-        <p sx={styles.status}>{m.user_settings_push_off()}</p>
-        <Button
-          loading={enable.isPending}
-          onClick={() => {
-            enable.mutate()
-          }}
-        >
-          {m.user_settings_push_enable()}
-        </Button>
-      </div>
+      <Alert variant="info">
+        <Download />
+        <AlertTitle>{m.user_settings_push_needs_install_title()}</AlertTitle>
+        <AlertDescription>{m.user_settings_push_needs_install()}</AlertDescription>
+      </Alert>
+    )
+  }
+
+  if (state === "unsupported") {
+    return (
+      <Alert variant="info">
+        <Info />
+        <AlertTitle>{m.user_settings_push_unsupported_title()}</AlertTitle>
+        <AlertDescription>{m.user_settings_push_unsupported()}</AlertDescription>
+      </Alert>
     )
   }
 
   return (
-    <p sx={styles.status}>
-      {{
-        denied: m.user_settings_push_denied,
-        "needs-install": m.user_settings_push_needs_install,
-        unsupported: m.user_settings_push_unsupported,
-      }[state.data]()}
-    </p>
+    <div sx={settingsStyles.item}>
+      <Monitor size={20} sx={settingsStyles.itemIcon} />
+      <div sx={settingsStyles.itemMain}>
+        <span sx={settingsStyles.itemTitle}>{m.user_settings_push_this_device()}</span>
+        <span sx={settingsStyles.itemMeta}>
+          {state === "on" ? m.user_settings_push_on() : m.user_settings_push_off()}
+        </span>
+      </div>
+    </div>
   )
 }
 
@@ -130,13 +174,8 @@ export function NotificationSettings({ user }: { user: Session["user"] }) {
   const defaults = config.settings
 
   return (
-    <>
-      <SettingsSection
-        description={m.user_settings_push_device_description()}
-        title={m.user_settings_push_device_title()}
-      >
-        <PushDevice />
-      </SettingsSection>
+    <div sx={settingsStyles.stack}>
+      <PushDevice />
       <SettingsSection
         description={m.user_settings_push_types_description()}
         title={m.user_settings_push_types_title()}
@@ -168,6 +207,6 @@ export function NotificationSettings({ user }: { user: Session["user"] }) {
           />
         </div>
       </SettingsSection>
-    </>
+    </div>
   )
 }
