@@ -2,7 +2,7 @@ import { COMMENT_TARGET_TYPES, type DB, type Kysely } from "@taiyomoe/db"
 import { getCommentText } from "@taiyomoe/schemas/comment-content"
 import { group } from "radashi"
 import z from "zod"
-import { liveCommentSql, THREAD_COLUMNS, visibleThreadTargetSql } from "./comments"
+import { liveCommentSql, THREAD_COLUMNS, timestampSql, visibleThreadTargetSql } from "./comments"
 import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
 import { languageSchema, userSummarySchema } from "./schemas"
 
@@ -81,8 +81,8 @@ export const listNotifications = async (
     .select([
       "n.id",
       "n.type",
-      "n.createdAt",
-      "n.readAt",
+      timestampSql("n.createdAt").as("createdAt"),
+      timestampSql("n.readAt").as("readAt"),
       "ch.id as chapterId",
       "ch.title as chapterTitle",
       "ch.number as chapterNumber",

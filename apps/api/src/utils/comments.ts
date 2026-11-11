@@ -136,7 +136,8 @@ export const visibleThreadTargetSql = (thread: string) => sql<boolean>`(
 
 const liveRepliesOf = (root: string) =>
   sql`from "comments" as "r" left join "users" as "ru" on "ru"."id" = "r"."authorId" where "r"."parentId" = ${sql.ref(`${root}.id`)} and ${liveCommentSql("r", "ru")}`
-const timestampSql = (column: string) =>
+
+export const timestampSql = (column: string) =>
   sql<string>`to_char(${sql.ref(column)}, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`
 
 export const selectComments = (db: Kysely<DB>, viewerId: string | null) =>

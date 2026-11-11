@@ -6,6 +6,7 @@ import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { timestampSql } from "../utils/comments"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -46,7 +47,7 @@ export const readMyNotificationHandler = new Hono().post(
       .set({ readAt: sql<Date>`coalesce("readAt", CURRENT_TIMESTAMP)` })
       .where("id", "=", id)
       .where("userId", "=", user.id)
-      .returning(["id", "readAt"])
+      .returning(["id", timestampSql("readAt").as("readAt")])
       .executeTakeFirst()
 
     if (notification === undefined) {
