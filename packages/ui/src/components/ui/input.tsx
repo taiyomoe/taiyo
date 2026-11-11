@@ -59,9 +59,20 @@ const styles = stylex.create({
     outlineColor: `color-mix(in srgb, ${colors.destructive} 16%, transparent)`,
   },
   input: {
+    WebkitTextFillColor: {
+      default: null,
+      ":-webkit-autofill": colors.foreground,
+    },
     borderRadius: "inherit",
     paddingInline: "calc(0.75rem - 1px)",
     backgroundColor: "transparent",
+    // Browsers paint autofilled fields with their own opaque background and
+    // text colour; an inset shadow in the field colour paints over it.
+    boxShadow: {
+      default: null,
+      ":-webkit-autofill": `0 0 0 1000px ${colors.field} inset`,
+    },
+    caretColor: colors.foreground,
     color: "inherit",
     fontSize: "inherit",
     lineHeight: {
@@ -69,11 +80,6 @@ const styles = stylex.create({
       [breakpoints.sm]: "2.375rem",
     },
     outlineStyle: "none",
-    // Chrome paints its autofill background on a transition; the absurd
-    // duration is the standard trick for suppressing it.
-    transitionDuration: "5000000s",
-    transitionProperty: "background-color",
-    transitionTimingFunction: "ease-in-out",
     height: {
       default: "2.625rem",
       [breakpoints.sm]: "2.375rem",
