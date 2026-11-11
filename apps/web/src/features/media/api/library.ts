@@ -70,6 +70,7 @@ export function useSetLibraryStatus() {
           : {
               mediaId,
               status,
+              notify: previous?.notify ?? true,
               createdAt: previous?.createdAt ?? now,
               updatedAt: now,
             },

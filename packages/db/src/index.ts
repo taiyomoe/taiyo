@@ -70,6 +70,10 @@ export * from "./models/media-model"
 
 export * from "./models/search-outbox-model"
 
+export * from "./models/notification-model"
+
+export * from "./models/notification-outbox-model"
+
 export * from "./models/session-model"
 
 export * from "./models/media-staff-model"

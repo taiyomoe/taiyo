@@ -11,8 +11,10 @@ import {
   CHAPTER_UPLOAD_QUEUE,
   type ChapterUploadJobData,
   createBullConnection,
+  drainNotificationOutbox,
   processChapterUpload,
   publishScheduledChapters,
+  purgeNotifications,
   reapOrphanCommentImages,
   reapStaleChapterUploads,
 } from "@taiyomoe/queue"
@@ -29,6 +31,9 @@ const SEARCH_MAINTENANCE_QUEUE = "search-maintenance"
 const DRAIN_JOB = "drain-search-outbox"
 const COMMENT_MAINTENANCE_QUEUE = "comment-maintenance"
 const REAP_COMMENT_IMAGES_JOB = "reap-orphan-comment-images"
+const NOTIFICATION_MAINTENANCE_QUEUE = "notification-maintenance"
+const DRAIN_NOTIFICATIONS_JOB = "drain-notification-outbox"
+const PURGE_NOTIFICATIONS_JOB = "purge-notifications"
 const chapterUploadActor = systemActor("chapter-upload-worker")
 const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
@@ -160,6 +165,19 @@ const commentWorker = new Worker(
   },
   { connection: createBullConnection(), concurrency: 1 },
 )
+const notificationWorker = new Worker(
+  NOTIFICATION_MAINTENANCE_QUEUE,
+  async (job) => {
+    if (job.name === PURGE_NOTIFICATIONS_JOB) {
+      await purgeNotifications(deps)
+
+      return
+    }
+
+    await drainNotificationOutbox(deps)
+  },
+  { connection: createBullConnection(), concurrency: 1 },
+)
 
 chapterWorker.on("ready", () => {
   // oxlint-disable-next-line no-console
@@ -213,12 +231,32 @@ await commentMaintenanceQueue
     console.warn("comment maintenance schedule not applied (store may not support it):", err)
   })
 
+const notificationMaintenanceQueue = new Queue(NOTIFICATION_MAINTENANCE_QUEUE, {
+  connection: createBullConnection(),
+})
+
+await notificationMaintenanceQueue
+  .upsertJobScheduler(DRAIN_NOTIFICATIONS_JOB, { every: 10_000 }, { name: DRAIN_NOTIFICATIONS_JOB })
+  .then(() =>
+    notificationMaintenanceQueue.upsertJobScheduler(
+      PURGE_NOTIFICATIONS_JOB,
+      { pattern: "15 4 * * *" },
+      { name: PURGE_NOTIFICATIONS_JOB },
+    ),
+  )
+  .then(() => notificationMaintenanceQueue.close())
+  .catch((err: unknown) => {
+    // oxlint-disable-next-line no-console
+    console.warn("notification maintenance schedule not applied (store may not support it):", err)
+  })
+
 const handleShutdownSignal = () => {
   Promise.all([
     chapterWorker.close(),
     maintenanceWorker.close(),
     searchWorker.close(),
     commentWorker.close(),
+    notificationWorker.close(),
   ])
     .then(() => {
       process.exit(0)

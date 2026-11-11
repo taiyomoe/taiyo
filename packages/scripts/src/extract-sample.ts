@@ -440,7 +440,9 @@ export default defineCommand({
         LIMIT 10
       ) ranked
     `.execute(trx)
-      await sql`TRUNCATE "searchOutbox", tasks, sessions, accounts, verifications`.execute(trx)
+      await sql`TRUNCATE "searchOutbox", "notificationOutbox", notifications, tasks, sessions, accounts, verifications`.execute(
+        trx,
+      )
 
       const { rows: columns } = await sql<{ table: string; column: string }>`
       SELECT c.table_name AS table, c.column_name AS column

@@ -70,6 +70,14 @@ export const createCommentReplyHandler = new Hono().post(
       .executeTakeFirstOrThrow()
 
     await saveImageUsages(db, id, checked.imageIds)
+
+    if (comment.authorId !== null && comment.authorId !== user.id) {
+      await db
+        .insertInto("notifications")
+        .values({ userId: comment.authorId, type: "COMMENT_REPLY", commentId: id })
+        .execute()
+    }
+
     c.var.audit.set({ target: { id } })
 
     return c.ok(

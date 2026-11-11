@@ -1,7 +1,6 @@
-import { sql } from "@taiyomoe/db"
 import { createMiddleware } from "hono/factory"
 import z from "zod"
-import { liveCommentSql } from "../utils/comments"
+import { liveCommentSql, visibleThreadTargetSql } from "../utils/comments"
 
 const paramSchema = z.object({ id: z.uuid() })
 
@@ -47,12 +46,7 @@ export const checkComment = (opts: { live?: boolean } = {}) =>
         "c.deletedAt",
         "t.profileId as ownerId",
         liveCommentSql("c", "u").as("live"),
-        sql<boolean>`(
-          exists (select 1 from "medias" as "m" where "m"."id" = "t"."mediaId" and "m"."deletedAt" is null)
-          or exists (select 1 from "chapters" as "ch" where "ch"."id" = "t"."chapterId" and "ch"."deletedAt" is null and "ch"."status" = 'PUBLISHED')
-          or exists (select 1 from "groups" as "g" where "g"."id" = "t"."groupId" and "g"."deletedAt" is null)
-          or exists (select 1 from "users" as "pu" where "pu"."id" = "t"."profileId" and not coalesce("pu"."banned", false))
-        )`.as("targetVisible"),
+        visibleThreadTargetSql("t").as("targetVisible"),
       ])
       .where("c.id", "=", parsed.data.id)
       .executeTakeFirst()

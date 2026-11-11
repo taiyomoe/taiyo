@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { banUserHandler } from "../handlers/ban-user-handler"
+import { countMyUnreadNotificationsHandler } from "../handlers/count-my-unread-notifications-handler"
 import { createListHandler } from "../handlers/create-list-handler"
 import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-handler"
 import { deleteMyAvatarHandler } from "../handlers/delete-my-avatar-handler"
@@ -24,8 +25,11 @@ import { listMyHistoryHandler } from "../handlers/list-my-history-handler"
 import { listMyLibraryHandler } from "../handlers/list-my-library-handler"
 import { listMyListsHandler } from "../handlers/list-my-lists-handler"
 import { listMyMediaSuggestionsHandler } from "../handlers/list-my-media-suggestions-handler"
+import { listMyNotificationsHandler } from "../handlers/list-my-notifications-handler"
 import { listUserReadingHistoryHandler } from "../handlers/list-user-reading-history-handler"
 import { listUsersHandler } from "../handlers/list-users-handler"
+import { readAllMyNotificationsHandler } from "../handlers/read-all-my-notifications-handler"
+import { readMyNotificationHandler } from "../handlers/read-my-notification-handler"
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
 import { setMyPasswordHandler } from "../handlers/set-my-password-handler"
 import { setUserRoleHandler } from "../handlers/set-user-role-handler"
@@ -59,6 +63,10 @@ export const usersRouter = new Hono()
   .route("/", removeLibraryEntryHandler)
   .route("/", listMyLibraryHandler)
   .route("/", listMyFeedHandler)
+  .route("/", listMyNotificationsHandler)
+  .route("/", countMyUnreadNotificationsHandler)
+  .route("/", readAllMyNotificationsHandler)
+  .route("/", readMyNotificationHandler)
   .route("/", createListHandler)
   .route("/", listMyListsHandler)
   .route("/", updateMySettingsHandler)

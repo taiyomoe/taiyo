@@ -66,6 +66,10 @@ export const COMMENT_DELETIONS = ["AUTHOR", "PAGE_OWNER", "MODERATOR"] as const
 
 export type CommentDeletion = (typeof COMMENT_DELETIONS)[number]
 
+export const NOTIFICATION_TYPES = ["CHAPTER_PUBLISHED", "COMMENT_REPLY"] as const
+
+export type NotificationType = (typeof NOTIFICATION_TYPES)[number]
+
 export const COMMENT_REPORT_REASONS = [
   "SPAM",
   "HARASSMENT",

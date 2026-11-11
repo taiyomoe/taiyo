@@ -17,6 +17,11 @@ const bodySchema = z.object({
     description: "Which bucket to put the media in.",
     example: "READING",
   }),
+  notify: z.boolean().optional().meta({
+    description:
+      "Whether new chapters of the media notify you. Left out, a new entry notifies and an existing entry keeps its choice. Entries in DROPPED or COMPLETED never notify.",
+    example: true,
+  }),
 })
 
 export const upsertLibraryEntryHandler = new Hono().put(
@@ -24,7 +29,7 @@ export const upsertLibraryEntryHandler = new Hono().put(
   describeRoute({
     summary: "Add or move a media in my library",
     description:
-      "Upserts a library entry. Adds the media to the chosen bucket; if it was already in another bucket, moves it. Idempotent.\n\n**Authentication:** signed-in user.",
+      "Upserts a library entry. Adds the media to the chosen bucket; if it was already in another bucket, moves it. Also turns new-chapter notifications on or off for the media. Idempotent.\n\n**Authentication:** signed-in user.",
     tags: ["Library"],
     requestBody: {
       content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
@@ -40,6 +45,7 @@ export const upsertLibraryEntryHandler = new Hono().put(
                   userId: z.uuid(),
                   mediaId: z.uuid(),
                   status: z.enum(USER_LIBRARY_STATUSES),
+                  notify: z.boolean(),
                 }),
               ),
             ),
@@ -60,9 +66,9 @@ export const upsertLibraryEntryHandler = new Hono().put(
   async (c) => {
     const { db, user } = c.var
     const { mediaId } = c.var.param
-    const { status } = c.var.json
+    const { status, notify } = c.var.json
 
-    c.var.audit.set({ target: { status } })
+    c.var.audit.set({ target: { status, notify } })
 
     const media = await db
       .selectFrom("medias")
@@ -75,12 +81,13 @@ export const upsertLibraryEntryHandler = new Hono().put(
       return c.fail("MEDIA_NOT_FOUND")
     }
 
-    await db
+    const entry = await db
       .insertInto("userLibraryEntries")
-      .values({ userId: user.id, mediaId, status })
-      .onConflict((oc) => oc.columns(["userId", "mediaId"]).doUpdateSet({ status }))
-      .execute()
+      .values({ userId: user.id, mediaId, status, notify })
+      .onConflict((oc) => oc.columns(["userId", "mediaId"]).doUpdateSet({ status, notify }))
+      .returning(["userId", "mediaId", "status", "notify"])
+      .executeTakeFirstOrThrow()
 
-    return c.ok({ userId: user.id, mediaId, status })
+    return c.ok(entry)
   },
 )
