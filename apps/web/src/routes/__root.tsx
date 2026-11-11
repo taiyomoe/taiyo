@@ -12,6 +12,7 @@ import { createIsomorphicFn } from "@tanstack/react-start"
 import { getCookies } from "@tanstack/react-start/server"
 import { fromEntries, map, pipe } from "remeda"
 import { CommandPaletteProvider } from "@/features/command-palette/components/command-palette-provider"
+import { NotificationStream } from "@/features/notifications/components/notification-stream"
 import { sessionQueryOptions } from "@/lib/session"
 import {
   THEME_COOKIE,
@@ -96,9 +97,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 })
 
 function RootComponent() {
+  const { session } = Route.useRouteContext()
+
   return (
     <ToastProvider>
       <CommandPaletteProvider>
+        {session === null ? null : <NotificationStream key={session.user.id} />}
         <Outlet />
       </CommandPaletteProvider>
     </ToastProvider>

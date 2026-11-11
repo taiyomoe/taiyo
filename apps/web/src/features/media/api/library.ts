@@ -41,7 +41,15 @@ export function useSetLibraryStatus() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ mediaId, status }: { mediaId: string; status: LibraryStatus | null }) => {
+    mutationFn: async ({
+      mediaId,
+      status,
+      notify,
+    }: {
+      mediaId: string
+      status: LibraryStatus | null
+      notify?: boolean
+    }) => {
       if (status === null) {
         const response = await api.users.me.library[":mediaId"].$delete({ param: { mediaId } })
 
@@ -50,12 +58,12 @@ export function useSetLibraryStatus() {
 
       const response = await api.users.me.library[":mediaId"].$put({
         param: { mediaId },
-        json: { status },
+        json: notify === undefined ? { status } : { status, notify },
       })
 
       return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
     },
-    onMutate: async ({ mediaId, status }) => {
+    onMutate: async ({ mediaId, status, notify }) => {
       const { queryKey } = libraryEntryQueryOptions(mediaId)
 
       await queryClient.cancelQueries({ queryKey })
@@ -70,7 +78,7 @@ export function useSetLibraryStatus() {
           : {
               mediaId,
               status,
-              notify: previous?.notify ?? true,
+              notify: notify ?? previous?.notify ?? true,
               createdAt: previous?.createdAt ?? now,
               updatedAt: now,
             },

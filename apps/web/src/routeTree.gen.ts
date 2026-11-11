@@ -14,6 +14,7 @@ import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DmcaRouteImport } from './routes/dmca'
 import { Route as LatestRouteImport } from './routes/latest'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RecentlyAddedRouteImport } from './routes/recently-added'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -69,6 +70,11 @@ const DmcaRoute = DmcaRouteImport.update({
 const LatestRoute = LatestRouteImport.update({
   id: '/latest',
   path: '/latest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -235,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
@@ -272,6 +279,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
@@ -311,6 +319,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
@@ -351,6 +360,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dmca'
     | '/latest'
+    | '/notifications'
     | '/privacy'
     | '/recently-added'
     | '/settings'
@@ -388,6 +398,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dmca'
     | '/latest'
+    | '/notifications'
     | '/privacy'
     | '/recently-added'
     | '/settings'
@@ -426,6 +437,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dmca'
     | '/latest'
+    | '/notifications'
     | '/privacy'
     | '/recently-added'
     | '/settings'
@@ -465,6 +477,7 @@ export interface RootRouteChildren {
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   DmcaRoute: typeof DmcaRoute
   LatestRoute: typeof LatestRoute
+  NotificationsRoute: typeof NotificationsRoute
   PrivacyRoute: typeof PrivacyRoute
   RecentlyAddedRoute: typeof RecentlyAddedRoute
   SettingsRoute: typeof SettingsRoute
@@ -515,6 +528,13 @@ declare module '@tanstack/react-router' {
       path: '/latest'
       fullPath: '/latest'
       preLoaderRoute: typeof LatestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -799,6 +819,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   DmcaRoute: DmcaRoute,
   LatestRoute: LatestRoute,
+  NotificationsRoute: NotificationsRoute,
   PrivacyRoute: PrivacyRoute,
   RecentlyAddedRoute: RecentlyAddedRoute,
   SettingsRoute: SettingsRoute,

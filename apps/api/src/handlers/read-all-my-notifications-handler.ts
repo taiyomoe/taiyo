@@ -30,7 +30,7 @@ export const readAllMyNotificationsHandler = new Hono().post(
   audited(notificationAudit.READ_ALL),
   withAuth(),
   async (c) => {
-    const { db, user } = c.var
+    const { db, user, notificationEvents } = c.var
     const result = await db
       .updateTable("notifications")
       .set({ readAt: sql<Date>`CURRENT_TIMESTAMP` })
@@ -40,6 +40,10 @@ export const readAllMyNotificationsHandler = new Hono().post(
     const count = Number(result.numUpdatedRows)
 
     c.var.audit.set({ target: { count } })
+
+    if (count > 0) {
+      await notificationEvents.publish([user.id])
+    }
 
     return c.ok({ count })
   },

@@ -40,7 +40,7 @@ export const readMyNotificationHandler = new Hono().post(
   withAuth(),
   validateParam(paramSchema),
   async (c) => {
-    const { db, user } = c.var
+    const { db, user, notificationEvents } = c.var
     const { id } = c.var.param
     const notification = await db
       .updateTable("notifications")
@@ -53,6 +53,8 @@ export const readMyNotificationHandler = new Hono().post(
     if (notification === undefined) {
       return c.fail("NOTIFICATION_NOT_FOUND")
     }
+
+    await notificationEvents.publish([user.id])
 
     return c.ok(notification)
   },

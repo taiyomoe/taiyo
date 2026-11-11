@@ -49,7 +49,7 @@ export const createCommentReplyHandler = new Hono().post(
   withTransaction,
   checkComment({ live: true }),
   async (c) => {
-    const { db, user, can, comment } = c.var
+    const { db, user, can, comment, afterCommit, notificationEvents } = c.var
     const { content } = c.var.json
     const checked = await checkContent(db, content, { userId: user.id })
 
@@ -71,11 +71,14 @@ export const createCommentReplyHandler = new Hono().post(
 
     await saveImageUsages(db, id, checked.imageIds)
 
-    if (comment.authorId !== null && comment.authorId !== user.id) {
+    const { authorId } = comment
+
+    if (authorId !== null && authorId !== user.id) {
       await db
         .insertInto("notifications")
-        .values({ userId: comment.authorId, type: "COMMENT_REPLY", commentId: id })
+        .values({ userId: authorId, type: "COMMENT_REPLY", commentId: id })
         .execute()
+      afterCommit(() => notificationEvents.publish([authorId]))
     }
 
     c.var.audit.set({ target: { id } })

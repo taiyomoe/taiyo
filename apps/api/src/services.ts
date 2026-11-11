@@ -1,5 +1,6 @@
 import type { S3Client } from "@aws-sdk/client-s3"
 import type { Auth } from "@taiyomoe/auth/server"
+import type { NotificationEvents } from "@taiyomoe/cache/notification-events"
 import type { DB } from "@taiyomoe/db"
 import type { GroupInvitationMail } from "@taiyomoe/email"
 import type { ChapterUploadProducer } from "@taiyomoe/queue"
@@ -19,5 +20,6 @@ export type Services = {
   auth: Auth
   chapterUploadQueue: ChapterUploadProducer
   mailer: Mailer
+  notificationEvents: NotificationEvents
   cacheNamespace: string
 }

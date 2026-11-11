@@ -21,10 +21,10 @@ const fanOutChapters = async (db: Kysely<DB>) => {
   const chapterIds = [...new Set(claimed.map(({ chapterId }) => chapterId))]
 
   if (chapterIds.length === 0) {
-    return { chapters: 0, notifications: 0 }
+    return { chapters: 0, userIds: [] }
   }
 
-  const { rows } = await sql<{ id: string }>`
+  const { rows } = await sql<{ userId: string }>`
     INSERT INTO "notifications" ("userId", "type", "chapterId")
     SELECT DISTINCT "r"."userId", 'CHAPTER_PUBLISHED'::"NotificationType", "c"."id"
     FROM "chapters" AS "c"
@@ -53,24 +53,29 @@ const fanOutChapters = async (db: Kysely<DB>) => {
         greatest("m"."contentRating", "c"."contentRating")::text
       )
     ON CONFLICT DO NOTHING
-    RETURNING "id"
+    RETURNING "userId"
   `.execute(db)
 
-  return { chapters: chapterIds.length, notifications: rows.length }
+  return { chapters: chapterIds.length, userIds: rows.map(({ userId }) => userId) }
 }
 
 export const drainNotificationOutbox = async ({ db }: NotifierDeps) => {
   const totals = { chapters: 0, notifications: 0 }
+  const userIds = new Set<string>()
 
   for (;;) {
     const batch = await db.transaction().execute(fanOutChapters)
 
     if (batch.chapters === 0) {
-      return totals
+      return { ...totals, userIds: [...userIds] }
     }
 
     totals.chapters += batch.chapters
-    totals.notifications += batch.notifications
+    totals.notifications += batch.userIds.length
+
+    for (const userId of batch.userIds) {
+      userIds.add(userId)
+    }
   }
 }
 

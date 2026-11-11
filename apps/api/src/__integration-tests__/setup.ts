@@ -17,6 +17,7 @@ import { afterAll, test as baseTest } from "vitest"
 import type { Services } from "../services"
 import { createApp } from "../app"
 import { defined } from "./helpers/assert"
+import { createMemoryNotificationEvents } from "./helpers/notification-events"
 
 const TEMPLATE_DB = "taiyo_test_template"
 const getDbUrl = (name: string) => {
@@ -77,6 +78,7 @@ export const test = baseTest.extend<Fixtures>({
           return Promise.resolve()
         },
       },
+      notificationEvents: createMemoryNotificationEvents(),
       cacheNamespace: `${crypto.randomUUID()}:`,
     }
 

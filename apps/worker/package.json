@@ -12,6 +12,7 @@
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/audit": "workspace:^",
+    "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
