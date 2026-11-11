@@ -23,7 +23,6 @@ const listShowcase = async (app: Parameters<typeof api>[0]) => {
 
   return res.body.data
 }
-
 // Puts every user's library on one all-audience media with a cover, so it
 // outranks the rest of the catalog.
 const promoteMedia = async (db: Services["db"]) => {
