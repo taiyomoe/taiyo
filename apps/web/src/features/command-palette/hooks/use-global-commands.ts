@@ -13,6 +13,7 @@ import {
   Moon,
   Settings,
   Shuffle,
+  Sparkles,
   Sun,
   User,
   UserAdd,
@@ -21,17 +22,16 @@ import {
   Shield,
 } from "@taiyomoe/ui/components/icons"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { useRouter } from "@tanstack/react-router"
 import { use } from "react"
 import type { PaletteCommand } from "@/features/command-palette/lib/palette-command"
 import { env } from "@/env/client"
+import { useRandomTitle } from "@/features/advanced-search/hooks/use-random-title"
+import { DEFAULT_ADVANCED_SEARCH } from "@/features/advanced-search/lib/advanced-search"
 import { DASHBOARD_SECTIONS } from "@/features/dashboard/lib/dashboard-sections"
 import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
 import { unwrapAuth } from "@/features/users/api/user-admin"
 import { useAuthActions } from "@/hooks/use-auth-actions"
 import { useCurrentHref } from "@/hooks/use-current-href"
-import { api } from "@/lib/api"
-import { unwrapEnvelope } from "@/lib/envelope"
 import { usePermissions } from "@/lib/permissions"
 import { sessionQueryOptions } from "@/lib/session"
 import { useSettings, useUpdateSettings } from "@/lib/settings"
@@ -60,7 +60,6 @@ const THEMES = [
 ] as const
 
 export function useGlobalCommands() {
-  const router = useRouter()
   const href = useCurrentHref()
   const theme = use(ThemeContext)
   const { data: session } = useQuery({ ...sessionQueryOptions, staleTime: "static" })
@@ -75,22 +74,7 @@ export function useGlobalCommands() {
       window.location.assign("/dashboard/users")
     },
   })
-  const openRandomTitle = async () => {
-    const filter = { contentRating: { in: [...contentRatings] } }
-    const first = await unwrapEnvelope(
-      await api.medias.search.$post({ json: { perPage: 1, page: 1, filter } }),
-    )
-    const total = first.meta.total
-    const page = Math.floor(Math.random() * Math.max(total, 1)) + 1
-    const pick = await unwrapEnvelope(
-      await api.medias.search.$post({ json: { perPage: 1, page, filter } }),
-    )
-    const mediaId = pick.data[0]?.id
-
-    if (mediaId !== undefined) {
-      await router.navigate({ to: "/media/$mediaId", params: { mediaId } })
-    }
-  }
+  const randomTitle = useRandomTitle()
   const navigation: PaletteCommand[] = [
     {
       id: "nav.home",
@@ -107,6 +91,14 @@ export function useGlobalCommands() {
       icon: Clock,
       keywords: ["new", "recent", "releases", "chapters", "updates"],
       run: { type: "navigate", to: { to: "/latest" } },
+    },
+    {
+      id: "nav.recently-added",
+      label: m.shell_nav_recently_added(),
+      section: "navigate",
+      icon: Sparkles,
+      keywords: ["new", "recent", "titles", "series", "added", "fresh"],
+      run: { type: "navigate", to: { to: "/recently-added" } },
     },
     {
       id: "nav.titles",
@@ -130,7 +122,12 @@ export function useGlobalCommands() {
       section: "navigate",
       icon: Shuffle,
       keywords: ["surprise", "discover", "lucky"],
-      run: { type: "perform", perform: openRandomTitle },
+      run: {
+        type: "perform",
+        perform: () => {
+          randomTitle.mutate(DEFAULT_ADVANCED_SEARCH)
+        },
+      },
     },
     ...(user === null
       ? []

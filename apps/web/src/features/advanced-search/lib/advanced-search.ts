@@ -146,6 +146,8 @@ export const parseAdvancedSearch = (url: AdvancedSearchUrl) => ({
 
 export type AdvancedSearch = ReturnType<typeof parseAdvancedSearch>
 
+export const DEFAULT_ADVANCED_SEARCH = parseAdvancedSearch(advancedSearchSchema.parse({}))
+
 export type AdvancedSearchFilters = Omit<AdvancedSearch, "q" | "sort" | "view" | "page">
 
 export const EMPTY_FILTERS = {

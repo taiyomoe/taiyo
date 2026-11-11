@@ -15,6 +15,7 @@ import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DmcaRouteImport } from './routes/dmca'
 import { Route as LatestRouteImport } from './routes/latest'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RecentlyAddedRouteImport } from './routes/recently-added'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -73,6 +74,11 @@ const LatestRoute = LatestRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecentlyAddedRoute = RecentlyAddedRouteImport.update({
+  id: '/recently-added',
+  path: '/recently-added',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -230,6 +236,7 @@ export interface FileRoutesByFullPath {
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
   '/privacy': typeof PrivacyRoute
+  '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
@@ -266,6 +273,7 @@ export interface FileRoutesByTo {
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
   '/privacy': typeof PrivacyRoute
+  '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
@@ -304,6 +312,7 @@ export interface FileRoutesById {
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
   '/privacy': typeof PrivacyRoute
+  '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
@@ -343,6 +352,7 @@ export interface FileRouteTypes {
     | '/dmca'
     | '/latest'
     | '/privacy'
+    | '/recently-added'
     | '/settings'
     | '/shop'
     | '/terms'
@@ -379,6 +389,7 @@ export interface FileRouteTypes {
     | '/dmca'
     | '/latest'
     | '/privacy'
+    | '/recently-added'
     | '/settings'
     | '/shop'
     | '/terms'
@@ -416,6 +427,7 @@ export interface FileRouteTypes {
     | '/dmca'
     | '/latest'
     | '/privacy'
+    | '/recently-added'
     | '/settings'
     | '/shop'
     | '/terms'
@@ -454,6 +466,7 @@ export interface RootRouteChildren {
   DmcaRoute: typeof DmcaRoute
   LatestRoute: typeof LatestRoute
   PrivacyRoute: typeof PrivacyRoute
+  RecentlyAddedRoute: typeof RecentlyAddedRoute
   SettingsRoute: typeof SettingsRoute
   ShopRoute: typeof ShopRoute
   TermsRoute: typeof TermsRoute
@@ -509,6 +522,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recently-added': {
+      id: '/recently-added'
+      path: '/recently-added'
+      fullPath: '/recently-added'
+      preLoaderRoute: typeof RecentlyAddedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -780,6 +800,7 @@ const rootRouteChildren: RootRouteChildren = {
   DmcaRoute: DmcaRoute,
   LatestRoute: LatestRoute,
   PrivacyRoute: PrivacyRoute,
+  RecentlyAddedRoute: RecentlyAddedRoute,
   SettingsRoute: SettingsRoute,
   ShopRoute: ShopRoute,
   TermsRoute: TermsRoute,
