@@ -1,6 +1,7 @@
 import {
   adminClient,
   customSessionClient,
+  lastLoginMethodClient,
   magicLinkClient,
   twoFactorClient,
   usernameClient,
@@ -17,5 +18,6 @@ export const authClient = createAuthClient({
     customSessionClient<Auth>(),
     adminClient(),
     twoFactorClient(),
+    lastLoginMethodClient(),
   ],
 })

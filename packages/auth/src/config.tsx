@@ -13,7 +13,15 @@ import { createPermissions, toRole } from "@taiyomoe/permissions"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
 import { APIError, createAuthMiddleware } from "better-auth/api"
-import { admin, captcha, customSession, magicLink, twoFactor, username } from "better-auth/plugins"
+import {
+  admin,
+  captcha,
+  customSession,
+  lastLoginMethod,
+  magicLink,
+  twoFactor,
+  username,
+} from "better-auth/plugins"
 import { DateTime } from "luxon"
 import { z } from "zod"
 import { adminPluginRoles } from "./admin-roles"
@@ -312,6 +320,10 @@ export const createAuth = ({
       }),
       admin({ defaultRole: "USER", adminRoles: ["ADMIN"], roles: adminPluginRoles }),
       twoFactor({ issuer: "Taiyō", allowPasswordless: true }),
+      // The second factor finishes a password sign-in, so it counts as one.
+      lastLoginMethod({
+        customResolveMethod: (ctx) => (ctx.path.startsWith("/two-factor/verify") ? "email" : null),
+      }),
       customSession(({ session, user }) =>
         Promise.resolve({
           session,

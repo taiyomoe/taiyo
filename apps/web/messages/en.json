@@ -19,6 +19,7 @@
   "auth_display_name_placeholder": "Yuki Nagato",
   "auth_email_placeholder": "you@email.com",
   "auth_sign_up_title": "Step into the light",
+  "auth_last_used": "Last used",
   "auth_sign_up_subtitle": "Create your free account — your library is waiting.",
   "auth_sign_in_title": "Welcome back",
   "auth_sign_in_subtitle": "Pick up right where you left off.",

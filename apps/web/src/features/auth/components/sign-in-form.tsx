@@ -18,8 +18,10 @@ import { authFormStyles as sx } from "@/features/auth/components/auth-form-style
 import { AuthHeading } from "@/features/auth/components/auth-heading"
 import { AuthSocialButtons } from "@/features/auth/components/auth-social-buttons"
 import { AuthSwitchLink } from "@/features/auth/components/auth-switch-link"
+import { LastUsed } from "@/features/auth/components/last-used"
 import { TwoFactorForm } from "@/features/auth/components/two-factor-form"
 import { useAuthForm } from "@/features/auth/hooks/use-auth-form"
+import { useLastLoginMethod } from "@/features/auth/hooks/use-last-login-method"
 import { m } from "@/paraglide/messages"
 
 const signInSchema = z.object({
@@ -30,6 +32,7 @@ const signInSchema = z.object({
 
 export const SignInForm = () => {
   const auth = useAuthForm()
+  const lastUsed = useLastLoginMethod()
   const [twoFactor, setTwoFactor] = useState(false)
   const form = useForm({
     resolver: zodResolver(signInSchema),
@@ -103,9 +106,11 @@ export const SignInForm = () => {
               {m.auth_forgot_password()}
             </a>
           </div>
-          <SunButton block type="submit" sx={sx.submit} loading={isSubmitting} disabled={isBusy}>
-            {m.auth_sign_in()}
-          </SunButton>
+          <LastUsed active={lastUsed === "email"}>
+            <SunButton block type="submit" sx={sx.submit} loading={isSubmitting} disabled={isBusy}>
+              {m.auth_sign_in()}
+            </SunButton>
+          </LastUsed>
         </Form>
       </div>
       <AuthSwitchLink
