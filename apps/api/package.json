@@ -29,7 +29,7 @@
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/search": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "evlog": "^2.33.1",
+    "evlog": "^2.34.0",
     "hono": "^4.13.16",
     "hono-openapi": "^1.5.0",
     "hono-rate-limiter": "^0.5.4",

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@taiyomoe/db": "workspace:^",
-    "evlog": "^2.33.1"
+    "evlog": "^2.34.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.6"
