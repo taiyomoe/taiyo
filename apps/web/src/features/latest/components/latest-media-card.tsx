@@ -122,14 +122,16 @@ export function LatestMediaCard({
   media,
   contentRatings,
   uploaderId,
+  groupId,
 }: {
   media: LatestMediaUpdate
   contentRatings: readonly ContentRating[]
   uploaderId?: string
+  groupId?: string
 }) {
   const [expanded, setExpanded] = useState(false)
   const all = useQuery({
-    ...mediaLatestChaptersQueryOptions(media.id, contentRatings, uploaderId),
+    ...mediaLatestChaptersQueryOptions(media.id, contentRatings, { uploaderId, groupId }),
     enabled: expanded,
   })
   const chapters = expanded && all.data !== undefined ? all.data : media.chapters

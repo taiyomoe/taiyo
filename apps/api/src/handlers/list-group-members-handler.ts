@@ -1,9 +1,10 @@
-import { GROUP_MEMBERSHIP_ROLES, GROUP_PERMISSIONS } from "@taiyomoe/db"
+import { GROUP_MEMBERSHIP_ROLES, GROUP_PERMISSIONS, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
+import { publishedChapters } from "../utils/group-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -18,6 +19,9 @@ const memberItemSchema = z.object({
   permissions: z.enum(GROUP_PERMISSIONS).array().nullable().meta({
     description:
       "The member's stored permissions. Only visible to the group's owners, members with `MANAGE_MEMBERS` and admins; null for everyone else.",
+  }),
+  chapterCount: z.int().meta({
+    description: "Published chapters the member uploaded that are credited to the group.",
   }),
   createdAt: z.iso.datetime(),
 })
@@ -67,9 +71,26 @@ export const listGroupMembersHandler = new Hono().get(
       .orderBy("groupMemberships.role", "asc")
       .orderBy("users.username", "asc")
       .execute()
+    const counts =
+      rows.length === 0
+        ? []
+        : await publishedChapters(db, group.id)
+            .where(
+              "chapters.uploaderId",
+              "in",
+              rows.map((row) => row.userId),
+            )
+            .groupBy("chapters.uploaderId")
+            .select(["chapters.uploaderId", sql<string>`count(*)`.as("count")])
+            .execute()
+    const chapterCounts = new Map(counts.map((row) => [row.uploaderId, Number(row.count)]))
 
     return c.ok(
-      rows.map((row) => ({ ...row, permissions: showPermissions ? row.permissions : null })),
+      rows.map((row) => ({
+        ...row,
+        chapterCount: chapterCounts.get(row.userId) ?? 0,
+        permissions: showPermissions ? row.permissions : null,
+      })),
     )
   },
 )

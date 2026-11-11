@@ -15,10 +15,12 @@ import type { CommentVote } from "./models/comment-vote-model"
 import type { Cover } from "./models/cover-model"
 import type { FeaturedMedia } from "./models/featured-media-model"
 import type { GroupCreationRequest } from "./models/group-creation-request-model"
+import type { GroupFollow } from "./models/group-follow-model"
 import type { GroupInvitation } from "./models/group-invitation-model"
 import type { GroupMembership } from "./models/group-membership-model"
 import type { Group } from "./models/group-model"
 import type { GroupOwnershipRequest } from "./models/group-ownership-request-model"
+import type { GroupReport } from "./models/group-report-model"
 import type { Media } from "./models/media-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
@@ -60,9 +62,11 @@ export type DB = {
   covers: Cover
   featuredMedias: FeaturedMedia
   groupCreationRequests: GroupCreationRequest
+  groupFollows: GroupFollow
   groupInvitations: GroupInvitation
   groupMemberships: GroupMembership
   groupOwnershipRequests: GroupOwnershipRequest
+  groupReports: GroupReport
   groups: Group
   mediaStaffs: MediaStaff
   mediaSuggestions: MediaSuggestion

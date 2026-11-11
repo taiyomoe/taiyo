@@ -45,16 +45,18 @@ const styles = stylex.create({
   },
   person: {
     flexShrink: 0,
+    fontSize: "0.875rem",
     height: "2.25rem",
     width: "2.25rem",
   },
   personFallback: {
     color: colors.background,
-    fontSize: "0.875rem",
+    fontSize: "inherit",
     fontWeight: 700,
   },
 })
-const toneFor = (id: string) =>
+
+export const toneFor = (id: string) =>
   TONES[Number.parseInt(id.replace(/-/g, "").slice(0, 8), 16) % TONES.length] ?? colors.primary
 
 export function GroupAvatar({

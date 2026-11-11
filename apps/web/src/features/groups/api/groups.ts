@@ -1,5 +1,7 @@
 import type { InferRequestType, InferResponseType } from "hono/client"
 import { queryOptions } from "@tanstack/react-query"
+import { isDefined, pickBy } from "remeda"
+import type { GroupChapterOrder, GroupMediaSort } from "@/features/groups/lib/group-page"
 import type { ContentRating } from "@/lib/settings"
 import { api } from "@/lib/api"
 import { unwrap, unwrapEnvelope } from "@/lib/envelope"
@@ -137,3 +139,108 @@ export type GroupCreationInput = InferRequestType<
 >["json"]
 
 export type GroupUpdateInput = InferRequestType<(typeof api.groups)[":id"]["$patch"]>["json"]
+
+export const groupFollowQueryOptions = (groupId: string) =>
+  queryOptions({
+    queryKey: ["groups", groupId, "follow"],
+    queryFn: async ({ signal }) =>
+      unwrap(await api.groups[":id"].follow.$get({ param: { id: groupId } }, { init: { signal } })),
+  })
+
+export const groupMediaUpdatesQueryOptions = (
+  groupId: string,
+  contentRatings: readonly ContentRating[],
+  {
+    page,
+    perPage,
+    order,
+    search,
+    mediaId,
+  }: {
+    page: number
+    perPage: number
+    order: GroupChapterOrder
+    search: string | undefined
+    mediaId: string | undefined
+  },
+) =>
+  queryOptions({
+    queryKey: [
+      "chapters",
+      "latest",
+      "medias",
+      { groupId, contentRatings, page, perPage, order, search, mediaId },
+    ],
+    queryFn: async ({ signal }) =>
+      unwrapEnvelope(
+        await api.chapters.latest.medias.$get(
+          {
+            query: pickBy(
+              {
+                groupId,
+                mediaId,
+                search,
+                order,
+                contentRating: contentRatings.join(","),
+                page: String(page),
+                perPage: String(perPage),
+              },
+              isDefined,
+            ),
+          },
+          { init: { signal } },
+        ),
+      ),
+  })
+
+export const groupMediasQueryOptions = (
+  groupId: string,
+  contentRatings: readonly ContentRating[],
+  { page, perPage, sort }: { page: number; perPage: number; sort: GroupMediaSort },
+) =>
+  queryOptions({
+    queryKey: ["groups", groupId, "medias", { contentRatings, page, perPage, sort }],
+    queryFn: async ({ signal }) =>
+      unwrapEnvelope(
+        await api.groups[":id"].medias.$get(
+          {
+            param: { id: groupId },
+            query: {
+              sort,
+              contentRating: contentRatings.join(","),
+              page: String(page),
+              perPage: String(perPage),
+            },
+          },
+          { init: { signal } },
+        ),
+      ),
+  })
+
+export type GroupMedia = InferResponseType<
+  (typeof api.groups)[":id"]["medias"]["$get"],
+  200
+>["data"][number]
+
+export const groupStatsQueryOptions = (groupId: string, contentRatings: readonly ContentRating[]) =>
+  queryOptions({
+    queryKey: ["groups", groupId, "stats", { contentRatings }],
+    queryFn: async ({ signal }) =>
+      unwrap(
+        await api.groups[":id"].stats.$get(
+          { param: { id: groupId }, query: { contentRating: contentRatings.join(",") } },
+          { init: { signal } },
+        ),
+      ),
+  })
+
+export type GroupStats = InferResponseType<(typeof api.groups)[":id"]["stats"]["$get"], 200>["data"]
+
+export type GroupReportInput = InferRequestType<
+  (typeof api.groups)[":id"]["reports"]["$post"]
+>["json"]
+
+export type GroupReport = InferResponseType<
+  (typeof api)["group-reports"]["$get"],
+  200
+>["data"][number]

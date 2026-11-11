@@ -126,6 +126,14 @@ export const GROUP_OWNERSHIP_REQUEST_STATUSES = [
 
 export type GroupOwnershipRequestStatus = (typeof GROUP_OWNERSHIP_REQUEST_STATUSES)[number]
 
+export const GROUP_REPORT_REASONS = ["IMPERSONATION", "STOLEN_WORK", "SPAM", "OTHER"] as const
+
+export type GroupReportReason = (typeof GROUP_REPORT_REASONS)[number]
+
+export const GROUP_REPORT_STATUSES = ["PENDING", "RESOLVED", "DISMISSED"] as const
+
+export type GroupReportStatus = (typeof GROUP_REPORT_STATUSES)[number]
+
 export const GROUP_INVITATION_STATUSES = [
   "PENDING",
   "ACCEPTED",

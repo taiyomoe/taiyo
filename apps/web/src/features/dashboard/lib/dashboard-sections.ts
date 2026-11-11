@@ -143,6 +143,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/comment-reports",
         visible: (can) => can("comment.review"),
       },
+      {
+        label: m.dashboard_nav_group_reports,
+        icon: Flag,
+        to: "/dashboard/group-reports",
+        visible: (can) => can("groupReport.review"),
+      },
     ],
   },
   {

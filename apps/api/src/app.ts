@@ -30,6 +30,7 @@ import { coversRouter } from "./routers/covers-router"
 import { dashboardRouter } from "./routers/dashboard-router"
 import { groupCreationRequestsRouter } from "./routers/group-creation-requests-router"
 import { groupInvitationsRouter } from "./routers/group-invitations-router"
+import { groupReportsRouter } from "./routers/group-reports-router"
 import { groupsRouter } from "./routers/groups-router"
 import { listsRouter } from "./routers/lists-router"
 import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
@@ -170,6 +171,7 @@ export const createApp = (services: Services) => {
     .route("/ownership-requests", ownershipRequestsRouter)
     .route("/group-invitations", groupInvitationsRouter)
     .route("/group-creation-requests", groupCreationRequestsRouter)
+    .route("/group-reports", groupReportsRouter)
     .route("/media-suggestions", mediaSuggestionsRouter)
     .route("/users", usersRouter)
     .route("/lists", listsRouter)

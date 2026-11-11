@@ -39,6 +39,7 @@ const TARGET_ICONS: Record<string, (props: IconProps) => ReactElement> = {
   ownershipRequest: Shield,
   groupCreationRequest: UserCheck,
   groupInvitation: Mail,
+  groupReport: Flag,
   user: User,
   staff: PenTool,
   list: List,

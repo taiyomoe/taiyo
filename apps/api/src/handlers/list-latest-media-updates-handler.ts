@@ -29,6 +29,17 @@ const querySchema = paginationQuerySchema.extend({
     .uuid()
     .optional()
     .meta({ description: "Only list the chapters uploaded by this user." }),
+  groupId: z
+    .uuid()
+    .optional()
+    .meta({ description: "Only list the chapters credited to this group." }),
+  mediaId: z.uuid().optional().meta({ description: "Only list the chapters of this media." }),
+  search: z.string().trim().min(1).max(100).optional().meta({
+    description: "Only list chapters whose title, number or media title matches.",
+  }),
+  order: z.enum(["latest", "oldest"]).default("latest").meta({
+    description: "`latest`: newest releases first. `oldest`: earliest releases first.",
+  }),
 })
 
 export const listLatestMediaUpdatesHandler = new Hono().get(
@@ -57,8 +68,19 @@ export const listLatestMediaUpdatesHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage, contentRating, chaptersPerMedia, uploaderId } = c.var.query
-    const filters = { contentRatings: contentRating, uploaderId }
+    const {
+      page,
+      perPage,
+      contentRating,
+      chaptersPerMedia,
+      uploaderId,
+      groupId,
+      mediaId,
+      search,
+      order,
+    } = c.var.query
+    const filters = { contentRatings: contentRating, uploaderId, groupId, mediaId, search }
+    const direction = order === "latest" ? "desc" : "asc"
     const [updates, totalRow] = await Promise.all([
       selectVisibleChapters(db, filters)
         .groupBy(["medias.id", "medias.countryOfOrigin", "medias.contentRating"])
@@ -66,11 +88,14 @@ export const listLatestMediaUpdatesHandler = new Hono().get(
           "medias.id",
           "medias.countryOfOrigin",
           "medias.contentRating",
-          eb.fn.max("chapters.createdAt").as("latestAt"),
+          (order === "latest"
+            ? eb.fn.max("chapters.createdAt")
+            : eb.fn.min("chapters.createdAt")
+          ).as("latestAt"),
           eb.fn.countAll<string>().as("chapterCount"),
         ])
-        .orderBy("latestAt", "desc")
-        .orderBy("medias.id", "desc")
+        .orderBy("latestAt", direction)
+        .orderBy("medias.id", direction)
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
@@ -87,7 +112,7 @@ export const listLatestMediaUpdatesHandler = new Hono().get(
               selectLatestChapters(db, filters)
                 .where("chapters.mediaId", "in", mediaIds)
                 .select(
-                  sql<number>`row_number() over (partition by ${sql.ref("chapters.mediaId")} order by ${sql.ref("chapters.createdAt")} desc, ${sql.ref("chapters.id")} desc)`.as(
+                  sql<number>`row_number() over (partition by ${sql.ref("chapters.mediaId")} order by ${sql.ref("chapters.createdAt")} ${sql.raw(direction)}, ${sql.ref("chapters.id")} ${sql.raw(direction)})`.as(
                     "rank",
                   ),
                 )
@@ -95,8 +120,8 @@ export const listLatestMediaUpdatesHandler = new Hono().get(
             )
             .selectAll()
             .where("rank", "<=", chaptersPerMedia)
-            .orderBy("createdAt", "desc")
-            .orderBy("id", "desc")
+            .orderBy("createdAt", direction)
+            .orderBy("id", direction)
             .execute()
     const [chapters, coverUrls, titles] = await Promise.all([
       withChapterDetails(db, rows),
