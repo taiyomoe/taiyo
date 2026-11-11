@@ -42,6 +42,7 @@ function PushDevice() {
   const test = useMutation({
     mutationFn: sendTestPush,
     onError,
+    onSettled,
     onSuccess: () => {
       toastManager.add({ title: m.user_settings_push_test_sent(), type: "success" })
     },

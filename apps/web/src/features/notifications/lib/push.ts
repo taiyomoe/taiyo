@@ -1,5 +1,5 @@
 import { api } from "@/lib/api"
-import { ensureSuccess, unwrap } from "@/lib/envelope"
+import { ensureSuccess, getApiErrorCode, unwrap } from "@/lib/envelope"
 
 const isIos = () =>
   /iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -90,11 +90,19 @@ export const sendTestPush = async () => {
     throw new Error("This device is not subscribed to push notifications.")
   }
 
-  await ensureSuccess(
-    await api.users.me["push-subscriptions"].test.$post({
-      json: { endpoint: subscription.endpoint },
-    }),
-  )
+  try {
+    await ensureSuccess(
+      await api.users.me["push-subscriptions"].test.$post({
+        json: { endpoint: subscription.endpoint },
+      }),
+    )
+  } catch (error) {
+    if (getApiErrorCode(error) === "PUSH_SUBSCRIPTION_EXPIRED") {
+      await subscription.unsubscribe()
+    }
+
+    throw error
+  }
 }
 
 /** Re-saves this device's subscription so the server keeps fresh keys and the right owner. */
