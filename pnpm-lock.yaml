@@ -102,8 +102,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/utils
       evlog:
-        specifier: ^2.33.1
-        version: 2.33.1(@tanstack/start-client-core@1.170.39)(hono@4.13.16)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        specifier: ^2.34.0
+        version: 2.34.0(@tanstack/start-client-core@1.170.39)(hono@4.13.16)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       hono:
         specifier: ^4.13.16
         version: 4.13.16
@@ -390,8 +390,8 @@ importers:
         specifier: ^6.4.2
         version: 6.4.2(ioredis@6.0.0)(pg@8.23.1)
       evlog:
-        specifier: ^2.33.1
-        version: 2.33.1(@tanstack/start-client-core@1.170.39)(hono@4.13.16)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        specifier: ^2.34.0
+        version: 2.34.0(@tanstack/start-client-core@1.170.39)(hono@4.13.16)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -409,8 +409,8 @@ importers:
         specifier: workspace:^
         version: link:../db
       evlog:
-        specifier: ^2.33.1
-        version: 2.33.1(@tanstack/start-client-core@1.170.39)(hono@4.13.16)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        specifier: ^2.34.0
+        version: 2.34.0(@tanstack/start-client-core@1.170.39)(hono@4.13.16)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
     devDependencies:
       '@types/node':
         specifier: ^26.6.6
@@ -4953,29 +4953,29 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
 
-  evlog@2.33.1:
-    resolution: {integrity: sha512-raahjdFBFXWBYRD/SMuBs/pBAcarTlV/YzuIk/iWH/Snieo5mqh1a9epfo7DOKXq1OWpHqH4xXhVxWv1JIIg+w==}
+  evlog@2.34.0:
+    resolution: {integrity: sha512-d1ETZ1Sk8cDCTKz++jIpyANqE2wnbfG2AzaR+HiVm/zppTxeGkoV62/gtnH5RyuaeMVR58NebYiXrDDyXWt8mQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
-      '@nestjs/common': '>=11.2.7'
-      '@nestjs/core': '>=11.2.7'
+      '@nestjs/common': '>=11.2.8'
+      '@nestjs/core': '>=11.2.8'
       '@nuxt/kit': ^4.4.2
-      '@orpc/server': '>=1.15.4'
-      '@tanstack/start-client-core': ^1.170.34
+      '@orpc/server': '>=1.16.1'
+      '@tanstack/start-client-core': ^1.170.39
       ai: '>=6.0.168 <8.0.0'
-      effect: ^4.0.0
+      effect: ^4.0.6
       elysia: '>=1.4.30'
       eve: '>=0.30.0'
-      express: '>=5.2.1'
-      fastify: '>=5.12.5'
+      express: '>=5.3.0'
+      fastify: '>=5.12.7'
       h3: ^1.15.11
-      hono: '>=4.13.12'
-      next: '>=16.3.8'
+      hono: '>=4.13.13'
+      next: '>=16.4.3'
       nitro: ^3.0.260311-beta
-      nitropack: ^2.13.4
+      nitropack: ^2.13.5
       ofetch: ^1.5.1
-      react: '>=19.3.0'
+      react: '>=19.3.1'
       react-router: '>=7.18.4'
       vite: ^7.0.0 || ^8.0.0
     peerDependenciesMeta:
@@ -10153,7 +10153,7 @@ snapshots:
 
   esutils@2.0.3: {}
 
-  evlog@2.33.1(@tanstack/start-client-core@1.170.39)(hono@4.13.16)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
+  evlog@2.34.0(@tanstack/start-client-core@1.170.39)(hono@4.13.16)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.64.1)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
     optionalDependencies:
       '@tanstack/start-client-core': 1.170.39
       hono: 4.13.16
