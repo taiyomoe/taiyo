@@ -37,10 +37,11 @@ const styles = stylex.create({
     letterSpacing: "-0.02em",
   },
   tagline: {
-    color: `color-mix(in srgb, ${scene.paper} 40%, transparent)`,
+    color: `color-mix(in srgb, ${scene.paper} 78%, transparent)`,
     fontFamily: font.mono,
     fontSize: "13px",
     position: "relative",
+    textShadow: `0 1px 2px ${scene.night}, 0 0 14px ${scene.night}, 0 0 28px ${scene.night}`,
     zIndex: 3,
   },
 })

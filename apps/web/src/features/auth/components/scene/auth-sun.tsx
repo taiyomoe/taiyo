@@ -18,12 +18,12 @@ const styles = stylex.create({
     position: "absolute",
   },
   orbit: {
+    aspectRatio: "1",
     position: "absolute",
     transform: "translateX(-50%)",
-    bottom: "-38%",
-    height: "27.5rem",
     left: "50%",
-    width: "27.5rem",
+    top: "66%",
+    width: "min(92%, 44rem)",
   },
   vignette: {
     background: `linear-gradient(180deg, ${scene.night} 0%, rgba(18,10,7,0.35) 26%, rgba(18,10,7,0.5) 50%, rgba(18,10,7,0.15) 78%, rgba(18,10,7,0.35) 100%)`,
