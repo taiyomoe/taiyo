@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { scene } from "@/components/scene/scene.stylex"
 
 const progress = stylex.keyframes({
   from: { transform: "translateX(-100%)" },
@@ -13,6 +14,9 @@ const styles = stylex.create({
     transform: "translateX(-100%)",
     height: "100%",
     width: "100%",
+  },
+  fillSun: {
+    backgroundImage: `linear-gradient(90deg, ${scene.brand}, ${scene.gold})`,
   },
   fillComplete: {
     transform: "translateX(0)",
@@ -33,11 +37,13 @@ export function ProgressFill({
   running,
   paused,
   complete,
+  sun,
   onComplete,
 }: {
   running: boolean
   paused: boolean
   complete: boolean
+  sun: boolean
   onComplete: () => void
 }) {
   return (
@@ -45,6 +51,7 @@ export function ProgressFill({
       onAnimationEnd={onComplete}
       sx={[
         styles.fill,
+        sun && styles.fillSun,
         complete && styles.fillComplete,
         running && styles.fillRunning,
         paused && styles.fillPaused,
