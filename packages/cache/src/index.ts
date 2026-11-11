@@ -40,6 +40,13 @@ export const cacheClient = {
       get: (id: string) => parseCache<Date>(client.get(`users:verification-email-sent-at:${id}`)),
     },
   },
+  medias: {
+    showcase: {
+      set: (key: string, value: unknown, ttl: number) =>
+        client.setex(`medias:showcase:${key}`, ttl, SuperJSON.stringify(value)),
+      get: <T>(key: string) => parseCache<T>(client.get(`medias:showcase:${key}`)),
+    },
+  },
   dashboard: {
     overview: {
       set: (key: string, value: unknown, ttl: number) =>
