@@ -50,7 +50,7 @@ export const createNotificationEvents = (url = env.DRAGONFLY_URL): NotificationE
       return () => {
         set.delete(listener)
 
-        if (set.size === 0) {
+        if (set.size === 0 && listeners.get(userId) === set) {
           listeners.delete(userId)
         }
       }
