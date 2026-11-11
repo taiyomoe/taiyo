@@ -63,7 +63,7 @@ jobs:
           5s --health-timeout 3s --health-retries 20
 
       rustfs:
-        image: rustfs/rustfs:latest
+        image: rustfs/rustfs:1.0.4
         ports: ["9000:9000"]
         env:
           RUSTFS_ACCESS_KEY: ci-access-key
