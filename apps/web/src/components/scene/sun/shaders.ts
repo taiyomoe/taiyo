@@ -153,7 +153,7 @@ void main() {
   float sparkle = glint * exp(-away * 1.3 / reach) * smoothstep(0.0, 0.08, away) * 0.9;
   light = over(light, vec3(1.0, 0.86, 0.55), min(sparkle, 1.0));
 
-  float alpha = light.a * smoothstep(0.985, 1.01, r) * (1.0 - smoothstep(uExtent * 0.86, uExtent, r));
+  float alpha = light.a * smoothstep(0.85, 0.9, r) * (1.0 - smoothstep(uExtent * 0.86, uExtent, r));
   gl_FragColor = vec4(light.rgb, clamp(alpha, 0.0, 1.0));
 }
 `

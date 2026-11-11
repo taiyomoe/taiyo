@@ -25,6 +25,7 @@ const VISIBLE_HEIGHT = 2 * CAMERA_Z * Math.tan(MathUtils.degToRad(FOV / 2))
 const BEAM_EXTENT = 3
 const BREATH_SECONDS = 5
 const AUTO_SPIN = 0.05
+const MAX_FLING = 3
 const INTERACTIVE = "a, button, input, textarea, select, label, [role='button']"
 
 export type SunScene = ReturnType<typeof createSunScene>
@@ -178,8 +179,13 @@ export const createSunScene = ({
     drag.x = event.clientX
     drag.y = event.clientY
     drag.time = event.timeStamp
-    drag.velocityX = dx / seconds
-    drag.velocityY = dy / seconds
+    // Smoothed and capped, so one fast last event does not fling the sun around.
+    const vx = drag.velocityX * 0.4 + (dx / seconds) * 0.6
+    const vy = drag.velocityY * 0.4 + (dy / seconds) * 0.6
+    const cap = Math.min(1, (drag.radius * MAX_FLING) / Math.max(Math.hypot(vx, vy), 1))
+
+    drag.velocityX = vx * cap
+    drag.velocityY = vy * cap
     drag.held = 0
     rotate(dx, dy)
   }
