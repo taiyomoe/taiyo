@@ -1,13 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
-import { breakpoints, font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useRef } from "react"
 import { Embers } from "@/components/scene/embers"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { AuthCitations } from "@/features/auth/components/scene/auth-citations"
 import { AuthSun } from "@/features/auth/components/scene/auth-sun"
-import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   root: {
@@ -17,7 +16,6 @@ const styles = stylex.create({
     backgroundColor: scene.night,
     display: { [breakpoints.lg]: "flex", default: "none" },
     flexDirection: "column",
-    justifyContent: "space-between",
     position: "relative",
     touchAction: "pan-y pinch-zoom",
   },
@@ -36,14 +34,6 @@ const styles = stylex.create({
     fontWeight: 700,
     letterSpacing: "-0.02em",
   },
-  tagline: {
-    color: `color-mix(in srgb, ${scene.paper} 78%, transparent)`,
-    fontFamily: font.mono,
-    fontSize: "13px",
-    position: "relative",
-    textShadow: `0 1px 2px ${scene.night}, 0 0 14px ${scene.night}, 0 0 28px ${scene.night}`,
-    zIndex: 3,
-  },
 })
 
 export const AuthScene = () => {
@@ -57,7 +47,6 @@ export const AuthScene = () => {
         <TaiyoLogoLockup sx={styles.lockup} />
       </Link>
       <AuthCitations />
-      <div sx={styles.tagline}>{m.auth_tagline()}</div>
     </div>
   )
 }

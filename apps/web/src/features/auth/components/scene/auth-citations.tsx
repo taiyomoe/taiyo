@@ -1,5 +1,3 @@
-import { QuoteDownIcon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useEffect, useState } from "react"
@@ -24,6 +22,7 @@ const CITATIONS = [
 ] satisfies Citation[]
 const styles = stylex.create({
   root: {
+    marginBlock: "auto",
     position: "relative",
     zIndex: 3,
     maxWidth: "32.5rem",
@@ -36,29 +35,6 @@ const styles = stylex.create({
     filter: "blur(10px)",
     position: "absolute",
     zIndex: -1,
-  },
-  badge: {
-    borderColor: `color-mix(in srgb, ${scene.paper} 10%, transparent)`,
-    borderRadius: radius.full,
-    borderStyle: "solid",
-    borderWidth: 1,
-    gap: "0.5rem",
-    paddingBlock: "0.375rem",
-    paddingInline: "0.8125rem",
-    alignItems: "center",
-    backdropFilter: "blur(6px)",
-    backgroundColor: `color-mix(in srgb, ${scene.paper} 6%, transparent)`,
-    color: scene.goldLight,
-    display: "inline-flex",
-    fontSize: "0.75rem",
-    fontWeight: 700,
-    letterSpacing: "0.04em",
-    textTransform: "uppercase",
-    marginBottom: "1.375rem",
-  },
-  badgeIcon: {
-    height: "0.875rem",
-    width: "0.875rem",
   },
   dots: {
     gap: "0.4375rem",
@@ -117,10 +93,6 @@ export const AuthCitations = () => {
       sx={styles.root}
     >
       <div sx={styles.scrim} />
-      <div sx={styles.badge}>
-        <HugeiconsIcon icon={QuoteDownIcon} {...stylex.props(styles.badgeIcon)} />
-        {m.auth_reviews_badge()}
-      </div>
       <AuthCitation
         key={index}
         quote={citation.quote()}
