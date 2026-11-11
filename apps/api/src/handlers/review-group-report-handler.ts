@@ -1,6 +1,8 @@
+import { groupReportAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -47,6 +49,7 @@ export const reviewGroupReportHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupReportAudit.REVIEW),
   withAuth("groupReport.review"),
   validateParam(paramSchema),
   validateJson(reviewSchema),
@@ -56,7 +59,7 @@ export const reviewGroupReportHandler = new Hono().post(
     const { status, note } = c.var.json
     const report = await db
       .selectFrom("groupReports")
-      .select(["id", "status"])
+      .select(["id", "groupId", "status"])
       .where("id", "=", id)
       .executeTakeFirst()
 
@@ -75,6 +78,8 @@ export const reviewGroupReportHandler = new Hono().post(
     if (reviewed === undefined) {
       return c.fail("GROUP_REPORT_NOT_PENDING")
     }
+
+    c.var.audit.set({ target: { groupId: report.groupId, status } })
 
     return c.ok({ id })
   },

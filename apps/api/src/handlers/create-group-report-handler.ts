@@ -1,7 +1,9 @@
+import { groupReportAudit } from "@taiyomoe/audit"
 import { GROUP_REPORT_REASONS, GROUP_REPORT_STATUSES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -50,6 +52,7 @@ export const createGroupReportHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupReportAudit.CREATE),
   withAuth("groupReport.create"),
   rateLimit({ prefix: "group-report", windowMs: 60_000, limit: 5 }),
   validateJson(createReportSchema),
@@ -70,6 +73,8 @@ export const createGroupReportHandler = new Hono().post(
     if (row === undefined) {
       return c.fail("GROUP_REPORT_EXISTS")
     }
+
+    c.var.audit.set({ target: { reportId: row.id, reason } })
 
     return c.ok({ id: row.id, status: row.status })
   },

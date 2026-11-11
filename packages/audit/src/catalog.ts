@@ -161,6 +161,13 @@ export const groupAudit = defineAuditCatalog("group", {
   CREATE: { target: "group", severity: "medium" },
   UPDATE: { target: "group", severity: "medium", requiresChanges: true },
   DELETE: { target: "group", severity: "high" },
+  FOLLOW: { target: "group", severity: "low" },
+  UNFOLLOW: { target: "group", severity: "low" },
+})
+
+export const groupReportAudit = defineAuditCatalog("group.report", {
+  CREATE: { target: "group", severity: "low" },
+  REVIEW: { target: "groupReport", severity: "medium" },
 })
 
 export const groupMemberAudit = defineAuditCatalog("group.member", {
@@ -254,6 +261,7 @@ export const auditCatalogs = [
   groupOwnershipAudit,
   groupInvitationAudit,
   groupCreationAudit,
+  groupReportAudit,
   listAudit,
   libraryAudit,
   historyAudit,
@@ -287,6 +295,7 @@ declare module "evlog" {
     groupOwnership: typeof groupOwnershipAudit
     groupInvitation: typeof groupInvitationAudit
     groupCreation: typeof groupCreationAudit
+    groupReport: typeof groupReportAudit
     list: typeof listAudit
     library: typeof libraryAudit
     history: typeof historyAudit

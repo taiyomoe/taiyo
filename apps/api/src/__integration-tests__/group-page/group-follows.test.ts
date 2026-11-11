@@ -1,4 +1,5 @@
 import { describe, expect } from "vitest"
+import { findAuditLogs } from "../helpers/audit"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { seedGroup } from "../helpers/seed"
@@ -36,6 +37,16 @@ describe("/groups/:id/follow", () => {
     })
 
     expect(removed.body).toMatchObject({ data: { following: false, followerCount: 0 } })
+
+    const follows = await findAuditLogs(services, "group.FOLLOW")
+    const unfollows = await findAuditLogs(services, "group.UNFOLLOW")
+
+    expect(follows.filter((log) => log.targetId === groupId)).toHaveLength(2)
+    expect(unfollows.find((log) => log.targetId === groupId)).toMatchObject({
+      outcome: "success",
+      actorId: userId,
+      targetType: "group",
+    })
   })
 
   test("requires a session", async ({ app, services }) => {

@@ -1,4 +1,5 @@
 import { describe, expect } from "vitest"
+import { findAuditLogs } from "../helpers/audit"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { seedGroup } from "../helpers/seed"
@@ -77,6 +78,19 @@ describe("group reports", () => {
     })
 
     expect(refiled.status).toBe(201)
+
+    const creations = await findAuditLogs(services, "group.report.CREATE")
+    const reviews = await findAuditLogs(services, "group.report.REVIEW")
+
+    expect(creations.filter((log) => log.targetId === groupId).map((log) => log.outcome)).toEqual([
+      "success",
+      "failure",
+      "success",
+    ])
+    expect(reviews.filter((log) => log.targetId === reportId)).toMatchObject([
+      { outcome: "success", actorId: moderator.userId, targetType: "groupReport" },
+      { outcome: "failure", reason: "GROUP_REPORT_NOT_PENDING" },
+    ])
   })
 
   test("rejects an unknown reason", async ({ app, services }) => {

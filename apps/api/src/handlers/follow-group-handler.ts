@@ -1,5 +1,7 @@
+import { groupAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getGroupFollow, groupFollowSchema } from "../utils/group-follows"
@@ -26,6 +28,7 @@ export const followGroupHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupAudit.FOLLOW),
   withAuth(),
   checkGroup(),
   async (c) => {
