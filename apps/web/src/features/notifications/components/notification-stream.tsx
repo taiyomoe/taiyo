@@ -25,6 +25,12 @@ export function NotificationStream() {
     }
     const lead = () =>
       new Promise<void>((resolve) => {
+        if (controller.signal.aborted) {
+          resolve()
+
+          return
+        }
+
         const source = new EventSource(getNotificationStreamUrl(), { withCredentials: true })
 
         source.addEventListener("ready", refresh)
