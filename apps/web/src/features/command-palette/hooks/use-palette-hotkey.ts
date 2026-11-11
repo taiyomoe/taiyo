@@ -6,8 +6,9 @@ const isEditable = (target: EventTarget | null) =>
 
 export function usePaletteHotkey({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || event.isComposing) {
+    // Browser autofill dispatches plain `keydown` events that carry no `key`.
+    const onKeyDown = (event: Event) => {
+      if (!(event instanceof KeyboardEvent) || event.defaultPrevented || event.isComposing) {
         return
       }
 
