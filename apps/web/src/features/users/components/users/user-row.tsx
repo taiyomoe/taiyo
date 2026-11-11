@@ -5,7 +5,7 @@ import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { ManagedUser } from "@/features/users/api/users"
 import { ListRow } from "@/components/layout/dashboard-page"
 import { TimeAgo } from "@/components/time/time-ago"
-import { UserName } from "@/components/user-name/user-name"
+import { UserLink } from "@/components/user-name/user-link"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { UserBanActions } from "@/features/users/components/users/user-ban-actions"
 import { UserMoreMenu } from "@/features/users/components/users/user-more-menu"
@@ -73,7 +73,7 @@ export function UserRow({
       <div sx={styles.main}>
         <div sx={styles.titleLine}>
           <span sx={styles.name}>
-            <UserName effect={user.nameEffect} name={user.displayUsername} />
+            <UserLink user={user} />
           </span>
           {user.banned ? (
             <Badge variant="error">

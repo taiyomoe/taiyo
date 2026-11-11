@@ -88,7 +88,7 @@ export function LogRow({
           if (
             window.getSelection()?.toString() === "" &&
             event.target instanceof Element &&
-            event.target.closest("button") === null
+            event.target.closest("button, a") === null
           ) {
             onToggle()
           }

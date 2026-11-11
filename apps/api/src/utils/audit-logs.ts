@@ -131,6 +131,10 @@ export const auditLogSchema = z.object({
         .string()
         .nullable()
         .meta({ description: "The user's equipped avatar border, for a user preview." }),
+      username: z
+        .string()
+        .nullable()
+        .meta({ description: "The user's username, for a user preview." }),
     })
     .nullable()
     .meta({

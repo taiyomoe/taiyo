@@ -4,7 +4,15 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { type UserProfile, useSetFollowing } from "@/features/users/api/profile"
 import { m } from "@/paraglide/messages"
 
-export function FollowButton({ profile, sx }: { profile: UserProfile; sx?: Sx }) {
+export function FollowButton({
+  profile,
+  size,
+  sx,
+}: {
+  profile: UserProfile
+  size?: "default" | "sm" | undefined
+  sx?: Sx
+}) {
   const setFollowing = useSetFollowing(profile)
   const following = profile.viewerFollows === true
 
@@ -13,6 +21,7 @@ export function FollowButton({ profile, sx }: { profile: UserProfile; sx?: Sx })
       onClick={() => {
         setFollowing.mutate(!following)
       }}
+      size={size ?? "default"}
       sx={sx}
       variant={following ? "outline" : "default"}
     >

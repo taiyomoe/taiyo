@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { DashboardOverview } from "@/features/dashboard/api/overview"
 import { AvatarBorder } from "@/components/avatar-border/avatar-border"
-import { UserName } from "@/components/user-name/user-name"
+import { UserLink } from "@/components/user-name/user-link"
 import { CardNote } from "@/features/dashboard/components/overview/card-note"
 import { formatTime } from "@/features/dashboard/lib/format"
 import { useNow } from "@/hooks/use-now"
@@ -100,7 +100,7 @@ export function RecentActivity({ overview: { recentActivity } }: { overview: Das
           </AvatarBorder>
           <p sx={styles.text}>
             <span sx={styles.actor}>
-              <UserName effect={activity.actor.nameEffect} name={activity.actor.displayUsername} />
+              <UserLink user={activity.actor} />
             </span>{" "}
             {describe(activity)}
           </p>

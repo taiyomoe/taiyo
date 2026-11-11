@@ -70,6 +70,3 @@ export const getTargetLabel = ({ preview, target }: AuditLogEntry) => {
 
   return typeof target?.name === "string" ? target.name : (target?.id ?? "")
 }
-
-export const getTargetNameEffect = ({ preview }: AuditLogEntry) =>
-  preview?.kind === "user" && typeof preview.label === "string" ? preview.nameEffect : null

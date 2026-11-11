@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
 import { AvatarBorder } from "@/components/avatar-border/avatar-border"
-import { UserName } from "@/components/user-name/user-name"
+import { UserLink } from "@/components/user-name/user-link"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -48,11 +48,7 @@ export function Uploader({ uploader, sx }: { uploader: LatestChapter["uploader"]
           </AvatarFallback>
         </Avatar>
       </AvatarBorder>
-      <UserName
-        effect={uploader.nameEffect}
-        name={uploader.displayUsername}
-        sx={styles.uploaderName}
-      />
+      <UserLink sx={styles.uploaderName} user={uploader} />
     </span>
   )
 }

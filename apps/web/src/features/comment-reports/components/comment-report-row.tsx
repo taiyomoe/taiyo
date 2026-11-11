@@ -5,6 +5,8 @@ import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { ReportedComment } from "@/features/comment-reports/api/comment-reports"
 import { ListRow } from "@/components/layout/dashboard-page"
 import { TimeAgo } from "@/components/time/time-ago"
+import { UserLink } from "@/components/user-name/user-link"
+import { renderWithName } from "@/components/user-name/with-name"
 import { CommentReportTarget } from "@/features/comment-reports/components/comment-report-target"
 import { CommentContent } from "@/features/comments/components/comment-content"
 import { COMMENT_REPORT_REASON_LABELS } from "@/features/comments/lib/report-reasons"
@@ -118,7 +120,7 @@ export function CommentReportRow({
             {comment.author === null ? null : (
               <>
                 <PersonAvatar person={comment.author} sx={styles.avatar} />
-                {comment.author.displayUsername}
+                <UserLink user={comment.author} />
               </>
             )}
             <TimeAgo date={comment.createdAt} />
@@ -143,7 +145,7 @@ export function CommentReportRow({
               <span sx={styles.reason}>{COMMENT_REPORT_REASON_LABELS[report.reason]()}</span>
               {report.details === null ? null : <span sx={styles.details}>“{report.details}”</span>}
               <span>
-                {m.comment_reports_reported_by({ user: report.reporter.displayUsername })} ·{" "}
+                {renderWithName(m.comment_reports_reported_by, report.reporter, { link: true })} ·{" "}
                 <TimeAgo date={report.createdAt} />
               </span>
             </li>

@@ -28,7 +28,7 @@ export function SuggestionMeta({ suggestion }: { suggestion: MediaSuggestionDeta
       <Uploader uploader={suggestion.author} />
       <TimeAgo date={suggestion.createdAt} />
       {suggestion.reviewer === null ? null : (
-        <span>{renderWithName(m.suggestion_reviewed_by, suggestion.reviewer)}</span>
+        <span>{renderWithName(m.suggestion_reviewed_by, suggestion.reviewer, { link: true })}</span>
       )}
     </div>
   )

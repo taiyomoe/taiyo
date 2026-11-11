@@ -88,7 +88,7 @@ export function ReviewForm({
           })}
         </DialogTitle>
         <DialogDescription>
-          {renderWithName(m.review_chapter_description, submission.uploader)}
+          {renderWithName(m.review_chapter_description, submission.uploader, { link: true })}
         </DialogDescription>
       </DialogHeader>
       <DialogPanel>
