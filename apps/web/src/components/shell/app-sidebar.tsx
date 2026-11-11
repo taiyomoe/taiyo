@@ -3,8 +3,7 @@ import type { ReactElement } from "react"
 import * as stylex from "@stylexjs/stylex"
 import {
   Bookmark,
-  Flame,
-  Forum,
+  Feed,
   History,
   Home,
   List,
@@ -12,7 +11,6 @@ import {
   Sliders,
   Sparkles,
   Store,
-  User,
   Users,
 } from "@taiyomoe/ui/components/icons"
 import {
@@ -22,6 +20,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarResizeHandle,
@@ -29,6 +28,8 @@ import {
 } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link, type LinkProps, useMatchRoute } from "@tanstack/react-router"
+import { useRandomTitle } from "@/features/advanced-search/hooks/use-random-title"
+import { DEFAULT_ADVANCED_SEARCH } from "@/features/advanced-search/lib/advanced-search"
 import { m } from "@/paraglide/messages"
 
 export type AppSidebarSection = {
@@ -37,38 +38,12 @@ export type AppSidebarSection = {
     label: () => string
     icon: (props: IconProps) => ReactElement
     to?: LinkProps["to"]
+    onClick?: () => void
+    pending?: boolean
+    soon?: boolean
   }>
 }
 
-const SECTIONS: AppSidebarSection[] = [
-  {
-    label: m.shell_nav_browse,
-    items: [
-      { label: m.shell_nav_home, icon: Home, to: "/" },
-      { label: m.shell_nav_advanced_search, icon: Sliders, to: "/titles" },
-      { label: m.shell_nav_recently_added, icon: Sparkles },
-      { label: m.shell_nav_popular_titles, icon: Flame },
-      { label: m.shell_nav_random_title, icon: Shuffle },
-    ],
-  },
-  {
-    label: m.shell_nav_my_library,
-    items: [
-      { label: m.shell_nav_follows, icon: Bookmark },
-      { label: m.shell_nav_reading_history, icon: History },
-      { label: m.shell_nav_my_lists, icon: List },
-    ],
-  },
-  {
-    label: m.shell_nav_community,
-    items: [
-      { label: m.shell_nav_groups, icon: Users, to: "/groups" },
-      { label: m.shell_nav_forums, icon: Forum },
-      { label: m.shell_nav_users, icon: User },
-      { label: m.shell_nav_shop, icon: Store, to: "/shop" },
-    ],
-  },
-]
 const styles = stylex.create({
   container: {
     height: "calc(100svh - var(--navbar-height))",
@@ -123,35 +98,81 @@ const styles = stylex.create({
   iconActive: {
     color: "inherit",
   },
+  soonBadge: {
+    paddingInline: "0.375rem",
+    backgroundColor: `color-mix(in srgb, ${colors.foreground} 8%, transparent)`,
+    color: colors.mutedForeground,
+    fontSize: "0.625rem",
+    fontWeight: 600,
+    letterSpacing: "0.06em",
+    textTransform: "uppercase",
+    transform: "translateY(-50%)",
+    right: "0.75rem",
+    top: "50%",
+  },
 })
 
-export function AppSidebar({
-  sections = SECTIONS,
-}: {
-  sections?: readonly AppSidebarSection[] | undefined
-}) {
+export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection[] | undefined }) {
   const matchRoute = useMatchRoute()
   const { setOpenMobile } = useSidebar()
+  const randomTitle = useRandomTitle()
+  const defaultSections: AppSidebarSection[] = [
+    {
+      label: m.shell_nav_browse,
+      items: [
+        { label: m.shell_nav_home, icon: Home, to: "/" },
+        { label: m.shell_nav_advanced_search, icon: Sliders, to: "/titles" },
+        { label: m.shell_nav_recently_added, icon: Sparkles, to: "/recently-added" },
+        {
+          label: m.shell_nav_random_title,
+          icon: Shuffle,
+          onClick: () => {
+            randomTitle.mutate(DEFAULT_ADVANCED_SEARCH)
+          },
+          pending: randomTitle.isPending,
+        },
+      ],
+    },
+    {
+      label: m.shell_nav_my_library,
+      items: [
+        { label: m.shell_nav_follows, icon: Bookmark },
+        { label: m.shell_nav_reading_history, icon: History },
+        { label: m.shell_nav_my_lists, icon: List },
+      ],
+    },
+    {
+      label: m.shell_nav_community,
+      items: [
+        { label: m.shell_nav_groups, icon: Users, to: "/groups" },
+        { label: m.shell_nav_feed, icon: Feed, soon: true },
+        { label: m.shell_nav_shop, icon: Store, to: "/shop" },
+      ],
+    },
+  ]
 
   return (
     <Sidebar sx={styles.container}>
       <SidebarContent sx={styles.content}>
-        {sections.map((section, index) => (
+        {(sections ?? defaultSections).map((section, index) => (
           <SidebarGroup key={section.label?.() ?? index} sx={styles.group}>
             {section.label === undefined ? null : (
               <SidebarGroupLabel sx={styles.groupLabel}>{section.label()}</SidebarGroupLabel>
             )}
             <SidebarGroupContent>
               <SidebarMenu sx={styles.menu}>
-                {section.items.map(({ label, icon: Icon, to }) => {
+                {section.items.map(({ label, icon: Icon, to, onClick, pending, soon }) => {
                   const isActive = to !== undefined && Boolean(matchRoute({ to }))
 
                   return (
                     <SidebarMenuItem key={label()}>
                       <SidebarMenuButton
+                        aria-busy={pending}
+                        disabled={soon === true || pending === true}
                         isActive={isActive}
                         onClick={() => {
                           setOpenMobile(false)
+                          onClick?.()
                         }}
                         render={to === undefined ? undefined : <Link to={to} />}
                         sx={[styles.button, isActive && styles.buttonActive]}
@@ -162,6 +183,11 @@ export function AppSidebar({
                         />
                         <span>{label()}</span>
                       </SidebarMenuButton>
+                      {soon === true ? (
+                        <SidebarMenuBadge sx={styles.soonBadge}>
+                          {m.shell_nav_soon()}
+                        </SidebarMenuBadge>
+                      ) : null}
                     </SidebarMenuItem>
                   )
                 })}

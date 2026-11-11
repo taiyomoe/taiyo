@@ -112,7 +112,7 @@ test.describe("command palette", () => {
     await visit(page, "/")
     await openPalette(page)
 
-    await expect(palette(page).getByText("Recent")).toBeVisible()
+    await expect(palette(page).getByText("Recent", { exact: true })).toBeVisible()
     await expect(option(page, new RegExp(TITLE))).toBeVisible()
   })
 

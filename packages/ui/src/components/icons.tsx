@@ -9,7 +9,7 @@ import {
   Book02Icon,
   LanguageSkillIcon,
   Bookmark02Icon,
-  BubbleChatIcon,
+  NewsIcon,
   Clock01Icon,
   GridViewIcon,
   FireIcon,
@@ -225,7 +225,7 @@ export const List: (props: IconProps) => React.ReactElement = icon(LeftToRightLi
 
 export const Users: (props: IconProps) => React.ReactElement = icon(UserGroupIcon)
 
-export const Forum: (props: IconProps) => React.ReactElement = icon(BubbleChatIcon)
+export const Feed: (props: IconProps) => React.ReactElement = icon(NewsIcon)
 
 export const User: (props: IconProps) => React.ReactElement = icon(UserIcon)
 
