@@ -57,11 +57,13 @@ const styles = stylex.create({
   },
   title: {
     overflow: "hidden",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
+    display: "-webkit-box",
     fontSize: "0.875rem",
     fontWeight: 600,
     lineHeight: 1.35,
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
+    overflowWrap: "anywhere",
   },
   text: {
     overflow: "hidden",
