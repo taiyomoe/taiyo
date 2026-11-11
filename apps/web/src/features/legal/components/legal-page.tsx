@@ -18,7 +18,9 @@ const styles = stylex.create({
   page: {
     backgroundColor: scene.night,
     color: scene.paper,
-    overflowX: "hidden",
+    // `clip`, not `hidden`: a hidden overflow makes the page a scroll container
+    // and the sticky table of contents would stick to it instead of the viewport.
+    overflowX: "clip",
   },
   body: {
     gap: "clamp(2.5rem,5vw,4rem)",
