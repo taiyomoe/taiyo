@@ -148,8 +148,8 @@ importers:
   apps/storybook:
     dependencies:
       '@hugeicons/core-free-icons':
-        specifier: ^4.3.5
-        version: 4.3.5
+        specifier: ^4.4.0
+        version: 4.4.0
       '@hugeicons/react':
         specifier: ^1.1.10
         version: 1.1.10(react@19.3.1)
@@ -221,8 +221,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.2(@standard-schema/spec@1.1.0)(ajv@8.20.0)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1))(valibot@1.5.0(typescript@7.0.2))(zod@4.6.7)
       '@hugeicons/core-free-icons':
-        specifier: ^4.3.5
-        version: 4.3.5
+        specifier: ^4.4.0
+        version: 4.4.0
       '@hugeicons/react':
         specifier: ^1.1.10
         version: 1.1.10(react@19.3.1)
@@ -709,8 +709,8 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0
       '@hugeicons/core-free-icons':
-        specifier: ^4.3.5
-        version: 4.3.5
+        specifier: ^4.4.0
+        version: 4.4.0
       '@hugeicons/react':
         specifier: ^1.1.10
         version: 1.1.10(react@19.3.1)
@@ -1564,8 +1564,8 @@ packages:
       zod:
         optional: true
 
-  '@hugeicons/core-free-icons@4.3.5':
-    resolution: {integrity: sha512-Sv+NjHRPnQk+yZsGCMcGznCHdTfJR9PMMOEKcJYAQU4gy90dmlc9PwdtvYOImBZIjiheMsTLL5eMn2DmHxUiUg==}
+  '@hugeicons/core-free-icons@4.4.0':
+    resolution: {integrity: sha512-7Mz8bmGoY6tZ6l3C2TXwNMLVSr0I8HPwjjFIERAuJFj3rWwLxdF2ZLkDqdrVuEE1dx5b/VXyIsP4WoSU6Q40KQ==}
 
   '@hugeicons/react@1.1.10':
     resolution: {integrity: sha512-9tAsd92yMVVGP+E+d8cM+wc0VnXuYZHNbWQi7TOe8k2neawmhiaFmVFbzyruejhOMa197/LbgvSED32ayUo3ZA==}
@@ -7455,7 +7455,7 @@ snapshots:
       valibot: 1.5.0(typescript@7.0.2)
       zod: 4.6.7
 
-  '@hugeicons/core-free-icons@4.3.5': {}
+  '@hugeicons/core-free-icons@4.4.0': {}
 
   '@hugeicons/react@1.1.10(react@19.3.1)':
     dependencies:
