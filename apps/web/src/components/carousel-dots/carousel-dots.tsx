@@ -1,18 +1,14 @@
-import type { UseEmblaCarouselType } from "embla-carousel-react"
+import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
-import type { FeaturedMedia } from "@/features/media/api/medias"
-import { ProgressFill } from "@/features/home/components/featured/progress-fill"
-import { m } from "@/paraglide/messages"
+import { ProgressFill } from "@/components/carousel-dots/progress-fill"
+import { scene } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   dots: {
     gap: "0.125rem",
     alignItems: "center",
     display: "flex",
-    position: "absolute",
-    bottom: { default: "0.375rem", [breakpoints.md]: "0.5rem" },
-    right: { default: "1rem", [breakpoints.md]: "2.25rem" },
   },
   dot: {
     borderStyle: "none",
@@ -47,47 +43,70 @@ const styles = stylex.create({
     height: "0.5rem",
     width: "0.5rem",
   },
+  pillSun: {
+    backgroundColor: {
+      default: `color-mix(in srgb, ${scene.paper} 22%, transparent)`,
+      ":is(:hover > *)": `color-mix(in srgb, ${scene.paper} 42%, transparent)`,
+    },
+    outlineColor: scene.gold,
+  },
   pillActive: {
     width: "2rem",
   },
 })
 
-export function FeaturedDots({
-  medias,
+/**
+ * Pills for a carousel: the current one widens and fills up while autoplay
+ * runs, and `onComplete` fires when it is full. `sun` paints them in the
+ * brand-scene colours for the night backdrops.
+ */
+export function CarouselDots({
+  items,
   selected,
-  emblaApi,
+  onSelect,
+  onComplete,
   autoplay,
   paused,
   reducedMotion,
+  variant = "default",
+  sx,
 }: {
-  medias: FeaturedMedia[]
+  items: Array<{ key: string; label: string }>
   selected: number
-  emblaApi: UseEmblaCarouselType[1]
+  onSelect: (index: number) => void
+  onComplete: () => void
   autoplay: boolean
   paused: boolean
   reducedMotion: boolean
+  variant?: "default" | "sun"
+  sx?: Sx
 }) {
+  const sun = variant === "sun"
+
   return (
-    <div sx={styles.dots}>
-      {medias.map((media, index) => {
+    <div sx={[styles.dots, sx]}>
+      {items.map((item, index) => {
         const active = index === selected
 
         return (
           <button
-            key={media.id}
+            key={item.key}
             aria-current={active}
-            aria-label={m.home_featured_go_to({ title: media.title ?? index + 1 })}
-            onClick={() => emblaApi?.goTo(index)}
+            aria-label={item.label}
+            onClick={() => {
+              onSelect(index)
+            }}
             sx={styles.dot}
             type="button"
           >
-            <span sx={[styles.pill, active && styles.pillActive]}>
+            <span sx={[styles.pill, sun && styles.pillSun, active && styles.pillActive]}>
               {active ? (
                 <ProgressFill
                   complete={reducedMotion}
-                  onComplete={() => emblaApi?.goToNext()}
+                  onComplete={onComplete}
                   paused={paused}
                   running={autoplay}
+                  sun={sun}
                 />
               ) : null}
             </span>

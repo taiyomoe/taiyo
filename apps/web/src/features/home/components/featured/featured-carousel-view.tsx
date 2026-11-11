@@ -1,8 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react"
 import { type FocusEvent, type PointerEvent, useEffect, useState } from "react"
 import type { FeaturedMedia } from "@/features/media/api/medias"
-import { FeaturedDots } from "@/features/home/components/featured/featured-dots"
+import { CarouselDots } from "@/components/carousel-dots/carousel-dots"
 import { FeaturedSlide } from "@/features/home/components/featured/featured-slide"
 import { featuredStyles } from "@/features/home/components/featured/featured-styles"
 import { useDocumentHidden } from "@/features/home/hooks/use-document-hidden"
@@ -18,6 +19,11 @@ const styles = stylex.create({
   container: {
     display: "flex",
     touchAction: "pan-y pinch-zoom",
+  },
+  dots: {
+    position: "absolute",
+    bottom: { default: "0.375rem", [breakpoints.md]: "0.5rem" },
+    right: { default: "1rem", [breakpoints.md]: "2.25rem" },
   },
 })
 
@@ -90,13 +96,18 @@ export function FeaturedCarouselView({ medias }: { medias: FeaturedMedia[] }) {
         </div>
       </div>
       {medias.length > 1 ? (
-        <FeaturedDots
+        <CarouselDots
           autoplay={autoplay}
-          emblaApi={emblaApi}
-          medias={medias}
+          items={medias.map((media, index) => ({
+            key: media.id,
+            label: m.home_featured_go_to({ title: media.title ?? index + 1 }),
+          }))}
+          onComplete={() => emblaApi?.goToNext()}
+          onSelect={(index) => emblaApi?.goTo(index)}
           paused={paused}
           reducedMotion={reducedMotion}
           selected={selected}
+          sx={styles.dots}
         />
       ) : null}
     </section>

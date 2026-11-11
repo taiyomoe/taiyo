@@ -59,7 +59,12 @@ export function useReaderKeyboard({
       return undefined
     }
 
-    const onKeyDown = (event: KeyboardEvent) => {
+    // Browser autofill dispatches plain `keydown` events that carry no `key`.
+    const onKeyDown = (event: Event) => {
+      if (!(event instanceof KeyboardEvent)) {
+        return
+      }
+
       const key = event.key.length === 1 ? event.key.toLowerCase() : event.key
       const action = event.shiftKey && key === " " ? "prev" : KEYS[key]
 

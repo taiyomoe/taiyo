@@ -29,6 +29,18 @@ export const featuredMediasQueryOptions = (contentRatings: readonly ContentRatin
 
 export type FeaturedMedia = InferResponseType<typeof api.medias.featured.$get, 200>["data"][number]
 
+// The API caches this list for an hour, so the browser has no reason to refetch
+// it within a visit either.
+export const showcaseMediasQueryOptions = () =>
+  queryOptions({
+    queryKey: ["medias", "showcase"],
+    queryFn: async ({ signal }) =>
+      (await unwrapEnvelope(await api.medias.showcase.$get({}, { init: { signal } }))).data,
+    staleTime: 60 * 60 * 1000,
+  })
+
+export type ShowcaseMedia = InferResponseType<typeof api.medias.showcase.$get, 200>["data"][number]
+
 export const mediaQueryOptions = (mediaId: string) =>
   queryOptions({
     queryKey: ["medias", mediaId],

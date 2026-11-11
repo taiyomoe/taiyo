@@ -1,11 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
-import { font } from "@taiyomoe/ui/styles/tokens.stylex"
-import { scene } from "@/components/scene/scene.stylex"
+import { scene, sceneFont } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   title: {
     color: scene.paper,
-    fontFamily: font.heading,
+    fontFamily: sceneFont.display,
     fontSize: "clamp(30px, 3.4vw, 42px)",
     fontWeight: 700,
     letterSpacing: "-0.02em",

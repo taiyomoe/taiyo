@@ -4,6 +4,8 @@ import type { SocialProvider } from "@/lib/auth"
 import { scene } from "@/components/scene/scene.stylex"
 import { DiscordButton } from "@/features/auth/components/discord-button"
 import { GoogleButton } from "@/features/auth/components/google-button"
+import { LastUsed } from "@/features/auth/components/last-used"
+import { useLastLoginMethod } from "@/features/auth/hooks/use-last-login-method"
 
 const styles = stylex.create({
   root: {
@@ -51,30 +53,38 @@ export const AuthSocialButtons = ({
   pending: SocialProvider | null
   disabled: boolean
   onSelect: (provider: SocialProvider) => void
-}) => (
-  <div sx={styles.root}>
-    <div sx={styles.providers}>
-      <GoogleButton
-        sx={styles.provider}
-        loading={pending === "google"}
-        disabled={disabled}
-        onClick={() => {
-          onSelect("google")
-        }}
-      />
-      <DiscordButton
-        sx={styles.provider}
-        loading={pending === "discord"}
-        disabled={disabled}
-        onClick={() => {
-          onSelect("discord")
-        }}
-      />
+}) => {
+  const lastUsed = useLastLoginMethod()
+
+  return (
+    <div sx={styles.root}>
+      <div sx={styles.providers}>
+        <LastUsed active={lastUsed === "google"}>
+          <GoogleButton
+            sx={styles.provider}
+            loading={pending === "google"}
+            disabled={disabled}
+            onClick={() => {
+              onSelect("google")
+            }}
+          />
+        </LastUsed>
+        <LastUsed active={lastUsed === "discord"}>
+          <DiscordButton
+            sx={styles.provider}
+            loading={pending === "discord"}
+            disabled={disabled}
+            onClick={() => {
+              onSelect("discord")
+            }}
+          />
+        </LastUsed>
+      </div>
+      <div sx={styles.divider}>
+        <span sx={styles.rule} />
+        <span sx={styles.label}>{label}</span>
+        <span sx={styles.rule} />
+      </div>
     </div>
-    <div sx={styles.divider}>
-      <span sx={styles.rule} />
-      <span sx={styles.label}>{label}</span>
-      <span sx={styles.rule} />
-    </div>
-  </div>
-)
+  )
+}

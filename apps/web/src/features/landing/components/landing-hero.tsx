@@ -1,14 +1,12 @@
 import { ArrowDown01Icon, Compass01Icon, Sun03Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
-import { font, text } from "@taiyomoe/ui/styles/tokens.stylex"
-import { type MouseEvent, useState } from "react"
+import { font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { type PointerEvent, useRef, useState } from "react"
 import { GhostAnchor } from "@/components/buttons/ghost-anchor"
 import { SunLink } from "@/components/buttons/sun-link"
 import { Embers } from "@/components/scene/embers"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
-import { Stars } from "@/components/scene/stars"
-import { Eyebrow } from "@/features/landing/components/eyebrow"
 import { LandingSun, type Parallax } from "@/features/landing/components/landing-sun"
 import { m } from "@/paraglide/messages"
 
@@ -23,6 +21,7 @@ const styles = stylex.create({
     justifyContent: "center",
     position: "relative",
     textAlign: "center",
+    touchAction: "pan-y pinch-zoom",
     minHeight: "100vh",
     paddingBottom: "clamp(10rem, 28vh, 20rem)",
     paddingTop: "7.5rem",
@@ -75,20 +74,6 @@ const styles = stylex.create({
     justifyContent: "center",
     marginTop: "0.375rem",
   },
-  rating: {
-    gap: "0.625rem",
-    alignItems: "center",
-    display: "flex",
-    marginTop: "0.5rem",
-  },
-  ratingLabel: {
-    color: `color-mix(in srgb, ${scene.paper} 60%, transparent)`,
-    fontSize: text.base,
-  },
-  ratingScore: {
-    color: scene.paper,
-    fontWeight: font.weightBold,
-  },
   scrollCue: {
     insetInline: 0,
     color: `color-mix(in srgb, ${scene.paper} 40%, transparent)`,
@@ -101,8 +86,15 @@ const styles = stylex.create({
 })
 
 export const LandingHero = () => {
+  const heroRef = useRef<HTMLElement>(null)
   const [parallax, setParallax] = useState<Parallax>({ x: 0, y: 0 })
-  const onMouseMove = (event: MouseEvent<HTMLElement>) => {
+  // Pointer, not mouse, events: dragging the sun cancels the mouse events, and
+  // the parallax would then jump to the pointer when the drag ends.
+  const onPointerMove = (event: PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== "mouse") {
+      return
+    }
+
     const rect = event.currentTarget.getBoundingClientRect()
 
     setParallax({
@@ -112,13 +104,12 @@ export const LandingHero = () => {
   }
 
   return (
-    <section sx={styles.hero} onMouseMove={onMouseMove}>
-      <LandingSun parallax={parallax} />
+    <section ref={heroRef} sx={styles.hero} onPointerMove={onPointerMove}>
+      <LandingSun parallax={parallax} surfaceRef={heroRef} />
       <Embers count={30} />
       <div sx={styles.scrim} />
 
       <div sx={styles.content}>
-        <Eyebrow centered>{m.landing_hero_eyebrow()}</Eyebrow>
         <h1 sx={styles.title}>{m.landing_hero_title()}</h1>
         <p sx={styles.subtitle}>{m.landing_hero_subtitle()}</p>
         <div sx={styles.actions}>
@@ -130,13 +121,6 @@ export const LandingHero = () => {
             <HugeiconsIcon icon={Compass01Icon} size={19} />
             {m.landing_hero_cta_secondary()}
           </GhostAnchor>
-        </div>
-        <div sx={styles.rating}>
-          <Stars filled={5} size={16} />
-          <span sx={styles.ratingLabel}>
-            <b sx={styles.ratingScore}>{m.landing_hero_rating_score()}</b>{" "}
-            {m.landing_hero_rating_label()}
-          </span>
         </div>
       </div>
 

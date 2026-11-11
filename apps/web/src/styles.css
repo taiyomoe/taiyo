@@ -33,32 +33,6 @@ html:has([data-app-shell]) body {
   width: 1.25rem !important;
 }
 
-@keyframes scene-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes scene-ray-pulse {
-  0%,
-  100% {
-    transform: scaleY(var(--ray-rest));
-  }
-  50% {
-    transform: scaleY(var(--ray-peak));
-  }
-}
-
-@keyframes scene-sun-breathe {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.04);
-  }
-}
-
 @keyframes scene-aurora {
   0% {
     transform: translate(-10%, 0);

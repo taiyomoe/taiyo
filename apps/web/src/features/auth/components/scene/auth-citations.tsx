@@ -1,10 +1,10 @@
-import { QuoteDownIcon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
-import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useEffect, useState } from "react"
-import { scene } from "@/components/scene/scene.stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useState } from "react"
+import { CarouselDots } from "@/components/carousel-dots/carousel-dots"
 import { AuthCitation } from "@/features/auth/components/scene/auth-citation"
+import { useDocumentHidden } from "@/features/home/hooks/use-document-hidden"
+import { usePrefersReducedMotion } from "@/features/home/hooks/use-prefers-reduced-motion"
 import { m } from "@/paraglide/messages"
 
 type Citation = {
@@ -24,6 +24,7 @@ const CITATIONS = [
 ] satisfies Citation[]
 const styles = stylex.create({
   root: {
+    marginBlock: "auto",
     position: "relative",
     zIndex: 3,
     maxWidth: "32.5rem",
@@ -37,69 +38,17 @@ const styles = stylex.create({
     position: "absolute",
     zIndex: -1,
   },
-  badge: {
-    borderColor: `color-mix(in srgb, ${scene.paper} 10%, transparent)`,
-    borderRadius: radius.full,
-    borderStyle: "solid",
-    borderWidth: 1,
-    gap: "0.5rem",
-    paddingBlock: "0.375rem",
-    paddingInline: "0.8125rem",
-    alignItems: "center",
-    backdropFilter: "blur(6px)",
-    backgroundColor: `color-mix(in srgb, ${scene.paper} 6%, transparent)`,
-    color: scene.goldLight,
-    display: "inline-flex",
-    fontSize: "0.75rem",
-    fontWeight: 700,
-    letterSpacing: "0.04em",
-    textTransform: "uppercase",
-    marginBottom: "1.375rem",
-  },
-  badgeIcon: {
-    height: "0.875rem",
-    width: "0.875rem",
-  },
   dots: {
-    gap: "0.4375rem",
-    display: "flex",
-    marginTop: "1.625rem",
-  },
-  dot: {
-    padding: 0,
-    borderRadius: radius.full,
-    borderStyle: "none",
-    backgroundColor: `color-mix(in srgb, ${scene.paper} 22%, transparent)`,
-    cursor: "pointer",
-    transitionDuration: "200ms",
-    transitionProperty: "width",
-    height: "0.5rem",
-    width: "0.5rem",
-  },
-  dotCurrent: {
-    backgroundImage: `linear-gradient(90deg, ${scene.brand}, ${scene.gold})`,
-    width: "1.625rem",
+    marginLeft: { default: "-0.1875rem", [breakpoints.md]: "-0.25rem" },
+    marginTop: "1.125rem",
   },
 })
 
 export const AuthCitations = () => {
   const [index, setIndex] = useState(0)
-  const [paused, setPaused] = useState(false)
-
-  useEffect(() => {
-    if (paused) {
-      return undefined
-    }
-
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % CITATIONS.length)
-    }, 4800)
-
-    return () => {
-      clearInterval(timer)
-    }
-  }, [paused])
-
+  const [hovered, setHovered] = useState(false)
+  const reducedMotion = usePrefersReducedMotion()
+  const hidden = useDocumentHidden()
   const citation = CITATIONS[index]
 
   if (!citation) {
@@ -109,18 +58,14 @@ export const AuthCitations = () => {
   return (
     <div
       onMouseEnter={() => {
-        setPaused(true)
+        setHovered(true)
       }}
       onMouseLeave={() => {
-        setPaused(false)
+        setHovered(false)
       }}
       sx={styles.root}
     >
       <div sx={styles.scrim} />
-      <div sx={styles.badge}>
-        <HugeiconsIcon icon={QuoteDownIcon} {...stylex.props(styles.badgeIcon)} />
-        {m.auth_reviews_badge()}
-      </div>
       <AuthCitation
         key={index}
         quote={citation.quote()}
@@ -128,19 +73,22 @@ export const AuthCitations = () => {
         role={citation.role()}
         who={citation.who}
       />
-      <div sx={styles.dots}>
-        {CITATIONS.map((item, dot) => (
-          <button
-            key={item.who}
-            type="button"
-            aria-label={m.auth_review_aria({ number: dot + 1 })}
-            onClick={() => {
-              setIndex(dot)
-            }}
-            sx={[styles.dot, dot === index && styles.dotCurrent]}
-          />
-        ))}
-      </div>
+      <CarouselDots
+        autoplay={!reducedMotion}
+        items={CITATIONS.map((item, dot) => ({
+          key: item.who,
+          label: m.auth_review_aria({ number: dot + 1 }),
+        }))}
+        onComplete={() => {
+          setIndex((current) => (current + 1) % CITATIONS.length)
+        }}
+        onSelect={setIndex}
+        paused={hovered || hidden}
+        reducedMotion={reducedMotion}
+        selected={index}
+        sx={styles.dots}
+        variant="sun"
+      />
     </div>
   )
 }

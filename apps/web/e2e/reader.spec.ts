@@ -99,8 +99,10 @@ test.describe("reader, signed out", () => {
 
   test("opens manhwa as a long strip and keeps reading into the next chapter", async ({ page }) => {
     await openReader(page, MANHWA.chapters[0])
-    await expect(pageImage(page, 1)).toBeVisible()
-    await expect(pageImage(page, 3)).toBeAttached()
+    // The strip appends the next chapter as soon as it loads, and its pages
+    // carry the same names, so these look at the first chapter only.
+    await expect(pageImage(page, 1).first()).toBeVisible()
+    await expect(pageImage(page, 3).first()).toBeAttached()
 
     const divider = page.getByText("End of Ch. 1", { exact: true })
 
