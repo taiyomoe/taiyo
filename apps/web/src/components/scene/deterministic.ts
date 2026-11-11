@@ -1,7 +1,7 @@
 /**
- * Deterministic pseudo-randomness for the scene's generated geometry (embers,
- * sun rays). Math.random() would diverge between the server and the browser and
- * React would flag a hydration mismatch.
+ * Deterministic pseudo-randomness for the scene's generated geometry (embers).
+ * Math.random() would diverge between the server and the browser and React
+ * would flag a hydration mismatch.
  *
  * `round` exists for the same reason: the browser re-serialises long floats
  * (5.721816935692914% -> 5.72182%) so the SSR string and the client's stop
@@ -14,5 +14,3 @@ export const rand = (seed: number) => {
 }
 
 export const round = (n: number) => Math.round(n * 100) / 100
-
-export const lerp = (from: number, to: number, t: number) => round(from + (to - from) * t)
