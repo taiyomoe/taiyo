@@ -70,15 +70,16 @@ run in a throwaway scratch directory and its output was merged in here.
 
 ## Environment variables
 
-Four, all client-side and all validated in `src/env/client.ts` (`@t3-oss/env-core`,
+Five, all client-side and all validated in `src/env/client.ts` (`@t3-oss/env-core`,
 `clientPrefix: "VITE_"`). See `.env.example`:
 
-| Variable                  | Source                      | Purpose                                       |
-| ------------------------- | --------------------------- | --------------------------------------------- |
-| `VITE_BETTER_AUTH_URL`    | `@taiyomoe/auth/env-client` | Where the Better Auth handler lives.          |
-| `VITE_TURNSTILE_SITE_KEY` | `@taiyomoe/auth/env-client` | Turnstile widget key for auth forms.          |
-| `VITE_SUPPORT_EMAIL`      | this app (defaulted)        | Contact address in legal copy.                |
-| `VITE_API_URL`            | this app (required)         | Base URL of the Taiyō API, no trailing slash. |
+| Variable                  | Source                      | Purpose                                        |
+| ------------------------- | --------------------------- | ---------------------------------------------- |
+| `VITE_BETTER_AUTH_URL`    | `@taiyomoe/auth/env-client` | Where the Better Auth handler lives.           |
+| `VITE_TURNSTILE_SITE_KEY` | `@taiyomoe/auth/env-client` | Turnstile widget key for auth forms.           |
+| `VITE_SUPPORT_EMAIL`      | this app (defaulted)        | Contact address in legal copy.                 |
+| `VITE_API_URL`            | this app (required)         | Base URL of the Taiyō API, no trailing slash.  |
+| `VITE_DISCORD_INVITE_URL` | this app (optional)         | Discord invite in the footer; hidden if unset. |
 
 Every key is registered in root `turbo.json` `globalEnv`; add new ones there too,
 or Turbo's cache will not notice them. If you later add server functions that need
