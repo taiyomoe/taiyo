@@ -8,95 +8,92 @@ import { range } from "remeda"
 import { TimeAgo } from "@/components/time/time-ago"
 import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
 import { groupChaptersQueryOptions } from "@/features/groups/api/groups"
-import { groupStyles } from "@/features/groups/components/group/group-styles"
+import { groupProfileStyles } from "@/features/groups/components/group/profile/group-profile-styles"
 import { GROUP_LATEST_RELEASES } from "@/features/groups/lib/group-page"
 import { Cover } from "@/features/media/components/cover"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
+const ROW_BLEED = "0.75rem"
 const styles = stylex.create({
-  section: {
-    gap: "0.875rem",
-    display: "flex",
-    flexDirection: "column",
-  },
-  header: {
-    alignItems: "baseline",
-    display: "flex",
-    justifyContent: "space-between",
-  },
   seeAll: {
     textDecoration: "none",
     color: {
       default: colors.primary,
       ":hover": `color-mix(in srgb, ${colors.primary} 75%, ${colors.foreground})`,
     },
-    fontSize: "0.9375rem",
+    fontSize: "0.875rem",
     fontWeight: 600,
     transitionDuration: motion.enter,
     transitionProperty: "color",
   },
-  grid: {
+  list: {
     margin: 0,
     padding: 0,
-    gap: "0.75rem",
     listStyle: "none",
+    columnGap: "1.5rem",
     display: "grid",
     gridTemplateColumns: {
       default: "minmax(0, 1fr)",
-      [breakpoints.sm]: "repeat(2, minmax(0, 1fr))",
-      [breakpoints.xl]: "repeat(4, minmax(0, 1fr))",
+      [breakpoints.md]: "repeat(2, minmax(0, 1fr))",
     },
   },
-  card: {
-    padding: "0.75rem",
+  row: {
+    borderRadius: radius.lg,
     gap: "0.875rem",
+    marginInline: `calc(-1 * ${ROW_BLEED})`,
+    paddingBlock: "0.5rem",
+    paddingInline: ROW_BLEED,
     textDecoration: "none",
     alignItems: "center",
+    backgroundColor: {
+      default: "transparent",
+      ":hover": `color-mix(in srgb, ${colors.foreground} 5%, transparent)`,
+    },
     color: colors.foreground,
     display: "flex",
     outlineColor: colors.ring,
-    outlineOffset: 2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    transform: { default: "none", ":hover": "translateY(-1px)" },
     transitionDuration: motion.enter,
-    transitionProperty: "transform",
+    transitionProperty: "background-color",
   },
   cover: {
     borderRadius: radius.md,
-    width: "3rem",
+    flexShrink: 0,
+    width: "2.5rem",
   },
   text: {
     gap: "0.125rem",
     display: "flex",
     flexDirection: "column",
+    flexGrow: 1,
     minWidth: 0,
   },
   title: {
     overflow: "hidden",
     fontSize: "0.9375rem",
-    fontWeight: 600,
+    fontWeight: 500,
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
   chapter: {
-    color: colors.primary,
-    fontFamily: font.mono,
+    color: colors.mutedForeground,
     fontSize: "0.8125rem",
-    fontWeight: 600,
   },
   time: {
+    color: colors.mutedForeground,
+    flexShrink: 0,
     fontFamily: font.mono,
     fontSize: "0.75rem",
   },
   skeleton: {
-    borderRadius: radius.xl,
-    height: "5.75rem",
+    borderRadius: radius.lg,
+    height: "3.75rem",
   },
 })
 
-export function LatestReleases({ groupId }: { groupId: string }) {
+export function GroupRecentReleases({ groupId }: { groupId: string }) {
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const latest = useQuery(
     groupChaptersQueryOptions(groupId, contentRatings, 1, GROUP_LATEST_RELEASES),
@@ -107,9 +104,9 @@ export function LatestReleases({ groupId }: { groupId: string }) {
   }
 
   return (
-    <section sx={styles.section}>
-      <div sx={styles.header}>
-        <h3 sx={groupStyles.heading}>{m.group_latest_releases()}</h3>
+    <section sx={groupProfileStyles.section}>
+      <div sx={groupProfileStyles.sectionHead}>
+        <h2 sx={groupProfileStyles.sectionTitle}>{m.group_latest_releases()}</h2>
         <Link
           params={{ groupId }}
           search={{ tab: "chapters" }}
@@ -119,7 +116,7 @@ export function LatestReleases({ groupId }: { groupId: string }) {
           {m.group_see_all()}
         </Link>
       </div>
-      <ul sx={styles.grid}>
+      <ul sx={styles.list}>
         {latest.data === undefined
           ? range(0, GROUP_LATEST_RELEASES).map((index) => (
               <li key={index}>
@@ -129,16 +126,16 @@ export function LatestReleases({ groupId }: { groupId: string }) {
           : latest.data.data.map((chapter) => (
               <li key={chapter.id}>
                 <Link
-                  params={{ mediaId: chapter.mediaId }}
-                  to="/media/$mediaId"
-                  {...stylex.props(groupStyles.card, styles.card)}
+                  params={{ chapterId: chapter.id }}
+                  to="/chapters/$chapterId"
+                  {...stylex.props(styles.row)}
                 >
                   <Cover src={chapter.mediaCoverUrl} sx={styles.cover} />
                   <span sx={styles.text}>
                     <span sx={styles.title}>{chapter.mediaTitle ?? m.media_untitled()}</span>
                     <span sx={styles.chapter}>{getChapterLabel(chapter)}</span>
-                    <TimeAgo date={chapter.createdAt} sx={styles.time} />
                   </span>
+                  <TimeAgo date={chapter.createdAt} sx={styles.time} />
                 </Link>
               </li>
             ))}

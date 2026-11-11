@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
@@ -9,7 +10,6 @@ import { CommentSection } from "@/features/comments/components/comment-section"
 import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
 import { formatCompact } from "@/features/dashboard/lib/format"
 import { GroupChapters } from "@/features/groups/components/group/tabs/group-chapters"
-import { GroupInfo } from "@/features/groups/components/group/tabs/group-info"
 import { GroupMembers } from "@/features/groups/components/group/tabs/group-members"
 import { GroupStats } from "@/features/groups/components/group/tabs/group-stats"
 import { GroupTitles } from "@/features/groups/components/group/tabs/group-titles"
@@ -19,19 +19,19 @@ const routeApi = getRouteApi("/groups/$groupId")
 const styles = stylex.create({
   tabs: {
     gap: "1.5rem",
-    gridColumnEnd: "tabs",
-    gridColumnStart: "tabs",
-    gridRowEnd: "tabs",
-    gridRowStart: "tabs",
     minWidth: 0,
   },
   tabList: {
+    boxShadow: `inset 0 -1px 0 ${colors.border}`,
     justifyContent: "flex-start",
     scrollbarWidth: "none",
-    maxWidth: "100%",
     overflowX: "auto",
+    paddingBottom: { '[data-orientation="horizontal"]': "1px", default: null },
+    paddingTop: { '[data-orientation="horizontal"]': 0, default: null },
+    width: "100%",
   },
   tab: {
+    flexGrow: 0,
     flexShrink: 0,
   },
   tabCount: {
@@ -47,11 +47,19 @@ const styles = stylex.create({
   },
 })
 
-export function GroupTabs({ group, user }: { group: Group; user: Session["user"] | null }) {
+export function GroupTabs({
+  group,
+  user,
+  overview,
+}: {
+  group: Group
+  user: Session["user"] | null
+  overview: ReactNode
+}) {
   const { tab = "info", comment } = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
   const commentCount = useCommentCount({ type: "GROUP", id: group.id }, group.commentCount)
-  const tabs: Array<{ value: GroupTab; label: string; count?: number }> = [
+  const tabs: Array<{ value: GroupTab; label: string; count?: number | undefined }> = [
     { value: "info", label: m.group_tab_info() },
     { value: "chapters", label: m.group_tab_chapters(), count: group.chapterCount },
     { value: "titles", label: m.group_tab_titles(), count: group.mediaCount },
@@ -82,9 +90,7 @@ export function GroupTabs({ group, user }: { group: Group; user: Session["user"]
           </TabsTab>
         ))}
       </TabsList>
-      <TabsPanel value="info">
-        <GroupInfo group={group} />
-      </TabsPanel>
+      <TabsPanel value="info">{overview}</TabsPanel>
       <TabsPanel value="chapters">
         <GroupChapters groupId={group.id} />
       </TabsPanel>

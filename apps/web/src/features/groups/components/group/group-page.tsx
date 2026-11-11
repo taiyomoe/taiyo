@@ -2,7 +2,7 @@ import { getRouteApi } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { AppShell } from "@/components/shell/app-shell"
 import { GroupPageContent } from "@/features/groups/components/group/group-page-content"
-import { MediaPageSkeleton } from "@/features/media/components/media-page/media-page-skeleton"
+import { ProfileSkeleton } from "@/features/users/components/profile/profile-skeleton"
 
 const routeApi = getRouteApi("/groups/$groupId")
 
@@ -12,7 +12,7 @@ export function GroupPage() {
 
   return (
     <AppShell user={session?.user ?? null}>
-      <Suspense fallback={<MediaPageSkeleton />}>
+      <Suspense fallback={<ProfileSkeleton />}>
         <GroupPageContent groupId={groupId} user={session?.user ?? null} />
       </Suspense>
     </AppShell>
@@ -24,7 +24,7 @@ export function GroupPageSkeleton() {
 
   return (
     <AppShell user={session?.user ?? null}>
-      <MediaPageSkeleton />
+      <ProfileSkeleton />
     </AppShell>
   )
 }

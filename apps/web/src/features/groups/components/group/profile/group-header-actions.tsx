@@ -1,3 +1,4 @@
+import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
 import { Settings } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
@@ -12,46 +13,46 @@ import { usePermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
-  actions: {
-    gap: "0.625rem",
+  root: {
+    gap: "0.5rem",
+    alignItems: "center",
     display: "flex",
-    flexDirection: "column",
-  },
-  row: {
-    gap: "0.625rem",
-    display: "flex",
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  full: {
-    width: "100%",
+    flexShrink: 0,
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
   },
 })
 
-export function GroupActions({ group, user }: { group: Group; user: Session["user"] | null }) {
+export function GroupHeaderActions({
+  group,
+  user,
+  sx,
+}: {
+  group: Group
+  user: Session["user"] | null
+  sx?: Sx
+}) {
   const can = usePermissions(user)
   const canManage =
     can("group.manageMembers", { id: group.id }) || can("group.update", { id: group.id })
 
   return (
-    <div sx={styles.actions}>
-      <FollowGroupButton group={group} signedIn={user !== null} />
-      <div sx={styles.row}>
-        <ReportGroupDialog group={group} signedIn={user !== null} sx={styles.grow} />
-        <ShareGroupButton group={group} />
-      </div>
-      {group.owned ? null : <ClaimAction group={group} sx={styles.full} user={user} />}
+    <div sx={[styles.root, sx]}>
       {canManage ? (
         <Button
+          aria-label={m.group_manage()}
           render={<Link params={{ groupId: group.id }} to="/dashboard/groups/$groupId" />}
-          sx={styles.full}
-          variant="ghost"
+          size="icon"
+          title={m.group_manage()}
+          variant="outline"
         >
           <Settings />
-          {m.group_manage()}
         </Button>
       ) : null}
+      {group.owned ? null : <ClaimAction group={group} user={user} />}
+      <ReportGroupDialog group={group} iconOnly signedIn={user !== null} />
+      <ShareGroupButton group={group} size="icon" />
+      <FollowGroupButton compact group={group} signedIn={user !== null} />
     </div>
   )
 }

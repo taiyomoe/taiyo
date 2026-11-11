@@ -11,9 +11,9 @@ import {
   Send,
   Users,
 } from "@taiyomoe/ui/components/icons"
-import { colors, font, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Group } from "@/features/groups/api/groups"
-import { groupStyles } from "@/features/groups/components/group/group-styles"
+import { groupProfileStyles } from "@/features/groups/components/group/profile/group-profile-styles"
 import { m } from "@/paraglide/messages"
 
 const LINKS = [
@@ -27,31 +27,26 @@ const LINKS = [
 ] as const satisfies ReadonlyArray<
   readonly [keyof Group, () => string, (props: IconProps) => ReactElement]
 >
+const ROW_BLEED = "0.75rem"
 const styles = stylex.create({
-  card: {
-    padding: "1.25rem",
-    gap: "0.75rem",
-    display: "flex",
-    flexDirection: "column",
-  },
   list: {
     margin: 0,
     padding: 0,
-    gap: "0.25rem",
     listStyle: "none",
     display: "flex",
     flexDirection: "column",
   },
   link: {
-    padding: "0.5rem",
     borderRadius: radius.lg,
     gap: "0.75rem",
-    marginInline: "-0.5rem",
+    marginInline: `calc(-1 * ${ROW_BLEED})`,
+    paddingBlock: "0.5rem",
+    paddingInline: ROW_BLEED,
     textDecoration: "none",
     alignItems: "center",
     backgroundColor: {
       default: "transparent",
-      ":hover": `color-mix(in srgb, ${colors.foreground} 4%, transparent)`,
+      ":hover": `color-mix(in srgb, ${colors.foreground} 5%, transparent)`,
     },
     color: colors.foreground,
     display: "flex",
@@ -62,10 +57,10 @@ const styles = stylex.create({
     transitionProperty: "background-color",
   },
   icon: {
-    borderRadius: radius.full,
+    borderRadius: radius.lg,
     alignItems: "center",
-    backgroundColor: colors.well,
-    color: colors.mutedForeground,
+    backgroundColor: `color-mix(in srgb, ${colors.primary} 12%, transparent)`,
+    color: `color-mix(in srgb, ${colors.primary} 80%, ${colors.foreground})`,
     display: "flex",
     flexShrink: 0,
     justifyContent: "center",
@@ -80,13 +75,12 @@ const styles = stylex.create({
   },
   label: {
     fontSize: "0.9375rem",
-    fontWeight: 600,
+    fontWeight: 500,
   },
   host: {
     overflow: "hidden",
     color: colors.mutedForeground,
-    fontFamily: font.mono,
-    fontSize: "0.75rem",
+    fontSize: "0.8125rem",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
@@ -133,8 +127,8 @@ export function GroupLinks({ group }: { group: Group }) {
   }
 
   return (
-    <section aria-label={m.group_find_us()} sx={[groupStyles.card, styles.card]}>
-      <span sx={groupStyles.label}>{m.group_find_us()}</span>
+    <section sx={groupProfileStyles.section}>
+      <h2 sx={groupProfileStyles.sectionTitle}>{m.group_find_us()}</h2>
       <ul sx={styles.list}>
         {links.map(({ key, label, icon: Icon, href, display }) => (
           <li key={key}>

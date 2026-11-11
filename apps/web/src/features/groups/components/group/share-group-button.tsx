@@ -4,7 +4,13 @@ import type { Group } from "@/features/groups/api/groups"
 import { useCopy } from "@/hooks/use-copy"
 import { m } from "@/paraglide/messages"
 
-export function ShareGroupButton({ group }: { group: Group }) {
+export function ShareGroupButton({
+  group,
+  size = "icon-lg",
+}: {
+  group: Group
+  size?: "icon" | "icon-lg"
+}) {
   const { copied, copy } = useCopy()
   const label = copied ? m.group_share_copied() : m.group_share()
 
@@ -20,7 +26,7 @@ export function ShareGroupButton({ group }: { group: Group }) {
           copy(url)
         }
       }}
-      size="icon-lg"
+      size={size}
       title={label}
       variant="outline"
     >

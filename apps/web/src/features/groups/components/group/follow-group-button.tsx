@@ -19,21 +19,36 @@ const styles = stylex.create({
   button: {
     width: "100%",
   },
+  compact: {
+    width: "auto",
+  },
   skeleton: {
     borderRadius: radius.full,
     height: "2.75rem",
   },
+  compactSkeleton: {
+    height: "2.25rem",
+    width: "7rem",
+  },
 })
 
-export function FollowGroupButton({ group, signedIn }: { group: Group; signedIn: boolean }) {
+export function FollowGroupButton({
+  group,
+  signedIn,
+  compact = false,
+}: {
+  group: Group
+  signedIn: boolean
+  compact?: boolean
+}) {
   const href = useCurrentHref()
 
   if (!signedIn) {
     return (
       <Button
         render={<Link search={{ redirect: href }} to="/auth/sign-in" />}
-        size="lg"
-        sx={styles.button}
+        size={compact ? "default" : "lg"}
+        sx={[styles.button, compact && styles.compact]}
       >
         <Bookmark />
         {m.group_follow()}
@@ -41,10 +56,10 @@ export function FollowGroupButton({ group, signedIn }: { group: Group; signedIn:
     )
   }
 
-  return <SignedInFollowButton groupId={group.id} />
+  return <SignedInFollowButton compact={compact} groupId={group.id} />
 }
 
-function SignedInFollowButton({ groupId }: { groupId: string }) {
+function SignedInFollowButton({ groupId, compact }: { groupId: string; compact: boolean }) {
   const queryClient = useQueryClient()
   const follow = useQuery(groupFollowQueryOptions(groupId))
   const toggle = useMutation({
@@ -66,7 +81,7 @@ function SignedInFollowButton({ groupId }: { groupId: string }) {
   })
 
   if (follow.data === undefined) {
-    return <Skeleton sx={styles.skeleton} />
+    return <Skeleton sx={[styles.skeleton, compact && styles.compactSkeleton]} />
   }
 
   const following = toggle.isPending ? toggle.variables : follow.data.following
@@ -77,8 +92,8 @@ function SignedInFollowButton({ groupId }: { groupId: string }) {
       onClick={() => {
         toggle.mutate(!following)
       }}
-      size="lg"
-      sx={styles.button}
+      size={compact ? "default" : "lg"}
+      sx={[styles.button, compact && styles.compact]}
       variant={following ? "secondary" : "default"}
     >
       {following ? <Check /> : <Bookmark />}

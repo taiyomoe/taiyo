@@ -90,10 +90,12 @@ export function ReportGroupDialog({
   group,
   signedIn,
   sx,
+  iconOnly = false,
 }: {
   group: Group
   signedIn: boolean
   sx?: Sx
+  iconOnly?: boolean
 }) {
   const href = useCurrentHref()
   const [open, setOpen] = useState(false)
@@ -107,13 +109,15 @@ export function ReportGroupDialog({
   if (!signedIn) {
     return (
       <Button
+        aria-label={m.group_report()}
         render={<Link search={{ redirect: href }} to="/auth/sign-in" />}
-        size="lg"
+        size={iconOnly ? "icon" : "lg"}
         sx={sx}
+        title={m.group_report()}
         variant="outline"
       >
         <Flag />
-        {m.group_report()}
+        {iconOnly ? null : m.group_report()}
       </Button>
     )
   }
@@ -133,9 +137,15 @@ export function ReportGroupDialog({
     >
       <DialogTrigger
         render={
-          <Button size="lg" sx={sx} variant="outline">
+          <Button
+            aria-label={m.group_report()}
+            size={iconOnly ? "icon" : "lg"}
+            sx={sx}
+            title={m.group_report()}
+            variant="outline"
+          >
             <Flag />
-            {m.group_report()}
+            {iconOnly ? null : m.group_report()}
           </Button>
         }
       />

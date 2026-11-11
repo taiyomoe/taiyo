@@ -14,7 +14,6 @@ export const GROUP_MEDIAS_PER_PAGE = 10
 
 export const GROUP_TITLES_PER_PAGE = 24
 
-
-export const GROUP_LATEST_RELEASES = 4
+export const GROUP_LATEST_RELEASES = 6
 
 export const GROUP_TITLE_OPTIONS = 100

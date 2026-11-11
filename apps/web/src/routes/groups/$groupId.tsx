@@ -1,6 +1,7 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
+import { commentsQueryOptions } from "@/features/comments/api/comments"
 import {
   groupChaptersQueryOptions,
   groupMediaUpdatesQueryOptions,
@@ -9,7 +10,6 @@ import {
   groupQueryOptions,
   groupStatsQueryOptions,
 } from "@/features/groups/api/groups"
-import { commentsQueryOptions } from "@/features/comments/api/comments"
 import { GroupPage, GroupPageSkeleton } from "@/features/groups/components/group/group-page"
 import {
   GROUP_CHAPTER_ORDERS,
@@ -42,6 +42,7 @@ export const Route = createFileRoute("/groups/$groupId")({
     const tab = {
       info: () => [
         context.queryClient.query(groupMembersQueryOptions(groupId)),
+        context.queryClient.query(groupStatsQueryOptions(groupId, contentRatings)),
         context.queryClient.query(
           groupChaptersQueryOptions(groupId, contentRatings, 1, GROUP_LATEST_RELEASES),
         ),
@@ -68,7 +69,9 @@ export const Route = createFileRoute("/groups/$groupId")({
       ],
       members: () => [context.queryClient.query(groupMembersQueryOptions(groupId))],
       comments: () => [
-        context.queryClient.infiniteQuery(commentsQueryOptions({ type: "GROUP", id: groupId }, "newest")),
+        context.queryClient.infiniteQuery(
+          commentsQueryOptions({ type: "GROUP", id: groupId }, "newest"),
+        ),
       ],
       stats: () => [context.queryClient.query(groupStatsQueryOptions(groupId, contentRatings))],
     }[deps.tab ?? "info"]

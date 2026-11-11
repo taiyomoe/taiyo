@@ -64,6 +64,7 @@ const styles = stylex.create({
 export function GroupEmblem({ group }: { group: Group }) {
   const initials = group.name
     .split(/\s+/)
+    .map((word) => word.replace(/[^\p{L}\p{N}]/gu, ""))
     .filter((word) => word !== "")
     .slice(0, 2)
     .map((word) => word.charAt(0).toUpperCase())
@@ -72,10 +73,10 @@ export function GroupEmblem({ group }: { group: Group }) {
   return (
     <div sx={styles.frame}>
       <div aria-hidden sx={styles.disc(toneFor(group.id))}>
-        {group.logo === null || group.logo === "" ? (
+        {group.logoUrl === null ? (
           initials
         ) : (
-          <img alt="" decoding="async" src={group.logo} sx={styles.logo} />
+          <img alt="" decoding="async" src={group.logoUrl} sx={styles.logo} />
         )}
       </div>
       {group.owned ? (
