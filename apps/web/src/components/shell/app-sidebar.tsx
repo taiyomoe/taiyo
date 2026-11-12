@@ -27,9 +27,11 @@ import {
   useSidebar,
 } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useQuery } from "@tanstack/react-query"
 import { Link, type LinkProps, useMatchRoute } from "@tanstack/react-router"
 import { useRandomTitle } from "@/features/advanced-search/hooks/use-random-title"
 import { DEFAULT_ADVANCED_SEARCH } from "@/features/advanced-search/lib/advanced-search"
+import { sessionQueryOptions } from "@/lib/session"
 import { m } from "@/paraglide/messages"
 
 export type AppSidebarSection = {
@@ -38,6 +40,8 @@ export type AppSidebarSection = {
     label: () => string
     icon: (props: IconProps) => ReactElement
     to?: LinkProps["to"]
+    params?: LinkProps["params"]
+    highlight?: boolean
     onClick?: () => void
     pending?: boolean
     soon?: boolean
@@ -116,6 +120,7 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
   const matchRoute = useMatchRoute()
   const { setOpenMobile } = useSidebar()
   const randomTitle = useRandomTitle()
+  const { data: session } = useQuery({ ...sessionQueryOptions, staleTime: "static" })
   const defaultSections: AppSidebarSection[] = [
     {
       label: m.shell_nav_browse,
@@ -137,7 +142,17 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
       label: m.shell_nav_my_library,
       items: [
         { label: m.shell_nav_follows, icon: Bookmark },
-        { label: m.shell_nav_reading_history, icon: History },
+        ...(typeof session?.user.username === "string"
+          ? [
+              {
+                label: m.shell_nav_reading_history,
+                icon: History,
+                to: "/users/$username",
+                params: { username: session.user.username },
+                highlight: false,
+              } as const,
+            ]
+          : []),
         { label: m.shell_nav_lists, icon: List, to: "/lists" },
       ],
     },
@@ -161,36 +176,45 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
             )}
             <SidebarGroupContent>
               <SidebarMenu sx={styles.menu}>
-                {section.items.map(({ label, icon: Icon, to, onClick, pending, soon }) => {
-                  const isActive = to !== undefined && Boolean(matchRoute({ to }))
+                {section.items.map(
+                  ({ label, icon: Icon, to, params, highlight, onClick, pending, soon }) => {
+                    const isActive =
+                      to !== undefined &&
+                      highlight !== false &&
+                      Boolean(matchRoute({ to, ...(params === undefined ? {} : { params }) }))
 
-                  return (
-                    <SidebarMenuItem key={label()}>
-                      <SidebarMenuButton
-                        aria-busy={pending}
-                        disabled={soon === true || pending === true}
-                        isActive={isActive}
-                        onClick={() => {
-                          setOpenMobile(false)
-                          onClick?.()
-                        }}
-                        render={to === undefined ? undefined : <Link to={to} />}
-                        sx={[styles.button, isActive && styles.buttonActive]}
-                      >
-                        <Icon
-                          {...stylex.props(styles.icon, isActive && styles.iconActive)}
-                          size={20}
-                        />
-                        <span>{label()}</span>
-                      </SidebarMenuButton>
-                      {soon === true ? (
-                        <SidebarMenuBadge sx={styles.soonBadge}>
-                          {m.shell_nav_soon()}
-                        </SidebarMenuBadge>
-                      ) : null}
-                    </SidebarMenuItem>
-                  )
-                })}
+                    return (
+                      <SidebarMenuItem key={label()}>
+                        <SidebarMenuButton
+                          aria-busy={pending}
+                          disabled={soon === true || pending === true}
+                          isActive={isActive}
+                          onClick={() => {
+                            setOpenMobile(false)
+                            onClick?.()
+                          }}
+                          render={
+                            to === undefined ? undefined : (
+                              <Link {...(params === undefined ? {} : { params })} to={to} />
+                            )
+                          }
+                          sx={[styles.button, isActive && styles.buttonActive]}
+                        >
+                          <Icon
+                            {...stylex.props(styles.icon, isActive && styles.iconActive)}
+                            size={20}
+                          />
+                          <span>{label()}</span>
+                        </SidebarMenuButton>
+                        {soon === true ? (
+                          <SidebarMenuBadge sx={styles.soonBadge}>
+                            {m.shell_nav_soon()}
+                          </SidebarMenuBadge>
+                        ) : null}
+                      </SidebarMenuItem>
+                    )
+                  },
+                )}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
