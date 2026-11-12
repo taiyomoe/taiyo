@@ -6,6 +6,9 @@ server {
     return 405;
   }
 
+  proxy_hide_header Access-Control-Allow-Origin;
+  add_header Access-Control-Allow-Origin "*" always;
+
   location ~ ^/(?<bucket>[^/]+)/(?<key>.+)$ {
     proxy_pass http://rustfs:9000/$bucket/$key;
     proxy_intercept_errors on;

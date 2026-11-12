@@ -159,7 +159,8 @@ const styles = stylex.create({
     position: "relative",
     height: "100%",
     maxWidth: "var(--available-width)",
-    width: "var(--anchor-width)",
+    minWidth: "var(--anchor-width)",
+    width: "max-content",
   },
   list: {
     padding: "0.375rem",
