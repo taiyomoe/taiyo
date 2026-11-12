@@ -1,6 +1,7 @@
 import { noop } from "@tanstack/react-query"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, notFound } from "@tanstack/react-router"
 import { z } from "zod"
+import { isNotFoundError } from "@/components/boundaries/not-found-page"
 import { commentsQueryOptions } from "@/features/comments/api/comments"
 import {
   groupChaptersQueryOptions,
@@ -10,6 +11,7 @@ import {
   groupQueryOptions,
   groupStatsQueryOptions,
 } from "@/features/groups/api/groups"
+import { GroupNotFoundPage } from "@/features/groups/components/group/group-not-found-page"
 import { GroupPage, GroupPageSkeleton } from "@/features/groups/components/group/group-page"
 import {
   GROUP_CHAPTER_ORDERS,
@@ -81,7 +83,17 @@ export const Route = createFileRoute("/groups/$groupId")({
       await prefetch
     }
 
-    return { name: await group.then((data) => data.name).catch(() => null) }
+    const name = await group
+      .then((data) => data.name)
+      .catch((error: unknown) => {
+        if (isNotFoundError(error, "GROUP_NOT_FOUND")) {
+          throw notFound()
+        }
+
+        return null
+      })
+
+    return { name }
   },
   head: ({ loaderData }) => ({
     meta: [
@@ -95,4 +107,5 @@ export const Route = createFileRoute("/groups/$groupId")({
   }),
   component: GroupPage,
   pendingComponent: GroupPageSkeleton,
+  notFoundComponent: GroupNotFoundPage,
 })

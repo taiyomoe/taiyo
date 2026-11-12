@@ -9,13 +9,10 @@ import {
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
 import { Link } from "@tanstack/react-router"
-import { getApiErrorCode } from "@/lib/envelope"
+import { isNotFoundError } from "@/components/boundaries/not-found-page"
 import { m } from "@/paraglide/messages"
 
-const NOT_FOUND_CODES = new Set(["LIST_NOT_FOUND", "VALIDATION_ERROR"])
-
-export const isListNotFoundError = (error: unknown) =>
-  NOT_FOUND_CODES.has(getApiErrorCode(error) ?? "")
+export const isListNotFoundError = (error: unknown) => isNotFoundError(error, "LIST_NOT_FOUND")
 
 function ListErrorState({ notFound }: { notFound: boolean }) {
   return (
@@ -34,10 +31,6 @@ function ListErrorState({ notFound }: { notFound: boolean }) {
       </EmptyContent>
     </Empty>
   )
-}
-
-export function ListNotFound() {
-  return <ListErrorState notFound />
 }
 
 export function ListError({ error }: { error: unknown }) {

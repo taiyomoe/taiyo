@@ -1,11 +1,13 @@
 import { noop } from "@tanstack/react-query"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, notFound } from "@tanstack/react-router"
 import { z } from "zod"
+import { isNotFoundError } from "@/components/boundaries/not-found-page"
 import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { latestMediaUpdatesQueryOptions } from "@/features/chapters/api/chapters"
 import { commentsQueryOptions } from "@/features/comments/api/comments"
 import { userListsQueryOptions } from "@/features/lists/api/lists"
 import { userProfileQueryOptions, userStatsQueryOptions } from "@/features/users/api/profile"
+import { ProfileNotFoundPage } from "@/features/users/components/profile/profile-not-found-page"
 import { ProfilePage } from "@/features/users/components/profile/profile-page"
 import { PROFILE_TABS, PROFILE_UPLOADS_PER_PAGE } from "@/features/users/lib/profile-page"
 import { getContentRatings } from "@/lib/settings"
@@ -45,7 +47,13 @@ export const Route = createFileRoute("/users/$username")({
       await Promise.all([profile.catch(noop), tabData])
     }
 
-    const loaded = await profile.catch(() => null)
+    const loaded = await profile.catch((error: unknown) => {
+      if (isNotFoundError(error, "USER_NOT_FOUND")) {
+        throw notFound()
+      }
+
+      return null
+    })
     const about = loaded === null ? undefined : Object.values(loaded.about).find(Boolean)
 
     return {
@@ -77,4 +85,5 @@ export const Route = createFileRoute("/users/$username")({
     }
   },
   component: ProfilePage,
+  notFoundComponent: ProfileNotFoundPage,
 })

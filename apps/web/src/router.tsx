@@ -3,6 +3,7 @@ import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query"
 import { DefaultErrorComponent } from "@/components/boundaries/default-error-component"
 import { DefaultPendingComponent } from "@/components/boundaries/default-pending-component"
+import { PageNotFound } from "@/components/boundaries/not-found-page"
 import { routeTree } from "./routeTree.gen"
 
 export function getRouter() {
@@ -17,6 +18,7 @@ export function getRouter() {
     defaultPreloadStaleTime: 0,
     defaultPendingComponent: DefaultPendingComponent,
     defaultErrorComponent: DefaultErrorComponent,
+    defaultNotFoundComponent: PageNotFound,
   })
 
   setupRouterSsrQueryIntegration({ router, queryClient })
