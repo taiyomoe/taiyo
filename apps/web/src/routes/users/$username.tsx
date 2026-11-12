@@ -4,6 +4,7 @@ import { z } from "zod"
 import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { latestMediaUpdatesQueryOptions } from "@/features/chapters/api/chapters"
 import { commentsQueryOptions } from "@/features/comments/api/comments"
+import { userListsQueryOptions } from "@/features/lists/api/lists"
 import { userProfileQueryOptions, userStatsQueryOptions } from "@/features/users/api/profile"
 import { ProfilePage } from "@/features/users/components/profile/profile-page"
 import { PROFILE_TABS, PROFILE_UPLOADS_PER_PAGE } from "@/features/users/lib/profile-page"
@@ -32,6 +33,8 @@ export const Route = createFileRoute("/users/$username")({
           await queryClient.query(
             latestMediaUpdatesQueryOptions(contentRatings, deps.page, PROFILE_UPLOADS_PER_PAGE, id),
           )
+        } else if (deps.tab === "lists") {
+          await queryClient.query(userListsQueryOptions(id, deps.page, contentRatings))
         } else {
           await queryClient.infiniteQuery(commentsQueryOptions({ type: "USER", id }, "newest"))
         }

@@ -44,6 +44,10 @@ const userProfileSchema = z.object({
     .meta({ description: "Whether the user hides who they follow from you." }),
   uploadCount: z.number().int().meta({ description: "Published chapters the user uploaded." }),
   commentCount: z.number().int().meta({ description: "Comments left on this profile." }),
+  listCount: z
+    .number()
+    .int()
+    .meta({ description: "Lists the user owns that you can see: PUBLIC ones, or all of yours." }),
   viewerFollows: z
     .boolean()
     .nullable()
@@ -162,6 +166,15 @@ export const getUserProfileHandler = new Hono().get(
             .where(liveCommentSql("c", "u"))
             .select(eb.fn.countAll<string>().as("count"))
             .as("comments"),
+          eb
+            .selectFrom("userLists")
+            .where("userLists.userId", "=", user.id)
+            .where("userLists.deletedAt", "is", null)
+            .where((inner) =>
+              viewerId === user.id ? inner.and([]) : inner("userLists.visibility", "=", "PUBLIC"),
+            )
+            .select(eb.fn.countAll<string>().as("count"))
+            .as("lists"),
           viewerId === null
             ? sql<boolean>`false`.as("viewerFollows")
             : eb
@@ -219,6 +232,7 @@ export const getUserProfileHandler = new Hono().get(
       followingHidden: user.settings.showFollowing === false && viewerId !== user.id,
       uploadCount: Number(counts.uploads ?? 0),
       commentCount: Number(counts.comments ?? 0),
+      listCount: Number(counts.lists ?? 0),
       viewerFollows: viewer === null ? null : counts.viewerFollows === true,
       followsViewer: viewer === null ? null : counts.followsViewer === true,
       groups: groups.map((group) => ({

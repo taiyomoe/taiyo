@@ -8,6 +8,7 @@ export type UserList = {
   name: string
   description: string | null
   visibility: Generated<UserListVisibility>
+  upvoteCount: Generated<number>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
   deletedAt: Timestamp | null

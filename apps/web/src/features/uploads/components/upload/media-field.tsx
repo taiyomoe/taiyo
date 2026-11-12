@@ -1,4 +1,3 @@
-import * as stylex from "@stylexjs/stylex"
 import {
   Combobox,
   ComboboxEmpty,
@@ -8,52 +7,13 @@ import {
   ComboboxPopup,
 } from "@taiyomoe/ui/components/ui/combobox"
 import { Field, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { useDeferredValue, useState } from "react"
-import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { searchMediasQueryOptions } from "@/features/media/api/medias"
-import { Cover } from "@/features/media/components/cover"
-import { getSynopsis } from "@/features/media/lib/media-labels"
+import { getOptionSynopsis, MediaOptionContent } from "@/features/media/components/media-option"
 import { m } from "@/paraglide/messages"
 
 export type MediaOption = { id: string; title: string; coverUrl: string | null; synopsis: string }
-
-const styles = stylex.create({
-  option: {
-    gap: "0.625rem",
-    alignItems: "center",
-    display: "flex",
-    minWidth: 0,
-    width: "100%",
-  },
-  cover: {
-    borderRadius: radius.md,
-    width: "2.5rem",
-  },
-  optionText: {
-    gap: "0.125rem",
-    display: "flex",
-    flexDirection: "column",
-    flexGrow: 1,
-    minWidth: 0,
-  },
-  optionTitle: {
-    overflow: "hidden",
-    fontWeight: 500,
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
-  optionSynopsis: {
-    overflow: "hidden",
-    WebkitBoxOrient: "vertical",
-    WebkitLineClamp: 2,
-    color: colors.mutedForeground,
-    display: "-webkit-box",
-    fontSize: "0.75rem",
-    lineHeight: "1rem",
-  },
-})
 
 export function MediaField({
   invalid,
@@ -78,9 +38,7 @@ export function MediaField({
             id: hit.id,
             title: hit.mainTitle.title,
             coverUrl: hit.coverUrl,
-            synopsis: (
-              getRichTextParagraphs(parseRichText(getSynopsis(hit.synopsis)))[0] ?? ""
-            ).replace(/\s+/g, " "),
+            synopsis: getOptionSynopsis(hit.synopsis),
           },
         ],
   )
@@ -115,15 +73,11 @@ export function MediaField({
           <ComboboxList>
             {(item: MediaOption) => (
               <ComboboxItem key={item.id} value={item}>
-                <span sx={styles.option}>
-                  <Cover src={item.coverUrl} sx={styles.cover} />
-                  <span sx={styles.optionText}>
-                    <span sx={styles.optionTitle}>{item.title}</span>
-                    {item.synopsis === "" ? null : (
-                      <span sx={styles.optionSynopsis}>{item.synopsis}</span>
-                    )}
-                  </span>
-                </span>
+                <MediaOptionContent
+                  coverUrl={item.coverUrl}
+                  synopsis={item.synopsis}
+                  title={item.title}
+                />
               </ComboboxItem>
             )}
           </ComboboxList>

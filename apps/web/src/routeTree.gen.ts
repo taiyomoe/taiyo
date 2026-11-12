@@ -37,6 +37,9 @@ import { Route as DashboardUploadRouteImport } from './routes/dashboard/upload'
 import { Route as DashboardUsersRouteImport } from './routes/dashboard/users'
 import { Route as GroupsIndexRouteImport } from './routes/groups/index'
 import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
+import { Route as ListsIndexRouteImport } from './routes/lists/index'
+import { Route as ListsListIdRouteImport } from './routes/lists/$listId'
+import { Route as ListsNewRouteImport } from './routes/lists/new'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
 import { Route as UsersUsernameRouteImport } from './routes/users/$username'
 import { Route as ChaptersChapterIdIndexRouteImport } from './routes/chapters/$chapterId.index'
@@ -45,6 +48,7 @@ import { Route as DashboardGroupsIndexRouteImport } from './routes/dashboard/gro
 import { Route as DashboardGroupsGroupIdRouteImport } from './routes/dashboard/groups/$groupId'
 import { Route as DashboardSuggestionsIndexRouteImport } from './routes/dashboard/suggestions/index'
 import { Route as DashboardSuggestionsSuggestionIdRouteImport } from './routes/dashboard/suggestions/$suggestionId'
+import { Route as ListsListIdEditRouteImport } from './routes/lists/$listId_.edit'
 import { Route as MediaMediaIdEditRouteImport } from './routes/media/$mediaId_.edit'
 
 const IndexRoute = IndexRouteImport.update({
@@ -187,6 +191,21 @@ const GroupsGroupIdRoute = GroupsGroupIdRouteImport.update({
   path: '/groups/$groupId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ListsIndexRoute = ListsIndexRouteImport.update({
+  id: '/lists/',
+  path: '/lists/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListsListIdRoute = ListsListIdRouteImport.update({
+  id: '/lists/$listId',
+  path: '/lists/$listId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListsNewRoute = ListsNewRouteImport.update({
+  id: '/lists/new',
+  path: '/lists/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MediaMediaIdRoute = MediaMediaIdRouteImport.update({
   id: '/media/$mediaId',
   path: '/media/$mediaId',
@@ -229,6 +248,11 @@ const DashboardSuggestionsSuggestionIdRoute =
     path: '/suggestions/$suggestionId',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const ListsListIdEditRoute = ListsListIdEditRouteImport.update({
+  id: '/lists/$listId_/edit',
+  path: '/lists/$listId/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MediaMediaIdEditRoute = MediaMediaIdEditRouteImport.update({
   id: '/media/$mediaId_/edit',
   path: '/media/$mediaId/edit',
@@ -262,13 +286,17 @@ export interface FileRoutesByFullPath {
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
+  '/lists/$listId': typeof ListsListIdRoute
+  '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
+  '/lists/': typeof ListsIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
+  '/lists/$listId/edit': typeof ListsListIdEditRoute
   '/media/$mediaId/edit': typeof MediaMediaIdEditRoute
   '/chapters/$chapterId/': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups/': typeof DashboardGroupsIndexRoute
@@ -300,13 +328,17 @@ export interface FileRoutesByTo {
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
+  '/lists/$listId': typeof ListsListIdRoute
+  '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard': typeof DashboardIndexRoute
   '/groups': typeof GroupsIndexRoute
+  '/lists': typeof ListsIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
+  '/lists/$listId/edit': typeof ListsListIdEditRoute
   '/media/$mediaId/edit': typeof MediaMediaIdEditRoute
   '/chapters/$chapterId': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups': typeof DashboardGroupsIndexRoute
@@ -340,13 +372,17 @@ export interface FileRoutesById {
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
+  '/lists/$listId': typeof ListsListIdRoute
+  '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
+  '/lists/': typeof ListsIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
+  '/lists/$listId_/edit': typeof ListsListIdEditRoute
   '/media/$mediaId_/edit': typeof MediaMediaIdEditRoute
   '/chapters/$chapterId/': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups/': typeof DashboardGroupsIndexRoute
@@ -381,13 +417,17 @@ export interface FileRouteTypes {
     | '/dashboard/upload'
     | '/dashboard/users'
     | '/groups/$groupId'
+    | '/lists/$listId'
+    | '/lists/new'
     | '/media/$mediaId'
     | '/users/$username'
     | '/dashboard/'
     | '/groups/'
+    | '/lists/'
     | '/chapters/$chapterId/source'
     | '/dashboard/groups/$groupId'
     | '/dashboard/suggestions/$suggestionId'
+    | '/lists/$listId/edit'
     | '/media/$mediaId/edit'
     | '/chapters/$chapterId/'
     | '/dashboard/groups/'
@@ -419,13 +459,17 @@ export interface FileRouteTypes {
     | '/dashboard/upload'
     | '/dashboard/users'
     | '/groups/$groupId'
+    | '/lists/$listId'
+    | '/lists/new'
     | '/media/$mediaId'
     | '/users/$username'
     | '/dashboard'
     | '/groups'
+    | '/lists'
     | '/chapters/$chapterId/source'
     | '/dashboard/groups/$groupId'
     | '/dashboard/suggestions/$suggestionId'
+    | '/lists/$listId/edit'
     | '/media/$mediaId/edit'
     | '/chapters/$chapterId'
     | '/dashboard/groups'
@@ -458,13 +502,17 @@ export interface FileRouteTypes {
     | '/dashboard/upload'
     | '/dashboard/users'
     | '/groups/$groupId'
+    | '/lists/$listId'
+    | '/lists/new'
     | '/media/$mediaId'
     | '/users/$username'
     | '/dashboard/'
     | '/groups/'
+    | '/lists/'
     | '/chapters/$chapterId/source'
     | '/dashboard/groups/$groupId'
     | '/dashboard/suggestions/$suggestionId'
+    | '/lists/$listId_/edit'
     | '/media/$mediaId_/edit'
     | '/chapters/$chapterId/'
     | '/dashboard/groups/'
@@ -485,10 +533,14 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TitlesRoute: typeof TitlesRoute
   GroupsGroupIdRoute: typeof GroupsGroupIdRoute
+  ListsListIdRoute: typeof ListsListIdRoute
+  ListsNewRoute: typeof ListsNewRoute
   MediaMediaIdRoute: typeof MediaMediaIdRoute
   UsersUsernameRoute: typeof UsersUsernameRoute
   GroupsIndexRoute: typeof GroupsIndexRoute
+  ListsIndexRoute: typeof ListsIndexRoute
   ChaptersChapterIdSourceRoute: typeof ChaptersChapterIdSourceRoute
+  ListsListIdEditRoute: typeof ListsListIdEditRoute
   MediaMediaIdEditRoute: typeof MediaMediaIdEditRoute
   ChaptersChapterIdIndexRoute: typeof ChaptersChapterIdIndexRoute
 }
@@ -691,6 +743,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GroupsGroupIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lists/': {
+      id: '/lists/'
+      path: '/lists'
+      fullPath: '/lists/'
+      preLoaderRoute: typeof ListsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lists/$listId': {
+      id: '/lists/$listId'
+      path: '/lists/$listId'
+      fullPath: '/lists/$listId'
+      preLoaderRoute: typeof ListsListIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lists/new': {
+      id: '/lists/new'
+      path: '/lists/new'
+      fullPath: '/lists/new'
+      preLoaderRoute: typeof ListsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/media/$mediaId': {
       id: '/media/$mediaId'
       path: '/media/$mediaId'
@@ -746,6 +819,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/suggestions/$suggestionId'
       preLoaderRoute: typeof DashboardSuggestionsSuggestionIdRouteImport
       parentRoute: typeof DashboardRouteRoute
+    }
+    '/lists/$listId_/edit': {
+      id: '/lists/$listId_/edit'
+      path: '/lists/$listId/edit'
+      fullPath: '/lists/$listId/edit'
+      preLoaderRoute: typeof ListsListIdEditRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/media/$mediaId_/edit': {
       id: '/media/$mediaId_/edit'
@@ -827,10 +907,14 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TitlesRoute: TitlesRoute,
   GroupsGroupIdRoute: GroupsGroupIdRoute,
+  ListsListIdRoute: ListsListIdRoute,
+  ListsNewRoute: ListsNewRoute,
   MediaMediaIdRoute: MediaMediaIdRoute,
   UsersUsernameRoute: UsersUsernameRoute,
   GroupsIndexRoute: GroupsIndexRoute,
+  ListsIndexRoute: ListsIndexRoute,
   ChaptersChapterIdSourceRoute: ChaptersChapterIdSourceRoute,
+  ListsListIdEditRoute: ListsListIdEditRoute,
   MediaMediaIdEditRoute: MediaMediaIdEditRoute,
   ChaptersChapterIdIndexRoute: ChaptersChapterIdIndexRoute,
 }

@@ -10,15 +10,18 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
+import { findMissingMediaIds, listMediaIdsSchema, replaceListItems } from "../utils/user-lists"
 
 const createListSchema = z.object({
   name: z
     .string()
+    .trim()
     .min(1)
     .max(config.input.maxNameLength)
     .meta({ description: "Name of the list.", example: "Best shounen" }),
   description: z
     .string()
+    .trim()
     .max(config.input.maxDescriptionLength)
     .nullable()
     .optional()
@@ -27,14 +30,14 @@ const createListSchema = z.object({
     .enum(USER_LIST_VISIBILITIES)
     .default("PRIVATE")
     .meta({ description: "Who can see the list. Defaults to PRIVATE." }),
+  mediaIds: listMediaIdsSchema.default([]),
 })
 
 export const createListHandler = new Hono().post(
   "/me/lists",
   describeRoute({
     summary: "Create a list",
-    description:
-      "Creates a custom user list. Defaults to PRIVATE.\n\n**Authentication:** signed-in user.",
+    description: `Creates a custom user list, optionally with its titles in order. Defaults to PRIVATE. A user can own at most ${config.lists.maxPerUser} lists.\n\n**Authentication:** signed-in user.`,
     tags: ["Custom lists"],
     requestBody: {
       content: { "application/json": await resolver(createListSchema).toOpenAPISchema() },
@@ -55,7 +58,11 @@ export const createListHandler = new Hono().post(
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The request data failed validation." }),
+      ...getOpenApiResponses({
+        404: "One of the titles doesn't exist.",
+        409: "You already own the maximum number of lists.",
+        422: "The request data failed validation.",
+      }),
     },
   }),
   audited(listAudit.CREATE),
@@ -64,7 +71,22 @@ export const createListHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, user } = c.var
-    const { name, description, visibility } = c.var.json
+    const { name, description, visibility, mediaIds } = c.var.json
+    const owned = await db
+      .selectFrom("userLists")
+      .where("userId", "=", user.id)
+      .where("deletedAt", "is", null)
+      .select(db.fn.countAll<string>().as("count"))
+      .executeTakeFirstOrThrow()
+
+    if (Number(owned.count) >= config.lists.maxPerUser) {
+      return c.fail("LIST_LIMIT_REACHED")
+    }
+
+    if ((await findMissingMediaIds(db, mediaIds)).length > 0) {
+      return c.fail("MEDIA_NOT_FOUND")
+    }
+
     const row = await db
       .insertInto("userLists")
       .values({
@@ -75,6 +97,8 @@ export const createListHandler = new Hono().post(
       })
       .returning(["id", "visibility"])
       .executeTakeFirstOrThrow()
+
+    await replaceListItems(db, row.id, mediaIds)
 
     c.var.audit.set({ target: { id: row.id, name } })
 

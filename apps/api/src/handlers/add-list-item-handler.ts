@@ -1,4 +1,5 @@
 import { listAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -10,6 +11,7 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
+import { countListItems, touchList } from "../utils/user-lists"
 
 const addItemSchema = z.object({
   mediaId: z.uuid().meta({ description: "ID of an existing media to add." }),
@@ -24,8 +26,7 @@ export const addListItemHandler = new Hono().post(
   "/:id/items",
   describeRoute({
     summary: "Add a media to a list",
-    description:
-      "Adds a media to a list. If `position` is omitted, the media goes to the end.\n\n**Authentication:** list owner.",
+    description: `Adds a media to a list. If \`position\` is omitted, the media goes to the end. A list holds at most ${config.lists.maxItems} titles.\n\n**Authentication:** list owner.`,
     tags: ["Custom lists"],
     requestBody: {
       content: { "application/json": await resolver(addItemSchema).toOpenAPISchema() },
@@ -45,7 +46,7 @@ export const addListItemHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         404: "No list or media with the given id exists.",
-        409: "This media is already on the list.",
+        409: "This media is already on the list, or the list is full.",
         422: "The request data failed validation.",
       }),
     },
@@ -68,6 +69,10 @@ export const addListItemHandler = new Hono().post(
 
     if (!media) {
       return c.fail("MEDIA_NOT_FOUND")
+    }
+
+    if ((await countListItems(db, list.id)) >= config.lists.maxItems) {
+      return c.fail("LIST_FULL")
     }
 
     let finalPosition = position
@@ -101,6 +106,8 @@ export const addListItemHandler = new Hono().post(
 
       throw err
     }
+
+    await touchList(db, list.id)
 
     c.var.audit.set({ target: { mediaId, position: finalPosition } })
 

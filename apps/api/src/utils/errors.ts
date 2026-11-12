@@ -430,6 +430,18 @@ const listErrors = {
     message: "This media is already on the list.",
     code: 409,
   },
+  LIST_FULL: {
+    message: "This list has reached the maximum number of titles.",
+    code: 409,
+  },
+  LIST_LIMIT_REACHED: {
+    message: "You have reached the maximum number of lists.",
+    code: 409,
+  },
+  LIST_SELF_VOTE: {
+    message: "You can't upvote your own list.",
+    code: 409,
+  },
 } as const
 const imageErrors = {
   INVALID_IMAGE: {

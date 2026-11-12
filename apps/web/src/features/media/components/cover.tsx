@@ -115,6 +115,7 @@ function CoverImage({
         decoding={priority === "high" ? "sync" : "async"}
         draggable={false}
         fetchPriority={priority}
+        loading={priority === "high" ? "eager" : "lazy"}
         onError={onError}
         onLoad={onLoad}
         src={src}

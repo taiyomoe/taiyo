@@ -108,6 +108,8 @@ export * from "./models/user-list-item-model"
 
 export * from "./models/user-list-model"
 
+export * from "./models/user-list-vote-model"
+
 export * from "./models/user-profile-model"
 
 export * from "./models/user-model"

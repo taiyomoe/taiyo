@@ -10,6 +10,7 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
+import { touchList } from "../utils/user-lists"
 
 const paramSchema = z.object({ id: z.uuid(), mediaId: z.uuid() })
 
@@ -55,6 +56,8 @@ export const removeListItemHandler = new Hono().delete(
     if (result.numDeletedRows === 0n) {
       return c.fail("LIST_ITEM_NOT_FOUND")
     }
+
+    await touchList(db, list.id)
 
     return c.ok({ listId: list.id, mediaId })
   },

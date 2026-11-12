@@ -138,7 +138,7 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
       items: [
         { label: m.shell_nav_follows, icon: Bookmark },
         { label: m.shell_nav_reading_history, icon: History },
-        { label: m.shell_nav_my_lists, icon: List },
+        { label: m.shell_nav_lists, icon: List, to: "/lists" },
       ],
     },
     {

@@ -1,4 +1,4 @@
-import { USER_LIST_VISIBILITIES } from "@taiyomoe/db"
+import { sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -6,16 +6,20 @@ import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, contentRatingsQuerySchema } from "../utils/schemas"
+import { listSummarySchema, selectListSummaries, toListSummaries } from "../utils/user-lists"
 
-const itemSchema = z.object({
-  id: z.uuid(),
-  name: z.string(),
-  description: z.string().nullable(),
-  visibility: z.enum(USER_LIST_VISIBILITIES),
-  itemCount: z.int(),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+const querySchema = paginationQuerySchema.extend({
+  contentRating: contentRatingsQuerySchema,
+  mediaId: z.uuid().optional().meta({
+    description: "A media to look up: each list then says whether it holds that media.",
+  }),
+})
+const myListSchema = listSummarySchema.extend({
+  hasMedia: z
+    .boolean()
+    .nullable()
+    .meta({ description: "Whether the list holds `mediaId`, or null when it wasn't given." }),
 })
 
 export const listMyListsHandler = new Hono().get(
@@ -30,7 +34,7 @@ export const listMyListsHandler = new Hono().get(
         description: "Your custom lists.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)),
+            schema: resolver(apiSuccessEnvelope(myListSchema.array(), paginationMetaSchema)),
           },
         },
       },
@@ -38,29 +42,28 @@ export const listMyListsHandler = new Hono().get(
     },
   }),
   withAuth(),
-  validateQuery(paginationQuerySchema),
+  validateQuery(querySchema),
   async (c) => {
     const { db, user } = c.var
-    const { page, perPage } = c.var.query
-    const [items, totalRow] = await Promise.all([
-      db
-        .selectFrom("userLists")
-        .where("userId", "=", user.id)
-        .where("deletedAt", "is", null)
-        .select((eb) => [
-          "id",
-          "name",
-          "description",
-          "visibility",
-          "createdAt",
-          "updatedAt",
-          eb
-            .selectFrom("userListItems")
-            .whereRef("userListItems.listId", "=", "userLists.id")
-            .select(eb.fn.countAll().as("count"))
-            .as("itemCount"),
-        ])
-        .orderBy("updatedAt", "desc")
+    const { page, perPage, contentRating, mediaId } = c.var.query
+    const [rows, totalRow] = await Promise.all([
+      selectListSummaries(db, user.id)
+        .where("userLists.userId", "=", user.id)
+        .select((eb) =>
+          mediaId === undefined
+            ? sql<boolean | null>`null`.as("hasMedia")
+            : eb
+                .exists(
+                  eb
+                    .selectFrom("userListItems")
+                    .select("userListItems.listId")
+                    .whereRef("userListItems.listId", "=", "userLists.id")
+                    .where("userListItems.mediaId", "=", mediaId),
+                )
+                .as("hasMedia"),
+        )
+        .orderBy("userLists.updatedAt", "desc")
+        .orderBy("userLists.id", "desc")
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
@@ -68,13 +71,21 @@ export const listMyListsHandler = new Hono().get(
         .selectFrom("userLists")
         .where("userId", "=", user.id)
         .where("deletedAt", "is", null)
-        .select(db.fn.countAll().as("count"))
+        .select(db.fn.countAll<string>().as("count"))
         .executeTakeFirstOrThrow(),
     ])
+    const summaries = await toListSummaries(db, rows, contentRating)
 
     return c.ok(
-      items.map((item) => ({ ...item, itemCount: Number(item.itemCount) })),
-      { page, perPage, total: Number(totalRow.count) },
+      summaries.map(({ hasMedia, ...list }) => ({
+        ...list,
+        hasMedia: hasMedia === null ? null : hasMedia === true || hasMedia === 1,
+      })),
+      {
+        page,
+        perPage,
+        total: Number(totalRow.count),
+      },
     )
   },
 )

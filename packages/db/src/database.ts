@@ -42,6 +42,7 @@ import type { UserHistory } from "./models/user-history-model"
 import type { UserLibraryEntry } from "./models/user-library-entry-model"
 import type { UserListItem } from "./models/user-list-item-model"
 import type { UserList } from "./models/user-list-model"
+import type { UserListVote } from "./models/user-list-vote-model"
 import type { User } from "./models/user-model"
 import type { UserProfile } from "./models/user-profile-model"
 import type { Verification } from "./models/verification-model"
@@ -91,6 +92,7 @@ export type DB = {
   userLibraryEntries: UserLibraryEntry
   userListItems: UserListItem
   userLists: UserList
+  userListVotes: UserListVote
   userProfiles: UserProfile
   users: User
   verifications: Verification

@@ -54,26 +54,27 @@ function RouteComponent() {
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Content you submit.</strong> Your library entries and
-                reading progress, the custom lists you create and the titles you add to them, the
-                users you follow, the chapter pages you upload, the edits you suggest to a title and
-                the note you attach to them, the groups you belong to and the permissions you hold
-                in them, the invitations you send and receive, and the message and links you provide
-                when you ask to take ownership of a group or to create one. When you take part in
-                discussions we store the comments and replies you post on titles, chapters, groups
-                and profiles, the earlier versions of a comment you edit (visible to moderators
-                only), the images and GIFs you upload for them, the images you favorite, the
-                comments you upvote, and the reports you send about comments or chapter pages.
-                Uploaded images are re-encoded and stripped of their metadata, such as camera
-                details and location, before they are stored; one that no comment uses and nobody
-                favorited is deleted after a day.
+                reading progress, the custom lists you create, the titles you add to them and the
+                lists you upvote, the users you follow, the chapter pages you upload, the edits you
+                suggest to a title and the note you attach to them, the groups you belong to and the
+                permissions you hold in them, the invitations you send and receive, and the message
+                and links you provide when you ask to take ownership of a group or to create one.
+                When you take part in discussions we store the comments and replies you post on
+                titles, chapters, groups and profiles, the earlier versions of a comment you edit
+                (visible to moderators only), the images and GIFs you upload for them, the images
+                you favorite, the comments you upvote, and the reports you send about comments or
+                chapter pages. Uploaded images are re-encoded and stripped of their metadata, such
+                as camera details and location, before they are stored; one that no comment uses and
+                nobody favorited is deleted after a day.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Your public profile.</strong> The avatar and banner you
                 upload, and whatever you choose to add about yourself: an about text, your city,
                 country, gender and birth date. Everything here is optional and shown publicly on
                 your profile, along with the title and name effect you pick. Your comments are
-                public too, on the page you posted them. Your reading and library statistics are
-                shown on your profile, unless you hide your library.
+                public too, on the page you posted them, and so are the lists you make public, on
+                your profile and on the lists page. Your reading and library statistics are shown on
+                your profile, unless you hide your library.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Technical information.</strong> Your IP address, browser
