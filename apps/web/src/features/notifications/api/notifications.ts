@@ -38,8 +38,7 @@ const CATEGORY_OF_TYPE = {
   COMMENT_LIKE: "activity",
   FOLLOW: "activity",
 } as const satisfies Record<Notification["type"], NotificationCategory>
-
-export const categoryOf = (notification: Notification) => CATEGORY_OF_TYPE[notification.type]
+const categoryOf = (notification: Notification) => CATEGORY_OF_TYPE[notification.type]
 
 export const notificationKeys = {
   all: ["notifications"] as const,

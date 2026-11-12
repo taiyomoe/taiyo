@@ -21,12 +21,11 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
 })
-
 /**
  * Fills a message whose placeholders are rich. The message is rendered with each
  * placeholder kept as `{name}`, then split on them, so translations keep their word order.
  */
-export const richMessage = (template: string, values: Record<string, ReactNode>) => {
+const richMessage = (template: string, values: Record<string, ReactNode>) => {
   let offset = 0
   const nodes = new Map(Object.entries(values))
 
@@ -42,12 +41,10 @@ export const richMessage = (template: string, values: Record<string, ReactNode>)
       return <Fragment key={start}>{key === undefined ? part : nodes.get(key)}</Fragment>
     })
 }
-
-export const Strong = ({ children }: { children: ReactNode }) => (
+const Strong = ({ children }: { children: ReactNode }) => (
   <strong sx={styles.strong}>{children}</strong>
 )
-
-export const targetLabel = (target: CommentTarget, viewerId: string) => {
+const targetLabel = (target: CommentTarget, viewerId: string) => {
   if (target.type === "USER") {
     return target.id === viewerId
       ? m.notifications_target_own_profile()
@@ -56,8 +53,7 @@ export const targetLabel = (target: CommentTarget, viewerId: string) => {
 
   return target.title ?? m.notifications_target_unknown()
 }
-
-export const targetNode = (target: CommentTarget, viewerId: string) => (
+const targetNode = (target: CommentTarget, viewerId: string) => (
   <>
     <Strong>{targetLabel(target, viewerId)}</Strong>
     {target.chapterNumber === null ? null : (
@@ -70,7 +66,6 @@ export const targetNode = (target: CommentTarget, viewerId: string) => (
     )}
   </>
 )
-
 /** "Sora", "Sora and Mina", "Sora and 13 others": the people behind a gathered notification. */
 const actorsText = (
   actors: Actors,

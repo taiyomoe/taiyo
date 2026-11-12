@@ -149,7 +149,6 @@ describe("follow notifications", () => {
   }) => {
     const star = await signInAs(services)
     const fans = await signInMany(services, 30)
-
     // All at once: concurrent follows must still land in a single notification.
     const results = await Promise.all(fans.map((fan) => follow(app, fan.headers, star.userId)))
 
