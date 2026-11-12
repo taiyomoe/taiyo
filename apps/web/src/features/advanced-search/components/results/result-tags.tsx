@@ -3,6 +3,7 @@ import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { SearchHit } from "@/features/advanced-search/hooks/use-search-results"
 import { getVisibleTags } from "@/features/advanced-search/lib/search-tags"
 import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
+import { getContentLanguage } from "@/lib/locale"
 
 const styles = stylex.create({
   tags: {
@@ -50,7 +51,7 @@ const styles = stylex.create({
 })
 
 export function ResultTags({ hit, clamp = true }: { hit: SearchHit; clamp?: boolean }) {
-  const tags = getVisibleTags(hit.tagKeys, hit.spoilerTagKeys)
+  const tags = getVisibleTags(hit.tagKeys, hit.spoilerTagKeys, getContentLanguage())
   const rating = hit.contentRating === "NORMAL" ? null : hit.contentRating
 
   if (tags.length === 0 && rating === null) {

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { type ShowcaseMedia, showcaseMediasQueryOptions } from "@/features/media/api/medias"
 import { Cover } from "@/features/media/components/cover"
+import { localizeTagName } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -67,8 +68,9 @@ const styles = stylex.create({
 const isTagKey = (key: string): key is keyof typeof config.tags => key in config.tags
 const getGenre = (tags: string[]) => {
   const known = tags.filter(isTagKey).map((key) => config.tags[key])
+  const tag = known.find(({ category }) => category === "Genre") ?? known[0]
 
-  return (known.find((tag) => tag.category === "Genre") ?? known[0])?.name.en
+  return tag === undefined ? undefined : localizeTagName(tag.name)
 }
 const getMeta = (media: ShowcaseMedia) =>
   [m.landing_marquee_chapters({ count: media.chapterCount }), getGenre(media.tags)]

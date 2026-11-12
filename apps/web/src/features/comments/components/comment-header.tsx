@@ -7,6 +7,7 @@ import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   header: {
@@ -70,7 +71,7 @@ export function CommentHeader({ comment }: { comment: Comment }) {
             {m.comments_edited()}
           </TooltipTrigger>
           <TooltipPopup>
-            {m.comments_edited_at({ date: new Date(comment.editedAt).toLocaleString() })}
+            {m.comments_edited_at({ date: new Date(comment.editedAt).toLocaleString(getLocale()) })}
           </TooltipPopup>
         </Tooltip>
       )}

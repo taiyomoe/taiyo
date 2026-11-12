@@ -25,6 +25,8 @@ import {
 import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
+import BrazilFlag from "country-flag-icons/react/3x2/BR"
+import FranceFlag from "country-flag-icons/react/3x2/FR"
 import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
 import { use } from "react"
 import { filter, isTruthy, join, map, pipe, take } from "remeda"
@@ -35,12 +37,18 @@ import { ContentFilterItems } from "@/features/settings/components/content-filte
 import { useAuthActions } from "@/hooks/use-auth-actions"
 import { ThemeContext } from "@/lib/theme"
 import { m } from "@/paraglide/messages"
+import { type Locale, getLocale, setLocale } from "@/paraglide/runtime"
 
 const THEMES = [
   { value: "light", label: m.shell_theme_light, icon: Sun },
   { value: "dark", label: m.shell_theme_dark, icon: Moon },
   { value: "system", label: m.shell_theme_system, icon: Monitor },
 ] as const
+const LANGUAGES = [
+  { value: "en", label: "English", flag: UnitedStatesFlag },
+  { value: "pt-BR", label: "Português (Brasil)", flag: BrazilFlag },
+  { value: "fr", label: "Français", flag: FranceFlag },
+] as const satisfies ReadonlyArray<{ value: Locale; label: string; flag: unknown }>
 const styles = stylex.create({
   trigger: {
     padding: 0,
@@ -95,10 +103,6 @@ const styles = stylex.create({
     height: "100%",
     width: "100%",
   },
-  trailing: {
-    color: colors.mutedForeground,
-    marginLeft: "auto",
-  },
 })
 
 export function UserMenu({ user }: { user: Session["user"] }) {
@@ -107,6 +111,8 @@ export function UserMenu({ user }: { user: Session["user"] }) {
   const signOut = useMutation({
     mutationFn: () => auth.signOut(),
   })
+  const locale = getLocale()
+  const LanguageFlag = LANGUAGES.find(({ value }) => value === locale)?.flag ?? UnitedStatesFlag
   const ThemeIcon = THEMES.find(({ value }) => value === theme.preference)?.icon ?? Moon
 
   return (
@@ -174,13 +180,33 @@ export function UserMenu({ user }: { user: Session["user"] }) {
             <ContentFilterItems />
           </MenuSubPopup>
         </MenuSub>
-        <MenuItem disabled>
-          <span sx={styles.flag}>
-            <UnitedStatesFlag {...stylex.props(styles.flagSvg)} />
-          </span>
-          {m.shell_language()}
-          <span sx={styles.trailing}>{m.shell_language_english()}</span>
-        </MenuItem>
+        <MenuSub>
+          <MenuSubTrigger>
+            <span sx={styles.flag}>
+              <LanguageFlag {...stylex.props(styles.flagSvg)} />
+            </span>
+            {m.shell_language()}
+          </MenuSubTrigger>
+          <MenuSubPopup sx={styles.subPopup}>
+            <MenuRadioGroup
+              onValueChange={(value: Locale) => {
+                void setLocale(value)
+              }}
+              value={locale}
+            >
+              {LANGUAGES.map(({ value, label, flag: Flag }) => (
+                <MenuRadioItem key={value} lang={value} value={value}>
+                  <span sx={styles.radioLabel}>
+                    <span sx={styles.flag}>
+                      <Flag {...stylex.props(styles.flagSvg)} />
+                    </span>
+                    {label}
+                  </span>
+                </MenuRadioItem>
+              ))}
+            </MenuRadioGroup>
+          </MenuSubPopup>
+        </MenuSub>
         <MenuSeparator />
         <MenuItem
           disabled={signOut.isPending}

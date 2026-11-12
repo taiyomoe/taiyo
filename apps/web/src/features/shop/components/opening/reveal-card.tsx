@@ -9,6 +9,7 @@ import {
   RARITY_LABELS,
 } from "@/features/users/lib/cosmetic-labels"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const emerge = stylex.keyframes({
   "0%": { filter: "blur(14px)", opacity: 0, transform: "translateY(90px) scale(0.6)" },
@@ -114,7 +115,7 @@ export function RevealCard({ opening, viewer }: { opening: LootBoxOpening; viewe
         </div>
         {opening.duplicate ? (
           <span sx={styles.status}>
-            {m.shop_opening_duplicate({ refund: opening.refund.toLocaleString() })}
+            {m.shop_opening_duplicate({ refund: opening.refund.toLocaleString(getLocale()) })}
           </span>
         ) : null}
       </div>

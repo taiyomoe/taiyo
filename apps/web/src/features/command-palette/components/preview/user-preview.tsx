@@ -9,6 +9,7 @@ import { previewStyles } from "@/features/command-palette/components/preview/pre
 import { GroupAvatar, PersonAvatar } from "@/features/groups/components/group-avatar"
 import { userProfileQueryOptions } from "@/features/users/api/profile"
 import { ROLE_LABELS } from "@/features/users/lib/role-labels"
+import { pickLocalized } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
@@ -74,12 +75,7 @@ export function UserPreview({ user }: { user: UserEntity }) {
     ...userProfileQueryOptions(user.username),
     staleTime: 60_000,
   })
-  const about =
-    profile === undefined
-      ? undefined
-      : (profile.about[getLocale()] ??
-        profile.about.en ??
-        Object.values(profile.about).find((value) => value !== ""))
+  const about = profile === undefined ? undefined : pickLocalized(profile.about)
   const joined =
     profile === undefined
       ? null

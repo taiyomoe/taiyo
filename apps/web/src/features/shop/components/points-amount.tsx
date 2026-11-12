@@ -2,6 +2,7 @@ import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
 import { Coins } from "@taiyomoe/ui/components/icons"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   amount: {
@@ -30,7 +31,7 @@ export function PointsAmount({
   return (
     <span sx={[styles.amount, sx]}>
       <Coins size={size} sx={styles.icon} />
-      {points.toLocaleString()}
+      {points.toLocaleString(getLocale())}
     </span>
   )
 }

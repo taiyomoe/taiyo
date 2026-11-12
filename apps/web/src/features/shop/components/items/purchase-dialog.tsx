@@ -22,6 +22,7 @@ import { useSoundPreference } from "@/features/shop/lib/use-sound-preference"
 import { getCosmeticLabel } from "@/features/users/lib/cosmetic-labels"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   preview: {
@@ -78,7 +79,7 @@ export function PurchaseDialog({
         <DialogHeader>
           <DialogTitle>{m.shop_confirm_title({ name })}</DialogTitle>
           <DialogDescription>
-            {m.shop_confirm_description({ price: price.toLocaleString() })}
+            {m.shop_confirm_description({ price: price.toLocaleString(getLocale()) })}
           </DialogDescription>
         </DialogHeader>
         <DialogPanel>
@@ -122,7 +123,7 @@ export function PurchaseDialog({
               )
             }}
           >
-            {m.shop_confirm_buy({ price: price.toLocaleString() })}
+            {m.shop_confirm_buy({ price: price.toLocaleString(getLocale()) })}
           </Button>
         </DialogFooter>
       </DialogPopup>

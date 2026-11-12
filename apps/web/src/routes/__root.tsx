@@ -22,6 +22,7 @@ import {
   systemThemeScript,
   useThemeState,
 } from "@/lib/theme"
+import { getLocale } from "@/paraglide/runtime"
 import appCss from "../styles.css?url"
 
 const readCookies = createIsomorphicFn()
@@ -116,7 +117,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html
       className={theme.dark ? darkThemeClassName : undefined}
-      lang="en"
+      lang={getLocale()}
       suppressHydrationWarning
     >
       <head>

@@ -35,6 +35,7 @@ export const tags = {
     name: {
       en: "Action",
       pt_br: "Ação",
+      fr: "Action",
     },
     description: {
       en: "Prominently features fast-paced sequences, physical combat, and intense confrontations.",
@@ -47,6 +48,7 @@ export const tags = {
     name: {
       en: "Adventure",
       pt_br: "Aventura",
+      fr: "Aventure",
     },
     description: {
       en: "Centers around exploration, journeys, and discovery of new places or experiences.",
@@ -59,6 +61,7 @@ export const tags = {
     name: {
       en: "Boys' Love",
       pt_br: "Boys' Love",
+      fr: "Boys’ Love",
     },
     description: {
       en: "Prominently features romance between two males, not inherently sexual.",
@@ -71,6 +74,7 @@ export const tags = {
     name: {
       en: "Comedy",
       pt_br: "Comédia",
+      fr: "Comédie",
     },
     description: {
       en: "Primarily aims to entertain through humor, jokes, and lighthearted situations.",
@@ -84,6 +88,7 @@ export const tags = {
     name: {
       en: "Crime",
       pt_br: "Crime",
+      fr: "Crime",
     },
     description: {
       en: "Centers around unlawful activities punishable by the state or other authority.",
@@ -96,6 +101,7 @@ export const tags = {
     name: {
       en: "Drama",
       pt_br: "Drama",
+      fr: "Drame",
     },
     description: {
       en: "Emphasizes emotional depth, character development, and interpersonal conflicts.",
@@ -109,6 +115,7 @@ export const tags = {
     name: {
       en: "Fantasy",
       pt_br: "Fantasia",
+      fr: "Fantasy",
     },
     description: {
       en: "Set in worlds with magic, mythical creatures, or supernatural elements.",
@@ -121,6 +128,7 @@ export const tags = {
     name: {
       en: "Girls' Love",
       pt_br: "Girls' Love",
+      fr: "Girls’ Love",
     },
     description: {
       en: "Prominently features romance between two females, not inherently sexual.",
@@ -133,6 +141,7 @@ export const tags = {
     name: {
       en: "Historical",
       pt_br: "Histórico",
+      fr: "Historique",
     },
     description: {
       en: "Partly or completely set during a real period of world history.",
@@ -145,6 +154,7 @@ export const tags = {
     name: {
       en: "Horror",
       pt_br: "Terror",
+      fr: "Horreur",
     },
     description: {
       en: "Designed to evoke fear, dread, or unease through disturbing imagery or themes.",
@@ -158,6 +168,7 @@ export const tags = {
     name: {
       en: "Isekai",
       pt_br: "Isekai",
+      fr: "Isekai",
     },
     description: {
       en: "Features characters being transported into an alternate world setting and having to adapt to their new surroundings.",
@@ -171,6 +182,7 @@ export const tags = {
     name: {
       en: "Magical Girls",
       pt_br: "Garotas Mágicas",
+      fr: "Magical girls",
     },
     description: {
       en: "Prominently features magical girls who aim to serve the greater good.",
@@ -183,6 +195,7 @@ export const tags = {
     name: {
       en: "Mecha",
       pt_br: "Mecha",
+      fr: "Mecha",
     },
     description: {
       en: "Prominently features piloted or autonomous giant robots and mechanical suits.",
@@ -195,6 +208,7 @@ export const tags = {
     name: {
       en: "Medical",
       pt_br: "Médico",
+      fr: "Médical",
     },
     description: {
       en: "Centered around the activities of people working in the field of medicine.",
@@ -207,6 +221,7 @@ export const tags = {
     name: {
       en: "Mystery",
       pt_br: "Mistério",
+      fr: "Mystère",
     },
     description: {
       en: "Centers around solving puzzles, uncovering secrets, or investigating unknown events.",
@@ -220,6 +235,7 @@ export const tags = {
     name: {
       en: "Philosophical",
       pt_br: "Filosófico",
+      fr: "Philosophique",
     },
     description: {
       en: "Relating or devoted to the study of the fundamental nature of knowledge, reality, and existence.",
@@ -233,6 +249,7 @@ export const tags = {
     name: {
       en: "Psychological",
       pt_br: "Psicológico",
+      fr: "Psychologique",
     },
     description: {
       en: "Explores the mental and emotional states of characters, often featuring mind games or internal struggles.",
@@ -246,6 +263,7 @@ export const tags = {
     name: {
       en: "Romance",
       pt_br: "Romance",
+      fr: "Romance",
     },
     description: {
       en: "Primarily focuses on romantic relationships and emotional connections between characters.",
@@ -259,6 +277,7 @@ export const tags = {
     name: {
       en: "Sci-Fi",
       pt_br: "Ficção Científica",
+      fr: "Science-fiction",
     },
     description: {
       en: "Set in futuristic or technologically advanced settings, often exploring scientific concepts.",
@@ -272,6 +291,7 @@ export const tags = {
     name: {
       en: "Slice of Life",
       pt_br: "Slice of Life",
+      fr: "Tranche de vie",
     },
     description: {
       en: "Depicts everyday experiences and mundane aspects of ordinary life.",
@@ -284,6 +304,7 @@ export const tags = {
     name: {
       en: "Sports",
       pt_br: "Esportes",
+      fr: "Sport",
     },
     description: {
       en: "Centers around athletic competitions, training, and the world of sports.",
@@ -296,6 +317,7 @@ export const tags = {
     name: {
       en: "Superhero",
       pt_br: "Super-herói",
+      fr: "Super-héros",
     },
     description: {
       en: "Prominently features super-powered humans who aim to serve the greater good.",
@@ -308,6 +330,7 @@ export const tags = {
     name: {
       en: "Supernatural",
       pt_br: "Sobrenatural",
+      fr: "Surnaturel",
     },
     description: {
       en: "Features phenomena beyond scientific explanation, such as ghosts, spirits, or paranormal events.",
@@ -321,6 +344,7 @@ export const tags = {
     name: {
       en: "Thriller",
       pt_br: "Suspense",
+      fr: "Thriller",
     },
     description: {
       en: "Built around tension, suspense, and high-stakes situations that keep readers on edge.",
@@ -334,6 +358,7 @@ export const tags = {
     name: {
       en: "Tragedy",
       pt_br: "Tragédia",
+      fr: "Tragédie",
     },
     description: {
       en: "Centers around tragic events and unhappy endings.",
@@ -346,6 +371,7 @@ export const tags = {
     name: {
       en: "Wuxia",
       pt_br: "Wuxia",
+      fr: "Wuxia",
     },
     description: {
       en: "Chinese fiction concerning the adventures of martial artists in Ancient China.",
@@ -360,6 +386,7 @@ export const tags = {
     name: {
       en: "Oneshot",
       pt_br: "Oneshot",
+      fr: "One-shot",
     },
     description: {
       en: "A media that is a single story.",
@@ -372,6 +399,7 @@ export const tags = {
     name: {
       en: "Award Winning",
       pt_br: "Prêmio Ganhador",
+      fr: "Primé",
     },
     description: {
       en: "A manga that has won an award.",
@@ -384,6 +412,7 @@ export const tags = {
     name: {
       en: "Official Colored",
       pt_br: "Oficial Colorido",
+      fr: "Couleur officielle",
     },
     description: {
       en: "A manga that is officially colored.",
@@ -396,6 +425,7 @@ export const tags = {
     name: {
       en: "Long Strip",
       pt_br: "Long Strip",
+      fr: "Défilement vertical",
     },
     description: {
       en: "Manga originally published in a vertical, long-strip format, designed for viewing on smartphones. Also known as webtoons.",
@@ -409,6 +439,7 @@ export const tags = {
     name: {
       en: "Anthology",
       pt_br: "Antologia",
+      fr: "Anthologie",
     },
     description: {
       en: "A collection of separate works collated into a single release.",
@@ -421,6 +452,7 @@ export const tags = {
     name: {
       en: "Fan Colored",
       pt_br: "Fan Colorido",
+      fr: "Colorisé par des fans",
     },
     description: {
       en: "A manga that is colored by fans.",
@@ -433,6 +465,7 @@ export const tags = {
     name: {
       en: "Self Published",
       pt_br: "Self Published",
+      fr: "Autoédité",
     },
     description: {
       en: "A manga that is self-published.",
@@ -445,6 +478,7 @@ export const tags = {
     name: {
       en: "4-koma",
       pt_br: "4-koma",
+      fr: "4-koma",
     },
     description: {
       en: "A manga in the 'yonkoma' format, which consists of four equal-sized panels arranged in a vertical strip.",
@@ -458,6 +492,7 @@ export const tags = {
     name: {
       en: "Doujinshi",
       pt_br: "Doujinshi",
+      fr: "Doujinshi",
     },
     description: {
       en: "A manga that is a doujinshi.",
@@ -470,6 +505,7 @@ export const tags = {
     name: {
       en: "Web Comic",
       pt_br: "Web Comic",
+      fr: "Webcomic",
     },
     description: {
       en: "A manga that is a web comic.",
@@ -482,6 +518,7 @@ export const tags = {
     name: {
       en: "Adaptation",
       pt_br: "Adaptation",
+      fr: "Adaptation",
     },
     description: {
       en: "A manga that is an adaptation.",
@@ -494,6 +531,7 @@ export const tags = {
     name: {
       en: "Full Color",
       pt_br: "Colorido",
+      fr: "Tout en couleur",
     },
     description: {
       en: "Manga that were initially published in full color.",
@@ -513,6 +551,7 @@ export const tags = {
     name: {
       en: "Achromatic",
       pt_br: "Acromático",
+      fr: "Achromatique",
     },
     description: {
       en: "Contains animation that is primarily done in black and white.",
@@ -525,6 +564,7 @@ export const tags = {
     name: {
       en: "Achronological Order",
       pt_br: "Ordem Acronológica",
+      fr: "Ordre non chronologique",
     },
     description: {
       en: "Chapters or episodes do not occur in chronological order.",
@@ -537,6 +577,7 @@ export const tags = {
     name: {
       en: "Acrobatics",
       pt_br: "Acrobacia",
+      fr: "Acrobatie",
     },
     description: {
       en: "The art of jumping, tumbling, and balancing. Often paired with trapeze, trampolining, tightropes, or general gymnastics.",
@@ -550,6 +591,7 @@ export const tags = {
     name: {
       en: "Acting",
       pt_br: "Atuação",
+      fr: "Comédie (jeu d’acteur)",
     },
     description: {
       en: "Centers around actors or the acting industry.",
@@ -562,6 +604,7 @@ export const tags = {
     name: {
       en: "Adoption",
       pt_br: "Adoção",
+      fr: "Adoption",
     },
     description: {
       en: "Features a character who has been adopted by someone who is neither of their biological parents.",
@@ -575,6 +618,7 @@ export const tags = {
     name: {
       en: "Advertisement",
       pt_br: "Propaganda",
+      fr: "Publicité",
     },
     description: {
       en: "Produced in order to promote the products of a certain company.",
@@ -587,6 +631,7 @@ export const tags = {
     name: {
       en: "Afterlife",
       pt_br: "Vida Após a Morte",
+      fr: "Au-delà",
     },
     description: {
       en: "Partly or completely set in the afterlife.",
@@ -599,6 +644,7 @@ export const tags = {
     name: {
       en: "Age Gap",
       pt_br: "Diferença de Idade",
+      fr: "Différence d’âge",
     },
     description: {
       en: "Prominently features romantic relations between people with a significant age difference.",
@@ -612,6 +658,7 @@ export const tags = {
     name: {
       en: "Age Regression",
       pt_br: "Regressão de Idade",
+      fr: "Régression d’âge",
     },
     description: {
       en: "Prominently features a character who was returned to a younger state.",
@@ -624,6 +671,7 @@ export const tags = {
     name: {
       en: "Agender",
       pt_br: "Agênero",
+      fr: "Agenre",
     },
     description: {
       en: "Prominently features agender characters.",
@@ -636,6 +684,7 @@ export const tags = {
     name: {
       en: "Agriculture",
       pt_br: "Agricultura",
+      fr: "Agriculture",
     },
     description: {
       en: "Prominently features agriculture practices.",
@@ -648,6 +697,7 @@ export const tags = {
     name: {
       en: "Ahegao",
       pt_br: "Ahegao",
+      fr: "Ahegao",
     },
     description: {
       en: "Features a character making an exaggerated orgasm face.",
@@ -660,6 +710,7 @@ export const tags = {
     name: {
       en: "Airsoft",
       pt_br: "Airsoft",
+      fr: "Airsoft",
     },
     description: {
       en: "Centers around the sport of airsoft.",
@@ -672,6 +723,7 @@ export const tags = {
     name: {
       en: "Alchemy",
       pt_br: "Alquimia",
+      fr: "Alchimie",
     },
     description: {
       en: "Features character(s) who practice alchemy.",
@@ -684,6 +736,7 @@ export const tags = {
     name: {
       en: "Aliens",
       pt_br: "Alienígenas",
+      fr: "Extraterrestres",
     },
     description: {
       en: "Prominently features extraterrestrial lifeforms.",
@@ -696,6 +749,7 @@ export const tags = {
     name: {
       en: "Alternate Universe",
       pt_br: "Universo Alternativo",
+      fr: "Univers alternatif",
     },
     description: {
       en: "Features multiple alternate universes in the same series.",
@@ -708,6 +762,7 @@ export const tags = {
     name: {
       en: "American Football",
       pt_br: "Futebol Americano",
+      fr: "Football américain",
     },
     description: {
       en: "Centers around the sport of American football.",
@@ -720,6 +775,7 @@ export const tags = {
     name: {
       en: "Amnesia",
       pt_br: "Amnésia",
+      fr: "Amnésie",
     },
     description: {
       en: "Prominently features a character(s) with memory loss.",
@@ -732,6 +788,7 @@ export const tags = {
     name: {
       en: "Amputation",
       pt_br: "Amputação",
+      fr: "Amputation",
     },
     description: {
       en: "Features amputation or amputees.",
@@ -744,6 +801,7 @@ export const tags = {
     name: {
       en: "Anachronism",
       pt_br: "Anacronismo",
+      fr: "Anachronisme",
     },
     description: {
       en: "Prominently features elements that are out of place in the historical period the work takes place in, particularly modern elements in a historical setting.",
@@ -757,6 +815,7 @@ export const tags = {
     name: {
       en: "Anal Sex",
       pt_br: "Sexo Anal",
+      fr: "Sexe anal",
     },
     description: {
       en: "Features sexual penetration of the anal cavity.",
@@ -769,6 +828,7 @@ export const tags = {
     name: {
       en: "Ancient China",
       pt_br: "China Antiga",
+      fr: "Chine ancienne",
     },
     description: {
       en: "Setting in ancient china, does not apply to fantasy settings.",
@@ -781,6 +841,7 @@ export const tags = {
     name: {
       en: "Angels",
       pt_br: "Anjos",
+      fr: "Anges",
     },
     description: {
       en: "Prominently features spiritual beings usually represented with wings and halos and believed to be attendants of God.",
@@ -794,6 +855,7 @@ export const tags = {
     name: {
       en: "Animals",
       pt_br: "Animais",
+      fr: "Animaux",
     },
     description: {
       en: "Prominently features animal characters in a leading role.",
@@ -806,6 +868,7 @@ export const tags = {
     name: {
       en: "Anthropomorphism",
       pt_br: "Antropomorfismo",
+      fr: "Anthropomorphisme",
     },
     description: {
       en: "Contains non-human character(s) that have attributes or characteristics of a human being.",
@@ -819,6 +882,7 @@ export const tags = {
     name: {
       en: "Anti-Hero",
       pt_br: "Anti-Herói",
+      fr: "Antihéros",
     },
     description: {
       en: "Features a protagonist who lacks conventional heroic attributes and may be considered a borderline villain.",
@@ -832,6 +896,7 @@ export const tags = {
     name: {
       en: "Archery",
       pt_br: "Arco e Flecha",
+      fr: "Tir à l’arc",
     },
     description: {
       en: "Centers around the sport of archery, or prominently features the use of archery in combat.",
@@ -845,6 +910,7 @@ export const tags = {
     name: {
       en: "Armpits",
       pt_br: "Axilas",
+      fr: "Aisselles",
     },
     description: {
       en: "Features the sexual depiction or stimulation of a character's armpits.",
@@ -857,6 +923,7 @@ export const tags = {
     name: {
       en: "Aromantic",
       pt_br: "Arromântico",
+      fr: "Aromantique",
     },
     description: {
       en: "Features a character who experiences little to no romantic attraction.",
@@ -869,6 +936,7 @@ export const tags = {
     name: {
       en: "Arranged Marriage",
       pt_br: "Casamento Arranjado",
+      fr: "Mariage arrangé",
     },
     description: {
       en: "Features two characters made to marry each other, usually by their family.",
@@ -881,6 +949,7 @@ export const tags = {
     name: {
       en: "Artificial Intelligence",
       pt_br: "Inteligência Artificial",
+      fr: "Intelligence artificielle",
     },
     description: {
       en: "Intelligent non-organic machines that work and react similarly to humans.",
@@ -894,6 +963,7 @@ export const tags = {
     name: {
       en: "Asexual",
       pt_br: "Assexual",
+      fr: "Asexuel",
     },
     description: {
       en: "Features a character who isn't sexually attracted to people of any sex or gender.",
@@ -907,6 +977,7 @@ export const tags = {
     name: {
       en: "Ashikoki",
       pt_br: "Ashikoki",
+      fr: "Ashikoki",
     },
     description: {
       en: "Footjob; features stimulation of genitalia by feet.",
@@ -919,6 +990,7 @@ export const tags = {
     name: {
       en: "Asphyxiation",
       pt_br: "Asfixia",
+      fr: "Asphyxie",
     },
     description: {
       en: "Features breath play.",
@@ -931,6 +1003,7 @@ export const tags = {
     name: {
       en: "Assassins",
       pt_br: "Assassinos",
+      fr: "Assassins",
     },
     description: {
       en: "Centers around characters who murder people as a profession.",
@@ -943,6 +1016,7 @@ export const tags = {
     name: {
       en: "Astronomy",
       pt_br: "Astronomia",
+      fr: "Astronomie",
     },
     description: {
       en: "Relating or centered around the study of celestial objects and phenomena, space, or the universe.",
@@ -956,6 +1030,7 @@ export const tags = {
     name: {
       en: "Athletics",
       pt_br: "Atletismo",
+      fr: "Athlétisme",
     },
     description: {
       en: "Centers around sporting events that involve competitive running, jumping, throwing, or walking.",
@@ -969,6 +1044,7 @@ export const tags = {
     name: {
       en: "Augmented Reality",
       pt_br: "Realidade Aumentada",
+      fr: "Réalité augmentée",
     },
     description: {
       en: "Prominently features events with augmented reality as the main setting.",
@@ -981,6 +1057,7 @@ export const tags = {
     name: {
       en: "Autobiographical",
       pt_br: "Autobiográfico",
+      fr: "Autobiographique",
     },
     description: {
       en: "Real stories and anecdotes written by the author about their own life.",
@@ -993,6 +1070,7 @@ export const tags = {
     name: {
       en: "Aviation",
       pt_br: "Aviação",
+      fr: "Aviation",
     },
     description: {
       en: "Regarding the flying or operation of aircraft.",
@@ -1005,6 +1083,7 @@ export const tags = {
     name: {
       en: "Badminton",
       pt_br: "Badminton",
+      fr: "Badminton",
     },
     description: {
       en: "Centers around the sport of badminton.",
@@ -1017,6 +1096,7 @@ export const tags = {
     name: {
       en: "Ballet",
       pt_br: "Balé",
+      fr: "Ballet",
     },
     description: {
       en: "Prominently features the dance art of ballet. Both traditional and contemporary styles.",
@@ -1029,6 +1109,7 @@ export const tags = {
     name: {
       en: "Band",
       pt_br: "Banda",
+      fr: "Groupe de musique",
     },
     description: {
       en: "Main cast is a group of musicians.",
@@ -1041,6 +1122,7 @@ export const tags = {
     name: {
       en: "Bar",
       pt_br: "Bar",
+      fr: "Bar",
     },
     description: {
       en: "Partly or completely set in a bar.",
@@ -1053,6 +1135,7 @@ export const tags = {
     name: {
       en: "Baseball",
       pt_br: "Beisebol",
+      fr: "Baseball",
     },
     description: {
       en: "Centers around the sport of baseball.",
@@ -1065,6 +1148,7 @@ export const tags = {
     name: {
       en: "Basketball",
       pt_br: "Basquete",
+      fr: "Basket-ball",
     },
     description: {
       en: "Centers around the sport of basketball.",
@@ -1077,6 +1161,7 @@ export const tags = {
     name: {
       en: "Battle Royale",
       pt_br: "Battle Royale",
+      fr: "Battle royale",
     },
     description: {
       en: "Centers around a fierce group competition, often violent and with only one winner.",
@@ -1090,6 +1175,7 @@ export const tags = {
     name: {
       en: "Biographical",
       pt_br: "Biográfico",
+      fr: "Biographique",
     },
     description: {
       en: "Based on true stories of real persons living or dead, written by another.",
@@ -1102,6 +1188,7 @@ export const tags = {
     name: {
       en: "Bisexual",
       pt_br: "Bissexual",
+      fr: "Bisexuel",
     },
     description: {
       en: "Features a character who is romantically or sexually attracted to people of more than one sex or gender.",
@@ -1115,6 +1202,7 @@ export const tags = {
     name: {
       en: "Blackmail",
       pt_br: "Chantagem",
+      fr: "Chantage",
     },
     description: {
       en: "Features a character blackmailing another.",
@@ -1127,6 +1215,7 @@ export const tags = {
     name: {
       en: "Board Game",
       pt_br: "Jogo de Tabuleiro",
+      fr: "Jeu de société",
     },
     description: {
       en: "Centers around characters playing board games.",
@@ -1139,6 +1228,7 @@ export const tags = {
     name: {
       en: "Boarding School",
       pt_br: "Internato",
+      fr: "Internat",
     },
     description: {
       en: "Features characters attending a boarding school.",
@@ -1151,6 +1241,7 @@ export const tags = {
     name: {
       en: "Body Horror",
       pt_br: "Horror Corporal",
+      fr: "Body horror",
     },
     description: {
       en: "Features characters who undergo horrific transformations or disfigurement, often to their own detriment.",
@@ -1164,6 +1255,7 @@ export const tags = {
     name: {
       en: "Body Image",
       pt_br: "Imagem Corporal",
+      fr: "Image corporelle",
     },
     description: {
       en: "Features themes of self-esteem concerning perceived defects or flaws in appearance, such as body weight or disfigurement, and may discuss topics such as eating disorders, fatphobia, and body dysmorphia.",
@@ -1177,6 +1269,7 @@ export const tags = {
     name: {
       en: "Body Swapping",
       pt_br: "Troca de Corpos",
+      fr: "Échange de corps",
     },
     description: {
       en: "Centers around individuals swapping bodies with one another.",
@@ -1189,6 +1282,7 @@ export const tags = {
     name: {
       en: "Bondage",
       pt_br: "Bondage",
+      fr: "Bondage",
     },
     description: {
       en: "Features BDSM, with or without the use of accessories.",
@@ -1201,6 +1295,7 @@ export const tags = {
     name: {
       en: "Boobjob",
       pt_br: "Boobjob",
+      fr: "Branlette espagnole",
     },
     description: {
       en: "Features the stimulation of male genitalia by breasts.",
@@ -1213,6 +1308,7 @@ export const tags = {
     name: {
       en: "Bowling",
       pt_br: "Boliche",
+      fr: "Bowling",
     },
     description: {
       en: "Centers around the sport of Bowling.",
@@ -1225,6 +1321,7 @@ export const tags = {
     name: {
       en: "Boxing",
       pt_br: "Boxe",
+      fr: "Boxe",
     },
     description: {
       en: "Centers around the sport of boxing.",
@@ -1237,6 +1334,7 @@ export const tags = {
     name: {
       en: "Bullying",
       pt_br: "Bullying",
+      fr: "Harcèlement scolaire",
     },
     description: {
       en: "Prominently features the use of force for intimidation, often in a school setting.",
@@ -1249,6 +1347,7 @@ export const tags = {
     name: {
       en: "Butler",
       pt_br: "Mordomo",
+      fr: "Majordome",
     },
     description: {
       en: "Prominently features a character who is a butler.",
@@ -1261,6 +1360,7 @@ export const tags = {
     name: {
       en: "Calligraphy",
       pt_br: "Caligrafia",
+      fr: "Calligraphie",
     },
     description: {
       en: "Centers around the art of calligraphy.",
@@ -1273,6 +1373,7 @@ export const tags = {
     name: {
       en: "Camping",
       pt_br: "Acampamento",
+      fr: "Camping",
     },
     description: {
       en: "Features the recreational activity of camping, either in a tent, vehicle, or simply sleeping outdoors.",
@@ -1286,6 +1387,7 @@ export const tags = {
     name: {
       en: "Cannibalism",
       pt_br: "Canibalismo",
+      fr: "Cannibalisme",
     },
     description: {
       en: "Prominently features the act of consuming another member of the same species as food.",
@@ -1298,6 +1400,7 @@ export const tags = {
     name: {
       en: "Card Battle",
       pt_br: "Batalha de Cartas",
+      fr: "Combat de cartes",
     },
     description: {
       en: "Centers around individuals competing in card games.",
@@ -1310,6 +1413,7 @@ export const tags = {
     name: {
       en: "Cars",
       pt_br: "Carros",
+      fr: "Voitures",
     },
     description: {
       en: "Centers around the use of automotive vehicles.",
@@ -1322,6 +1426,7 @@ export const tags = {
     name: {
       en: "Centaur",
       pt_br: "Centauro",
+      fr: "Centaure",
     },
     description: {
       en: "Prominently features a character with a human upper body and the lower body of a horse.",
@@ -1335,6 +1440,7 @@ export const tags = {
     name: {
       en: "Cervix Penetration",
       pt_br: "Penetração Cervical",
+      fr: "Pénétration du col",
     },
     description: {
       en: "A sexual act in which the cervix is visibly penetrated.",
@@ -1347,6 +1453,7 @@ export const tags = {
     name: {
       en: "CGI",
       pt_br: "CGI",
+      fr: "Images de synthèse",
     },
     description: {
       en: "Prominently features scenes created with computer-generated imagery.",
@@ -1359,6 +1466,7 @@ export const tags = {
     name: {
       en: "Cheating",
       pt_br: "Traição",
+      fr: "Infidélité",
     },
     description: {
       en: "Features a character with a partner shown being intimate with someone else consensually.",
@@ -1372,6 +1480,7 @@ export const tags = {
     name: {
       en: "Cheerleading",
       pt_br: "Cheerleading",
+      fr: "Pom-pom girls",
     },
     description: {
       en: "Centers around the activity of cheerleading.",
@@ -1384,6 +1493,7 @@ export const tags = {
     name: {
       en: "Chibi",
       pt_br: "Chibi",
+      fr: "Chibi",
     },
     description: {
       en: 'Features "super deformed" character designs with smaller, rounder proportions and a cute look.',
@@ -1397,6 +1507,7 @@ export const tags = {
     name: {
       en: "Chimera",
       pt_br: "Quimera",
+      fr: "Chimère",
     },
     description: {
       en: "Features a beast made by combining animals, usually with humans.",
@@ -1409,6 +1520,7 @@ export const tags = {
     name: {
       en: "Chuunibyou",
       pt_br: "Chuunibyou",
+      fr: "Chuunibyou",
     },
     description: {
       en: 'Prominently features a character with "Middle School 2nd Year Syndrome", who either acts like a know-it-all adult or falsely believes they have special powers.',
@@ -1422,6 +1534,7 @@ export const tags = {
     name: {
       en: "Circus",
       pt_br: "Circo",
+      fr: "Cirque",
     },
     description: {
       en: "Prominently features a circus.",
@@ -1434,6 +1547,7 @@ export const tags = {
     name: {
       en: "Class Struggle",
       pt_br: "Luta de Classes",
+      fr: "Lutte des classes",
     },
     description: {
       en: "Contains conflict born between the different social classes. Generally between an dominant elite and a suffering oppressed group.",
@@ -1447,6 +1561,7 @@ export const tags = {
     name: {
       en: "Classic Literature",
       pt_br: "Literatura Clássica",
+      fr: "Littérature classique",
     },
     description: {
       en: "Discusses or adapts a work of classic world literature.",
@@ -1459,6 +1574,7 @@ export const tags = {
     name: {
       en: "Classical Music",
       pt_br: "Música Clássica",
+      fr: "Musique classique",
     },
     description: {
       en: "Centers on the musical style of classical, not to be applied to anime that use classical in its soundtrack.",
@@ -1472,6 +1588,7 @@ export const tags = {
     name: {
       en: "Clone",
       pt_br: "Clone",
+      fr: "Clone",
     },
     description: {
       en: "Prominently features a character who is an artificial exact copy of another organism.",
@@ -1484,6 +1601,7 @@ export const tags = {
     name: {
       en: "Coastal",
       pt_br: "Costeiro",
+      fr: "Littoral",
     },
     description: {
       en: "Story prominently takes place near the beach or around a coastal area/town. Setting is near the ocean.",
@@ -1497,6 +1615,7 @@ export const tags = {
     name: {
       en: "Cohabitation",
       pt_br: "Coabitação",
+      fr: "Cohabitation",
     },
     description: {
       en: "Features two or more people who live in the same household and develop a romantic or sexual relationship.",
@@ -1510,6 +1629,7 @@ export const tags = {
     name: {
       en: "College",
       pt_br: "Faculdade",
+      fr: "Université",
     },
     description: {
       en: "Partly or completely set in a college or university.",
@@ -1522,6 +1642,7 @@ export const tags = {
     name: {
       en: "Coming of Age",
       pt_br: "Amadurecimento",
+      fr: "Passage à l’âge adulte",
     },
     description: {
       en: "Centers around a character's transition from childhood to adulthood.",
@@ -1534,6 +1655,7 @@ export const tags = {
     name: {
       en: "Conspiracy",
       pt_br: "Conspiração",
+      fr: "Conspiration",
     },
     description: {
       en: "Contains one or more factions controlling or attempting to control the world from the shadows.",
@@ -1546,6 +1668,7 @@ export const tags = {
     name: {
       en: "Cosmic Horror",
       pt_br: "Horror Cósmico",
+      fr: "Horreur cosmique",
     },
     description: {
       en: "A type of horror that emphasizes human insignificance in the grand scope of cosmic reality; fearing the unknown and being powerless to fight it.",
@@ -1559,6 +1682,7 @@ export const tags = {
     name: {
       en: "Cosplay",
       pt_br: "Cosplay",
+      fr: "Cosplay",
     },
     description: {
       en: "Features dressing up as a different character or profession.",
@@ -1571,6 +1695,7 @@ export const tags = {
     name: {
       en: "Cowboys",
       pt_br: "Cowboys",
+      fr: "Cowboys",
     },
     description: {
       en: "Features Western or Western-inspired cowboys.",
@@ -1583,6 +1708,7 @@ export const tags = {
     name: {
       en: "Creature Taming",
       pt_br: "Domesticação de Criaturas",
+      fr: "Dressage de créatures",
     },
     description: {
       en: "Features the taming of animals, monsters, or other creatures.",
@@ -1595,6 +1721,7 @@ export const tags = {
     name: {
       en: "Criminal Organization",
       pt_br: "Organização Criminosa",
+      fr: "Organisation criminelle",
     },
     description: {
       en: "Prominently features a group of people who commit crimes for illicit or violent purposes.",
@@ -1607,6 +1734,7 @@ export const tags = {
     name: {
       en: "Crossdressing",
       pt_br: "Crossdressing",
+      fr: "Travestissement",
     },
     description: {
       en: "Prominently features a character dressing up as the opposite sex.",
@@ -1619,6 +1747,7 @@ export const tags = {
     name: {
       en: "Crossover",
       pt_br: "Crossover",
+      fr: "Crossover",
     },
     description: {
       en: "Centers around the placement of two or more otherwise discrete fictional characters, settings, or universes into the context of a single story.",
@@ -1632,6 +1761,7 @@ export const tags = {
     name: {
       en: "Cult",
       pt_br: "Culto",
+      fr: "Secte",
     },
     description: {
       en: "Features a social group with unorthodox religious, spiritual, or philosophical beliefs and practices.",
@@ -1645,6 +1775,7 @@ export const tags = {
     name: {
       en: "Cultivation",
       pt_br: "Cultivo",
+      fr: "Cultivation",
     },
     description: {
       en: 'Features characters using training, often martial arts-related, and other special methods to cultivate qi (a component of traditional Chinese philosophy, described as "life force") and gain strength or immortality.',
@@ -1658,6 +1789,7 @@ export const tags = {
     name: {
       en: "Cumflation",
       pt_br: "Cumflation",
+      fr: "Cumflation",
     },
     description: {
       en: "The stomach area expands outward like a balloon due to being filled specifically with semen.",
@@ -1671,6 +1803,7 @@ export const tags = {
     name: {
       en: "Cunnilingus",
       pt_br: "Cunnilingus",
+      fr: "Cunnilingus",
     },
     description: {
       en: "Features oral sex performed on female genitalia.",
@@ -1683,6 +1816,7 @@ export const tags = {
     name: {
       en: "Curses",
       pt_br: "Maldições",
+      fr: "Malédictions",
     },
     description: {
       en: "Features a character, object or area that has been cursed, usually by a malevolent supernatural force.",
@@ -1696,6 +1830,7 @@ export const tags = {
     name: {
       en: "Cute Boys Doing Cute Things",
       pt_br: "Garotos Fofos Fazendo Coisas Fofas",
+      fr: "Garçons mignons faisant des choses mignonnes",
     },
     description: {
       en: "Centers around male characters doing cute activities, usually with little to no emphasis on drama and conflict.",
@@ -1709,6 +1844,7 @@ export const tags = {
     name: {
       en: "Cute Girls Doing Cute Things",
       pt_br: "Garotas Fofas Fazendo Coisas Fofas",
+      fr: "Filles mignonnes faisant des choses mignonnes",
     },
     description: {
       en: "Centers around female characters doing cute activities, usually with little to no emphasis on drama and conflict.\n",
@@ -1722,6 +1858,7 @@ export const tags = {
     name: {
       en: "Cyberpunk",
       pt_br: "Cyberpunk",
+      fr: "Cyberpunk",
     },
     description: {
       en: "Set in a future of advanced technological and scientific achievements that have resulted in social disorder.",
@@ -1735,6 +1872,7 @@ export const tags = {
     name: {
       en: "Cyborg",
       pt_br: "Ciborgue",
+      fr: "Cyborg",
     },
     description: {
       en: "Prominently features a human character whose physiological functions are aided or enhanced by artificial means.",
@@ -1748,6 +1886,7 @@ export const tags = {
     name: {
       en: "Cycling",
       pt_br: "Ciclismo",
+      fr: "Cyclisme",
     },
     description: {
       en: "Centers around the sport of cycling.",
@@ -1760,6 +1899,7 @@ export const tags = {
     name: {
       en: "Dancing",
       pt_br: "Dança",
+      fr: "Danse",
     },
     description: {
       en: "Centers around the art of dance.",
@@ -1772,6 +1912,7 @@ export const tags = {
     name: {
       en: "Death Game",
       pt_br: "Jogo Mortal",
+      fr: "Jeu mortel",
     },
     description: {
       en: "Features characters participating in a game, where failure results in death.",
@@ -1784,6 +1925,7 @@ export const tags = {
     name: {
       en: "Deepthroat",
       pt_br: "Garganta Profunda",
+      fr: "Gorge profonde",
     },
     description: {
       en: "Features oral sex where the majority of the erect male genitalia is inside another person's mouth, usually stimulating some gagging in the back of their throat.",
@@ -1797,6 +1939,7 @@ export const tags = {
     name: {
       en: "Defloration",
       pt_br: "Defloração",
+      fr: "Défloration",
     },
     description: {
       en: "Features a female character who has never had sexual relations (until now).",
@@ -1809,6 +1952,7 @@ export const tags = {
     name: {
       en: "Delinquents",
       pt_br: "Delinquentes",
+      fr: "Délinquants",
     },
     description: {
       en: 'Features characters with a notorious image and attitude, sometimes referred to as "yankees".',
@@ -1822,6 +1966,7 @@ export const tags = {
     name: {
       en: "Demons",
       pt_br: "Demônios",
+      fr: "Démons",
     },
     description: {
       en: "Prominently features malevolent otherworldly creatures.",
@@ -1834,6 +1979,7 @@ export const tags = {
     name: {
       en: "Denpa",
       pt_br: "Denpa",
+      fr: "Denpa",
     },
     description: {
       en: "Works that feature themes of social dissociation, delusions, and other issues like suicide, bullying, self-isolation, paranoia, and technological necessity in daily lives. Classic iconography: telephone poles, rooftops, and trains.",
@@ -1847,6 +1993,7 @@ export const tags = {
     name: {
       en: "Desert",
       pt_br: "Deserto",
+      fr: "Désert",
     },
     description: {
       en: "Prominently features a desert environment.",
@@ -1859,6 +2006,7 @@ export const tags = {
     name: {
       en: "Detective",
       pt_br: "Detetive",
+      fr: "Détective",
     },
     description: {
       en: "Features a character who investigates and solves crimes.",
@@ -1871,6 +2019,7 @@ export const tags = {
     name: {
       en: "DILF",
       pt_br: "DILF",
+      fr: "DILF",
     },
     description: {
       en: "Features sexual intercourse with older men.",
@@ -1883,6 +2032,7 @@ export const tags = {
     name: {
       en: "Dinosaurs",
       pt_br: "Dinossauros",
+      fr: "Dinosaures",
     },
     description: {
       en: "Prominently features Dinosaurs, prehistoric reptiles that went extinct millions of years ago.",
@@ -1895,6 +2045,7 @@ export const tags = {
     name: {
       en: "Disability",
       pt_br: "Deficiência",
+      fr: "Handicap",
     },
     description: {
       en: "A work that features one or more characters with a physical, mental, cognitive, or developmental condition that impairs, interferes with, or limits the person's ability to engage in certain tasks or actions.",
@@ -1908,6 +2059,7 @@ export const tags = {
     name: {
       en: "Dissociative Identities",
       pt_br: "Identidades Dissociativas",
+      fr: "Identités dissociatives",
     },
     description: {
       en: "A case where one or more people share the same body.",
@@ -1920,6 +2072,7 @@ export const tags = {
     name: {
       en: "Double Penetration",
       pt_br: "Dupla Penetração",
+      fr: "Double pénétration",
     },
     description: {
       en: "A sexual act in which the vagina/anus are penetrated by two penises/toys.",
@@ -1932,6 +2085,7 @@ export const tags = {
     name: {
       en: "Dragons",
       pt_br: "Dragões",
+      fr: "Dragons",
     },
     description: {
       en: "Prominently features mythical reptiles which generally have wings and can breathe fire.",
@@ -1944,6 +2098,7 @@ export const tags = {
     name: {
       en: "Drawing",
       pt_br: "Desenho",
+      fr: "Dessin",
     },
     description: {
       en: "Centers around the art of drawing, including manga and doujinshi.",
@@ -1956,6 +2111,7 @@ export const tags = {
     name: {
       en: "Drugs",
       pt_br: "Drogas",
+      fr: "Drogues",
     },
     description: {
       en: "Prominently features the usage of drugs such as opioids, stimulants, hallucinogens etc.",
@@ -1968,6 +2124,7 @@ export const tags = {
     name: {
       en: "Dullahan",
       pt_br: "Dullahan",
+      fr: "Dullahan",
     },
     description: {
       en: "Prominently features a character who is a Dullahan, a creature from Irish Folklore with a head that can be detached from its main body.",
@@ -1981,6 +2138,7 @@ export const tags = {
     name: {
       en: "Dungeon",
       pt_br: "Masmorra",
+      fr: "Donjon",
     },
     description: {
       en: "Prominently features a dungeon environment.",
@@ -1993,6 +2151,7 @@ export const tags = {
     name: {
       en: "Dystopian",
       pt_br: "Distópico",
+      fr: "Dystopie",
     },
     description: {
       en: "Partly or completely set in a society characterized by poverty, squalor or oppression.",
@@ -2006,6 +2165,7 @@ export const tags = {
     name: {
       en: "E-Sports",
       pt_br: "E-Sports",
+      fr: "E-sport",
     },
     description: {
       en: "Prominently features professional video game competitions, tournaments, players, etc.",
@@ -2018,6 +2178,7 @@ export const tags = {
     name: {
       en: "Eco-Horror",
       pt_br: "Eco-Horror",
+      fr: "Horreur écologique",
     },
     description: {
       en: "Utilizes a horrifying depiction of ecology to explore man and its relationship with nature.",
@@ -2031,6 +2192,7 @@ export const tags = {
     name: {
       en: "Economics",
       pt_br: "Economia",
+      fr: "Économie",
     },
     description: {
       en: "Centers around the field of economics.",
@@ -2043,6 +2205,7 @@ export const tags = {
     name: {
       en: "Educational",
       pt_br: "Educativo",
+      fr: "Éducatif",
     },
     description: {
       en: "Primary aim is to educate the audience.",
@@ -2055,6 +2218,7 @@ export const tags = {
     name: {
       en: "Elderly Protagonist",
       pt_br: "Protagonista Idoso",
+      fr: "Protagoniste âgé",
     },
     description: {
       en: "The protagonist is either over 60 years of age, has an elderly appearance, or, in the case of non-humans, is considered elderly for their species.",
@@ -2068,6 +2232,7 @@ export const tags = {
     name: {
       en: "Elf",
       pt_br: "Elfo",
+      fr: "Elfe",
     },
     description: {
       en: "Prominently features a character who is an elf.",
@@ -2080,6 +2245,7 @@ export const tags = {
     name: {
       en: "Ensemble Cast",
       pt_br: "Elenco Conjunto",
+      fr: "Distribution chorale",
     },
     description: {
       en: "Features a large cast of characters with (almost) equal screen time and importance to the plot.",
@@ -2093,6 +2259,7 @@ export const tags = {
     name: {
       en: "Environmental",
       pt_br: "Ambiental",
+      fr: "Environnement",
     },
     description: {
       en: "Concern with the state of the natural world and how humans interact with it.",
@@ -2105,6 +2272,7 @@ export const tags = {
     name: {
       en: "Episodic",
       pt_br: "Episódico",
+      fr: "Épisodique",
     },
     description: {
       en: "Features story arcs that are loosely tied or lack an overarching plot.",
@@ -2117,6 +2285,7 @@ export const tags = {
     name: {
       en: "Ero Guro",
       pt_br: "Ero Guro",
+      fr: "Ero guro",
     },
     description: {
       en: "Japanese literary and artistic movement originating in the 1930's. Works have a focus on grotesque eroticism, sexual corruption, and decadence.",
@@ -2130,6 +2299,7 @@ export const tags = {
     name: {
       en: "Erotic Piercings",
       pt_br: "Piercings Eróticos",
+      fr: "Piercings érotiques",
     },
     description: {
       en: "Features a type of body modification designed to enhance sexual pleasure and intimacy, and/or decoratively adorns portions of the body considered sexual in nature.",
@@ -2143,6 +2313,7 @@ export const tags = {
     name: {
       en: "Espionage",
       pt_br: "Espionagem",
+      fr: "Espionnage",
     },
     description: {
       en: "Prominently features characters infiltrating an organization in order to steal sensitive information.",
@@ -2156,6 +2327,7 @@ export const tags = {
     name: {
       en: "Estranged Family",
       pt_br: "Família Afastada",
+      fr: "Famille éloignée",
     },
     description: {
       en: "At least one family member of the MC intentionally distances themselves or a family distances themselves from a person related to the MC.",
@@ -2169,6 +2341,7 @@ export const tags = {
     name: {
       en: "Exhibitionism",
       pt_br: "Exibicionismo",
+      fr: "Exhibitionnisme",
     },
     description: {
       en: "Features the act of exposing oneself in public for sexual pleasure.",
@@ -2181,6 +2354,7 @@ export const tags = {
     name: {
       en: "Exorcism",
       pt_br: "Exorcismo",
+      fr: "Exorcisme",
     },
     description: {
       en: "Involving religious methods of vanquishing youkai, demons, or other supernatural entities.",
@@ -2194,6 +2368,7 @@ export const tags = {
     name: {
       en: "Facial",
       pt_br: "Facial",
+      fr: "Facial",
     },
     description: {
       en: "Features sexual ejaculation onto an individual's face.",
@@ -2206,6 +2381,7 @@ export const tags = {
     name: {
       en: "Fairy",
       pt_br: "Fada",
+      fr: "Fée",
     },
     description: {
       en: "Prominently features a character who is a fairy.",
@@ -2218,6 +2394,7 @@ export const tags = {
     name: {
       en: "Fairy Tale",
       pt_br: "Conto de Fadas",
+      fr: "Conte de fées",
     },
     description: {
       en: "This work tells a fairy tale, centers around fairy tales, or is based on a classic fairy tale.",
@@ -2231,6 +2408,7 @@ export const tags = {
     name: {
       en: "Fake Relationship",
       pt_br: "Relacionamento Falso",
+      fr: "Fausse relation",
     },
     description: {
       en: "When two characters enter a fake relationship that mutually benefits one or both involved.",
@@ -2244,6 +2422,7 @@ export const tags = {
     name: {
       en: "Family Life",
       pt_br: "Vida Familiar",
+      fr: "Vie de famille",
     },
     description: {
       en: "Centers around the activities of a family unit.",
@@ -2256,6 +2435,7 @@ export const tags = {
     name: {
       en: "Fashion",
       pt_br: "Moda",
+      fr: "Mode",
     },
     description: {
       en: "Centers around the fashion industry.",
@@ -2268,6 +2448,7 @@ export const tags = {
     name: {
       en: "Feet",
       pt_br: "Pés",
+      fr: "Pieds",
     },
     description: {
       en: "Features the sexual depiction or stimulation of a character's feet.",
@@ -2280,6 +2461,7 @@ export const tags = {
     name: {
       en: "Fellatio",
       pt_br: "Felação",
+      fr: "Fellation",
     },
     description: {
       en: "Blowjob; features oral sex performed on male genitalia.",
@@ -2292,6 +2474,7 @@ export const tags = {
     name: {
       en: "Female Harem",
       pt_br: "Harém Feminino",
+      fr: "Harem féminin",
     },
     description: {
       en: "Main cast features the protagonist plus several female characters who are romantically interested in them.",
@@ -2305,6 +2488,7 @@ export const tags = {
     name: {
       en: "Female Protagonist",
       pt_br: "Protagonista Feminina",
+      fr: "Protagoniste féminine",
     },
     description: {
       en: "Main character is female.",
@@ -2317,6 +2501,7 @@ export const tags = {
     name: {
       en: "Femboy",
       pt_br: "Femboy",
+      fr: "Femboy",
     },
     description: {
       en: "Features a boy who exhibits characteristics or behaviors considered in many cultures to be typical of girls.",
@@ -2330,6 +2515,7 @@ export const tags = {
     name: {
       en: "Femdom",
       pt_br: "Femdom",
+      fr: "Femdom",
     },
     description: {
       en: "Female Dominance. Features sexual acts with a woman in a dominant position.",
@@ -2342,6 +2528,7 @@ export const tags = {
     name: {
       en: "Fencing",
       pt_br: "Esgrima",
+      fr: "Escrime",
     },
     description: {
       en: "Centers around the sport of fencing.",
@@ -2354,6 +2541,7 @@ export const tags = {
     name: {
       en: "Filmmaking",
       pt_br: "Produção Cinematográfica",
+      fr: "Cinéma",
     },
     description: {
       en: "Centers around the art of filmmaking.",
@@ -2366,6 +2554,7 @@ export const tags = {
     name: {
       en: "Fingering",
       pt_br: "Dedilhado",
+      fr: "Doigtage",
     },
     description: {
       en: "Features vaginal or anal insertion of fingers.",
@@ -2378,6 +2567,7 @@ export const tags = {
     name: {
       en: "Firefighters",
       pt_br: "Bombeiros",
+      fr: "Pompiers",
     },
     description: {
       en: "Centered around the life and activities of rescuers specialised in firefighting.",
@@ -2390,6 +2580,7 @@ export const tags = {
     name: {
       en: "Fishing",
       pt_br: "Pesca",
+      fr: "Pêche",
     },
     description: {
       en: "Centers around the sport of fishing.",
@@ -2402,6 +2593,7 @@ export const tags = {
     name: {
       en: "Fisting",
       pt_br: "Fisting",
+      fr: "Fisting",
     },
     description: {
       en: "A sexual activity that involves inserting one or more hands into the vagina or rectum.",
@@ -2414,6 +2606,7 @@ export const tags = {
     name: {
       en: "Fitness",
       pt_br: "Fitness",
+      fr: "Fitness",
     },
     description: {
       en: "Centers around exercise with the aim of improving physical health.",
@@ -2426,6 +2619,7 @@ export const tags = {
     name: {
       en: "Flash",
       pt_br: "Flash",
+      fr: "Flash",
     },
     description: {
       en: "Created using Flash animation techniques.",
@@ -2438,6 +2632,7 @@ export const tags = {
     name: {
       en: "Flat Chest",
       pt_br: "Peito Plano",
+      fr: "Poitrine plate",
     },
     description: {
       en: "Features a female character with smaller-than-average breasts.",
@@ -2450,6 +2645,7 @@ export const tags = {
     name: {
       en: "Food",
       pt_br: "Comida",
+      fr: "Cuisine",
     },
     description: {
       en: "Centers around cooking or food appraisal.",
@@ -2462,6 +2658,7 @@ export const tags = {
     name: {
       en: "Football",
       pt_br: "Futebol",
+      fr: "Football",
     },
     description: {
       en: 'Centers around the sport of football (known in the USA as "soccer").',
@@ -2474,6 +2671,7 @@ export const tags = {
     name: {
       en: "Foreign",
       pt_br: "Estrangeiro",
+      fr: "Étranger",
     },
     description: {
       en: "Partly or completely set in a country outside the country of origin.",
@@ -2486,6 +2684,7 @@ export const tags = {
     name: {
       en: "Found Family",
       pt_br: "Família Encontrada",
+      fr: "Famille choisie",
     },
     description: {
       en: "Features a group of characters with no biological relations that are united in a group providing social support.",
@@ -2499,6 +2698,7 @@ export const tags = {
     name: {
       en: "Fugitive",
       pt_br: "Fugitivo",
+      fr: "Fugitif",
     },
     description: {
       en: "Prominently features a character evading capture by an individual or organization.",
@@ -2511,6 +2711,7 @@ export const tags = {
     name: {
       en: "Full CGI",
       pt_br: "CGI Completo",
+      fr: "Entièrement en images de synthèse",
     },
     description: {
       en: "Almost entirely created with computer-generated imagery.",
@@ -2523,6 +2724,7 @@ export const tags = {
     name: {
       en: "Futanari",
       pt_br: "Futanari",
+      fr: "Futanari",
     },
     description: {
       en: "Features female characters with male genitalia.",
@@ -2535,6 +2737,7 @@ export const tags = {
     name: {
       en: "Gambling",
       pt_br: "Apostas",
+      fr: "Jeux d’argent",
     },
     description: {
       en: "Centers around the act of gambling.",
@@ -2547,6 +2750,7 @@ export const tags = {
     name: {
       en: "Gangs",
       pt_br: "Gangues",
+      fr: "Gangs",
     },
     description: {
       en: "Centers around gang organizations.",
@@ -2559,6 +2763,7 @@ export const tags = {
     name: {
       en: "Gender Bending",
       pt_br: "Mudança de Gênero",
+      fr: "Changement de genre",
     },
     description: {
       en: "Prominently features a character who dresses and behaves in a way characteristic of another gender, or has been transformed into a person of another gender.",
@@ -2572,6 +2777,7 @@ export const tags = {
     name: {
       en: "Ghost",
       pt_br: "Fantasma",
+      fr: "Fantôme",
     },
     description: {
       en: "Prominently features a character who is a ghost.",
@@ -2584,6 +2790,7 @@ export const tags = {
     name: {
       en: "Go",
       pt_br: "Go",
+      fr: "Go",
     },
     description: {
       en: "Centered around the game of Go.",
@@ -2596,6 +2803,7 @@ export const tags = {
     name: {
       en: "Goblin",
       pt_br: "Goblin",
+      fr: "Gobelin",
     },
     description: {
       en: "A goblin is a monstrous creature from European folklore. They are almost always small and grotesque, mischievous or outright malicious, and greedy. Sometimes with magical abilities.",
@@ -2609,6 +2817,7 @@ export const tags = {
     name: {
       en: "Gods",
       pt_br: "Deuses",
+      fr: "Dieux",
     },
     description: {
       en: "Prominently features a character of divine or religious nature.",
@@ -2621,6 +2830,7 @@ export const tags = {
     name: {
       en: "Golf",
       pt_br: "Golfe",
+      fr: "Golf",
     },
     description: {
       en: "Centers around the sport of golf.",
@@ -2633,6 +2843,7 @@ export const tags = {
     name: {
       en: "Gore",
       pt_br: "Gore",
+      fr: "Gore",
     },
     description: {
       en: "Prominently features graphic bloodshed and violence.",
@@ -2645,6 +2856,7 @@ export const tags = {
     name: {
       en: "Group Sex",
       pt_br: "Sexo em Grupo",
+      fr: "Sexe en groupe",
     },
     description: {
       en: "Features more than two participants engaged in sex simultaneously.",
@@ -2657,6 +2869,7 @@ export const tags = {
     name: {
       en: "Guns",
       pt_br: "Armas de Fogo",
+      fr: "Armes à feu",
     },
     description: {
       en: "Prominently features the use of guns in combat.",
@@ -2669,6 +2882,7 @@ export const tags = {
     name: {
       en: "Gyaru",
       pt_br: "Gyaru",
+      fr: "Gyaru",
     },
     description: {
       en: "Prominently features a female character who has a distinct American-emulated fashion style, such as tanned skin, bleached hair, and excessive makeup. Also known as gal.",
@@ -2682,6 +2896,7 @@ export const tags = {
     name: {
       en: "Hair Pulling",
       pt_br: "Puxar Cabelo",
+      fr: "Tirage de cheveux",
     },
     description: {
       en: "A sexual act in which the giver will grab the receivers hair and tug whilst giving pleasure from behind.",
@@ -2695,6 +2910,7 @@ export const tags = {
     name: {
       en: "Handball",
       pt_br: "Handebol",
+      fr: "Handball",
     },
     description: {
       en: "Centers around the sport of handball.",
@@ -2707,6 +2923,7 @@ export const tags = {
     name: {
       en: "Handjob",
       pt_br: "Punheta",
+      fr: "Masturbation manuelle",
     },
     description: {
       en: "Features the stimulation of genitalia by another's hands.",
@@ -2719,6 +2936,7 @@ export const tags = {
     name: {
       en: "Henshin",
       pt_br: "Henshin",
+      fr: "Henshin",
     },
     description: {
       en: "Prominently features character or costume transformations which often grant special abilities.",
@@ -2732,6 +2950,7 @@ export const tags = {
     name: {
       en: "Heterosexual",
       pt_br: "Heterossexual",
+      fr: "Hétérosexuel",
     },
     description: {
       en: "Prominently features a romance between a man and a woman, not inherently sexual.",
@@ -2744,6 +2963,7 @@ export const tags = {
     name: {
       en: "Hikikomori",
       pt_br: "Hikikomori",
+      fr: "Hikikomori",
     },
     description: {
       en: "Prominently features a character who withdraws from social life, often seeking extreme isolation.",
@@ -2757,6 +2977,7 @@ export const tags = {
     name: {
       en: "Hip-hop Music",
       pt_br: "Música Hip-hop",
+      fr: "Hip-hop",
     },
     description: {
       en: "Centers on the musical style of hip-hop, not to be applied to anime that use hip-hop in its soundtrack.",
@@ -2770,6 +2991,7 @@ export const tags = {
     name: {
       en: "Homeless",
       pt_br: "Sem-teto",
+      fr: "Sans-abri",
     },
     description: {
       en: "Prominently features a character that is homeless.",
@@ -2782,6 +3004,7 @@ export const tags = {
     name: {
       en: "Horticulture",
       pt_br: "Horticultura",
+      fr: "Horticulture",
     },
     description: {
       en: "The story prominently features plant care and gardening.",
@@ -2794,6 +3017,7 @@ export const tags = {
     name: {
       en: "Human Pet",
       pt_br: "Pet Humano",
+      fr: "Animal de compagnie humain",
     },
     description: {
       en: 'Features characters in a master-slave relationship where one is the "owner" and the other is a "pet."',
@@ -2807,6 +3031,7 @@ export const tags = {
     name: {
       en: "Hypersexuality",
       pt_br: "Hipersexualidade",
+      fr: "Hypersexualité",
     },
     description: {
       en: "Portrays a character with a hypersexuality disorder, compulsive sexual behavior, or sex addiction.",
@@ -2820,6 +3045,7 @@ export const tags = {
     name: {
       en: "Ice Skating",
       pt_br: "Patinação no Gelo",
+      fr: "Patinage",
     },
     description: {
       en: "Centers around the sport of ice skating.",
@@ -2832,6 +3058,7 @@ export const tags = {
     name: {
       en: "Idol",
       pt_br: "Idol",
+      fr: "Idol",
     },
     description: {
       en: "Centers around the life and activities of an idol.",
@@ -2844,6 +3071,7 @@ export const tags = {
     name: {
       en: "Incest",
       pt_br: "Incesto",
+      fr: "Inceste",
     },
     description: {
       en: "Features sexual or romantic relations between characters who are related by blood.",
@@ -2857,6 +3085,7 @@ export const tags = {
     name: {
       en: "Indigenous Cultures",
       pt_br: "Culturas Indígenas",
+      fr: "Cultures autochtones",
     },
     description: {
       en: "Prominently features real-life indigenous cultures.",
@@ -2869,6 +3098,7 @@ export const tags = {
     name: {
       en: "Inn",
       pt_br: "Pousada",
+      fr: "Auberge",
     },
     description: {
       en: "Partially or completely set in an Inn or Hotel.",
@@ -2881,6 +3111,7 @@ export const tags = {
     name: {
       en: "Inseki",
       pt_br: "Inseki",
+      fr: "Inseki",
     },
     description: {
       en: "Features sexual or romantic relations among step, adopted, and other non-blood related family members.",
@@ -2894,6 +3125,7 @@ export const tags = {
     name: {
       en: "Irrumatio",
       pt_br: "Irrumatio",
+      fr: "Irrumation",
     },
     description: {
       en: "Oral rape; features a character thrusting their genitalia or a phallic object into the mouth of another character.",
@@ -2907,6 +3139,7 @@ export const tags = {
     name: {
       en: "Iyashikei",
       pt_br: "Iyashikei",
+      fr: "Iyashikei",
     },
     description: {
       en: "Primary aim is to heal the audience through serene depictions of characters' daily lives.",
@@ -2920,6 +3153,7 @@ export const tags = {
     name: {
       en: "Jazz Music",
       pt_br: "Música Jazz",
+      fr: "Jazz",
     },
     description: {
       en: "Centers on the musical style of jazz, not to be applied to anime that use jazz in its soundtrack.",
@@ -2933,6 +3167,7 @@ export const tags = {
     name: {
       en: "Josei",
       pt_br: "Josei",
+      fr: "Josei",
     },
     description: {
       en: "Target demographic is adult females.",
@@ -2945,6 +3180,7 @@ export const tags = {
     name: {
       en: "Judo",
       pt_br: "Judô",
+      fr: "Judo",
     },
     description: {
       en: "Centers around the sport of judo.",
@@ -2957,6 +3193,7 @@ export const tags = {
     name: {
       en: "Kabuki",
       pt_br: "Kabuki",
+      fr: "Kabuki",
     },
     description: {
       en: "Prominently features the traditional Japanese theater art of kabuki.",
@@ -2969,6 +3206,7 @@ export const tags = {
     name: {
       en: "Kaiju",
       pt_br: "Kaiju",
+      fr: "Kaiju",
     },
     description: {
       en: "Prominently features giant monsters.",
@@ -2981,6 +3219,7 @@ export const tags = {
     name: {
       en: "Karuta",
       pt_br: "Karuta",
+      fr: "Karuta",
     },
     description: {
       en: "Centers around the game of karuta.",
@@ -2993,6 +3232,7 @@ export const tags = {
     name: {
       en: "Kemonomimi",
       pt_br: "Kemonomimi",
+      fr: "Kemonomimi",
     },
     description: {
       en: "Prominently features humanoid characters with animal ears.",
@@ -3005,6 +3245,7 @@ export const tags = {
     name: {
       en: "Kids",
       pt_br: "Infantil",
+      fr: "Enfants",
     },
     description: {
       en: "Target demographic is young children.",
@@ -3017,6 +3258,7 @@ export const tags = {
     name: {
       en: "Kingdom Management",
       pt_br: "Gestão de Reino",
+      fr: "Gestion de royaume",
     },
     description: {
       en: "Characters in these series take on the responsibility of running a town or kingdom, whether they take control of an existing one, or build their own from the ground up.",
@@ -3030,6 +3272,7 @@ export const tags = {
     name: {
       en: "Konbini",
       pt_br: "Konbini",
+      fr: "Konbini",
     },
     description: {
       en: "Predominantly features a convenience store.",
@@ -3042,6 +3285,7 @@ export const tags = {
     name: {
       en: "Kuudere",
       pt_br: "Kuudere",
+      fr: "Kuudere",
     },
     description: {
       en: "Prominently features a character who generally retains a cold, blunt and cynical exterior, but once one gets to know them, they have a very warm and loving interior.",
@@ -3055,6 +3299,7 @@ export const tags = {
     name: {
       en: "Lacrosse",
       pt_br: "Lacrosse",
+      fr: "Crosse",
     },
     description: {
       en: "A team game played with a ball and lacrosse sticks.",
@@ -3067,6 +3312,7 @@ export const tags = {
     name: {
       en: "Lactation",
       pt_br: "Lactação",
+      fr: "Lactation",
     },
     description: {
       en: "Features breast milk play and production.",
@@ -3079,6 +3325,7 @@ export const tags = {
     name: {
       en: "Language Barrier",
       pt_br: "Barreira Linguística",
+      fr: "Barrière de la langue",
     },
     description: {
       en: "A barrier to communication between people who are unable to speak a common language.",
@@ -3091,6 +3338,7 @@ export const tags = {
     name: {
       en: "Large Breasts",
       pt_br: "Seios Grandes",
+      fr: "Forte poitrine",
     },
     description: {
       en: "Features a character with larger-than-average breasts.",
@@ -3103,6 +3351,7 @@ export const tags = {
     name: {
       en: "LGBTQ+ Themes",
       pt_br: "Temas LGBTQ+",
+      fr: "Thèmes LGBTQ+",
     },
     description: {
       en: "Prominently features characters or themes associated with the LGBTQ+ community, such as sexuality or gender identity.",
@@ -3116,6 +3365,7 @@ export const tags = {
     name: {
       en: "Lost Civilization",
       pt_br: "Civilização Perdida",
+      fr: "Civilisation perdue",
     },
     description: {
       en: "Featuring a civilization with few ruins or records that exist in present day knowledge.",
@@ -3129,6 +3379,7 @@ export const tags = {
     name: {
       en: "Love Triangle",
       pt_br: "Triângulo Amoroso",
+      fr: "Triangle amoureux",
     },
     description: {
       en: "Centered around romantic feelings between more than two people. Includes all love polygons.",
@@ -3142,6 +3393,7 @@ export const tags = {
     name: {
       en: "Mafia",
       pt_br: "Máfia",
+      fr: "Mafia",
     },
     description: {
       en: "Centered around Italian organised crime syndicates.",
@@ -3154,6 +3406,7 @@ export const tags = {
     name: {
       en: "Magic",
       pt_br: "Magia",
+      fr: "Magie",
     },
     description: {
       en: "Prominently features magical elements or the use of magic.",
@@ -3166,6 +3419,7 @@ export const tags = {
     name: {
       en: "Mahjong",
       pt_br: "Mahjong",
+      fr: "Mahjong",
     },
     description: {
       en: "Centered around the game of mahjong.",
@@ -3178,6 +3432,7 @@ export const tags = {
     name: {
       en: "Maids",
       pt_br: "Empregadas",
+      fr: "Soubrettes",
     },
     description: {
       en: "Prominently features a character who is a maid.",
@@ -3190,6 +3445,7 @@ export const tags = {
     name: {
       en: "Makeup",
       pt_br: "Maquiagem",
+      fr: "Maquillage",
     },
     description: {
       en: "Centers around the makeup industry.",
@@ -3202,6 +3458,7 @@ export const tags = {
     name: {
       en: "Male Harem",
       pt_br: "Harém Masculino",
+      fr: "Harem masculin",
     },
     description: {
       en: "Main cast features the protagonist plus several male characters who are romantically interested in them.",
@@ -3215,6 +3472,7 @@ export const tags = {
     name: {
       en: "Male Pregnancy",
       pt_br: "Gravidez Masculina",
+      fr: "Grossesse masculine",
     },
     description: {
       en: "Features pregnant male characters in a sexual context.",
@@ -3227,6 +3485,7 @@ export const tags = {
     name: {
       en: "Male Protagonist",
       pt_br: "Protagonista Masculino",
+      fr: "Protagoniste masculin",
     },
     description: {
       en: "Main character is male.",
@@ -3239,6 +3498,7 @@ export const tags = {
     name: {
       en: "Manzai",
       pt_br: "Manzai",
+      fr: "Manzai",
     },
     description: {
       en: "Prominently features an act of traditional Japanese comedy that involves two performers.",
@@ -3251,6 +3511,7 @@ export const tags = {
     name: {
       en: "Marriage",
       pt_br: "Casamento",
+      fr: "Mariage",
     },
     description: {
       en: "Centers around marriage between two or more characters.",
@@ -3263,6 +3524,7 @@ export const tags = {
     name: {
       en: "Martial Arts",
       pt_br: "Artes Marciais",
+      fr: "Arts martiaux",
     },
     description: {
       en: "Centers around the use of traditional hand-to-hand combat.",
@@ -3275,6 +3537,7 @@ export const tags = {
     name: {
       en: "Masochism",
       pt_br: "Masoquismo",
+      fr: "Masochisme",
     },
     description: {
       en: "Prominently features characters who get sexual pleasure from being hurt or controlled by others.",
@@ -3288,6 +3551,7 @@ export const tags = {
     name: {
       en: "Masturbation",
       pt_br: "Masturbação",
+      fr: "Masturbation",
     },
     description: {
       en: "Features erotic stimulation of one's own genitalia or other erogenous regions.",
@@ -3300,6 +3564,7 @@ export const tags = {
     name: {
       en: "Matchmaking",
       pt_br: "Casamenteiro",
+      fr: "Arrangement de rencontres",
     },
     description: {
       en: "Prominently features either a matchmaker or events with the intent of matchmaking with eventual marriage in sight.",
@@ -3313,6 +3578,7 @@ export const tags = {
     name: {
       en: "Mating Press",
       pt_br: "Mating Press",
+      fr: "Mating press",
     },
     description: {
       en: "Features the sex position in which two partners face each other, with one of them thrusting downwards and the other's legs tucked up towards their head.",
@@ -3326,6 +3592,7 @@ export const tags = {
     name: {
       en: "Matriarchy",
       pt_br: "Matriarcado",
+      fr: "Matriarcat",
     },
     description: {
       en: "Prominently features a country that is ruled by a Queen or a society that is dominated by female inheritance.",
@@ -3339,6 +3606,7 @@ export const tags = {
     name: {
       en: "Medieval",
       pt_br: "Medieval",
+      fr: "Médiéval",
     },
     description: {
       en: "Partially or completely set in the Middle Ages or a Middle Ages-inspired setting. Commonly features elements such as European castles and knights.",
@@ -3352,6 +3620,7 @@ export const tags = {
     name: {
       en: "Memory Manipulation",
       pt_br: "Manipulação de Memória",
+      fr: "Manipulation de la mémoire",
     },
     description: {
       en: "Prominently features a character(s) who has had their memories altered.",
@@ -3364,6 +3633,7 @@ export const tags = {
     name: {
       en: "Mermaid",
       pt_br: "Sereia",
+      fr: "Sirène",
     },
     description: {
       en: "A mythological creature with the body of a human and the tail of a fish.",
@@ -3376,6 +3646,7 @@ export const tags = {
     name: {
       en: "Meta",
       pt_br: "Meta",
+      fr: "Méta",
     },
     description: {
       en: "Features fourth wall-breaking references to itself or genre tropes.",
@@ -3389,6 +3660,7 @@ export const tags = {
     name: {
       en: "Metal Music",
       pt_br: "Música Metal",
+      fr: "Metal",
     },
     description: {
       en: "Centers on the musical style of metal, not to be applied to anime that use metal in its soundtrack.",
@@ -3402,6 +3674,7 @@ export const tags = {
     name: {
       en: "MILF",
       pt_br: "MILF",
+      fr: "MILF",
     },
     description: {
       en: "Features sexual intercourse with older women.",
@@ -3414,6 +3687,7 @@ export const tags = {
     name: {
       en: "Military",
       pt_br: "Militar",
+      fr: "Militaire",
     },
     description: {
       en: "Centered around the life and activities of military personnel.",
@@ -3426,6 +3700,7 @@ export const tags = {
     name: {
       en: "Mixed Gender Harem",
       pt_br: "Harém Misto",
+      fr: "Harem mixte",
     },
     description: {
       en: "Main cast features the protagonist plus several people, regardless of gender, who are romantically interested in them.",
@@ -3439,6 +3714,7 @@ export const tags = {
     name: {
       en: "Mixed Media",
       pt_br: "Mídia Mista",
+      fr: "Techniques mixtes",
     },
     description: {
       en: "Features a combination of different media and animation techniques. Often seen with puppetry, textiles, live action footage, stop motion, and more. This does not include works with normal usage of CGI in their production.",
@@ -3452,6 +3728,7 @@ export const tags = {
     name: {
       en: "Modeling",
       pt_br: "Modelagem",
+      fr: "Mannequinat",
     },
     description: {
       en: "Features a line of work with the purpose of displaying and advertising products such as makeup, clothing, and jewelry. Also includes posing artistically for figure drawing, painting, sculpting, and photography.",
@@ -3465,6 +3742,7 @@ export const tags = {
     name: {
       en: "Monsters",
       pt_br: "Monstros",
+      fr: "Monstres",
     },
     description: {
       en: "Prominently features monsters.",
@@ -3477,6 +3755,7 @@ export const tags = {
     name: {
       en: "Monster Boy",
       pt_br: "Garoto Monstro",
+      fr: "Garçon monstre",
     },
     description: {
       en: "Prominently features a male character who is a part-monster.",
@@ -3489,6 +3768,7 @@ export const tags = {
     name: {
       en: "Monster Girl",
       pt_br: "Garota Monstro",
+      fr: "Fille monstre",
     },
     description: {
       en: "Prominently features a female character who is part-monster.",
@@ -3501,6 +3781,7 @@ export const tags = {
     name: {
       en: "Mopeds",
       pt_br: "Ciclomotores",
+      fr: "Mobylettes",
     },
     description: {
       en: "Prominently features mopeds.",
@@ -3513,6 +3794,7 @@ export const tags = {
     name: {
       en: "Motorcycles",
       pt_br: "Motocicletas",
+      fr: "Motos",
     },
     description: {
       en: "Prominently features the use of motorcycles.",
@@ -3525,6 +3807,7 @@ export const tags = {
     name: {
       en: "Mountaineering",
       pt_br: "Alpinismo",
+      fr: "Alpinisme",
     },
     description: {
       en: "Prominently features characters discussing or hiking mountains.",
@@ -3537,6 +3820,7 @@ export const tags = {
     name: {
       en: "Musical Theater",
       pt_br: "Teatro Musical",
+      fr: "Comédie musicale",
     },
     description: {
       en: "Features a performance that combines songs, spoken dialogue, acting, and dance.",
@@ -3549,6 +3833,7 @@ export const tags = {
     name: {
       en: "Mythology",
       pt_br: "Mitologia",
+      fr: "Mythologie",
     },
     description: {
       en: "Prominently features mythological elements, especially those from religious or cultural tradition.",
@@ -3563,6 +3848,7 @@ export const tags = {
     name: {
       en: "Nakadashi",
       pt_br: "Nakadashi",
+      fr: "Nakadashi",
     },
     description: {
       en: "Creampie; features sexual ejaculation inside of a character.",
@@ -3575,6 +3861,7 @@ export const tags = {
     name: {
       en: "Natural Disaster",
       pt_br: "Desastre Natural",
+      fr: "Catastrophe naturelle",
     },
     description: {
       en: "It focuses on catastrophic events of natural origin, such as earthquakes, tsunamis,  volcanic eruptions, and severe storms. These works often present situations of extreme danger in which the characters struggle to survive and overcome the adversity.",
@@ -3588,6 +3875,7 @@ export const tags = {
     name: {
       en: "Necromancy",
       pt_br: "Necromancia",
+      fr: "Nécromancie",
     },
     description: {
       en: "When the dead are summoned as spirits, skeletons, or the undead, usually for the purpose of gaining information or to be used as a weapon.",
@@ -3601,6 +3889,7 @@ export const tags = {
     name: {
       en: "Nekomimi",
       pt_br: "Nekomimi",
+      fr: "Nekomimi",
     },
     description: {
       en: "Humanoid characters with cat-like features such as cat ears and a tail.",
@@ -3613,6 +3902,7 @@ export const tags = {
     name: {
       en: "Netorare",
       pt_br: "Netorare",
+      fr: "Netorare",
     },
     description: {
       en: "Netorare is what happens when the protagonist gets their partner stolen from them by someone else. It is a sexual fetish designed to cause sexual jealousy by way of having the partner indulge in sexual activity with someone other than the protagonist.",
@@ -3626,6 +3916,7 @@ export const tags = {
     name: {
       en: "Netorase",
       pt_br: "Netorase",
+      fr: "Netorase",
     },
     description: {
       en: "Features characters in a romantic relationship who agree to be sexually intimate with others.",
@@ -3639,6 +3930,7 @@ export const tags = {
     name: {
       en: "Netori",
       pt_br: "Netori",
+      fr: "Netori",
     },
     description: {
       en: "Features the protagonist stealing the partner of someone else. The opposite of netorare.",
@@ -3651,6 +3943,7 @@ export const tags = {
     name: {
       en: "Ninja",
       pt_br: "Ninja",
+      fr: "Ninja",
     },
     description: {
       en: "Prominently features Japanese warriors traditionally trained in espionage, sabotage and assasination.",
@@ -3664,6 +3957,7 @@ export const tags = {
     name: {
       en: "No Dialogue",
       pt_br: "Sem Diálogo",
+      fr: "Sans dialogue",
     },
     description: {
       en: "This work contains no dialogue.",
@@ -3676,6 +3970,7 @@ export const tags = {
     name: {
       en: "Noir",
       pt_br: "Noir",
+      fr: "Noir",
     },
     description: {
       en: "Stylized as a cynical crime drama with low-key visuals.",
@@ -3688,6 +3983,7 @@ export const tags = {
     name: {
       en: "Non-fiction",
       pt_br: "Não-Ficção",
+      fr: "Non-fiction",
     },
     description: {
       en: "A work that provides information regarding a real world topic and does not focus on an imaginary narrative.",
@@ -3701,6 +3997,7 @@ export const tags = {
     name: {
       en: "Nudity",
       pt_br: "Nudez",
+      fr: "Nudité",
     },
     description: {
       en: "Features a character wearing no clothing or exposing intimate body parts.",
@@ -3713,6 +4010,7 @@ export const tags = {
     name: {
       en: "Nun",
       pt_br: "Freira",
+      fr: "Nonne",
     },
     description: {
       en: "Prominently features a character who is a nun.",
@@ -3725,6 +4023,7 @@ export const tags = {
     name: {
       en: "Office",
       pt_br: "Escritório",
+      fr: "Bureau",
     },
     description: {
       en: "Features people who work in a business office.",
@@ -3737,6 +4036,7 @@ export const tags = {
     name: {
       en: "Office Lady",
       pt_br: "Mulher de Escritório",
+      fr: "Employée de bureau",
     },
     description: {
       en: "Prominently features a female office worker or OL.",
@@ -3749,6 +4049,7 @@ export const tags = {
     name: {
       en: "Oiran",
       pt_br: "Oiran",
+      fr: "Oiran",
     },
     description: {
       en: "Prominently features a courtesan character of the Japanese Edo Period.",
@@ -3761,6 +4062,7 @@ export const tags = {
     name: {
       en: "Ojou-sama",
       pt_br: "Ojou-sama",
+      fr: "Ojou-sama",
     },
     description: {
       en: "Features a wealthy, high-class, oftentimes stuck up and demanding female character.",
@@ -3774,6 +4076,7 @@ export const tags = {
     name: {
       en: "Omegaverse",
       pt_br: "Omegaverse",
+      fr: "Omegaverse",
     },
     description: {
       en: "Alternative universe that prominently features dynamics modeled after wolves in which there are alphas, betas, and omegas and heat cycles as well as impregnation, regardless of gender.",
@@ -3787,6 +4090,7 @@ export const tags = {
     name: {
       en: "Orphan",
       pt_br: "Órfão",
+      fr: "Orphelin",
     },
     description: {
       en: "Prominently features a character that is an orphan.",
@@ -3799,6 +4103,7 @@ export const tags = {
     name: {
       en: "Otaku Culture",
       pt_br: "Cultura Otaku",
+      fr: "Culture otaku",
     },
     description: {
       en: "Centers around the culture of a fanatical fan-base.",
@@ -3811,6 +4116,7 @@ export const tags = {
     name: {
       en: "Outdoor Activities",
       pt_br: "Atividades ao Ar Livre",
+      fr: "Activités de plein air",
     },
     description: {
       en: "Centers around hiking, camping or other outdoor activities.",
@@ -3823,6 +4129,7 @@ export const tags = {
     name: {
       en: "Oyakodon",
       pt_br: "Oyakodon",
+      fr: "Oyakodon",
     },
     description: {
       en: "Features a character who has sexual relations with both the mother and her daughter.",
@@ -3835,6 +4142,7 @@ export const tags = {
     name: {
       en: "Pandemic",
       pt_br: "Pandemia",
+      fr: "Pandémie",
     },
     description: {
       en: "Prominently features a disease prevalent over a whole country or the world.",
@@ -3847,6 +4155,7 @@ export const tags = {
     name: {
       en: "Parenthood",
       pt_br: "Parentalidade",
+      fr: "Parentalité",
     },
     description: {
       en: "Centers around the experience of raising a child.",
@@ -3859,6 +4168,7 @@ export const tags = {
     name: {
       en: "Parkour",
       pt_br: "Parkour",
+      fr: "Parkour",
     },
     description: {
       en: "Centers around the sport of parkour.",
@@ -3871,6 +4181,7 @@ export const tags = {
     name: {
       en: "Parody",
       pt_br: "Paródia",
+      fr: "Parodie",
     },
     description: {
       en: "Features deliberate exaggeration of popular tropes or a particular genre to comedic effect.",
@@ -3884,6 +4195,7 @@ export const tags = {
     name: {
       en: "Pet Play",
       pt_br: "Pet Play",
+      fr: "Pet play",
     },
     description: {
       en: "Treating a participant as though they were a pet animal. Often involves a collar and possibly BDSM.",
@@ -3897,6 +4209,7 @@ export const tags = {
     name: {
       en: "Photography",
       pt_br: "Fotografia",
+      fr: "Photographie",
     },
     description: {
       en: "Centers around the use of cameras to capture photos.",
@@ -3909,6 +4222,7 @@ export const tags = {
     name: {
       en: "Pirates",
       pt_br: "Piratas",
+      fr: "Pirates",
     },
     description: {
       en: "Prominently features sea-faring adventurers branded as criminals by the law.",
@@ -3921,6 +4235,7 @@ export const tags = {
     name: {
       en: "Poker",
       pt_br: "Pôquer",
+      fr: "Poker",
     },
     description: {
       en: "Centers around the game of poker or its variations.",
@@ -3933,6 +4248,7 @@ export const tags = {
     name: {
       en: "Police",
       pt_br: "Polícia",
+      fr: "Police",
     },
     description: {
       en: "Centers around the life and activities of law enforcement officers.",
@@ -3945,6 +4261,7 @@ export const tags = {
     name: {
       en: "Politics",
       pt_br: "Política",
+      fr: "Politique",
     },
     description: {
       en: "Centers around politics, politicians, or government activities.",
@@ -3957,6 +4274,7 @@ export const tags = {
     name: {
       en: "Polyamorous",
       pt_br: "Poliamoroso",
+      fr: "Polyamour",
     },
     description: {
       en: "Features a character who is in a consenting relationship with multiple people at one time.",
@@ -3970,6 +4288,7 @@ export const tags = {
     name: {
       en: "Post-Apocalyptic",
       pt_br: "Pós-Apocalíptico",
+      fr: "Post-apocalyptique",
     },
     description: {
       en: "Partly or completely set in a world or civilization after a global disaster.",
@@ -3983,6 +4302,7 @@ export const tags = {
     name: {
       en: "POV",
       pt_br: "POV",
+      fr: "POV",
     },
     description: {
       en: "Point of View; features scenes shown from the perspective of the series protagonist.",
@@ -3995,6 +4315,7 @@ export const tags = {
     name: {
       en: "Pregnancy",
       pt_br: "Gravidez",
+      fr: "Grossesse",
     },
     description: {
       en: "Features pregnant female characters or discusses the topic of pregnancy.",
@@ -4007,6 +4328,7 @@ export const tags = {
     name: {
       en: "Primarily Adult Cast",
       pt_br: "Elenco Principalmente Adulto",
+      fr: "Personnages surtout adultes",
     },
     description: {
       en: "Main cast is mostly composed of characters above a high school age.",
@@ -4020,6 +4342,7 @@ export const tags = {
     name: {
       en: "Primarily Animal Cast",
       pt_br: "Elenco Principalmente Animal",
+      fr: "Personnages surtout animaux",
     },
     description: {
       en: "Main cast is mostly composed animal or animal-like characters.",
@@ -4033,6 +4356,7 @@ export const tags = {
     name: {
       en: "Primarily Child Cast",
       pt_br: "Elenco Principalmente Infantil",
+      fr: "Personnages surtout enfants",
     },
     description: {
       en: "Main cast is mostly composed of characters below a high school age.",
@@ -4046,6 +4370,7 @@ export const tags = {
     name: {
       en: "Primarily Female Cast",
       pt_br: "Elenco Principalmente Feminino",
+      fr: "Personnages surtout féminins",
     },
     description: {
       en: "Main cast is mostly composed of female characters.",
@@ -4058,6 +4383,7 @@ export const tags = {
     name: {
       en: "Primarily Male Cast",
       pt_br: "Elenco Principalmente Masculino",
+      fr: "Personnages surtout masculins",
     },
     description: {
       en: "Main cast is mostly composed of male characters.",
@@ -4070,6 +4396,7 @@ export const tags = {
     name: {
       en: "Primarily Teen Cast",
       pt_br: "Elenco Principalmente Adolescente",
+      fr: "Personnages surtout adolescents",
     },
     description: {
       en: "Main cast is mostly composed of teen characters.",
@@ -4082,6 +4409,7 @@ export const tags = {
     name: {
       en: "Prison",
       pt_br: "Prisão",
+      fr: "Prison",
     },
     description: {
       en: "Partly or completely set in a prison.",
@@ -4094,6 +4422,7 @@ export const tags = {
     name: {
       en: "Prostitution",
       pt_br: "Prostituição",
+      fr: "Prostitution",
     },
     description: {
       en: "Features characters who are paid for sexual favors.",
@@ -4106,6 +4435,7 @@ export const tags = {
     name: {
       en: "Proxy Battle",
       pt_br: "Batalha por Procuração",
+      fr: "Combat par procuration",
     },
     description: {
       en: "A proxy battle is a battle where humans use creatures/robots to do the fighting for them, either by commanding those creatures/robots or by simply evolving them/changing them into battle mode.",
@@ -4119,6 +4449,7 @@ export const tags = {
     name: {
       en: "Psychosexual",
       pt_br: "Psicossexual",
+      fr: "Psychosexuel",
     },
     description: {
       en: "Work that involves the psychological aspects of sexual impulses.",
@@ -4131,6 +4462,7 @@ export const tags = {
     name: {
       en: "Public Sex",
       pt_br: "Sexo em Público",
+      fr: "Sexe en public",
     },
     description: {
       en: "Features sexual acts performed in public settings.",
@@ -4143,6 +4475,7 @@ export const tags = {
     name: {
       en: "Puppetry",
       pt_br: "Teatro de Marionetes",
+      fr: "Marionnettes",
     },
     description: {
       en: "Animation style involving the manipulation of puppets to act out scenes.",
@@ -4155,6 +4488,7 @@ export const tags = {
     name: {
       en: "Rakugo",
       pt_br: "Rakugo",
+      fr: "Rakugo",
     },
     description: {
       en: "Rakugo is the traditional Japanese performance art of comic storytelling.",
@@ -4167,6 +4501,7 @@ export const tags = {
     name: {
       en: "Rape",
       pt_br: "Estupro",
+      fr: "Viol",
     },
     description: {
       en: "Features non-consensual sexual penetration.",
@@ -4179,6 +4514,7 @@ export const tags = {
     name: {
       en: "Real Robot",
       pt_br: "Robô Realista",
+      fr: "Real robot",
     },
     description: {
       en: "Prominently features mechanical designs loosely influenced by real-world robotics.",
@@ -4191,6 +4527,7 @@ export const tags = {
     name: {
       en: "Rehabilitation",
       pt_br: "Reabilitação",
+      fr: "Réhabilitation",
     },
     description: {
       en: "Prominently features the recovery of a character who became incapable of social life or work.",
@@ -4204,6 +4541,7 @@ export const tags = {
     name: {
       en: "Reincarnation",
       pt_br: "Reencarnação",
+      fr: "Réincarnation",
     },
     description: {
       en: "Features a character being born again after death, typically as another person or in another world.",
@@ -4217,6 +4555,7 @@ export const tags = {
     name: {
       en: "Religion",
       pt_br: "Religião",
+      fr: "Religion",
     },
     description: {
       en: "Centers on the belief that humanity is related to supernatural, transcendental, and spiritual elements.",
@@ -4230,6 +4569,7 @@ export const tags = {
     name: {
       en: "Rescue",
       pt_br: "Resgate",
+      fr: "Sauvetage",
     },
     description: {
       en: "Centers around operations that carry out urgent treatment of injuries, remove people from danger, or save lives. This includes series that are about search-and-rescue teams, trauma surgeons, firefighters, and more.",
@@ -4243,6 +4583,7 @@ export const tags = {
     name: {
       en: "Restaurant",
       pt_br: "Restaurante",
+      fr: "Restaurant",
     },
     description: {
       en: "Features a business that prepares and serves food and drinks to customers. Also encompasses cafes and bistros.",
@@ -4256,6 +4597,7 @@ export const tags = {
     name: {
       en: "Revenge",
       pt_br: "Vingança",
+      fr: "Vengeance",
     },
     description: {
       en: "Prominently features a character who aims to exact punishment in a resentful or vindictive manner.",
@@ -4268,6 +4610,7 @@ export const tags = {
     name: {
       en: "Reverse Isekai",
       pt_br: "Isekai Reverso",
+      fr: "Isekai inversé",
     },
     description: {
       en: "Features a character from a fantasy world who is transported into a modern day setting.",
@@ -4281,6 +4624,7 @@ export const tags = {
     name: {
       en: "Rimjob",
       pt_br: "Beijo Grego",
+      fr: "Anulingus",
     },
     description: {
       en: "Features oral sex performed on the anus.",
@@ -4293,6 +4637,7 @@ export const tags = {
     name: {
       en: "Robots",
       pt_br: "Robôs",
+      fr: "Robots",
     },
     description: {
       en: "Prominently features humanoid machines.",
@@ -4305,6 +4650,7 @@ export const tags = {
     name: {
       en: "Rock Music",
       pt_br: "Música Rock",
+      fr: "Rock",
     },
     description: {
       en: "Centers on the musical style of rock, not to be applied to anime that use rock in its soundtrack.",
@@ -4318,6 +4664,7 @@ export const tags = {
     name: {
       en: "Rotoscoping",
       pt_br: "Rotoscopia",
+      fr: "Rotoscopie",
     },
     description: {
       en: "Animation technique that animators use to trace over motion picture footage, frame by frame, to produce realistic action.",
@@ -4331,6 +4678,7 @@ export const tags = {
     name: {
       en: "Royal Affairs",
       pt_br: "Assuntos Reais",
+      fr: "Affaires royales",
     },
     description: {
       en: "Features nobility, alliances, arranged marriage, succession disputes, religious orders and other elements of royal politics.",
@@ -4344,6 +4692,7 @@ export const tags = {
     name: {
       en: "Rugby",
       pt_br: "Rugby",
+      fr: "Rugby",
     },
     description: {
       en: "Centers around the sport of rugby.",
@@ -4356,6 +4705,7 @@ export const tags = {
     name: {
       en: "Rural",
       pt_br: "Rural",
+      fr: "Rural",
     },
     description: {
       en: "Partly or completely set in the countryside.",
@@ -4368,6 +4718,7 @@ export const tags = {
     name: {
       en: "Sadism",
       pt_br: "Sadismo",
+      fr: "Sadisme",
     },
     description: {
       en: "Prominently features characters deriving pleasure, especially sexual gratification, from inflicting pain, suffering, or humiliation on others.",
@@ -4381,6 +4732,7 @@ export const tags = {
     name: {
       en: "Samurai",
       pt_br: "Samurai",
+      fr: "Samouraï",
     },
     description: {
       en: "Prominently features warriors of medieval Japanese nobility bound by a code of honor.",
@@ -4393,6 +4745,7 @@ export const tags = {
     name: {
       en: "Satire",
       pt_br: "Sátira",
+      fr: "Satire",
     },
     description: {
       en: "Prominently features the use of comedy or ridicule to expose and criticise social phenomena.",
@@ -4406,6 +4759,7 @@ export const tags = {
     name: {
       en: "Scat",
       pt_br: "Escatologia",
+      fr: "Scato",
     },
     description: {
       en: "Lots of feces.",
@@ -4418,6 +4772,7 @@ export const tags = {
     name: {
       en: "School",
       pt_br: "Escola",
+      fr: "École",
     },
     description: {
       en: "Partly or completely set in a primary or secondary educational institution.",
@@ -4431,6 +4786,7 @@ export const tags = {
     name: {
       en: "School Club",
       pt_br: "Clube Escolar",
+      fr: "Club scolaire",
     },
     description: {
       en: "Partly or completely set in a school club scene.",
@@ -4443,6 +4799,7 @@ export const tags = {
     name: {
       en: "Scissoring",
       pt_br: "Tesoura",
+      fr: "Ciseaux",
     },
     description: {
       en: "A form of sexual activity between women in which the genitals are stimulated by being rubbed against one another.",
@@ -4456,6 +4813,7 @@ export const tags = {
     name: {
       en: "Scuba Diving",
       pt_br: "Mergulho",
+      fr: "Plongée sous-marine",
     },
     description: {
       en: "Prominently features characters diving with the aid of special breathing equipment.",
@@ -4468,6 +4826,7 @@ export const tags = {
     name: {
       en: "Seinen",
       pt_br: "Seinen",
+      fr: "Seinen",
     },
     description: {
       en: "Target demographic is adult males.",
@@ -4480,6 +4839,7 @@ export const tags = {
     name: {
       en: "Sex Toys",
       pt_br: "Brinquedos Sexuais",
+      fr: "Sextoys",
     },
     description: {
       en: "Features objects that are designed to stimulate sexual pleasure.",
@@ -4492,6 +4852,7 @@ export const tags = {
     name: {
       en: "Shapeshifting",
       pt_br: "Metamorfose",
+      fr: "Métamorphose",
     },
     description: {
       en: "Features character(s) who changes one's appearance or form.",
@@ -4504,6 +4865,7 @@ export const tags = {
     name: {
       en: "Shimaidon",
       pt_br: "Shimaidon",
+      fr: "Shimaidon",
     },
     description: {
       en: "Features a character who has sexual relations with two sisters.",
@@ -4516,6 +4878,7 @@ export const tags = {
     name: {
       en: "Ships",
       pt_br: "Navios",
+      fr: "Navires",
     },
     description: {
       en: "Prominently features the use of sea-based transportation vessels.",
@@ -4528,6 +4891,7 @@ export const tags = {
     name: {
       en: "Shogi",
       pt_br: "Shogi",
+      fr: "Shogi",
     },
     description: {
       en: "Centers around the game of shogi.",
@@ -4540,6 +4904,7 @@ export const tags = {
     name: {
       en: "Shoujo",
       pt_br: "Shoujo",
+      fr: "Shoujo",
     },
     description: {
       en: "Target demographic is teenage and young adult females.",
@@ -4552,6 +4917,7 @@ export const tags = {
     name: {
       en: "Shounen",
       pt_br: "Shounen",
+      fr: "Shounen",
     },
     description: {
       en: "Target demographic is teenage and young adult males.",
@@ -4564,6 +4930,7 @@ export const tags = {
     name: {
       en: "Shrine Maiden",
       pt_br: "Sacerdotisa",
+      fr: "Prêtresse shintō",
     },
     description: {
       en: "Prominently features a character who is a shrine maiden.",
@@ -4576,6 +4943,7 @@ export const tags = {
     name: {
       en: "Skateboarding",
       pt_br: "Skate",
+      fr: "Skateboard",
     },
     description: {
       en: "Centers around or prominently features skateboarding as a sport.",
@@ -4588,6 +4956,7 @@ export const tags = {
     name: {
       en: "Skeleton",
       pt_br: "Esqueleto",
+      fr: "Squelette",
     },
     description: {
       en: "Prominently features skeleton(s) as a character.",
@@ -4600,6 +4969,7 @@ export const tags = {
     name: {
       en: "Slapstick",
       pt_br: "Pastelão",
+      fr: "Slapstick",
     },
     description: {
       en: "Prominently features comedy based on deliberately clumsy actions or embarrassing events.",
@@ -4613,6 +4983,7 @@ export const tags = {
     name: {
       en: "Slavery",
       pt_br: "Escravidão",
+      fr: "Esclavage",
     },
     description: {
       en: "Prominently features slaves, slavery, or slave trade.",
@@ -4625,6 +4996,7 @@ export const tags = {
     name: {
       en: "Snowscape",
       pt_br: "Paisagem Nevada",
+      fr: "Paysage enneigé",
     },
     description: {
       en: "Prominently or partially set in a snowy environment.",
@@ -4637,6 +5009,7 @@ export const tags = {
     name: {
       en: "Software Development",
       pt_br: "Desenvolvimento de Software",
+      fr: "Développement logiciel",
     },
     description: {
       en: "Centers around characters developing or programming a piece of technology, software, gaming, etc.",
@@ -4650,6 +5023,7 @@ export const tags = {
     name: {
       en: "Space",
       pt_br: "Espaço",
+      fr: "Espace",
     },
     description: {
       en: "Partly or completely set in outer space.",
@@ -4662,6 +5036,7 @@ export const tags = {
     name: {
       en: "Space Opera",
       pt_br: "Ópera Espacial",
+      fr: "Space opera",
     },
     description: {
       en: "Centers around space warfare, advanced technology, chivalric romance and adventure.",
@@ -4675,6 +5050,7 @@ export const tags = {
     name: {
       en: "Spearplay",
       pt_br: "Combate com Lança",
+      fr: "Maniement de la lance",
     },
     description: {
       en: "Prominently features the use of spears in combat.",
@@ -4687,6 +5063,7 @@ export const tags = {
     name: {
       en: "Squirting",
       pt_br: "Ejaculação Feminina",
+      fr: "Squirting",
     },
     description: {
       en: "Female ejaculation; features the expulsion of liquid from the female genitalia.",
@@ -4699,6 +5076,7 @@ export const tags = {
     name: {
       en: "Steampunk",
       pt_br: "Steampunk",
+      fr: "Steampunk",
     },
     description: {
       en: "Prominently features technology and designs inspired by 19th-century industrial steam-powered machinery.",
@@ -4712,6 +5090,7 @@ export const tags = {
     name: {
       en: "Stop Motion",
       pt_br: "Stop Motion",
+      fr: "Stop motion",
     },
     description: {
       en: "Animation style characterized by physical objects being moved incrementally between frames to create the illusion of movement.",
@@ -4725,6 +5104,7 @@ export const tags = {
     name: {
       en: "Succubus",
       pt_br: "Súcubo",
+      fr: "Succube",
     },
     description: {
       en: "Prominently features a character who is a succubus, a creature in medieval folklore that typically uses their sexual prowess to trap and seduce people to feed off them.",
@@ -4738,6 +5118,7 @@ export const tags = {
     name: {
       en: "Suicide",
       pt_br: "Suicídio",
+      fr: "Suicide",
     },
     description: {
       en: "The act or an instance of taking or attempting to take one's own life voluntarily and intentionally.",
@@ -4751,6 +5132,7 @@ export const tags = {
     name: {
       en: "Sumata",
       pt_br: "Sumata",
+      fr: "Sumata",
     },
     description: {
       en: "Pussyjob; features the stimulation of male genitalia by the thighs and labia majora of a female character.",
@@ -4764,6 +5146,7 @@ export const tags = {
     name: {
       en: "Sumo",
       pt_br: "Sumô",
+      fr: "Sumo",
     },
     description: {
       en: "Centers around the sport of sumo.",
@@ -4776,6 +5159,7 @@ export const tags = {
     name: {
       en: "Super Power",
       pt_br: "Super Poder",
+      fr: "Superpouvoirs",
     },
     description: {
       en: "Prominently features characters with special abilities that allow them to do what would normally be physically or logically impossible.",
@@ -4789,6 +5173,7 @@ export const tags = {
     name: {
       en: "Super Robot",
       pt_br: "Super Robô",
+      fr: "Super robot",
     },
     description: {
       en: "Prominently features large robots often piloted by hot-blooded protagonists.",
@@ -4801,6 +5186,7 @@ export const tags = {
     name: {
       en: "Surfing",
       pt_br: "Surfe",
+      fr: "Surf",
     },
     description: {
       en: "Centers around surfing as a sport.",
@@ -4813,6 +5199,7 @@ export const tags = {
     name: {
       en: "Surreal Comedy",
       pt_br: "Comédia Surreal",
+      fr: "Comédie absurde",
     },
     description: {
       en: "Prominently features comedic moments that defy casual reasoning, resulting in illogical events.",
@@ -4826,6 +5213,7 @@ export const tags = {
     name: {
       en: "Survival",
       pt_br: "Sobrevivência",
+      fr: "Survie",
     },
     description: {
       en: "Centers around the struggle to live in spite of extreme obstacles.",
@@ -4838,6 +5226,7 @@ export const tags = {
     name: {
       en: "Swapping",
       pt_br: "Troca de Casais",
+      fr: "Échangisme",
     },
     description: {
       en: "Features consensual partner swapping between couples during sexual activities.",
@@ -4850,6 +5239,7 @@ export const tags = {
     name: {
       en: "Sweat",
       pt_br: "Suor",
+      fr: "Sueur",
     },
     description: {
       en: "Lots of sweat.",
@@ -4862,6 +5252,7 @@ export const tags = {
     name: {
       en: "Swimming",
       pt_br: "Natação",
+      fr: "Natation",
     },
     description: {
       en: "Centers around the sport of swimming.",
@@ -4874,6 +5265,7 @@ export const tags = {
     name: {
       en: "Swordplay",
       pt_br: "Combate com Espada",
+      fr: "Maniement de l’épée",
     },
     description: {
       en: "Prominently features the use of swords in combat.",
@@ -4886,6 +5278,7 @@ export const tags = {
     name: {
       en: "Table Tennis",
       pt_br: "Tênis de Mesa",
+      fr: "Tennis de table",
     },
     description: {
       en: 'Centers around the sport of table tennis (also known as "ping pong").',
@@ -4898,6 +5291,7 @@ export const tags = {
     name: {
       en: "Tanks",
       pt_br: "Tanques",
+      fr: "Chars",
     },
     description: {
       en: "Prominently features the use of tanks or other armoured vehicles.",
@@ -4910,6 +5304,7 @@ export const tags = {
     name: {
       en: "Tanned Skin",
       pt_br: "Pele Bronzeada",
+      fr: "Peau bronzée",
     },
     description: {
       en: "Prominently features characters with tanned skin.",
@@ -4922,6 +5317,7 @@ export const tags = {
     name: {
       en: "Teacher",
       pt_br: "Professor",
+      fr: "Enseignant",
     },
     description: {
       en: "Protagonist is an educator, usually in a school setting.",
@@ -4934,6 +5330,7 @@ export const tags = {
     name: {
       en: "Teens' Love",
       pt_br: "Amor Adolescente",
+      fr: "Teens’ Love",
     },
     description: {
       en: "Sexually explicit love-story between individuals of the opposite sex, specifically targeting females of teens and young adult age.",
@@ -4947,6 +5344,7 @@ export const tags = {
     name: {
       en: "Tennis",
       pt_br: "Tênis",
+      fr: "Tennis",
     },
     description: {
       en: "Centers around the sport of tennis.",
@@ -4959,6 +5357,7 @@ export const tags = {
     name: {
       en: "Tentacles",
       pt_br: "Tentáculos",
+      fr: "Tentacules",
     },
     description: {
       en: "Features the long appendages most commonly associated with octopuses or squid, often sexually penetrating a character.",
@@ -4972,6 +5371,7 @@ export const tags = {
     name: {
       en: "Terrorism",
       pt_br: "Terrorismo",
+      fr: "Terrorisme",
     },
     description: {
       en: "Centers around the activities of a terrorist or terrorist organization.",
@@ -4984,6 +5384,7 @@ export const tags = {
     name: {
       en: "Threesome",
       pt_br: "Ménage à Trois",
+      fr: "Plan à trois",
     },
     description: {
       en: "Features sexual acts between three people.",
@@ -4996,6 +5397,7 @@ export const tags = {
     name: {
       en: "Time Loop",
       pt_br: "Loop Temporal",
+      fr: "Boucle temporelle",
     },
     description: {
       en: "A character is stuck in a repetitive cycle that they are attempting to break out of. This is distinct from a manipulating time of their own choice.",
@@ -5009,6 +5411,7 @@ export const tags = {
     name: {
       en: "Time Manipulation",
       pt_br: "Manipulação do Tempo",
+      fr: "Manipulation du temps",
     },
     description: {
       en: "Prominently features time-traveling or other time-warping phenomena.",
@@ -5021,6 +5424,7 @@ export const tags = {
     name: {
       en: "Time Skip",
       pt_br: "Salto Temporal",
+      fr: "Ellipse temporelle",
     },
     description: {
       en: "Features a gap in time used to advance the story.",
@@ -5033,6 +5437,7 @@ export const tags = {
     name: {
       en: "Tokusatsu",
       pt_br: "Tokusatsu",
+      fr: "Tokusatsu",
     },
     description: {
       en: "Prominently features elements that resemble special effects in Japanese live-action shows",
@@ -5046,6 +5451,7 @@ export const tags = {
     name: {
       en: "Tomboy",
       pt_br: "Moleca",
+      fr: "Garçon manqué",
     },
     description: {
       en: "Features a girl who exhibits characteristics or behaviors considered in many cultures to be typical of boys.",
@@ -5059,6 +5465,7 @@ export const tags = {
     name: {
       en: "Torture",
       pt_br: "Tortura",
+      fr: "Torture",
     },
     description: {
       en: "The act of deliberately inflicting severe pain or suffering upon another individual or oneself as a punishment or with a specific purpose.",
@@ -5072,6 +5479,7 @@ export const tags = {
     name: {
       en: "Trains",
       pt_br: "Trens",
+      fr: "Trains",
     },
     description: {
       en: "Prominently features trains.",
@@ -5084,6 +5492,7 @@ export const tags = {
     name: {
       en: "Transgender",
       pt_br: "Transgênero",
+      fr: "Transgenre",
     },
     description: {
       en: "Features a character whose gender identity differs from the sex they were assigned at birth.",
@@ -5097,6 +5506,7 @@ export const tags = {
     name: {
       en: "Travel",
       pt_br: "Viagem",
+      fr: "Voyage",
     },
     description: {
       en: "Centers around character(s) moving between places a significant distance apart.",
@@ -5110,6 +5520,7 @@ export const tags = {
     name: {
       en: "Triads",
       pt_br: "Tríades",
+      fr: "Triades",
     },
     description: {
       en: "Centered around Chinese organised crime syndicates.",
@@ -5122,6 +5533,7 @@ export const tags = {
     name: {
       en: "Tsundere",
       pt_br: "Tsundere",
+      fr: "Tsundere",
     },
     description: {
       en: "Prominently features a character who acts cold and hostile in order to mask warmer emotions.",
@@ -5135,6 +5547,7 @@ export const tags = {
     name: {
       en: "Twins",
       pt_br: "Gêmeos",
+      fr: "Jumeaux",
     },
     description: {
       en: "Prominently features two or more siblings that were born at one birth.",
@@ -5147,6 +5560,7 @@ export const tags = {
     name: {
       en: "Unrequited Love",
       pt_br: "Amor Não Correspondido",
+      fr: "Amour non réciproque",
     },
     description: {
       en: "One or more characters are experiencing an unrequited love that may or may not be reciprocated.",
@@ -5160,6 +5574,7 @@ export const tags = {
     name: {
       en: "Urban",
       pt_br: "Urbano",
+      fr: "Urbain",
     },
     description: {
       en: "Partly or completely set in a city.",
@@ -5172,6 +5587,7 @@ export const tags = {
     name: {
       en: "Urban Fantasy",
       pt_br: "Fantasia Urbana",
+      fr: "Fantasy urbaine",
     },
     description: {
       en: "Set in a world similar to the real world, but with the existence of magic or other supernatural elements.",
@@ -5185,6 +5601,7 @@ export const tags = {
     name: {
       en: "Vampire",
       pt_br: "Vampiro",
+      fr: "Vampire",
     },
     description: {
       en: "Prominently features a character who is a vampire.",
@@ -5197,6 +5614,7 @@ export const tags = {
     name: {
       en: "Vertical Video",
       pt_br: "Vídeo Vertical",
+      fr: "Vidéo verticale",
     },
     description: {
       en: "Animated works originally created in a vertical aspect ratio (such as 9:16), intended for viewing on smartphones.",
@@ -5210,6 +5628,7 @@ export const tags = {
     name: {
       en: "Veterinarian",
       pt_br: "Veterinário",
+      fr: "Vétérinaire",
     },
     description: {
       en: "Prominently features a veterinarian or one of the main characters is a veterinarian.",
@@ -5222,6 +5641,7 @@ export const tags = {
     name: {
       en: "Video Games",
       pt_br: "Videogames",
+      fr: "Jeux vidéo",
     },
     description: {
       en: "Centers around characters playing video games.",
@@ -5234,6 +5654,7 @@ export const tags = {
     name: {
       en: "Vikings",
       pt_br: "Vikings",
+      fr: "Vikings",
     },
     description: {
       en: "Prominently features Scandinavian seafaring pirates and warriors.",
@@ -5246,6 +5667,7 @@ export const tags = {
     name: {
       en: "Villainess",
       pt_br: "Vilã",
+      fr: "Méchante",
     },
     description: {
       en: "Centers around or prominently features a villainous noble lady.",
@@ -5258,6 +5680,7 @@ export const tags = {
     name: {
       en: "Virginity",
       pt_br: "Virgindade",
+      fr: "Virginité",
     },
     description: {
       en: "Features a male character who has never had sexual relations (until now).",
@@ -5270,6 +5693,7 @@ export const tags = {
     name: {
       en: "Virtual World",
       pt_br: "Mundo Virtual",
+      fr: "Monde virtuel",
     },
     description: {
       en: "Partly or completely set in the world inside a video game.",
@@ -5282,6 +5706,7 @@ export const tags = {
     name: {
       en: "Vocal Synth",
       pt_br: "Sintetizador Vocal",
+      fr: "Synthèse vocale",
     },
     description: {
       en: "Features one or more singers or characters that are products of a synthesize singing program. Popular examples are Vocaloids, UTAUloids, and CeVIOs.",
@@ -5295,6 +5720,7 @@ export const tags = {
     name: {
       en: "Volleyball",
       pt_br: "Vôlei",
+      fr: "Volley-ball",
     },
     description: {
       en: "Centers around the sport of volleyball.",
@@ -5307,6 +5733,7 @@ export const tags = {
     name: {
       en: "Vore",
       pt_br: "Vore",
+      fr: "Vore",
     },
     description: {
       en: "Features a character being swallowed or swallowing another creature whole.",
@@ -5319,6 +5746,7 @@ export const tags = {
     name: {
       en: "Voyeur",
       pt_br: "Voyeur",
+      fr: "Voyeurisme",
     },
     description: {
       en: "Features a character who enjoys seeing the sex acts or sex organs of others.",
@@ -5332,6 +5760,7 @@ export const tags = {
     name: {
       en: "VTuber",
       pt_br: "VTuber",
+      fr: "VTuber",
     },
     description: {
       en: "Prominently features a character who is either an actual or fictive VTuber.",
@@ -5344,6 +5773,7 @@ export const tags = {
     name: {
       en: "War",
       pt_br: "Guerra",
+      fr: "Guerre",
     },
     description: {
       en: "Partly or completely set during wartime.",
@@ -5356,6 +5786,7 @@ export const tags = {
     name: {
       en: "Watersports",
       pt_br: "Urofilia",
+      fr: "Urophilie",
     },
     description: {
       en: "Features sexual situations involving urine.",
@@ -5368,6 +5799,7 @@ export const tags = {
     name: {
       en: "Werewolf",
       pt_br: "Lobisomem",
+      fr: "Loup-garou",
     },
     description: {
       en: "Prominently features a character who is a werewolf.",
@@ -5380,6 +5812,7 @@ export const tags = {
     name: {
       en: "Wilderness",
       pt_br: "Natureza Selvagem",
+      fr: "Nature sauvage",
     },
     description: {
       en: "Predominantly features a location with little to no human activity, such as a deserted island, a jungle, or a snowy mountain range.",
@@ -5393,6 +5826,7 @@ export const tags = {
     name: {
       en: "Witch",
       pt_br: "Bruxa",
+      fr: "Sorcière",
     },
     description: {
       en: "Prominently features a character who is a witch.",
@@ -5405,6 +5839,7 @@ export const tags = {
     name: {
       en: "Work",
       pt_br: "Trabalho",
+      fr: "Travail",
     },
     description: {
       en: "Centers around the activities of a certain occupation.",
@@ -5417,6 +5852,7 @@ export const tags = {
     name: {
       en: "Wrestling",
       pt_br: "Luta Livre",
+      fr: "Catch",
     },
     description: {
       en: "Centers around the sport of wrestling.",
@@ -5429,6 +5865,7 @@ export const tags = {
     name: {
       en: "Writing",
       pt_br: "Escrita",
+      fr: "Écriture",
     },
     description: {
       en: "Centers around the profession of writing books or novels.",
@@ -5441,6 +5878,7 @@ export const tags = {
     name: {
       en: "Yakuza",
       pt_br: "Yakuza",
+      fr: "Yakuza",
     },
     description: {
       en: "Centered around Japanese organised crime syndicates.",
@@ -5453,6 +5891,7 @@ export const tags = {
     name: {
       en: "Yandere",
       pt_br: "Yandere",
+      fr: "Yandere",
     },
     description: {
       en: "Prominently features a character who is obsessively in love with another, to the point of acting deranged or violent.",
@@ -5466,6 +5905,7 @@ export const tags = {
     name: {
       en: "Youkai",
       pt_br: "Youkai",
+      fr: "Yōkai",
     },
     description: {
       en: "Prominently features supernatural creatures from Japanese folklore.",
@@ -5478,6 +5918,7 @@ export const tags = {
     name: {
       en: "Yuri",
       pt_br: "Yuri",
+      fr: "Yuri",
     },
     description: {
       en: "Prominently features romance between two females, not inherently sexual. Also known as Girls' Love.",
@@ -5491,6 +5932,7 @@ export const tags = {
     name: {
       en: "Zombie",
       pt_br: "Zumbi",
+      fr: "Zombie",
     },
     description: {
       en: "Prominently features reanimated corpses which often prey on live humans and turn them into zombies.",
@@ -5504,6 +5946,7 @@ export const tags = {
     name: {
       en: "Zoophilia",
       pt_br: "Zoofilia",
+      fr: "Zoophilie",
     },
     description: {
       en: "Features a character who has a sexual attraction for non-human animals.",
@@ -5515,7 +5958,7 @@ export const tags = {
 } as const satisfies Record<
   string,
   {
-    name: Record<"en" | "pt_br", string>
+    name: Record<"en" | "pt_br" | "fr", string>
     description: Record<"en" | "pt_br", string>
     category: TagCategories
     isAdult: boolean

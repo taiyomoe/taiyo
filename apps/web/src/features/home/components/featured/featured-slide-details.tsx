@@ -6,6 +6,7 @@ import type { FeaturedMedia } from "@/features/media/api/medias"
 import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { synopsisLines } from "@/features/home/components/featured/synopsis-lines.stylex"
 import { getSynopsis } from "@/features/media/lib/media-labels"
+import { localizeTagName } from "@/lib/locale"
 
 const MAX_GENRES = 8
 const styles = stylex.create({
@@ -117,7 +118,7 @@ const getGenres = (tags: string[]) =>
     .map((key) => config.tags[key])
     .filter((tag) => tag.category === "Genre")
     .slice(0, MAX_GENRES)
-    .map((tag) => tag.name.en)
+    .map((tag) => localizeTagName(tag.name))
 
 export function FeaturedSlideDetails({ media }: { media: FeaturedMedia }) {
   const synopsis = getRichTextParagraphs(parseRichText(getSynopsis(media.synopsis)))

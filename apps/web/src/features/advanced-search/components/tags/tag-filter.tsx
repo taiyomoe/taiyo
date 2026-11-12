@@ -7,6 +7,7 @@ import type { AdvancedSearch } from "@/features/advanced-search/lib/advanced-sea
 import { FilterField } from "@/features/advanced-search/components/filters/filter-field"
 import { TagFilterPanel } from "@/features/advanced-search/components/tags/tag-filter-panel"
 import { getTagName } from "@/features/advanced-search/lib/search-tags"
+import { getContentLanguage } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 
 type TagSelection = Pick<AdvancedSearch, "tags" | "excludedTags" | "tagMode">
@@ -43,7 +44,10 @@ const styles = stylex.create({
   },
 })
 const listNames = (keys: AdvancedSearch["tags"]) => {
-  const names = keys.slice(0, VISIBLE_NAMES).map(getTagName).join(", ")
+  const names = keys
+    .slice(0, VISIBLE_NAMES)
+    .map((key) => getTagName(key, getContentLanguage()))
+    .join(", ")
   const hidden = keys.length - VISIBLE_NAMES
 
   return hidden > 0 ? m.search_tags_list_more({ names, count: hidden }) : names

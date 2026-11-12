@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { colors, font, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   list: {
@@ -77,7 +78,7 @@ export function BarList({ items, total }: { items: BarListItem[]; total?: number
           <div sx={styles.head}>
             <span sx={styles.label}>{item.label}</span>
             <span sx={styles.value}>
-              {item.value.toLocaleString()}
+              {item.value.toLocaleString(getLocale())}
               {sum > 0 ? ` · ${Math.round((item.value / sum) * 100)}%` : ""}
             </span>
           </div>

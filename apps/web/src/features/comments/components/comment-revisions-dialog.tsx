@@ -14,6 +14,7 @@ import { ErrorAlert } from "@/components/feedback/error-alert"
 import { commentRevisionsQueryOptions } from "@/features/comments/api/comments"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   panel: {
@@ -75,15 +76,17 @@ function RevisionsBody({ commentId }: { commentId: string }) {
         <span sx={[styles.meta, styles.current]}>
           {current.deletedAt === null
             ? m.comments_history_current()
-            : m.comments_history_removed({ date: new Date(current.deletedAt).toLocaleString() })}
+            : m.comments_history_removed({
+                date: new Date(current.deletedAt).toLocaleString(getLocale()),
+              })}
           {" · "}
-          {new Date(current.writtenAt).toLocaleString()}
+          {new Date(current.writtenAt).toLocaleString(getLocale())}
         </span>
         <pre sx={styles.source}>{current.content}</pre>
       </div>
       {revisions.map((revision) => (
         <div key={revision.writtenAt} sx={styles.version}>
-          <span sx={styles.meta}>{new Date(revision.writtenAt).toLocaleString()}</span>
+          <span sx={styles.meta}>{new Date(revision.writtenAt).toLocaleString(getLocale())}</span>
           <pre sx={styles.source}>{revision.content}</pre>
         </div>
       ))}

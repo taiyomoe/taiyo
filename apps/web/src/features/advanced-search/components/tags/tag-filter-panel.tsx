@@ -24,6 +24,7 @@ import {
   setTagState,
   type TagKey,
 } from "@/features/advanced-search/lib/search-tags"
+import { getContentLanguage } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 
 type TagSelection = Pick<AdvancedSearch, "tags" | "excludedTags" | "tagMode">
@@ -87,7 +88,7 @@ export function TagFilterPanel({
 }) {
   const [query, setQuery] = useState("")
   const modeLabelId = useId()
-  const sections = useMemo(() => getTagSections(), [])
+  const sections = useMemo(() => getTagSections(getContentLanguage()), [])
   const visible = filterTagSections(
     sections,
     query,
