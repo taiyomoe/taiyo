@@ -66,6 +66,11 @@ export const config = {
     readRetentionDays: 90,
     unreadRetentionDays: 365,
   },
+  lists: {
+    maxItems: 500,
+    maxPerUser: 100,
+    previewCovers: 4,
+  },
   tags,
   pagination: {
     defaultPage: 1,

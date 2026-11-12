@@ -207,6 +207,8 @@ export const listAudit = defineAuditCatalog("list", {
   ITEM_ADD: { target: "list", severity: "low" },
   ITEM_MOVE: { target: "list", severity: "low" },
   ITEM_REMOVE: { target: "list", severity: "low" },
+  VOTE: { target: "list", severity: "low" },
+  UNVOTE: { target: "list", severity: "low" },
 })
 
 export const libraryAudit = defineAuditCatalog("library", {

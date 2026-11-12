@@ -43,6 +43,35 @@ describe("GET /users/me/lists", () => {
     expect(list2Row?.itemCount).toBe(0)
   })
 
+  test("flags the lists that hold mediaId", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+    const holding = await services.db
+      .insertInto("userLists")
+      .values({ userId, name: "Has it" })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+
+    await services.db.insertInto("userLists").values({ userId, name: "Lacks it" }).execute()
+    await services.db
+      .insertInto("userListItems")
+      .values({ listId: holding.id, mediaId: SEEDED_MEDIA_ID, position: 0 })
+      .execute()
+
+    const res = await api<Array<{ id: string; hasMedia: boolean | null }>>(
+      app,
+      `/users/me/lists?mediaId=${SEEDED_MEDIA_ID}`,
+      { headers },
+    )
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.map((list) => list.id === holding.id)).toEqual(
+      res.body.data.map((list) => list.hasMedia),
+    )
+  })
+
   test("excludes soft-deleted lists", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services)
 

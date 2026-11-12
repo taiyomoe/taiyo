@@ -8,6 +8,7 @@ import type { ProfileTab } from "@/features/users/lib/profile-page"
 import type { Session } from "@/lib/session"
 import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
 import { CommentsTab } from "@/features/users/components/profile/tabs/comments-tab"
+import { ListsTab, ListsTabSkeleton } from "@/features/users/components/profile/tabs/lists-tab"
 import { OverviewTab } from "@/features/users/components/profile/tabs/overview/overview-tab"
 import { StatsTabSkeleton } from "@/features/users/components/profile/tabs/stats-skeleton"
 import {
@@ -86,6 +87,10 @@ export function ProfileTabs({
           {m.profile_tab_uploads()}
           {profile.uploadCount === 0 ? null : <span sx={styles.count}>{profile.uploadCount}</span>}
         </TabsTab>
+        <TabsTab sx={styles.tab} value="lists">
+          {m.profile_tab_lists()}
+          {profile.listCount === 0 ? null : <span sx={styles.count}>{profile.listCount}</span>}
+        </TabsTab>
         <TabsTab sx={styles.tab} value="comments">
           {m.profile_tab_comments()}
           {commentCount === undefined || commentCount === 0 ? null : (
@@ -106,6 +111,11 @@ export function ProfileTabs({
       <TabsPanel value="uploads">
         <Suspense fallback={<UploadsTabSkeleton />}>
           <UploadsTab page={page} profile={profile} />
+        </Suspense>
+      </TabsPanel>
+      <TabsPanel value="lists">
+        <Suspense fallback={<ListsTabSkeleton />}>
+          <ListsTab isOwner={viewer?.id === profile.id} page={page} profile={profile} />
         </Suspense>
       </TabsPanel>
       <TabsPanel value="comments">

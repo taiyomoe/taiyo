@@ -86,9 +86,11 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("name", "text", (c) => c.notNull())
     .addColumn("description", "text")
     .addColumn("visibility", sql`"UserListVisibility"`, (c) => c.notNull().defaultTo("PRIVATE"))
+    .addColumn("upvoteCount", "integer", (c) => c.notNull().defaultTo(0))
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addColumn("updatedAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addColumn("deletedAt", sql`timestamp(3)`)
+    .addCheckConstraint("userLists_upvoteCount_check", sql`"upvoteCount" >= 0`)
     .execute()
 
   await sql`
@@ -98,8 +100,15 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   `.execute(db)
 
   await sql`
+    CREATE INDEX "userLists_top_idx"
+      ON "userLists" ("upvoteCount" DESC, "createdAt" DESC, "id" DESC)
+      WHERE "deletedAt" IS NULL AND "visibility" = 'PUBLIC'
+  `.execute(db)
+
+  // Votes bump upvoteCount and item edits touch updatedAt explicitly, so only metadata edits fire this.
+  await sql`
     CREATE TRIGGER "userLists_set_updated_at"
-    BEFORE UPDATE ON "userLists"
+    BEFORE UPDATE OF "name", "description", "visibility" ON "userLists"
     FOR EACH ROW
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
@@ -121,6 +130,24 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .createIndex("userListItems_listId_position_idx")
     .on("userListItems")
     .columns(["listId", "position"])
+    .execute()
+
+  await db.schema
+    .createTable("userListVotes")
+    .addColumn("listId", "uuid", (c) =>
+      c.notNull().references("userLists.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("userId", "uuid", (c) =>
+      c.notNull().references("users.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addPrimaryKeyConstraint("userListVotes_pkey", ["listId", "userId"])
+    .execute()
+
+  await db.schema
+    .createIndex("userListVotes_userId_idx")
+    .on("userListVotes")
+    .column("userId")
     .execute()
 }
 
