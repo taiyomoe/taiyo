@@ -38,6 +38,7 @@ const styles = stylex.create({
     gap: "0.5rem",
     alignItems: "center",
     display: "flex",
+    whiteSpace: "nowrap",
     width: "100%",
   },
   itemCount: {

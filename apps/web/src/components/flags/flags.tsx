@@ -372,7 +372,7 @@ const DISPLAY_CODES: Partial<Record<LatestChapter["language"], string>> = { es_l
 const ROMANIZED_SUFFIX = "_ro"
 const getDisplayName = (code: string) => {
   try {
-    return new Intl.DisplayNames([getLocale()], { type: "language" }).of(code)
+    return new Intl.DisplayNames([getLocale()], { type: "language", style: "short" }).of(code)
   } catch {
     return undefined
   }

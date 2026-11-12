@@ -10,17 +10,18 @@ import type { Session } from "@/lib/session"
 import { mediaChapterFacetsQueryOptions } from "@/features/chapters/api/chapters"
 import { CommentSection } from "@/features/comments/components/comment-section"
 import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
+import { MediaBanners } from "@/features/media/components/media-banners/media-banners"
 import { MediaChapters } from "@/features/media/components/media-chapters/media-chapters"
+import { MediaCovers } from "@/features/media/components/media-covers/media-covers"
 import { MediaInfo } from "@/features/media/components/media-info/media-info"
+import { getPermissions } from "@/lib/permissions"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
 type MediaTab = (typeof MEDIA_TABS)[number]
 
 const DISABLED_TABS = [
-  { value: "covers", label: m.media_tab_covers },
   { value: "related", label: m.media_tab_related },
-  { value: "banners", label: m.media_tab_banners },
   { value: "stats", label: m.media_tab_stats },
 ] as const
 const routeApi = getRouteApi("/media/$mediaId")
@@ -65,6 +66,13 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
     mediaChapterFacetsQueryOptions(media.id, { contentRatings, language: lang }),
   )
   const commentCount = useCommentCount({ type: "MEDIA", id: media.id })
+  const canManage = user !== null && getPermissions(user)("media.update")
+  const coverCount = media.covers.filter((cover) =>
+    contentRatings.includes(cover.contentRating),
+  ).length
+  const bannerCount = media.banners.filter((banner) =>
+    contentRatings.includes(banner.contentRating),
+  ).length
 
   return (
     <Tabs
@@ -85,6 +93,14 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
         <TabsTab sx={styles.tab} value="chapters">
           {m.media_tab_chapters()}
           {facets.data === undefined ? null : <span sx={styles.tabCount}>{facets.data.total}</span>}
+        </TabsTab>
+        <TabsTab sx={styles.tab} value="covers">
+          {m.media_tab_covers()}
+          {coverCount === 0 ? null : <span sx={styles.tabCount}>{coverCount}</span>}
+        </TabsTab>
+        <TabsTab sx={styles.tab} value="banners">
+          {m.media_tab_banners()}
+          {bannerCount === 0 ? null : <span sx={styles.tabCount}>{bannerCount}</span>}
         </TabsTab>
         <TabsTab sx={styles.tab} value="comments">
           {m.media_tab_comments()}
@@ -109,6 +125,12 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
       </TabsPanel>
       <TabsPanel value="chapters">
         <MediaChapters mediaId={media.id} user={user} />
+      </TabsPanel>
+      <TabsPanel value="covers">
+        <MediaCovers canManage={canManage} media={media} />
+      </TabsPanel>
+      <TabsPanel value="banners">
+        <MediaBanners canManage={canManage} media={media} />
       </TabsPanel>
       <TabsPanel value="comments">
         <CommentSection

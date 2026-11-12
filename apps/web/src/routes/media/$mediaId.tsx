@@ -28,6 +28,12 @@ const searchSchema = z.object({
   q: z.string().trim().min(1).max(100).optional().catch(undefined),
   unread: z.boolean().optional().catch(undefined),
   comment: z.uuid().optional().catch(undefined),
+  coverVolume: z.string().trim().min(1).max(32).optional().catch(undefined),
+  coverLang: z
+    .string()
+    .regex(/^[a-z]{2}(?:_[a-z]{2})?$/)
+    .optional()
+    .catch(undefined),
 })
 
 export const Route = createFileRoute("/media/$mediaId")({
