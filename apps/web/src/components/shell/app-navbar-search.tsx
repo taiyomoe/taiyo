@@ -105,7 +105,7 @@ export function AppNavbarSearch() {
         onClick={() => {
           openPalette()
         }}
-        size="icon"
+        size="icon-xl"
         sx={styles.mobile}
         variant="ghost"
       >

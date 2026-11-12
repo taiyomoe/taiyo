@@ -22,7 +22,7 @@ import {
   MenuSubTrigger,
   MenuTrigger,
 } from "@taiyomoe/ui/components/ui/menu"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
@@ -60,8 +60,8 @@ const styles = stylex.create({
   avatar: {
     fontSize: "0.8125rem",
     fontWeight: 600,
-    height: "2.25rem",
-    width: "2.25rem",
+    height: { default: "2.75rem", [breakpoints.sm]: "2.5rem" },
+    width: { default: "2.75rem", [breakpoints.sm]: "2.5rem" },
   },
   fallback: {
     backgroundColor: colors.primary,
