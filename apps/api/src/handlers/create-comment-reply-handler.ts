@@ -1,4 +1,6 @@
 import { commentAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
+import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -72,8 +74,20 @@ export const createCommentReplyHandler = new Hono().post(
     await saveImageUsages(db, id, checked.imageIds)
 
     const { authorId } = comment
+    const author =
+      authorId === null || authorId === user.id
+        ? undefined
+        : await db
+            .selectFrom("users")
+            .select(
+              sql<boolean>`coalesce(("settings" ->> 'notifyReplies')::boolean, ${config.settings.notifyReplies})`.as(
+                "notify",
+              ),
+            )
+            .where("id", "=", authorId)
+            .executeTakeFirst()
 
-    if (authorId !== null && authorId !== user.id) {
+    if (authorId !== null && author?.notify === true) {
       await db
         .insertInto("notifications")
         .values({ userId: authorId, type: "COMMENT_REPLY", commentId: id })

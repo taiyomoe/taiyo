@@ -76,7 +76,7 @@ export function AppNavbar({
           <SignInButton />
         ) : (
           <>
-            <NotificationBell />
+            <NotificationBell viewerId={user.id} />
             <UserMenu user={user} />
           </>
         )}

@@ -121,7 +121,7 @@ export const getThreadTarget = async (db: Kysely<DB>, threadId: string) => {
   }
 }
 
-const bannedSql = (alias: string) =>
+export const bannedSql = (alias: string) =>
   sql<boolean>`(coalesce(${sql.ref(`${alias}.banned`)}, false) and (${sql.ref(`${alias}.banExpires`)} is null or ${sql.ref(`${alias}.banExpires`)} > (CURRENT_TIMESTAMP at time zone 'UTC')))`
 
 export const liveCommentSql = (comment: string, author: string) =>

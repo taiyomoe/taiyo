@@ -8,6 +8,7 @@ import { syncPushSubscription } from "@/features/notifications/lib/push"
 
 const LOCK_NAME = "taiyo:notification-stream"
 const CHANNEL_NAME = "taiyo:notifications"
+const REFRESH_DELAY_MS = 400
 
 /**
  * Keeps the notification queries fresh while the user is signed in. One tab holds the
@@ -20,8 +21,13 @@ export function NotificationStream() {
   useEffect(() => {
     const controller = new AbortController()
     const channel = new BroadcastChannel(CHANNEL_NAME)
+    let timer: ReturnType<typeof setTimeout> | undefined
+    // A burst of upvotes or follows sends many changes: refetch once it settles.
     const refresh = () => {
-      void queryClient.invalidateQueries({ queryKey: notificationKeys.all })
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        void queryClient.invalidateQueries({ queryKey: notificationKeys.all })
+      }, REFRESH_DELAY_MS)
     }
     const lead = () =>
       new Promise<void>((resolve) => {
@@ -54,6 +60,7 @@ export function NotificationStream() {
     }
 
     return () => {
+      clearTimeout(timer)
       controller.abort()
       channel.close()
     }

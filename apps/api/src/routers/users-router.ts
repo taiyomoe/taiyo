@@ -1,14 +1,15 @@
 import { Hono } from "hono"
 import { banUserHandler } from "../handlers/ban-user-handler"
-import { countMyUnreadNotificationsHandler } from "../handlers/count-my-unread-notifications-handler"
 import { createListHandler } from "../handlers/create-list-handler"
 import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-handler"
 import { deleteMyAvatarHandler } from "../handlers/delete-my-avatar-handler"
 import { deleteMyBannerHandler } from "../handlers/delete-my-banner-handler"
+import { deleteMyNotificationsHandler } from "../handlers/delete-my-notifications-handler"
 import { deletePushSubscriptionHandler } from "../handlers/delete-push-subscription-handler"
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
+import { getMyNotificationCountsHandler } from "../handlers/get-my-notification-counts-handler"
 import { getMyOverviewHandler } from "../handlers/get-my-overview-handler"
 import { getMyReaderSettingsHandler } from "../handlers/get-my-reader-settings-handler"
 import { getPushPublicKeyHandler } from "../handlers/get-push-public-key-handler"
@@ -44,6 +45,7 @@ import { updateMyAccountHandler } from "../handlers/update-my-account-handler"
 import { updateMyAvatarHandler } from "../handlers/update-my-avatar-handler"
 import { updateMyBannerHandler } from "../handlers/update-my-banner-handler"
 import { updateMyCosmeticsHandler } from "../handlers/update-my-cosmetics-handler"
+import { updateMyNotificationsHandler } from "../handlers/update-my-notifications-handler"
 import { updateMyProfileHandler } from "../handlers/update-my-profile-handler"
 import { updateMyReaderSettingsHandler } from "../handlers/update-my-reader-settings-handler"
 import { updateMySettingsHandler } from "../handlers/update-my-settings-handler"
@@ -70,9 +72,11 @@ export const usersRouter = new Hono()
   .route("/", listMyLibraryHandler)
   .route("/", listMyFeedHandler)
   .route("/", listMyNotificationsHandler)
-  .route("/", countMyUnreadNotificationsHandler)
+  .route("/", getMyNotificationCountsHandler)
   .route("/", readAllMyNotificationsHandler)
   .route("/", readMyNotificationHandler)
+  .route("/", updateMyNotificationsHandler)
+  .route("/", deleteMyNotificationsHandler)
   .route("/", streamMyNotificationsHandler)
   .route("/", getPushPublicKeyHandler)
   .route("/", upsertPushSubscriptionHandler)

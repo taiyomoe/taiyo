@@ -53,6 +53,8 @@ import {
   LeftToRightListNumberIcon,
   LibraryIcon,
   Notification01Icon,
+  InboxIcon,
+  Activity01Icon,
   PenTool02Icon,
   Settings01Icon,
   Shield01Icon,
@@ -284,6 +286,10 @@ export const Shield: (props: IconProps) => React.ReactElement = icon(Shield01Ico
 export const Settings: (props: IconProps) => React.ReactElement = icon(Settings01Icon)
 
 export const Bell: (props: IconProps) => React.ReactElement = icon(Notification01Icon)
+
+export const Inbox: (props: IconProps) => React.ReactElement = icon(InboxIcon)
+
+export const Activity: (props: IconProps) => React.ReactElement = icon(Activity01Icon)
 
 export const Upload: (props: IconProps) => React.ReactElement = icon(Upload04Icon)
 

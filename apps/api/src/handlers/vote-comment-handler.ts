@@ -8,6 +8,7 @@ import { checkComment } from "../middlewares/check-comment-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { recordActivity } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -43,9 +44,10 @@ export const voteCommentHandler = new Hono()
     withTransaction,
     checkComment({ live: true }),
     async (c) => {
-      const { db, user, comment } = c.var
+      const { db, user, comment, afterCommit, notificationEvents } = c.var
+      const { authorId } = comment
 
-      if (comment.authorId === user.id) {
+      if (authorId === user.id) {
         return c.fail("COMMENT_SELF_VOTE")
       }
 
@@ -61,6 +63,19 @@ export const voteCommentHandler = new Hono()
         .where("id", "=", comment.id)
         .returning("upvoteCount")
         .executeTakeFirstOrThrow()
+
+      if (
+        inserted !== undefined &&
+        authorId !== null &&
+        (await recordActivity(db, {
+          type: "COMMENT_LIKE",
+          recipientId: authorId,
+          actorId: user.id,
+          commentId: comment.id,
+        }))
+      ) {
+        afterCommit(() => notificationEvents.publish([authorId]))
+      }
 
       return c.ok({ upvoteCount, viewerVoted: true })
     },

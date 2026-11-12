@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import { config } from "@taiyomoe/config"
 import { AlertCircle, Bell, Download, Info, Monitor } from "@taiyomoe/ui/components/icons"
 import { Alert, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
@@ -8,6 +7,10 @@ import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { Session } from "@/lib/session"
+import {
+  NOTIFY_SETTINGS,
+  useBooleanSettings,
+} from "@/features/notifications/lib/notification-settings"
 import {
   disablePush,
   enablePush,
@@ -18,8 +21,6 @@ import { SettingSwitch } from "@/features/reader/components/sheet/setting-contro
 import { SettingsSection } from "@/features/settings/components/settings-section"
 import { settingsStyles } from "@/features/settings/components/settings-styles"
 import { getErrorMessage } from "@/lib/errors"
-import { sessionQueryOptions } from "@/lib/session"
-import { useUpdateSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
 const PUSH_STATE_KEY = ["push", "state"] as const
@@ -168,44 +169,84 @@ function PushDeviceState({
   )
 }
 
+const PUSH_SETTINGS = [
+  {
+    key: "pushLibraryChapters",
+    requires: "notifyChapters",
+    label: m.user_settings_push_library,
+    hint: m.user_settings_push_library_hint,
+  },
+  {
+    key: "pushGroupChapters",
+    requires: "notifyChapters",
+    label: m.user_settings_push_groups,
+    hint: m.user_settings_push_groups_hint,
+  },
+  {
+    key: "pushReplies",
+    requires: "notifyReplies",
+    label: m.user_settings_push_replies,
+    hint: m.user_settings_push_replies_hint,
+  },
+  {
+    key: "pushLikes",
+    requires: "notifyLikes",
+    label: m.user_settings_push_likes,
+    hint: m.user_settings_push_likes_hint,
+  },
+  {
+    key: "pushFollows",
+    requires: "notifyFollows",
+    label: m.user_settings_push_follows,
+    hint: m.user_settings_push_follows_hint,
+  },
+] as const
+
 export function NotificationSettings({ user }: { user: Session["user"] }) {
-  const updateSettings = useUpdateSettings()
-  const { data: session } = useQuery({ ...sessionQueryOptions, staleTime: "static" })
-  const settings = session?.user.settings ?? user.settings
-  const defaults = config.settings
+  const settings = useBooleanSettings(user.settings)
 
   return (
     <div sx={settingsStyles.stack}>
+      <SettingsSection
+        description={m.user_settings_notify_description()}
+        title={m.user_settings_notify_title()}
+      >
+        <div sx={settingsStyles.form}>
+          {NOTIFY_SETTINGS.map(({ key, label, hint }) => (
+            <SettingSwitch
+              checked={settings.get(key)}
+              hint={hint()}
+              key={key}
+              label={label()}
+              onChange={(checked) => {
+                settings.set(key, checked)
+              }}
+            />
+          ))}
+        </div>
+      </SettingsSection>
       <PushDevice />
       <SettingsSection
         description={m.user_settings_push_types_description()}
         title={m.user_settings_push_types_title()}
       >
         <div sx={settingsStyles.form}>
-          <SettingSwitch
-            checked={settings.pushLibraryChapters ?? defaults.pushLibraryChapters}
-            hint={m.user_settings_push_library_hint()}
-            label={m.user_settings_push_library()}
-            onChange={(checked) => {
-              updateSettings.mutate({ pushLibraryChapters: checked })
-            }}
-          />
-          <SettingSwitch
-            checked={settings.pushGroupChapters ?? defaults.pushGroupChapters}
-            hint={m.user_settings_push_groups_hint()}
-            label={m.user_settings_push_groups()}
-            onChange={(checked) => {
-              updateSettings.mutate({ pushGroupChapters: checked })
-            }}
-          />
-          <SettingSwitch
-            checked={settings.pushReplies ?? defaults.pushReplies}
-            hint={m.user_settings_push_replies_hint()}
-            label={m.user_settings_push_replies()}
-            onChange={(checked) => {
-              updateSettings.mutate({ pushReplies: checked })
-            }}
-          />
+          {PUSH_SETTINGS.map(({ key, requires, label, hint }) => {
+            const allowed = settings.get(requires)
+
+            return (
+              <SettingSwitch
+                checked={allowed && settings.get(key)}
+                disabled={!allowed}
+                hint={allowed ? hint() : m.user_settings_push_type_off()}
+                key={key}
+                label={label()}
+                onChange={(checked) => {
+                  settings.set(key, checked)
+                }}
+              />
+            )
+          })}
         </div>
       </SettingsSection>
     </div>

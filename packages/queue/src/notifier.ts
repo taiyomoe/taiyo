@@ -48,6 +48,7 @@ const fanOutChapters = async (db: Kysely<DB>) => {
       AND "c"."deletedAt" IS NULL
       AND "c"."createdAt" > (CURRENT_TIMESTAMP AT TIME ZONE 'UTC') - make_interval(days => ${config.notifications.maxChapterAgeDays})
       AND "r"."userId" <> "c"."uploaderId"
+      AND coalesce(("u"."settings" ->> 'notifyChapters')::boolean, ${config.settings.notifyChapters})
       AND jsonb_exists(
         coalesce("u"."settings" -> 'contentRating', ${JSON.stringify(config.settings.contentRating)}::jsonb),
         greatest("m"."contentRating", "c"."contentRating")::text
