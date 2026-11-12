@@ -8,6 +8,7 @@ export const env = createEnv({
   client: {
     VITE_SUPPORT_EMAIL: z.email().default("support@taiyo.moe"),
     VITE_API_URL: z.url(),
+    VITE_DISCORD_INVITE_URL: z.url().optional(),
   },
   runtimeEnv: import.meta.env,
 })

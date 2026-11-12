@@ -3,24 +3,14 @@ import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
+import { env } from "@/env/client"
 import { Section } from "@/features/landing/components/section"
 import { m } from "@/paraglide/messages"
 
-const COLUMNS = [
-  {
-    id: "community",
-    heading: m.landing_footer_col_community,
-    links: [{ id: "discord", label: m.landing_footer_discord, to: "#" }],
-  },
-  {
-    id: "legal",
-    heading: m.landing_footer_col_legal,
-    links: [
-      { id: "terms", label: m.landing_footer_terms, to: "/terms" },
-      { id: "privacy", label: m.landing_footer_privacy, to: "/privacy" },
-      { id: "dmca", label: m.landing_footer_content_policy, to: "/dmca" },
-    ],
-  },
+const LEGAL_LINKS = [
+  { id: "terms", label: m.landing_footer_terms, to: "/terms" },
+  { id: "privacy", label: m.landing_footer_privacy, to: "/privacy" },
+  { id: "dmca", label: m.landing_footer_content_policy, to: "/dmca" },
 ] as const
 const styles = stylex.create({
   lockup: {
@@ -91,24 +81,31 @@ export const LandingFooter = () => (
           </Link>
           <p sx={styles.tagline}>{m.landing_footer_tagline()}</p>
         </div>
-        {COLUMNS.map((column) => (
-          <div key={column.id}>
-            <div sx={styles.heading}>{column.heading()}</div>
+        {env.VITE_DISCORD_INVITE_URL === undefined ? null : (
+          <div>
+            <div sx={styles.heading}>{m.landing_footer_col_community()}</div>
             <div sx={styles.links}>
-              {column.links.map((link) =>
-                link.to === "#" ? (
-                  <a key={link.id} href={link.to} sx={styles.link}>
-                    {link.label()}
-                  </a>
-                ) : (
-                  <Link key={link.id} to={link.to} {...stylex.props(styles.link)}>
-                    {link.label()}
-                  </Link>
-                ),
-              )}
+              <a
+                href={env.VITE_DISCORD_INVITE_URL}
+                rel="noreferrer"
+                sx={styles.link}
+                target="_blank"
+              >
+                {m.landing_footer_discord()}
+              </a>
             </div>
           </div>
-        ))}
+        )}
+        <div>
+          <div sx={styles.heading}>{m.landing_footer_col_legal()}</div>
+          <div sx={styles.links}>
+            {LEGAL_LINKS.map((link) => (
+              <Link key={link.id} to={link.to} {...stylex.props(styles.link)}>
+                {link.label()}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </Section>
   </footer>
