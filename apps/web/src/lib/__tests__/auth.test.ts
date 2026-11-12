@@ -18,6 +18,8 @@ const setup = (error: AuthError | null = null, callbackURL?: string, signInData?
     signIn: { email: respond("signIn.email", signInData), social: respond("signIn.social") },
     signUp: { email: respond("signUp.email") },
     signOut: respond("signOut"),
+    requestPasswordReset: respond("requestPasswordReset"),
+    resetPassword: respond("resetPassword"),
     twoFactor: {
       verifyTotp: respond("twoFactor.verifyTotp"),
       verifyBackupCode: respond("twoFactor.verifyBackupCode"),
@@ -164,6 +166,45 @@ describe("createAuthActions", () => {
     expect(navigation).toEqual([])
   })
 
+  it("sends the captcha token and the reset page with a password reset request", async () => {
+    const { actions, calls, navigation, hasCachedSession } = setup()
+    const redirectTo = "https://taiyo.moe/auth/reset-password"
+
+    expect(
+      await actions.requestPasswordReset("reader@taiyo.moe", { captchaToken: "token", redirectTo }),
+    ).toEqual({ ok: true })
+    expect(calls).toEqual([
+      {
+        method: "requestPasswordReset",
+        args: [
+          { email: "reader@taiyo.moe", redirectTo },
+          { headers: { "x-captcha-response": "token" } },
+        ],
+      },
+    ])
+    expect(hasCachedSession()).toBe(true)
+    expect(navigation).toEqual([])
+  })
+
+  it("resets the password without signing in", async () => {
+    const { actions, calls, navigation, hasCachedSession } = setup()
+    const values = { newPassword: "hunter2222", token: "reset-token" }
+
+    expect(await actions.resetPassword(values)).toEqual({ ok: true })
+    expect(calls).toEqual([{ method: "resetPassword", args: [values] }])
+    expect(hasCachedSession()).toBe(true)
+    expect(navigation).toEqual([])
+  })
+
+  it("explains an expired reset link", async () => {
+    const { actions } = setup({ code: "INVALID_TOKEN", status: 400 })
+
+    expect(await actions.resetPassword({ newPassword: "hunter2222", token: "old" })).toEqual({
+      ok: false,
+      message: m.auth_error_reset_link_invalid(),
+    })
+  })
+
   it("starts a social sign-in that comes back home", async () => {
     const { actions, calls } = setup()
 
@@ -182,6 +223,7 @@ describe("getAuthErrorMessage", () => {
     [{ code: "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL", status: 422 }, m.auth_error_email_taken()],
     [{ code: "MISSING_RESPONSE", status: 400 }, m.auth_error_captcha()],
     [{ code: "VERIFICATION_FAILED", status: 403 }, m.auth_error_captcha()],
+    [{ code: "INVALID_TOKEN", status: 400 }, m.auth_error_reset_link_invalid()],
     [{ status: 429 }, m.auth_error_rate_limited()],
     [{ code: "SOMETHING_NEW", status: 400 }, m.auth_error_generic()],
     [{ status: 500 }, m.auth_error_generic()],

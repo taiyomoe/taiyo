@@ -39,5 +39,9 @@ export const useAuthForm = () => {
     verifyTwoFactor: (values: Parameters<typeof actions.verifyTwoFactor>[0]) =>
       run(() => actions.verifyTwoFactor(values)),
     signUp: (...args: Parameters<typeof actions.signUp>) => run(() => actions.signUp(...args)),
+    requestPasswordReset: (...args: Parameters<typeof actions.requestPasswordReset>) =>
+      run(() => actions.requestPasswordReset(...args)),
+    resetPassword: (values: Parameters<typeof actions.resetPassword>[0]) =>
+      run(() => actions.resetPassword(values)),
   }
 }

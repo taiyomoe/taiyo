@@ -9,11 +9,11 @@ export const AuthSwitchLink = ({
 }: {
   prompt: string
   label: string
-  to: "/auth/sign-in" | "/auth/sign-up"
+  to: "/auth/sign-in" | "/auth/sign-up" | "/auth/forgot-password"
 }) => (
   <p sx={sx.footer}>
     {prompt}{" "}
-    <Link search to={to} {...stylex.props(sx.link)}>
+    <Link from="/auth" search={({ redirect }) => ({ redirect })} to={to} {...stylex.props(sx.link)}>
       {label}
     </Link>
   </p>

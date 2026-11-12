@@ -1,13 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LockPasswordIcon, Mail01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-// Required even though nothing here calls `stylex.*`: the compiler only
-// processes a file that imports StyleX, and the `sx` props below are compiled,
-// not runtime props. Drop this import and every style in this file silently
-// stops applying. See packages/ui/STYLEX.md.
-// oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { Form } from "@taiyomoe/ui/components/ui/form"
+import { Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -102,9 +98,14 @@ export const SignInForm = () => {
           />
           <div sx={sx.row}>
             <CheckboxField control={form.control} name="rememberMe" label={m.auth_remember_me()} />
-            <a href="/forgot-password" sx={[sx.link, sx.linkNoWrap]}>
+            <Link
+              from="/auth"
+              search={({ redirect }) => ({ redirect })}
+              to="/auth/forgot-password"
+              {...stylex.props(sx.link, sx.linkNoWrap)}
+            >
               {m.auth_forgot_password()}
-            </a>
+            </Link>
           </div>
           <LastUsed active={lastUsed === "email"}>
             <SunButton block type="submit" sx={sx.submit} loading={isSubmitting} disabled={isBusy}>
