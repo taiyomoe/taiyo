@@ -2229,5 +2229,17 @@
   "profile_lists_empty_description": "{name} hasn't shared any lists.",
   "profile_lists_empty_description_owner": "Collect titles you love into a list, then share it or keep it private.",
   "list_not_found_title": "List not found",
-  "list_not_found_description": "It may have been deleted, or its owner made it private."
+  "list_not_found_description": "It may have been deleted, or its owner made it private.",
+  "unsaved_changes_title": "Discard unsaved changes?",
+  "unsaved_changes_description": "Your changes haven't been saved. If you leave now, they'll be lost.",
+  "unsaved_changes_keep": "Keep editing",
+  "unsaved_changes_discard": "Discard changes",
+  "not_found_back_home": "Back to home",
+  "page_not_found_title": "Page not found",
+  "page_not_found_description": "This page doesn't exist, or it has moved.",
+  "group_not_found_title": "Group not found",
+  "group_not_found_description": "It may have been deleted, or the link is wrong.",
+  "group_back": "All groups",
+  "profile_not_found_title": "User not found",
+  "profile_not_found_description": "Nobody goes by this username. It may have changed, or the account was deleted."
 }

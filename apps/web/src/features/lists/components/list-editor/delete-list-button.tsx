@@ -35,7 +35,7 @@ export function DeleteListButton({ list }: { list: { id: string; name: string } 
             run: async () => {
               await remove.mutateAsync(list.id)
               toastManager.add({ title: m.list_editor_deleted(), type: "success" })
-              await navigate({ to: "/lists" })
+              await navigate({ to: "/lists", ignoreBlocker: true })
               queryClient.removeQueries({ queryKey: ["lists", "detail", list.id] })
             },
           })

@@ -6,6 +6,7 @@ import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { UnsavedChangesGuard } from "@/components/dialogs/unsaved-changes-guard"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { InputField, TextareaField } from "@/components/fields/form-field"
 import { type ListDetail, useCreateList, useUpdateList } from "@/features/lists/api/lists"
@@ -46,7 +47,7 @@ export function ListEditor({ list }: { list: ListDetail | null }) {
   const create = useCreateList()
   const update = useUpdateList()
   const mutation = list === null ? create : update
-  const [items, setItems] = useState<EditorTitle[]>(
+  const [initialItems] = useState<EditorTitle[]>(
     () =>
       list?.items.map((item) => ({
         mediaId: item.mediaId,
@@ -55,6 +56,7 @@ export function ListEditor({ list }: { list: ListDetail | null }) {
         type: item.type,
       })) ?? [],
   )
+  const [items, setItems] = useState(initialItems)
   const form = useForm<ListDetailsValues>({
     resolver: zodResolver(listDetailsSchema),
     mode: "onSubmit",
@@ -66,6 +68,10 @@ export function ListEditor({ list }: { list: ListDetail | null }) {
     },
   })
   const submitting = form.formState.isSubmitting
+  const dirty =
+    form.formState.isDirty ||
+    items.length !== initialItems.length ||
+    items.some((item, index) => item.mediaId !== initialItems[index]?.mediaId)
   const onSubmit = form.handleSubmit(async ({ name, description, visibility }) => {
     const values = {
       name,
@@ -82,7 +88,7 @@ export function ListEditor({ list }: { list: ListDetail | null }) {
       title: list === null ? m.list_editor_created() : m.list_editor_saved(),
       type: "success",
     })
-    await navigate({ to: "/lists/$listId", params: { listId: id } })
+    await navigate({ to: "/lists/$listId", params: { listId: id }, ignoreBlocker: true })
   })
 
   return (
@@ -117,6 +123,7 @@ export function ListEditor({ list }: { list: ListDetail | null }) {
       </section>
       <TitlesPanel disabled={submitting} items={items} onChange={setItems} />
       <EditorBar list={list} submitting={submitting} />
+      <UnsavedChangesGuard dirty={dirty} />
     </Form>
   )
 }
