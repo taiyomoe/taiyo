@@ -27,6 +27,11 @@ export type AuthClient = {
     ) => Promise<AuthResponse>
   }
   signOut: () => Promise<AuthResponse>
+  requestPasswordReset: (
+    body: { email: string; redirectTo: string },
+    options: { headers: Record<string, string> },
+  ) => Promise<AuthResponse>
+  resetPassword: (body: { newPassword: string; token: string }) => Promise<AuthResponse>
   twoFactor: {
     verifyTotp: (body: TwoFactorBody) => Promise<AuthResponse>
     verifyBackupCode: (body: TwoFactorBody) => Promise<AuthResponse>
@@ -52,6 +57,7 @@ const messagesByCode: Record<string, () => string> = {
   INVALID_TWO_FACTOR_COOKIE: m.user_settings_2fa_expired,
   MISSING_RESPONSE: m.auth_error_captcha,
   VERIFICATION_FAILED: m.auth_error_captcha,
+  INVALID_TOKEN: m.auth_error_reset_link_invalid,
 }
 
 export const getAuthErrorMessage = (error: AuthError) => {
@@ -66,6 +72,8 @@ export const getAuthErrorMessage = (error: AuthError) => {
 
 const toResult = ({ error }: AuthResponse): AuthResult =>
   error === null ? { ok: true } : { ok: false, message: getAuthErrorMessage(error) }
+const captchaHeaders = (captchaToken: string | null) =>
+  captchaToken !== null && captchaToken !== "" ? { "x-captcha-response": captchaToken } : {}
 const needsTwoFactor = (data: unknown) =>
   typeof data === "object" &&
   data !== null &&
@@ -129,14 +137,21 @@ export const createAuthActions = ({
       toResult(
         await client.signUp.email(
           { ...values, callbackURL },
-          {
-            headers:
-              captchaToken !== null && captchaToken !== ""
-                ? { "x-captcha-response": captchaToken }
-                : {},
-          },
+          { headers: captchaHeaders(captchaToken) },
         ),
       ),
+    requestPasswordReset: async (
+      email: string,
+      { captchaToken, redirectTo }: { captchaToken: string | null; redirectTo: string },
+    ) =>
+      toResult(
+        await client.requestPasswordReset(
+          { email, redirectTo },
+          { headers: captchaHeaders(captchaToken) },
+        ),
+      ),
+    resetPassword: async (values: { newPassword: string; token: string }) =>
+      toResult(await client.resetPassword(values)),
     signInSocial: async (provider: SocialProvider) =>
       toResult(await client.signIn.social({ provider, callbackURL })),
     signOut: async () => {

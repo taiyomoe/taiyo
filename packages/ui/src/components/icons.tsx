@@ -128,6 +128,10 @@ import {
   ImageAdd02Icon,
   ImageNotFound01Icon,
   SquareLock02Icon,
+  LockPasswordIcon,
+  MailValidation01Icon,
+  PasswordValidationIcon,
+  Unlink04Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -461,3 +465,12 @@ export const At: (props: IconProps) => React.ReactElement = icon(AtIcon)
 export const Send: (props: IconProps) => React.ReactElement = icon(SentIcon)
 
 export const Lock: (props: IconProps) => React.ReactElement = icon(SquareLock02Icon)
+
+export const LockPassword: (props: IconProps) => React.ReactElement = icon(LockPasswordIcon)
+
+export const MailValidation: (props: IconProps) => React.ReactElement = icon(MailValidation01Icon)
+
+export const PasswordValidation: (props: IconProps) => React.ReactElement =
+  icon(PasswordValidationIcon)
+
+export const Unlink: (props: IconProps) => React.ReactElement = icon(Unlink04Icon)

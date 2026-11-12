@@ -83,6 +83,7 @@ export const createAuth = ({
       minPasswordLength: config.auth.password.minLength,
       maxPasswordLength: config.auth.password.maxLength,
       requireEmailVerification: true,
+      revokeSessionsOnPasswordReset: true,
       sendResetPassword: async (data) => {
         await resend.emails.send({
           from: "Taiyō <no-reply@taiyo.moe>",

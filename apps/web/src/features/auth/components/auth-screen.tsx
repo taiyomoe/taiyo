@@ -1,10 +1,8 @@
+import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { scene } from "@/components/scene/scene.stylex"
-import { AuthTabs } from "@/features/auth/components/auth-tabs"
 import { AuthScene } from "@/features/auth/components/scene/auth-scene"
-import { SignInForm } from "@/features/auth/components/sign-in-form"
-import { SignUpForm } from "@/features/auth/components/sign-up-form"
 
 const styles = stylex.create({
   screen: {
@@ -33,14 +31,11 @@ const styles = stylex.create({
   },
 })
 
-export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => (
+export const AuthScreen = ({ children }: { children: ReactNode }) => (
   <div data-auth-screen sx={styles.screen}>
     <AuthScene />
     <div sx={styles.panel}>
-      <div sx={styles.column}>
-        <AuthTabs type={type} />
-        {type === "sign-in" ? <SignInForm /> : <SignUpForm />}
-      </div>
+      <div sx={styles.column}>{children}</div>
     </div>
   </div>
 )

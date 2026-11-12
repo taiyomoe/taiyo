@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { AuthForm } from "@/features/auth/components/auth-form"
+import { AuthScreen } from "@/features/auth/components/auth-screen"
+import { AuthTabs } from "@/features/auth/components/auth-tabs"
+import { SignUpForm } from "@/features/auth/components/sign-up-form"
 import { m } from "@/paraglide/messages"
 
 export const Route = createFileRoute("/auth/sign-up")({
@@ -8,5 +10,10 @@ export const Route = createFileRoute("/auth/sign-up")({
 })
 
 function RouteComponent() {
-  return <AuthForm type="sign-up" />
+  return (
+    <AuthScreen>
+      <AuthTabs type="sign-up" />
+      <SignUpForm />
+    </AuthScreen>
+  )
 }
