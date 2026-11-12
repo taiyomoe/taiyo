@@ -2,7 +2,6 @@ import type { IconProps } from "@taiyomoe/ui/components/icons"
 import type { ReactElement } from "react"
 import * as stylex from "@stylexjs/stylex"
 import {
-  Bookmark,
   Feed,
   History,
   Home,
@@ -141,7 +140,6 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
     {
       label: m.shell_nav_my_library,
       items: [
-        { label: m.shell_nav_follows, icon: Bookmark },
         ...(typeof session?.user.username === "string"
           ? [
               {
