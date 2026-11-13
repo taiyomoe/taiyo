@@ -8,7 +8,8 @@ import {
   ComboboxList,
   ComboboxPopup,
 } from "@taiyomoe/ui/components/ui/combobox"
-import { getLanguageName, LanguageFlag } from "@/components/flags/flags"
+import { LanguageFlag } from "@/components/flags/flags"
+import { getLanguageName } from "@/components/flags/language-flags"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

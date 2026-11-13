@@ -10,7 +10,8 @@ import {
   ComboboxList,
   ComboboxPopup,
 } from "@taiyomoe/ui/components/ui/combobox"
-import { getLanguageName, LanguageFlag } from "@/components/flags/flags"
+import { LanguageFlag } from "@/components/flags/flags"
+import { getLanguageName } from "@/components/flags/language-flags"
 import { fieldEditorStyles } from "@/features/media-suggestions/components/field-editors/field-editor-styles"
 import { m } from "@/paraglide/messages"
 

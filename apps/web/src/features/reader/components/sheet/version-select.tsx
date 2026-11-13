@@ -9,7 +9,8 @@ import {
 } from "@taiyomoe/ui/components/ui/select"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { ReaderChapter } from "@/features/reader/api/reader"
-import { LanguageFlag, getLanguageName } from "@/components/flags/flags"
+import { LanguageFlag } from "@/components/flags/flags"
+import { getLanguageName } from "@/components/flags/language-flags"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

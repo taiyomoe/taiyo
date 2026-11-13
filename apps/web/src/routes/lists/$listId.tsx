@@ -1,9 +1,11 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute, notFound } from "@tanstack/react-router"
+import { getRichTextSummary } from "@/components/rich-text/rich-text-document"
 import { listQueryOptions } from "@/features/lists/api/lists"
 import { isListNotFoundError } from "@/features/lists/components/list-page/list-error"
 import { ListNotFoundPage } from "@/features/lists/components/list-page/list-not-found-page"
 import { ListPage } from "@/features/lists/components/list-page/list-page"
+import { pageOgMeta } from "@/features/og/lib/og-meta"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -25,22 +27,23 @@ export const Route = createFileRoute("/lists/$listId")({
       return null
     })
 
-    return { name: loaded?.name ?? null, description: loaded?.description ?? null }
+    return {
+      name: loaded?.name ?? null,
+      description: getRichTextSummary(loaded?.description),
+    }
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     const name = loaderData?.name ?? null
-    const description = loaderData?.description?.slice(0, 160) ?? null
 
     return {
       meta: [
         { title: name === null ? m.list_meta_title_fallback() : m.list_meta_title({ name }) },
-        ...(name === null ? [] : [{ property: "og:title", content: name }]),
-        ...(description === null || description === ""
-          ? []
-          : [
-              { name: "description", content: description },
-              { property: "og:description", content: description },
-            ]),
+        ...pageOgMeta({
+          kind: "lists",
+          id: params.listId,
+          title: name,
+          description: loaderData?.description,
+        }),
       ],
     }
   },

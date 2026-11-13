@@ -3,7 +3,8 @@ import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.st
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useDeferredValue } from "react"
-import { getLanguageName, LanguageFlag } from "@/components/flags/flags"
+import { LanguageFlag } from "@/components/flags/flags"
+import { getLanguageName } from "@/components/flags/language-flags"
 import { Cover } from "@/features/media/components/cover"
 import {
   LIBRARY_STATUS_LABELS,

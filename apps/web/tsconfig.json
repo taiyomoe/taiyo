@@ -4,11 +4,12 @@
     "lib": ["ES2022", "DOM"],
     "types": ["node", "vite/client"],
     "allowJs": true,
+    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["${configDir}/*.ts", "${configDir}/src", "${configDir}/e2e"]
+  "include": ["${configDir}/*.ts", "${configDir}/src", "${configDir}/e2e", "${configDir}/scripts"]
 }

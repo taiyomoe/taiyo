@@ -1,6 +1,7 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
+import { getRichTextSummary } from "@/components/rich-text/rich-text-document"
 import {
   CHAPTER_SORTS,
   mediaChapterFacetsQueryOptions,
@@ -10,8 +11,9 @@ import { commentsQueryOptions } from "@/features/comments/api/comments"
 import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/features/media/api/library"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { MediaPage } from "@/features/media/components/media-page/media-page"
-import { getMainTitle } from "@/features/media/lib/media-labels"
+import { getMainTitle, getSynopsis } from "@/features/media/lib/media-labels"
 import { CHAPTERS_PER_PAGE, MEDIA_TABS } from "@/features/media/lib/media-page"
+import { pageOgMeta } from "@/features/og/lib/og-meta"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -42,10 +44,13 @@ export const Route = createFileRoute("/media/$mediaId")({
   loader: async ({ context, params: { mediaId }, deps }) => {
     const contentRatings = getContentRatings(context.session)
     const filters = { contentRatings, language: deps.lang }
-    const title = context.queryClient
+    const summary = context.queryClient
       .query(mediaQueryOptions(mediaId))
-      .then((data) => getMainTitle(data.titles))
-      .catch(() => null)
+      .then((data) => ({
+        title: getMainTitle(data.titles),
+        synopsis: getRichTextSummary(getSynopsis(data.synopsis)),
+      }))
+      .catch(() => ({ title: null, synopsis: null }))
     const prefetch = Promise.all(
       [
         context.queryClient.query(mediaChapterFacetsQueryOptions(mediaId, filters)),
@@ -84,9 +89,9 @@ export const Route = createFileRoute("/media/$mediaId")({
       await prefetch
     }
 
-    return { title: await title }
+    return summary
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     const title = loaderData?.title ?? null
 
     return {
@@ -94,6 +99,12 @@ export const Route = createFileRoute("/media/$mediaId")({
         {
           title: title === null ? m.media_meta_title_fallback() : m.media_meta_title({ title }),
         },
+        ...pageOgMeta({
+          kind: "media",
+          id: params.mediaId,
+          title,
+          description: loaderData?.synopsis,
+        }),
       ],
     }
   },

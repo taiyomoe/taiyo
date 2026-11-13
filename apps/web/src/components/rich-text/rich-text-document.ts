@@ -344,3 +344,13 @@ export const getRichTextParagraphs = (document: MarkdownDocument) =>
   document.children.flatMap((node) =>
     node.type === "paragraph" ? [inlineText(node.children, "mask").trim()] : [],
   )
+
+/** The text of `source` on a single line, spoilers masked, or null when it has none. */
+export const getRichTextSummary = (source: string | null | undefined) => {
+  const text =
+    source === null || source === undefined
+      ? ""
+      : getRichTextParagraphs(parseRichText(source)).join(" ").replaceAll(/\s+/g, " ").trim()
+
+  return text === "" ? null : text
+}

@@ -13,6 +13,7 @@ import { getCookies } from "@tanstack/react-start/server"
 import { fromEntries, map, pipe } from "remeda"
 import { CommandPaletteProvider } from "@/features/command-palette/components/command-palette-provider"
 import { NotificationStream } from "@/features/notifications/components/notification-stream"
+import { siteOgMeta } from "@/features/og/lib/og-meta"
 import { sessionQueryOptions } from "@/lib/session"
 import {
   THEME_COOKIE,
@@ -51,7 +52,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       themePreference,
     }
   },
-  head: () => ({
+  head: ({ matches }) => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -59,6 +60,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Read, track, and organize the manga you love." },
       { name: "apple-mobile-web-app-title", content: "Taiyō" },
       { name: "theme-color", content: "#120a07" },
+      ...siteOgMeta(matches.map((match) => match.routeId)),
     ],
     links: [
       {
