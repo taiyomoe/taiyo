@@ -46,6 +46,7 @@ const adminBodySchema = z.object({
 })
 const cookieDomain = serverEnv.BETTER_AUTH_COOKIE_DOMAIN ?? ""
 const actorSchema = z.object({ id: z.string(), role: z.unknown(), banned: z.boolean().nullish() })
+const unlinkAccountBodySchema = z.object({ accountId: z.string() })
 const signInBodySchema = z.object({
   email: z.string().optional(),
   username: z.string().optional(),
@@ -211,6 +212,28 @@ export const createAuth = ({
             throw new APIError("FORBIDDEN", {
               code: "FORBIDDEN_TARGET",
               message: "You can't do this for this user",
+            })
+          }
+
+          return
+        }
+
+        if (ctx.path === "/unlink-account") {
+          const body = unlinkAccountBodySchema.safeParse(ctx.body)
+          const account = body.success
+            ? await db
+                .selectFrom("accounts")
+                .select("providerId")
+                .where("id", "=", body.data.accountId)
+                .executeTakeFirst()
+            : undefined
+
+          // Unlinking the password would let a session alone set a new one (POST
+          // /users/me/password) and turn off 2FA, which otherwise both need the password.
+          if (account?.providerId === "credential") {
+            throw new APIError("BAD_REQUEST", {
+              code: "CANNOT_UNLINK_PASSWORD",
+              message: "Change or reset your password instead",
             })
           }
 
