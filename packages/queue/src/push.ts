@@ -25,35 +25,41 @@ const graphemes = new Intl.Segmenter()
 
 export const getVapidPublicKey = () => env.VAPID_PUBLIC_KEY ?? null
 
-export const createWebPushSender = () => {
-  const { VAPID_PUBLIC_KEY: publicKey, VAPID_PRIVATE_KEY: privateKey, VAPID_SUBJECT: subject } = env
+// An absolute deadline: web-push's own `timeout` only fires on an idle socket, so an endpoint
+// that keeps sending a byte now and then could hold the send, and the notification worker's
+// transaction, for as long as it likes.
+const SEND_TIMEOUT_MS = 5000
 
+export const createWebPushSender = ({
+  subject = env.VAPID_SUBJECT,
+  publicKey = env.VAPID_PUBLIC_KEY,
+  privateKey = env.VAPID_PRIVATE_KEY,
+} = {}) => {
   if (publicKey === undefined || privateKey === undefined || subject === undefined) {
     return null
   }
 
   const vapidDetails = { subject, publicKey, privateKey }
   const send: PushSender = async ({ endpoint, p256dh, auth }, message) => {
-    try {
-      const { statusCode } = await webpush.sendNotification(
-        { endpoint, keys: { p256dh, auth } },
-        JSON.stringify(message),
-        {
-          vapidDetails,
-          TTL: config.notifications.pushTtlSeconds,
-          timeout: 10_000,
-          urgency: "normal",
-        },
-      )
+    const { method, headers, body } = webpush.generateRequestDetails(
+      { endpoint, keys: { p256dh, auth } },
+      JSON.stringify(message),
+      { vapidDetails, TTL: config.notifications.pushTtlSeconds, urgency: "normal" },
+    )
+    const response = await fetch(endpoint, {
+      method,
+      headers: Object.fromEntries(
+        Object.entries(headers).filter(([name]) => name.toLowerCase() !== "content-length"),
+      ),
+      body,
+      redirect: "manual",
+      signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
+    })
 
-      return statusCode
-    } catch (err) {
-      if (err instanceof webpush.WebPushError) {
-        return err.statusCode
-      }
+    // Only the status matters, so the response body is never buffered.
+    await response.body?.cancel()
 
-      throw err
-    }
+    return response.status
   }
 
   return send
