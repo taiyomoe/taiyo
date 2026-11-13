@@ -58,7 +58,9 @@ export const getPresignedUploadUrl = (
   getSignedUrl(
     presignClient ?? s3,
     new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: contentType }),
-    { expiresIn },
+    // The presigner leaves Content-Type unsigned by default, which would let the uploader store
+    // any type (text/html included) in the publicly readable bucket.
+    { expiresIn, signableHeaders: new Set(["content-type"]) },
   )
 
 export const getChapterPageKey = (mediaId: string, chapterId: string, pageId: string) =>
