@@ -14,6 +14,7 @@ import { FollowButton } from "@/features/users/components/profile/follow-button"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
 import { READER_RANK_LABELS } from "@/features/users/lib/level-labels"
 import { ROLE_LABELS } from "@/features/users/lib/role-labels"
+import { pickLocalized } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
@@ -106,10 +107,7 @@ export function UserHoverCard({ username }: { username: string }) {
   }
 
   const locale = getLocale()
-  const about =
-    profile.about[locale] ??
-    profile.about.en ??
-    Object.values(profile.about).find((value) => value !== "")
+  const about = pickLocalized(profile.about)
   const numbers = new Intl.NumberFormat(locale, { notation: "compact" })
   const joined = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(
     new Date(profile.createdAt),

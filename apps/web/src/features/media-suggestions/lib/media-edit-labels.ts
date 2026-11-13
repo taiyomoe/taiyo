@@ -1,14 +1,17 @@
 import type { StaffRole } from "@taiyomoe/db/constants"
 import { config } from "@taiyomoe/config"
+import { localizeTagName } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 
-export const TAG_OPTIONS = Object.entries(config.tags)
-  .map(([key, tag]) => ({ key, name: tag.name.en, category: tag.category }))
-  .sort((a, b) => a.name.localeCompare(b.name))
+export const getTagOptions = () =>
+  Object.entries(config.tags)
+    .map(([key, tag]) => ({ key, name: localizeTagName(tag.name), category: tag.category }))
+    .sort((a, b) => a.name.localeCompare(b.name))
 
-const TAG_NAMES = new Map(TAG_OPTIONS.map((tag) => [tag.key, tag.name]))
+const isTagKey = (key: string): key is keyof typeof config.tags => Object.hasOwn(config.tags, key)
 
-export const getTagName = (key: string) => TAG_NAMES.get(key) ?? key
+export const getTagName = (key: string) =>
+  isTagKey(key) ? localizeTagName(config.tags[key].name) : key
 
 export const STAFF_ROLE_LABELS: Record<StaffRole, () => string> = {
   AUTHOR: m.media_info_authors,

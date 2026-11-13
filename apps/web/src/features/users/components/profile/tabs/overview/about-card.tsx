@@ -6,8 +6,8 @@ import type { UserProfile } from "@/features/users/api/profile"
 import { RichText } from "@/components/rich-text/rich-text"
 import { parseRichText } from "@/components/rich-text/rich-text-document"
 import { profileStyles } from "@/features/users/components/profile/profile-styles"
+import { pickLocalized } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
-import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   section: {
@@ -25,11 +25,7 @@ const styles = stylex.create({
 })
 
 export function AboutCard({ profile, isOwner }: { profile: UserProfile; isOwner: boolean }) {
-  const locale = getLocale()
-  const about =
-    profile.about[locale] ??
-    profile.about.en ??
-    Object.values(profile.about).find((value) => value !== "")
+  const about = pickLocalized(profile.about)
 
   return (
     <section sx={[profileStyles.card, styles.section]}>

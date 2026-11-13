@@ -1,4 +1,5 @@
 import { config } from "@taiyomoe/config"
+import type { ContentLanguage } from "@/lib/locale"
 
 export type TagKey = keyof typeof config.tags
 
@@ -34,6 +35,10 @@ export type TagSectionId = (typeof TAG_SECTION_IDS)[number]
 
 export const isTagKey = (key: string): key is TagKey => Object.hasOwn(config.tags, key)
 
+const nameIn = (
+  names: { en: string } & Partial<Record<string, string>>,
+  language: ContentLanguage,
+) => names[language] ?? names.en
 const byName = (a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name)
 const byGroupLabel = (a: { label: string | null }, b: { label: string | null }) => {
   if (a.label === null || b.label === null) {
@@ -50,7 +55,7 @@ const TAGS = Object.keys(config.tags)
 
     return {
       key,
-      name: tag.name.en,
+      names: tag.name,
       isAdult: tag.isAdult,
       section,
       group: rest.length === 0 ? null : rest.join(" · "),
@@ -58,9 +63,13 @@ const TAGS = Object.keys(config.tags)
   })
 const TAG_BY_KEY = new Map(TAGS.map((tag) => [tag.key, tag]))
 
-export const getTagName = (key: TagKey) => TAG_BY_KEY.get(key)?.name ?? key
+export const getTagName = (key: TagKey, language: ContentLanguage) => {
+  const tag = TAG_BY_KEY.get(key)
 
-export const getTagSections = (): TagSection[] =>
+  return tag === undefined ? key : nameIn(tag.names, language)
+}
+
+export const getTagSections = (language: ContentLanguage): TagSection[] =>
   TAG_SECTION_IDS.map((id) => {
     const groups = new Map<string | null, SearchTag[]>()
 
@@ -68,7 +77,7 @@ export const getTagSections = (): TagSection[] =>
       if (tag.section === id) {
         groups.set(tag.group, [
           ...(groups.get(tag.group) ?? []),
-          { key: tag.key, name: tag.name, isAdult: tag.isAdult },
+          { key: tag.key, name: nameIn(tag.names, language), isAdult: tag.isAdult },
         ])
       }
     }
@@ -127,7 +136,11 @@ export const setTagState = (
       : selection.excludedTags.filter((tag) => tag !== key),
 })
 
-export const getVisibleTags = (tagKeys: readonly string[], spoilerTagKeys: readonly string[]) =>
+export const getVisibleTags = (
+  tagKeys: readonly string[],
+  spoilerTagKeys: readonly string[],
+  language: ContentLanguage,
+) =>
   tagKeys
     .filter((key) => !spoilerTagKeys.includes(key))
     .flatMap((key) => {
@@ -135,6 +148,6 @@ export const getVisibleTags = (tagKeys: readonly string[], spoilerTagKeys: reado
 
       return tag === undefined
         ? []
-        : [{ key: tag.key, name: tag.name, isGenre: tag.section === "Genre" }]
+        : [{ key: tag.key, name: nameIn(tag.names, language), isGenre: tag.section === "Genre" }]
     })
     .sort((a, b) => Number(b.isGenre) - Number(a.isGenre))

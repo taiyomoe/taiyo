@@ -40,6 +40,7 @@ import {
 } from "@/features/users/lib/cosmetic-labels"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   popup: {
@@ -257,8 +258,8 @@ function Unlock({ item, progress }: { item: Item; progress: MyCosmetics["progres
       </div>
       <span sx={styles.progressText}>
         {m.profile_unlock_progress({
-          current: current.toLocaleString(),
-          threshold: unlock.threshold.toLocaleString(),
+          current: current.toLocaleString(getLocale()),
+          threshold: unlock.threshold.toLocaleString(getLocale()),
         })}
       </span>
     </>

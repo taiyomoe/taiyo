@@ -7,6 +7,7 @@ import { PointsAmount } from "@/features/shop/components/points-amount"
 import { TIER_LABELS } from "@/features/shop/lib/tier-labels"
 import { CHEST_PALETTES } from "@/features/shop/scene/chest-palettes"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   info: {
@@ -85,7 +86,9 @@ export function TierInfo({
           {m.shop_box_open_chest()}
         </Button>
         {short > 0 && !exhausted ? (
-          <span sx={styles.hint}>{m.shop_box_short({ needed: short.toLocaleString() })}</span>
+          <span sx={styles.hint}>
+            {m.shop_box_short({ needed: short.toLocaleString(getLocale()) })}
+          </span>
         ) : null}
       </div>
     </div>

@@ -2,8 +2,8 @@ import type { BadgeVariant } from "@taiyomoe/ui/components/ui/badge"
 import { config } from "@taiyomoe/config"
 import type { LibraryStatus } from "@/features/media/api/library"
 import type { Media } from "@/features/media/api/medias"
+import { localizeTagName, pickLocalized } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
-import { getLocale } from "@/paraglide/runtime"
 
 type Label = () => string
 
@@ -121,11 +121,8 @@ export const getMediaTags = (tags: Media["tags"]) =>
 
     const tag = config.tags[key]
 
-    return [{ key, isSpoiler, isGenre: tag.category === "Genre", name: tag.name.en }]
+    return [{ key, isSpoiler, isGenre: tag.category === "Genre", name: localizeTagName(tag.name) }]
   })
-
-const pickLocalized = (values: Partial<Record<string, string>>) =>
-  values[getLocale()] ?? values.en ?? Object.values(values).find((value) => value !== undefined)
 
 export const getSynopsis = (synopsis: Media["synopsis"]) =>
   pickLocalized(synopsis)?.split(/\n\s*(?:-{3,}|_{3,}|\*{3,})\s*\n/)[0] ?? ""

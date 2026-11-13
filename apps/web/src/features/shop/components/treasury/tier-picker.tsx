@@ -5,6 +5,7 @@ import type { ShopLootBox } from "@/features/shop/api/shop"
 import { TIER_LABELS } from "@/features/shop/lib/tier-labels"
 import { CHEST_PALETTES } from "@/features/shop/scene/chest-palettes"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   group: {
@@ -95,7 +96,7 @@ export function TierPicker({
         >
           <span aria-hidden sx={styles.gem(CHEST_PALETTES[box.key].glow)} />
           {TIER_LABELS[box.key].name()}
-          <span sx={styles.price}>{box.price.toLocaleString()}</span>
+          <span sx={styles.price}>{box.price.toLocaleString(getLocale())}</span>
         </button>
       ))}
     </div>

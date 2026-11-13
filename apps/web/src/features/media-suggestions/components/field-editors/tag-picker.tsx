@@ -12,8 +12,10 @@ import {
 import { useState } from "react"
 import type { MediaEditDraft } from "@/features/media-suggestions/lib/media-edit-model"
 import { fieldEditorStyles } from "@/features/media-suggestions/components/field-editors/field-editor-styles"
-import { TAG_OPTIONS } from "@/features/media-suggestions/lib/media-edit-labels"
+import { getTagOptions } from "@/features/media-suggestions/lib/media-edit-labels"
 import { m } from "@/paraglide/messages"
+
+type TagOption = ReturnType<typeof getTagOptions>[number]
 
 export function TagPicker({
   selected,
@@ -26,11 +28,11 @@ export function TagPicker({
 
   return (
     <div sx={fieldEditorStyles.addPicker}>
-      <Combobox<(typeof TAG_OPTIONS)[number]>
+      <Combobox<TagOption>
         inputValue={input}
         isItemEqualToValue={(a, b) => a.key === b.key}
         itemToStringLabel={(item) => item.name}
-        items={TAG_OPTIONS.filter((option) => !selected.some((tag) => tag.key === option.key))}
+        items={getTagOptions().filter((option) => !selected.some((tag) => tag.key === option.key))}
         onInputValueChange={setInput}
         onValueChange={(next) => {
           if (next !== null) {
@@ -43,7 +45,7 @@ export function TagPicker({
         <ComboboxInput placeholder={m.media_edit_tags_add()} size="sm" />
         <ComboboxPopup>
           <ComboboxList>
-            {(item: (typeof TAG_OPTIONS)[number]) => (
+            {(item: TagOption) => (
               <ComboboxItem key={item.key} value={item}>
                 <span sx={fieldEditorStyles.option}>
                   {item.name}

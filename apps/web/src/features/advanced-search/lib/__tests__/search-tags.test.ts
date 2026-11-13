@@ -30,14 +30,14 @@ describe("tag states", () => {
 
 describe("tag sections", () => {
   it("files every tag under exactly one section", () => {
-    const keys = tagsOf(getTagSections()).map((tag) => tag.key)
+    const keys = tagsOf(getTagSections("en")).map((tag) => tag.key)
 
     expect(new Set(keys).size).toBe(keys.length)
     expect(keys).toContain("ACTION")
   })
 
   it("filters by name and hides tags the reader may not see", () => {
-    const sections = filterTagSections(getTagSections(), "rom", (tag) => !tag.isAdult)
+    const sections = filterTagSections(getTagSections("en"), "rom", (tag) => !tag.isAdult)
     const names = tagsOf(sections).map((tag) => tag.name)
 
     expect(names.length).toBeGreaterThan(0)
@@ -47,7 +47,7 @@ describe("tag sections", () => {
 
 describe("getVisibleTags", () => {
   it("hides spoilers and unknown keys, and lists genres first", () => {
-    const tags = getVisibleTags(["ISEKAI", "ACTION", "MYSTERY", "NOPE"], ["MYSTERY"])
+    const tags = getVisibleTags(["ISEKAI", "ACTION", "MYSTERY", "NOPE"], ["MYSTERY"], "en")
 
     expect(tags.map((tag) => tag.key)).not.toContain("MYSTERY")
     expect(tags.map((tag) => tag.key)).not.toContain("NOPE")

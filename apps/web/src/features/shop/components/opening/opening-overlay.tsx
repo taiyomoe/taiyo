@@ -20,6 +20,7 @@ import { useEquipCosmetics } from "@/features/users/api/profile"
 import { getCosmeticLabel } from "@/features/users/lib/cosmetic-labels"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const fadeUp = stylex.keyframes({
   "0%": { opacity: 0, transform: "translateY(12px)" },
@@ -167,7 +168,9 @@ export function OpeningOverlay({
               <DialogPrimitive.Description {...stylex.props(styles.status)}>
                 {stage === "charging"
                   ? m.shop_opening_charging()
-                  : m.shop_box_duplicate_refund({ refund: box.duplicateRefund.toLocaleString() })}
+                  : m.shop_box_duplicate_refund({
+                      refund: box.duplicateRefund.toLocaleString(getLocale()),
+                    })}
               </DialogPrimitive.Description>
             </div>
             <div sx={styles.tools}>
@@ -213,7 +216,7 @@ export function OpeningOverlay({
                     }}
                     variant="outline"
                   >
-                    {m.shop_opening_again({ price: box.price.toLocaleString() })}
+                    {m.shop_opening_again({ price: box.price.toLocaleString(getLocale()) })}
                   </Button>
                   <Button
                     loading={equip.isPending}
@@ -241,7 +244,7 @@ export function OpeningOverlay({
                   </Button>
                 </div>
                 <span sx={styles.balance}>
-                  {m.shop_points({ points: result.balance.toLocaleString() })}
+                  {m.shop_points({ points: result.balance.toLocaleString(getLocale()) })}
                 </span>
               </>
             ) : null}

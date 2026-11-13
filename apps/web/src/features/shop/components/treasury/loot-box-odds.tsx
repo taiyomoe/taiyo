@@ -4,6 +4,7 @@ import type { ShopLootBox } from "@/features/shop/api/shop"
 import { RARITY_COLORS } from "@/features/shop/lib/rarity-colors"
 import { RARITY_LABELS } from "@/features/users/lib/cosmetic-labels"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
   panel: {
@@ -106,7 +107,9 @@ export function LootBoxOdds({ box }: { box: ShopLootBox }) {
             ? m.shop_box_exhausted()
             : m.shop_box_collected({ owned: box.owned, total: box.total })}
         </span>
-        <span>{m.shop_box_duplicate_refund({ refund: box.duplicateRefund.toLocaleString() })}</span>
+        <span>
+          {m.shop_box_duplicate_refund({ refund: box.duplicateRefund.toLocaleString(getLocale()) })}
+        </span>
       </div>
     </div>
   )

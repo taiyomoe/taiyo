@@ -40,7 +40,7 @@ const navigate = async (request) => {
   try {
     return await fetch(request)
   } catch {
-    return (await fromOffline(request, { ignoreSearch: true })) ?? offlinePage()
+    return (await fromOffline(request, { ignoreSearch: true, ignoreVary: true })) ?? offlinePage()
   }
 }
 

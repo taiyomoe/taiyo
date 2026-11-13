@@ -9,6 +9,7 @@ import type {
 } from "@taiyomoe/db/cosmetics"
 import { ROLE_LABELS } from "@/features/users/lib/role-labels"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 type Label = () => string
 
@@ -113,11 +114,11 @@ export const describeUnlock = (unlock: CosmeticUnlock) => {
   }
 
   if (unlock.type === "shop") {
-    return m.profile_unlock_shop({ price: unlock.price.toLocaleString() })
+    return m.profile_unlock_shop({ price: unlock.price.toLocaleString(getLocale()) })
   }
 
   if (unlock.type === "achievement") {
-    const threshold = unlock.threshold.toLocaleString()
+    const threshold = unlock.threshold.toLocaleString(getLocale())
 
     if (unlock.metric === "chaptersRead") {
       return m.profile_unlock_chapters_read({ threshold })
