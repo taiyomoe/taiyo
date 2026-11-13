@@ -1,7 +1,6 @@
 import type z from "zod"
-import { coerceFormDataValue } from "@taiyomoe/utils"
+import { buildFormDataObject, coerceFormDataValue } from "@taiyomoe/utils"
 import { createMiddleware } from "hono/factory"
-import { construct } from "radashi"
 
 type Env<TSchema extends z.ZodType> = {
   Variables: {
@@ -16,13 +15,10 @@ export const validateFormData = <TSchema extends z.ZodType>(schema: TSchema) =>
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await c.req.formData()
-      const flat: Record<string, unknown> = {}
 
-      for (const [key, value] of formData.entries()) {
-        flat[key] = coerceFormDataValue(value)
-      }
-
-      json = construct(flat)
+      json = buildFormDataObject(
+        [...formData.entries()].map(([key, value]) => [key, coerceFormDataValue(value)]),
+      )
     }
 
     const validation = schema.safeParse(json)
