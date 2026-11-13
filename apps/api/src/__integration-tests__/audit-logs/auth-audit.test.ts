@@ -76,25 +76,6 @@ describe("Audited auth requests", () => {
     expect(log).toMatchObject({ outcome: "success", actorId: userId, targetId: userId })
   })
 
-  test("records a profile edit with its changes", async ({ services }) => {
-    const app = createWebApp(services)
-    const { userId, headers } = await signInAs(services)
-    const res = await app.request("/api/auth/update-user", {
-      method: "POST",
-      headers: authHeaders(headers),
-      body: JSON.stringify({ name: "Renamed User" }),
-    })
-
-    expect(res.status).toBe(200)
-
-    const [log] = await findAuditLogs(services, "user.PROFILE_UPDATE")
-
-    expect(log).toMatchObject({ outcome: "success", actorId: userId, targetId: userId })
-    expect(log?.event).toMatchObject({
-      audit: { changes: { after: { name: "Renamed User" } } },
-    })
-  })
-
   test("records a rejected sign-up", async ({ services }) => {
     const app = createWebApp(services)
     const res = await app.request("/api/auth/sign-up/email", {

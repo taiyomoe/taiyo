@@ -79,6 +79,9 @@ export const createAuth = ({
     appName: "Taiyō",
     baseURL: clientEnv.VITE_BETTER_AUTH_URL,
     trustedOrigins,
+    // Profile edits go through /users/me/account and /users/me/avatar, which enforce the display
+    // name policy and the owned-avatar rule that Better Auth's generic endpoint would skip.
+    disabledPaths: ["/update-user"],
     database: kyselyAdapter(db, { type: "postgres", usePlural: true }),
     emailAndPassword: {
       enabled: true,
