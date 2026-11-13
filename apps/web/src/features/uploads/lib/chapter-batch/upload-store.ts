@@ -1,4 +1,4 @@
-import type { ImageMimeType, Language } from "@taiyomoe/db/constants"
+import type { ImageMimeType, SupportedLanguage } from "@taiyomoe/db/constants"
 import type { QueryClient } from "@tanstack/react-query"
 import type { ChapterSource } from "@/features/uploads/lib/chapter-batch/sources"
 import { api } from "@/lib/api"
@@ -32,7 +32,7 @@ type UploadBatch = {
   id: string
   mediaId: string
   mediaTitle: string
-  language: Language
+  language: SupportedLanguage
   groupIds: string[]
   jobs: UploadJob[]
 }

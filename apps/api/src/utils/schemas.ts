@@ -5,6 +5,8 @@ import {
   GROUP_PERMISSIONS,
   LANGUAGES,
   MEDIA_COUNTRIES_OF_ORIGIN,
+  MEDIA_LANGUAGES,
+  SUPPORTED_LANGUAGES,
 } from "@taiyomoe/db"
 import z from "zod"
 
@@ -45,6 +47,12 @@ export const timeZoneSchema = z
   .default("UTC")
 
 export const languageSchema = (description: string) =>
+  z.enum(SUPPORTED_LANGUAGES).meta({ description, example: "en" })
+
+export const mediaLanguageSchema = (description: string) =>
+  z.enum(MEDIA_LANGUAGES).meta({ description, example: "ja" })
+
+export const storedLanguageSchema = (description: string) =>
   z.enum(LANGUAGES).meta({ description, example: "en" })
 
 export const contentRatingSchema = (description: string) =>
@@ -125,7 +133,7 @@ export const mediaLinksSchema = z
   })
 
 export const mediaSynopsisSchema = z
-  .partialRecord(z.enum(LANGUAGES), z.string().max(config.input.maxSynopsisLength))
+  .partialRecord(z.enum(SUPPORTED_LANGUAGES), z.string().max(config.input.maxSynopsisLength))
   .meta({
     description: "Synopsis text keyed by language code.",
     example: {
@@ -134,11 +142,16 @@ export const mediaSynopsisSchema = z
   })
 
 export const localizedTextSchema = z
-  .partialRecord(z.enum(LANGUAGES), z.string().max(config.input.maxDescriptionLength))
+  .partialRecord(z.enum(SUPPORTED_LANGUAGES), z.string().max(config.input.maxDescriptionLength))
   .meta({
     description: "Localized text keyed by language code. Send empty string to clear a key.",
-    example: { en: "Manga artist known for ...", ja: "..." },
+    example: { en: "Manga artist known for ...", pt_br: "..." },
   })
+
+export const storedLocalizedTextSchema = z.partialRecord(z.enum(LANGUAGES), z.string()).meta({
+  description: "Localized text keyed by language code.",
+  example: { en: "Manga artist known for ...", pt_br: "..." },
+})
 
 const linkUrlField = (description: string) =>
   z.string().max(config.input.maxUrlLength).exactOptional().meta({ description })
@@ -181,7 +194,7 @@ export const chapterFeedItemSchema = z.object({
     .string()
     .nullable()
     .meta({ description: "The volume of the chapter, if any.", example: "12" }),
-  language: languageSchema("The language of the chapter."),
+  language: storedLanguageSchema("The language of the chapter."),
   contentRating: contentRatingSchema("The content rating of the chapter."),
   createdAt: z.iso.datetime().meta({
     description: "When the chapter was released.",

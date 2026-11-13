@@ -17,14 +17,14 @@ import {
   apiSuccessEnvelope,
   contentRatingSchema,
   fileSchema,
-  languageSchema,
+  mediaLanguageSchema,
 } from "../utils/schemas"
 
 const createCoversSchema = z.object({
   covers: z
     .object({
       file: fileSchema("The file of the cover."),
-      language: languageSchema("The language of the cover."),
+      language: mediaLanguageSchema("The language of the cover."),
       contentRating: contentRatingSchema("The content rating of the cover."),
       main: z.boolean().default(false).meta({
         description:

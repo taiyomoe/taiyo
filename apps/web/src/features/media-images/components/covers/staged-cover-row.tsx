@@ -1,5 +1,5 @@
-import type { ContentRating, Language } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
+import { type ContentRating, type MediaLanguage, MEDIA_LANGUAGES } from "@taiyomoe/db/constants"
 import { Close } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
@@ -137,7 +137,8 @@ export function StagedCoverRow({
         />
         <span sx={styles.language}>
           <LanguagePicker
-            onChange={(language: Language) => {
+            languages={MEDIA_LANGUAGES}
+            onChange={(language: MediaLanguage) => {
               onChange({ language })
             }}
             value={item.language}

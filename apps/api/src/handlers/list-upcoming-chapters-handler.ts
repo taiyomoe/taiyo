@@ -1,4 +1,4 @@
-import { LANGUAGES } from "@taiyomoe/db"
+import { SUPPORTED_LANGUAGES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -26,7 +26,7 @@ const querySchema = z.object({
     .optional()
     .meta({ description: "Only list the chapters credited to this group." }),
   language: z
-    .enum(LANGUAGES)
+    .enum(SUPPORTED_LANGUAGES)
     .optional()
     .meta({ description: "Only list chapters in this language." }),
 })

@@ -1,5 +1,10 @@
-import type { ContentRating, Language } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
+import {
+  type ContentRating,
+  isMediaLanguage,
+  type MediaLanguage,
+  MEDIA_LANGUAGES,
+} from "@taiyomoe/db/constants"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Dialog,
@@ -69,7 +74,9 @@ function EditCoverForm({
 }) {
   const update = useUpdateCover(mediaId)
   const [volume, setVolume] = useState(cover.volume ?? "")
-  const [language, setLanguage] = useState<Language>(cover.language)
+  const [language, setLanguage] = useState<MediaLanguage | null>(
+    isMediaLanguage(cover.language) ? cover.language : null,
+  )
   const [contentRating, setContentRating] = useState<ContentRating>(cover.contentRating)
   const parsedVolume = parseVolumeInput(volume)
 
@@ -84,7 +91,14 @@ function EditCoverForm({
         }
 
         update.mutate(
-          { id: cover.id, patch: { volume: parsedVolume, language, contentRating } },
+          {
+            id: cover.id,
+            patch: {
+              volume: parsedVolume,
+              contentRating,
+              ...(language === null ? {} : { language }),
+            },
+          },
           { onSuccess: onDone },
         )
       }}
@@ -114,7 +128,7 @@ function EditCoverForm({
           </Field>
           <Field>
             <FieldLabel>{m.upload_language()}</FieldLabel>
-            <LanguagePicker onChange={setLanguage} value={language} />
+            <LanguagePicker languages={MEDIA_LANGUAGES} onChange={setLanguage} value={language} />
           </Field>
           <Field>
             <FieldLabel>{m.media_images_content_rating()}</FieldLabel>

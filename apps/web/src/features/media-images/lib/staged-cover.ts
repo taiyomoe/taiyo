@@ -1,8 +1,8 @@
-import type { ContentRating, Language } from "@taiyomoe/db/constants"
+import type { ContentRating, MediaLanguage } from "@taiyomoe/db/constants"
 
 export type StagedCoverFields = {
   volume: string
-  language: Language
+  language: MediaLanguage
   contentRating: ContentRating
   main: boolean
 }

@@ -102,7 +102,7 @@ describe("GET /medias/:id/chapters/facets", () => {
 
   test("returns no volumes for a language without chapters", async ({ app, services }) => {
     const catalog = await seedCatalog(services)
-    const facets = await getFacets(app, catalog.mediaId, "language=ja")
+    const facets = await getFacets(app, catalog.mediaId, "language=fr")
 
     expect(facets.total).toBe(0)
     expect(facets.volumes).toEqual([])

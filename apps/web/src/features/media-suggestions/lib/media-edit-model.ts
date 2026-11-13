@@ -1,4 +1,4 @@
-import type { MediaEditField } from "@taiyomoe/db/constants"
+import { isMediaLanguage, isSupportedLanguage, type MediaEditField } from "@taiyomoe/db/constants"
 import type {
   MediaEditChanges,
   MediaEditView,
@@ -97,7 +97,11 @@ export const toChanges = (draft: MediaEditDraft, fields: readonly MediaEditField
 
   return {
     ...(has("titles")
-      ? { titles: draft.titles.map((t) => ({ ...t, title: t.title.trim() })) }
+      ? {
+          titles: draft.titles.flatMap(({ language, ...t }) =>
+            isMediaLanguage(language) ? [{ ...t, language, title: t.title.trim() }] : [],
+          ),
+        }
       : {}),
     ...(has("synopsis") ? { synopsis: cleanSynopsis(draft.synopsis) } : {}),
     ...(has("type") ? { type: draft.type } : {}),
@@ -119,6 +123,10 @@ export const toChanges = (draft: MediaEditDraft, fields: readonly MediaEditField
 export const getTitlesError = (titles: readonly MediaEditTitle[]) => {
   if (titles.some((title) => title.title.trim() === "")) {
     return m.media_edit_titles_empty()
+  }
+
+  if (titles.some((title) => !isMediaLanguage(title.language))) {
+    return m.media_edit_titles_language()
   }
 
   if (titles.filter((title) => title.isMainTitle).length !== 1) {
@@ -147,6 +155,10 @@ export const getLinkError = (key: string, value: string | number | undefined) =>
 
 export const getFieldsError = (draft: MediaEditDraft, fields: readonly MediaEditField[]) =>
   (fields.includes("titles") ? getTitlesError(draft.titles) : null) ??
+  (fields.includes("synopsis") &&
+  Object.keys(cleanSynopsis(draft.synopsis)).some((language) => !isSupportedLanguage(language))
+    ? m.media_edit_synopsis_language()
+    : null) ??
   (fields.includes("links")
     ? (Object.entries(draft.links)
         .map(([key, value]) => getLinkError(key, value))

@@ -1,7 +1,7 @@
 // StyleX only compiles the `sx` props of files that import it.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
-import { LANGUAGES, type Language } from "@taiyomoe/db/constants"
+import { type Language, SUPPORTED_LANGUAGES, type SupportedLanguage } from "@taiyomoe/db/constants"
 import {
   Combobox,
   ComboboxEmpty,
@@ -15,7 +15,7 @@ import { getLanguageName } from "@/components/flags/language-flags"
 import { fieldEditorStyles } from "@/features/media-suggestions/components/field-editors/field-editor-styles"
 import { m } from "@/paraglide/messages"
 
-const LANGUAGE_OPTIONS = [...LANGUAGES]
+const LANGUAGE_OPTIONS = [...SUPPORTED_LANGUAGES]
   .map((code) => ({ code, name: getLanguageName(code) }))
   .sort((a, b) => a.name.localeCompare(b.name))
 
@@ -24,7 +24,7 @@ export function SynopsisLanguagePicker({
   onPick,
 }: {
   exclude: readonly Language[]
-  onPick: (language: Language) => void
+  onPick: (language: SupportedLanguage) => void
 }) {
   return (
     <div sx={fieldEditorStyles.addPicker}>

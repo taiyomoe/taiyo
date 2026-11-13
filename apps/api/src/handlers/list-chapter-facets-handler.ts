@@ -1,4 +1,4 @@
-import { LANGUAGES } from "@taiyomoe/db"
+import { SUPPORTED_LANGUAGES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -6,12 +6,16 @@ import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { selectMediaChapters } from "../utils/media-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, contentRatingsQuerySchema, languageSchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  contentRatingsQuerySchema,
+  storedLanguageSchema,
+} from "../utils/schemas"
 
 const querySchema = z.object({
   contentRating: contentRatingsQuerySchema,
   language: z
-    .enum(LANGUAGES)
+    .enum(SUPPORTED_LANGUAGES)
     .optional()
     .meta({ description: "Narrow the volume facet to this language." }),
 })
@@ -28,7 +32,7 @@ const facetsSchema = z.object({
     .meta({ description: "Volumes, latest first." }),
   languages: z
     .object({
-      language: languageSchema("The language."),
+      language: storedLanguageSchema("The language."),
       count: z.int().meta({ description: "How many chapters are in this language." }),
     })
     .array()

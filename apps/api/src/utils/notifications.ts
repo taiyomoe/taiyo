@@ -20,7 +20,7 @@ import {
   visibleThreadTargetSql,
 } from "./comments"
 import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
-import { languageSchema, userSummarySchema } from "./schemas"
+import { storedLanguageSchema, userSummarySchema } from "./schemas"
 
 const EXCERPT_LENGTH = 200
 const LATEST_ACTORS = 3
@@ -70,7 +70,7 @@ export const notificationSchema = z.discriminatedUnion("type", [
       title: z.string().nullable(),
       number: z.number(),
       volume: z.string().nullable(),
-      language: languageSchema("The language of the chapter."),
+      language: storedLanguageSchema("The language of the chapter."),
       mediaId: z.uuid(),
       mediaTitle: z.string().nullable().meta({ description: "The main title of the media." }),
       mediaCoverUrl: z.url().nullable().meta({ description: "The main cover of the media." }),

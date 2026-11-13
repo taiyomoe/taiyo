@@ -1,4 +1,4 @@
-import { FLAGS, LANGUAGES, sql } from "@taiyomoe/db"
+import { FLAGS, SUPPORTED_LANGUAGES, sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema, sortDirectionSchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -17,7 +17,7 @@ import {
 const querySchema = paginationQuerySchema.extend({
   contentRating: contentRatingsQuerySchema,
   language: z
-    .enum(LANGUAGES)
+    .enum(SUPPORTED_LANGUAGES)
     .optional()
     .meta({ description: "Only list chapters in this language." }),
   volume: z

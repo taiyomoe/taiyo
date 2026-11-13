@@ -1,4 +1,4 @@
-import type { Language } from "@taiyomoe/db/constants"
+import type { SupportedLanguage } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
 import { CheckCircle } from "@taiyomoe/ui/components/icons"
 import { Alert, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
@@ -53,7 +53,7 @@ export function UploadPage() {
   const { user } = session
   const can = usePermissions(user)
   const [media, setMedia] = useState<MediaOption | null>(prefill.media)
-  const [language, setLanguage] = useState<Language>("en")
+  const [language, setLanguage] = useState<SupportedLanguage>("en")
   const [groups, setGroups] = useState<GroupOption[]>(prefill.group === null ? [] : [prefill.group])
   const [attempted, setAttempted] = useState(false)
   const [editing, setEditing] = useState<string | null>(null)

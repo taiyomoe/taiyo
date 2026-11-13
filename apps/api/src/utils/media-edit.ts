@@ -2,7 +2,6 @@ import { config } from "@taiyomoe/config"
 import {
   type DB,
   type Kysely,
-  LANGUAGES,
   type LocalizedText,
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
@@ -17,12 +16,13 @@ import {
   type MediaLinks,
   type MediaTags,
   STAFF_ROLES,
+  SUPPORTED_LANGUAGES,
   sql,
 } from "@taiyomoe/db"
 import z from "zod"
 import {
   contentRatingSchema,
-  languageSchema,
+  mediaLanguageSchema,
   mediaLinksSchema,
   mediaSynopsisSchema,
   mediaTagsSchema,
@@ -35,7 +35,7 @@ const mediaEditTitleSchema = z.object({
     description: "The title in the given language.",
     example: "One Punch Man",
   }),
-  language: languageSchema("The language of the title."),
+  language: mediaLanguageSchema("The language of the title."),
   isAcronym: z.boolean().default(false).meta({ description: "Whether the title is an acronym." }),
   isMainTitle: z
     .boolean()
@@ -122,7 +122,7 @@ type MediaEditView = Omit<MediaEdit, "staffs"> & {
 
 const compactSynopsis = (synopsis: LocalizedText) =>
   Object.fromEntries(
-    LANGUAGES.flatMap((language) => {
+    SUPPORTED_LANGUAGES.flatMap((language) => {
       const text = synopsis[language]?.trim()
 
       return text === undefined || text === "" ? [] : [[language, text]]
