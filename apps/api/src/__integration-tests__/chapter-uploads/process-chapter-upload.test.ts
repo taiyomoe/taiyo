@@ -6,6 +6,8 @@ import { GetObjectCommand, getChapterPageKey, HeadObjectCommand } from "@taiyomo
 import sharp from "sharp"
 import { describe, expect, vi } from "vitest"
 import type { Services } from "../../services"
+import { signInAs } from "../helpers/auth"
+import { seedGroup, seedMembership } from "../helpers/seed"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
@@ -85,6 +87,82 @@ const readUploadState = async (
   const listed = await s3.send(new ListObjectsV2Command({ Bucket: s3Bucket, Prefix: pageKey }))
 
   return { status: task.status, pages: chapter.pages, pageObjects: listed.Contents ?? [] }
+}
+const stageAndProcess = async (
+  { db, s3, s3Bucket }: Services,
+  {
+    status,
+    number,
+    uploaderId,
+    scheduled = false,
+    groupIds = [],
+  }: {
+    status: "UPLOADING" | "PENDING"
+    number: number
+    uploaderId: string
+    scheduled?: boolean
+    groupIds?: string[]
+  },
+) => {
+  const chapterId = crypto.randomUUID()
+  const uploadId = crypto.randomUUID()
+  const taskId = crypto.randomUUID()
+  const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+
+  await db
+    .insertInto("chapters")
+    .values({
+      id: chapterId,
+      mediaId: SEEDED_MEDIA_ID,
+      number,
+      language: "en",
+      uploaderId,
+      status,
+      createdAt: sql<Date>`now() at time zone 'UTC' - interval '1 day'`,
+      publishAt: scheduled ? sql<Date>`now() at time zone 'UTC' + interval '1 day'` : null,
+    })
+    .execute()
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: s3Bucket,
+      Key: stagingKey,
+      Body: await makeTinyJpeg(),
+      ContentType: "image/jpeg",
+    }),
+  )
+  await db
+    .insertInto("tasks")
+    .values({
+      id: taskId,
+      type: "UPLOAD_CHAPTER",
+      status: "PENDING",
+      sessionId: uploadId,
+      payload: {
+        chapterId,
+        mediaId: SEEDED_MEDIA_ID,
+        uploadId,
+        pages: [{ pageId: crypto.randomUUID(), stagingKey }],
+      },
+    })
+    .execute()
+
+  if (groupIds.length > 0) {
+    await db
+      .insertInto("chapterGroups")
+      .values(groupIds.map((groupId) => ({ chapterId, groupId })))
+      .execute()
+  }
+
+  await processChapterUpload({ db, s3, s3Bucket }, { taskId })
+
+  return db
+    .selectFrom("chapters")
+    .select([
+      "status",
+      sql<boolean>`"createdAt" > now() at time zone 'UTC' - interval '1 hour'`.as("fresh"),
+    ])
+    .where("id", "=", chapterId)
+    .executeTakeFirstOrThrow()
 }
 
 describe("processChapterUpload", () => {
@@ -169,65 +247,50 @@ describe("processChapterUpload", () => {
   test("publishes an uploading chapter as just released, schedules it, or keeps a submission pending", async ({
     services,
   }) => {
-    const { db, s3, s3Bucket } = services
-    const stage = async (status: "UPLOADING" | "PENDING", number: number, scheduled = false) => {
-      const chapterId = crypto.randomUUID()
-      const uploadId = crypto.randomUUID()
-      const taskId = crypto.randomUUID()
-      const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
-
-      await db
-        .insertInto("chapters")
-        .values({
-          id: chapterId,
-          mediaId: SEEDED_MEDIA_ID,
-          number,
-          language: "en",
-          uploaderId: SEEDED_UPLOADER_ID,
-          status,
-          createdAt: sql<Date>`now() at time zone 'UTC' - interval '1 day'`,
-          publishAt: scheduled ? sql<Date>`now() at time zone 'UTC' + interval '1 day'` : null,
-        })
-        .execute()
-      await s3.send(
-        new PutObjectCommand({
-          Bucket: s3Bucket,
-          Key: stagingKey,
-          Body: await makeTinyJpeg(),
-          ContentType: "image/jpeg",
-        }),
-      )
-      await db
-        .insertInto("tasks")
-        .values({
-          id: taskId,
-          type: "UPLOAD_CHAPTER",
-          status: "PENDING",
-          sessionId: uploadId,
-          payload: {
-            chapterId,
-            mediaId: SEEDED_MEDIA_ID,
-            uploadId,
-            pages: [{ pageId: crypto.randomUUID(), stagingKey }],
-          },
-        })
-        .execute()
-      await processChapterUpload({ db, s3, s3Bucket }, { taskId })
-
-      return db
-        .selectFrom("chapters")
-        .select([
-          "status",
-          sql<boolean>`"createdAt" > now() at time zone 'UTC' - interval '1 hour'`.as("fresh"),
-        ])
-        .where("id", "=", chapterId)
-        .executeTakeFirstOrThrow()
-    }
+    const { userId: uploaderId } = await signInAs(services, { role: "UPLOADER" })
+    const stage = (status: "UPLOADING" | "PENDING", number: number, scheduled = false) =>
+      stageAndProcess(services, { status, number, scheduled, uploaderId })
 
     expect(await stage("UPLOADING", 96_101)).toEqual({ status: "PUBLISHED", fresh: true })
     expect(await stage("PENDING", 96_102)).toEqual({ status: "PENDING", fresh: false })
     expect(await stage("UPLOADING", 96_103, true)).toEqual({ status: "SCHEDULED", fresh: false })
     expect(await stage("PENDING", 96_104, true)).toEqual({ status: "PENDING", fresh: false })
+  })
+
+  test("sends an uploading chapter to review when its uploader can no longer publish it", async ({
+    services,
+  }) => {
+    const { db } = services
+    const owner = await signInAs(services)
+    const member = await signInAs(services)
+    const groupId = await seedGroup(services, owner.userId, `Scans ${crypto.randomUUID()}`)
+    const otherGroupId = await seedGroup(services, owner.userId, `Scans ${crypto.randomUUID()}`)
+
+    await seedMembership(services, {
+      groupId,
+      userId: member.userId,
+      permissions: ["UPLOAD_CHAPTERS"],
+    })
+
+    const stage = (number: number, groupIds: string[]) =>
+      stageAndProcess(services, {
+        status: "UPLOADING",
+        number,
+        uploaderId: member.userId,
+        groupIds,
+      })
+
+    expect(await stage(96_201, [groupId])).toMatchObject({ status: "PUBLISHED" })
+    expect(await stage(96_202, [otherGroupId])).toMatchObject({ status: "PENDING" })
+    expect(await stage(96_203, [])).toMatchObject({ status: "PENDING" })
+
+    await db
+      .deleteFrom("groupMemberships")
+      .where("groupId", "=", groupId)
+      .where("userId", "=", member.userId)
+      .execute()
+
+    expect(await stage(96_204, [groupId])).toMatchObject({ status: "PENDING" })
   })
 
   test("leaves rejected and withdrawn chapters without pages and removes the processed files", async ({
