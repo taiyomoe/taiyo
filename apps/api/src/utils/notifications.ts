@@ -6,9 +6,10 @@ import {
   NOTIFICATION_CATEGORIES,
   NOTIFICATION_CATEGORY_NAMES,
   type NotificationCategory,
+  type SqlBool,
+  sql,
 } from "@taiyomoe/db"
 import { getCommentText } from "@taiyomoe/schemas/comment-content"
-import { type SqlBool, sql } from "kysely"
 import { group } from "radashi"
 import z from "zod"
 import {

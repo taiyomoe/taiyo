@@ -38,12 +38,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # smoke imports the app's entry point inside the built image, with production
+          # dependencies only: a runtime import of a dev dependency fails here instead of
+          # crashing the pods. The worker starts its queues on import, so it has none.
           - app: api
             target: server
+            smoke: >-
+              docker run --rm -e TEST=1 -e RESEND_API_KEY=re_smoke -e S3_PUBLIC_URL=https://cdn.example.invalid
+              taiyo-api:ci node --import tsx -e "await import('./src/index.ts')"
           - app: worker
             target: server
           - app: web
             target: web
+            smoke: >-
+              docker run --rm taiyo-web:ci node -e "await import('./dist/server/server.js')"
     env:
       PUSH: ${{ github.event_name != 'pull_request' }}
     steps:
@@ -84,19 +92,47 @@ jobs:
             type=sha,prefix=sha-,format=short
             type=ref,event=branch
 
-      - uses: docker/build-push-action@v7
+      - id: build-args
+        name: Build arguments
+        run: |
+          {
+            echo "value<<EOF"
+            echo "APP=${{ matrix.app }}"
+            echo "VITE_API_URL=${{ vars.VITE_API_URL || 'https://example.invalid' }}"
+            echo "VITE_BETTER_AUTH_URL=${{ vars.VITE_BETTER_AUTH_URL || 'https://example.invalid' }}"
+            echo "VITE_TURNSTILE_SITE_KEY=${{ vars.VITE_TURNSTILE_SITE_KEY || 'placeholder' }}"
+            if [ -n "${{ vars.VITE_DISCORD_INVITE_URL }}" ]; then
+              echo "VITE_DISCORD_INVITE_URL=${{ vars.VITE_DISCORD_INVITE_URL }}"
+            fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        uses: docker/build-push-action@v7
         with:
           context: .
           target: ${{ matrix.target }}
           platforms: linux/amd64
-          push: ${{ env.PUSH == 'true' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            APP=${{ matrix.app }}
-            VITE_API_URL=${{ vars.VITE_API_URL || 'https://example.invalid' }}
-            VITE_BETTER_AUTH_URL=${{ vars.VITE_BETTER_AUTH_URL || 'https://example.invalid' }}
-            VITE_TURNSTILE_SITE_KEY=${{ vars.VITE_TURNSTILE_SITE_KEY || 'placeholder' }}
-            ${{ vars.VITE_DISCORD_INVITE_URL && format('VITE_DISCORD_INVITE_URL={0}', vars.VITE_DISCORD_INVITE_URL) || '' }}
+          load: true
+          tags: taiyo-${{ matrix.app }}:ci
+          build-args: ${{ steps.build-args.outputs.value }}
           cache-from: type=gha,scope=${{ matrix.app }}
           cache-to: type=gha,scope=${{ matrix.app }},mode=max
+
+      - name: Smoke test
+        if: ${{ matrix.smoke }}
+        run: ${{ matrix.smoke }}
+
+      # Same inputs as Build, so every layer comes from its cache.
+      - name: Push
+        if: ${{ env.PUSH == 'true' }}
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          target: ${{ matrix.target }}
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: ${{ steps.build-args.outputs.value }}
+          cache-from: type=gha,scope=${{ matrix.app }}
