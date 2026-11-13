@@ -6,6 +6,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { recordActivity } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -39,7 +40,7 @@ export const followUserHandler = new Hono().post(
   checkUser(),
   withTransaction,
   async (c) => {
-    const { db, user, targetUser } = c.var
+    const { db, user, targetUser, afterCommit, notificationEvents } = c.var
 
     if (user.id === targetUser.id) {
       return c.fail("FOLLOW_SELF")
@@ -60,6 +61,12 @@ export const followUserHandler = new Hono().post(
       .insertInto("userFollows")
       .values({ followerId: user.id, followingId: targetUser.id })
       .execute()
+
+    if (
+      await recordActivity(db, { type: "FOLLOW", recipientId: targetUser.id, actorId: user.id })
+    ) {
+      afterCommit(() => notificationEvents.publish([targetUser.id]))
+    }
 
     return c.ok({ followerId: user.id, followingId: targetUser.id })
   },

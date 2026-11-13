@@ -25,9 +25,8 @@ type Notification = {
 const listNotifications = async (app: Hono, headers: Record<string, string>) =>
   expectSuccess(await api<Notification[]>(app, "/users/me/notifications", { headers }))
 const countUnread = async (app: Hono, headers: Record<string, string>) =>
-  expectSuccess(
-    await api<{ count: number }>(app, "/users/me/notifications/unread-count", { headers }),
-  ).count
+  expectSuccess(await api<{ unread: number }>(app, "/users/me/notifications/counts", { headers }))
+    .unread
 
 describe("chapter notifications", () => {
   test("list, count and read a new chapter", async ({ app, services }) => {
@@ -132,7 +131,7 @@ describe("chapter notifications", () => {
 
   test("rejects unauthenticated requests", async ({ app }) => {
     expect((await api(app, "/users/me/notifications")).status).toBe(401)
-    expect((await api(app, "/users/me/notifications/unread-count")).status).toBe(401)
+    expect((await api(app, "/users/me/notifications/counts")).status).toBe(401)
   })
 })
 

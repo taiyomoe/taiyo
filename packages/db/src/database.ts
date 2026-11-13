@@ -24,6 +24,7 @@ import type { GroupReport } from "./models/group-report-model"
 import type { Media } from "./models/media-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
+import type { NotificationActor } from "./models/notification-actor-model"
 import type { Notification } from "./models/notification-model"
 import type { NotificationOutboxEntry } from "./models/notification-outbox-model"
 import type { PageBookmark } from "./models/page-bookmark-model"
@@ -76,6 +77,7 @@ export type DB = {
   mediaSuggestions: MediaSuggestion
   medias: Media
   notificationOutbox: NotificationOutboxEntry
+  notificationActors: NotificationActor
   notifications: Notification
   pageBookmarks: PageBookmark
   pageReports: PageReport

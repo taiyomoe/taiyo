@@ -29,3 +29,27 @@ export const formatTimeAgo = (
     match.unit,
   )
 }
+
+/** "12m", "3h", "2d", then the date: the elapsed time alone, for dense lists. */
+export const formatElapsed = (date: Date, now: number) => {
+  const elapsed = Math.max(0, (now - date.getTime()) / 1000)
+  const match = UNITS.find(({ seconds }) => elapsed >= seconds)
+
+  if (match === undefined) {
+    return m.time_now()
+  }
+
+  if (match.unit === "month" || match.unit === "year") {
+    return new Intl.DateTimeFormat(getLocale(), {
+      day: "numeric",
+      month: "short",
+      year: date.getFullYear() === new Date(now).getFullYear() ? undefined : "numeric",
+    }).format(date)
+  }
+
+  return new Intl.NumberFormat(getLocale(), {
+    style: "unit",
+    unit: match.unit,
+    unitDisplay: "narrow",
+  }).format(Math.floor(elapsed / match.seconds))
+}

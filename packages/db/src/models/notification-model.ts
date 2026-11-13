@@ -9,6 +9,7 @@ export type Notification = {
   chapterId: string | null
   commentId: string | null
   createdAt: Generated<Timestamp>
+  lastEventAt: Generated<Timestamp>
   readAt: Timestamp | null
   pushedAt: Timestamp | null
 }

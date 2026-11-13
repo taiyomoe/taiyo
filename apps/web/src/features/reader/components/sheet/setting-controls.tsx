@@ -99,18 +99,20 @@ export function SettingSwitch({
   label,
   hint,
   checked,
+  disabled = false,
   onChange,
 }: {
   label: string
   hint?: string | undefined
   checked: boolean
+  disabled?: boolean
   onChange: (checked: boolean) => void
 }) {
   return (
     <div sx={styles.field}>
       <label sx={styles.switchRow}>
         {label}
-        <Switch checked={checked} onCheckedChange={onChange} />
+        <Switch checked={checked} disabled={disabled} onCheckedChange={onChange} />
       </label>
       {hint === undefined ? null : <SettingHint>{hint}</SettingHint>}
     </div>

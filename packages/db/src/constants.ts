@@ -66,9 +66,24 @@ export const COMMENT_DELETIONS = ["AUTHOR", "PAGE_OWNER", "MODERATOR"] as const
 
 export type CommentDeletion = (typeof COMMENT_DELETIONS)[number]
 
-export const NOTIFICATION_TYPES = ["CHAPTER_PUBLISHED", "COMMENT_REPLY"] as const
+export const NOTIFICATION_TYPES = [
+  "CHAPTER_PUBLISHED",
+  "COMMENT_REPLY",
+  "COMMENT_LIKE",
+  "FOLLOW",
+] as const
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number]
+
+export const NOTIFICATION_CATEGORY_NAMES = ["chapters", "replies", "activity"] as const
+
+export const NOTIFICATION_CATEGORIES = {
+  chapters: ["CHAPTER_PUBLISHED"],
+  replies: ["COMMENT_REPLY"],
+  activity: ["COMMENT_LIKE", "FOLLOW"],
+} as const satisfies Record<NotificationCategory, readonly NotificationType[]>
+
+export type NotificationCategory = (typeof NOTIFICATION_CATEGORY_NAMES)[number]
 
 export const COMMENT_REPORT_REASONS = [
   "SPAM",

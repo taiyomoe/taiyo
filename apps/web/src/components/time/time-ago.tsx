@@ -2,7 +2,7 @@ import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
 import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/ui/popover"
 import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
-import { formatTimeAgo } from "@/components/time/format-time-ago"
+import { formatElapsed, formatTimeAgo } from "@/components/time/format-time-ago"
 import { TimeDetails } from "@/components/time/time-details"
 import { useHoverPopover } from "@/hooks/use-hover-popover"
 import { useNow } from "@/hooks/use-now"
@@ -30,7 +30,17 @@ const styles = stylex.create({
   },
 })
 
-export function TimeAgo({ date, future = false, sx }: { date: string; future?: boolean; sx?: Sx }) {
+export function TimeAgo({
+  date,
+  future = false,
+  compact = false,
+  sx,
+}: {
+  date: string
+  future?: boolean
+  compact?: boolean
+  sx?: Sx
+}) {
   const parsed = new Date(date)
   const now = useNow()
   const hover = useHoverPopover()
@@ -44,7 +54,9 @@ export function TimeAgo({ date, future = false, sx }: { date: string; future?: b
         style={hover.open ? { color: TIME_ACTIVE_COLOR } : undefined}
         sx={[styles.time, sx]}
       >
-        {formatTimeAgo(parsed, now, "narrow", future)}
+        {compact && !future
+          ? formatElapsed(parsed, now)
+          : formatTimeAgo(parsed, now, "narrow", future)}
       </PopoverTrigger>
       <PopoverPopup {...hover.popupProps} arrow side="top">
         <TimeDetails date={parsed} future={future} now={now} />

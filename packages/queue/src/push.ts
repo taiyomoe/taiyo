@@ -1,4 +1,4 @@
-import type { DB } from "@taiyomoe/db"
+import type { DB, NotificationType } from "@taiyomoe/db"
 import { config } from "@taiyomoe/config"
 import { getCoverUrl } from "@taiyomoe/s3"
 import { getCommentText } from "@taiyomoe/schemas/comment-content"
@@ -61,9 +61,11 @@ export const createWebPushSender = () => {
 
 export const isExpiredPushStatus = (status: number) => EXPIRED_STATUSES.has(status)
 
+const ACTIVITY_TYPES = ["COMMENT_LIKE", "FOLLOW"] as const
+
 type PushRow = {
   notificationId: string
-  type: "CHAPTER_PUBLISHED" | "COMMENT_REPLY"
+  type: NotificationType
   subscriptionId: string
   endpoint: string
   p256dh: string
@@ -83,6 +85,10 @@ type PushRow = {
   threadChapterId: string | null
   threadGroupId: string | null
   profileUsername: string | null
+  actorCount: string | null
+  actorName: string | null
+  actorUsername: string | null
+  actorImage: string | null
 }
 
 const commentPath = (row: PushRow) => {
@@ -129,13 +135,45 @@ const toMessage = (row: PushRow) => {
     graphemes.segment(getCommentText(row.commentContent ?? "")),
     ({ segment }) => segment,
   )
+  const excerpt =
+    text.length === 0
+      ? "An image"
+      : `${text.slice(0, EXCERPT_LENGTH).join("")}${text.length > EXCERPT_LENGTH ? "…" : ""}`
+  const others = Number(row.actorCount ?? 1) - 1
+  const actors =
+    others === 0
+      ? (row.actorName ?? "Someone")
+      : `${row.actorName ?? "Someone"} and ${others} ${others === 1 ? "other" : "others"}`
+
+  if (row.type === "FOLLOW") {
+    return {
+      title: `${actors} started following you`,
+      body: others === 0 ? `@${row.actorUsername ?? ""}` : "See who in your inbox",
+      url: open(
+        others === 0
+          ? `/users/${encodeURIComponent(row.actorUsername ?? "")}`
+          : "/notifications?category=activity",
+      ),
+      icon: row.actorImage,
+      tag: row.notificationId,
+    } satisfies PushMessage
+  }
+
+  if (row.type === "COMMENT_LIKE") {
+    const count = Number(row.actorCount ?? 1)
+
+    return {
+      title: `${count} ${count === 1 ? "reader" : "readers"} upvoted your comment`,
+      body: excerpt,
+      url: open(commentPath(row)),
+      icon: null,
+      tag: row.notificationId,
+    } satisfies PushMessage
+  }
 
   return {
     title: `${row.authorName ?? "Someone"} replied to your comment`,
-    body:
-      text.length === 0
-        ? "Sent an image"
-        : `${text.slice(0, EXCERPT_LENGTH).join("")}${text.length > EXCERPT_LENGTH ? "…" : ""}`,
+    body: text.length === 0 ? "Sent an image" : excerpt,
     url: open(commentPath(row)),
     icon: row.authorImage,
     tag: row.notificationId,
@@ -174,7 +212,11 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
       "th"."mediaId" AS "threadMediaId",
       "th"."chapterId" AS "threadChapterId",
       "th"."groupId" AS "threadGroupId",
-      "pu"."username" AS "profileUsername"
+      "pu"."username" AS "profileUsername",
+      "act"."count" AS "actorCount",
+      "act"."name" AS "actorName",
+      "act"."username" AS "actorUsername",
+      "act"."image" AS "actorImage"
     FROM "notifications" AS "n"
     INNER JOIN "users" AS "u" ON "u"."id" = "n"."userId"
     INNER JOIN "pushSubscriptions" AS "ps" ON "ps"."userId" = "n"."userId"
@@ -189,6 +231,31 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
     LEFT JOIN "users" AS "au" ON "au"."id" = "c"."authorId"
     LEFT JOIN "commentThreads" AS "th" ON "th"."id" = "c"."threadId"
     LEFT JOIN "users" AS "pu" ON "pu"."id" = "th"."profileId"
+    LEFT JOIN LATERAL (
+      SELECT
+        count(*) AS "count",
+        (array_agg("pa"."displayUsername" ORDER BY "na"."createdAt" DESC))[1] AS "name",
+        (array_agg("pa"."username" ORDER BY "na"."createdAt" DESC))[1] AS "username",
+        (array_agg("pa"."image" ORDER BY "na"."createdAt" DESC))[1] AS "image"
+      FROM "notificationActors" AS "na"
+      INNER JOIN "users" AS "pa" ON "pa"."id" = "na"."actorId"
+      WHERE "na"."notificationId" = "n"."id"
+        AND NOT (
+          coalesce("pa"."banned", false)
+          AND ("pa"."banExpires" IS NULL OR "pa"."banExpires" > (CURRENT_TIMESTAMP AT TIME ZONE 'UTC'))
+        )
+        AND CASE "n"."type"
+          WHEN 'FOLLOW' THEN EXISTS (
+            SELECT 1 FROM "userFollows" AS "uf"
+            WHERE "uf"."followerId" = "na"."actorId" AND "uf"."followingId" = "n"."userId"
+          )
+          WHEN 'COMMENT_LIKE' THEN EXISTS (
+            SELECT 1 FROM "commentVotes" AS "cvt"
+            WHERE "cvt"."commentId" = "n"."commentId" AND "cvt"."userId" = "na"."actorId"
+          )
+          ELSE false
+        END
+    ) AS "act" ON "n"."type" IN ('FOLLOW', 'COMMENT_LIKE')
     WHERE "n"."id" IN (${sql.join(notificationIds)})
       AND "n"."readAt" IS NULL
       AND "n"."createdAt" > (CURRENT_TIMESTAMP AT TIME ZONE 'UTC') - make_interval(mins => ${config.notifications.pushMaxAgeMinutes})
@@ -225,6 +292,17 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
           AND "au"."id" IS NOT NULL
           AND coalesce(("u"."settings" ->> 'pushReplies')::boolean, ${defaults.pushReplies})
         )
+        OR (
+          "n"."type" = 'COMMENT_LIKE'
+          AND "c"."deletedAt" IS NULL
+          AND "act"."count" > 0
+          AND coalesce(("u"."settings" ->> 'pushLikes')::boolean, ${defaults.pushLikes})
+        )
+        OR (
+          "n"."type" = 'FOLLOW'
+          AND "act"."count" > 0
+          AND coalesce(("u"."settings" ->> 'pushFollows')::boolean, ${defaults.pushFollows})
+        )
       )
   `.execute(db)
 
@@ -235,6 +313,16 @@ const sendBatch = async (db: Kysely<DB>, send: PushSender | null) => {
     .selectFrom("notifications")
     .select("id")
     .where("pushedAt", "is", null)
+    .where((eb) =>
+      eb.or([
+        eb("type", "not in", ACTIVITY_TYPES),
+        eb(
+          "createdAt",
+          "<=",
+          sql<Date>`(CURRENT_TIMESTAMP AT TIME ZONE 'UTC') - make_interval(mins => ${config.notifications.activityPushDelayMinutes})`,
+        ),
+      ]),
+    )
     .orderBy("createdAt")
     .limit(config.notifications.pushBatchSize)
     .forUpdate()
@@ -285,7 +373,8 @@ const sendBatch = async (db: Kysely<DB>, send: PushSender | null) => {
 /**
  * Sends a Web Push for every notification not pushed yet, to each of its recipient's
  * devices, then marks it pushed. A crash before the commit sends the batch again; the
- * notification id is the push `tag`, so a device shows it once.
+ * notification id is the push `tag`, so a device shows it once. Upvotes and follows wait
+ * `activityPushDelayMinutes` first, so a burst of them goes out as one push.
  */
 export const sendPendingPushes = async ({
   db,

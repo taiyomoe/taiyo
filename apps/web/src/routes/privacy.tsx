@@ -20,7 +20,7 @@ function RouteComponent() {
     <LegalPage
       eyebrow="Legal"
       title="Privacy Policy"
-      updated="11 November 2026"
+      updated="12 November 2026"
       intro="This policy explains what Taiyō collects, why we collect it, who else sees it, and the control you have over it. We have tried to write it in plain language rather than in the shape of a liability shield."
       sections={[
         {
@@ -78,11 +78,14 @@ function RouteComponent() {
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Notifications.</strong> The notifications we create for
-                you — new chapters of the titles in your library and of the groups you follow, and
-                replies to your comments — and when you read them, kept for up to a year. If you
-                turn on push notifications on a device, we store the address its browser gives us
-                for delivering them and the keys that encrypt them, until you turn them off, sign
-                out there, or the browser stops accepting them.
+                you — new chapters of the titles in your library and of the groups you follow,
+                replies to your comments, upvotes on your comments and new followers — and when you
+                read them, kept for up to a year. For upvotes and follows we also record who caused
+                them, so each person notifies you once; we show you who followed you, but upvotes
+                stay anonymous and only their number is shown. If you turn on push notifications on
+                a device, we store the address its browser gives us for delivering them and the keys
+                that encrypt them, until you turn them off, sign out there, or the browser stops
+                accepting them.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Technical information.</strong> Your IP address, browser
