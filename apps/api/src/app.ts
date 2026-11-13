@@ -55,6 +55,8 @@ const hyperdxIngestionKey = env.HYPERDX_INGESTION_KEY ?? ""
 
 export const createApp = (services: Services) => {
   const app = new Hono()
+    // Registered before the middlewares so Kubernetes probes skip logging and CORS.
+    .get("/health", (c) => c.json({ status: "ok" }))
     .use(
       evlog({
         ...((process.env.TEST ?? "") !== "" || hyperdxEndpoint === "" || hyperdxIngestionKey === ""

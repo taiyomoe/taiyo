@@ -1,0 +1,102 @@
+name: Build images
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Pull requests only build, to catch a broken Dockerfile before merge. Images are
+# pushed from develop alone, so no workflow triggered by a fork ever gets write access
+# to the registry.
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".github/ISSUE_TEMPLATE/**"
+      - "LICENSE"
+  push:
+    branches: ["develop"]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".github/ISSUE_TEMPLATE/**"
+      - "LICENSE"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: api
+            target: server
+          - app: worker
+            target: server
+          - app: web
+            target: web
+    env:
+      PUSH: ${{ github.event_name != 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # The web bundle inlines these public values, so a pushed image built without
+      # them would ship a broken client.
+      - name: Check the web build variables
+        if: ${{ matrix.app == 'web' && env.PUSH == 'true' }}
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_BETTER_AUTH_URL: ${{ vars.VITE_BETTER_AUTH_URL }}
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
+        run: |
+          missing=0
+          for name in VITE_API_URL VITE_BETTER_AUTH_URL VITE_TURNSTILE_SITE_KEY; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Repository variable $name is not set"
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - uses: docker/setup-buildx-action@v4
+
+      - if: ${{ env.PUSH == 'true' }}
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/taiyo-${{ matrix.app }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=ref,event=branch
+
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          target: ${{ matrix.target }}
+          platforms: linux/amd64
+          push: ${{ env.PUSH == 'true' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP=${{ matrix.app }}
+            VITE_API_URL=${{ vars.VITE_API_URL || 'https://example.invalid' }}
+            VITE_BETTER_AUTH_URL=${{ vars.VITE_BETTER_AUTH_URL || 'https://example.invalid' }}
+            VITE_TURNSTILE_SITE_KEY=${{ vars.VITE_TURNSTILE_SITE_KEY || 'placeholder' }}
+            ${{ vars.VITE_DISCORD_INVITE_URL && format('VITE_DISCORD_INVITE_URL={0}', vars.VITE_DISCORD_INVITE_URL) || '' }}
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,scope=${{ matrix.app }},mode=max
