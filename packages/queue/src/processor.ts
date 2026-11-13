@@ -19,6 +19,23 @@ import {
 
 export type ProcessorDeps = { db: Kysely<DB>; s3: S3Client; s3Bucket: string }
 
+// create-chapter only decided `UPLOADING` at creation: the right to publish without review is
+// checked again here, since the uploader may have been removed, demoted or banned since.
+const uploaderMayPublish = sql<boolean>`exists (
+  select 1 from "users" as "u"
+  where "u"."id" = "chapters"."uploaderId"
+    and not (coalesce("u"."banned", false) and ("u"."banExpires" is null or "u"."banExpires" > (CURRENT_TIMESTAMP at time zone 'UTC')))
+    and (
+      "u"."role" in ('UPLOADER', 'ADMIN')
+      or exists (
+        select 1 from "chapterGroups" as "cg"
+        inner join "groups" as "g" on "g"."id" = "cg"."groupId" and "g"."deletedAt" is null
+        inner join "groupMemberships" as "gm" on "gm"."groupId" = "cg"."groupId" and "gm"."userId" = "u"."id"
+        where "cg"."chapterId" = "chapters"."id"
+          and ("gm"."role" = 'OWNER' or 'UPLOAD_CHAPTERS' = any("gm"."permissions"))
+      )
+    )
+)`
 const chapterReferencesManifest = async (
   db: Kysely<DB>,
   { chapterId, pages }: ChapterUploadManifest,
@@ -126,13 +143,15 @@ export const processChapterUpload = async (
         pages: manifest.pages.map(({ pageId }) => ({ id: pageId })),
         status: sql<ChapterStatus>`case
           when "status" <> 'UPLOADING' then "status"
+          when not ${uploaderMayPublish} then 'PENDING'::"ChapterStatus"
           when "publishAt" > (CURRENT_TIMESTAMP at time zone 'UTC') then 'SCHEDULED'::"ChapterStatus"
           else 'PUBLISHED'::"ChapterStatus"
         end`,
         createdAt: sql<Date>`case
-          when "status" = 'UPLOADING' and "publishAt" > (CURRENT_TIMESTAMP at time zone 'UTC') then "createdAt"
-          when "status" = 'UPLOADING' then CURRENT_TIMESTAMP
-          else "createdAt"
+          when "status" <> 'UPLOADING' then "createdAt"
+          when not ${uploaderMayPublish} then "createdAt"
+          when "publishAt" > (CURRENT_TIMESTAMP at time zone 'UTC') then "createdAt"
+          else CURRENT_TIMESTAMP
         end`,
       })
       .where("id", "=", manifest.chapterId)
