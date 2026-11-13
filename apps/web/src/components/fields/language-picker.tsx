@@ -1,5 +1,5 @@
+import type { Language } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
-import { LANGUAGES, type Language } from "@taiyomoe/db/constants"
 import {
   Combobox,
   ComboboxEmpty,
@@ -28,24 +28,26 @@ const styles = stylex.create({
     minWidth: 0,
   },
 })
-const LANGUAGE_OPTIONS = [...LANGUAGES]
-  .map((code) => ({ code, name: getLanguageName(code) }))
-  .sort((a, b) => a.name.localeCompare(b.name))
 
-export function LanguagePicker({
+export function LanguagePicker<T extends Language>({
+  languages,
   value,
   onChange,
 }: {
-  value: Language
-  onChange: (value: Language) => void
+  languages: readonly T[]
+  value: Language | null
+  onChange: (value: T) => void
 }) {
-  const selected = LANGUAGE_OPTIONS.find((option) => option.code === value) ?? null
+  const options = languages
+    .map((code) => ({ code, name: getLanguageName(code) }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+  const selected = options.find((option) => option.code === value) ?? null
 
   return (
-    <Combobox<(typeof LANGUAGE_OPTIONS)[number]>
+    <Combobox<(typeof options)[number]>
       isItemEqualToValue={(a, b) => a.code === b.code}
       itemToStringLabel={(item) => item.name}
-      items={LANGUAGE_OPTIONS}
+      items={options}
       onValueChange={(next) => {
         if (next !== null) {
           onChange(next.code)
@@ -59,7 +61,7 @@ export function LanguagePicker({
       />
       <ComboboxPopup>
         <ComboboxList>
-          {(item: (typeof LANGUAGE_OPTIONS)[number]) => (
+          {(item: (typeof options)[number]) => (
             <ComboboxItem key={item.code} value={item}>
               <span sx={styles.option}>
                 <LanguageFlag language={item.code} />

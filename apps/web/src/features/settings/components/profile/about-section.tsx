@@ -1,5 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
-import { GENDERS, type Gender, type Language, LANGUAGES } from "@taiyomoe/db/constants"
+import {
+  GENDERS,
+  type Gender,
+  isSupportedLanguage,
+  type Language,
+  SUPPORTED_LANGUAGES,
+  type SupportedLanguage,
+} from "@taiyomoe/db/constants"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Field, FieldDescription, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
@@ -69,15 +76,14 @@ const styles = stylex.create({
     fontVariantNumeric: "tabular-nums",
   },
 })
-const isLanguage = (value: string): value is Language => LANGUAGES.some((code) => code === value)
 
 export function AboutSection({ profile }: { profile: UserProfile }) {
   const update = useUpdateProfile(profile.username)
   const locale = getLocale()
-  const [language, setLanguage] = useState<Language>(() => {
-    const existing = Object.keys(profile.about).find(isLanguage)
+  const [language, setLanguage] = useState<SupportedLanguage>(() => {
+    const existing = Object.keys(profile.about).find(isSupportedLanguage)
 
-    return isLanguage(locale) && (existing === undefined || locale in profile.about)
+    return isSupportedLanguage(locale) && (existing === undefined || locale in profile.about)
       ? locale
       : (existing ?? "en")
   })
@@ -113,7 +119,9 @@ export function AboutSection({ profile }: { profile: UserProfile }) {
         update.mutate(
           {
             about: Object.fromEntries(
-              Object.entries(about).map(([code, value]) => [code, value?.trim() ?? ""]),
+              Object.entries(about).flatMap(([code, value]) =>
+                isSupportedLanguage(code) ? [[code, value?.trim() ?? ""]] : [],
+              ),
             ),
             city: city.trim() === "" ? null : city.trim(),
             country,
@@ -160,7 +168,11 @@ export function AboutSection({ profile }: { profile: UserProfile }) {
                   </SegmentedControlItem>
                 </SegmentedControl>
                 <div sx={styles.language}>
-                  <LanguagePicker onChange={setLanguage} value={language} />
+                  <LanguagePicker
+                    languages={SUPPORTED_LANGUAGES}
+                    onChange={setLanguage}
+                    value={language}
+                  />
                 </div>
               </div>
             </div>

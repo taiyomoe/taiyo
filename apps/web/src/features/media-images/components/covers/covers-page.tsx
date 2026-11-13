@@ -1,7 +1,7 @@
-import type { ContentRating, Language } from "@taiyomoe/db/constants"
 // StyleX only compiles the `sx` props of files that import it.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
+import { type ContentRating, type MediaLanguage, MEDIA_LANGUAGES } from "@taiyomoe/db/constants"
 import { Field, FieldDescription, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { getRouteApi } from "@tanstack/react-router"
 import { useState } from "react"
@@ -20,7 +20,7 @@ export function CoversPage() {
   const prefill = routeApi.useLoaderData()
   const navigate = routeApi.useNavigate()
   const [media, setMedia] = useState(prefill.media)
-  const [language, setLanguage] = useState<Language>("ja")
+  const [language, setLanguage] = useState<MediaLanguage>("ja")
   const [contentRating, setContentRating] = useState<ContentRating>("NORMAL")
 
   return (
@@ -35,7 +35,7 @@ export function CoversPage() {
         >
           <Field>
             <FieldLabel>{m.upload_language()}</FieldLabel>
-            <LanguagePicker onChange={setLanguage} value={language} />
+            <LanguagePicker languages={MEDIA_LANGUAGES} onChange={setLanguage} value={language} />
             <FieldDescription>{m.media_images_defaults_hint()}</FieldDescription>
           </Field>
           <Field>

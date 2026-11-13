@@ -15,7 +15,7 @@ import {
 } from "../utils/dashboard-overview"
 import { getMainTitles } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, languageSchema, timeZoneSchema } from "../utils/schemas"
+import { apiSuccessEnvelope, storedLanguageSchema, timeZoneSchema } from "../utils/schemas"
 
 const CACHE_TTL_SECONDS: Record<DashboardRange, number> = {
   "24h": 60,
@@ -91,7 +91,7 @@ const dashboardOverviewSchema = z.object({
   }),
   readsByLanguage: z
     .object({
-      language: languageSchema("The language of the chapters read."),
+      language: storedLanguageSchema("The language of the chapters read."),
       reads: z.int().meta({ description: "Reads in the current window.", example: 940 }),
     })
     .array()

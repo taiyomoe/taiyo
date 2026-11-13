@@ -4,12 +4,12 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkStaff } from "../middlewares/check-staff-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, localizedTextSchema, staffLinksSchema } from "../utils/schemas"
+import { apiSuccessEnvelope, staffLinksSchema, storedLocalizedTextSchema } from "../utils/schemas"
 
 const staffDetailSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the staff." }),
   name: z.string().meta({ description: "Name of the staff.", example: "Kishimoto Masashi" }),
-  bio: localizedTextSchema,
+  bio: storedLocalizedTextSchema,
   links: staffLinksSchema,
   imageUrl: z.url().nullable().meta({ description: "Public URL of the staff image, if any." }),
   createdAt: z.iso.datetime().meta({ description: "When the staff was created." }),

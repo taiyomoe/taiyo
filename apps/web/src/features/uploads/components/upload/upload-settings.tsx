@@ -1,8 +1,8 @@
-import type { Language } from "@taiyomoe/db/constants"
 // StyleX only compiles the `sx` props of files that import it.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { config } from "@taiyomoe/config"
+import { type SupportedLanguage, SUPPORTED_LANGUAGES } from "@taiyomoe/db/constants"
 import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import type { ReleaseSettings } from "@/features/uploads/lib/chapter-batch/release"
@@ -37,8 +37,8 @@ export function UploadSettings({
   attempted: boolean
   media: MediaOption | null
   onMediaChange: (media: MediaOption | null) => void
-  language: Language
-  onLanguageChange: (language: Language) => void
+  language: SupportedLanguage
+  onLanguageChange: (language: SupportedLanguage) => void
   groups: GroupOption[]
   onGroupsChange: (groups: GroupOption[]) => void
   release: ReleaseSettings
@@ -61,7 +61,11 @@ export function UploadSettings({
       <MediaField invalid={attempted && media === null} onChange={onMediaChange} value={media} />
       <Field>
         <FieldLabel>{m.upload_language()}</FieldLabel>
-        <LanguagePicker onChange={onLanguageChange} value={language} />
+        <LanguagePicker
+          languages={SUPPORTED_LANGUAGES}
+          onChange={onLanguageChange}
+          value={language}
+        />
       </Field>
       <Field>
         <FieldLabel>{m.upload_groups()}</FieldLabel>

@@ -1,5 +1,5 @@
 import { userAudit } from "@taiyomoe/audit"
-import { COUNTRIES, GENDERS, LANGUAGES, sql } from "@taiyomoe/db"
+import { COUNTRIES, GENDERS, LANGUAGES, SUPPORTED_LANGUAGES, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -14,7 +14,7 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 const MIN_AGE_YEARS = 13
 const bodySchema = z.object({
   about: z
-    .partialRecord(z.enum(LANGUAGES), z.string().trim().max(2000))
+    .partialRecord(z.enum(SUPPORTED_LANGUAGES), z.string().trim().max(2000))
     .optional()
     .meta({ description: "About text, keyed by language. An empty string removes a language." }),
   city: z.string().trim().max(64).nullable().optional().meta({ example: "Lisbon" }),

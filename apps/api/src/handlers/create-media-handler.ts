@@ -27,7 +27,7 @@ import {
   apiSuccessEnvelope,
   contentRatingSchema,
   fileSchema,
-  languageSchema,
+  mediaLanguageSchema,
   mediaLinksSchema,
   mediaTagsSchema,
 } from "../utils/schemas"
@@ -39,7 +39,7 @@ const createMediaSchema = z.object({
         description: "The title of the media for the given language.",
         example: "One Punch Man",
       }),
-      language: languageSchema("The language of the title."),
+      language: mediaLanguageSchema("The language of the title."),
       main: z.boolean().default(false).meta({
         description: "Whether the title is the main title of the media.",
         example: false,
@@ -96,7 +96,7 @@ const createMediaSchema = z.object({
   covers: z
     .object({
       file: fileSchema("The file of the cover."),
-      language: languageSchema("The language of the cover."),
+      language: mediaLanguageSchema("The language of the cover."),
       contentRating: contentRatingSchema("The content rating of the cover."),
       main: z.boolean().default(false).meta({
         description: "Whether the cover is the main cover of the media.",

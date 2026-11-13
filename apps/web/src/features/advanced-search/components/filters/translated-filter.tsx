@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { LANGUAGES, type Language } from "@taiyomoe/db/constants"
+import { SUPPORTED_LANGUAGES, type SupportedLanguage } from "@taiyomoe/db/constants"
 import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMemo } from "react"
@@ -9,7 +9,7 @@ import { ComboFilter } from "@/features/advanced-search/components/filters/combo
 import { FilterSummary } from "@/features/advanced-search/components/filters/filter-summary"
 import { m } from "@/paraglide/messages"
 
-type LanguageOption = { code: Language; name: string }
+type LanguageOption = { code: SupportedLanguage; name: string }
 
 const styles = stylex.create({
   toggle: {
@@ -45,12 +45,12 @@ export function TranslatedFilter({
   onChange,
 }: {
   translated: boolean
-  languages: readonly Language[]
-  onChange: (value: { translated: boolean; languages: Language[] }) => void
+  languages: readonly SupportedLanguage[]
+  onChange: (value: { translated: boolean; languages: SupportedLanguage[] }) => void
 }) {
   const options = useMemo(
     () =>
-      LANGUAGES.map((code) => ({ code, name: getLanguageName(code) })).sort((a, b) =>
+      SUPPORTED_LANGUAGES.map((code) => ({ code, name: getLanguageName(code) })).sort((a, b) =>
         a.name.localeCompare(b.name),
       ),
     [],

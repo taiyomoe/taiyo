@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { MEDIA_LANGUAGES } from "@taiyomoe/db/constants"
 import { ChevronDown, ChevronUp, Close, Crown } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
@@ -71,6 +72,7 @@ export function TitleRow({
       />
       <div sx={styles.titleLanguage}>
         <LanguagePicker
+          languages={MEDIA_LANGUAGES}
           onChange={(language) => {
             onUpdate({ language })
           }}

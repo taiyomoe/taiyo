@@ -9,11 +9,11 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, contentRatingSchema, languageSchema } from "../utils/schemas"
+import { apiSuccessEnvelope, contentRatingSchema, mediaLanguageSchema } from "../utils/schemas"
 
 const updateCoverSchema = z
   .object({
-    language: languageSchema("The language of the cover.").optional(),
+    language: mediaLanguageSchema("The language of the cover.").optional(),
     contentRating: contentRatingSchema("The content rating of the cover.").optional(),
     volume: z
       .number()

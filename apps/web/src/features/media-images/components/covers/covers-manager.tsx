@@ -1,4 +1,4 @@
-import type { ContentRating, Language } from "@taiyomoe/db/constants"
+import type { ContentRating, MediaLanguage } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useQuery } from "@tanstack/react-query"
@@ -34,7 +34,7 @@ export function CoversManager({
 }: {
   mediaId: string
   title: string
-  language: Language
+  language: MediaLanguage
   contentRating: ContentRating
 }) {
   const media = useQuery(mediaQueryOptions(mediaId))

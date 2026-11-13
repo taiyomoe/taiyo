@@ -427,6 +427,29 @@ export const LANGUAGES = [
 
 export type Language = (typeof LANGUAGES)[number]
 
+export const SUPPORTED_LANGUAGES = ["en", "fr", "pt_br", "pt_pt"] as const satisfies Language[]
+
+export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number]
+
+export const isSupportedLanguage = (value: string): value is SupportedLanguage =>
+  SUPPORTED_LANGUAGES.some((language) => language === value)
+
+export const MEDIA_LANGUAGES = [
+  ...SUPPORTED_LANGUAGES,
+  "ja",
+  "ja_ro",
+  "ko",
+  "ko_ro",
+  "zh",
+  "zh_hk",
+  "zh_ro",
+] as const satisfies Language[]
+
+export type MediaLanguage = (typeof MEDIA_LANGUAGES)[number]
+
+export const isMediaLanguage = (value: string): value is MediaLanguage =>
+  MEDIA_LANGUAGES.some((language) => language === value)
+
 export const COUNTRIES = [
   "ad",
   "ae",

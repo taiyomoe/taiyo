@@ -1,4 +1,4 @@
-import type { ContentRating, Language } from "@taiyomoe/db/constants"
+import type { ContentRating, MediaLanguage } from "@taiyomoe/db/constants"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api"
 import { ensureSuccess, unwrap } from "@/lib/envelope"
@@ -6,7 +6,7 @@ import { ensureSuccess, unwrap } from "@/lib/envelope"
 export type NewCover = {
   file: File
   volume: number | null
-  language: Language
+  language: MediaLanguage
   contentRating: ContentRating
   main: boolean
 }
@@ -15,7 +15,7 @@ export type NewBanner = { file: File; contentRating: ContentRating }
 
 export type CoverPatch = {
   volume?: number | null
-  language?: Language
+  language?: MediaLanguage
   contentRating?: ContentRating
 }
 

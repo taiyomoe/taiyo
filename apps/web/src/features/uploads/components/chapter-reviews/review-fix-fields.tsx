@@ -1,5 +1,5 @@
-import type { Language } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
+import { type SupportedLanguage, SUPPORTED_LANGUAGES } from "@taiyomoe/db/constants"
 import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import { LanguagePicker } from "@/components/fields/language-picker"
@@ -31,12 +31,12 @@ export function ReviewFixFields({
   numberInvalid: boolean
   volume: string
   title: string
-  language: Language
+  language: SupportedLanguage | null
   groups: GroupOption[]
   onNumberChange: (number: string) => void
   onVolumeChange: (volume: string) => void
   onTitleChange: (title: string) => void
-  onLanguageChange: (language: Language) => void
+  onLanguageChange: (language: SupportedLanguage) => void
   onGroupsChange: (groups: GroupOption[]) => void
 }) {
   return (
@@ -73,7 +73,11 @@ export function ReviewFixFields({
       </Field>
       <Field>
         <FieldLabel>{m.upload_language()}</FieldLabel>
-        <LanguagePicker onChange={onLanguageChange} value={language} />
+        <LanguagePicker
+          languages={SUPPORTED_LANGUAGES}
+          onChange={onLanguageChange}
+          value={language}
+        />
       </Field>
       <Field>
         <FieldLabel>{m.upload_groups()}</FieldLabel>

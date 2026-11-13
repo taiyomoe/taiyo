@@ -1,5 +1,9 @@
-import type { Language } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
+import {
+  isSupportedLanguage,
+  type SupportedLanguage,
+  SUPPORTED_LANGUAGES,
+} from "@taiyomoe/db/constants"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   DialogClose,
@@ -81,7 +85,9 @@ export function EditChapterForm({
   const [number, setNumber] = useState(String(chapter.number))
   const [volume, setVolume] = useState(chapter.volume ?? "")
   const [title, setTitle] = useState(chapter.title ?? "")
-  const [language, setLanguage] = useState<Language>(chapter.language)
+  const [language, setLanguage] = useState<SupportedLanguage | null>(
+    isSupportedLanguage(chapter.language) ? chapter.language : null,
+  )
   const [order, setOrder] = useState<string[] | null>(null)
   const [link, setLink] = useState<string | null>(null)
   const linkValue = link ?? details.data?.externalUrl ?? ""
@@ -130,7 +136,11 @@ export function EditChapterForm({
             </Field>
             <Field>
               <FieldLabel>{m.upload_language()}</FieldLabel>
-              <LanguagePicker onChange={setLanguage} value={language} />
+              <LanguagePicker
+                languages={SUPPORTED_LANGUAGES}
+                onChange={setLanguage}
+                value={language}
+              />
             </Field>
           </div>
           <Field>
@@ -167,7 +177,7 @@ export function EditChapterForm({
                   number: parsedNumber,
                   volume: volume.trim() === "" ? null : volume.trim(),
                   title: title.trim() === "" ? null : title.trim(),
-                  language,
+                  ...(language === null ? {} : { language }),
                   ...(link === null
                     ? {}
                     : { externalUrl: link.trim() === "" ? null : link.trim() }),

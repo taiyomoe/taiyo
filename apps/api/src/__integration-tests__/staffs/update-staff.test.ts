@@ -78,7 +78,7 @@ describe("PATCH /staffs/:id", () => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
     const form = new FormData()
 
-    form.append("bio.ja", "日本語のバイオ")
+    form.append("bio.pt_br", "Biografia em português")
 
     const res = await api(app, `/staffs/${KISHIMOTO_ID}`, { method: "PATCH", headers, form })
 
@@ -91,7 +91,7 @@ describe("PATCH /staffs/:id", () => {
       .executeTakeFirst()
     const { bio } = defined(row)
 
-    expect(bio.ja).toBe("日本語のバイオ")
+    expect(bio.pt_br).toBe("Biografia em português")
     expect(bio.en).toBeTruthy()
   })
 

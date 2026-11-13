@@ -1,12 +1,13 @@
 import {
   CONTENT_RATINGS,
   FLAGS,
-  LANGUAGES,
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
+  MEDIA_LANGUAGES,
   MEDIA_SOURCES,
   MEDIA_STATUSES,
   MEDIA_TYPES,
+  SUPPORTED_LANGUAGES,
 } from "@taiyomoe/db"
 import { paginationQuerySchema, sortDirectionSchema } from "@taiyomoe/schemas"
 import { z } from "zod"
@@ -31,9 +32,9 @@ export const mediaFilterSchema = z
     tags: stringArrayFilter.optional(),
     spoilerTags: stringArrayFilter.optional(),
     linkProviders: stringArrayFilter.optional(),
-    titleLanguages: enumArrayFilter(LANGUAGES).optional(),
-    chapterLanguages: enumArrayFilter(LANGUAGES).optional(),
-    coverLanguages: enumArrayFilter(LANGUAGES).optional(),
+    titleLanguages: enumArrayFilter(MEDIA_LANGUAGES).optional(),
+    chapterLanguages: enumArrayFilter(SUPPORTED_LANGUAGES).optional(),
+    coverLanguages: enumArrayFilter(MEDIA_LANGUAGES).optional(),
     authors: uuidArrayFilter.optional(),
     artists: uuidArrayFilter.optional(),
     createdAt: dateFilter.optional(),

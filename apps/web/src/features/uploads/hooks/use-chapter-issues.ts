@@ -1,4 +1,4 @@
-import type { Language } from "@taiyomoe/db/constants"
+import type { SupportedLanguage } from "@taiyomoe/db/constants"
 import { config } from "@taiyomoe/config"
 import { useQuery } from "@tanstack/react-query"
 import { isWebUrl, resolveLink } from "@/features/uploads/lib/chapter-batch/links"
@@ -14,7 +14,7 @@ import { m } from "@/paraglide/messages"
 
 type ChapterIssuesInput = {
   mediaId: string | undefined
-  language: Language
+  language: SupportedLanguage
   rows: UploadRow[]
   template: string
 }

@@ -1,10 +1,10 @@
 import {
   CONTENT_RATINGS,
-  LANGUAGES,
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
   MEDIA_STATUSES,
   MEDIA_TYPES,
+  SUPPORTED_LANGUAGES,
 } from "@taiyomoe/db/constants"
 import { z } from "zod"
 import type { SearchMediasBody } from "@/features/media/api/medias"
@@ -81,7 +81,7 @@ const LIST_VALIDATORS = {
   excludedTags: isTagKey,
   authors: (value: string): value is string => isUuid(value),
   artists: (value: string): value is string => isUuid(value),
-  languages: oneOf(LANGUAGES),
+  languages: oneOf(SUPPORTED_LANGUAGES),
 }
 
 export const advancedSearchSchema = z.object({

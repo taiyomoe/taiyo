@@ -1,5 +1,5 @@
-import type { Language } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
+import { isSupportedLanguage, type SupportedLanguage } from "@taiyomoe/db/constants"
 import {
   DialogDescription,
   DialogHeader,
@@ -70,7 +70,9 @@ export function ReviewForm({
   const [number, setNumber] = useState(String(submission.number))
   const [volume, setVolume] = useState(submission.volume ?? "")
   const [title, setTitle] = useState(submission.title ?? "")
-  const [language, setLanguage] = useState<Language>(submission.language)
+  const [language, setLanguage] = useState<SupportedLanguage | null>(
+    isSupportedLanguage(submission.language) ? submission.language : null,
+  )
   const [groups, setGroups] = useState<GroupOption[]>(submission.groups)
   const [rejecting, setRejecting] = useState(false)
   const [reason, setReason] = useState("")
@@ -134,7 +136,7 @@ export function ReviewForm({
                 number: parsedNumber,
                 volume: volume.trim() === "" ? null : volume.trim(),
                 title: title.trim() === "" ? null : title.trim(),
-                language,
+                ...(language === null ? {} : { language }),
                 groupIds: groups.map((group) => group.id),
               },
             },
