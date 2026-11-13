@@ -30,9 +30,20 @@ if ((process.env.TEST ?? "") === "") {
     notificationEvents: createNotificationEvents(),
     cacheNamespace: "",
   })
-
-  serve({ fetch: app.fetch, port: env.PORT }, ({ port }) => {
+  const server = serve({ fetch: app.fetch, port: env.PORT }, ({ port }) => {
     // oxlint-disable-next-line no-console
     console.debug(`Server is running on http://localhost:${port}`)
   })
+  // Stop accepting connections, let in-flight requests finish, then release the pool.
+  const handleShutdownSignal = () => {
+    server.close(() => {
+      db.destroy().then(
+        () => process.exit(0),
+        () => process.exit(1),
+      )
+    })
+  }
+
+  process.on("SIGTERM", handleShutdownSignal)
+  process.on("SIGINT", handleShutdownSignal)
 }

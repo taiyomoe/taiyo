@@ -44,6 +44,7 @@ const adminBodySchema = z.object({
   userId: z.uuid().optional(),
   sessionToken: z.string().optional(),
 })
+const cookieDomain = serverEnv.BETTER_AUTH_COOKIE_DOMAIN ?? ""
 const actorSchema = z.object({ id: z.string(), role: z.unknown(), banned: z.boolean().nullish() })
 const signInBodySchema = z.object({
   email: z.string().optional(),
@@ -151,7 +152,15 @@ export const createAuth = ({
       customRules: rateLimitRules,
     },
     session: { storeSessionInDatabase: true },
-    advanced: { database: { generateId: "uuid" }, disableOriginCheck: false },
+    advanced: {
+      database: { generateId: "uuid" },
+      disableOriginCheck: false,
+      // The api sets the session cookie on its own host, yet the web SSR reads it from the
+      // requests it receives and forwards it: when they run on sibling subdomains, the
+      // cookie must be scoped to their shared parent domain to reach both.
+      crossSubDomainCookies:
+        cookieDomain === "" ? { enabled: false } : { enabled: true, domain: cookieDomain },
+    },
     hooks: {
       before: createAuthMiddleware(async (ctx) => {
         const action = ADMIN_ACTIONS.get(ctx.path)

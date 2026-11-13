@@ -10,7 +10,8 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "dev": "tsx watch --env-file-if-exists=.env src/index.ts"
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "start": "node --env-file-if-exists=.env --import tsx src/index.ts"
   },
   "dependencies": {
     "@hono-rate-limiter/redis": "^0.1.4",
@@ -36,6 +37,7 @@
     "magic-bytes.js": "^1.13.1",
     "radashi": "^13.0.1",
     "sharp": "^0.35.5",
+    "tsx": "^4.23.15",
     "zod": "^4.6.7"
   },
   "devDependencies": {
@@ -43,7 +45,6 @@
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",
     "kysely": "^0.29.8",
-    "pg": "^8.23.1",
-    "tsx": "^4.23.15"
+    "pg": "^8.23.1"
   }
 }
