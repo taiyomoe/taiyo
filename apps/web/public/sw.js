@@ -116,3 +116,47 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(networkFirst(request))
   }
 })
+
+const readPushMessage = (event) => {
+  try {
+    return event.data?.json() ?? {}
+  } catch {
+    return {}
+  }
+}
+
+self.addEventListener("push", (event) => {
+  const message = readPushMessage(event)
+
+  event.waitUntil(
+    self.registration.showNotification(message.title ?? "Taiyō", {
+      body: message.body ?? "",
+      icon: message.icon ?? "/web-app-manifest-192x192.png",
+      badge: "/favicon-96x96.png",
+      tag: message.tag,
+      data: { url: message.url ?? "/notifications" },
+    }),
+  )
+})
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close()
+
+  const url = new URL(event.notification.data?.url ?? "/notifications", self.location.origin)
+
+  event.waitUntil(
+    (async () => {
+      const windows = await self.clients.matchAll({ type: "window" })
+      const client = windows.find((candidate) => new URL(candidate.url).origin === url.origin)
+
+      if (client === undefined) {
+        await self.clients.openWindow(url.href)
+
+        return
+      }
+
+      await client.focus()
+      await client.navigate(url.href).catch(() => self.clients.openWindow(url.href))
+    })(),
+  )
+})

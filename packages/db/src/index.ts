@@ -74,6 +74,8 @@ export * from "./models/notification-model"
 
 export * from "./models/notification-outbox-model"
 
+export * from "./models/push-subscription-model"
+
 export * from "./models/session-model"
 
 export * from "./models/media-staff-model"

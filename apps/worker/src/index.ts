@@ -12,12 +12,14 @@ import {
   CHAPTER_UPLOAD_QUEUE,
   type ChapterUploadJobData,
   createBullConnection,
+  createWebPushSender,
   drainNotificationOutbox,
   processChapterUpload,
   publishScheduledChapters,
   purgeNotifications,
   reapOrphanCommentImages,
   reapStaleChapterUploads,
+  sendPendingPushes,
 } from "@taiyomoe/queue"
 import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from "@taiyomoe/s3"
 import { drainSearchOutbox, getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
@@ -35,11 +37,13 @@ const REAP_COMMENT_IMAGES_JOB = "reap-orphan-comment-images"
 const NOTIFICATION_MAINTENANCE_QUEUE = "notification-maintenance"
 const DRAIN_NOTIFICATIONS_JOB = "drain-notification-outbox"
 const PURGE_NOTIFICATIONS_JOB = "purge-notifications"
+const SEND_PUSHES_JOB = "send-pushes"
 const chapterUploadActor = systemActor("chapter-upload-worker")
 const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const notificationEvents = createNotificationEvents()
+const pushDeps = { db: deps.db, send: createWebPushSender() }
 const searchDeps = { db: deps.db, meili: getMeiliClient(), mediasIndex: SEARCH_INDEXES.MEDIAS }
 
 initLogger({
@@ -176,9 +180,13 @@ const notificationWorker = new Worker(
       return
     }
 
-    const { userIds } = await drainNotificationOutbox(deps)
+    if (job.name === DRAIN_NOTIFICATIONS_JOB) {
+      const { userIds } = await drainNotificationOutbox(deps)
 
-    await notificationEvents.publish(userIds)
+      await notificationEvents.publish(userIds)
+    }
+
+    await sendPendingPushes(pushDeps)
   },
   { connection: createBullConnection(), concurrency: 1 },
 )
@@ -241,6 +249,13 @@ const notificationMaintenanceQueue = new Queue(NOTIFICATION_MAINTENANCE_QUEUE, {
 
 await notificationMaintenanceQueue
   .upsertJobScheduler(DRAIN_NOTIFICATIONS_JOB, { every: 10_000 }, { name: DRAIN_NOTIFICATIONS_JOB })
+  .then(() =>
+    notificationMaintenanceQueue.upsertJobScheduler(
+      SEND_PUSHES_JOB,
+      { every: 5000 },
+      { name: SEND_PUSHES_JOB },
+    ),
+  )
   .then(() =>
     notificationMaintenanceQueue.upsertJobScheduler(
       PURGE_NOTIFICATIONS_JOB,

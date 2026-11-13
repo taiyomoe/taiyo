@@ -3,7 +3,7 @@ import { createAuth } from "@taiyomoe/auth/server"
 import { createNotificationEvents } from "@taiyomoe/cache/notification-events"
 import { getDb } from "@taiyomoe/db"
 import { sendGroupInvitationEmail } from "@taiyomoe/email"
-import { getChapterUploadProducer } from "@taiyomoe/queue"
+import { createWebPushSender, getChapterUploadProducer, getVapidPublicKey } from "@taiyomoe/queue"
 import { getS3Bucket, getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { type AppType, createApp } from "./app"
@@ -28,6 +28,8 @@ if ((process.env.TEST ?? "") === "") {
         process.env.NODE_ENV === "production" ? sendGroupInvitationEmail : () => Promise.resolve(),
     },
     notificationEvents: createNotificationEvents(),
+    pushSender: createWebPushSender(),
+    vapidPublicKey: getVapidPublicKey(),
     cacheNamespace: "",
   })
   const server = serve({ fetch: app.fetch, port: env.PORT }, ({ port }) => {

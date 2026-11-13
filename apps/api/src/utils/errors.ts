@@ -307,6 +307,22 @@ const commentErrors = {
     message: "The requested notification was not found.",
     code: 404,
   },
+  PUSH_SUBSCRIPTION_NOT_FOUND: {
+    message: "This device is not subscribed to push notifications.",
+    code: 404,
+  },
+  PUSH_SUBSCRIPTION_EXPIRED: {
+    message: "The push service no longer accepts this device's subscription. Subscribe again.",
+    code: 410,
+  },
+  PUSH_NOT_CONFIGURED: {
+    message: "Push notifications are not configured on this server.",
+    code: 503,
+  },
+  PUSH_DELIVERY_FAILED: {
+    message: "The push service did not accept the notification. Try again later.",
+    code: 502,
+  },
   COMMENT_EMPTY: {
     message: "A comment needs some text or at least one image.",
     code: 422,

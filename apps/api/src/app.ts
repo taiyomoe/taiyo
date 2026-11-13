@@ -100,6 +100,8 @@ export const createApp = (services: Services) => {
         c.set("chapterUploadQueue", services.chapterUploadQueue)
         c.set("mailer", services.mailer)
         c.set("notificationEvents", services.notificationEvents)
+        c.set("pushSender", services.pushSender)
+        c.set("vapidPublicKey", services.vapidPublicKey)
         c.set("cacheNamespace", services.cacheNamespace)
 
         function ok<T>(data: T): JsonResponse<SuccessEnvelope<T>, 200 | 201>

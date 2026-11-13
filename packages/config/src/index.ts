@@ -30,6 +30,9 @@ export const config = {
     showLibrary: true,
     homeLayout: "ROWS",
     latestUpdatesLayout: "LIST",
+    pushLibraryChapters: true,
+    pushGroupChapters: true,
+    pushReplies: true,
   } satisfies Required<UserSettings>,
   images: {
     maxSizeBytes: 10 * 1024 * 1024,
@@ -65,6 +68,11 @@ export const config = {
     maxChapterAgeDays: 7,
     readRetentionDays: 90,
     unreadRetentionDays: 365,
+    pushBatchSize: 100,
+    pushConcurrency: 20,
+    pushMaxAgeMinutes: 60,
+    pushTtlSeconds: 24 * 60 * 60,
+    maxPushSubscriptions: 10,
   },
   lists: {
     maxItems: 500,

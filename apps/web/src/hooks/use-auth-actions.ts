@@ -1,13 +1,13 @@
 import { authClient } from "@taiyomoe/auth/client"
 import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
+import { disablePush } from "@/features/notifications/lib/push"
 import { createAuthActions } from "@/lib/auth"
 
 export const useAuthActions = (callbackURL?: string) => {
   const queryClient = useQueryClient()
   const router = useRouter()
-
-  return createAuthActions({
+  const actions = createAuthActions({
     client: authClient,
     queryClient,
     router: {
@@ -16,4 +16,13 @@ export const useAuthActions = (callbackURL?: string) => {
     },
     callbackURL,
   })
+
+  return {
+    ...actions,
+    signOut: async () => {
+      await disablePush().catch(() => {})
+
+      return actions.signOut()
+    },
+  }
 }

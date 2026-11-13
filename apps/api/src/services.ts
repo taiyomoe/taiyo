@@ -3,7 +3,7 @@ import type { Auth } from "@taiyomoe/auth/server"
 import type { NotificationEvents } from "@taiyomoe/cache/notification-events"
 import type { DB } from "@taiyomoe/db"
 import type { GroupInvitationMail } from "@taiyomoe/email"
-import type { ChapterUploadProducer } from "@taiyomoe/queue"
+import type { ChapterUploadProducer, PushSender } from "@taiyomoe/queue"
 import type { Meilisearch } from "@taiyomoe/search"
 import type { Kysely } from "kysely"
 
@@ -21,5 +21,7 @@ export type Services = {
   chapterUploadQueue: ChapterUploadProducer
   mailer: Mailer
   notificationEvents: NotificationEvents
+  pushSender: PushSender | null
+  vapidPublicKey: string | null
   cacheNamespace: string
 }

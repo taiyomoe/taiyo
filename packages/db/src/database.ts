@@ -28,6 +28,7 @@ import type { Notification } from "./models/notification-model"
 import type { NotificationOutboxEntry } from "./models/notification-outbox-model"
 import type { PageBookmark } from "./models/page-bookmark-model"
 import type { PageReport } from "./models/page-report-model"
+import type { PushSubscription } from "./models/push-subscription-model"
 import type { ReadingReward } from "./models/reading-reward-model"
 import type { SearchOutboxEntry } from "./models/search-outbox-model"
 import type { Session } from "./models/session-model"
@@ -78,6 +79,7 @@ export type DB = {
   notifications: Notification
   pageBookmarks: PageBookmark
   pageReports: PageReport
+  pushSubscriptions: PushSubscription
   readingRewards: ReadingReward
   searchOutbox: SearchOutboxEntry
   sessions: Session

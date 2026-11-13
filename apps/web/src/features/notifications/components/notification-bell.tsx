@@ -45,8 +45,8 @@ const styles = stylex.create({
     position: "absolute",
     height: "1rem",
     minWidth: "0.5rem",
-    right: "-0.125rem",
-    top: "-0.125rem",
+    right: "0.125rem",
+    top: "0.125rem",
   },
   popup: {
     padding: 0,
@@ -125,7 +125,7 @@ export function NotificationBell() {
                 ? m.notifications_title()
                 : m.notifications_title_unread({ count: unread })
             }
-            size="icon"
+            size="icon-xl"
             sx={styles.trigger}
             variant="ghost"
           />

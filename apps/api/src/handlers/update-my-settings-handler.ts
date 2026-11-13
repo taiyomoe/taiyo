@@ -33,6 +33,18 @@ const bodySchema = z.object({
     .boolean()
     .optional()
     .meta({ description: "Whether others can see your library and reading stats.", example: true }),
+  pushLibraryChapters: z.boolean().optional().meta({
+    description: "Whether new chapters of the medias in your library are pushed to your devices.",
+    example: true,
+  }),
+  pushGroupChapters: z.boolean().optional().meta({
+    description: "Whether new chapters of the groups you follow are pushed to your devices.",
+    example: true,
+  }),
+  pushReplies: z.boolean().optional().meta({
+    description: "Whether replies to your comments are pushed to your devices.",
+    example: true,
+  }),
 })
 const settingsSchema = z.object({
   contentRating: z.enum(CONTENT_RATINGS).array().optional(),
@@ -41,6 +53,9 @@ const settingsSchema = z.object({
   showLibrary: z.boolean().optional(),
   homeLayout: z.enum(["ROWS", "COLUMNS"]).optional(),
   latestUpdatesLayout: z.enum(LATEST_UPDATES_LAYOUTS).optional(),
+  pushLibraryChapters: z.boolean().optional(),
+  pushGroupChapters: z.boolean().optional(),
+  pushReplies: z.boolean().optional(),
 })
 
 export const updateMySettingsHandler = new Hono().patch(

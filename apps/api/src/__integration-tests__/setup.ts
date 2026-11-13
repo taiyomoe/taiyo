@@ -18,6 +18,7 @@ import type { Services } from "../services"
 import { createApp } from "../app"
 import { defined } from "./helpers/assert"
 import { createMemoryNotificationEvents } from "./helpers/notification-events"
+import { createMemoryPushSender } from "./helpers/push-sender"
 
 const TEMPLATE_DB = "taiyo_test_template"
 const getDbUrl = (name: string) => {
@@ -79,6 +80,8 @@ export const test = baseTest.extend<Fixtures>({
         },
       },
       notificationEvents: createMemoryNotificationEvents(),
+      pushSender: createMemoryPushSender(),
+      vapidPublicKey: "test-vapid-public-key",
       cacheNamespace: `${crypto.randomUUID()}:`,
     }
 

@@ -4,6 +4,7 @@ import {
   getNotificationStreamUrl,
   notificationKeys,
 } from "@/features/notifications/api/notifications"
+import { syncPushSubscription } from "@/features/notifications/lib/push"
 
 const LOCK_NAME = "taiyo:notification-stream"
 const CHANNEL_NAME = "taiyo:notifications"
@@ -24,6 +25,12 @@ export function NotificationStream() {
     }
     const lead = () =>
       new Promise<void>((resolve) => {
+        if (controller.signal.aborted) {
+          resolve()
+
+          return
+        }
+
         const source = new EventSource(getNotificationStreamUrl(), { withCredentials: true })
 
         source.addEventListener("ready", refresh)
@@ -38,6 +45,7 @@ export function NotificationStream() {
       })
 
     channel.addEventListener("message", refresh)
+    syncPushSubscription().catch(() => {})
 
     if ("locks" in navigator) {
       navigator.locks.request(LOCK_NAME, { signal: controller.signal }, lead).catch(() => {})

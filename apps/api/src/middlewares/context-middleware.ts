@@ -3,7 +3,7 @@ import type { Auth, Session, User } from "@taiyomoe/auth/server"
 import type { NotificationEvents } from "@taiyomoe/cache/notification-events"
 import type { DB } from "@taiyomoe/db"
 import type { Actor, Permissions } from "@taiyomoe/permissions"
-import type { ChapterUploadProducer } from "@taiyomoe/queue"
+import type { ChapterUploadProducer, PushSender } from "@taiyomoe/queue"
 import type { Meilisearch } from "@taiyomoe/search"
 import type { EvlogVariables } from "evlog/hono"
 import type { TypedResponse } from "hono"
@@ -64,6 +64,8 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   chapterUploadQueue: ChapterUploadProducer
   mailer: Mailer
   notificationEvents: NotificationEvents
+  pushSender: PushSender | null
+  vapidPublicKey: string | null
   cacheNamespace: string
   errorCode?: ErrorCode
 }
