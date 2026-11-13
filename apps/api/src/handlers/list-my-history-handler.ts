@@ -50,9 +50,11 @@ export const listMyHistoryHandler = new Hono().get(
       db
         .selectFrom("userHistories")
         .innerJoin("chapters", "chapters.id", "userHistories.chapterId")
+        .innerJoin("medias", "medias.id", "chapters.mediaId")
         .where("userHistories.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
         .where("chapters.status", "=", "PUBLISHED")
+        .where("medias.deletedAt", "is", null)
         .where(isOpenedHistory)
         .select([
           "userHistories.chapterId",
@@ -71,9 +73,11 @@ export const listMyHistoryHandler = new Hono().get(
       db
         .selectFrom("userHistories")
         .innerJoin("chapters", "chapters.id", "userHistories.chapterId")
+        .innerJoin("medias", "medias.id", "chapters.mediaId")
         .where("userHistories.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
         .where("chapters.status", "=", "PUBLISHED")
+        .where("medias.deletedAt", "is", null)
         .where(isOpenedHistory)
         .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),

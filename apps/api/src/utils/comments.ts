@@ -55,10 +55,12 @@ export const resolveCommentTarget = async (db: Kysely<DB>, { type, id }: Comment
   if (type === "CHAPTER") {
     const chapter = await db
       .selectFrom("chapters")
-      .select("id")
-      .where("id", "=", id)
-      .where("deletedAt", "is", null)
-      .where("status", "=", "PUBLISHED")
+      .innerJoin("medias", "medias.id", "chapters.mediaId")
+      .select("chapters.id")
+      .where("chapters.id", "=", id)
+      .where("chapters.deletedAt", "is", null)
+      .where("chapters.status", "=", "PUBLISHED")
+      .where("medias.deletedAt", "is", null)
       .executeTakeFirst()
 
     return chapter === undefined ? null : { type, id, ownerId: null }
@@ -129,7 +131,7 @@ export const liveCommentSql = (comment: string, author: string) =>
 
 export const visibleThreadTargetSql = (thread: string) => sql<boolean>`(
   exists (select 1 from "medias" as "m" where "m"."id" = ${sql.ref(`${thread}.mediaId`)} and "m"."deletedAt" is null)
-  or exists (select 1 from "chapters" as "ch" where "ch"."id" = ${sql.ref(`${thread}.chapterId`)} and "ch"."deletedAt" is null and "ch"."status" = 'PUBLISHED')
+  or exists (select 1 from "chapters" as "ch" inner join "medias" as "chm" on "chm"."id" = "ch"."mediaId" where "ch"."id" = ${sql.ref(`${thread}.chapterId`)} and "ch"."deletedAt" is null and "ch"."status" = 'PUBLISHED' and "chm"."deletedAt" is null)
   or exists (select 1 from "groups" as "g" where "g"."id" = ${sql.ref(`${thread}.groupId`)} and "g"."deletedAt" is null)
   or exists (select 1 from "users" as "pu" where "pu"."id" = ${sql.ref(`${thread}.profileId`)} and not coalesce("pu"."banned", false))
 )`

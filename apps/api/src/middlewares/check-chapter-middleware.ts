@@ -21,9 +21,17 @@ export const checkChapter = (opts: { includeDeleted?: boolean; unpublished?: boo
 
     log.set({ chapter: { id } })
 
-    const base = db.selectFrom("chapters").selectAll().where("id", "=", id)
-    const visible = opts.unpublished === true ? base : base.where("status", "=", "PUBLISHED")
-    const query = opts.includeDeleted === true ? visible : visible.where("deletedAt", "is", null)
+    const base = db
+      .selectFrom("chapters")
+      .innerJoin("medias", "medias.id", "chapters.mediaId")
+      .selectAll("chapters")
+      .where("chapters.id", "=", id)
+    const visible =
+      opts.unpublished === true ? base : base.where("chapters.status", "=", "PUBLISHED")
+    const query =
+      opts.includeDeleted === true
+        ? visible
+        : visible.where("chapters.deletedAt", "is", null).where("medias.deletedAt", "is", null)
     const chapter = await query.executeTakeFirst()
 
     if (!chapter) {

@@ -56,12 +56,14 @@ export const listMyBookmarksHandler = new Hono().get(
     const base = db
       .selectFrom("pageBookmarks")
       .innerJoin("chapters", "chapters.id", "pageBookmarks.chapterId")
+      .innerJoin("medias", "medias.id", "chapters.mediaId")
       .where(
         sql<boolean>`exists (select 1 from unnest(${sql.ref("chapters.pages")}) as p(page) where ${sql.ref("p.page")}->>'id' = ${sql.ref("pageBookmarks.pageId")}::text)`,
       )
       .where("pageBookmarks.userId", "=", user.id)
       .where("chapters.deletedAt", "is", null)
       .where("chapters.status", "=", "PUBLISHED")
+      .where("medias.deletedAt", "is", null)
       .$if(mediaId !== undefined, (qb) => qb.where("chapters.mediaId", "=", mediaId ?? ""))
     const [rows, totalRow] = await Promise.all([
       base

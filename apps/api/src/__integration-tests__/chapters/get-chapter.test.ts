@@ -1,6 +1,10 @@
+import type { Hono } from "hono"
+import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
 import { defined } from "../helpers/assert"
+import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
+import { seedChapter, seedHistory, seedMedia } from "../helpers/seed"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
@@ -74,5 +78,58 @@ describe("GET /chapters/:id", () => {
     }
 
     expect(res.body.code).toBe("VALIDATION_ERROR")
+  })
+})
+
+const listHistoryChapterIds = async (app: Hono, headers: Record<string, string>) => {
+  const res = await api<Array<{ chapterId: string }>>(app, "/users/me/history", { headers })
+
+  if (!res.body.success) {
+    throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+  }
+
+  return res.body.data.map((item) => item.chapterId)
+}
+
+describe("chapters of a deleted media", () => {
+  test("are no longer readable, commentable or listed in history", async ({ app, services }) => {
+    const reader = await signInAs(services)
+    const uploader = await signInAs(services, { role: "UPLOADER" })
+    const mediaId = await seedMedia(services, uploader.userId)
+    const chapterId = await seedChapter(services, {
+      mediaId,
+      uploaderId: uploader.userId,
+      number: 1,
+      status: "PUBLISHED",
+      pages: [{ id: randomUUID() }],
+    })
+
+    await seedHistory(services, reader.userId, chapterId)
+
+    expect((await api(app, `/chapters/${chapterId}`)).status).toBe(200)
+    expect(await listHistoryChapterIds(app, reader.headers)).toContain(chapterId)
+
+    const deleted = await api(app, `/medias/${mediaId}`, {
+      method: "DELETE",
+      headers: uploader.headers,
+    })
+
+    expect(deleted.status).toBe(200)
+
+    for (const path of [
+      `/chapters/${chapterId}`,
+      `/chapters/${chapterId}/reader`,
+      `/chapters/${chapterId}/groups`,
+    ]) {
+      const res = await api(app, path)
+
+      expect(res.status).toBe(404)
+    }
+
+    const comments = await api(app, `/comments?targetType=CHAPTER&targetId=${chapterId}`)
+
+    expect(comments.status).toBe(404)
+
+    expect(await listHistoryChapterIds(app, reader.headers)).not.toContain(chapterId)
   })
 })
