@@ -16,8 +16,6 @@ import {
   groupLinkSchema,
 } from "../utils/schemas"
 
-const urlField = (description: string) =>
-  z.string().max(config.input.maxUrlLength).nullable().optional().meta({ description })
 const createGroupSchema = z.object({
   name: z
     .string()
@@ -30,8 +28,6 @@ const createGroupSchema = z.object({
     .nullable()
     .optional()
     .meta({ description: "Description of the group." }),
-  logo: urlField("Storage key of the group logo."),
-  banner: urlField("Storage key of the group banner."),
   website: groupLinkSchema("Website URL."),
   discord: groupDiscordSchema,
   x: groupLinkSchema("X / Twitter URL."),
@@ -84,8 +80,6 @@ export const createGroupHandler = new Hono().post(
 
     for (const key of [
       "description",
-      "logo",
-      "banner",
       "website",
       "discord",
       "x",

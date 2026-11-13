@@ -18,13 +18,19 @@ import {
   groupLinkSchema,
 } from "../utils/schemas"
 
-const urlField = () => z.string().max(config.input.maxUrlLength).nullable().optional()
+const imageKeyField = (kind: "logos" | "banners") =>
+  z
+    .string()
+    .regex(new RegExp(`^groups/[0-9a-f-]{36}/${kind}/[0-9a-f-]{36}\\.(jpg|gif)$`))
+    .nullable()
+    .optional()
+    .meta({ description: `Storage key of the group image, under \`groups/<id>/${kind}/\`.` })
 const updateGroupSchema = z
   .object({
     name: z.string().min(1).max(config.input.maxNameLength).optional(),
     description: z.string().max(config.input.maxDescriptionLength).nullable().optional(),
-    logo: urlField(),
-    banner: urlField(),
+    logo: imageKeyField("logos"),
+    banner: imageKeyField("banners"),
     website: groupLinkSchema("Website URL."),
     discord: groupDiscordSchema,
     x: groupLinkSchema("X / Twitter URL."),
@@ -79,6 +85,19 @@ export const updateGroupHandler = new Hono().patch(
     const { db, group } = c.var
     const body = c.var.json
     const updates: Record<string, unknown> = {}
+    const foreignImage = (["logo", "banner"] as const).find(
+      (key) => typeof body[key] === "string" && !body[key].startsWith(`groups/${group.id}/`),
+    )
+
+    if (foreignImage !== undefined) {
+      return c.fail("VALIDATION_ERROR", [
+        {
+          code: "custom",
+          path: [foreignImage],
+          message: "The image must be stored under this group.",
+        },
+      ])
+    }
 
     for (const key of [
       "name",

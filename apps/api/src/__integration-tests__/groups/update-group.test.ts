@@ -51,6 +51,42 @@ describe("PATCH /groups/:id", () => {
     expect(row?.website).toBeNull()
   })
 
+  test("only accepts images stored under the group", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const imageId = crypto.randomUUID()
+
+    for (const banner of [
+      "https://tracker.example.com/beacon.png",
+      `groups/${crypto.randomUUID()}/banners/${imageId}.jpg`,
+      `groups/${SEEDED_GROUP_ID}/logos/${imageId}.jpg`,
+    ]) {
+      const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, {
+        method: "PATCH",
+        headers,
+        json: { banner },
+      })
+
+      expect(res.status).toBe(422)
+    }
+
+    const ownKey = `groups/${SEEDED_GROUP_ID}/banners/${imageId}.jpg`
+    const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, {
+      method: "PATCH",
+      headers,
+      json: { banner: ownKey },
+    })
+
+    expect(res.status).toBe(200)
+
+    const row = await services.db
+      .selectFrom("groups")
+      .select(["banner"])
+      .where("id", "=", SEEDED_GROUP_ID)
+      .executeTakeFirst()
+
+    expect(row?.banner).toBe(ownKey)
+  })
+
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, {
       method: "PATCH",
