@@ -19,7 +19,7 @@ const makeTinyJpeg = async () =>
   })
     .jpeg()
     .toBuffer()
-const seedStagedUpload = async ({ db, s3, s3Bucket }: Services, number: number) => {
+const seedStagedUpload = async ({ db, s3, s3Bucket }: Services, number: number, page?: Buffer) => {
   const chapterId = crypto.randomUUID()
   const uploadId = crypto.randomUUID()
   const taskId = crypto.randomUUID()
@@ -41,7 +41,7 @@ const seedStagedUpload = async ({ db, s3, s3Bucket }: Services, number: number) 
     new PutObjectCommand({
       Bucket: s3Bucket,
       Key: stagingKey,
-      Body: await makeTinyJpeg(),
+      Body: page ?? (await makeTinyJpeg()),
       ContentType: "image/jpeg",
     }),
   )
@@ -400,6 +400,29 @@ describe("processChapterUpload", () => {
       .execute()
 
     await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(Error)
+
+    const task = await db
+      .selectFrom("tasks")
+      .select(["status"])
+      .where("id", "=", taskId)
+      .executeTakeFirstOrThrow()
+
+    expect(task.status).toBe("FAILED")
+  })
+
+  test("refuses a page that decodes to more pixels than the limit", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const side = Math.ceil(Math.sqrt(config.images.maxChapterPageDecodedPixels)) + 1
+    const page = await sharp({
+      create: { width: side, height: side, channels: 3, background: { r: 0, g: 0, b: 0 } },
+    })
+      .png()
+      .toBuffer()
+    const { taskId } = await seedStagedUpload(services, 96_301, page)
+
+    await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(
+      "pixel limit",
+    )
 
     const task = await db
       .selectFrom("tasks")

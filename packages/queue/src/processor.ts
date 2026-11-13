@@ -122,7 +122,9 @@ export const processChapterUpload = async (
         throw new Error(`page ${pageId} is not a valid image`)
       }
 
-      const processed = await sharp(buffer)
+      const processed = await sharp(buffer, {
+        limitInputPixels: config.images.maxChapterPageDecodedPixels,
+      })
         .rotate()
         .jpeg({ quality: config.images.chapterPageQuality, progressive: true })
         .toBuffer()
