@@ -486,7 +486,7 @@ type RefactorMediasDb = {
 type MigrationDb = RefactorTrackersDb & RefactorMediasDb
 
 export async function up(db: Kysely<MigrationDb>): Promise<void> {
-  // refactor-trackers
+  // Trackers and trailer, moved into the links column
   await db.schema
     .alterTable("Media")
     .addColumn("links", "jsonb", (c) => c.notNull().defaultTo(sql`'{}'::jsonb`))
@@ -579,7 +579,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
   await db.schema.dropType("Trackers").execute()
 
-  // add-staff
+  // Staff
   // Creates the staff tables only. Importing authors and artists from MangaDex used to
   // happen here, one API call per media inside the migration transaction: hours of
   // downtime on production, and a MangaDex outage would roll back every migration. It now
@@ -620,7 +620,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .column("staffId")
     .execute()
 
-  // refactor-medias
+  // Synopsis, tags and volumes
   /**
    * Phase 1: Convert synopsis from TEXT to JSONB.
    */

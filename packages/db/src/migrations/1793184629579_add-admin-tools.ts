@@ -6,7 +6,7 @@ const TABLES = ["userHistories", "userLibraryEntries", "chapters", "covers", "me
 const INDEXES = TABLES.map((table) => ({ table, name: `${table}_createdAt_idx` }))
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // add-audit-logs
+  // Audit logs
   await db.schema.createType("AuditOutcome").asEnum(["success", "failure", "denied"]).execute()
 
   await db.schema.createType("AuditActorType").asEnum(["user", "system", "api", "agent"]).execute()
@@ -70,7 +70,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION audit_logs_reject_change()
   `.execute(db)
 
-  // add-created-at-indexes
+  // createdAt indexes
   // Plain index builds, inside the migration transaction: the whole migration stays
   // atomic, and production is down while it runs, so CONCURRENTLY would gain nothing.
   for (const { table, name } of INDEXES) {
@@ -79,12 +79,12 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
-  // add-created-at-indexes
+  // createdAt indexes
   for (const { name } of INDEXES) {
     await db.schema.dropIndex(name).execute()
   }
 
-  // add-audit-logs
+  // Audit logs
   await db.schema.dropTable("auditLogs").execute()
   await sql`DROP FUNCTION audit_logs_reject_change()`.execute(db)
   await db.schema.dropType("AuditSeverity").execute()

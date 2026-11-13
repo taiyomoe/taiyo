@@ -12,7 +12,7 @@ const PERMISSIONS = [
 ]
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // add-group-ownership
+  // Memberships and ownership claims
   await db.schema.createType("GroupMembershipRole").asEnum(["OWNER", "MEMBER"]).execute()
 
   await db.schema
@@ -90,7 +90,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
 
-  // add-group-member-permissions
+  // Member permissions
   await db.schema
     .alterTable("groupMemberships")
     .addColumn("permissions", sql`text[]`, (c) => c.notNull().defaultTo(sql`'{}'::text[]`))
@@ -104,7 +104,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     )
     .execute()
 
-  // add-group-invitations-and-requests
+  // Invitations and creation requests
   await db.schema
     .createType("GroupInvitationStatus")
     .asEnum(["PENDING", "ACCEPTED", "DECLINED", "CANCELLED", "EXPIRED"])
@@ -206,7 +206,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
 
-  // add-group-follows-and-reports
+  // Follows and reports
   await db.schema
     .createTable("groupFollows")
     .addColumn("userId", "uuid", (c) =>

@@ -4,7 +4,7 @@ import { type Kysely, sql } from "kysely"
 // invariants the new model relies on.
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // rename-tables
+  // Table renames
   await sql`
     CREATE OR REPLACE FUNCTION set_updated_at()
     RETURNS TRIGGER AS $$
@@ -315,7 +315,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   // _prisma_migrations
   await db.schema.dropTable("_prisma_migrations").ifExists().execute()
 
-  // add-missing-indexes-and-invariants
+  // Foreign key indexes and the single main cover
   // Indexes on FK columns that every list endpoint filters by. Postgres
   // doesn't auto-create indexes for foreign keys; without these, list-by-
   // media is a sequential scan.

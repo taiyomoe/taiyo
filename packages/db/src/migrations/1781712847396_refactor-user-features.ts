@@ -152,7 +152,7 @@ const replayReads = (reads: Read[]) => {
 type MigrationDb = RefactorUserFeaturesDb & AddReadingRewardsDb
 
 export async function up(db: Kysely<MigrationDb>): Promise<void> {
-  // refactor-user-features
+  // Libraries, reading history and lists
   await db.schema
     .createType("UserLibraryStatus")
     .asEnum(["READING", "REREADING", "PLAN_TO_READ", "COMPLETED", "ON_HOLD", "DROPPED"])
@@ -409,7 +409,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .column("userId")
     .execute()
 
-  // add-reading-rewards
+  // Reading rewards
   await db.schema
     .createTable("readingRewards")
     .addColumn("id", "uuid", (c) => c.primaryKey().defaultTo(sql`gen_random_uuid()`))
@@ -539,7 +539,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .columns(["userId", "mediaId", "number"])
     .execute()
 
-  // add-reader-extras
+  // Page bookmarks and page reports
   await db.schema.alterTable("users").addColumn("readerSettings", "jsonb").execute()
 
   await db.schema
