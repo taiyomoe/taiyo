@@ -7,6 +7,7 @@ import { useDeferredValue } from "react"
 import type { Media } from "@/features/media/api/medias"
 import type { MEDIA_TABS } from "@/features/media/lib/media-page"
 import type { Session } from "@/lib/session"
+import { SoonBadge } from "@/components/feedback/soon-badge"
 import { mediaChapterFacetsQueryOptions } from "@/features/chapters/api/chapters"
 import { CommentSection } from "@/features/comments/components/comment-section"
 import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
@@ -44,6 +45,9 @@ const styles = stylex.create({
   },
   soonTab: {
     display: { default: "none", [breakpoints.sm]: "flex" },
+  },
+  soonBadge: {
+    marginInlineStart: "0.375rem",
   },
   tabCount: {
     borderRadius: radius.full,
@@ -109,14 +113,9 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
           )}
         </TabsTab>
         {DISABLED_TABS.map(({ value, label }) => (
-          <TabsTab
-            key={value}
-            disabled
-            sx={[styles.tab, styles.soonTab]}
-            title={m.media_tab_soon()}
-            value={value}
-          >
+          <TabsTab key={value} disabled sx={[styles.tab, styles.soonTab]} value={value}>
             {label()}
+            <SoonBadge sx={styles.soonBadge} />
           </TabsTab>
         ))}
       </TabsList>

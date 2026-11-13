@@ -28,6 +28,7 @@ import {
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { Link, type LinkProps, useMatchRoute } from "@tanstack/react-router"
+import { SoonBadge } from "@/components/feedback/soon-badge"
 import { useRandomTitle } from "@/features/advanced-search/hooks/use-random-title"
 import { DEFAULT_ADVANCED_SEARCH } from "@/features/advanced-search/lib/advanced-search"
 import { sessionQueryOptions } from "@/lib/session"
@@ -102,13 +103,7 @@ const styles = stylex.create({
     color: "inherit",
   },
   soonBadge: {
-    paddingInline: "0.375rem",
-    backgroundColor: `color-mix(in srgb, ${colors.foreground} 8%, transparent)`,
-    color: colors.mutedForeground,
-    fontSize: "0.625rem",
-    fontWeight: 600,
-    letterSpacing: "0.06em",
-    textTransform: "uppercase",
+    paddingInline: 0,
     transform: "translateY(-50%)",
     right: "0.75rem",
     top: "50%",
@@ -206,7 +201,7 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
                         </SidebarMenuButton>
                         {soon === true ? (
                           <SidebarMenuBadge sx={styles.soonBadge}>
-                            {m.shell_nav_soon()}
+                            <SoonBadge />
                           </SidebarMenuBadge>
                         ) : null}
                       </SidebarMenuItem>
