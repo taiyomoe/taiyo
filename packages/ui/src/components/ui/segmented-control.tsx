@@ -3,8 +3,10 @@ import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import type { Sx } from "../../styles/sx"
-import { breakpoints, colors, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
+
+type CheckedRect = Record<"left" | "top" | "width" | "height", number>
 
 const styles = stylex.create({
   root: {
@@ -14,7 +16,9 @@ const styles = stylex.create({
     backgroundColor: colors.well,
     boxShadow: shadows.sunken,
     display: "flex",
+    position: "relative",
     scrollbarWidth: "none",
+    zIndex: 0,
     maxWidth: "100%",
     overflowX: "auto",
     overscrollBehaviorX: "contain",
@@ -24,6 +28,27 @@ const styles = stylex.create({
     contain: "inline-size",
     width: "100%",
   },
+  indicator: {
+    borderRadius: radius.full,
+    backgroundColor: colors.wellRaised,
+    boxShadow: shadows.raised,
+    pointerEvents: "none",
+    position: "absolute",
+    transitionDuration: {
+      default: motion.springDuration,
+      [consts.reducedMotion]: "0s",
+    },
+    transitionProperty: "width, height, translate",
+    transitionTimingFunction: motion.spring,
+    zIndex: -1,
+    left: 0,
+    top: 0,
+  },
+  indicatorPosition: (rect: CheckedRect) => ({
+    translate: `${rect.left}px ${rect.top}px`,
+    height: rect.height,
+    width: rect.width,
+  }),
   item: {
     borderColor: "transparent",
     borderRadius: radius.full,
@@ -31,14 +56,7 @@ const styles = stylex.create({
     borderWidth: 1,
     paddingInline: "calc(0.75rem - 1px)",
     alignItems: "center",
-    backgroundColor: {
-      "[data-checked]": colors.wellRaised,
-      default: "transparent",
-    },
-    boxShadow: {
-      "[data-checked]": shadows.raised,
-      default: "none",
-    },
+    backgroundColor: "transparent",
     color: {
       "[data-checked]": colors.foreground,
       default: `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
@@ -69,7 +87,7 @@ const styles = stylex.create({
       default: null,
     },
     transitionDuration: motion.enter,
-    transitionProperty: "color, background-color, box-shadow",
+    transitionProperty: "color",
     userSelect: "none",
     whiteSpace: "nowrap",
     height: {
@@ -90,8 +108,55 @@ const styles = stylex.create({
   },
 })
 
+function trackCheckedItem(node: HTMLDivElement, onChange: (rect: CheckedRect | null) => void) {
+  const findChecked = () =>
+    node.querySelector<HTMLElement>('[data-slot="segmented-control-item"][data-checked]')
+  const checked = findChecked()
+
+  if (checked !== null) {
+    const end = checked.offsetLeft + checked.offsetWidth
+
+    if (end > node.scrollLeft + node.clientWidth) {
+      node.scrollLeft = end - node.clientWidth + 4
+    }
+  }
+
+  const measure = () => {
+    const item = findChecked()
+
+    onChange(
+      item === null
+        ? null
+        : {
+            left: item.offsetLeft,
+            top: item.offsetTop,
+            width: item.offsetWidth,
+            height: item.offsetHeight,
+          },
+    )
+  }
+
+  measure()
+
+  const mutations = new MutationObserver(measure)
+  const resizes = new ResizeObserver(measure)
+
+  mutations.observe(node, { attributeFilter: ["data-checked"], subtree: true })
+  resizes.observe(node)
+
+  for (const item of node.children) {
+    resizes.observe(item)
+  }
+
+  return () => {
+    mutations.disconnect()
+    resizes.disconnect()
+  }
+}
+
 export function SegmentedControl({
   className,
+  children,
   fullWidth = false,
   sx,
   ...props
@@ -100,28 +165,30 @@ export function SegmentedControl({
   sx?: Sx
 }): React.ReactElement {
   const styleProps = stylex.props(styles.root, fullWidth && styles.fullWidth, sx)
-  const revealChecked = React.useCallback((node: HTMLDivElement | null) => {
-    const checked = node?.querySelector<HTMLElement>("[data-checked]")
-
-    if (node === null || checked === null || checked === undefined) {
-      return
-    }
-
-    const end = checked.offsetLeft + checked.offsetWidth
-
-    if (end > node.scrollLeft + node.clientWidth) {
-      node.scrollLeft = end - node.clientWidth + 4
-    }
-  }, [])
+  const [checkedRect, setCheckedRect] = React.useState<CheckedRect | null>(null)
+  const track = React.useCallback(
+    (node: HTMLDivElement | null) =>
+      node === null ? undefined : trackCheckedItem(node, setCheckedRect),
+    [],
+  )
 
   return (
     <RadioGroupPrimitive
       className={cn(styleProps.className, className)}
       data-slot="segmented-control"
-      ref={revealChecked}
+      ref={track}
       style={styleProps.style}
       {...props}
-    />
+    >
+      {children}
+      {checkedRect !== null && (
+        <span
+          aria-hidden
+          data-slot="segmented-control-indicator"
+          {...stylex.props(styles.indicator, styles.indicatorPosition(checkedRect))}
+        />
+      )}
+    </RadioGroupPrimitive>
   )
 }
 
