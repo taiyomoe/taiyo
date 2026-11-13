@@ -47,7 +47,7 @@ describe("POST /chapters/:id/pages/upload-session", () => {
   })
 
   test("binds the declared content type into the upload URL", async ({ app, services }) => {
-    const { userId, headers } = await signInAs(services)
+    const { userId, headers } = await signInAs(services, { role: "ADMIN" })
     const chapter = await services.db
       .insertInto("chapters")
       .values({ mediaId: SEEDED_MEDIA_ID, number: 99_002, language: "en", uploaderId: userId })
