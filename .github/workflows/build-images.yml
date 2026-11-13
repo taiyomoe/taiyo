@@ -138,3 +138,52 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: ${{ steps.build-args.outputs.value }}
           cache-from: type=gha,scope=${{ matrix.app }}
+
+  # Points taiyo-deploy at the images just pushed. Argo CD then runs the migrations and
+  # starts the new api and web next to the live ones; traffic only switches once the
+  # Rollouts are promoted.
+  release:
+    name: Release to the cluster
+    needs: build
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/develop' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Holds TAIYO_DEPLOY_KEY (write access to taiyomoe/taiyo-deploy) and only accepts
+    # develop: no pull request can read it.
+    environment: release
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: taiyomoe/taiyo-deploy
+          ssh-key: ${{ secrets.TAIYO_DEPLOY_KEY }}
+
+      - name: Point the release at this commit
+        run: |
+          # Runs of successive pushes can finish out of order: only the head of develop
+          # releases, so an older run never overwrites a newer tag.
+          head=$(git ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" refs/heads/develop | cut -f1)
+          if [ "$head" != "$GITHUB_SHA" ]; then
+            echo "develop moved on to $head: its own run releases it."
+            exit 0
+          fi
+
+          tag="sha-${GITHUB_SHA::7}"
+          sed -i -E "s/(newTag: )sha-[0-9a-f]+/\1${tag}/" apps/taiyo/app/kustomization.yaml
+          if git diff --quiet; then
+            echo "Already on ${tag}."
+            exit 0
+          fi
+
+          git config user.name "taiyo-release"
+          git config user.email "taiyo-release@users.noreply.github.com"
+          git commit -am "chore: release taiyo ${tag}" -m "From ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+          for _ in 1 2 3; do
+            git push origin HEAD:main && exit 0
+            git pull --rebase origin main
+          done
+          exit 1
