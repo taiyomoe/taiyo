@@ -20,6 +20,7 @@ import type { Services } from "./services"
 import packageJson from "../package.json"
 import { corsAllowedOrigins, env } from "./env"
 import { auditAuthRequest } from "./middlewares/audit-auth-middleware"
+import { checkOrigin } from "./middlewares/check-origin-middleware"
 import { auditLogsRouter } from "./routers/audit-logs-router"
 import { bannersRouter } from "./routers/banners-router"
 import { chaptersRouter } from "./routers/chapters-router"
@@ -154,6 +155,7 @@ export const createApp = (services: Services) => {
         await next()
       }),
     )
+    .use(checkOrigin(corsAllowedOrigins))
     .notFound((c) => c.fail("NOT_FOUND"))
     .onError((err, c) => {
       c.get("log").error(err)
