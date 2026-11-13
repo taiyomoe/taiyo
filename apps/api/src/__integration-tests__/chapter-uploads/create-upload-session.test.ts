@@ -46,6 +46,35 @@ describe("POST /chapters/:id/pages/upload-session", () => {
     expect(task?.status).toBe("PENDING")
   })
 
+  test("binds the declared content type into the upload URL", async ({ app, services }) => {
+    const { userId, headers } = await signInAs(services)
+    const chapter = await services.db
+      .insertInto("chapters")
+      .values({ mediaId: SEEDED_MEDIA_ID, number: 99_002, language: "en", uploaderId: userId })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+    const res = await api<{ pages: Array<{ uploadUrl: string }> }>(
+      app,
+      `/chapters/${chapter.id}/pages/upload-session`,
+      { method: "POST", headers, json: { pages: [{ contentType: "image/png", size: 8 }] } },
+    )
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const uploadUrl = res.body.data.pages[0]?.uploadUrl ?? ""
+    const put = (contentType: string) =>
+      fetch(uploadUrl, {
+        method: "PUT",
+        body: "<b>hi</b>",
+        headers: { "content-type": contentType },
+      })
+
+    expect((await put("text/html")).status).toBe(403)
+    expect((await put("image/png")).status).toBe(200)
+  })
+
   test("returns CHAPTER_PAGES_ALREADY_UPLOADED when chapter already has pages", async ({
     app,
     services,
