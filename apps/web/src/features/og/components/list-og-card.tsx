@@ -4,7 +4,6 @@ import {
   OgCanvas,
   OgEyebrow,
   OgPicture,
-  OgSun,
   OgText,
   OgTitle,
 } from "@/features/og/components/og-parts"
@@ -14,13 +13,17 @@ export const LIST_TEXT_WIDTH = 500
 
 const FAN_CENTER = { x: 910, y: 330 }
 const FAN_COVER = { width: 200, height: 300 }
-// From the outside in, so the middle cover lies on top.
+// The list's first title in the middle and on top, the next two beside it,
+// the last two on the outside:
+//       1
+//     2   3
+//   4       5
 const FAN = [
-  { slot: 0, x: -190, y: 46, angle: -15 },
-  { slot: 4, x: 190, y: 46, angle: 15 },
-  { slot: 1, x: -98, y: 14, angle: -7.5 },
-  { slot: 3, x: 98, y: 14, angle: 7.5 },
-  { slot: 2, x: 0, y: 0, angle: 0 },
+  { x: 0, y: 0, angle: 0 },
+  { x: -98, y: 14, angle: -7.5 },
+  { x: 98, y: 14, angle: 7.5 },
+  { x: -190, y: 46, angle: -15 },
+  { x: 190, y: 46, angle: 15 },
 ]
 
 export type ListOgCardProps = {
@@ -39,33 +42,35 @@ export type ListOgCardProps = {
  */
 export const ListOgCard = (props: ListOgCardProps) => {
   const covers = props.covers.slice(0, FAN.length)
-  // A short list still sits centred: two covers take the two middle slots.
-  const offset = Math.floor((FAN.length - covers.length) / 2)
 
   return (
-    <OgCanvas>
-      <OgSun
-        x={FAN_CENTER.x}
-        y={covers.length === 0 ? OG_HEIGHT / 2 : 150}
-        radius={covers.length === 0 ? 150 : 128}
-      />
-      {FAN.filter(({ slot }) => slot >= offset && slot < offset + covers.length).map(
-        ({ slot, x, y, angle }) => (
+    <OgCanvas
+      sun={
+        covers.length === 0
+          ? { x: FAN_CENTER.x, y: OG_HEIGHT / 2, radius: 150 }
+          : { x: FAN_CENTER.x, y: 150, radius: 128 }
+      }
+    >
+      {/* Drawn from the last to the first, so the first lies on top. */}
+      {[...covers.entries()].reverse().map(([index, cover]) => {
+        const place = FAN[index] ?? { x: 0, y: 0, angle: 0 }
+
+        return (
           <OgPicture
-            key={slot}
-            src={covers[slot - offset] ?? null}
+            key={index}
+            src={cover}
             width={FAN_COVER.width}
             height={FAN_COVER.height}
             radius={16}
             style={{
               position: "absolute",
-              left: FAN_CENTER.x + x - FAN_COVER.width / 2,
-              top: FAN_CENTER.y + y - FAN_COVER.height / 2 + 30,
-              transform: `rotate(${angle}deg)`,
+              left: FAN_CENTER.x + place.x - FAN_COVER.width / 2,
+              top: FAN_CENTER.y + place.y - FAN_COVER.height / 2 + 30,
+              transform: `rotate(${place.angle}deg)`,
             }}
           />
-        ),
-      )}
+        )
+      })}
       <div
         style={{
           display: "flex",

@@ -39,8 +39,8 @@
         font-family: "Inter", sans-serif;
       }
       #stage[data-mode="sun"] {
-        width: 1200px;
-        height: 1200px;
+        width: 1600px;
+        height: 1600px;
         background: transparent;
       }
       #stage[data-mode="sun"] > :not(#sun) {
@@ -152,7 +152,6 @@
       const FOV = 30
       const CAMERA_Z = 12
       const VISIBLE_HEIGHT = 2 * CAMERA_Z * Math.tan(MathUtils.degToRad(FOV / 2))
-      const BEAM_EXTENT = 3
 
       const config = await (await fetch("/config.json")).json()
       const stage = document.querySelector("#stage")
@@ -189,8 +188,8 @@
         new ShaderMaterial({
           uniforms: {
             ...uniforms,
-            uExtent: { value: BEAM_EXTENT },
-            uSize: { value: config.sun.radius / 235 },
+            uExtent: { value: config.sun.extent },
+            uSize: { value: config.sun.size },
           },
           vertexShader: config.shaders.PLANE_VERTEX,
           fragmentShader: config.shaders.BEAMS_FRAGMENT,
@@ -205,7 +204,7 @@
 
       camera.position.z = CAMERA_Z
       spin.add(new Mesh(new SphereGeometry(1, 128, 96), plasma))
-      beams.scale.setScalar(BEAM_EXTENT * 2)
+      beams.scale.setScalar(config.sun.extent * 2)
       beams.renderOrder = -1
       group.add(spin, beams)
       group.position.set((config.sun.x - width / 2) * unit, (height / 2 - config.sun.y) * unit, 0)

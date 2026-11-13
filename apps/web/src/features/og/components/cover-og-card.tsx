@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { OgBrand, OgCanvas, OgPicture, OgSun } from "@/features/og/components/og-parts"
+import { OgBrand, OgCanvas, OgPicture } from "@/features/og/components/og-parts"
 import { OG_HEIGHT, OG_PADDING, OG_WIDTH } from "@/features/og/lib/og-theme"
 
 const COVER_WIDTH = 330
@@ -28,8 +28,10 @@ export const CoverOgCard = ({
   top: ReactNode
   bottom?: ReactNode
 }) => (
-  <OgCanvas backdrop={sensitive === null ? cover : null}>
-    <OgSun x={coverLeft + COVER_WIDTH - 34} y={coverTop + 40} radius={118} />
+  <OgCanvas
+    backdrop={sensitive === null ? cover : null}
+    sun={{ x: coverLeft + COVER_WIDTH - 34, y: coverTop + 40, radius: 118 }}
+  >
     <OgPicture
       src={cover}
       width={COVER_WIDTH}

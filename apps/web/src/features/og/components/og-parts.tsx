@@ -3,17 +3,19 @@ import { TaiyoLogo } from "@taiyomoe/ui/components/logos/taiyo-logo"
 import sun from "@/features/og/assets/sun.webp?inline"
 import { OG_HEIGHT, OG_WIDTH, ogColors, ogFonts } from "@/features/og/lib/og-theme"
 
-// sun.webp is 1200px wide around a disc of radius 200px: the beams reach three
-// radii out, so the picture is six radii across.
-const SUN_SPAN = 6
+// sun.webp is 1600px wide around a disc of radius 160px: the beams reach five
+// radii out, so the picture is ten radii across.
+const SUN_SPAN = 10
 const graphemes = new Intl.Segmenter(undefined, { granularity: "grapheme" })
 
 /** The first letter of a name, to stand in for a missing picture. */
 export const getInitial = (name: string) =>
   [...graphemes.segment(name.trim())].at(0)?.segment.toUpperCase() ?? "?"
 
+export type OgSunPlace = { x: number; y: number; radius: number }
+
 /** The landing page's plasma sun, its disc centred on `x`, `y`. */
-export const OgSun = ({ x, y, radius }: { x: number; y: number; radius: number }) => (
+const OgSun = ({ x, y, radius }: OgSunPlace) => (
   <img
     src={sun}
     alt=""
@@ -28,13 +30,16 @@ export const OgSun = ({ x, y, radius }: { x: number; y: number; radius: number }
 )
 
 /**
- * The card itself: the landing page's night sky, and behind it, when the page
- * has one, its own picture, blurred to a glow that tints the night.
+ * The card itself: the landing page's night sky, tinted by the page's own
+ * picture when it has one, and lit by the sun at `sun`. Its light spreads
+ * across the whole card, and warms the left edge the text starts from.
  */
 export const OgCanvas = ({
+  sun: place,
   backdrop,
   children,
 }: {
+  sun: OgSunPlace
   backdrop?: string | null
   children: ReactNode
 }) => (
@@ -76,6 +81,17 @@ export const OgCanvas = ({
         />
       </>
     )}
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        backgroundImage: [
+          `radial-gradient(circle 1100px at ${place.x}px ${place.y}px, rgba(255, 184, 32, 0.3) 0%, rgba(251, 110, 84, 0.13) 38%, transparent 72%)`,
+          "radial-gradient(60% 95% at 0% 50%, rgba(255, 184, 32, 0.2) 0%, rgba(242, 69, 45, 0.08) 45%, transparent 80%)",
+        ].join(", "),
+      }}
+    />
+    <OgSun {...place} />
     {children}
   </div>
 )

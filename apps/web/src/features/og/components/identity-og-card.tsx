@@ -5,7 +5,6 @@ import {
   OgEyebrow,
   OgPicture,
   OgStat,
-  OgSun,
   OgText,
   OgTitle,
 } from "@/features/og/components/og-parts"
@@ -30,12 +29,11 @@ export type IdentityOgCardProps = {
 }
 
 /**
- * A user's card, and a group's: their picture eclipses the sun, so its corona
- * frames the avatar or the logo, and the name and numbers sit beside it.
+ * A user's card, and a group's: their picture in a ring of light, the name and
+ * numbers beside it, and the sun rising from the bottom right corner.
  */
 export const IdentityOgCard = (props: IdentityOgCardProps) => (
-  <OgCanvas backdrop={props.backdrop}>
-    <OgSun x={PICTURE_CENTER.x} y={PICTURE_CENTER.y} radius={PICTURE_SIZE / 2 + 14} />
+  <OgCanvas backdrop={props.backdrop} sun={{ x: OG_WIDTH - 110, y: OG_HEIGHT + 20, radius: 150 }}>
     <OgPicture
       src={props.picture}
       width={PICTURE_SIZE}
@@ -45,7 +43,8 @@ export const IdentityOgCard = (props: IdentityOgCardProps) => (
         position: "absolute",
         left: PICTURE_CENTER.x - PICTURE_SIZE / 2,
         top: PICTURE_CENTER.y - PICTURE_SIZE / 2,
-        border: `6px solid ${ogColors.night}`,
+        border: `5px solid ${ogColors.goldLight}`,
+        boxShadow: "0 0 70px rgba(255, 184, 32, 0.4), 0 30px 70px rgba(5, 2, 1, 0.6)",
       }}
       fallback={
         <span
@@ -70,7 +69,8 @@ export const IdentityOgCard = (props: IdentityOgCardProps) => (
         left: OG_WIDTH - OG_PADDING - IDENTITY_TEXT_WIDTH,
         top: OG_PADDING,
         width: IDENTITY_TEXT_WIDTH,
-        height: OG_HEIGHT - OG_PADDING * 2 - 54,
+        // Stops above the sun rising in the bottom right corner.
+        height: OG_HEIGHT - OG_PADDING * 2 - 110,
       }}
     >
       {props.eyebrow === null ? null : <OgEyebrow>{props.eyebrow}</OgEyebrow>}
