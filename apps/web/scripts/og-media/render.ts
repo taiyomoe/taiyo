@@ -20,7 +20,8 @@ import path from "node:path"
 import * as shaders from "../../src/components/scene/sun/shaders.ts"
 
 const FPS = 30
-const LOOP_SECONDS = 16
+// The sun turns once per loop, so the loop also sets how fast it spins.
+const LOOP_SECONDS = 24
 const FADE_FRAMES = 45
 const LOOP_FRAMES = FPS * LOOP_SECONDS
 const ORIGIN = "http://og-stage.local"
@@ -101,7 +102,7 @@ const sceneConfig = {
   title: "Read in the light.",
   loopSeconds: LOOP_SECONDS,
   timeScale: 1.6,
-  breaths: 2,
+  breaths: 3,
   turns: 1,
   spin: 0,
   embers: 34,
@@ -174,7 +175,7 @@ const renderVideo = async () => {
 
   log("Encoding the video…")
   // H.264 in yuv420p with the index up front plays in every client that plays
-  // video at all, and 16 s of it stays far below iMessage's 10 MB budget.
+  // video at all, and 24 s of it stays far below iMessage's 10 MB budget.
   run("ffmpeg", [
     "-v",
     "error",

@@ -240,8 +240,7 @@ describe("og cards", () => {
       ["/logo.jpg", await picture(400, 400, HUES[3] ?? "", "LOGO")],
       ...(await Promise.all(
         HUES.map(
-          async (hue, index) =>
-            [`/cover-${index}.jpg`, await picture(400, 600, hue, `#${index + 1}`)] as const,
+          async (hue, index) => [`/cover-${index}.jpg`, await picture(400, 600, hue, "")] as const,
         ),
       )),
       ["/not-an-image.jpg", new TextEncoder().encode("<html>nope</html>")],
