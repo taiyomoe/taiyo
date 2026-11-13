@@ -4,6 +4,8 @@ import { m } from "../../paraglide/messages"
 import { type AuthClient, type AuthError, createAuthActions, getAuthErrorMessage } from "../auth"
 import { sessionQueryOptions } from "../session"
 
+const origin = "http://localhost"
+const absolute = (path: string) => new URL(path, origin).href
 const setup = (error: AuthError | null = null, callbackURL?: string, signInData?: unknown) => {
   const calls: Array<{ method: string; args: unknown[] }> = []
   const navigation: string[] = []
@@ -45,7 +47,7 @@ const setup = (error: AuthError | null = null, callbackURL?: string, signInData?
       },
     },
     callbackURL,
-    getOrigin: () => "https://taiyo.moe",
+    getOrigin: () => origin,
   })
   const hasCachedSession = () =>
     queryClient.getQueryState(sessionQueryOptions.queryKey) !== undefined
@@ -60,7 +62,7 @@ describe("createAuthActions", () => {
 
     expect(await actions.signIn(credentials)).toEqual({ ok: true })
     expect(calls).toEqual([
-      { method: "signIn.email", args: [{ ...credentials, callbackURL: "https://taiyo.moe/" }] },
+      { method: "signIn.email", args: [{ ...credentials, callbackURL: absolute("/") }] },
     ])
     expect(hasCachedSession()).toBe(false)
     expect(navigation).toEqual(["invalidate", "navigate /"])
@@ -72,8 +74,8 @@ describe("createAuthActions", () => {
     expect(await actions.signIn(credentials)).toEqual({ ok: true })
     expect(await actions.signInSocial("google")).toEqual({ ok: true })
     expect(calls.map((call) => call.args[0])).toEqual([
-      { ...credentials, callbackURL: "https://taiyo.moe/media/1?tab=chapters" },
-      { provider: "google", callbackURL: "https://taiyo.moe/media/1?tab=chapters" },
+      { ...credentials, callbackURL: absolute("/media/1?tab=chapters") },
+      { provider: "google", callbackURL: absolute("/media/1?tab=chapters") },
     ])
     expect(navigation).toEqual(["invalidate", "navigate /media/1?tab=chapters"])
   })
@@ -160,11 +162,8 @@ describe("createAuthActions", () => {
     expect(await actions.signUp(values, { captchaToken: "token" })).toEqual({ ok: true })
     expect(await actions.signUp(values, { captchaToken: null })).toEqual({ ok: true })
     expect(calls.map((call) => call.args)).toEqual([
-      [
-        { ...values, callbackURL: "https://taiyo.moe/" },
-        { headers: { "x-captcha-response": "token" } },
-      ],
-      [{ ...values, callbackURL: "https://taiyo.moe/" }, { headers: {} }],
+      [{ ...values, callbackURL: absolute("/") }, { headers: { "x-captcha-response": "token" } }],
+      [{ ...values, callbackURL: absolute("/") }, { headers: {} }],
     ])
     expect(hasCachedSession()).toBe(true)
     expect(navigation).toEqual([])
@@ -172,7 +171,7 @@ describe("createAuthActions", () => {
 
   it("sends the captcha token and the reset page with a password reset request", async () => {
     const { actions, calls, navigation, hasCachedSession } = setup()
-    const redirectTo = "https://taiyo.moe/auth/reset-password"
+    const redirectTo = absolute("/auth/reset-password")
 
     expect(
       await actions.requestPasswordReset("reader@taiyo.moe", { captchaToken: "token", redirectTo }),
@@ -216,7 +215,7 @@ describe("createAuthActions", () => {
     expect(calls).toEqual([
       {
         method: "signIn.social",
-        args: [{ provider: "discord", callbackURL: "https://taiyo.moe/" }],
+        args: [{ provider: "discord", callbackURL: absolute("/") }],
       },
     ])
   })
