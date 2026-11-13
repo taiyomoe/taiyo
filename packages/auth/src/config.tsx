@@ -51,8 +51,10 @@ const signInBodySchema = z.object({
   username: z.string().optional(),
   password: z.string(),
 })
+// The same status and body Better Auth returns for an unknown account, so a failed sign-in does
+// not tell whether the email or username is registered.
 const createInvalidCredsError = (isEmail: boolean) =>
-  new APIError("FORBIDDEN", {
+  APIError.from("UNAUTHORIZED", {
     code: isEmail ? "INVALID_EMAIL_OR_PASSWORD" : "INVALID_USERNAME_OR_PASSWORD",
     message: isEmail ? "Invalid email or password" : "Invalid username or password",
   })
@@ -311,8 +313,9 @@ export const createAuth = ({
             .where("email", "=", data.email)
             .executeTakeFirst()
 
+          // Answer as if the link was sent, so the request does not reveal unknown emails.
           if (user === undefined || user.email === null || user.email === "") {
-            throw new APIError("BAD_REQUEST", { message: "Failed to send magic link" })
+            return
           }
 
           await resend.emails.send({
