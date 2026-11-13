@@ -6,6 +6,7 @@ import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
 import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
+import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -54,6 +55,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
   }),
   audited(chapterUploadAudit.FINALIZE),
   withAuth(),
+  rateLimit({ prefix: "chapter-upload-finalize", windowMs: 60_000, limit: 60 }),
   validateJson(finalizeChapterUploadSchema),
   checkChapter({ unpublished: true }),
   authorizeChapter("update"),
@@ -81,9 +83,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
       return c.fail("CHAPTER_UPLOAD_SESSION_NOT_FOUND")
     }
 
-    c.var.afterCommit(async () => {
-      await chapterUploadQueue.enqueue({ taskId })
-    })
+    await chapterUploadQueue.enqueue({ taskId })
 
     return c.ok({ taskId })
   },

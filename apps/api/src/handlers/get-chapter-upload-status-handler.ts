@@ -5,6 +5,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
+import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -53,6 +54,7 @@ export const getChapterUploadStatusHandler = new Hono().get(
     },
   }),
   withAuth(),
+  rateLimit({ prefix: "chapter-upload-status", windowMs: 60_000, limit: 120 }),
   validateQuery(getChapterUploadStatusQuerySchema),
   checkChapter({ unpublished: true }),
   authorizeChapter("update"),
