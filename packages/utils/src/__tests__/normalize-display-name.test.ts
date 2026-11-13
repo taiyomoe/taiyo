@@ -57,13 +57,14 @@ describe("normalizeDisplayName", () => {
     expect(normalizeDisplayName("Test-User@123")).toBe("TestUser123")
   })
 
-  it("should preserve multiple spaces", () => {
-    expect(normalizeDisplayName("john  doe")).toBe("john  doe")
-    expect(normalizeDisplayName("test   user")).toBe("test   user")
+  it("should collapse runs of whitespace into one space", () => {
+    expect(normalizeDisplayName("john  doe")).toBe("john doe")
+    expect(normalizeDisplayName("test\u00a0user")).toBe("test user")
+    expect(normalizeDisplayName(" test\u3000\u3000user ")).toBe("test user")
   })
 
   it("should handle edge cases", () => {
-    expect(normalizeDisplayName("   ")).toBe("   ")
+    expect(normalizeDisplayName("   ")).toBe("generated_username")
     expect(normalizeDisplayName("!!!")).toBe("generated_username")
     expect(normalizeDisplayName("a b")).toBe("a b")
   })

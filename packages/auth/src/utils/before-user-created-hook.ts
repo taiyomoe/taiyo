@@ -1,6 +1,6 @@
-import type { DB, Kysely } from "@taiyomoe/db"
 import type { User } from "better-auth"
 import { config } from "@taiyomoe/config"
+import { type DB, type Kysely, sql } from "@taiyomoe/db"
 import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 import { APIError } from "better-auth/api"
 import { randomInt } from "node:crypto"
@@ -34,7 +34,11 @@ export const createBeforeUserCreatedHook =
         .where((eb) =>
           eb.or([
             eb("username", "=", candidate.username),
-            eb("displayUsername", "=", candidate.displayUsername),
+            eb(
+              sql`lower(${sql.ref("displayUsername")})`,
+              "=",
+              candidate.displayUsername.toLowerCase(),
+            ),
           ]),
         )
         .executeTakeFirst()
