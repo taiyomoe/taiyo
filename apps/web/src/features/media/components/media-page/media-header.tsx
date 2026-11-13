@@ -36,7 +36,10 @@ const styles = stylex.create({
     color: colors.foreground,
     display: "-webkit-box",
     fontFamily: sceneFont.display,
-    fontSize: { default: "1.625rem", [breakpoints.sm]: "2.25rem", [breakpoints.lg]: "3.25rem" },
+    fontSize: {
+      default: "1.625rem",
+      [breakpoints.sm]: { default: "2.25rem", [breakpoints.lg]: "3.25rem" },
+    },
     fontWeight: font.weightBold,
     letterSpacing: "-0.02em",
     lineHeight: 1.1,

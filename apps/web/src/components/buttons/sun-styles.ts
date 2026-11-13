@@ -27,7 +27,7 @@ export const sunStyles = stylex.create({
   md: {
     paddingInline: "1.5rem",
     fontSize: text.base,
-    height: "3.375rem",
+    height: "3rem",
   },
   lg: {
     paddingInline: "2.125rem",

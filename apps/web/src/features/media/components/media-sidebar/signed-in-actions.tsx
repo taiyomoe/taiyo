@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Edit } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useDeferredValue } from "react"
@@ -20,7 +20,7 @@ import { m } from "@/paraglide/messages"
 const styles = stylex.create({
   skeletonButton: {
     borderRadius: radius.full,
-    height: "2.75rem",
+    height: { default: "2.5rem", [breakpoints.sm]: "2.25rem" },
   },
 })
 
@@ -55,6 +55,7 @@ export function SignedInActions({ mediaId, canEdit }: { mediaId: string; canEdit
       />
       <Button
         render={<Link params={{ mediaId }} to="/media/$mediaId/edit" />}
+        size="lg"
         sx={mediaSidebarStyles.library}
         variant="ghost"
       >

@@ -10,8 +10,8 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
-import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link, useRouteContext } from "@tanstack/react-router"
+import { layout } from "@/components/layout/layout.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 import { getApiErrorCode } from "@/lib/envelope"
 import { m } from "@/paraglide/messages"
@@ -19,7 +19,7 @@ import { m } from "@/paraglide/messages"
 const styles = stylex.create({
   page: {
     paddingBlock: "2rem",
-    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
   },
 })
 
@@ -29,35 +29,41 @@ export const isNotFoundError = (error: unknown, code: string) => {
   return errorCode === code || errorCode === "VALIDATION_ERROR"
 }
 
-export function NotFoundPage({
-  icon,
-  title,
-  description,
-  back,
-}: {
+type NotFoundProps = {
   icon: ReactNode
   title: string
   description: string
-  back: { label: string; to: "/" | "/groups" | "/lists" }
-}) {
+  back: {
+    label: string
+    to: "/" | "/groups" | "/lists" | "/titles" | "/dashboard/groups" | "/dashboard/suggestions"
+  }
+}
+
+export function NotFoundContent({ icon, title, description, back }: NotFoundProps) {
+  return (
+    <div sx={styles.page}>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">{icon}</EmptyMedia>
+          <EmptyTitle>{title}</EmptyTitle>
+          <EmptyDescription>{description}</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button render={<Link to={back.to} />} variant="outline">
+            {back.label}
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </div>
+  )
+}
+
+export function NotFoundPage(props: NotFoundProps) {
   const { session } = useRouteContext({ from: "__root__" })
 
   return (
     <AppShell user={session?.user ?? null}>
-      <div sx={styles.page}>
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">{icon}</EmptyMedia>
-            <EmptyTitle>{title}</EmptyTitle>
-            <EmptyDescription>{description}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button render={<Link to={back.to} />} size="sm" variant="outline">
-              {back.label}
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </div>
+      <NotFoundContent {...props} />
     </AppShell>
   )
 }

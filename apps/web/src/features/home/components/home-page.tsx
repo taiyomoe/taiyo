@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
-import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { CatchBoundary } from "@tanstack/react-router"
 import { Suspense } from "react"
 import type { Session } from "@/lib/session"
+import { layout } from "@/components/layout/layout.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 import {
   FeaturedCarousel,
@@ -14,10 +14,7 @@ const styles = stylex.create({
   page: {
     gap: "3rem",
     paddingBlock: "2rem",
-    paddingInline: {
-      default: "1.25rem",
-      [breakpoints.md]: "2rem",
-    },
+    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
   },

@@ -22,8 +22,10 @@ export const statsStyles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "minmax(0, 1fr)",
-      [breakpoints.md]: "repeat(2, minmax(0, 1fr))",
-      [breakpoints.xl]: "repeat(3, minmax(0, 1fr))",
+      [breakpoints.md]: {
+        default: "repeat(2, minmax(0, 1fr))",
+        [breakpoints.xl]: "repeat(3, minmax(0, 1fr))",
+      },
     },
   },
   cardBody: {

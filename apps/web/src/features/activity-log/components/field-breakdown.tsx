@@ -4,6 +4,7 @@ import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { AuditLogFacets } from "@/features/activity-log/api/audit-logs"
 import type { FacetKey } from "@/features/activity-log/components/breakdown/types"
+import { sceneFont } from "@/components/scene/scene.stylex"
 import { FacetList } from "@/features/activity-log/components/breakdown/facet-list"
 import { formatCount } from "@/features/activity-log/lib/format"
 import { m } from "@/paraglide/messages"
@@ -19,19 +20,23 @@ const SECTIONS: ReadonlyArray<{ key: FacetKey; field: string; label: () => strin
 ]
 const styles = stylex.create({
   card: {
-    padding: "1.25rem",
+    padding: "1.5rem",
     gap: "1.5rem",
     minWidth: 0,
   },
   title: {
     margin: 0,
-    fontSize: "1.0625rem",
+    fontFamily: sceneFont.display,
+    fontSize: "1.375rem",
     fontWeight: 700,
+    letterSpacing: "-0.01em",
+    lineHeight: 1.2,
   },
   subtitle: {
     margin: 0,
     color: colors.mutedForeground,
-    fontSize: "0.8125rem",
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
     marginTop: "0.25rem",
   },
   section: {

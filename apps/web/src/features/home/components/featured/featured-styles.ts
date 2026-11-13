@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { layout } from "@/components/layout/layout.stylex"
 
 export const featuredStyles = stylex.create({
   root: {
@@ -28,7 +29,7 @@ export const featuredStyles = stylex.create({
   },
   content: {
     gap: { default: "1.25rem", [breakpoints.md]: "2.5rem" },
-    paddingInline: { default: "1.25rem", [breakpoints.md]: "2.5rem" },
+    paddingInline: layout.gutter,
     display: "flex",
     position: "relative",
     paddingBottom: { default: "2.25rem", [breakpoints.md]: "2.5rem" },

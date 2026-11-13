@@ -1,6 +1,8 @@
 import { noop } from "@tanstack/react-query"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, notFound } from "@tanstack/react-router"
 import { z } from "zod"
+import { isNotFoundError } from "@/components/boundaries/not-found-page"
+import { ChapterNotFoundPage } from "@/features/chapters/components/chapter-not-found-page"
 import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { getMainTitle } from "@/features/media/lib/media-labels"
@@ -31,7 +33,13 @@ export const Route = createFileRoute("/chapters/$chapterId/")({
       await prefetch
     }
 
-    const chapterData = await chapter.catch(() => null)
+    const chapterData = await chapter.catch((error: unknown) => {
+      if (isNotFoundError(error, "CHAPTER_NOT_FOUND")) {
+        throw notFound()
+      }
+
+      return null
+    })
     const mediaData = await media.catch(() => null)
     const history = import.meta.env.SSR ? await reader.then((data) => data.history, noop) : null
     const pages = chapterData?.pages ?? []
@@ -70,4 +78,5 @@ export const Route = createFileRoute("/chapters/$chapterId/")({
         : [{ rel: "preload", as: "image", href: loaderData.firstPageUrl, fetchPriority: "high" }],
   }),
   component: ReaderPage,
+  notFoundComponent: ChapterNotFoundPage,
 })

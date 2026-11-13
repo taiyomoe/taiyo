@@ -44,6 +44,7 @@ export function LibraryButton({
       <MenuTrigger
         render={
           <Button
+            size="lg"
             sx={[mediaSidebarStyles.library, status !== null && styles.libraryActive]}
             variant={status === null ? "outline" : "secondary"}
           />

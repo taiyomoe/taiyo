@@ -17,6 +17,7 @@ import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/t
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { lazy, Suspense } from "react"
+import { layout } from "@/components/layout/layout.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 import { AccountSettings } from "@/features/settings/components/account/account-settings"
@@ -48,7 +49,7 @@ const styles = stylex.create({
   page: {
     gap: "1.75rem",
     marginInline: "auto",
-    paddingInline: { default: "1rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
     maxWidth: "60rem",
@@ -122,7 +123,6 @@ export function SettingsPage() {
             render={
               <Link params={{ username: session.user.username ?? "" }} to="/users/$username" />
             }
-            size="sm"
             variant="outline"
           >
             {m.user_settings_view_profile()}

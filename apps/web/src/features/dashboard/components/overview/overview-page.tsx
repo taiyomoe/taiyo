@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
-import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import type { dashboardOverviewQueryOptions } from "@/features/dashboard/api/overview"
 import type { DashboardRange } from "@/features/dashboard/lib/dashboard"
 import type { Session } from "@/lib/session"
+import { layout } from "@/components/layout/layout.stylex"
 import { DashboardIntro } from "@/features/dashboard/components/dashboard-intro"
 import { OverviewControls } from "@/features/dashboard/components/overview/overview-controls"
 import { OverviewError } from "@/features/dashboard/components/overview/overview-error"
@@ -13,10 +13,7 @@ import { m } from "@/paraglide/messages"
 const styles = stylex.create({
   page: {
     gap: "1.5rem",
-    paddingInline: {
-      default: "1.25rem",
-      [breakpoints.md]: "2rem",
-    },
+    paddingInline: layout.gutter,
     containerType: "inline-size",
     display: "flex",
     flexDirection: "column",

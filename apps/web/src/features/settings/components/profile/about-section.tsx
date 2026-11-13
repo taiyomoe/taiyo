@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@taiyomoe/ui/components/ui/select"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
-import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { LanguagePicker } from "@/components/fields/language-picker"
@@ -52,12 +52,21 @@ const styles = stylex.create({
     gap: "0.5rem",
     alignItems: "center",
     display: "flex",
-  },
-  modeItem: {
-    height: "2rem",
+    flexGrow: { default: 1, [breakpoints.sm]: 0 },
+    justifyContent: "flex-end",
+    minWidth: 0,
   },
   language: {
-    width: "11rem",
+    flexBasis: "11rem",
+    flexGrow: { default: 1, [breakpoints.sm]: 0 },
+    flexShrink: 1,
+    minWidth: 0,
+  },
+  aboutFoot: {
+    gap: "1rem",
+    alignItems: "baseline",
+    display: "flex",
+    justifyContent: "space-between",
   },
   preview: {
     padding: "1rem",
@@ -69,8 +78,8 @@ const styles = stylex.create({
     width: "100%",
   },
   counter: {
-    alignSelf: "flex-end",
     color: colors.mutedForeground,
+    flexShrink: 0,
     fontFamily: font.mono,
     fontSize: "0.75rem",
     fontVariantNumeric: "tabular-nums",
@@ -160,10 +169,10 @@ export function AboutSection({ profile }: { profile: UserProfile }) {
                   }}
                   value={mode}
                 >
-                  <SegmentedControlItem size="sm" sx={styles.modeItem} value="write">
+                  <SegmentedControlItem value="write">
                     {m.user_settings_about_write()}
                   </SegmentedControlItem>
-                  <SegmentedControlItem size="sm" sx={styles.modeItem} value="preview">
+                  <SegmentedControlItem value="preview">
                     {m.user_settings_about_preview()}
                   </SegmentedControlItem>
                 </SegmentedControl>
@@ -195,10 +204,12 @@ export function AboutSection({ profile }: { profile: UserProfile }) {
                 )}
               </div>
             )}
-            <FieldDescription>{m.user_settings_about_markdown()}</FieldDescription>
-            <span sx={styles.counter}>
-              {m.comments_counter({ count: text.length, max: ABOUT_MAX })}
-            </span>
+            <div sx={styles.aboutFoot}>
+              <FieldDescription>{m.user_settings_about_markdown()}</FieldDescription>
+              <span sx={styles.counter}>
+                {m.comments_counter({ count: text.length, max: ABOUT_MAX })}
+              </span>
+            </div>
           </Field>
           <div sx={settingsStyles.row}>
             <Field>

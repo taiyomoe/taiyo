@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { layout } from "@/components/layout/layout.stylex"
 
 export const mediaPageStyles = stylex.create({
   layout: {
@@ -8,7 +9,7 @@ export const mediaPageStyles = stylex.create({
       default: '"cover header" "actions actions" "tabs tabs"',
     },
     marginInline: "auto",
-    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
     columnGap: { [breakpoints.lg]: "2.5rem", default: "1rem" },
     display: "grid",
     gridTemplateColumns: {

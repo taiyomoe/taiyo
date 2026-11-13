@@ -194,9 +194,11 @@ same as looking the same:
   `height: { default: "2.25rem", [breakpoints.sm]: "2rem" }`. A query only one
   component needs goes in a `defineConsts` in a `*.stylex.ts` file beside it;
   `taiyo/no-inline-queries` rejects query strings anywhere else.
-  Overlapping `breakpoints` keys resolve by width whatever their order, but
-  overlapping `containers` keys resolve by declaration text, so write a
-  container range by nesting:
+  Two overlapping `breakpoints` or `containers` keys on one property do NOT
+  resolve by width: the emitted rules share a priority and are sorted by value,
+  so `{ [breakpoints.md]: "2rem", [breakpoints.lg]: "0.5rem" }` gives 2rem on
+  desktop. Nest the wider query inside the narrower one, which compiles to a
+  more specific rule:
   `{ default: "span 12", [containers["2xl"]]: { default: "span 6", [containers["5xl"]]: "span 4" } }`.
 - **`stylex.when.*` keys are only legal at the FIRST level of a condition
   object.** `color: { default: x, [stylex.when.ancestor(":active", m)]: y }` is

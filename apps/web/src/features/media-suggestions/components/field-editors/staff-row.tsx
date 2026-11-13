@@ -41,7 +41,7 @@ export function StaffRow({
         options={STAFF_ROLES}
         value={staff.role}
       />
-      <Button aria-label={m.media_edit_remove()} onClick={onRemove} size="icon-sm" variant="ghost">
+      <Button aria-label={m.media_edit_remove()} onClick={onRemove} size="icon-xl" variant="ghost">
         <Close />
       </Button>
     </div>

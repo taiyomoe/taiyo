@@ -49,7 +49,9 @@ export function SignedOutActions({ mediaId }: { mediaId: string }) {
     <div sx={mediaSidebarStyles.actions}>
       <ReadButton mediaId={mediaId} progress={null} />
       <Popover>
-        <PopoverTrigger render={<Button sx={mediaSidebarStyles.library} variant="outline" />}>
+        <PopoverTrigger
+          render={<Button size="lg" sx={mediaSidebarStyles.library} variant="outline" />}
+        >
           <Bookmark />
           {m.media_library_add()}
         </PopoverTrigger>

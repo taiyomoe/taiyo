@@ -5,9 +5,13 @@ import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 const styles = stylex.create({
   note: {
     margin: 0,
+    flex: "1",
     paddingBlock: "2rem",
+    alignItems: "center",
     color: colors.mutedForeground,
+    display: "flex",
     fontSize: "0.875rem",
+    justifyContent: "center",
     textAlign: "center",
   },
 })
