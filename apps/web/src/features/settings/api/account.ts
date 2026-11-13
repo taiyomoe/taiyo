@@ -75,17 +75,20 @@ export function useChangePassword() {
   })
 }
 
+// Absolute: Better Auth resolves a relative callbackURL against the api's origin.
+const accountSettingsURL = () => new URL("/settings?tab=account", window.location.origin).href
+
 export function useChangeEmail() {
   return useMutation({
     mutationFn: (newEmail: string) =>
-      unwrapAuth(authClient.changeEmail({ newEmail, callbackURL: "/settings?tab=account" })),
+      unwrapAuth(authClient.changeEmail({ newEmail, callbackURL: accountSettingsURL() })),
   })
 }
 
 export function useLinkAccount() {
   return useMutation({
     mutationFn: (provider: "discord" | "google") =>
-      unwrapAuth(authClient.linkSocial({ provider, callbackURL: "/settings?tab=account" })),
+      unwrapAuth(authClient.linkSocial({ provider, callbackURL: accountSettingsURL() })),
   })
 }
 

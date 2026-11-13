@@ -45,6 +45,7 @@ const setup = (error: AuthError | null = null, callbackURL?: string, signInData?
       },
     },
     callbackURL,
+    getOrigin: () => "https://taiyo.moe",
   })
   const hasCachedSession = () =>
     queryClient.getQueryState(sessionQueryOptions.queryKey) !== undefined
@@ -59,7 +60,7 @@ describe("createAuthActions", () => {
 
     expect(await actions.signIn(credentials)).toEqual({ ok: true })
     expect(calls).toEqual([
-      { method: "signIn.email", args: [{ ...credentials, callbackURL: "/" }] },
+      { method: "signIn.email", args: [{ ...credentials, callbackURL: "https://taiyo.moe/" }] },
     ])
     expect(hasCachedSession()).toBe(false)
     expect(navigation).toEqual(["invalidate", "navigate /"])
@@ -71,8 +72,8 @@ describe("createAuthActions", () => {
     expect(await actions.signIn(credentials)).toEqual({ ok: true })
     expect(await actions.signInSocial("google")).toEqual({ ok: true })
     expect(calls.map((call) => call.args[0])).toEqual([
-      { ...credentials, callbackURL: "/media/1?tab=chapters" },
-      { provider: "google", callbackURL: "/media/1?tab=chapters" },
+      { ...credentials, callbackURL: "https://taiyo.moe/media/1?tab=chapters" },
+      { provider: "google", callbackURL: "https://taiyo.moe/media/1?tab=chapters" },
     ])
     expect(navigation).toEqual(["invalidate", "navigate /media/1?tab=chapters"])
   })
@@ -159,8 +160,11 @@ describe("createAuthActions", () => {
     expect(await actions.signUp(values, { captchaToken: "token" })).toEqual({ ok: true })
     expect(await actions.signUp(values, { captchaToken: null })).toEqual({ ok: true })
     expect(calls.map((call) => call.args)).toEqual([
-      [{ ...values, callbackURL: "/" }, { headers: { "x-captcha-response": "token" } }],
-      [{ ...values, callbackURL: "/" }, { headers: {} }],
+      [
+        { ...values, callbackURL: "https://taiyo.moe/" },
+        { headers: { "x-captcha-response": "token" } },
+      ],
+      [{ ...values, callbackURL: "https://taiyo.moe/" }, { headers: {} }],
     ])
     expect(hasCachedSession()).toBe(true)
     expect(navigation).toEqual([])
@@ -210,7 +214,10 @@ describe("createAuthActions", () => {
 
     expect(await actions.signInSocial("discord")).toEqual({ ok: true })
     expect(calls).toEqual([
-      { method: "signIn.social", args: [{ provider: "discord", callbackURL: "/" }] },
+      {
+        method: "signIn.social",
+        args: [{ provider: "discord", callbackURL: "https://taiyo.moe/" }],
+      },
     ])
   })
 })
