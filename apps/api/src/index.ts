@@ -6,6 +6,7 @@ import { sendGroupInvitationEmail } from "@taiyomoe/email"
 import { createWebPushSender, getChapterUploadProducer, getVapidPublicKey } from "@taiyomoe/queue"
 import { getS3Bucket, getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
+import { initLogger } from "evlog"
 import { type AppType, createApp } from "./app"
 import { corsAllowedOrigins, env } from "./env"
 
@@ -14,6 +15,9 @@ export { createApp }
 export type { AppType }
 
 if ((process.env.TEST ?? "") === "") {
+  // Names the service in every log event; evlog falls back to "app".
+  initLogger({ env: { service: "api" } })
+
   const db = getDb()
   const app = createApp({
     db,

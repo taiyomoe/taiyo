@@ -25,6 +25,7 @@ import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from
 import { drainSearchOutbox, getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { Queue, Worker } from "bullmq"
 import { audit, auditRedactPreset, initLogger } from "evlog"
+import { createHyperDXDrain } from "evlog/hyperdx"
 import { env } from "./env"
 
 const CHAPTER_MAINTENANCE_QUEUE = "chapter-maintenance"
@@ -45,10 +46,20 @@ const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const notificationEvents = createNotificationEvents()
 const pushDeps = { db: deps.db, send: createWebPushSender() }
 const searchDeps = { db: deps.db, meili: getMeiliClient(), mediasIndex: SEARCH_INDEXES.MEDIAS }
+const auditLogDrain = createAuditLogDrain(deps.db)
+const hyperdxDrain =
+  (process.env.TEST ?? "") !== "" ||
+  env.HYPERDX_ENDPOINT === undefined ||
+  env.HYPERDX_INGESTION_KEY === undefined
+    ? null
+    : createHyperDXDrain({ endpoint: env.HYPERDX_ENDPOINT, apiKey: env.HYPERDX_INGESTION_KEY })
 
+// initLogger takes a single drain: audit events go to Postgres, every event to HyperDX.
 initLogger({
   env: { service: "worker" },
-  drain: createAuditLogDrain(deps.db),
+  drain: async (ctx) => {
+    await Promise.all([auditLogDrain(ctx), hyperdxDrain?.(ctx)])
+  },
   redact: { ...auditRedactPreset, builtins: false },
 })
 
