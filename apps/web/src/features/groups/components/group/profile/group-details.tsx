@@ -5,7 +5,7 @@ import { Calendar, Check, Copy, Globe, Tag, Users } from "@taiyomoe/ui/component
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Group } from "@/features/groups/api/groups"
-import { getLanguageName } from "@/components/flags/flags"
+import { getLanguageName } from "@/components/flags/language-flags"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { groupProfileStyles } from "@/features/groups/components/group/profile/group-profile-styles"
 import { useCopy } from "@/hooks/use-copy"

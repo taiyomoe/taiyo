@@ -2,6 +2,7 @@ import { noop } from "@tanstack/react-query"
 import { createFileRoute, notFound } from "@tanstack/react-router"
 import { z } from "zod"
 import { isNotFoundError } from "@/components/boundaries/not-found-page"
+import { getRichTextSummary } from "@/components/rich-text/rich-text-document"
 import { commentsQueryOptions } from "@/features/comments/api/comments"
 import {
   groupChaptersQueryOptions,
@@ -21,6 +22,7 @@ import {
   GROUP_TABS,
   GROUP_TITLES_PER_PAGE,
 } from "@/features/groups/lib/group-page"
+import { pageOgMeta } from "@/features/og/lib/og-meta"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -83,19 +85,17 @@ export const Route = createFileRoute("/groups/$groupId")({
       await prefetch
     }
 
-    const name = await group
-      .then((data) => data.name)
+    return group
+      .then((data) => ({ name: data.name, description: getRichTextSummary(data.description) }))
       .catch((error: unknown) => {
         if (isNotFoundError(error, "GROUP_NOT_FOUND")) {
           throw notFound()
         }
 
-        return null
+        return { name: null, description: null }
       })
-
-    return { name }
   },
-  head: ({ loaderData }) => ({
+  head: ({ loaderData, params }) => ({
     meta: [
       {
         title:
@@ -103,6 +103,12 @@ export const Route = createFileRoute("/groups/$groupId")({
             ? m.group_meta_title_fallback()
             : m.group_meta_title({ name: loaderData.name }),
       },
+      ...pageOgMeta({
+        kind: "groups",
+        id: params.groupId,
+        title: loaderData?.name ?? null,
+        description: loaderData?.description,
+      }),
     ],
   }),
   component: GroupPage,

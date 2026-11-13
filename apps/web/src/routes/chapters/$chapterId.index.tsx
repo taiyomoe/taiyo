@@ -4,6 +4,7 @@ import { z } from "zod"
 import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { getMainTitle } from "@/features/media/lib/media-labels"
+import { pageOgMeta } from "@/features/og/lib/og-meta"
 import { chapterReaderQueryOptions } from "@/features/reader/api/reader"
 import { ReaderPage } from "@/features/reader/components/reader-page"
 import { chapterQueryOptions } from "@/features/uploads/api/submissions"
@@ -43,22 +44,25 @@ export const Route = createFileRoute("/chapters/$chapterId/")({
       requestedPage === undefined
         ? pages[Math.max(resumed, 0)]
         : pages[Math.min(requestedPage, pages.length) - 1]
+    const labels =
+      chapterData === null || mediaData === null
+        ? null
+        : {
+            chapter: getChapterLabel(chapterData),
+            media: getMainTitle(mediaData.titles) ?? m.media_untitled(),
+          }
 
     return {
-      title:
-        chapterData === null || mediaData === null
-          ? null
-          : m.reader_meta_title({
-              chapter: getChapterLabel(chapterData),
-              media: getMainTitle(mediaData.titles) ?? m.media_untitled(),
-            }),
+      title: labels === null ? null : m.reader_meta_title(labels),
+      heading: labels === null ? null : `${labels.chapter} · ${labels.media}`,
       firstPageUrl: firstPage?.url ?? null,
     }
   },
-  head: ({ loaderData }) => ({
+  head: ({ loaderData, params }) => ({
     meta: [
       { title: loaderData?.title ?? m.reader_meta_title_fallback() },
       { name: "robots", content: "noindex" },
+      ...pageOgMeta({ kind: "chapters", id: params.chapterId, title: loaderData?.heading ?? null }),
     ],
     links:
       loaderData?.firstPageUrl === undefined || loaderData.firstPageUrl === null

@@ -280,6 +280,30 @@ non-suspending `useQuery` with its own inline skeleton.
   plugin's own dev injection never runs; `__root.tsx` links
   `/virtual:stylex.css` and its HMR runtime itself in dev.
 
+## Open Graph previews
+
+- **Pages with their own card** (title, chapter, user, group, list) call
+  `pageOgMeta` in their `head`, and their route id is listed in `CARD_ROUTES`
+  (`src/features/og/lib/og-meta.ts`). A page missing from that list also gets
+  the site-wide `og:video`, and Discord then plays the sun instead of showing
+  the card.
+- **The cards are drawn on request** by `src/routes/og/$kind.$id.ts` with
+  Takumi, a native renderer, from HTML markup (`renderToStaticMarkup`). Do not
+  import `@takumi-rs/helpers/jsx`: its types add a `tw` prop to every React
+  element and break `@taiyomoe/ui`. Takumi has no browser fonts, so every
+  script a title can use needs a family in `OG_FONT_FAMILIES`.
+- **The cards fetch data anonymously**, through their own Hono client: the
+  app's `api` forwards the viewer's cookie, and a cached card must never show a
+  private list.
+- **The stress test** (`src/features/og/lib/__tests__/og-cards.test.ts`)
+  checks that no text leaves the card, runs into a picture or overlaps other
+  text, for very long, unbroken, CJK, RTL and emoji names. Run it with
+  `OG_PREVIEW_DIR=<dir>` to save every card and look at them.
+- **The sun video, its poster and `sun.webp`** come from the landing page's
+  shaders, rendered frame by frame in Chromium:
+  `pnpm -F @taiyomoe/web render:og-media` (needs ffmpeg and a GPU). Rerun it
+  after changing `src/components/scene/sun/shaders.ts`.
+
 ## Legal pages
 
 `src/routes/{privacy,terms,dmca}.tsx` must describe only what the Service actually

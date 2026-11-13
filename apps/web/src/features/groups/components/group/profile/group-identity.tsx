@@ -5,7 +5,7 @@ import { breakpoints, colors, font, motion } from "@taiyomoe/ui/styles/tokens.st
 import { Link } from "@tanstack/react-router"
 import type { Group } from "@/features/groups/api/groups"
 import type { GroupTab } from "@/features/groups/lib/group-page"
-import { getLanguageCode } from "@/components/flags/flags"
+import { getLanguageCode } from "@/components/flags/language-flags"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { TimeAgo } from "@/components/time/time-ago"
 import { formatCompact } from "@/features/dashboard/lib/format"

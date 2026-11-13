@@ -2,10 +2,11 @@ import { noop } from "@tanstack/react-query"
 import { createFileRoute, notFound } from "@tanstack/react-router"
 import { z } from "zod"
 import { isNotFoundError } from "@/components/boundaries/not-found-page"
-import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
+import { getRichTextSummary } from "@/components/rich-text/rich-text-document"
 import { latestMediaUpdatesQueryOptions } from "@/features/chapters/api/chapters"
 import { commentsQueryOptions } from "@/features/comments/api/comments"
 import { userListsQueryOptions } from "@/features/lists/api/lists"
+import { pageOgMeta } from "@/features/og/lib/og-meta"
 import { userProfileQueryOptions, userStatsQueryOptions } from "@/features/users/api/profile"
 import { ProfileNotFoundPage } from "@/features/users/components/profile/profile-not-found-page"
 import { ProfilePage } from "@/features/users/components/profile/profile-page"
@@ -54,33 +55,25 @@ export const Route = createFileRoute("/users/$username")({
 
       return null
     })
-    const about = loaded === null ? undefined : Object.values(loaded.about).find(Boolean)
 
     return {
       name: loaded?.displayUsername ?? null,
-      about:
-        about === undefined
-          ? null
-          : getRichTextParagraphs(parseRichText(about)).join(" ").trim() || null,
-      image: loaded?.image ?? null,
+      about: loaded === null ? null : getRichTextSummary(Object.values(loaded.about).find(Boolean)),
     }
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     const name = loaderData?.name ?? null
 
     return {
       meta: [
         { title: name === null ? m.profile_meta_title_fallback() : m.profile_meta_title({ name }) },
-        ...(loaderData?.about === null || loaderData?.about === undefined
-          ? []
-          : [
-              { name: "description", content: loaderData.about.slice(0, 160) },
-              { property: "og:description", content: loaderData.about.slice(0, 160) },
-            ]),
-        ...(name === null ? [] : [{ property: "og:title", content: name }]),
-        ...(loaderData?.image === null || loaderData?.image === undefined
-          ? []
-          : [{ property: "og:image", content: loaderData.image }]),
+        ...pageOgMeta({
+          kind: "users",
+          id: params.username,
+          title: name,
+          description: loaderData?.about,
+          type: "profile",
+        }),
       ],
     }
   },

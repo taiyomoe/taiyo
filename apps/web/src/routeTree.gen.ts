@@ -55,6 +55,7 @@ import { Route as DashboardSuggestionsIndexRouteImport } from './routes/dashboar
 import { Route as DashboardSuggestionsSuggestionIdRouteImport } from './routes/dashboard/suggestions/$suggestionId'
 import { Route as ListsListIdEditRouteImport } from './routes/lists/$listId_.edit'
 import { Route as MediaMediaIdEditRouteImport } from './routes/media/$mediaId_.edit'
+import { Route as OgKindIdRouteImport } from './routes/og/$kind.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -288,6 +289,11 @@ const MediaMediaIdEditRoute = MediaMediaIdEditRouteImport.update({
   path: '/media/$mediaId/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OgKindIdRoute = OgKindIdRouteImport.update({
+  id: '/og/$kind/$id',
+  path: '/og/$kind/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -333,6 +339,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/lists/$listId/edit': typeof ListsListIdEditRoute
   '/media/$mediaId/edit': typeof MediaMediaIdEditRoute
+  '/og/$kind/$id': typeof OgKindIdRoute
   '/chapters/$chapterId/': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups/': typeof DashboardGroupsIndexRoute
   '/dashboard/suggestions/': typeof DashboardSuggestionsIndexRoute
@@ -380,6 +387,7 @@ export interface FileRoutesByTo {
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/lists/$listId/edit': typeof ListsListIdEditRoute
   '/media/$mediaId/edit': typeof MediaMediaIdEditRoute
+  '/og/$kind/$id': typeof OgKindIdRoute
   '/chapters/$chapterId': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups': typeof DashboardGroupsIndexRoute
   '/dashboard/suggestions': typeof DashboardSuggestionsIndexRoute
@@ -429,6 +437,7 @@ export interface FileRoutesById {
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/lists/$listId_/edit': typeof ListsListIdEditRoute
   '/media/$mediaId_/edit': typeof MediaMediaIdEditRoute
+  '/og/$kind/$id': typeof OgKindIdRoute
   '/chapters/$chapterId/': typeof ChaptersChapterIdIndexRoute
   '/dashboard/groups/': typeof DashboardGroupsIndexRoute
   '/dashboard/suggestions/': typeof DashboardSuggestionsIndexRoute
@@ -479,6 +488,7 @@ export interface FileRouteTypes {
     | '/dashboard/suggestions/$suggestionId'
     | '/lists/$listId/edit'
     | '/media/$mediaId/edit'
+    | '/og/$kind/$id'
     | '/chapters/$chapterId/'
     | '/dashboard/groups/'
     | '/dashboard/suggestions/'
@@ -526,6 +536,7 @@ export interface FileRouteTypes {
     | '/dashboard/suggestions/$suggestionId'
     | '/lists/$listId/edit'
     | '/media/$mediaId/edit'
+    | '/og/$kind/$id'
     | '/chapters/$chapterId'
     | '/dashboard/groups'
     | '/dashboard/suggestions'
@@ -574,6 +585,7 @@ export interface FileRouteTypes {
     | '/dashboard/suggestions/$suggestionId'
     | '/lists/$listId_/edit'
     | '/media/$mediaId_/edit'
+    | '/og/$kind/$id'
     | '/chapters/$chapterId/'
     | '/dashboard/groups/'
     | '/dashboard/suggestions/'
@@ -603,6 +615,7 @@ export interface RootRouteChildren {
   ChaptersChapterIdSourceRoute: typeof ChaptersChapterIdSourceRoute
   ListsListIdEditRoute: typeof ListsListIdEditRoute
   MediaMediaIdEditRoute: typeof MediaMediaIdEditRoute
+  OgKindIdRoute: typeof OgKindIdRoute
   ChaptersChapterIdIndexRoute: typeof ChaptersChapterIdIndexRoute
 }
 
@@ -930,6 +943,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MediaMediaIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/og/$kind/$id': {
+      id: '/og/$kind/$id'
+      path: '/og/$kind/$id'
+      fullPath: '/og/$kind/$id'
+      preLoaderRoute: typeof OgKindIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1021,6 +1041,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChaptersChapterIdSourceRoute: ChaptersChapterIdSourceRoute,
   ListsListIdEditRoute: ListsListIdEditRoute,
   MediaMediaIdEditRoute: MediaMediaIdEditRoute,
+  OgKindIdRoute: OgKindIdRoute,
   ChaptersChapterIdIndexRoute: ChaptersChapterIdIndexRoute,
 }
 export const routeTree = rootRouteImport

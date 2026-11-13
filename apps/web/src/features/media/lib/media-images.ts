@@ -1,5 +1,5 @@
 import type { Media } from "@/features/media/api/medias"
-import { getLanguageName } from "@/components/flags/flags"
+import { getLanguageName } from "@/components/flags/language-flags"
 import { NO_VOLUME, getVolumeName } from "@/features/media/lib/chapter-volumes"
 import { m } from "@/paraglide/messages"
 

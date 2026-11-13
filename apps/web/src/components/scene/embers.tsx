@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { type CSSProperties, useMemo } from "react"
+import { useMemo } from "react"
 import { rand, round } from "./deterministic"
 import { scene } from "./scene.stylex"
 const build = (count: number) =>
@@ -41,18 +41,16 @@ export const Embers = ({ count = 26 }: { count?: number }) => {
         <span
           key={ember.id}
           className={emberProps.className}
-          style={
-            {
-              ...emberProps.style,
-              left: `${ember.left}%`,
-              width: ember.size,
-              height: ember.size,
-              background: ember.gold ? scene.goldLight : scene.ember,
-              boxShadow: `0 0 ${ember.glow}px ${ember.gold ? scene.gold : scene.brand}`,
-              "--drift": ember.drift,
-              animation: `scene-ember-rise ${ember.dur}s linear ${ember.delay}s infinite`,
-            } as CSSProperties
-          }
+          style={{
+            ...emberProps.style,
+            left: `${ember.left}%`,
+            width: ember.size,
+            height: ember.size,
+            background: ember.gold ? scene.goldLight : scene.ember,
+            boxShadow: `0 0 ${ember.glow}px ${ember.gold ? scene.gold : scene.brand}`,
+            "--drift": ember.drift,
+            animation: `scene-ember-rise ${ember.dur}s linear ${ember.delay}s infinite`,
+          }}
         />
       ))}
     </div>

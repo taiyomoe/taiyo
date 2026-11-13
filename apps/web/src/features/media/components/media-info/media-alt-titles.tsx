@@ -1,7 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { getAltTitles } from "@/features/media/lib/media-labels"
-import { LanguageFlag, getLanguageName } from "@/components/flags/flags"
+import { LanguageFlag } from "@/components/flags/flags"
+import { getLanguageName } from "@/components/flags/language-flags"
 
 const styles = stylex.create({
   titles: {

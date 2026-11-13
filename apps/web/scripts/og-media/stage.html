@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "PT Serif";
+        font-weight: 700;
+        src: url("/fonts/pt-serif-latin.woff2") format("woff2");
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "PT Serif";
+        font-weight: 700;
+        src: url("/fonts/pt-serif-latin-ext.woff2") format("woff2");
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: "Inter";
+        font-weight: 100 900;
+        src: url("/fonts/inter-latin.woff2") format("woff2");
+      }
+      html,
+      body {
+        margin: 0;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        overflow: hidden;
+        width: 1200px;
+        height: 630px;
+        background: radial-gradient(120% 90% at 50% 100%, #1a0d08 0%, #120a07 55%, #0d0705 100%);
+        font-family: "Inter", sans-serif;
+      }
+      #stage[data-mode="sun"] {
+        width: 1600px;
+        height: 1600px;
+        background: transparent;
+      }
+      #stage[data-mode="sun"] > :not(#sun) {
+        display: none;
+      }
+      .aurora {
+        position: absolute;
+        inset: -20% -20% 10% -20%;
+        background: radial-gradient(
+          58% 70% at 50% 92%,
+          color-mix(in srgb, #f2452d 50%, transparent),
+          transparent 72%
+        );
+        filter: blur(24px);
+      }
+      #sun {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .vignette {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          #120a07 0%,
+          color-mix(in srgb, #120a07 40%, transparent) 26%,
+          color-mix(in srgb, #120a07 5%, transparent) 52%,
+          transparent 100%
+        );
+      }
+      #embers {
+        position: absolute;
+        inset: 0;
+      }
+      .ember {
+        position: absolute;
+        bottom: -10px;
+        border-radius: 50%;
+      }
+      .content {
+        position: absolute;
+        inset: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        padding-top: 76px;
+        color: #fffcf8;
+        text-align: center;
+      }
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: "PT Serif", serif;
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .lockup svg {
+        width: auto;
+        height: 1.35em;
+      }
+      .title {
+        margin: 0;
+        font-family: "PT Serif", serif;
+        font-size: 92px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 0.98;
+        text-shadow: 0 4px 40px rgba(10, 5, 3, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+      <div class="aurora"></div>
+      <canvas id="sun"></canvas>
+      <div class="vignette"></div>
+      <div id="embers"></div>
+      <div class="content">
+        <div class="lockup">
+          <svg viewBox="0 0 800.864 512" aria-hidden="true"><path fill="#f2452d" d="" /></svg>
+          <span>Taiyō</span>
+        </div>
+        <h1 class="title"></h1>
+      </div>
+    </div>
+    <script type="module">
+      import {
+        Group,
+        MathUtils,
+        Mesh,
+        PerspectiveCamera,
+        PlaneGeometry,
+        Quaternion,
+        Scene,
+        ShaderMaterial,
+        SphereGeometry,
+        Vector3,
+        WebGLRenderer,
+      } from "/three.module.js"
+
+      // Mirrors src/components/scene/sun/sun-scene.ts: same camera, same
+      // geometry, same shaders, but driven by an explicit clock instead of
+      // requestAnimationFrame, so every frame can be captured exactly once.
+      const FOV = 30
+      const CAMERA_Z = 12
+      const VISIBLE_HEIGHT = 2 * CAMERA_Z * Math.tan(MathUtils.degToRad(FOV / 2))
+
+      const config = await (await fetch("/config.json")).json()
+      const stage = document.querySelector("#stage")
+      const canvas = document.querySelector("#sun")
+
+      stage.dataset.mode = config.mode
+      document.querySelector(".lockup path").setAttribute("d", config.logoPath)
+      document.querySelector(".title").textContent = config.title
+
+      const { width, height } = stage.getBoundingClientRect()
+      const renderer = new WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        preserveDrawingBuffer: true,
+      })
+
+      renderer.setClearColor(0x000000, 0)
+      renderer.setPixelRatio(config.pixelRatio)
+      renderer.setSize(width, height, false)
+
+      const camera = new PerspectiveCamera(FOV, width / height, 0.1, 100)
+      const scene = new Scene()
+      const group = new Group()
+      const spin = new Group()
+      const uniforms = { uTime: { value: 0 }, uBreath: { value: 0 } }
+      const plasma = new ShaderMaterial({
+        uniforms: { uTime: uniforms.uTime },
+        vertexShader: config.shaders.SPHERE_VERTEX,
+        fragmentShader: config.shaders.PLASMA_FRAGMENT,
+      })
+      const beams = new Mesh(
+        new PlaneGeometry(1, 1),
+        new ShaderMaterial({
+          uniforms: {
+            ...uniforms,
+            uExtent: { value: config.sun.extent },
+            uSize: { value: config.sun.size },
+          },
+          vertexShader: config.shaders.PLANE_VERTEX,
+          fragmentShader: config.shaders.BEAMS_FRAGMENT,
+          transparent: true,
+          depthWrite: false,
+        }),
+      )
+      const tilt = new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), 0.12)
+      const turn = new Quaternion()
+      const up = new Vector3(0, 1, 0)
+      const unit = VISIBLE_HEIGHT / height
+
+      camera.position.z = CAMERA_Z
+      spin.add(new Mesh(new SphereGeometry(1, 128, 96), plasma))
+      beams.scale.setScalar(config.sun.extent * 2)
+      beams.renderOrder = -1
+      group.add(spin, beams)
+      group.position.set((config.sun.x - width / 2) * unit, (height / 2 - config.sun.y) * unit, 0)
+      group.scale.setScalar(config.sun.radius * unit)
+      scene.add(group)
+
+      const rand = (seed) => {
+        const x = Math.sin(seed * 12.9898) * 43758.5453
+
+        return x - Math.floor(x)
+      }
+      const embers = Array.from({ length: config.embers }, (_, i) => {
+        const size = 2 + rand(i + 100) * 4
+        const gold = rand(i + 500) > 0.5
+        const element = document.createElement("span")
+
+        element.className = "ember"
+        Object.assign(element.style, {
+          left: `${rand(i) * 100}%`,
+          width: `${size}px`,
+          height: `${size}px`,
+          background: gold ? "#ffc94d" : "#fb6e54",
+          boxShadow: `0 0 ${size * 3}px ${gold ? "#ffb820" : "#f2452d"}`,
+        })
+        document.querySelector("#embers").append(element)
+
+        // Each ember rises once or twice per loop, so the field loops with the video.
+        return {
+          element,
+          laps: 1 + Math.floor(rand(i + 300) * 2),
+          phase: rand(i + 200),
+          drift: rand(i + 400) * 120 - 60,
+        }
+      })
+      const aurora = document.querySelector(".aurora")
+
+      window.renderFrame = (seconds) => {
+        const loop = (seconds % config.loopSeconds) / config.loopSeconds
+        const wave = 0.5 - 0.5 * Math.cos(loop * Math.PI * 2)
+
+        uniforms.uTime.value = seconds * config.timeScale
+        uniforms.uBreath.value = 0.5 - 0.5 * Math.cos(loop * Math.PI * 2 * config.breaths)
+        spin.quaternion
+          .copy(tilt)
+          .premultiply(turn.setFromAxisAngle(up, config.spin + loop * Math.PI * 2 * config.turns))
+        aurora.style.transform = `translate(${-10 + 20 * wave}%, ${-4 * wave}%)`
+
+        for (const ember of embers) {
+          const progress = (loop * ember.laps + ember.phase) % 1
+          const opacity =
+            progress < 0.1
+              ? (progress / 0.1) * 0.9
+              : progress < 0.9
+                ? 0.9 - ((progress - 0.1) / 0.8) * 0.2
+                : 0.7 * (1 - (progress - 0.9) / 0.1)
+
+          ember.element.style.opacity = String(opacity)
+          ember.element.style.transform = `translate(${progress * ember.drift}px, ${-progress * height * 0.78}px)`
+        }
+
+        renderer.render(scene, camera)
+      }
+      await document.fonts.ready
+      window.ready = true
+    </script>
+  </body>
+</html>

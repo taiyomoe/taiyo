@@ -9,7 +9,8 @@ import {
 } from "@taiyomoe/ui/components/ui/select"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaChapterFacets } from "@/features/chapters/api/chapters"
-import { LanguageFlag, getLanguageName } from "@/components/flags/flags"
+import { LanguageFlag } from "@/components/flags/flags"
+import { getLanguageName } from "@/components/flags/language-flags"
 import { m } from "@/paraglide/messages"
 
 const ALL_LANGUAGES = "all"

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaCover, VolumeGroup } from "@/features/media/lib/media-images"
-import { getLanguageCode, getLanguageName } from "@/components/flags/flags"
+import { getLanguageCode, getLanguageName } from "@/components/flags/language-flags"
 import { CoverGrid, CoverGridItem } from "@/features/media/components/media-covers/cover-grid"
 import { CoverTile } from "@/features/media/components/media-covers/cover-tile"
 import { getVolumeName } from "@/features/media/lib/chapter-volumes"
