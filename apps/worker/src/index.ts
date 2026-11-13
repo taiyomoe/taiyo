@@ -88,7 +88,9 @@ const chapterWorker = new Worker<ChapterUploadJobData>(
   CHAPTER_UPLOAD_QUEUE,
   async (job) => {
     try {
-      const processed = await processChapterUpload(deps, job.data)
+      const processed = await processChapterUpload(deps, job.data, {
+        isFinalAttempt: job.attemptsMade + 1 >= (job.opts.attempts ?? 1),
+      })
 
       if (processed !== undefined) {
         audit(
