@@ -36,6 +36,7 @@ import { listsRouter } from "./routers/lists-router"
 import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
+import { recommendationsRouter } from "./routers/recommendations-router"
 import { searchRouter } from "./routers/search-router"
 import { shopRouter } from "./routers/shop-router"
 import { staffsRouter } from "./routers/staffs-router"
@@ -185,6 +186,7 @@ export const createApp = (services: Services) => {
     .route("/comment-reports", commentReportsRouter)
     .route("/dashboard", dashboardRouter)
     .route("/search", searchRouter)
+    .route("/recommendations", recommendationsRouter)
     .route("/shop", shopRouter)
     .route("/audit-logs", auditLogsRouter)
 
@@ -208,6 +210,11 @@ export const createApp = (services: Services) => {
               name: "Search",
               description:
                 "Type-ahead search across titles, groups and users at once, for quick-open UIs.",
+            },
+            {
+              name: "Recommendations",
+              description:
+                "Related titles, personal recommendations and the events that measure how well they work.",
             },
             {
               name: "Covers",

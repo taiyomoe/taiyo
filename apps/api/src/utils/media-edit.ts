@@ -7,11 +7,13 @@ import {
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
   MEDIA_EDIT_FIELDS,
+  MEDIA_RELATION_TYPES,
   MEDIA_SOURCES,
   MEDIA_STATUSES,
   MEDIA_TYPES,
   type MediaEdit,
   type MediaEditField,
+  type MediaEditRelation,
   type MediaEditStaff,
   type MediaEditTitle,
   type MediaLinks,
@@ -19,7 +21,9 @@ import {
   STAFF_ROLES,
   sql,
 } from "@taiyomoe/db"
+import { withInverses } from "@taiyomoe/recommendations"
 import z from "zod"
+import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
 import {
   contentRatingSchema,
   languageSchema,
@@ -45,6 +49,13 @@ const mediaEditTitleSchema = z.object({
 const mediaEditStaffSchema = z.object({
   staffId: z.uuid().meta({ description: "The ID of the staff member." }),
   role: z.enum(STAFF_ROLES).meta({ description: "The staff member's role.", example: "AUTHOR" }),
+})
+const mediaEditRelationSchema = z.object({
+  mediaId: z.uuid().meta({ description: "The ID of the related media." }),
+  type: z.enum(MEDIA_RELATION_TYPES).meta({
+    description: "What the related media is to this one: `SEQUEL` means it continues this media.",
+    example: "SEQUEL",
+  }),
 })
 
 export const mediaEditSchema = z.object({
@@ -104,20 +115,37 @@ export const mediaEditSchema = z.object({
     .max(config.input.maxMediaStaffs)
     .exactOptional()
     .meta({ description: "Every staff credit of the media, replacing the current ones." }),
+  relations: mediaEditRelationSchema
+    .array()
+    .max(config.input.maxMediaRelations)
+    .refine((relations) => new Set(relations.map((r) => r.mediaId)).size === relations.length, {
+      message: "A media can only be related once.",
+    })
+    .exactOptional()
+    .meta({
+      description:
+        "Every relation of the media, replacing the current ones. The other media gets the opposite relation.",
+    }),
 })
 
 const mediaEditStaffViewSchema = mediaEditStaffSchema.extend({
   name: z.string().meta({ description: "The name of the staff member.", example: "ONE" }),
 })
+const mediaEditRelationViewSchema = mediaEditRelationSchema.extend({
+  title: z.string().nullable().meta({ description: "The main title of the related media." }),
+  coverUrl: z.url().nullable().meta({ description: "URL of the related media's main cover." }),
+})
 
 export const mediaEditViewSchema = mediaEditSchema.extend({
   staffs: mediaEditStaffViewSchema.array().exactOptional(),
+  relations: mediaEditRelationViewSchema.array().exactOptional(),
 })
 
 export const mediaEditFieldSchema = z.enum(MEDIA_EDIT_FIELDS)
 
-type MediaEditView = Omit<MediaEdit, "staffs"> & {
+type MediaEditView = Omit<MediaEdit, "staffs" | "relations"> & {
   staffs?: Array<MediaEditStaff & { name: string }>
+  relations?: Array<MediaEditRelation & { title: string | null; coverUrl: string | null }>
 }
 
 const compactSynopsis = (synopsis: LocalizedText) =>
@@ -149,6 +177,10 @@ const sortStaffs = (staffs: MediaEditStaff[]) =>
   [...new Map(staffs.map((staff) => [`${staff.role}:${staff.staffId}`, staff])).entries()]
     .sort(([a], [b]) => (a < b ? -1 : 1))
     .map(([, staff]) => ({ staffId: staff.staffId, role: staff.role }))
+const sortRelations = (relations: MediaEditRelation[]) =>
+  [...new Map(relations.map((relation) => [relation.mediaId, relation])).values()]
+    .sort((a, b) => (a.mediaId < b.mediaId ? -1 : 1))
+    .map((relation) => ({ mediaId: relation.mediaId, type: relation.type }))
 const toIsoDate = (value: string | null) => (value === null ? null : new Date(value).toISOString())
 
 export const normalizeMediaEdit = (edit: MediaEdit) => {
@@ -168,6 +200,10 @@ export const normalizeMediaEdit = (edit: MediaEdit) => {
 
   if (edit.staffs !== undefined) {
     normalized.staffs = sortStaffs(edit.staffs)
+  }
+
+  if (edit.relations !== undefined) {
+    normalized.relations = sortRelations(edit.relations)
   }
 
   if (edit.startDate !== undefined) {
@@ -225,7 +261,7 @@ export const readMediaEdits = async (db: Kysely<DB>, mediaIds: readonly string[]
     return new Map<string, Required<MediaEdit>>()
   }
 
-  const [medias, titles, staffs] = await Promise.all([
+  const [medias, titles, staffs, relations] = await Promise.all([
     db
       .selectFrom("medias")
       .select([
@@ -259,6 +295,13 @@ export const readMediaEdits = async (db: Kysely<DB>, mediaIds: readonly string[]
       .where("mediaStaffs.mediaId", "in", mediaIds)
       .where("staffs.deletedAt", "is", null)
       .execute(),
+    db
+      .selectFrom("mediaRelations")
+      .innerJoin("medias", "medias.id", "mediaRelations.relatedMediaId")
+      .select(["mediaRelations.mediaId", "mediaRelations.relatedMediaId", "mediaRelations.type"])
+      .where("mediaRelations.mediaId", "in", mediaIds)
+      .where("medias.deletedAt", "is", null)
+      .execute(),
   ])
 
   return new Map(
@@ -280,6 +323,11 @@ export const readMediaEdits = async (db: Kysely<DB>, mediaIds: readonly string[]
             tags: normalizeTags(media.tags ?? []),
             links: media.links,
             staffs: sortStaffs(staffs.filter((staff) => staff.mediaId === media.id)),
+            relations: sortRelations(
+              relations
+                .filter((relation) => relation.mediaId === media.id)
+                .map((relation) => ({ mediaId: relation.relatedMediaId, type: relation.type })),
+            ),
           },
         ] satisfies [string, Required<MediaEdit>],
     ),
@@ -296,22 +344,37 @@ export const readMediaEdit = async (db: Kysely<DB>, mediaId: string) => {
   return edit
 }
 
-export const withStaffNames = async (db: Kysely<DB>, edits: MediaEdit[]) => {
+export const withEditNames = async (db: Kysely<DB>, edits: MediaEdit[]) => {
   const staffIds = [...new Set(edits.flatMap((edit) => (edit.staffs ?? []).map((s) => s.staffId)))]
-  const rows =
+  const relatedIds = [
+    ...new Set(edits.flatMap((edit) => (edit.relations ?? []).map((r) => r.mediaId))),
+  ]
+  const [rows, titles, covers] = await Promise.all([
     staffIds.length === 0
       ? []
-      : await db.selectFrom("staffs").select(["id", "name"]).where("id", "in", staffIds).execute()
+      : db.selectFrom("staffs").select(["id", "name"]).where("id", "in", staffIds).execute(),
+    getMainTitles(db, relatedIds),
+    getMainCoverUrls(db, relatedIds),
+  ])
   const names = new Map(rows.map((row) => [row.id, row.name]))
 
   return edits.map(
-    ({ staffs, ...rest }) =>
+    ({ staffs, relations, ...rest }) =>
       ({
         ...rest,
         ...(staffs === undefined
           ? {}
           : {
               staffs: staffs.map((staff) => ({ ...staff, name: names.get(staff.staffId) ?? "" })),
+            }),
+        ...(relations === undefined
+          ? {}
+          : {
+              relations: relations.map((relation) => ({
+                ...relation,
+                title: titles.get(relation.mediaId) ?? null,
+                coverUrl: covers.get(relation.mediaId) ?? null,
+              })),
             }),
       }) satisfies MediaEditView,
   )
@@ -328,6 +391,7 @@ export const lockMedia = (db: Kysely<DB>, mediaId: string) =>
 
 type MediaEditError =
   | { code: "STAFF_NOT_FOUND" }
+  | { code: "MEDIA_INVALID_RELATIONS" }
   | {
       code: "MEDIA_LINK_CONFLICT"
       details: { conflictingMediaId: string; providedLinks: MediaLinks }
@@ -345,6 +409,43 @@ export const checkMediaEdit = async (db: Kysely<DB>, mediaId: string, edit: Medi
 
     if (found.length !== staffIds.length) {
       return { code: "STAFF_NOT_FOUND" } satisfies MediaEditError
+    }
+  }
+
+  if (edit.relations !== undefined && edit.relations.length > 0) {
+    const relatedIds = edit.relations.map((relation) => relation.mediaId)
+    const found = relatedIds.includes(mediaId)
+      ? []
+      : await db
+          .selectFrom("medias")
+          .select("id")
+          .where("id", "in", relatedIds)
+          .where("deletedAt", "is", null)
+          .execute()
+
+    if (found.length !== relatedIds.length) {
+      return { code: "MEDIA_INVALID_RELATIONS" } satisfies MediaEditError
+    }
+
+    const current = await db
+      .selectFrom("mediaRelations")
+      .select("relatedMediaId")
+      .where("mediaId", "=", mediaId)
+      .execute()
+    const currentIds = new Set(current.map((row) => row.relatedMediaId))
+    const added = relatedIds.filter((id) => !currentIds.has(id))
+    const counts =
+      added.length === 0
+        ? []
+        : await db
+            .selectFrom("mediaRelations")
+            .select((eb) => ["mediaId", eb.fn.countAll<string>().as("count")])
+            .where("mediaId", "in", added)
+            .groupBy("mediaId")
+            .execute()
+
+    if (counts.some((row) => Number(row.count) >= config.input.maxMediaRelations)) {
+      return { code: "MEDIA_INVALID_RELATIONS" } satisfies MediaEditError
     }
   }
 
@@ -463,5 +564,56 @@ export const applyMediaEdit = async (
         .onConflict((oc) => oc.doNothing())
         .execute()
     }
+  }
+
+  if (edit.relations !== undefined) {
+    const liveMedias = db.selectFrom("medias").select("id").where("deletedAt", "is", null)
+    const previous = await db
+      .selectFrom("mediaRelations")
+      .select("relatedMediaId")
+      .where("mediaId", "=", mediaId)
+      .execute()
+
+    await db
+      .deleteFrom("mediaRelations")
+      .where((eb) =>
+        eb.or([
+          eb.and([eb("mediaId", "=", mediaId), eb("relatedMediaId", "in", liveMedias)]),
+          eb.and([eb("relatedMediaId", "=", mediaId), eb("mediaId", "in", liveMedias)]),
+        ]),
+      )
+      .execute()
+
+    const rows = withInverses(
+      edit.relations.map((relation) => ({
+        mediaId,
+        relatedMediaId: relation.mediaId,
+        type: relation.type,
+      })),
+    )
+
+    if (rows.length > 0) {
+      await db
+        .insertInto("mediaRelations")
+        .values(rows)
+        .onConflict((oc) =>
+          oc.columns(["mediaId", "relatedMediaId"]).doUpdateSet((eb) => ({
+            type: eb.ref("excluded.type"),
+          })),
+        )
+        .execute()
+    }
+
+    const touched = new Set([
+      mediaId,
+      ...previous.map((row) => row.relatedMediaId),
+      ...edit.relations.map((relation) => relation.mediaId),
+    ])
+
+    await db
+      .insertInto("mediaRelationSyncs")
+      .values([...touched].map((id) => ({ mediaId: id })))
+      .onConflict((oc) => oc.doNothing())
+      .execute()
   }
 }

@@ -10,6 +10,7 @@
   "dependencies": {
     "@faker-js/faker": "^10.6.0",
     "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/recommendations": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",
     "citty": "^0.2.2",

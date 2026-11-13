@@ -107,6 +107,7 @@ export const config = {
     maxMediaTitles: 50,
     maxMediaTags: 100,
     maxMediaStaffs: 50,
+    maxMediaRelations: 50,
     maxPendingSuggestions: 100,
   },
 } as const

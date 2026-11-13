@@ -4,6 +4,7 @@ import { latestChaptersQueryOptions } from "@/features/chapters/api/chapters"
 import { IndexPage } from "@/features/home/components/index-page"
 import { LATEST_UPDATES_PER_PAGE } from "@/features/home/lib/latest-updates"
 import { featuredMediasQueryOptions, showcaseMediasQueryOptions } from "@/features/media/api/medias"
+import { myRecommendationsQueryOptions } from "@/features/recommendations/api/recommendations"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/")({
           queryClient
             .query(latestChaptersQueryOptions(getContentRatings(session), LATEST_UPDATES_PER_PAGE))
             .catch(noop),
+          queryClient.query(myRecommendationsQueryOptions(getContentRatings(session))).catch(noop),
         ])
       : queryClient.query(showcaseMediasQueryOptions()).catch(noop)
 

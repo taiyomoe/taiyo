@@ -292,6 +292,9 @@ try {
     step("Indexing medias in Meilisearch")
     run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-meilisearch"])
 
+    step("Computing similar titles")
+    run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "refresh-recommendations"])
+
     step("Creating dev sign-in sessions")
     const sessions = capture("pnpm", ["--silent", "-F", "@taiyomoe/scripts", "cli", "dev-sessions"])
       .split("\n")

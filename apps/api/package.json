@@ -26,6 +26,7 @@
     "@taiyomoe/email": "workspace:^",
     "@taiyomoe/permissions": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
+    "@taiyomoe/recommendations": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/search": "workspace:^",

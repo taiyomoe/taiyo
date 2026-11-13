@@ -18,6 +18,7 @@ import {
   MEDIA_STATUS_LABELS,
   MEDIA_TYPE_LABELS,
 } from "@/features/media/lib/media-labels"
+import { RELATION_TYPE_LABELS } from "@/features/recommendations/lib/recommendation-labels"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -173,6 +174,19 @@ export const FIELD_PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => R
           <li key={`${staff.role}:${staff.staffId}`} sx={styles.row}>
             <span sx={styles.text}>{staff.name}</span>
             <Badge variant="secondary">{STAFF_ROLE_LABELS[staff.role]()}</Badge>
+          </li>
+        ))}
+      </ul>
+    ),
+  relations: (draft) =>
+    draft.relations.length === 0 ? (
+      <Empty />
+    ) : (
+      <ul sx={styles.list}>
+        {draft.relations.map((relation) => (
+          <li key={relation.mediaId} sx={styles.row}>
+            <span sx={styles.text}>{relation.title ?? m.media_untitled()}</span>
+            <Badge variant="secondary">{RELATION_TYPE_LABELS[relation.type]()}</Badge>
           </li>
         ))}
       </ul>

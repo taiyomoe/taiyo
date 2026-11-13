@@ -15,16 +15,14 @@ import { MediaBanners } from "@/features/media/components/media-banners/media-ba
 import { MediaChapters } from "@/features/media/components/media-chapters/media-chapters"
 import { MediaCovers } from "@/features/media/components/media-covers/media-covers"
 import { MediaInfo } from "@/features/media/components/media-info/media-info"
+import { MediaRelated } from "@/features/recommendations/components/media-related"
 import { getPermissions } from "@/lib/permissions"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
 type MediaTab = (typeof MEDIA_TABS)[number]
 
-const DISABLED_TABS = [
-  { value: "related", label: m.media_tab_related },
-  { value: "stats", label: m.media_tab_stats },
-] as const
+const DISABLED_TABS = [{ value: "stats", label: m.media_tab_stats }] as const
 const routeApi = getRouteApi("/media/$mediaId")
 const styles = stylex.create({
   tabs: {
@@ -112,6 +110,9 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
             <span sx={styles.tabCount}>{commentCount}</span>
           )}
         </TabsTab>
+        <TabsTab sx={styles.tab} value="related">
+          {m.media_tab_related()}
+        </TabsTab>
         {DISABLED_TABS.map(({ value, label }) => (
           <TabsTab key={value} disabled sx={[styles.tab, styles.soonTab]} value={value}>
             {label()}
@@ -138,6 +139,9 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
           target={{ type: "MEDIA", id: media.id }}
           viewer={user}
         />
+      </TabsPanel>
+      <TabsPanel value="related">
+        <MediaRelated mediaId={media.id} />
       </TabsPanel>
     </Tabs>
   )

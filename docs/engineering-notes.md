@@ -265,3 +265,48 @@ Neither count is content-rating aware, and search currently returns every
 content rating unconditionally. Once per-user content-rating filtering lands,
 decide whether "popular" is computed per-audience or globally — a globally
 ranked NSFW title surfacing on a filtered browse page is the failure mode.
+
+## Related titles and recommendations
+
+`packages/recommendations` owns both halves of a media's Related tab.
+
+**Relations** (sequel, side story, adaptation…) live in `mediaRelations`, and
+every relation is stored in both directions: `(A, B, SEQUEL)` exists exactly
+when `(B, A, PREQUEL)` does. Each type has exactly one inverse
+(`INVERSE_MEDIA_RELATION_TYPES`), which is what makes this lossless, and it is
+why reads only ever filter on `mediaId`. Anything that writes relations must
+go through `withInverses` and replace both directions at once:
+`applyMediaEdit` deletes every row touching the media before inserting, and
+`syncMediaRelations` skips a pair when either direction already exists. A
+type added without a unique inverse breaks the invariant.
+
+`syncMediaRelations` imports each media's relations from MangaDex once, then
+records it in `mediaRelationSyncs`. From then on, the media edit form owns its
+relations, so a relation an editor removes is not re-imported. An edit marks
+the media, and every media it gains or loses a relation with, as synced, so
+importing the other side cannot bring back a relation an editor removed. Both
+writers stop at `maxMediaRelations` on each side, so the edit form always
+accepts the relations it loads.
+
+**Similar titles** are precomputed into `mediaSimilarities` by
+`refreshMediaSimilarities`, which the worker runs hourly. The score blends
+rarity-weighted tag overlap, shared staff and, once enough readers overlap,
+item-to-item co-reading from libraries, lists and reading history. It then
+re-ranks for variety, so near-duplicates do not fill the list. The engine is
+pure (`computeSimilarities`), so tests and the offline evaluator run it
+without a database. It is a generator so the refresh can write and yield
+between batches instead of blocking the worker's event loop.
+
+Before changing a weight in `DEFAULT_ENGINE_OPTIONS`, run
+`pnpm -F @taiyomoe/scripts cli evaluate-recommendations` against realistic
+data. It hides one title per reader and reports how often each variant gets it
+back in the top 10. It also reports click rates from `recommendationImpressions`
+and `recommendationClicks`, which the refresh purges after 180 days. An
+impression lists only the titles that came at least half on screen, so a
+shelf's off-screen titles do not dilute its click rate. Pass `--since` and
+`--until` to compare the weeks before and after a weight change.
+
+Each similar-titles list is diversified across all content ratings first.
+When that leaves fewer than `limit` titles at a stricter rating, the list is
+topped up from that rating's own candidates, so readers who hide explicit
+titles still get a full Related tab.

@@ -16,6 +16,7 @@
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
+    "@taiyomoe/recommendations": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",
     "bullmq": "^6.6.0",

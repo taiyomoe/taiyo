@@ -93,6 +93,13 @@ function RouteComponent() {
                 keep the Service running, to investigate abuse, and to diagnose faults.
               </p>
               <p sx={prose.p}>
+                <strong sx={prose.strong}>Recommendations.</strong> We suggest related titles and,
+                on your home page, titles picked from your library, lists and reading history,
+                combined anonymously with what other readers read. To measure how well these
+                suggestions work, we record which ones were shown and which ones you opened, linked
+                to your account when you are signed in.
+              </p>
+              <p sx={prose.p}>
                 <strong sx={prose.strong}>Anti-abuse signals.</strong> When you sign up we use
                 Cloudflare Turnstile to tell humans from bots. Turnstile receives technical signals
                 from your browser; it is designed not to profile you across sites.
@@ -108,8 +115,8 @@ function RouteComponent() {
               <ul sx={prose.ul}>
                 <li>
                   <strong sx={prose.strong}>To provide the Service</strong> — creating your account,
-                  authenticating you, storing your library and reading progress. Legal basis:
-                  performance of our contract with you.
+                  authenticating you, storing your library and reading progress, and recommending
+                  titles you might like. Legal basis: performance of our contract with you.
                 </li>
                 <li>
                   <strong sx={prose.strong}>To keep the Service safe</strong> — rate limiting, abuse
@@ -213,7 +220,8 @@ function RouteComponent() {
               </p>
               <p sx={prose.p}>
                 Server logs are kept for a short period, normally no more than 90 days, and then
-                deleted. Backups roll off on their own schedule.
+                deleted. Records of the recommendations shown and opened are deleted after 180 days.
+                Backups roll off on their own schedule.
               </p>
             </>
           ),

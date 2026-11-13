@@ -9,6 +9,7 @@ import {
   FeaturedCarouselSkeleton,
 } from "@/features/home/components/featured/featured-carousel"
 import { LatestUpdates } from "@/features/home/components/latest-updates/latest-updates"
+import { ForYouShelf } from "@/features/recommendations/components/for-you-shelf"
 
 const styles = stylex.create({
   page: {
@@ -33,6 +34,7 @@ export function HomePage({ user }: { user: Session["user"] }) {
       </CatchBoundary>
       <div sx={styles.page}>
         <LatestUpdates />
+        <ForYouShelf />
       </div>
     </AppShell>
   )

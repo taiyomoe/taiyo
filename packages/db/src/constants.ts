@@ -34,6 +34,36 @@ export const STAFF_ROLES = ["AUTHOR", "ARTIST"] as const
 
 export type StaffRole = (typeof STAFF_ROLES)[number]
 
+export const MEDIA_RELATION_TYPES = [
+  "PREQUEL",
+  "SEQUEL",
+  "MAIN_STORY",
+  "SIDE_STORY",
+  "ORIGINAL",
+  "ADAPTATION",
+  "ALTERNATE_VERSION",
+  "ALTERNATE_STORY",
+  "SAME_FRANCHISE",
+] as const
+
+export type MediaRelationType = (typeof MEDIA_RELATION_TYPES)[number]
+
+export const INVERSE_MEDIA_RELATION_TYPES = {
+  PREQUEL: "SEQUEL",
+  SEQUEL: "PREQUEL",
+  MAIN_STORY: "SIDE_STORY",
+  SIDE_STORY: "MAIN_STORY",
+  ORIGINAL: "ADAPTATION",
+  ADAPTATION: "ORIGINAL",
+  ALTERNATE_VERSION: "ALTERNATE_VERSION",
+  ALTERNATE_STORY: "ALTERNATE_STORY",
+  SAME_FRANCHISE: "SAME_FRANCHISE",
+} as const satisfies Record<MediaRelationType, MediaRelationType>
+
+export const RECOMMENDATION_SURFACES = ["RELATED", "FOR_YOU"] as const
+
+export type RecommendationSurface = (typeof RECOMMENDATION_SURFACES)[number]
+
 export const CHAPTER_STATUSES = [
   "UPLOADING",
   "PENDING",
@@ -118,6 +148,7 @@ export const MEDIA_EDIT_FIELDS = [
   "tags",
   "links",
   "staffs",
+  "relations",
 ] as const
 
 export type MediaEditField = (typeof MEDIA_EDIT_FIELDS)[number]

@@ -89,6 +89,9 @@ importers:
       '@taiyomoe/queue':
         specifier: workspace:^
         version: link:../../packages/queue
+      '@taiyomoe/recommendations':
+        specifier: workspace:^
+        version: link:../../packages/recommendations
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../../packages/s3
@@ -407,6 +410,9 @@ importers:
       '@taiyomoe/queue':
         specifier: workspace:^
         version: link:../../packages/queue
+      '@taiyomoe/recommendations':
+        specifier: workspace:^
+        version: link:../../packages/recommendations
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../../packages/s3
@@ -649,6 +655,22 @@ importers:
         specifier: ^3.6.4
         version: 3.6.4
 
+  packages/recommendations:
+    dependencies:
+      '@taiyomoe/config':
+        specifier: workspace:^
+        version: link:../config
+      '@taiyomoe/db':
+        specifier: workspace:^
+        version: link:../db
+      radashi:
+        specifier: ^13.0.1
+        version: 13.0.1
+    devDependencies:
+      '@types/node':
+        specifier: ^26.6.6
+        version: 26.6.6
+
   packages/s3:
     dependencies:
       '@aws-sdk/client-s3':
@@ -682,6 +704,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../db
+      '@taiyomoe/recommendations':
+        specifier: workspace:^
+        version: link:../recommendations
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../s3
