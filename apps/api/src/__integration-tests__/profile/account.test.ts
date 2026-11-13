@@ -139,6 +139,22 @@ describe("POST /users/me/password", () => {
   })
 })
 
+describe("display name spacing", () => {
+  test("refuses whitespace that would render like another name", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+
+    for (const displayName of ["Test\u00a0Admin", "Test  Admin", "Test\u3000Admin"]) {
+      const res = await api(app, "/users/me/account", {
+        method: "PATCH",
+        headers,
+        json: { displayName },
+      })
+
+      expect(res.status).toBe(422)
+    }
+  })
+})
+
 describe("showFollowing", () => {
   test("hides who the user follows from everyone but them", async ({ app, services }) => {
     const owner = await signInAs(services)

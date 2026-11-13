@@ -14,7 +14,9 @@ export const config = {
       maxLength: 30,
     },
     displayName: {
-      regex: /^[a-zA-Z0-9_.\s]{3,30}$/,
+      // Words of letters, numbers, dots and underscores separated by single ASCII spaces: other
+      // whitespace or runs of spaces would render like another user's name.
+      regex: /^(?=.{3,30}$)[a-zA-Z0-9_.]+(?: [a-zA-Z0-9_.]+)*$/,
       minLength: 3,
       maxLength: 30,
     },
