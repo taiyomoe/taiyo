@@ -4,6 +4,7 @@ import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Fragment } from "react"
 import type { Notification } from "@/features/notifications/api/notifications"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 type CommentTarget = Extract<Notification, { type: "COMMENT_REPLY" }>["comment"]["target"]
 type Actors = Extract<Notification, { type: "FOLLOW" }>["actors"]
@@ -90,7 +91,7 @@ const actorsText = (
   return richMessage(templates.many(), {
     ...extra,
     name,
-    count: <Strong>{(actors.count - 1).toLocaleString()}</Strong>,
+    count: <Strong>{(actors.count - 1).toLocaleString(getLocale())}</Strong>,
   })
 }
 
@@ -104,7 +105,7 @@ export const notificationText = (notification: Notification, viewerId: string) =
   }
 
   if (notification.type === "COMMENT_LIKE") {
-    const count = notification.upvoteCount.toLocaleString()
+    const count = notification.upvoteCount.toLocaleString(getLocale())
 
     return richMessage(m.notifications_upvotes({ readers: "{readers}", target: "{target}" }), {
       readers: (
