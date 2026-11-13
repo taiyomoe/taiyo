@@ -13,6 +13,9 @@ const main = defineCommand({
     "extract-sample": () => import("./extract-sample").then((m) => m.default),
     "download-sample-images": () => import("./download-sample-images").then((m) => m.default),
     "upload-sample-images": () => import("./upload-sample-images").then((m) => m.default),
+    "sync-media-relations": () => import("./sync-media-relations").then((m) => m.default),
+    "refresh-recommendations": () => import("./refresh-recommendations").then((m) => m.default),
+    "evaluate-recommendations": () => import("./evaluate-recommendations").then((m) => m.default),
   },
 })
 

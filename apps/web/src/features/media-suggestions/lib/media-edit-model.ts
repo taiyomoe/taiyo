@@ -11,6 +11,8 @@ export type MediaEditTitle = MediaEditDraft["titles"][number]
 
 export type MediaEditStaff = MediaEditDraft["staffs"][number]
 
+export type MediaEditRelation = MediaEditDraft["relations"][number]
+
 export const FIELD_LABELS: Record<MediaEditField, () => string> = {
   titles: m.media_edit_field_titles,
   synopsis: m.media_edit_field_synopsis,
@@ -25,6 +27,7 @@ export const FIELD_LABELS: Record<MediaEditField, () => string> = {
   tags: m.media_edit_field_tags,
   links: m.media_info_links,
   staffs: m.media_edit_field_staffs,
+  relations: m.media_edit_field_relations,
 }
 
 export const toDraft = (view: MediaEditView) =>
@@ -42,6 +45,7 @@ export const toDraft = (view: MediaEditView) =>
     tags: view.tags ?? [],
     links: view.links ?? {},
     staffs: view.staffs ?? [],
+    relations: view.relations ?? [],
   }) satisfies MediaEditDraft
 
 const cleanSynopsis = (synopsis: MediaEditDraft["synopsis"]) =>
@@ -69,6 +73,10 @@ const comparable = (field: MediaEditField, draft: MediaEditDraft) => {
 
   if (field === "staffs") {
     return draft.staffs.map(({ staffId, role }) => `${role}:${staffId}`).sort()
+  }
+
+  if (field === "relations") {
+    return draft.relations.map(({ mediaId, type }) => `${mediaId}:${type}`).sort()
   }
 
   return draft[field]
@@ -112,6 +120,9 @@ export const toChanges = (draft: MediaEditDraft, fields: readonly MediaEditField
     ...(has("links") ? { links: cleanLinks(draft.links) } : {}),
     ...(has("staffs")
       ? { staffs: draft.staffs.map(({ staffId, role }) => ({ staffId, role })) }
+      : {}),
+    ...(has("relations")
+      ? { relations: draft.relations.map(({ mediaId, type }) => ({ mediaId, type })) }
       : {}),
   } satisfies MediaEditChanges
 }

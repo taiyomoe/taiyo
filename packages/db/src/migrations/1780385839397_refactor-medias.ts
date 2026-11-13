@@ -485,7 +485,16 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .alterColumn("tags", (c) => c.setDefault(sql`'{}'::jsonb[]`))
     .execute()
 
-  const rows = await db.selectFrom("Media").select(["id", "genres", "tags", "oneShot"]).execute()
+  const rows = await db
+    .selectFrom("Media")
+    .select([
+      "id",
+      // node-postgres has no parser for arrays of a custom enum and returns them as a "{A,B}" string.
+      sql<string[] | null>`"genres"::text[]`.as("genres"),
+      "tags",
+      "oneShot",
+    ])
+    .execute()
 
   for (const row of rows) {
     const newTags: MediaTag[] = []
@@ -503,7 +512,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
       push({ key: "ONESHOT", isSpoiler: false })
     }
 
-    const genres: string[] = Array.isArray(row.genres) ? row.genres : []
+    const genres = row.genres ?? []
 
     for (const genre of genres) {
       if (TAG_KEYS.has(genre)) {

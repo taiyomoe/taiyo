@@ -80,6 +80,12 @@ export * from "./models/push-subscription-model"
 
 export * from "./models/session-model"
 
+export * from "./models/media-relation-model"
+
+export * from "./models/media-relation-sync-model"
+
+export * from "./models/media-similarity-model"
+
 export * from "./models/media-staff-model"
 
 export * from "./models/media-suggestion-model"
@@ -89,6 +95,10 @@ export * from "./models/page-bookmark-model"
 export * from "./models/page-report-model"
 
 export * from "./models/reading-reward-model"
+
+export * from "./models/recommendation-click-model"
+
+export * from "./models/recommendation-impression-model"
 
 export * from "./models/shop-purchase-model"
 

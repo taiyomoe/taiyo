@@ -14,6 +14,7 @@ import { MediaPage } from "@/features/media/components/media-page/media-page"
 import { getMainTitle, getSynopsis } from "@/features/media/lib/media-labels"
 import { CHAPTERS_PER_PAGE, MEDIA_TABS } from "@/features/media/lib/media-page"
 import { pageOgMeta } from "@/features/og/lib/og-meta"
+import { relatedMediasQueryOptions } from "@/features/recommendations/api/recommendations"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -68,6 +69,9 @@ export const Route = createFileRoute("/media/$mediaId")({
                 }),
               ),
             ]
+          : []),
+        ...(deps.tab === "related"
+          ? [context.queryClient.query(relatedMediasQueryOptions(mediaId, contentRatings))]
           : []),
         ...(deps.tab === "comments"
           ? [

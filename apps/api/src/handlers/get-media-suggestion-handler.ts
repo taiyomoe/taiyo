@@ -2,7 +2,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { checkMediaSuggestion } from "../middlewares/check-media-suggestion-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
-import { editedFields, pickFields, withStaffNames } from "../utils/media-edit"
+import { editedFields, pickFields, withEditNames } from "../utils/media-edit"
 import {
   conflictsOf,
   loadContext,
@@ -40,7 +40,7 @@ export const getMediaSuggestionHandler = new Hono().get(
     const { db, mediaSuggestion: row } = c.var
     const { current, titles, covers } = await loadContext(db, [row], [row.mediaId])
     const now = current.get(row.mediaId)
-    const [changes, base, currentValues] = await withStaffNames(db, [
+    const [changes, base, currentValues] = await withEditNames(db, [
       row.changes,
       row.base,
       now === undefined ? {} : pickFields(now, editedFields(row.changes)),

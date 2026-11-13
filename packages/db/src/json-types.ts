@@ -6,6 +6,7 @@ import type {
   MediaDemography,
   MediaLink,
   MediaLinkNumberKey,
+  MediaRelationType,
   MediaSource,
   MediaStatus,
   MediaType,
@@ -40,6 +41,11 @@ export type MediaEditStaff = {
   role: StaffRole
 }
 
+export type MediaEditRelation = {
+  mediaId: string
+  type: MediaRelationType
+}
+
 export type MediaEdit = Partial<{
   titles: MediaEditTitle[]
   synopsis: LocalizedText
@@ -54,7 +60,16 @@ export type MediaEdit = Partial<{
   tags: MediaTags[]
   links: MediaLinks
   staffs: MediaEditStaff[]
+  relations: MediaEditRelation[]
 }>
+
+export type MediaSimilarityItem = {
+  mediaId: string
+  score: number
+  tags: string[]
+  staff: boolean
+  readers: boolean
+}
 
 export type StaffLinks = Partial<Record<StaffLink, string>>
 

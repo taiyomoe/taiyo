@@ -12,6 +12,7 @@ import type { EditorProps } from "@/features/media-suggestions/components/field-
 import { dateEditor } from "@/features/media-suggestions/components/field-editors/date-editor"
 import { enumEditor } from "@/features/media-suggestions/components/field-editors/enum-editor"
 import { LinksEditor } from "@/features/media-suggestions/components/field-editors/links-editor"
+import { RelationsEditor } from "@/features/media-suggestions/components/field-editors/relations-editor"
 import { StaffsEditor } from "@/features/media-suggestions/components/field-editors/staffs-editor"
 import { SynopsisEditor } from "@/features/media-suggestions/components/field-editors/synopsis-editor"
 import { TagsEditor } from "@/features/media-suggestions/components/field-editors/tags-editor"
@@ -55,6 +56,7 @@ const EDITORS: Record<MediaEditField, (props: EditorProps) => ReactNode> = {
   tags: TagsEditor,
   links: LinksEditor,
   staffs: StaffsEditor,
+  relations: RelationsEditor,
 }
 
 export function FieldEditor({ field, ...props }: EditorProps & { field: MediaEditField }) {

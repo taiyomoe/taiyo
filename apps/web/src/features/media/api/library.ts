@@ -90,6 +90,12 @@ export function useSetLibraryStatus() {
       queryClient.setQueryData(libraryEntryQueryOptions(mediaId).queryKey, context?.previous)
     },
     onSettled: (_data, _error, { mediaId }) =>
-      queryClient.invalidateQueries({ queryKey: libraryEntryQueryOptions(mediaId).queryKey }),
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: libraryEntryQueryOptions(mediaId).queryKey }),
+        queryClient.invalidateQueries({ queryKey: ["recommendations"] }),
+        queryClient.invalidateQueries({
+          predicate: (query) => query.queryKey[0] === "medias" && query.queryKey[2] === "related",
+        }),
+      ]),
   })
 }

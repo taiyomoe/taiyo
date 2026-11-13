@@ -21,6 +21,7 @@ const SECTIONS: Array<{ title: () => string; fields: readonly MediaEditField[] }
   { title: m.media_edit_field_tags, fields: ["tags"] },
   { title: m.media_info_links, fields: ["links"] },
   { title: m.media_edit_field_staffs, fields: ["staffs"] },
+  { title: m.media_edit_field_relations, fields: ["relations"] },
 ]
 const styles = stylex.create({
   sections: {

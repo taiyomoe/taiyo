@@ -3,7 +3,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
-import { mediaEditViewSchema, readMediaEdit, withStaffNames } from "../utils/media-edit"
+import { mediaEditViewSchema, readMediaEdit, withEditNames } from "../utils/media-edit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -56,7 +56,7 @@ export const getMediaEditHandler = new Hono().get(
         .where("status", "=", "PENDING")
         .executeTakeFirst(),
     ])
-    const [currentView = {}, changes = {}] = await withStaffNames(db, [
+    const [currentView = {}, changes = {}] = await withEditNames(db, [
       current,
       pending?.changes ?? {},
     ])

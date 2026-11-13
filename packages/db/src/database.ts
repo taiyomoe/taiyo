@@ -22,6 +22,9 @@ import type { Group } from "./models/group-model"
 import type { GroupOwnershipRequest } from "./models/group-ownership-request-model"
 import type { GroupReport } from "./models/group-report-model"
 import type { Media } from "./models/media-model"
+import type { MediaRelation } from "./models/media-relation-model"
+import type { MediaRelationSync } from "./models/media-relation-sync-model"
+import type { MediaSimilarity } from "./models/media-similarity-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
 import type { NotificationActor } from "./models/notification-actor-model"
@@ -31,6 +34,8 @@ import type { PageBookmark } from "./models/page-bookmark-model"
 import type { PageReport } from "./models/page-report-model"
 import type { PushSubscription } from "./models/push-subscription-model"
 import type { ReadingReward } from "./models/reading-reward-model"
+import type { RecommendationClick } from "./models/recommendation-click-model"
+import type { RecommendationImpression } from "./models/recommendation-impression-model"
 import type { SearchOutboxEntry } from "./models/search-outbox-model"
 import type { Session } from "./models/session-model"
 import type { ShopPurchase } from "./models/shop-purchase-model"
@@ -73,6 +78,9 @@ export type DB = {
   groupOwnershipRequests: GroupOwnershipRequest
   groupReports: GroupReport
   groups: Group
+  mediaRelations: MediaRelation
+  mediaRelationSyncs: MediaRelationSync
+  mediaSimilarities: MediaSimilarity
   mediaStaffs: MediaStaff
   mediaSuggestions: MediaSuggestion
   medias: Media
@@ -83,6 +91,8 @@ export type DB = {
   pageReports: PageReport
   pushSubscriptions: PushSubscription
   readingRewards: ReadingReward
+  recommendationClicks: RecommendationClick
+  recommendationImpressions: RecommendationImpression
   searchOutbox: SearchOutboxEntry
   sessions: Session
   shopPurchases: ShopPurchase

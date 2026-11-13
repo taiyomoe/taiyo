@@ -49,6 +49,11 @@ const mediaErrors = {
     message: "Invalid titles configuration. Exactly one main title is required.",
     code: 422,
   },
+  MEDIA_INVALID_RELATIONS: {
+    message:
+      "A relation points to a media that does not exist, to the media itself, or to a media that already has the most relations allowed.",
+    code: 422,
+  },
   MEDIA_INVALID_COVERS: {
     message:
       "Invalid covers configuration. At least one cover with exactly one main cover is required.",

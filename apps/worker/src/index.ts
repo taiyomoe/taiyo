@@ -21,6 +21,7 @@ import {
   reapStaleChapterUploads,
   sendPendingPushes,
 } from "@taiyomoe/queue"
+import { refreshMediaSimilarities, syncMediaRelations } from "@taiyomoe/recommendations"
 import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from "@taiyomoe/s3"
 import { drainSearchOutbox, getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { Queue, Worker } from "bullmq"
@@ -39,6 +40,9 @@ const NOTIFICATION_MAINTENANCE_QUEUE = "notification-maintenance"
 const DRAIN_NOTIFICATIONS_JOB = "drain-notification-outbox"
 const PURGE_NOTIFICATIONS_JOB = "purge-notifications"
 const SEND_PUSHES_JOB = "send-pushes"
+const RECOMMENDATIONS_QUEUE = "recommendations"
+const SYNC_RELATIONS_JOB = "sync-media-relations"
+const REFRESH_SIMILARITIES_JOB = "refresh-media-similarities"
 const chapterUploadActor = systemActor("chapter-upload-worker")
 const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
@@ -203,6 +207,17 @@ const notificationWorker = new Worker(
   },
   { connection: createBullConnection(), concurrency: 1 },
 )
+const recommendationsWorker = new Worker(
+  RECOMMENDATIONS_QUEUE,
+  async (job) => {
+    if (job.name === SYNC_RELATIONS_JOB) {
+      return syncMediaRelations(deps)
+    }
+
+    return refreshMediaSimilarities(deps)
+  },
+  { connection: createBullConnection(), concurrency: 1 },
+)
 
 chapterWorker.on("ready", () => {
   // oxlint-disable-next-line no-console
@@ -282,6 +297,25 @@ await notificationMaintenanceQueue
     console.warn("notification maintenance schedule not applied (store may not support it):", err)
   })
 
+const recommendationsQueue = new Queue(RECOMMENDATIONS_QUEUE, {
+  connection: createBullConnection(),
+})
+
+await recommendationsQueue
+  .upsertJobScheduler(SYNC_RELATIONS_JOB, { pattern: "20 * * * *" }, { name: SYNC_RELATIONS_JOB })
+  .then(() =>
+    recommendationsQueue.upsertJobScheduler(
+      REFRESH_SIMILARITIES_JOB,
+      { pattern: "40 * * * *" },
+      { name: REFRESH_SIMILARITIES_JOB },
+    ),
+  )
+  .then(() => recommendationsQueue.close())
+  .catch((err: unknown) => {
+    // oxlint-disable-next-line no-console
+    console.warn("recommendations schedule not applied (store may not support it):", err)
+  })
+
 const handleShutdownSignal = () => {
   Promise.all([
     chapterWorker.close(),
@@ -289,6 +323,7 @@ const handleShutdownSignal = () => {
     searchWorker.close(),
     commentWorker.close(),
     notificationWorker.close(),
+    recommendationsWorker.close(),
   ])
     .then(() => {
       process.exit(0)
