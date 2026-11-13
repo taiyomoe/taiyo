@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker"
 import { type Kysely, sql } from "kysely"
+import { cluster } from "radashi"
 import normalizeEmail from "validator/lib/normalizeEmail"
 
 type MigrationDb = {
@@ -20,20 +21,28 @@ type MigrationDb = {
     showLibrary: boolean
     homeLayout: string
   }
+  // Temporary tables staging per-user values: each phase then updates "User" with one
+  // statement instead of one per user (17k users in production).
+  normalizedEmails: { id: string; normalizedEmail: string | null }
+  usernames: { id: string; username: string; displayUsername: string }
+  userSettings: { id: string; settings: string }
 }
 
+const BATCH_SIZE = 1000
 const USERNAME_MIN = 3
 const USERNAME_MAX = 30
 const DISPLAY_NAME_MIN = 3
 const DISPLAY_NAME_MAX = 30
-const normalizeUsername = (input: string) => {
-  const normalized = input
+const sanitizeUsername = (input: string) =>
+  input
     .slice(0, USERNAME_MAX)
     .replaceAll(" ", "_")
     .replace(/[^a-zA-Z0-9_.]/g, "")
     .toLowerCase()
+const normalizeUsername = (input: string) => {
+  const normalized = sanitizeUsername(input)
 
-  return normalized.length < USERNAME_MIN ? faker.internet.username() : normalized
+  return normalized.length < USERNAME_MIN ? sanitizeUsername(faker.internet.username()) : normalized
 }
 const normalizeDisplayName = (input: string) => {
   const normalized = input.slice(0, DISPLAY_NAME_MAX).replace(/[^a-zA-Z0-9_.\s]/g, "")
@@ -135,20 +144,39 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await db.schema.alterTable("User").addColumn("normalizedEmail", "text").execute()
 
   const usersForEmail = await db.selectFrom("User").select(["id", "email"]).execute()
-
-  for (const user of usersForEmail) {
+  const normalizedEmails = usersForEmail.map((user) => {
     const normalized = user.email !== null && user.email !== "" ? normalizeEmail(user.email) : null
 
     if (normalized === false) {
       throw new Error(`Failed to normalize email for user ${user.id}`)
     }
 
-    await db
-      .updateTable("User")
-      .set({ normalizedEmail: normalized ?? null })
-      .where("id", "=", user.id)
-      .execute()
+    return { id: user.id, normalizedEmail: normalized }
+  })
+
+  await db.schema
+    .createTable("normalizedEmails")
+    .temporary()
+    .addColumn("id", "uuid", (c) => c.primaryKey())
+    .addColumn("normalizedEmail", "text")
+    .execute()
+
+  for (const batch of cluster(normalizedEmails, BATCH_SIZE)) {
+    await db.insertInto("normalizedEmails").values(batch).execute()
   }
+
+  // Inside the migration transaction, autovacuum cannot refresh the planner's statistics
+  // on these freshly written tables, which the join below relies on.
+  await sql`ANALYZE "normalizedEmails", "User"`.execute(db)
+
+  await db
+    .updateTable("User")
+    .from("normalizedEmails")
+    .set((eb) => ({ normalizedEmail: eb.ref("normalizedEmails.normalizedEmail") }))
+    .whereRef("User.id", "=", "normalizedEmails.id")
+    .execute()
+
+  await db.schema.dropTable("normalizedEmails").execute()
 
   /**
    * Phase 3: add username and displayUsername columns to User table.
@@ -175,38 +203,62 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .execute()
   const takenUsernames = new Set<string>()
   const takenDisplayUsernames = new Set<string>()
+  // The candidate is sanitized before the uniqueness check: lowercasing it afterwards
+  // collided with taken names on production data ("User_username_key").
   const generateUsername = (set: Set<string>): string => {
-    const candidate = faker.internet.username()
+    const candidate = sanitizeUsername(faker.internet.username())
 
-    return set.has(candidate) ? generateUsername(set) : candidate
+    return set.has(candidate) || candidate.length < USERNAME_MIN ? generateUsername(set) : candidate
   }
   const generateDisplayUsername = (set: Set<string>): string => {
     const candidate = faker.internet.displayName()
 
     return set.has(candidate) ? generateDisplayUsername(set) : candidate
   }
+  const usernames: Array<{ id: string; username: string; displayUsername: string }> = []
 
   for (const user of usersForUsername) {
     let username = normalizeUsername(user.name)
     let displayUsername = normalizeDisplayName(user.name)
 
     if (takenUsernames.has(username)) {
-      username = generateUsername(takenUsernames).toLowerCase()
+      username = generateUsername(takenUsernames)
     }
 
     if (takenDisplayUsernames.has(displayUsername)) {
       displayUsername = generateDisplayUsername(takenDisplayUsernames)
     }
 
-    await db
-      .updateTable("User")
-      .set({ username, displayUsername })
-      .where("id", "=", user.id)
-      .execute()
-
+    usernames.push({ id: user.id, username, displayUsername })
     takenUsernames.add(username)
     takenDisplayUsernames.add(displayUsername)
   }
+
+  await db.schema
+    .createTable("usernames")
+    .temporary()
+    .addColumn("id", "uuid", (c) => c.primaryKey())
+    .addColumn("username", "text", (c) => c.notNull())
+    .addColumn("displayUsername", "text", (c) => c.notNull())
+    .execute()
+
+  for (const batch of cluster(usernames, BATCH_SIZE)) {
+    await db.insertInto("usernames").values(batch).execute()
+  }
+
+  await sql`ANALYZE "usernames", "User"`.execute(db)
+
+  await db
+    .updateTable("User")
+    .from("usernames")
+    .set((eb) => ({
+      username: eb.ref("usernames.username"),
+      displayUsername: eb.ref("usernames.displayUsername"),
+    }))
+    .whereRef("User.id", "=", "usernames.id")
+    .execute()
+
+  await db.schema.dropTable("usernames").execute()
 
   await db.schema
     .alterTable("User")
@@ -226,8 +278,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .selectFrom("UserSetting")
     .select(["userId", "preferredTitles", "showFollowing", "showLibrary", "homeLayout"])
     .execute()
-
-  for (const row of settingsRows) {
+  const userSettings = settingsRows.map((row) => {
     const rawSettings = {
       preferredTitles: row.preferredTitles,
       showFollowing: row.showFollowing ? null : false,
@@ -238,12 +289,30 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
       Object.entries(rawSettings).filter(([, value]) => value !== null),
     )
 
-    await db
-      .updateTable("User")
-      .set({ settings: sql`${JSON.stringify(settings)}::jsonb` })
-      .where("id", "=", row.userId)
-      .execute()
+    return { id: row.userId, settings: JSON.stringify(settings) }
+  })
+
+  await db.schema
+    .createTable("userSettings")
+    .temporary()
+    .addColumn("id", "uuid", (c) => c.primaryKey())
+    .addColumn("settings", "jsonb", (c) => c.notNull())
+    .execute()
+
+  for (const batch of cluster(userSettings, BATCH_SIZE)) {
+    await db.insertInto("userSettings").values(batch).execute()
   }
+
+  await sql`ANALYZE "userSettings", "User"`.execute(db)
+
+  await db
+    .updateTable("User")
+    .from("userSettings")
+    .set((eb) => ({ settings: eb.ref("userSettings.settings") }))
+    .whereRef("User.id", "=", "userSettings.id")
+    .execute()
+
+  await db.schema.dropTable("userSettings").execute()
 
   await db.schema.dropTable("UserSetting").execute()
 
@@ -263,6 +332,15 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await db.schema
     .alterTable("UserProfile")
     .alterColumn("about", (c) => c.setNotNull())
+    .execute()
+
+  /**
+   * Phase 6: Points can never go negative. Production never had this check, and init
+   * mirrors production, so it starts here.
+   */
+  await db.schema
+    .alterTable("UserProfile")
+    .addCheckConstraint("UserProfile_points_check", sql`"points" >= 0`)
     .execute()
 }
 

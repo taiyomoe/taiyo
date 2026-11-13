@@ -1,8 +1,22 @@
 import { type Kysely, sql } from "kysely"
 
-const createdAt = sql`timestamp(3)`
+// Community: comments, notifications, push subscriptions and activity notifications.
 
-export async function up(db: Kysely<unknown>) {
+const createdAt = sql`timestamp(3)`
+const replaceNotificationType = async (db: Kysely<unknown>, values: string[]) => {
+  await sql`ALTER TYPE "NotificationType" RENAME TO "NotificationType_old"`.execute(db)
+  await sql`CREATE TYPE "NotificationType" AS ENUM (${sql.join(values.map((value) => sql.lit(value)))})`.execute(
+    db,
+  )
+  await sql`
+    ALTER TABLE "notifications"
+      ALTER COLUMN "type" TYPE "NotificationType" USING "type"::text::"NotificationType"
+  `.execute(db)
+  await sql`DROP TYPE "NotificationType_old"`.execute(db)
+}
+
+export async function up(db: Kysely<unknown>): Promise<void> {
+  // add-comments
   await db.schema
     .createType("CommentDeletion")
     .asEnum(["AUTHOR", "PAGE_OWNER", "MODERATOR"])
@@ -241,9 +255,250 @@ export async function up(db: Kysely<unknown>) {
     )
     .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .execute()
+
+  // add-notifications
+  await db.schema
+    .alterTable("userLibraryEntries")
+    .addColumn("notify", "boolean", (c) => c.notNull().defaultTo(true))
+    .execute()
+
+  await db.schema
+    .createType("NotificationType")
+    .asEnum(["CHAPTER_PUBLISHED", "COMMENT_REPLY"])
+    .execute()
+
+  await db.schema
+    .createTable("notifications")
+    .addColumn("id", "uuid", (c) => c.primaryKey().defaultTo(sql`gen_random_uuid()`))
+    .addColumn("userId", "uuid", (c) =>
+      c.notNull().references("users.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("type", sql`"NotificationType"`, (c) => c.notNull())
+    .addColumn("chapterId", "uuid", (c) =>
+      c.references("chapters.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("commentId", "uuid", (c) =>
+      c.references("comments.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("readAt", sql`timestamp(3)`)
+    .addCheckConstraint(
+      "notifications_subject_check",
+      sql`("type" = 'CHAPTER_PUBLISHED' and "chapterId" is not null and "commentId" is null)
+        or ("type" = 'COMMENT_REPLY' and "commentId" is not null and "chapterId" is null)`,
+    )
+    .execute()
+
+  await sql`
+    CREATE UNIQUE INDEX "notifications_userId_chapterId_key"
+      ON "notifications" ("userId", "chapterId")
+      WHERE "chapterId" IS NOT NULL
+  `.execute(db)
+
+  await sql`
+    CREATE UNIQUE INDEX "notifications_userId_commentId_key"
+      ON "notifications" ("userId", "commentId")
+      WHERE "commentId" IS NOT NULL
+  `.execute(db)
+
+  await sql`
+    CREATE INDEX "notifications_userId_createdAt_idx"
+      ON "notifications" ("userId", "createdAt" DESC, "id" DESC)
+  `.execute(db)
+
+  await sql`
+    CREATE INDEX "notifications_userId_unread_idx"
+      ON "notifications" ("userId")
+      WHERE "readAt" IS NULL
+  `.execute(db)
+
+  await db.schema
+    .createIndex("notifications_chapterId_idx")
+    .on("notifications")
+    .column("chapterId")
+    .execute()
+
+  await db.schema
+    .createIndex("notifications_commentId_idx")
+    .on("notifications")
+    .column("commentId")
+    .execute()
+
+  await db.schema
+    .createTable("notificationOutbox")
+    .addColumn("id", "bigint", (c) => c.primaryKey().generatedAlwaysAsIdentity())
+    .addColumn("chapterId", "uuid", (c) =>
+      c.notNull().references("chapters.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .execute()
+
+  await sql`
+    CREATE FUNCTION notification_outbox_enqueue_chapter() RETURNS trigger AS $$
+    BEGIN
+      INSERT INTO "notificationOutbox" ("chapterId") VALUES (NEW.id);
+
+      RETURN NULL;
+    END;
+    $$ LANGUAGE plpgsql
+  `.execute(db)
+
+  await sql`
+    CREATE TRIGGER "chapters_insert_enqueue_notification_outbox"
+    AFTER INSERT ON "chapters"
+    FOR EACH ROW
+    WHEN (NEW."status" = 'PUBLISHED' AND NEW."deletedAt" IS NULL)
+    EXECUTE FUNCTION notification_outbox_enqueue_chapter()
+  `.execute(db)
+
+  await sql`
+    CREATE TRIGGER "chapters_publish_enqueue_notification_outbox"
+    AFTER UPDATE OF "status" ON "chapters"
+    FOR EACH ROW
+    WHEN (
+      NEW."status" = 'PUBLISHED'
+      AND OLD."status" IS DISTINCT FROM 'PUBLISHED'
+      AND NEW."deletedAt" IS NULL
+    )
+    EXECUTE FUNCTION notification_outbox_enqueue_chapter()
+  `.execute(db)
+
+  // add-push-subscriptions
+  await db.schema
+    .createTable("pushSubscriptions")
+    .addColumn("id", "uuid", (c) => c.primaryKey().defaultTo(sql`gen_random_uuid()`))
+    .addColumn("userId", "uuid", (c) =>
+      c.notNull().references("users.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("endpoint", "text", (c) => c.notNull().unique())
+    .addColumn("p256dh", "text", (c) => c.notNull())
+    .addColumn("auth", "text", (c) => c.notNull())
+    .addColumn("userAgent", "text")
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("updatedAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .execute()
+
+  await db.schema
+    .createIndex("pushSubscriptions_userId_idx")
+    .on("pushSubscriptions")
+    .column("userId")
+    .execute()
+
+  await sql`
+    CREATE TRIGGER "pushSubscriptions_set_updated_at"
+    BEFORE UPDATE ON "pushSubscriptions"
+    FOR EACH ROW
+    EXECUTE FUNCTION set_updated_at()
+  `.execute(db)
+
+  await db.schema
+    .alterTable("notifications")
+    .addColumn("pushedAt", sql`timestamp(3)`)
+    .execute()
+  await sql`UPDATE "notifications" SET "pushedAt" = CURRENT_TIMESTAMP`.execute(db)
+  await sql`
+    CREATE INDEX "notifications_unpushed_idx"
+      ON "notifications" ("createdAt")
+      WHERE "pushedAt" IS NULL
+  `.execute(db)
+
+  // add-activity-notifications
+  await sql`ALTER TABLE "notifications" DROP CONSTRAINT "notifications_subject_check"`.execute(db)
+  // A type made in this transaction can use its values at once, unlike ADD VALUE.
+  await replaceNotificationType(db, [
+    "CHAPTER_PUBLISHED",
+    "COMMENT_REPLY",
+    "COMMENT_LIKE",
+    "FOLLOW",
+  ])
+  await sql`
+    ALTER TABLE "notifications" ADD CONSTRAINT "notifications_subject_check" CHECK (
+      ("type" = 'CHAPTER_PUBLISHED' AND "chapterId" IS NOT NULL AND "commentId" IS NULL)
+      OR ("type" IN ('COMMENT_REPLY', 'COMMENT_LIKE') AND "commentId" IS NOT NULL AND "chapterId" IS NULL)
+      OR ("type" = 'FOLLOW' AND "commentId" IS NULL AND "chapterId" IS NULL)
+    )
+  `.execute(db)
+
+  // Likes gather in a new notification once the previous one is read, so only replies stay unique.
+  await sql`DROP INDEX "notifications_userId_commentId_key"`.execute(db)
+  await sql`
+    CREATE UNIQUE INDEX "notifications_userId_commentId_key"
+      ON "notifications" ("userId", "commentId")
+      WHERE "type" = 'COMMENT_REPLY'
+  `.execute(db)
+
+  await db.schema
+    .alterTable("notifications")
+    .addColumn("lastEventAt", sql`timestamp(3)`, (c) =>
+      c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`),
+    )
+    .execute()
+  await sql`UPDATE "notifications" SET "lastEventAt" = "createdAt"`.execute(db)
+  await sql`DROP INDEX "notifications_userId_createdAt_idx"`.execute(db)
+  await sql`
+    CREATE INDEX "notifications_userId_lastEventAt_idx"
+      ON "notifications" ("userId", "lastEventAt" DESC, "id" DESC)
+  `.execute(db)
+
+  await db.schema
+    .createTable("notificationActors")
+    .addColumn("notificationId", "uuid", (c) =>
+      c.notNull().references("notifications.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("actorId", "uuid", (c) =>
+      c.notNull().references("users.id").onDelete("cascade").onUpdate("cascade"),
+    )
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addPrimaryKeyConstraint("notificationActors_pkey", ["notificationId", "actorId"])
+    .execute()
+
+  await db.schema
+    .createIndex("notificationActors_actorId_idx")
+    .on("notificationActors")
+    .column("actorId")
+    .execute()
 }
 
-export async function down(db: Kysely<unknown>) {
+export async function down(db: Kysely<unknown>): Promise<void> {
+  // add-activity-notifications
+  await db.schema.dropTable("notificationActors").execute()
+  await sql`DELETE FROM "notifications" WHERE "type" IN ('COMMENT_LIKE', 'FOLLOW')`.execute(db)
+  await sql`DROP INDEX "notifications_userId_lastEventAt_idx"`.execute(db)
+  await sql`
+    CREATE INDEX "notifications_userId_createdAt_idx"
+      ON "notifications" ("userId", "createdAt" DESC, "id" DESC)
+  `.execute(db)
+  await db.schema.alterTable("notifications").dropColumn("lastEventAt").execute()
+  await sql`DROP INDEX "notifications_userId_commentId_key"`.execute(db)
+  await sql`
+    CREATE UNIQUE INDEX "notifications_userId_commentId_key"
+      ON "notifications" ("userId", "commentId")
+      WHERE "commentId" IS NOT NULL
+  `.execute(db)
+  await sql`ALTER TABLE "notifications" DROP CONSTRAINT "notifications_subject_check"`.execute(db)
+  await replaceNotificationType(db, ["CHAPTER_PUBLISHED", "COMMENT_REPLY"])
+  await sql`
+    ALTER TABLE "notifications" ADD CONSTRAINT "notifications_subject_check" CHECK (
+      ("type" = 'CHAPTER_PUBLISHED' AND "chapterId" IS NOT NULL AND "commentId" IS NULL)
+      OR ("type" = 'COMMENT_REPLY' AND "commentId" IS NOT NULL AND "chapterId" IS NULL)
+    )
+  `.execute(db)
+
+  // add-push-subscriptions
+  await sql`DROP INDEX "notifications_unpushed_idx"`.execute(db)
+  await db.schema.alterTable("notifications").dropColumn("pushedAt").execute()
+  await db.schema.dropTable("pushSubscriptions").execute()
+
+  // add-notifications
+  await sql`DROP TRIGGER "chapters_publish_enqueue_notification_outbox" ON "chapters"`.execute(db)
+  await sql`DROP TRIGGER "chapters_insert_enqueue_notification_outbox" ON "chapters"`.execute(db)
+  await sql`DROP FUNCTION notification_outbox_enqueue_chapter()`.execute(db)
+  await db.schema.dropTable("notificationOutbox").execute()
+  await db.schema.dropTable("notifications").execute()
+  await db.schema.dropType("NotificationType").execute()
+  await db.schema.alterTable("userLibraryEntries").dropColumn("notify").execute()
+
+  // add-comments
   await db.schema.dropTable("blockedCommentImages").execute()
   await db.schema.dropTable("commentImageFavorites").execute()
   await db.schema.dropTable("commentImageUsages").execute()

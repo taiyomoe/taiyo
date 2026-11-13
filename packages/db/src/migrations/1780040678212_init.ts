@@ -644,12 +644,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("city", "text")
     .addColumn("country", sql`"Countries"`)
     .addColumn("about", "text")
-    .addColumn("points", "integer", (c) =>
-      c
-        .notNull()
-        .defaultTo(0)
-        .check(sql`"points" >= 0`),
-    )
+    .addColumn("points", "integer", (c) => c.notNull().defaultTo(0))
     .addColumn("userId", "text", (c) =>
       c.notNull().references("User.id").onDelete("restrict").onUpdate("cascade"),
     )

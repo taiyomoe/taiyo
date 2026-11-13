@@ -1,6 +1,10 @@
 import { type Kysely, sql } from "kysely"
 
+// Renames every table to its plural camelCase name, then adds the foreign key indexes and
+// invariants the new model relies on.
+
 export async function up(db: Kysely<unknown>): Promise<void> {
+  // rename-tables
   await sql`
     CREATE OR REPLACE FUNCTION set_updated_at()
     RETURNS TRIGGER AS $$
@@ -310,10 +314,43 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
   // _prisma_migrations
   await db.schema.dropTable("_prisma_migrations").ifExists().execute()
+
+  // add-missing-indexes-and-invariants
+  // Indexes on FK columns that every list endpoint filters by. Postgres
+  // doesn't auto-create indexes for foreign keys; without these, list-by-
+  // media is a sequential scan.
+  await db.schema.createIndex("chapters_mediaId_idx").on("chapters").column("mediaId").execute()
+  await db.schema.createIndex("covers_mediaId_idx").on("covers").column("mediaId").execute()
+  await db.schema.createIndex("banners_mediaId_idx").on("banners").column("mediaId").execute()
+
+  // Exactly one main cover per media. set-main-cover's read-then-write race
+  // can otherwise leave two covers flagged as main, and production already has
+  // such pairs: keep the newest one as main before enforcing it.
+  await sql`
+    UPDATE "covers" c
+    SET "isMainCover" = false
+    WHERE c."isMainCover"
+      AND c."deletedAt" IS NULL
+      AND EXISTS (
+        SELECT 1 FROM "covers" o
+        WHERE o."mediaId" = c."mediaId"
+          AND o."isMainCover"
+          AND o."deletedAt" IS NULL
+          AND (o."createdAt", o.id) > (c."createdAt", c.id)
+      )
+  `.execute(db)
+
+  await sql`
+    CREATE UNIQUE INDEX "covers_mediaId_main_unique"
+      ON "covers" ("mediaId")
+      WHERE "isMainCover" = true AND "deletedAt" IS NULL
+  `.execute(db)
 }
 
 export function down(): Promise<void> {
   return Promise.reject(
-    new Error("rename-tables is a destructive data-type migration and cannot be reversed"),
+    new Error(
+      "rename-tables cannot be reversed: rename-tables, add-missing-indexes-and-invariants destroy data",
+    ),
   )
 }
