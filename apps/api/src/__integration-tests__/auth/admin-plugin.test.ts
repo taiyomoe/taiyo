@@ -107,6 +107,30 @@ describe("Better Auth admin plugin", () => {
     expect(await sessionsOf(services, other.userId)).toHaveLength(1)
   })
 
+  test("keeps the target rule when the request carries a second session cookie", async ({
+    app,
+    services,
+  }) => {
+    const admin = await signInAs(services, { role: "ADMIN" })
+    const other = await signInAs(services, { role: "ADMIN" })
+    const target = await signInAs(services)
+    const decoy = `${admin.headers.Cookie}; better-auth.session_token=x`
+
+    for (const userId of [other.userId, admin.userId]) {
+      const res = await auth(app, "/admin/list-user-sessions", decoy, { json: { userId } })
+
+      expect(res).toMatchObject({ status: 403, body: { code: "FORBIDDEN_TARGET" } })
+    }
+
+    const [otherSession] = await sessionsOf(services, other.userId)
+    const revoke = await auth(app, "/admin/revoke-user-session", admin.headers.Cookie, {
+      json: { userId: target.userId, sessionToken: otherSession?.token },
+    })
+
+    expect(revoke).toMatchObject({ status: 403, body: { code: "FORBIDDEN_TARGET" } })
+    expect(await sessionsOf(services, other.userId)).toHaveLength(1)
+  })
+
   test("keeps impersonation, passwords and sessions to admins", async ({ app, services }) => {
     const target = await signInAs(services)
 

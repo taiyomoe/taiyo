@@ -12,7 +12,7 @@ import {
 import { createPermissions, toRole } from "@taiyomoe/permissions"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
-import { APIError, createAuthMiddleware } from "better-auth/api"
+import { APIError, createAuthMiddleware, getAuthoritativeSessionFromCtx } from "better-auth/api"
 import {
   admin,
   captcha,
@@ -29,7 +29,6 @@ import { clientEnv } from "./env/client"
 import { serverEnv } from "./env/server"
 import { afterHook } from "./utils/after-hook"
 import { createBeforeUserCreatedHook } from "./utils/before-user-created-hook"
-import { getSessionFromHeaders } from "./utils/get-session-from-headers"
 
 const ADMIN_ACTIONS = new Map(
   Object.entries({
@@ -45,7 +44,6 @@ const adminBodySchema = z.object({
   sessionToken: z.string().optional(),
 })
 const cookieDomain = serverEnv.BETTER_AUTH_COOKIE_DOMAIN ?? ""
-const actorSchema = z.object({ id: z.string(), role: z.unknown(), banned: z.boolean().nullish() })
 const unlinkAccountBodySchema = z.object({ accountId: z.string() })
 const signInBodySchema = z.object({
   email: z.string().optional(),
@@ -172,12 +170,13 @@ export const createAuth = ({
         const action = ADMIN_ACTIONS.get(ctx.path)
 
         if (action !== undefined) {
-          const session = await getSessionFromHeaders(ctx)
-          const actor = actorSchema.safeParse(session?.user)
+          // Same session and same target as the admin endpoint itself, and refuse whenever either
+          // cannot be resolved: a request the hook cannot read must not skip the target rule.
+          const session = await getAuthoritativeSessionFromCtx(ctx)
           const body = adminBodySchema.safeParse(ctx.body)
 
-          if (!actor.success) {
-            return
+          if (session === null) {
+            throw new APIError("UNAUTHORIZED")
           }
 
           if (!body.success) {
@@ -187,33 +186,40 @@ export const createAuth = ({
             })
           }
 
-          const targetId =
-            body.data.userId ??
-            (body.data.sessionToken === undefined
-              ? undefined
-              : (await ctx.context.internalAdapter.findSession(body.data.sessionToken))?.session
-                  .userId)
-          const target =
+          const { userId, sessionToken } = body.data
+          const revokesOneSession = ctx.path === "/admin/revoke-user-session"
+          const targetSession =
+            revokesOneSession && sessionToken !== undefined
+              ? await ctx.context.internalAdapter.findSession(sessionToken)
+              : null
+          const targetId = revokesOneSession ? targetSession?.session.userId : userId
+          const [actor, target] = await Promise.all([
+            db
+              .selectFrom("users")
+              .select(["id", "role", "banned", "banExpires"])
+              .where("id", "=", session.user.id)
+              .executeTakeFirst(),
             targetId === undefined
               ? undefined
-              : await db
+              : db
                   .selectFrom("users")
                   .select(["id", "role"])
                   .where("id", "=", targetId)
-                  .executeTakeFirst()
+                  .executeTakeFirst(),
+          ])
+          const can =
+            actor === undefined
+              ? undefined
+              : createPermissions({
+                  id: actor.id,
+                  role: toRole(actor.role),
+                  banned:
+                    actor.banned === true &&
+                    (actor.banExpires === null || actor.banExpires > new Date()),
+                  memberships: [],
+                })
 
-          if (target === undefined) {
-            return
-          }
-
-          const can = createPermissions({
-            id: actor.data.id,
-            role: toRole(actor.data.role),
-            banned: actor.data.banned === true,
-            memberships: [],
-          })
-
-          if (!can(action, target)) {
+          if (can === undefined || target === undefined || !can(action, target)) {
             throw new APIError("FORBIDDEN", {
               code: "FORBIDDEN_TARGET",
               message: "You can't do this for this user",
