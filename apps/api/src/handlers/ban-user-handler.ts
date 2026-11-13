@@ -65,7 +65,7 @@ export const banUserHandler = new Hono().post(
   checkUser({ includeBanned: true }),
   withTransaction,
   async (c) => {
-    const { can, db, s3, s3Bucket, targetUser, user } = c.var
+    const { auth, can, db, s3, s3Bucket, targetUser, user } = c.var
     const { reason, days } = c.var.json
 
     if (!can("user.ban", { id: targetUser.id, role: targetUser.role })) {
@@ -145,6 +145,11 @@ export const banUserHandler = new Hono().post(
     ])
 
     c.var.afterCommit(async () => {
+      // Deleting the rows above leaves Better Auth's cached sessions alive on its own routes.
+      const { internalAdapter } = await auth.$context
+
+      await internalAdapter.deleteUserSessions(targetUser.id)
+
       for (const chapter of chapters) {
         await deleteChapterPages({ s3, s3Bucket }, chapter)
       }
