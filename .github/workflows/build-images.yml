@@ -40,18 +40,20 @@ jobs:
         include:
           # smoke imports the app's entry point inside the built image, with production
           # dependencies only: a runtime import of a dev dependency fails here instead of
-          # crashing the pods. The worker starts its queues on import, so it has none.
+          # crashing the pods. It exits right after the import: Redis clients open on import
+          # and would fail later without a server. The worker starts its queues on import,
+          # so it has none.
           - app: api
             target: server
             smoke: >-
               docker run --rm -e TEST=1 -e RESEND_API_KEY=re_smoke -e S3_PUBLIC_URL=https://cdn.example.invalid
-              taiyo-api:ci node --import tsx -e "await import('./src/index.ts')"
+              taiyo-api:ci node --import tsx -e "await import('./src/index.ts'); process.exit(0)"
           - app: worker
             target: server
           - app: web
             target: web
             smoke: >-
-              docker run --rm taiyo-web:ci node -e "await import('./dist/server/server.js')"
+              docker run --rm taiyo-web:ci node -e "await import('./dist/server/server.js'); process.exit(0)"
     env:
       PUSH: ${{ github.event_name != 'pull_request' }}
     steps:
