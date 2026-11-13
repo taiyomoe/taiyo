@@ -9,6 +9,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
+import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const roleSchema = z.object({
@@ -45,7 +46,7 @@ export const setUserRoleHandler = new Hono().patch(
   validateJson(roleSchema),
   checkUser({ includeBanned: true }),
   async (c) => {
-    const { can, db, targetUser } = c.var
+    const { auth, can, db, targetUser } = c.var
     const { role } = c.var.json
 
     if (!can("user.setRole", { id: targetUser.id, role: targetUser.role })) {
@@ -55,6 +56,8 @@ export const setUserRoleHandler = new Hono().patch(
     c.var.audit.set({ changes: auditChanges(targetUser, { role }) })
 
     await db.updateTable("users").set({ role }).where("id", "=", targetUser.id).execute()
+    // Better Auth serves its own routes (admin plugin included) from the user cached in each session.
+    await refreshUserSessions(auth, targetUser.id)
 
     return c.ok({ id: targetUser.id, role })
   },
