@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, Close, Crown } from "@taiyomoe/ui/components/ic
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import { Toggle } from "@taiyomoe/ui/components/ui/toggle"
-import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaEditTitle } from "@/features/media-suggestions/lib/media-edit-model"
 import { LanguagePicker } from "@/components/fields/language-picker"
 import { m } from "@/paraglide/messages"
@@ -25,6 +25,11 @@ const styles = stylex.create({
   rowActions: {
     gap: "0.125rem",
     display: "flex",
+  },
+  acronym: {
+    borderRadius: radius.full,
+    paddingInline: "calc(1rem - 1px)",
+    height: { default: "2.75rem", [breakpoints.sm]: "2.5rem" },
   },
   mainOn: {
     color: colors.warning,
@@ -57,7 +62,7 @@ export function TitleRow({
         aria-label={m.media_edit_title_main()}
         aria-pressed={title.isMainTitle}
         onClick={onMakeMain}
-        size="icon-sm"
+        size="icon-xl"
         title={m.media_edit_title_main()}
         variant="ghost"
       >
@@ -84,7 +89,7 @@ export function TitleRow({
           onUpdate({ isAcronym })
         }}
         pressed={title.isAcronym}
-        size="sm"
+        sx={styles.acronym}
         variant="outline"
       >
         {m.media_edit_title_acronym()}
@@ -96,7 +101,7 @@ export function TitleRow({
           onClick={() => {
             onMove(-1)
           }}
-          size="icon-sm"
+          size="icon-xl"
           variant="ghost"
         >
           <ChevronUp />
@@ -107,7 +112,7 @@ export function TitleRow({
           onClick={() => {
             onMove(1)
           }}
-          size="icon-sm"
+          size="icon-xl"
           variant="ghost"
         >
           <ChevronDown />
@@ -115,7 +120,7 @@ export function TitleRow({
         <Button
           aria-label={m.media_edit_remove()}
           onClick={onRemove}
-          size="icon-sm"
+          size="icon-xl"
           variant="ghost"
         >
           <Close />

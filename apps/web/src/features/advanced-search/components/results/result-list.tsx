@@ -39,9 +39,13 @@ const styles = stylex.create({
     gap: "1rem",
     gridTemplateColumns: {
       default: "repeat(2, minmax(0, 1fr))",
-      [breakpoints.sm]: "repeat(3, minmax(0, 1fr))",
-      [breakpoints.md]: "repeat(4, minmax(0, 1fr))",
-      [breakpoints.xl]: "repeat(6, minmax(0, 1fr))",
+      [breakpoints.sm]: {
+        default: "repeat(3, minmax(0, 1fr))",
+        [breakpoints.md]: {
+          default: "repeat(4, minmax(0, 1fr))",
+          [breakpoints.xl]: "repeat(6, minmax(0, 1fr))",
+        },
+      },
     },
   },
   item: {

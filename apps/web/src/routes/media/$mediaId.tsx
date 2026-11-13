@@ -1,6 +1,7 @@
 import { noop } from "@tanstack/react-query"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, notFound } from "@tanstack/react-router"
 import { z } from "zod"
+import { isNotFoundError } from "@/components/boundaries/not-found-page"
 import { getRichTextSummary } from "@/components/rich-text/rich-text-document"
 import {
   CHAPTER_SORTS,
@@ -10,6 +11,7 @@ import {
 import { commentsQueryOptions } from "@/features/comments/api/comments"
 import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/features/media/api/library"
 import { mediaQueryOptions } from "@/features/media/api/medias"
+import { MediaNotFoundPage } from "@/features/media/components/media-page/media-not-found-page"
 import { MediaPage } from "@/features/media/components/media-page/media-page"
 import { getMainTitle, getSynopsis } from "@/features/media/lib/media-labels"
 import { CHAPTERS_PER_PAGE, MEDIA_TABS } from "@/features/media/lib/media-page"
@@ -44,15 +46,10 @@ export const Route = createFileRoute("/media/$mediaId")({
   loader: async ({ context, params: { mediaId }, deps }) => {
     const contentRatings = getContentRatings(context.session)
     const filters = { contentRatings, language: deps.lang }
-    const summary = context.queryClient
-      .query(mediaQueryOptions(mediaId))
-      .then((data) => ({
-        title: getMainTitle(data.titles),
-        synopsis: getRichTextSummary(getSynopsis(data.synopsis)),
-      }))
-      .catch(() => ({ title: null, synopsis: null }))
+    const media = context.queryClient.query(mediaQueryOptions(mediaId))
     const prefetch = Promise.all(
       [
+        media,
         context.queryClient.query(mediaChapterFacetsQueryOptions(mediaId, filters)),
         ...((deps.tab ?? "chapters") === "chapters"
           ? [
@@ -89,7 +86,18 @@ export const Route = createFileRoute("/media/$mediaId")({
       await prefetch
     }
 
-    return summary
+    return media
+      .then((data) => ({
+        title: getMainTitle(data.titles),
+        synopsis: getRichTextSummary(getSynopsis(data.synopsis)),
+      }))
+      .catch((error: unknown) => {
+        if (isNotFoundError(error, "MEDIA_NOT_FOUND")) {
+          throw notFound()
+        }
+
+        return { title: null, synopsis: null }
+      })
   },
   head: ({ loaderData, params }) => {
     const title = loaderData?.title ?? null
@@ -109,4 +117,5 @@ export const Route = createFileRoute("/media/$mediaId")({
     }
   },
   component: MediaPage,
+  notFoundComponent: MediaNotFoundPage,
 })

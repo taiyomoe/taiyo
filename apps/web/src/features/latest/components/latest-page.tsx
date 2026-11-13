@@ -4,6 +4,7 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
+import { layout } from "@/components/layout/layout.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 import {
@@ -17,17 +18,18 @@ const styles = stylex.create({
   page: {
     gap: "1.5rem",
     paddingBlock: "2rem",
-    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
   },
   header: {
-    gap: "0.75rem",
+    gap: "0.5rem",
     alignItems: "center",
     display: "flex",
   },
   back: {
     color: colors.mutedForeground,
+    marginInlineStart: { default: "-0.75rem", [breakpoints.sm]: "-0.6875rem" },
   },
   heading: {
     margin: 0,
@@ -50,7 +52,7 @@ export function LatestPage() {
           <Button
             aria-label={m.latest_back()}
             render={<Link to="/" />}
-            size="icon"
+            size="icon-xl"
             sx={styles.back}
             variant="ghost"
           >

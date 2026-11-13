@@ -30,6 +30,7 @@ import { getRouteApi, Link, Navigate } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { range } from "remeda"
 import type { Session } from "@/lib/session"
+import { layout } from "@/components/layout/layout.stylex"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
@@ -79,7 +80,7 @@ const styles = stylex.create({
   page: {
     gap: { default: "1.25rem", [breakpoints.md]: "1.75rem" },
     marginInline: "auto",
-    paddingInline: { default: "1rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
     maxWidth: "76rem",
@@ -162,8 +163,8 @@ const styles = stylex.create({
     borderStyle: "solid",
     borderWidth: { default: 0, [breakpoints.lg]: 1 },
     gap: { default: "0.375rem", [breakpoints.lg]: "0.125rem" },
-    marginInline: { default: "-1rem", [breakpoints.md]: "-2rem", [breakpoints.lg]: 0 },
-    paddingInline: { default: "1rem", [breakpoints.md]: "2rem", [breakpoints.lg]: "0.5rem" },
+    marginInline: { default: `calc(-1 * ${layout.gutter})`, [breakpoints.lg]: 0 },
+    paddingInline: { default: layout.gutter, [breakpoints.lg]: "0.5rem" },
     backgroundColor: { default: "transparent", [breakpoints.lg]: colors.card },
     display: "flex",
     flexDirection: { default: "row", [breakpoints.lg]: "column" },
@@ -172,11 +173,11 @@ const styles = stylex.create({
   },
   navItem: {
     borderColor: { default: colors.border, [breakpoints.lg]: "transparent" },
-    borderRadius: { default: radius.full, [breakpoints.lg]: radius.lg },
+    borderRadius: { default: radius.full, [breakpoints.lg]: `calc(${radius.xxl} - 0.5rem - 1px)` },
     borderStyle: "solid",
     borderWidth: 1,
     gap: "0.625rem",
-    paddingInline: { default: "0.875rem", [breakpoints.lg]: "0.75rem" },
+    paddingInline: { default: "0.875rem", [breakpoints.lg]: "calc(0.625rem - 1px)" },
     textDecoration: "none",
     alignItems: "center",
     backgroundColor: { default: "transparent", ":hover": colors.accent },
@@ -341,7 +342,7 @@ const styles = stylex.create({
     outlineOffset: 2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    height: "2rem",
+    height: { default: "2.25rem", [breakpoints.sm]: "2rem" },
   },
   filterActive: {
     borderColor: `color-mix(in srgb, ${colors.primary} 55%, transparent)`,
@@ -742,7 +743,6 @@ function Toolbar({
               onClick={() => {
                 setRead.mutate({ ids, read: true }, { onError })
               }}
-              size="sm"
               variant="outline"
             >
               <Check />
@@ -754,7 +754,6 @@ function Toolbar({
               onClick={() => {
                 setRead.mutate({ ids, read: false }, { onError })
               }}
-              size="sm"
               variant="outline"
             >
               <Mail />
@@ -777,7 +776,6 @@ function Toolbar({
                   },
                 })
               }}
-              size="sm"
               variant="destructive-outline"
             >
               <Trash />
@@ -821,6 +819,7 @@ function SearchField({ search }: { search: Search }) {
       <InputGroupInput
         aria-label={m.notifications_search()}
         maxLength={100}
+        size="sm"
         onChange={(event) => {
           setValue(event.target.value)
         }}

@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi } from "@tanstack/react-router"
+import { layout } from "@/components/layout/layout.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { activityLogContainers } from "@/features/activity-log/components/activity-log.stylex"
 import { FieldBreakdown } from "@/features/activity-log/components/field-breakdown"
@@ -16,10 +17,7 @@ const routeApi = getRouteApi("/dashboard/activity-log")
 const styles = stylex.create({
   page: {
     gap: "1.5rem",
-    paddingInline: {
-      default: "1.25rem",
-      [breakpoints.md]: "2rem",
-    },
+    paddingInline: layout.gutter,
     containerType: "inline-size",
     display: "flex",
     flexDirection: "column",

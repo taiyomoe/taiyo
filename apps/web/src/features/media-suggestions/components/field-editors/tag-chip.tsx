@@ -26,6 +26,8 @@ const styles = stylex.create({
     color: colors.warning,
   },
   spoilerToggle: {
+    borderRadius: radius.full,
+    paddingInline: "calc(0.625rem - 1px)",
     color: {
       "[data-pressed]": colors.warning,
       default: colors.mutedForeground,
@@ -57,7 +59,7 @@ export function TagChip({
       >
         {m.media_edit_tag_spoiler()}
       </Toggle>
-      <Button aria-label={m.media_edit_remove()} onClick={onRemove} size="icon-xs" variant="ghost">
+      <Button aria-label={m.media_edit_remove()} onClick={onRemove} size="icon-sm" variant="ghost">
         <Close />
       </Button>
     </li>

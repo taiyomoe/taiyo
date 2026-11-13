@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { layout } from "@/components/layout/layout.stylex"
 
 export const groupProfileStyles = stylex.create({
   root: {
@@ -10,7 +11,7 @@ export const groupProfileStyles = stylex.create({
   container: {
     gap: "1.75rem",
     marginInline: "auto",
-    paddingInline: { default: "1rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
     maxWidth: "72rem",

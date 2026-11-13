@@ -49,6 +49,7 @@ const styles = stylex.create({
   },
   seeAll: {
     color: colors.mutedForeground,
+    marginInlineEnd: "-0.75rem",
   },
 })
 

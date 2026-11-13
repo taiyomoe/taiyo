@@ -23,7 +23,7 @@ const styles = stylex.create({
   dots: {
     position: "absolute",
     bottom: { default: "0.375rem", [breakpoints.md]: "0.5rem" },
-    right: { default: "1rem", [breakpoints.md]: "2.25rem" },
+    right: { default: "calc(1.25rem - 0.1875rem)", [breakpoints.md]: "calc(2rem - 0.25rem)" },
   },
 })
 

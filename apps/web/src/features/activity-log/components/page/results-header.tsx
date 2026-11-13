@@ -10,12 +10,13 @@ import { m } from "@/paraglide/messages"
 const styles = stylex.create({
   resultsHeader: {
     gap: "0.75rem",
-    paddingBlock: "1rem",
-    paddingInline: "1.25rem",
-    alignItems: "baseline",
+    paddingInline: "1.5rem",
+    alignItems: "flex-start",
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    paddingBlockEnd: "1.25rem",
+    paddingBlockStart: "1.5rem",
     borderBottomColor: colors.border,
     borderBottomStyle: "solid",
     borderBottomWidth: 1,

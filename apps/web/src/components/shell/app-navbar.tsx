@@ -3,6 +3,7 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { Session } from "@/lib/session"
+import { layout } from "@/components/layout/layout.stylex"
 import { AppNavbarBrand } from "@/components/shell/app-navbar-brand"
 import { AppNavbarSearch } from "@/components/shell/app-navbar-search"
 import { UserMenu } from "@/components/shell/user-menu"
@@ -52,7 +53,7 @@ const styles = stylex.create({
     alignItems: "center",
     display: "flex",
     justifyContent: "flex-end",
-    paddingInlineEnd: "1.25rem",
+    paddingInlineEnd: layout.gutter,
     paddingInlineStart: "1rem",
     minWidth: 0,
   },

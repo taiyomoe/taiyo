@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
 import { ArrowLeft } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { CatchBoundary, getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
+import { layout } from "@/components/layout/layout.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 import { ListContent } from "@/features/lists/components/list-page/list-content"
 import { ListError } from "@/features/lists/components/list-page/list-error"
@@ -16,7 +16,7 @@ const styles = stylex.create({
   page: {
     gap: "2rem",
     marginInline: "auto",
-    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
     maxWidth: "72rem",

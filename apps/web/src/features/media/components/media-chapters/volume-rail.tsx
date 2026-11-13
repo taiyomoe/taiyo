@@ -19,9 +19,14 @@ const styles = stylex.create({
     boxShadow: shadows.sunken,
     display: "flex",
     flexDirection: { [breakpoints.xl]: "column", default: "row" },
+    scrollbarWidth: { [breakpoints.xl]: "thin", default: "none" },
+    maxHeight: { [breakpoints.xl]: "calc(100svh - var(--navbar-height) - 2rem)", default: null },
+    overflowX: { [breakpoints.xl]: "hidden", default: "auto" },
+    overflowY: { [breakpoints.xl]: "auto", default: "hidden" },
+  },
+  nav: {
     position: { [breakpoints.xl]: "sticky", default: "static" },
-    scrollbarWidth: "none",
-    overflowX: { [breakpoints.xl]: "visible", default: "auto" },
+    minWidth: 0,
     top: "calc(var(--navbar-height) + 1rem)",
   },
 })
@@ -41,7 +46,7 @@ export function VolumeRail({
   const last = Math.max(...facets.volumes.map((volume) => volume.lastNumber))
 
   return (
-    <nav aria-label={m.media_chapters_volumes()}>
+    <nav aria-label={m.media_chapters_volumes()} sx={styles.nav}>
       <ul sx={styles.rail}>
         <VolumeItem
           active={selected === undefined}

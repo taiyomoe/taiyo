@@ -37,6 +37,7 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
   end: {
+    marginInlineEnd: "-0.75rem",
     marginInlineStart: "auto",
   },
 })

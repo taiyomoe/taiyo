@@ -4,6 +4,7 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
+import { layout } from "@/components/layout/layout.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 import {
@@ -22,7 +23,7 @@ const styles = stylex.create({
     gap: "2.5rem",
     marginInline: "auto",
     paddingBlock: "2rem",
-    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
     maxWidth: "72rem",

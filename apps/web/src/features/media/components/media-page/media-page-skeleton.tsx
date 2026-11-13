@@ -26,7 +26,10 @@ const styles = stylex.create({
     width: "min(16rem, 50%)",
   },
   title: {
-    height: { default: "1.75rem", [breakpoints.sm]: "2.5rem", [breakpoints.lg]: "3.5rem" },
+    height: {
+      default: "1.75rem",
+      [breakpoints.sm]: { default: "2.5rem", [breakpoints.lg]: "3.5rem" },
+    },
     width: "min(32rem, 85%)",
   },
   badges: {

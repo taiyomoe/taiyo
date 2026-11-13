@@ -76,6 +76,7 @@ export const prose = stylex.create({
     flexDirection: "column",
     fontSize: "1rem",
     lineHeight: 1.65,
+    listStyleType: "disc",
     marginBottom: "0.875rem",
     paddingLeft: "1.25rem",
   },

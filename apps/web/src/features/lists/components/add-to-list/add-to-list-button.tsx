@@ -64,7 +64,7 @@ export function AddToListButton({ mediaId, mediaTitle }: { mediaId: string; medi
   return (
     <>
       <Menu onOpenChange={setOpen} open={open}>
-        <MenuTrigger render={<Button sx={styles.trigger} variant="ghost" />}>
+        <MenuTrigger render={<Button size="lg" sx={styles.trigger} variant="ghost" />}>
           <List />
           {m.media_add_to_list()}
         </MenuTrigger>

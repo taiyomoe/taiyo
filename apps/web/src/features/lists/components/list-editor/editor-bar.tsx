@@ -1,26 +1,27 @@
 import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { DeleteListButton } from "@/features/lists/components/list-editor/delete-list-button"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   bar: {
+    padding: "0.5rem",
+    borderColor: colors.border,
+    borderRadius: radius.full,
+    borderStyle: "solid",
+    borderWidth: 1,
     gap: "0.5rem",
-    marginInline: { default: "-1.25rem", [breakpoints.md]: "-2rem" },
-    paddingBlock: "0.75rem",
-    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
     alignItems: "center",
     backdropFilter: "blur(12px)",
-    backgroundColor: `color-mix(in srgb, ${colors.background} 88%, transparent)`,
+    backgroundClip: "border-box",
+    backgroundColor: `color-mix(in srgb, ${colors.popover} 88%, transparent)`,
+    boxShadow: shadows.overlay,
     display: "flex",
     position: "sticky",
     zIndex: 2,
-    borderTopColor: colors.border,
-    borderTopStyle: "solid",
-    borderTopWidth: 1,
-    bottom: 0,
+    bottom: "1rem",
   },
   end: {
     gap: "0.5rem",

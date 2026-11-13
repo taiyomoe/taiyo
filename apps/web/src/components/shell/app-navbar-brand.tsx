@@ -5,12 +5,13 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { useSidebar } from "@taiyomoe/ui/components/ui/sidebar"
 import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
+import { layout } from "@/components/layout/layout.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   brand: {
-    paddingInline: "1rem",
+    paddingInline: { default: layout.gutter, [breakpoints.md]: "1.5rem" },
     alignItems: "center",
     display: "flex",
     flexShrink: 0,
@@ -43,9 +44,10 @@ const styles = stylex.create({
       default: motion.slide,
       [consts.reducedMotion]: "0s",
     },
-    transitionProperty: "width, margin-right, opacity",
+    transitionProperty: "width, margin, opacity",
     transitionTimingFunction: motion.easeOut,
-    marginRight: "0.375rem",
+    marginLeft: "-0.5rem",
+    marginRight: "0.5rem",
     width: "2.25rem",
   },
   toggleSlotHidden: {
@@ -53,8 +55,12 @@ const styles = stylex.create({
       default: 1,
       [breakpoints.md]: 0,
     },
+    marginLeft: {
+      default: "-0.5rem",
+      [breakpoints.md]: 0,
+    },
     marginRight: {
-      default: "0.375rem",
+      default: "0.5rem",
       [breakpoints.md]: 0,
     },
     width: {

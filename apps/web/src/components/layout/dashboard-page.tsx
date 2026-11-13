@@ -1,12 +1,13 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { layout } from "@/components/layout/layout.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   page: {
     gap: "2rem",
-    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
+    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
     maxWidth: "68rem",

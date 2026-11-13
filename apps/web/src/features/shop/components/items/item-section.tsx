@@ -28,8 +28,10 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "repeat(2, minmax(0, 1fr))",
-      [breakpoints.md]: "repeat(3, minmax(0, 1fr))",
-      [breakpoints.xl]: "repeat(4, minmax(0, 1fr))",
+      [breakpoints.md]: {
+        default: "repeat(3, minmax(0, 1fr))",
+        [breakpoints.xl]: "repeat(4, minmax(0, 1fr))",
+      },
     },
   },
 })

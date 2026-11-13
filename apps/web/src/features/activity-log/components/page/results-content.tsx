@@ -12,7 +12,7 @@ import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   skeletons: {
-    padding: "1.25rem",
+    padding: "1.5rem",
     gap: "0.75rem",
     display: "flex",
     flexDirection: "column",
