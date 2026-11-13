@@ -61,6 +61,59 @@ describe("roles", () => {
   })
 })
 
+describe("role cosmetics", () => {
+  test("are unequipped when the role that grants them is removed", async ({ app, services }) => {
+    const admin = await signInAs(services, { role: "ADMIN" })
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const equipped = await api(app, "/users/me/cosmetics", {
+      method: "PATCH",
+      headers: moderator.headers,
+      json: { title: "moderator", nameEffect: "azure" },
+    })
+
+    expect(equipped.status).toBe(200)
+
+    await api(app, `/users/${moderator.userId}/role`, {
+      method: "PATCH",
+      headers: admin.headers,
+      json: { role: "USER" },
+    })
+
+    const row = await services.db
+      .selectFrom("users")
+      .leftJoin("userProfiles", "userProfiles.userId", "users.id")
+      .select(["users.nameEffect", "userProfiles.title"])
+      .where("users.id", "=", moderator.userId)
+      .executeTakeFirstOrThrow()
+
+    expect(row).toEqual({ nameEffect: null, title: null })
+  })
+
+  test("stay equipped when the new role still grants them", async ({ app, services }) => {
+    const admin = await signInAs(services, { role: "ADMIN" })
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+
+    await api(app, "/users/me/cosmetics", {
+      method: "PATCH",
+      headers: moderator.headers,
+      json: { nameEffect: "azure" },
+    })
+    await api(app, `/users/${moderator.userId}/role`, {
+      method: "PATCH",
+      headers: admin.headers,
+      json: { role: "ADMIN" },
+    })
+
+    const row = await services.db
+      .selectFrom("users")
+      .select("nameEffect")
+      .where("id", "=", moderator.userId)
+      .executeTakeFirstOrThrow()
+
+    expect(row.nameEffect).toBe("azure")
+  })
+})
+
 describe("bans", () => {
   test("moderators ban regular users only, admins anyone but themselves", async ({
     app,
