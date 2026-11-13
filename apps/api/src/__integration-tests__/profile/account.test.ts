@@ -177,5 +177,22 @@ describe("showFollowing", () => {
     expect(hidden.body.data).toEqual([])
     expect(own.body.data).toHaveLength(1)
     expect(profile.body.data.followingHidden).toBe(true)
+
+    const followerIds = async (headers: Record<string, string> = {}) => {
+      const res = await api<Array<{ id: string }>>(app, `/users/${followee.userId}/followers`, {
+        headers,
+      })
+
+      if (!res.body.success) {
+        throw new Error("Expected success")
+      }
+
+      return res.body.data.map((follower) => follower.id)
+    }
+
+    expect(await followerIds()).not.toContain(owner.userId)
+    expect(await followerIds(viewer.headers)).not.toContain(owner.userId)
+    expect(await followerIds(owner.headers)).toContain(owner.userId)
+    expect(await followerIds(followee.headers)).toContain(owner.userId)
   })
 })
