@@ -54,14 +54,14 @@ jobs:
       - name: Check the web build variables
         if: ${{ matrix.app == 'web' && env.PUSH == 'true' }}
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          VITE_BETTER_AUTH_URL: ${{ secrets.VITE_BETTER_AUTH_URL }}
-          VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_BETTER_AUTH_URL: ${{ vars.VITE_BETTER_AUTH_URL }}
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
         run: |
           missing=0
           for name in VITE_API_URL VITE_BETTER_AUTH_URL VITE_TURNSTILE_SITE_KEY; do
             if [ -z "${!name}" ]; then
-              echo "::error::Repository secret $name is not set"
+              echo "::error::Repository variable $name is not set"
               missing=1
             fi
           done
@@ -94,9 +94,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             APP=${{ matrix.app }}
-            VITE_API_URL=${{ secrets.VITE_API_URL || 'https://example.invalid' }}
-            VITE_BETTER_AUTH_URL=${{ secrets.VITE_BETTER_AUTH_URL || 'https://example.invalid' }}
-            VITE_TURNSTILE_SITE_KEY=${{ secrets.VITE_TURNSTILE_SITE_KEY || 'placeholder' }}
-            ${{ secrets.VITE_DISCORD_INVITE_URL && format('VITE_DISCORD_INVITE_URL={0}', secrets.VITE_DISCORD_INVITE_URL) || '' }}
+            VITE_API_URL=${{ vars.VITE_API_URL || 'https://example.invalid' }}
+            VITE_BETTER_AUTH_URL=${{ vars.VITE_BETTER_AUTH_URL || 'https://example.invalid' }}
+            VITE_TURNSTILE_SITE_KEY=${{ vars.VITE_TURNSTILE_SITE_KEY || 'placeholder' }}
+            ${{ vars.VITE_DISCORD_INVITE_URL && format('VITE_DISCORD_INVITE_URL={0}', vars.VITE_DISCORD_INVITE_URL) || '' }}
           cache-from: type=gha,scope=${{ matrix.app }}
           cache-to: type=gha,scope=${{ matrix.app }},mode=max
