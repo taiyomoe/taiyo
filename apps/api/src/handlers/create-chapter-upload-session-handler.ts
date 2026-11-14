@@ -114,6 +114,7 @@ export const createChapterUploadSessionHandler = new Hono().post(
         s3Bucket,
         stagingKey,
         page.contentType,
+        page.size,
         config.images.uploadUrlTtlSeconds,
       )
 
