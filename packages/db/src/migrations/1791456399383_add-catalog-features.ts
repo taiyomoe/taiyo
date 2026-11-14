@@ -1,13 +1,5 @@
 import { type Kysely, sql } from "kysely"
 
-const MEDIA_REFERENCING_TABLES = [
-  "titles",
-  "covers",
-  "mediaStaffs",
-  "chapters",
-  "userLibraryEntries",
-]
-
 export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .alterTable("covers")
@@ -88,14 +80,40 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION search_outbox_enqueue_media()
   `.execute(db)
 
-  for (const table of MEDIA_REFERENCING_TABLES) {
-    await sql`
-      CREATE TRIGGER ${sql.id(`${table}_enqueue_search_outbox`)}
-      AFTER INSERT OR UPDATE OR DELETE ON ${sql.id(table)}
-      FOR EACH ROW
-      EXECUTE FUNCTION search_outbox_enqueue_media_reference()
-    `.execute(db)
-  }
+  await sql`
+    CREATE TRIGGER "titles_enqueue_search_outbox"
+    AFTER INSERT OR UPDATE OR DELETE ON "titles"
+    FOR EACH ROW
+    EXECUTE FUNCTION search_outbox_enqueue_media_reference()
+  `.execute(db)
+
+  await sql`
+    CREATE TRIGGER "covers_enqueue_search_outbox"
+    AFTER INSERT OR UPDATE OR DELETE ON "covers"
+    FOR EACH ROW
+    EXECUTE FUNCTION search_outbox_enqueue_media_reference()
+  `.execute(db)
+
+  await sql`
+    CREATE TRIGGER "mediaStaffs_enqueue_search_outbox"
+    AFTER INSERT OR UPDATE OR DELETE ON "mediaStaffs"
+    FOR EACH ROW
+    EXECUTE FUNCTION search_outbox_enqueue_media_reference()
+  `.execute(db)
+
+  await sql`
+    CREATE TRIGGER "chapters_enqueue_search_outbox"
+    AFTER INSERT OR UPDATE OR DELETE ON "chapters"
+    FOR EACH ROW
+    EXECUTE FUNCTION search_outbox_enqueue_media_reference()
+  `.execute(db)
+
+  await sql`
+    CREATE TRIGGER "userLibraryEntries_enqueue_search_outbox"
+    AFTER INSERT OR UPDATE OR DELETE ON "userLibraryEntries"
+    FOR EACH ROW
+    EXECUTE FUNCTION search_outbox_enqueue_media_reference()
+  `.execute(db)
 
   await sql`
     CREATE TRIGGER "staffs_enqueue_search_outbox"
@@ -189,11 +207,17 @@ export async function down(db: Kysely<unknown>): Promise<void> {
 
   await sql`DROP TRIGGER "staffs_enqueue_search_outbox" ON "staffs"`.execute(db)
 
-  for (const table of MEDIA_REFERENCING_TABLES) {
-    await sql`DROP TRIGGER ${sql.id(`${table}_enqueue_search_outbox`)} ON ${sql.id(table)}`.execute(
-      db,
-    )
-  }
+  await sql`DROP TRIGGER "titles_enqueue_search_outbox" ON "titles"`.execute(db)
+
+  await sql`DROP TRIGGER "covers_enqueue_search_outbox" ON "covers"`.execute(db)
+
+  await sql`DROP TRIGGER "mediaStaffs_enqueue_search_outbox" ON "mediaStaffs"`.execute(db)
+
+  await sql`DROP TRIGGER "chapters_enqueue_search_outbox" ON "chapters"`.execute(db)
+
+  await sql`DROP TRIGGER "userLibraryEntries_enqueue_search_outbox" ON "userLibraryEntries"`.execute(
+    db,
+  )
 
   await sql`DROP TRIGGER "medias_enqueue_search_outbox" ON "medias"`.execute(db)
   await sql`DROP FUNCTION search_outbox_enqueue_staff_medias()`.execute(db)

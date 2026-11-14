@@ -1,8 +1,5 @@
 import { type Kysely, sql } from "kysely"
 
-const TABLES = ["userHistories", "userLibraryEntries", "chapters", "covers", "medias", "users"]
-const INDEXES = TABLES.map((table) => ({ table, name: `${table}_createdAt_idx` }))
-
 export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema.createType("AuditOutcome").asEnum(["success", "failure", "denied"]).execute()
 
@@ -67,15 +64,39 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION audit_logs_reject_change()
   `.execute(db)
 
-  for (const { table, name } of INDEXES) {
-    await db.schema.createIndex(name).on(table).column("createdAt").execute()
-  }
+  await db.schema
+    .createIndex("userHistories_createdAt_idx")
+    .on("userHistories")
+    .column("createdAt")
+    .execute()
+
+  await db.schema
+    .createIndex("userLibraryEntries_createdAt_idx")
+    .on("userLibraryEntries")
+    .column("createdAt")
+    .execute()
+
+  await db.schema.createIndex("chapters_createdAt_idx").on("chapters").column("createdAt").execute()
+
+  await db.schema.createIndex("covers_createdAt_idx").on("covers").column("createdAt").execute()
+
+  await db.schema.createIndex("medias_createdAt_idx").on("medias").column("createdAt").execute()
+
+  await db.schema.createIndex("users_createdAt_idx").on("users").column("createdAt").execute()
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
-  for (const { name } of INDEXES) {
-    await db.schema.dropIndex(name).execute()
-  }
+  await db.schema.dropIndex("userHistories_createdAt_idx").execute()
+
+  await db.schema.dropIndex("userLibraryEntries_createdAt_idx").execute()
+
+  await db.schema.dropIndex("chapters_createdAt_idx").execute()
+
+  await db.schema.dropIndex("covers_createdAt_idx").execute()
+
+  await db.schema.dropIndex("medias_createdAt_idx").execute()
+
+  await db.schema.dropIndex("users_createdAt_idx").execute()
 
   await db.schema.dropTable("auditLogs").execute()
   await sql`DROP FUNCTION audit_logs_reject_change()`.execute(db)

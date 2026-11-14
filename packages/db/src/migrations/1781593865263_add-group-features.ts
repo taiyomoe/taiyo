@@ -1,13 +1,5 @@
 import { type Kysely, sql } from "kysely"
 
-const PERMISSIONS = [
-  "UPLOAD_CHAPTERS",
-  "EDIT_CHAPTERS",
-  "DELETE_CHAPTERS",
-  "EDIT_GROUP",
-  "MANAGE_MEMBERS",
-]
-
 export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema.createType("GroupMembershipRole").asEnum(["OWNER", "MEMBER"]).execute()
 
@@ -87,7 +79,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .alterTable("groupMemberships")
     .addCheckConstraint(
       "groupMemberships_permissions_check",
-      sql`"permissions" <@ ${sql.raw(`ARRAY[${PERMISSIONS.map((p) => `'${p}'`).join(", ")}]::text[]`)}`,
+      sql`"permissions" <@ ARRAY['UPLOAD_CHAPTERS', 'EDIT_CHAPTERS', 'DELETE_CHAPTERS', 'EDIT_GROUP', 'MANAGE_MEMBERS']::text[]`,
     )
     .execute()
 
@@ -115,7 +107,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("updatedAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addCheckConstraint(
       "groupInvitations_permissions_check",
-      sql`"permissions" <@ ${sql.raw(`ARRAY[${PERMISSIONS.map((p) => `'${p}'`).join(", ")}]::text[]`)}`,
+      sql`"permissions" <@ ARRAY['UPLOAD_CHAPTERS', 'EDIT_CHAPTERS', 'DELETE_CHAPTERS', 'EDIT_GROUP', 'MANAGE_MEMBERS']::text[]`,
     )
     .execute()
 

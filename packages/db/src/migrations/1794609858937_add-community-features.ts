@@ -1,7 +1,5 @@
 import { type Kysely, sql } from "kysely"
 
-const createdAt = sql`timestamp(3)`
-
 export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .createType("CommentDeletion")
@@ -31,7 +29,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("profileId", "uuid", (c) =>
       c.unique().references("users.id").onDelete("cascade").onUpdate("cascade"),
     )
-    .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addCheckConstraint(
       "commentThreads_one_target_check",
       sql`num_nonnulls("mediaId", "chapterId", "groupId", "profileId") = 1`,
@@ -55,10 +53,10 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     )
     .addColumn("content", "text", (c) => c.notNull())
     .addColumn("upvoteCount", "integer", (c) => c.notNull().defaultTo(0))
-    .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
-    .addColumn("updatedAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
-    .addColumn("editedAt", createdAt)
-    .addColumn("deletedAt", createdAt)
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("updatedAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("editedAt", sql`timestamp(3)`)
+    .addColumn("deletedAt", sql`timestamp(3)`)
     .addColumn("deletion", sql`"CommentDeletion"`)
     .addColumn("deleterId", "uuid", (c) =>
       c.references("users.id").onDelete("set null").onUpdate("cascade"),
@@ -105,7 +103,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
       c.notNull().references("comments.id").onDelete("cascade").onUpdate("cascade"),
     )
     .addColumn("content", "text", (c) => c.notNull())
-    .addColumn("createdAt", createdAt, (c) => c.notNull())
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull())
     .execute()
   await db.schema
     .createIndex("commentRevisions_commentId_createdAt_idx")
@@ -121,7 +119,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("userId", "uuid", (c) =>
       c.notNull().references("users.id").onDelete("cascade").onUpdate("cascade"),
     )
-    .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addPrimaryKeyConstraint("commentVotes_pkey", ["commentId", "userId"])
     .execute()
   await db.schema
@@ -145,8 +143,8 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("resolverId", "uuid", (c) =>
       c.references("users.id").onDelete("set null").onUpdate("cascade"),
     )
-    .addColumn("resolvedAt", createdAt)
-    .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("resolvedAt", sql`timestamp(3)`)
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .execute()
   await sql`CREATE UNIQUE INDEX "commentReports_open_reporter_comment_key" ON "commentReports" ("reporterId", "commentId") WHERE "status" = 'OPEN'`.execute(
     db,
@@ -175,8 +173,8 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("byteSize", "integer", (c) => c.notNull().check(sql`"byteSize" > 0`))
     .addColumn("sha256", "text", (c) => c.notNull())
     .addColumn("dhash", "bigint", (c) => c.notNull())
-    .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
-    .addColumn("removedAt", createdAt)
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("removedAt", sql`timestamp(3)`)
     .addColumn("removerId", "uuid", (c) =>
       c.references("users.id").onDelete("set null").onUpdate("cascade"),
     )
@@ -212,7 +210,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("imageId", "uuid", (c) =>
       c.notNull().references("commentImages.id").onDelete("cascade").onUpdate("cascade"),
     )
-    .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addPrimaryKeyConstraint("commentImageFavorites_pkey", ["userId", "imageId"])
     .execute()
   await db.schema
@@ -239,7 +237,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("blockerId", "uuid", (c) =>
       c.references("users.id").onDelete("set null").onUpdate("cascade"),
     )
-    .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .execute()
 
   await db.schema

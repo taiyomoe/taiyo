@@ -2,26 +2,6 @@ import { type Kysely, sql } from "kysely"
 
 type MigrationDb = Record<string, Record<string, unknown>>
 
-const UUID_COLUMNS = {
-  User: ["id"],
-  Account: ["id", "userId"],
-  Session: ["userId"],
-  UserSetting: ["id", "userId"],
-  UserProfile: ["id", "userId"],
-  UserHistory: ["mediaId", "userId"],
-  UserLibrary: ["userId"],
-  _UserFollow: ["A", "B"],
-  Media: ["id", "creatorId", "deleterId"],
-  MediaCover: ["id", "mediaId", "uploaderId", "deleterId"],
-  MediaBanner: ["id", "mediaId", "uploaderId", "deleterId"],
-  MediaChapter: ["id", "mediaId", "uploaderId", "deleterId"],
-  MediaTitle: ["id", "mediaId", "creatorId", "deleterId"],
-  MediaTracker: ["id", "mediaId", "creatorId", "deleterId"],
-  Scan: ["id", "creatorId", "deleterId"],
-  Task: ["id", "sessionId"],
-  _MediaChapterToScan: ["A", "B"],
-}
-
 export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await db.schema.alterTable("Account").dropConstraint("Account_userId_fkey").execute()
 
@@ -95,14 +75,128 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .dropConstraint("_ScanToScanMember_A_fkey")
     .execute()
 
-  for (const [table, columns] of Object.entries(UUID_COLUMNS)) {
-    const changes = columns.flatMap((column) => [
-      sql`ALTER COLUMN ${sql.ref(column)} TYPE uuid USING ${sql.ref(column)}::uuid`,
-      ...(column === "id" ? [sql`ALTER COLUMN "id" SET DEFAULT gen_random_uuid()`] : []),
-    ])
+  await sql`
+    ALTER TABLE "User"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid()
+  `.execute(db)
 
-    await sql`ALTER TABLE ${sql.table(table)} ${sql.join(changes)}`.execute(db)
-  }
+  await sql`
+    ALTER TABLE "Account"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "userId" TYPE uuid USING "userId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "Session"
+      ALTER COLUMN "userId" TYPE uuid USING "userId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "UserSetting"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "userId" TYPE uuid USING "userId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "UserProfile"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "userId" TYPE uuid USING "userId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "UserHistory"
+      ALTER COLUMN "mediaId" TYPE uuid USING "mediaId"::uuid,
+      ALTER COLUMN "userId" TYPE uuid USING "userId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "UserLibrary"
+      ALTER COLUMN "userId" TYPE uuid USING "userId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "_UserFollow"
+      ALTER COLUMN "A" TYPE uuid USING "A"::uuid,
+      ALTER COLUMN "B" TYPE uuid USING "B"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "Media"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "creatorId" TYPE uuid USING "creatorId"::uuid,
+      ALTER COLUMN "deleterId" TYPE uuid USING "deleterId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "MediaCover"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "mediaId" TYPE uuid USING "mediaId"::uuid,
+      ALTER COLUMN "uploaderId" TYPE uuid USING "uploaderId"::uuid,
+      ALTER COLUMN "deleterId" TYPE uuid USING "deleterId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "MediaBanner"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "mediaId" TYPE uuid USING "mediaId"::uuid,
+      ALTER COLUMN "uploaderId" TYPE uuid USING "uploaderId"::uuid,
+      ALTER COLUMN "deleterId" TYPE uuid USING "deleterId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "MediaChapter"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "mediaId" TYPE uuid USING "mediaId"::uuid,
+      ALTER COLUMN "uploaderId" TYPE uuid USING "uploaderId"::uuid,
+      ALTER COLUMN "deleterId" TYPE uuid USING "deleterId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "MediaTitle"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "mediaId" TYPE uuid USING "mediaId"::uuid,
+      ALTER COLUMN "creatorId" TYPE uuid USING "creatorId"::uuid,
+      ALTER COLUMN "deleterId" TYPE uuid USING "deleterId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "MediaTracker"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "mediaId" TYPE uuid USING "mediaId"::uuid,
+      ALTER COLUMN "creatorId" TYPE uuid USING "creatorId"::uuid,
+      ALTER COLUMN "deleterId" TYPE uuid USING "deleterId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "Scan"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "creatorId" TYPE uuid USING "creatorId"::uuid,
+      ALTER COLUMN "deleterId" TYPE uuid USING "deleterId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "Task"
+      ALTER COLUMN "id" TYPE uuid USING "id"::uuid,
+      ALTER COLUMN "id" SET DEFAULT gen_random_uuid(),
+      ALTER COLUMN "sessionId" TYPE uuid USING "sessionId"::uuid
+  `.execute(db)
+
+  await sql`
+    ALTER TABLE "_MediaChapterToScan"
+      ALTER COLUMN "A" TYPE uuid USING "A"::uuid,
+      ALTER COLUMN "B" TYPE uuid USING "B"::uuid
+  `.execute(db)
 
   await db.schema.dropIndex("User_id_idx").execute()
 
