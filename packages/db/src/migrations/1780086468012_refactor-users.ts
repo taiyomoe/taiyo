@@ -131,9 +131,8 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await db.schema
     .alterTable("User")
     .alterColumn("emailVerified", (c) => c.dropDefault())
+    .addColumn("normalizedEmail", "text")
     .execute()
-
-  await db.schema.alterTable("User").addColumn("normalizedEmail", "text").execute()
 
   const usersForEmail = await db.selectFrom("User").select(["id", "email"]).execute()
   const normalizedEmails = usersForEmail.map((user) => {
@@ -249,10 +248,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .alterTable("User")
     .alterColumn("displayUsername", (c) => c.setNotNull())
     .alterColumn("username", (c) => c.setNotNull())
-    .execute()
-
-  await db.schema
-    .alterTable("User")
     .addColumn("settings", "jsonb", (c) => c.notNull().defaultTo(sql`'{}'::jsonb`))
     .execute()
 
@@ -303,13 +298,10 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await sql`ALTER TABLE "UserProfile" ALTER COLUMN "about" TYPE JSONB USING CASE WHEN "about" IS NOT NULL THEN jsonb_build_object('pt_br', "about") ELSE '{}' END`.execute(
     db,
   )
-  await db.schema
-    .alterTable("UserProfile")
-    .alterColumn("about", (c) => c.setDefault(sql`'{}'::jsonb`))
-    .execute()
 
   await db.schema
     .alterTable("UserProfile")
+    .alterColumn("about", (c) => c.setDefault(sql`'{}'::jsonb`))
     .alterColumn("about", (c) => c.setNotNull())
     .execute()
 

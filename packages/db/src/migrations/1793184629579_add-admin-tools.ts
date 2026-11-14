@@ -32,12 +32,15 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`CREATE INDEX "auditLogs_createdAt_idx" ON "auditLogs" ("createdAt" DESC, id DESC)`.execute(
     db,
   )
+
   await sql`CREATE INDEX "auditLogs_actor_idx" ON "auditLogs" ("actorId", "createdAt" DESC)`.execute(
     db,
   )
+
   await sql`
     CREATE INDEX "auditLogs_target_idx" ON "auditLogs" ("targetType", "targetId", "createdAt" DESC)
   `.execute(db)
+
   await sql`CREATE INDEX "auditLogs_action_idx" ON "auditLogs" (action, "createdAt" DESC)`.execute(
     db,
   )
@@ -99,8 +102,12 @@ export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropIndex("users_createdAt_idx").execute()
 
   await db.schema.dropTable("auditLogs").execute()
+
   await sql`DROP FUNCTION audit_logs_reject_change()`.execute(db)
+
   await db.schema.dropType("AuditSeverity").execute()
+
   await db.schema.dropType("AuditActorType").execute()
+
   await db.schema.dropType("AuditOutcome").execute()
 }

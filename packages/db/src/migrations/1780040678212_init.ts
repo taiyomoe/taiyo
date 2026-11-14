@@ -986,44 +986,82 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
 export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable("UserSetting").execute()
+
   await db.schema.dropTable("Task").execute()
+
   await db.schema.dropTable("_ScanToScanMember").execute()
+
   await db.schema.dropTable("_MediaChapterToScan").execute()
+
   await db.schema.dropTable("UserLibrary").execute()
+
   await db.schema.dropTable("UserHistory").execute()
+
   await db.schema.dropTable("Session").execute()
+
   await db.schema.dropTable("Scan").execute()
+
   await db.schema.dropTable("ScanMember").execute()
+
   await db.schema.dropTable("MediaTracker").execute()
+
   await db.schema.dropTable("MediaTitle").execute()
+
   await db.schema.dropTable("_UserFollow").execute()
+
   await db.schema.dropTable("MediaCover").execute()
+
   await db.schema.dropTable("MediaChapterComment").execute()
+
   await db.schema.dropTable("MediaChapter").execute()
+
   await db.schema.dropTable("MediaBanner").execute()
+
   await db.schema.dropTable("Media").execute()
+
   await db.schema.dropTable("UserProfile").execute()
+
   await db.schema.dropTable("Account").execute()
+
   await db.schema.dropTable("User").execute()
+
   await db.schema.dropTable("VerificationToken").execute()
+
   await db.schema.dropTable("_prisma_migrations").execute()
 
   await db.schema.dropType("HomeLayout").execute()
+
   await db.schema.dropType("TaskStatus").execute()
+
   await db.schema.dropType("TaskType").execute()
+
   await db.schema.dropType("ScanMemberPermissions").execute()
+
   await db.schema.dropType("ScanMemberRoles").execute()
+
   await db.schema.dropType("Trackers").execute()
+
   await db.schema.dropType("Languages").execute()
+
   await db.schema.dropType("Flag").execute()
+
   await db.schema.dropType("MediaGenres").execute()
+
   await db.schema.dropType("MediaCountryOfOrigin").execute()
+
   await db.schema.dropType("MediaDemography").execute()
+
   await db.schema.dropType("MediaSource").execute()
+
   await db.schema.dropType("MediaStatus").execute()
+
   await db.schema.dropType("MediaType").execute()
+
   await db.schema.dropType("ContentRating").execute()
+
   await db.schema.dropType("Countries").execute()
+
   await db.schema.dropType("Genders").execute()
+
   await db.schema.dropType("Roles").execute()
 }

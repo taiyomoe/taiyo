@@ -201,6 +201,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
 export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable("mediaSuggestions").execute()
+
   await db.schema.dropType("MediaSuggestionStatus").execute()
 
   await db.schema.dropTable("featuredMedias").execute()
@@ -220,14 +221,20 @@ export async function down(db: Kysely<unknown>): Promise<void> {
   )
 
   await sql`DROP TRIGGER "medias_enqueue_search_outbox" ON "medias"`.execute(db)
+
   await sql`DROP FUNCTION search_outbox_enqueue_staff_medias()`.execute(db)
+
   await sql`DROP FUNCTION search_outbox_enqueue_media_reference()`.execute(db)
+
   await sql`DROP FUNCTION search_outbox_enqueue_media()`.execute(db)
+
   await db.schema.dropTable("searchOutbox").execute()
 
   await db.schema.alterTable("covers").dropConstraint("covers_extension_check").execute()
+
   await db.schema.alterTable("covers").dropColumn("extension").execute()
 
   await db.schema.alterTable("banners").dropConstraint("banners_extension_check").execute()
+
   await db.schema.alterTable("banners").dropColumn("extension").execute()
 }

@@ -30,10 +30,13 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema.alterTable("users").renameConstraint("User_pkey", "users_pkey").execute()
 
   await sql`ALTER INDEX "User_email_key" RENAME TO "users_email_key"`.execute(db)
+
   await sql`ALTER INDEX "User_username_key" RENAME TO "users_username_key"`.execute(db)
+
   await sql`ALTER INDEX "User_displayUsername_key" RENAME TO "users_displayUsername_key"`.execute(
     db,
   )
+
   await installUpdatedAt("users")
 
   await db.schema.alterTable("UserProfile").renameTo("userProfiles").execute()
@@ -49,6 +52,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .execute()
 
   await sql`ALTER INDEX "UserProfile_userId_key" RENAME TO "userProfiles_userId_key"`.execute(db)
+
   await installUpdatedAt("userProfiles")
 
   await db.schema.alterTable("UserLibrary").renameTo("userLibraries").execute()
@@ -95,6 +99,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`ALTER INDEX "Account_accountId_providerId_userId_key" RENAME TO "accounts_accountId_providerId_userId_key"`.execute(
     db,
   )
+
   await installUpdatedAt("accounts")
 
   await db.schema.alterTable("Session").renameTo("sessions").execute()
@@ -107,6 +112,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .execute()
 
   await sql`ALTER INDEX "Session_token_key" RENAME TO "sessions_token_key"`.execute(db)
+
   await installUpdatedAt("sessions")
 
   await db.schema.alterTable("Verification").renameTo("verifications").execute()
@@ -290,7 +296,9 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable("_prisma_migrations").ifExists().execute()
 
   await db.schema.createIndex("chapters_mediaId_idx").on("chapters").column("mediaId").execute()
+
   await db.schema.createIndex("covers_mediaId_idx").on("covers").column("mediaId").execute()
+
   await db.schema.createIndex("banners_mediaId_idx").on("banners").column("mediaId").execute()
 
   await sql`

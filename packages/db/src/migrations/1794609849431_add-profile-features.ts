@@ -1,8 +1,12 @@
 import { type Kysely, sql } from "kysely"
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  await db.schema.alterTable("users").addColumn("nameEffect", "text").execute()
-  await db.schema.alterTable("users").addColumn("avatarBorder", "text").execute()
+  await db.schema
+    .alterTable("users")
+    .addColumn("nameEffect", "text")
+    .addColumn("avatarBorder", "text")
+    .execute()
+
   await db.schema.alterTable("userProfiles").addColumn("title", "text").execute()
 
   await db.schema
@@ -48,6 +52,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .execute()
 
   await db.schema.createIndex("twoFactors_userId_idx").on("twoFactors").column("userId").execute()
+
   await db.schema.createIndex("twoFactors_secret_idx").on("twoFactors").column("secret").execute()
 
   await db.schema.createType("ShopPurchaseType").asEnum(["ITEM", "LOOT_BOX"]).execute()
@@ -87,15 +92,20 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
 export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable("shopPurchases").execute()
+
   await db.schema.dropType("ShopPurchaseType").execute()
 
   await db.schema.dropTable("twoFactors").execute()
+
   await db.schema.alterTable("users").dropColumn("twoFactorEnabled").execute()
 
   await sql`DROP INDEX IF EXISTS "chapters_uploaderId_createdAt_idx"`.execute(db)
+
   await db.schema.dropTable("userCosmetics").execute()
+
   await db.schema.dropType("UserCosmeticKind").execute()
+
   await db.schema.alterTable("userProfiles").dropColumn("title").execute()
-  await db.schema.alterTable("users").dropColumn("avatarBorder").execute()
-  await db.schema.alterTable("users").dropColumn("nameEffect").execute()
+
+  await db.schema.alterTable("users").dropColumn("avatarBorder").dropColumn("nameEffect").execute()
 }

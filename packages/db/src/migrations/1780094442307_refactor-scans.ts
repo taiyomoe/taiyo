@@ -105,6 +105,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`ALTER INDEX "MediaTitle_mediaId_language_priority_key" RENAME TO "Title_mediaId_language_priority_key"`.execute(
     db,
   )
+
   await db.schema
     .alterTable("Title")
     .renameConstraint("MediaTitle_mediaId_fkey", "Title_mediaId_fkey")
@@ -142,6 +143,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`ALTER INDEX "_MediaChapterToGroup_B_index" RENAME TO "_ChapterToGroup_B_index"`.execute(
     db,
   )
+
   await db.schema
     .alterTable("_ChapterToGroup")
     .renameConstraint("_MediaChapterToGroup_A_fkey", "_ChapterToGroup_A_fkey")

@@ -5,10 +5,12 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .createType("CommentDeletion")
     .asEnum(["AUTHOR", "PAGE_OWNER", "MODERATOR"])
     .execute()
+
   await db.schema
     .createType("CommentReportReason")
     .asEnum(["SPAM", "HARASSMENT", "SPOILER", "NSFW", "ILLEGAL", "OTHER"])
     .execute()
+
   await db.schema
     .createType("CommentReportStatus")
     .asEnum(["OPEN", "RESOLVED", "DISMISSED"])
@@ -75,20 +77,25 @@ export async function up(db: Kysely<unknown>): Promise<void> {
       ON "comments" ("threadId", "createdAt" DESC, "id" DESC)
       WHERE "parentId" IS NULL
   `.execute(db)
+
   await sql`
     CREATE INDEX "comments_threadId_top_idx"
       ON "comments" ("threadId", "upvoteCount" DESC, "createdAt" DESC, "id" DESC)
       WHERE "parentId" IS NULL
   `.execute(db)
+
   await sql`
     CREATE INDEX "comments_parentId_createdAt_idx"
       ON "comments" ("parentId", "createdAt", "id")
       WHERE "parentId" IS NOT NULL
   `.execute(db)
+
   await sql`CREATE INDEX "comments_replyToId_idx" ON "comments" ("replyToId")`.execute(db)
+
   await sql`CREATE INDEX "comments_authorId_createdAt_idx" ON "comments" ("authorId", "createdAt" DESC)`.execute(
     db,
   )
+
   await sql`
     CREATE TRIGGER "comments_set_updated_at"
     BEFORE UPDATE ON "comments"
@@ -105,6 +112,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("content", "text", (c) => c.notNull())
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull())
     .execute()
+
   await db.schema
     .createIndex("commentRevisions_commentId_createdAt_idx")
     .on("commentRevisions")
@@ -122,6 +130,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addPrimaryKeyConstraint("commentVotes_pkey", ["commentId", "userId"])
     .execute()
+
   await db.schema
     .createIndex("commentVotes_userId_idx")
     .on("commentVotes")
@@ -146,14 +155,17 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("resolvedAt", sql`timestamp(3)`)
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .execute()
+
   await sql`CREATE UNIQUE INDEX "commentReports_open_reporter_comment_key" ON "commentReports" ("reporterId", "commentId") WHERE "status" = 'OPEN'`.execute(
     db,
   )
+
   await db.schema
     .createIndex("commentReports_status_createdAt_idx")
     .on("commentReports")
     .columns(["status", "createdAt"])
     .execute()
+
   await db.schema
     .createIndex("commentReports_commentId_idx")
     .on("commentReports")
@@ -179,9 +191,11 @@ export async function up(db: Kysely<unknown>): Promise<void> {
       c.references("users.id").onDelete("set null").onUpdate("cascade"),
     )
     .execute()
+
   await sql`CREATE UNIQUE INDEX "commentImages_uploaderId_sha256_key" ON "commentImages" ("uploaderId", "sha256") WHERE "removedAt" IS NULL`.execute(
     db,
   )
+
   await sql`CREATE INDEX "commentImages_createdAt_idx" ON "commentImages" ("createdAt") WHERE "removedAt" IS NULL`.execute(
     db,
   )
@@ -196,6 +210,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     )
     .addPrimaryKeyConstraint("commentImageUsages_pkey", ["commentId", "imageId"])
     .execute()
+
   await db.schema
     .createIndex("commentImageUsages_imageId_idx")
     .on("commentImageUsages")
@@ -213,11 +228,13 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addPrimaryKeyConstraint("commentImageFavorites_pkey", ["userId", "imageId"])
     .execute()
+
   await db.schema
     .createIndex("commentImageFavorites_userId_createdAt_idx")
     .on("commentImageFavorites")
     .columns(["userId", "createdAt desc"])
     .execute()
+
   await db.schema
     .createIndex("commentImageFavorites_imageId_idx")
     .on("commentImageFavorites")
@@ -405,25 +422,44 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
 export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable("pushSubscriptions").execute()
+
   await sql`DROP TRIGGER "chapters_publish_enqueue_notification_outbox" ON "chapters"`.execute(db)
+
   await sql`DROP TRIGGER "chapters_insert_enqueue_notification_outbox" ON "chapters"`.execute(db)
+
   await sql`DROP FUNCTION notification_outbox_enqueue_chapter()`.execute(db)
+
   await db.schema.dropTable("notificationOutbox").execute()
+
   await db.schema.dropTable("notificationActors").execute()
+
   await db.schema.dropTable("notifications").execute()
+
   await db.schema.dropType("NotificationType").execute()
+
   await db.schema.alterTable("userLibraryEntries").dropColumn("notify").execute()
 
   await db.schema.dropTable("blockedCommentImages").execute()
+
   await db.schema.dropTable("commentImageFavorites").execute()
+
   await db.schema.dropTable("commentImageUsages").execute()
+
   await db.schema.dropTable("commentImages").execute()
+
   await db.schema.dropTable("commentReports").execute()
+
   await db.schema.dropTable("commentVotes").execute()
+
   await db.schema.dropTable("commentRevisions").execute()
+
   await db.schema.dropTable("comments").execute()
+
   await db.schema.dropTable("commentThreads").execute()
+
   await db.schema.dropType("CommentReportStatus").execute()
+
   await db.schema.dropType("CommentReportReason").execute()
+
   await db.schema.dropType("CommentDeletion").execute()
 }

@@ -609,18 +609,11 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await sql`ALTER TABLE "Media" ALTER COLUMN "synopsis" TYPE JSONB USING CASE WHEN "synopsis" IS NOT NULL THEN jsonb_build_object('pt_br', "synopsis") ELSE '{}' END`.execute(
     db,
   )
+
   await db.schema
     .alterTable("Media")
     .alterColumn("synopsis", (c) => c.setDefault(sql`'{}'::jsonb`))
-    .execute()
-
-  await db.schema
-    .alterTable("Media")
     .alterColumn("synopsis", (c) => c.setNotNull())
-    .execute()
-
-  await db.schema
-    .alterTable("Media")
     .alterColumn("tags", (c) => c.setDefault(sql`'{}'::jsonb[]`))
     .execute()
 
@@ -708,9 +701,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
   await db.schema.dropTable("mediaTags").execute()
 
-  await db.schema.alterTable("Media").dropColumn("genres").execute()
-
-  await db.schema.alterTable("Media").dropColumn("oneShot").execute()
+  await db.schema.alterTable("Media").dropColumn("genres").dropColumn("oneShot").execute()
 
   await db.schema.dropType("MediaGenres").execute()
 

@@ -21,7 +21,12 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("addedBy", "uuid", (c) =>
       c.notNull().references("users.id").onDelete("restrict").onUpdate("cascade"),
     )
+    .addColumn("permissions", sql`text[]`, (c) => c.notNull().defaultTo(sql`'{}'::text[]`))
     .addPrimaryKeyConstraint("groupMemberships_pkey", ["userId", "groupId"])
+    .addCheckConstraint(
+      "groupMemberships_permissions_check",
+      sql`"permissions" <@ ARRAY['UPLOAD_CHAPTERS', 'EDIT_CHAPTERS', 'DELETE_CHAPTERS', 'EDIT_GROUP', 'MANAGE_MEMBERS']::text[]`,
+    )
     .execute()
 
   await db.schema
@@ -55,6 +60,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("reviewerNote", "text")
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .addColumn("updatedAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+    .addColumn("proofLinks", sql`text[]`, (c) => c.notNull().defaultTo(sql`'{}'::text[]`))
     .execute()
 
   await sql`
@@ -69,19 +75,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     FOR EACH ROW
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
-
-  await db.schema
-    .alterTable("groupMemberships")
-    .addColumn("permissions", sql`text[]`, (c) => c.notNull().defaultTo(sql`'{}'::text[]`))
-    .execute()
-
-  await db.schema
-    .alterTable("groupMemberships")
-    .addCheckConstraint(
-      "groupMemberships_permissions_check",
-      sql`"permissions" <@ ARRAY['UPLOAD_CHAPTERS', 'EDIT_CHAPTERS', 'DELETE_CHAPTERS', 'EDIT_GROUP', 'MANAGE_MEMBERS']::text[]`,
-    )
-    .execute()
 
   await db.schema
     .createType("GroupInvitationStatus")
@@ -129,11 +122,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     FOR EACH ROW
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
-
-  await db.schema
-    .alterTable("groupOwnershipRequests")
-    .addColumn("proofLinks", sql`text[]`, (c) => c.notNull().defaultTo(sql`'{}'::text[]`))
-    .execute()
 
   await db.schema
     .createIndex("groupOwnershipRequests_status_createdAt_idx")
