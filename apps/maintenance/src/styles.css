@@ -10,7 +10,9 @@
   }
 }
 
-html {
+/* Safari on iOS 26 tints its status bar and toolbar with the body's background. */
+html,
+body {
   background-color: #0d0705;
   color-scheme: dark;
 }

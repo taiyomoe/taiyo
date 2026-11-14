@@ -113,7 +113,7 @@ export const LegalPage = ({
   intro: ReactNode
   sections: LegalSection[]
 }) => (
-  <div sx={styles.page}>
+  <div data-legal-page sx={styles.page}>
     <LandingNav />
     <LegalMasthead eyebrow={eyebrow} intro={intro} title={title} updated={updated} />
     <Section>

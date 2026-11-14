@@ -8,6 +8,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Safari on iOS 26 tints its status bar and toolbar with the body's background, and
+   these pages paint the night scene whatever the theme. */
+html:has([data-landing], [data-auth-screen], [data-legal-page]) body {
+  background-color: #120a07;
+}
+
 html:has([data-app-shell]),
 html:has([data-app-shell]) body {
   overscroll-behavior: none;
