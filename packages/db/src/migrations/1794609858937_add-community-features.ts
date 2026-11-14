@@ -1,11 +1,8 @@
 import { type Kysely, sql } from "kysely"
 
-// Community: comments, notifications, push subscriptions and activity notifications.
-
 const createdAt = sql`timestamp(3)`
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // Comments
   await db.schema
     .createType("CommentDeletion")
     .asEnum(["AUTHOR", "PAGE_OWNER", "MODERATOR"])
@@ -245,7 +242,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("createdAt", createdAt, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .execute()
 
-  // Notifications
   await db.schema
     .alterTable("userLibraryEntries")
     .addColumn("notify", "boolean", (c) => c.notNull().defaultTo(true))
@@ -289,7 +285,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
       WHERE "chapterId" IS NOT NULL
   `.execute(db)
 
-  // Likes gather in a new notification once the previous one is read, so only replies stay unique.
   await sql`
     CREATE UNIQUE INDEX "notifications_userId_commentId_key"
       ON "notifications" ("userId", "commentId")
@@ -382,7 +377,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION notification_outbox_enqueue_chapter()
   `.execute(db)
 
-  // Push subscriptions
   await db.schema
     .createTable("pushSubscriptions")
     .addColumn("id", "uuid", (c) => c.primaryKey().defaultTo(sql`gen_random_uuid()`))
@@ -412,7 +406,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
-  // Notifications and push subscriptions
   await db.schema.dropTable("pushSubscriptions").execute()
   await sql`DROP TRIGGER "chapters_publish_enqueue_notification_outbox" ON "chapters"`.execute(db)
   await sql`DROP TRIGGER "chapters_insert_enqueue_notification_outbox" ON "chapters"`.execute(db)
@@ -423,7 +416,6 @@ export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropType("NotificationType").execute()
   await db.schema.alterTable("userLibraryEntries").dropColumn("notify").execute()
 
-  // Comments
   await db.schema.dropTable("blockedCommentImages").execute()
   await db.schema.dropTable("commentImageFavorites").execute()
   await db.schema.dropTable("commentImageUsages").execute()

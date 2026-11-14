@@ -1,9 +1,6 @@
 import { type ColumnType, type Kysely, sql } from "kysely"
 import { cluster } from "radashi"
 
-// Medias: trackers and the trailer move to the links column, the staff tables appear, and
-// synopsis, genres, tags and volumes take their new shapes.
-
 type RefactorTrackersDb = {
   Media: {
     id: string
@@ -15,7 +12,6 @@ type RefactorTrackersDb = {
     externalId: string
     mediaId: string
   }
-  // Temporary table staging each media's links: one UPDATE instead of one per media.
   mediaLinks: { id: string; links: string }
 }
 
@@ -478,15 +474,12 @@ type RefactorMediasDb = {
     tags: ColumnType<Array<{ key: string; isSpoiler?: boolean | null }> | null, never, unknown>
     oneShot: boolean
   }
-  // Temporary table staging each media's tags (as a JSON array): one UPDATE instead of
-  // one per media.
   mediaTags: { id: string; tags: string }
 }
 
 type MigrationDb = RefactorTrackersDb & RefactorMediasDb
 
 export async function up(db: Kysely<MigrationDb>): Promise<void> {
-  // Trackers and trailer, moved into the links column
   await db.schema
     .alterTable("Media")
     .addColumn("links", "jsonb", (c) => c.notNull().defaultTo(sql`'{}'::jsonb`))
@@ -560,8 +553,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     await db.insertInto("mediaLinks").values(batch).execute()
   }
 
-  // Inside the migration transaction, autovacuum cannot refresh the planner's statistics
-  // on these freshly written tables, which the join below relies on.
   await sql`ANALYZE "mediaLinks", "Media"`.execute(db)
 
   await db
@@ -579,11 +570,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
   await db.schema.dropType("Trackers").execute()
 
-  // Staff
-  // Creates the staff tables only. Importing authors and artists from MangaDex used to
-  // happen here, one API call per media inside the migration transaction: hours of
-  // downtime on production, and a MangaDex outage would roll back every migration. It now
-  // runs after the migration, site up: packages/db/src/backfills/import-mangadex-staff.ts.
   await db.schema.createType("StaffRole").asEnum(["AUTHOR", "ARTIST"]).execute()
 
   await db.schema
@@ -620,10 +606,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .column("staffId")
     .execute()
 
-  // Synopsis, tags and volumes
-  /**
-   * Phase 1: Convert synopsis from TEXT to JSONB.
-   */
   await sql`ALTER TABLE "Media" ALTER COLUMN "synopsis" TYPE JSONB USING CASE WHEN "synopsis" IS NOT NULL THEN jsonb_build_object('pt_br', "synopsis") ELSE '{}' END`.execute(
     db,
   )
@@ -637,9 +619,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .alterColumn("synopsis", (c) => c.setNotNull())
     .execute()
 
-  /**
-   * Phase 2: Convert genres and oneShot to tags.
-   */
   await db.schema
     .alterTable("Media")
     .alterColumn("tags", (c) => c.setDefault(sql`'{}'::jsonb[]`))
@@ -669,9 +648,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     for (const genre of genres) {
       if (TAG_KEYS.has(genre)) {
         push({ key: genre, isSpoiler: false })
-      } else {
-        // oxlint-disable-next-line no-console
-        console.warn(`Invalid genre key "${genre}" for media ${row.id}, skipping`)
       }
     }
 
@@ -704,12 +680,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
       if (tag.key === "POSTAPOCALYPTIC") {
         push({ key: "POST_APOCALYPTIC", isSpoiler })
-
-        continue
       }
-
-      // oxlint-disable-next-line no-console
-      console.warn(`Invalid tag key "${tag.key}" for media ${row.id}, skipping`)
     }
 
     mediaTags.push({ id: row.id, tags: JSON.stringify(newTags) })
@@ -726,11 +697,8 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     await db.insertInto("mediaTags").values(batch).execute()
   }
 
-  // Inside the migration transaction, autovacuum cannot refresh the planner's statistics
-  // on these freshly written tables, which the join below relies on.
   await sql`ANALYZE "mediaTags", "Media"`.execute(db)
 
-  // "tags" is a jsonb[] column: the staged JSON array is unnested into it.
   await db
     .updateTable("Media")
     .from("mediaTags")
@@ -746,9 +714,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
   await db.schema.dropType("MediaGenres").execute()
 
-  /**
-   * Phase 3: Convert volume from INT to TEXT.
-   */
   await sql`ALTER TABLE "Cover" ALTER COLUMN "volume" TYPE TEXT USING "volume"::TEXT`.execute(db)
 
   await sql`ALTER TABLE "Chapter" ALTER COLUMN "volume" TYPE TEXT USING "volume"::TEXT`.execute(db)

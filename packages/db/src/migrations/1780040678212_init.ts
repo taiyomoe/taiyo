@@ -445,7 +445,6 @@ const COUNTRIES = [
 ] as const
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // Enums
   await db.schema
     .createType("Roles")
     .asEnum(["USER", "MODERATOR", "UPLOADER_INTERN", "UPLOADER", "ADMIN"])
@@ -563,7 +562,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
   await db.schema.createType("HomeLayout").asEnum(["ROWS", "COLUMNS"]).execute()
 
-  // Prisma migrations table
   await db.schema
     .createTable("_prisma_migrations")
     .addColumn("id", sql`varchar(36)`, (c) => c.primaryKey())
@@ -576,7 +574,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("applied_steps_count", "integer", (c) => c.notNull().defaultTo(0))
     .execute()
 
-  // VerificationToken
   await db.schema
     .createTable("VerificationToken")
     .addColumn("identifier", "text", (c) => c.notNull())
@@ -585,7 +582,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addPrimaryKeyConstraint("VerificationToken_pkey", ["identifier", "token"])
     .execute()
 
-  // User
   await db.schema
     .createTable("User")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -602,7 +598,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
   await db.schema.createIndex("User_id_idx").on("User").column("id").execute()
 
-  // Account
   await db.schema
     .createTable("Account")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -630,7 +625,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // UserProfile
   await db.schema
     .createTable("UserProfile")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -657,7 +651,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // Media
   await db.schema
     .createTable("Media")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -686,7 +679,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // MediaBanner
   await db.schema
     .createTable("MediaBanner")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -705,7 +697,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // MediaChapter
   await db.schema
     .createTable("MediaChapter")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -730,7 +721,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // MediaChapterComment
   await db.schema
     .createTable("MediaChapterComment")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -751,7 +741,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // MediaCover
   await db.schema
     .createTable("MediaCover")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -773,7 +762,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // _UserFollow
   await db.schema
     .createTable("_UserFollow")
     .addColumn("A", "text", (c) =>
@@ -787,7 +775,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
   await db.schema.createIndex("_UserFollow_B_index").on("_UserFollow").column("B").execute()
 
-  // MediaTitle
   await db.schema
     .createTable("MediaTitle")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -815,7 +802,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // MediaTracker
   await db.schema
     .createTable("MediaTracker")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -833,7 +819,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // ScanMember
   await db.schema
     .createTable("ScanMember")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -847,7 +832,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     )
     .execute()
 
-  // Scan
   await db.schema
     .createTable("Scan")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -872,7 +856,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // Session
   await db.schema
     .createTable("Session")
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
@@ -891,7 +874,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // UserHistory
   await db.schema
     .createTable("UserHistory")
     .addColumn("progression", sql`jsonb[]`)
@@ -910,7 +892,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // UserLibrary
   await db.schema
     .createTable("UserLibrary")
     .addColumn("reading", sql`jsonb[]`, (c) => c.defaultTo(sql`ARRAY[]::jsonb[]`))
@@ -931,7 +912,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // _MediaChapterToScan
   await db.schema
     .createTable("_MediaChapterToScan")
     .addColumn("A", "text", (c) =>
@@ -949,7 +929,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .column("B")
     .execute()
 
-  // _ScanToScanMember
   await db.schema
     .createTable("_ScanToScanMember")
     .addColumn("A", "text", (c) =>
@@ -967,7 +946,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .column("B")
     .execute()
 
-  // Task
   await db.schema
     .createTable("Task")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -979,7 +957,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("payload", "jsonb", (c) => c.notNull())
     .execute()
 
-  // UserSetting
   await db.schema
     .createTable("UserSetting")
     .addColumn("id", "text", (c) => c.primaryKey())

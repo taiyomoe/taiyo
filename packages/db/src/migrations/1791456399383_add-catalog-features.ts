@@ -1,7 +1,5 @@
 import { type Kysely, sql } from "kysely"
 
-// Catalog: image extensions, the search outbox, featured medias and media suggestions.
-
 const MEDIA_REFERENCING_TABLES = [
   "titles",
   "covers",
@@ -11,7 +9,6 @@ const MEDIA_REFERENCING_TABLES = [
 ]
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // Image extensions
   await db.schema
     .alterTable("covers")
     .addColumn("extension", "text", (c) => c.notNull().defaultTo("jpg"))
@@ -32,7 +29,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addCheckConstraint("banners_extension_check", sql`"extension" IN ('jpg', 'gif')`)
     .execute()
 
-  // Search outbox
   await db.schema
     .createTable("searchOutbox")
     .addColumn("id", "bigint", (c) => c.primaryKey().generatedAlwaysAsIdentity())
@@ -108,7 +104,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION search_outbox_enqueue_staff_medias()
   `.execute(db)
 
-  // Featured medias
   await db.schema
     .createTable("featuredMedias")
     .addColumn("mediaId", "uuid", (c) =>
@@ -132,7 +127,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
 
-  // Media suggestions
   await db.schema
     .createType("MediaSuggestionStatus")
     .asEnum(["PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN"])
@@ -188,14 +182,11 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
-  // Media suggestions
   await db.schema.dropTable("mediaSuggestions").execute()
   await db.schema.dropType("MediaSuggestionStatus").execute()
 
-  // Featured medias
   await db.schema.dropTable("featuredMedias").execute()
 
-  // Search outbox
   await sql`DROP TRIGGER "staffs_enqueue_search_outbox" ON "staffs"`.execute(db)
 
   for (const table of MEDIA_REFERENCING_TABLES) {
@@ -210,7 +201,6 @@ export async function down(db: Kysely<unknown>): Promise<void> {
   await sql`DROP FUNCTION search_outbox_enqueue_media()`.execute(db)
   await db.schema.dropTable("searchOutbox").execute()
 
-  // Image extensions
   await db.schema.alterTable("covers").dropConstraint("covers_extension_check").execute()
   await db.schema.alterTable("covers").dropColumn("extension").execute()
 

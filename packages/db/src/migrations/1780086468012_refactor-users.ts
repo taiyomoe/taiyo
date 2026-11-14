@@ -21,8 +21,6 @@ type MigrationDb = {
     showLibrary: boolean
     homeLayout: string
   }
-  // Temporary tables staging per-user values: each phase then updates "User" with one
-  // statement instead of one per user (17k users in production).
   normalizedEmails: { id: string; normalizedEmail: string | null }
   usernames: { id: string; username: string; displayUsername: string }
   userSettings: { id: string; settings: string }
@@ -51,9 +49,6 @@ const normalizeDisplayName = (input: string) => {
 }
 
 export async function up(db: Kysely<MigrationDb>): Promise<void> {
-  /**
-   * Phase 1: better-auth migration (Account/Session/Verification + bans).
-   */
   await db.schema.dropIndex("Account_provider_providerAccountId_key").execute()
 
   await db.schema.dropIndex("Session_sessionToken_key").execute()
@@ -127,9 +122,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
   await db.schema.createIndex("Session_token_key").on("Session").column("token").unique().execute()
 
-  /**
-   * Phase 2: Convert emailVerified (timestamp) to boolean and add normalizedEmail column to User table.
-   */
   await db.schema
     .alterTable("User")
     .dropColumn("emailVerified")
@@ -165,8 +157,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     await db.insertInto("normalizedEmails").values(batch).execute()
   }
 
-  // Inside the migration transaction, autovacuum cannot refresh the planner's statistics
-  // on these freshly written tables, which the join below relies on.
   await sql`ANALYZE "normalizedEmails", "User"`.execute(db)
 
   await db
@@ -178,9 +168,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
   await db.schema.dropTable("normalizedEmails").execute()
 
-  /**
-   * Phase 3: add username and displayUsername columns to User table.
-   */
   await db.schema
     .alterTable("User")
     .addColumn("displayUsername", "text")
@@ -203,8 +190,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .execute()
   const takenUsernames = new Set<string>()
   const takenDisplayUsernames = new Set<string>()
-  // The candidate is sanitized before the uniqueness check: lowercasing it afterwards
-  // collided with taken names on production data ("User_username_key").
   const generateUsername = (set: Set<string>): string => {
     const candidate = sanitizeUsername(faker.internet.username())
 
@@ -266,9 +251,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .alterColumn("username", (c) => c.setNotNull())
     .execute()
 
-  /**
-   * Phase 4: Convert UserSetting table to settings column in User table.
-   */
   await db.schema
     .alterTable("User")
     .addColumn("settings", "jsonb", (c) => c.notNull().defaultTo(sql`'{}'::jsonb`))
@@ -318,9 +300,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
   await db.schema.dropType("HomeLayout").execute()
 
-  /**
-   * Phase 5: Convert about (text) to jsonb in UserProfile table.
-   */
   await sql`ALTER TABLE "UserProfile" ALTER COLUMN "about" TYPE JSONB USING CASE WHEN "about" IS NOT NULL THEN jsonb_build_object('pt_br', "about") ELSE '{}' END`.execute(
     db,
   )
@@ -334,10 +313,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .alterColumn("about", (c) => c.setNotNull())
     .execute()
 
-  /**
-   * Phase 6: Points can never go negative. Production never had this check, and init
-   * mirrors production, so it starts here.
-   */
   await db.schema
     .alterTable("UserProfile")
     .addCheckConstraint("UserProfile_points_check", sql`"points" >= 0`)

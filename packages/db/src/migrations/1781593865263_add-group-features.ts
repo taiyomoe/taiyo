@@ -1,8 +1,5 @@
 import { type Kysely, sql } from "kysely"
 
-// Groups: memberships, ownership claims, member permissions, invitations, creation
-// requests, follows and reports.
-
 const PERMISSIONS = [
   "UPLOAD_CHAPTERS",
   "EDIT_CHAPTERS",
@@ -12,7 +9,6 @@ const PERMISSIONS = [
 ]
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // Memberships and ownership claims
   await db.schema.createType("GroupMembershipRole").asEnum(["OWNER", "MEMBER"]).execute()
 
   await db.schema
@@ -20,7 +16,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .asEnum(["PENDING", "APPROVED", "REJECTED", "CANCELLED"])
     .execute()
 
-  // groupMemberships: many-to-many between users and groups, with a role.
   await db.schema
     .createTable("groupMemberships")
     .addColumn("userId", "uuid", (c) =>
@@ -43,18 +38,12 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .columns(["groupId", "role"])
     .execute()
 
-  // requireChapterAccess (group-ownership Phase 3) joins chapterGroups to
-  // groupMemberships filtered by userId. The PK (userId, groupId) supports
-  // lookups starting from userId already, but Postgres can pick the index
-  // shape it prefers — making it explicit also unlocks the "what groups is
-  // this user in?" query the design doc calls out.
   await db.schema
     .createIndex("groupMemberships_userId_idx")
     .on("groupMemberships")
     .column("userId")
     .execute()
 
-  // groupOwnershipRequests: workflow + audit log for claim requests.
   await db.schema
     .createTable("groupOwnershipRequests")
     .addColumn("id", "uuid", (c) => c.primaryKey().defaultTo(sql`gen_random_uuid()`))
@@ -76,7 +65,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("updatedAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .execute()
 
-  // At most one pending request per (user, group) at a time.
   await sql`
     CREATE UNIQUE INDEX "groupOwnershipRequests_pending_unique"
       ON "groupOwnershipRequests" ("userId", "groupId")
@@ -90,7 +78,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
 
-  // Member permissions
   await db.schema
     .alterTable("groupMemberships")
     .addColumn("permissions", sql`text[]`, (c) => c.notNull().defaultTo(sql`'{}'::text[]`))
@@ -104,7 +91,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     )
     .execute()
 
-  // Invitations and creation requests
   await db.schema
     .createType("GroupInvitationStatus")
     .asEnum(["PENDING", "ACCEPTED", "DECLINED", "CANCELLED", "EXPIRED"])
@@ -206,7 +192,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
 
-  // Follows and reports
   await db.schema
     .createTable("groupFollows")
     .addColumn("userId", "uuid", (c) =>

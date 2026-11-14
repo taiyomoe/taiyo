@@ -2,7 +2,6 @@ import { type Kysely, sql } from "kysely"
 
 type MigrationDb = Record<string, Record<string, unknown>>
 
-// Every text id, and every column pointing at one, becomes a uuid.
 const UUID_COLUMNS = {
   User: ["id"],
   Account: ["id", "userId"],
@@ -24,7 +23,6 @@ const UUID_COLUMNS = {
 }
 
 export async function up(db: Kysely<MigrationDb>): Promise<void> {
-  // Foreign keys between converted columns
   await db.schema.alterTable("Account").dropConstraint("Account_userId_fkey").execute()
 
   await db.schema.alterTable("Session").dropConstraint("Session_userId_fkey").execute()
@@ -97,9 +95,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .dropConstraint("_ScanToScanMember_A_fkey")
     .execute()
 
-  // Columns change type in place: one rewrite per table, which rebuilds its indexes too.
-  // Copying into new uuid columns instead would leave the old row versions behind until
-  // commit, and the migration transaction could not use any index built over them.
   for (const [table, columns] of Object.entries(UUID_COLUMNS)) {
     const changes = columns.flatMap((column) => [
       sql`ALTER COLUMN ${sql.ref(column)} TYPE uuid USING ${sql.ref(column)}::uuid`,
@@ -109,10 +104,8 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     await sql`ALTER TABLE ${sql.table(table)} ${sql.join(changes)}`.execute(db)
   }
 
-  // The primary key already indexes it.
   await db.schema.dropIndex("User_id_idx").execute()
 
-  // Foreign keys, back on the uuid columns
   await db.schema
     .alterTable("Account")
     .addForeignKeyConstraint("Account_userId_fkey", ["userId"], "User", ["id"])

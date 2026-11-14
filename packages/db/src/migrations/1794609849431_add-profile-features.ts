@@ -1,9 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
-// Profiles: customization, two-factor authentication and the points shop.
-
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // Profile customization
   await db.schema.alterTable("users").addColumn("nameEffect", "text").execute()
   await db.schema.alterTable("users").addColumn("avatarBorder", "text").execute()
   await db.schema.alterTable("userProfiles").addColumn("title", "text").execute()
@@ -32,7 +29,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
       WHERE "deletedAt" IS NULL
   `.execute(db)
 
-  // Two-factor authentication
   await db.schema
     .alterTable("users")
     .addColumn("twoFactorEnabled", "boolean", (c) => c.notNull().defaultTo(false))
@@ -54,7 +50,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema.createIndex("twoFactors_userId_idx").on("twoFactors").column("userId").execute()
   await db.schema.createIndex("twoFactors_secret_idx").on("twoFactors").column("secret").execute()
 
-  // Shop
   await db.schema.createType("ShopPurchaseType").asEnum(["ITEM", "LOOT_BOX"]).execute()
 
   await db.schema
@@ -91,15 +86,12 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
-  // Shop
   await db.schema.dropTable("shopPurchases").execute()
   await db.schema.dropType("ShopPurchaseType").execute()
 
-  // Two-factor authentication
   await db.schema.dropTable("twoFactors").execute()
   await db.schema.alterTable("users").dropColumn("twoFactorEnabled").execute()
 
-  // Profile customization
   await sql`DROP INDEX IF EXISTS "chapters_uploaderId_createdAt_idx"`.execute(db)
   await db.schema.dropTable("userCosmetics").execute()
   await db.schema.dropType("UserCosmeticKind").execute()

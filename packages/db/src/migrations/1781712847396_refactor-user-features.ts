@@ -1,9 +1,6 @@
 import { type Kysely, sql } from "kysely"
 import { cluster } from "radashi"
 
-// Readers: libraries, reading history and lists (carried over from production), reading
-// rewards and the points they earned, page bookmarks and page reports.
-
 type LibraryColumn = "reading" | "rereading" | "planToRead" | "completed" | "onHold" | "dropped"
 type RefactorUserFeaturesDb = {
   medias: { id: string }
@@ -40,8 +37,6 @@ const LIBRARY_STATUSES = [
 const BATCH_SIZE = 1000
 const READERS_PER_BATCH = 500
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-// The legacy JSONB arrays hold { mediaId, updatedAt } (libraries) and
-// { chapterId, pageId, completed, updatedAt } (histories). Unreadable values are skipped.
 const field = (json: unknown, key: string): unknown => {
   const value: unknown = typeof json === "string" ? JSON.parse(json) : json
 
@@ -68,7 +63,6 @@ type AddReadingRewardsDb = {
     points: number
     createdAt: Date
   }
-  // Temporary table staging each reader's earned points for one UPDATE.
   earnedPoints: { userId: string; points: number }
 }
 type Reward = AddReadingRewardsDb["readingRewards"]
@@ -81,17 +75,10 @@ type Read = {
   updatedAt: Date
 }
 
-// Same rules as apps/api/src/handlers/update-chapter-history-handler.ts when this migration
-// was written: completing a chapter someone else uploaded credits its unclaimed pages,
-// within SECONDS_PER_PAGE since the reader's previous reward and DAILY_PAGE_LIMIT over a
-// rolling day, and every PAGES_PER_POINT pages read make a point.
 const SECONDS_PER_PAGE = 2
 const PAGES_PER_POINT = 20
 const DAILY_PAGE_LIMIT = 1200
 const DAY_MS = 86_400_000
-// Replays one batch of reads, ordered by reader then time, as if each had been completed
-// live. The legacy history has no opening time, so a reader's first reward is only capped
-// by the chapter's pages and the daily limit.
 const replayReads = (reads: Read[]) => {
   const rewards: Reward[] = []
   const earned = new Map<string, number>()
@@ -152,7 +139,6 @@ const replayReads = (reads: Read[]) => {
 type MigrationDb = RefactorUserFeaturesDb & AddReadingRewardsDb
 
 export async function up(db: Kysely<MigrationDb>): Promise<void> {
-  // Libraries, reading history and lists
   await db.schema
     .createType("UserLibraryStatus")
     .asEnum(["READING", "REREADING", "PLAN_TO_READ", "COMPLETED", "ON_HOLD", "DROPPED"])
@@ -160,8 +146,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
 
   await db.schema.createType("UserListVisibility").asEnum(["PUBLIC", "PRIVATE"]).execute()
 
-  // Old shape: one row per user, six JSONB array columns of { mediaId, updatedAt }.
-  // Replaced by userLibraryEntries (one row per (user, media) with a status).
   await db.schema
     .createTable("userLibraryEntries")
     .addColumn("userId", "uuid", (c) =>
@@ -176,10 +160,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addPrimaryKeyConstraint("userLibraryEntries_pkey", ["userId", "mediaId"])
     .execute()
 
-  // Production holds 70k entries for 11k users. Computed here rather than in one
-  // INSERT … SELECT: inside the long migration transaction, Postgres planned that query to
-  // run for hours. A media listed under several statuses keeps the most recently updated
-  // one; medias deleted since are skipped.
   const mediaIds = new Set((await db.selectFrom("medias").select("id").execute()).map((m) => m.id))
   const libraries = await db.selectFrom("userLibraries").selectAll().execute()
   const libraryEntries = new Map<string, LibraryEntry>()
@@ -235,13 +215,8 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     EXECUTE FUNCTION set_updated_at()
   `.execute(db)
 
-  // Old shape: one row per (userId, mediaId) + a JSONB progression array of
-  // { chapterId, pageId, completed, updatedAt }. Replaced by per-chapter rows: opening a
-  // chapter upserts (userId, chapterId). Kept aside until its rows are carried over.
   await db.schema.alterTable("userHistories").renameTo("legacyUserHistories").execute()
 
-  // Frees its name for the new table's foreign key, which Postgres would otherwise call
-  // "userHistories_userId_fkey1".
   await db.schema
     .alterTable("legacyUserHistories")
     .dropConstraint("userHistories_userId_fkey")
@@ -262,8 +237,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addPrimaryKeyConstraint("userHistories_pkey", ["userId", "chapterId"])
     .execute()
 
-  // Production holds 1.6M chapter reads (255 MB of JSON), read a batch of readers at a
-  // time. A chapter read twice keeps its latest progress; chapters deleted since are skipped.
   const chapterIds = new Set(
     (await db.selectFrom("chapters").select("id").execute()).map((c) => c.id),
   )
@@ -364,7 +337,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
       WHERE "deletedAt" IS NULL AND "visibility" = 'PUBLIC'
   `.execute(db)
 
-  // Votes bump upvoteCount and item edits touch updatedAt explicitly, so only metadata edits fire this.
   await sql`
     CREATE TRIGGER "userLists_set_updated_at"
     BEFORE UPDATE OF "name", "description", "visibility" ON "userLists"
@@ -409,7 +381,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .column("userId")
     .execute()
 
-  // Reading rewards
   await db.schema
     .createTable("readingRewards")
     .addColumn("id", "uuid", (c) => c.primaryKey().defaultTo(sql`gen_random_uuid()`))
@@ -428,11 +399,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
     .execute()
 
-  // Rewards the reading history carried over from production (1.6M chapter reads), with
-  // the rules readers would have met live. Done before the indexes exist, so inserts stay
-  // cheap. No joins: inside the long migration transaction, Postgres planned them to run
-  // for hours, so chapters are looked up in memory and histories read by primary key.
-  // Readers without a profile earn nothing, like at runtime.
   const chapters = new Map(
     (
       await db
@@ -502,7 +468,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     }
   }
 
-  // Added to the points already on the profile.
   await db.schema
     .createTable("earnedPoints")
     .temporary()
@@ -514,8 +479,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     await db.insertInto("earnedPoints").values(batch).execute()
   }
 
-  // Inside the migration transaction, autovacuum cannot refresh the planner's statistics
-  // on these freshly written tables, which the join below relies on.
   await sql`ANALYZE "earnedPoints", "userProfiles"`.execute(db)
 
   await db
@@ -539,7 +502,6 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .columns(["userId", "mediaId", "number"])
     .execute()
 
-  // Page bookmarks and page reports
   await db.schema.alterTable("users").addColumn("readerSettings", "jsonb").execute()
 
   await db.schema

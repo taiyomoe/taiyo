@@ -1,7 +1,5 @@
 import { type Kysely, sql } from "kysely"
 
-// Chapters: review queue, upload status, scheduling and external links.
-
 export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .createType("ChapterStatus")
@@ -44,7 +42,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   `.execute(db)
 }
 
-// Dropping the columns drops their indexes and check constraints with them.
 export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .alterTable("chapters")
