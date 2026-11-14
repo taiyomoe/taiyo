@@ -8,6 +8,13 @@ import { randomInt } from "node:crypto"
 const MAX_SUFFIXED_ATTEMPTS = 5
 const withSuffix = (base: string, suffix: string, max: number) =>
   `${base.slice(0, max - suffix.length)}${suffix}`
+// The OAuth routes create the account under the provider's email. Unless the provider verified
+// that address, anyone could claim someone else's, and keep the account through the owner's
+// later verification or password reset.
+const SOCIAL_SIGN_UP_PATHS = new Set(["/callback/:id", "/sign-in/social"])
+
+export const isUnverifiedSocialSignUp = (user: User, path: string | undefined) =>
+  !user.emailVerified && path !== undefined && SOCIAL_SIGN_UP_PATHS.has(path)
 
 export const createBeforeUserCreatedHook =
   ({ db }: { db: Kysely<DB> }) =>

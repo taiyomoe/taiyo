@@ -1,6 +1,7 @@
 import {
   captchaEndpoints,
   createBeforeUserCreatedHook,
+  isUnverifiedSocialSignUp,
   rateLimitRules,
 } from "@taiyomoe/auth/server"
 import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
@@ -79,6 +80,16 @@ describe("Sign-up", () => {
     expect(data.displayUsername.length).toBeLessThanOrEqual(30)
     expect(data.username).toMatch(/_\d{4}$/)
     expect(data.displayUsername).toMatch(/_\d{4}$/)
+  })
+
+  test("refuses a social sign-up whose email the provider has not verified", () => {
+    const user = buildUser("Claimed")
+
+    expect(isUnverifiedSocialSignUp(user, "/callback/:id")).toBe(true)
+    expect(isUnverifiedSocialSignUp(user, "/sign-in/social")).toBe(true)
+    expect(isUnverifiedSocialSignUp({ ...user, emailVerified: true }, "/callback/:id")).toBe(false)
+    // An email sign-up is verified afterwards, through the link it sends.
+    expect(isUnverifiedSocialSignUp(user, "/sign-up/email")).toBe(false)
   })
 
   test("rejects a sign-up without a captcha token", async ({ app }) => {
