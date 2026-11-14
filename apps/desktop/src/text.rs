@@ -10,9 +10,9 @@ use std::rc::Rc;
 use std::sync::Arc;
 
 use gpui::{
-    App, AvailableSpace, Bounds, Element, ElementId, Font, FontId, FontStyle, FontWeight, GlobalElementId, GlyphId,
-    Hsla, InspectorElementId, IntoElement, LayoutId, LineLayout, Pixels, SharedString, Size, Style, TextRun, Window,
-    font, point, px, size,
+    App, AvailableSpace, Bounds, Element, ElementId, Font, FontId, FontWeight, GlobalElementId, GlyphId, Hsla,
+    InspectorElementId, IntoElement, LayoutId, LineLayout, Pixels, SharedString, Size, Style, TextRun, Window, font,
+    point, px, size,
 };
 
 #[derive(Clone)]
@@ -59,11 +59,6 @@ impl Spaced {
 
     pub fn spacing(mut self, ls: f32) -> Self {
         self.spacing = px(ls);
-        self
-    }
-
-    pub fn italic(mut self) -> Self {
-        self.font.style = FontStyle::Italic;
         self
     }
 
@@ -181,14 +176,15 @@ impl Spaced {
                     }
                     let line_x0 = glyphs[start].x;
                     let right = self.end_x(&glyphs, &layout, i + 1) - line_x0;
-                    if right > max && i > start {
-                        if let Some(b) = last_break.filter(|&b| b > start) {
-                            lines.push((start, b));
-                            start = b + 1;
-                            i = start;
-                            last_break = None;
-                            continue;
-                        }
+                    if right > max
+                        && i > start
+                        && let Some(b) = last_break.filter(|&b| b > start)
+                    {
+                        lines.push((start, b));
+                        start = b + 1;
+                        i = start;
+                        last_break = None;
+                        continue;
                     }
                     i += 1;
                 }

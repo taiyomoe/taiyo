@@ -67,6 +67,7 @@ pub struct TextInput {
     pub masked: bool,
     font_size: Pixels,
     caret_epoch: Instant,
+    blink: Option<gpui::Task<()>>,
     selected_range: Range<usize>,
     selection_reversed: bool,
     marked_range: Option<Range<usize>>,
@@ -84,6 +85,7 @@ impl TextInput {
             masked,
             font_size: px(14.0),
             caret_epoch: Instant::now(),
+            blink: None,
             selected_range: 0..0,
             selection_reversed: false,
             marked_range: None,
@@ -93,12 +95,28 @@ impl TextInput {
         }
     }
 
-    pub fn is_empty(&self) -> bool {
-        self.content.is_empty()
+    /// Wakes the field up when the caret next turns on or off, instead of
+    /// redrawing every frame while it is focused.
+    fn schedule_blink(&mut self, cx: &mut Context<Self>) {
+        if self.blink.is_some() {
+            return;
+        }
+        let since = self.caret_epoch.elapsed().as_millis() as u64;
+        let wait = 500 - since % 500;
+        self.blink = Some(cx.spawn(async move |this, cx| {
+            cx.background_executor()
+                .timer(std::time::Duration::from_millis(wait))
+                .await;
+            this.update(cx, |this, cx| {
+                this.blink = None;
+                cx.notify();
+            })
+            .ok();
+        }));
     }
 
     /// Byte offset in the shaped (possibly masked) text for a content offset.
-    fn to_display(&self, offset: usize) -> usize {
+    fn display_offset(&self, offset: usize) -> usize {
         if self.masked {
             self.content[..offset.min(self.content.len())].chars().count() * '•'.len_utf8()
         } else {
@@ -106,7 +124,7 @@ impl TextInput {
         }
     }
 
-    fn from_display(&self, offset: usize) -> usize {
+    fn content_offset(&self, offset: usize) -> usize {
         if self.masked {
             let chars = offset / '•'.len_utf8();
             self.content
@@ -252,7 +270,7 @@ impl TextInput {
         if position.y > bounds.bottom() {
             return self.content.len();
         }
-        self.from_display(line.closest_index_for_x(position.x - bounds.left()))
+        self.content_offset(line.closest_index_for_x(position.x - bounds.left()))
     }
 
     fn select_to(&mut self, offset: usize, cx: &mut Context<Self>) {
@@ -319,16 +337,6 @@ impl TextInput {
             .grapheme_indices(true)
             .find_map(|(idx, _)| (idx > offset).then_some(idx))
             .unwrap_or(self.content.len())
-    }
-
-    fn reset(&mut self) {
-        self.content = "".into();
-        self.selected_range = 0..0;
-        self.selection_reversed = false;
-        self.marked_range = None;
-        self.last_layout = None;
-        self.last_bounds = None;
-        self.is_selecting = false;
     }
 }
 
@@ -425,11 +433,11 @@ impl EntityInputHandler for TextInput {
         let range = self.range_from_utf16(&range_utf16);
         Some(Bounds::from_corners(
             point(
-                bounds.left() + last_layout.x_for_index(self.to_display(range.start)),
+                bounds.left() + last_layout.x_for_index(self.display_offset(range.start)),
                 bounds.top(),
             ),
             point(
-                bounds.left() + last_layout.x_for_index(self.to_display(range.end)),
+                bounds.left() + last_layout.x_for_index(self.display_offset(range.end)),
                 bounds.bottom(),
             ),
         ))
@@ -444,7 +452,7 @@ impl EntityInputHandler for TextInput {
         let line_point = self.last_bounds?.localize(&point)?;
         let last_layout = self.last_layout.as_ref()?;
 
-        let utf8_index = self.from_display(last_layout.index_for_x(point.x - line_point.x)?);
+        let utf8_index = self.content_offset(last_layout.index_for_x(point.x - line_point.x)?);
         Some(self.offset_to_utf16(utf8_index))
     }
 }
@@ -503,8 +511,9 @@ impl Element for TextElement {
     ) -> Self::PrepaintState {
         let input = self.input.read(cx);
         let content = input.display_text();
-        let selected_range = input.to_display(input.selected_range.start)..input.to_display(input.selected_range.end);
-        let cursor = input.to_display(input.cursor_offset());
+        let selected_range =
+            input.display_offset(input.selected_range.start)..input.display_offset(input.selected_range.end);
+        let cursor = input.display_offset(input.cursor_offset());
         let style = window.text_style();
 
         let (display_text, text_color): (SharedString, Hsla) = if content.is_empty() {
@@ -606,12 +615,12 @@ impl Element for TextElement {
         if focus_handle.is_focused(window) {
             // Chrome's caret: solid while typing, then blinks every 500ms.
             let since = self.input.read(cx).caret_epoch.elapsed().as_millis();
-            if (since / 500) % 2 == 0
+            if (since / 500).is_multiple_of(2)
                 && let Some(cursor) = prepaint.cursor.take()
             {
                 window.paint_quad(cursor);
             }
-            window.request_animation_frame();
+            self.input.update(cx, |input, cx| input.schedule_blink(cx));
         }
 
         self.input.update(cx, |input, _cx| {

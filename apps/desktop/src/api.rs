@@ -39,8 +39,6 @@ struct Envelope<T> {
 #[serde(rename_all = "camelCase")]
 pub struct User {
     pub name: String,
-    pub username: Option<String>,
-    pub image: Option<String>,
     #[serde(default)]
     pub settings: Settings,
 }
@@ -173,7 +171,6 @@ pub struct Group {
 #[serde(rename_all = "camelCase")]
 pub struct Uploader {
     pub display_username: String,
-    pub image: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]

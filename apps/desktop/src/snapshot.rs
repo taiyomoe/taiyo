@@ -139,10 +139,11 @@ pub fn schedule(window: &mut Window, cx: &mut App) {
             let alive = handle.update(cx, |_, window, cx| {
                 let started = std::time::Instant::now();
                 window.draw(cx).clear();
+                let drawn = started.elapsed().as_secs_f64() * 1000.0;
                 window.present();
                 window.complete_frame();
                 if trace {
-                    samples.push(started.elapsed().as_secs_f64() * 1000.0);
+                    samples.push(drawn);
                     if samples.len() == 120 {
                         samples.sort_by(f64::total_cmp);
                         eprintln!(

@@ -4,8 +4,8 @@ use std::collections::HashMap;
 use std::time::Duration;
 
 use gpui::{
-    AnyElement, Bounds, BoxShadow, Corners, Div, Hsla, IntoElement, ParentElement, Pixels, Rgba, SharedString, Styled,
-    Svg, Transformation, Window, canvas, div, img, point, prelude::*, px, radians, svg,
+    Bounds, BoxShadow, Corners, Div, Hsla, IntoElement, ParentElement, Pixels, Rgba, SharedString, Styled, Svg,
+    Transformation, Window, canvas, div, img, point, prelude::*, px, radians, svg,
 };
 
 use crate::anim::{self, Easing, Tween};
@@ -258,10 +258,6 @@ pub fn error_alert(message: SharedString) -> Div {
         .text_color(colors::FOREGROUND)
         .child(div().pt(px(2.)).child(icon("alert", 16., rgb(0xff6467))))
         .child(div().font_weight(gpui::FontWeight(500.)).child(message))
-}
-
-pub fn into_any(el: impl IntoElement) -> AnyElement {
-    el.into_any_element()
 }
 
 pub trait HasHovers: 'static {

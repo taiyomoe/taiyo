@@ -28,10 +28,6 @@ pub fn alpha(color: Rgba, a: f32) -> Hsla {
     .into()
 }
 
-pub fn hsla(color: Rgba) -> Hsla {
-    color.into()
-}
-
 /// Linear blend in sRGB, like `color-mix(in srgb, a (1-t), b t)`.
 pub fn mix(a: Rgba, b: Rgba, t: f32) -> Rgba {
     Rgba {

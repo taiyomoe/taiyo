@@ -8,21 +8,20 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use gpui::{
-    AnyElement, Bounds, Context, CursorStyle, Entity, EventEmitter, FocusHandle, Focusable, Font, FontStyle,
-    FontWeight, Hsla, IntoElement, MouseButton, MouseDownEvent, MouseMoveEvent, MouseUpEvent, ParentElement, Pixels,
-    Render, RenderImage, SharedString, Styled, TextRun, Window, canvas, div, font, linear_color_stop, linear_gradient,
-    point, prelude::*, px, size,
+    AnyView, Bounds, Context, CursorStyle, Entity, EventEmitter, Font, FontStyle, FontWeight, Hsla, IntoElement,
+    MouseButton, MouseDownEvent, MouseMoveEvent, MouseUpEvent, ParentElement, Pixels, Render, RenderImage,
+    SharedString, StyleRefinement, Styled, TextRun, Window, canvas, div, font, point, prelude::*, px, size,
 };
 
 use crate::anim::{self, Easing, Tween};
-use crate::api::{self, Session};
-use crate::input::{Submit, Tab, TabPrev, TextInput};
+use crate::api::Session;
+use crate::auth_form::AuthForm;
 use crate::paint::{self, Field};
 use crate::raster::{self, RadialSpec};
 use crate::sun::{self, FrameParams, Quat, SunWorker};
 use crate::text::spaced;
-use crate::theme::{alpha, colors, rgba, scene};
-use crate::ui::{self, Hovers, icon, lerp, lerp_color, picture};
+use crate::theme::{alpha, rgba, scene};
+use crate::ui::{self, HasHovers, Hovers, hover_listener, icon, lerp};
 
 const CITATION_MS: f32 = 7000.0;
 
@@ -123,19 +122,10 @@ fn embers() -> Vec<Ember> {
 type ImageCache = Rc<RefCell<HashMap<(u32, u32), Arc<RenderImage>>>>;
 
 pub struct AuthView {
-    mode: Mode,
-    name: Entity<TextInput>,
-    email: Entity<TextInput>,
-    password: Entity<TextInput>,
-    focus: FocusHandle,
-    remember: bool,
-    agree: bool,
-    show_password: bool,
-    submitting: bool,
-    pressed: bool,
-    error: Option<SharedString>,
-    last_used: Option<String>,
+    form: Entity<AuthForm>,
     hovers: Hovers,
+    /// The balanced quote width (a search), kept per quote and size.
+    balanced: Option<(usize, f32, Pixels)>,
 
     citation: usize,
     elapsed_ms: f32,
@@ -164,41 +154,27 @@ pub struct AuthView {
 
 impl EventEmitter<AuthEvent> for AuthView {}
 
-impl Focusable for AuthView {
-    fn focus_handle(&self, _: &gpui::App) -> FocusHandle {
-        self.focus.clone()
+impl HasHovers for AuthView {
+    fn hovers(&mut self) -> &mut Hovers {
+        &mut self.hovers
     }
 }
 
 impl AuthView {
     pub fn new(last_used: Option<String>, window: &mut Window, cx: &mut Context<Self>) -> Self {
-        let name = cx.new(|cx| TextInput::new("Yuki Nagato", false, cx));
-        let email = cx.new(|cx| TextInput::new("you@email.com", false, cx));
-        let password = cx.new(|cx| TextInput::new("••••••••", true, cx));
-        for input in [&name, &email, &password] {
-            cx.observe(input, |_, _, cx| cx.notify()).detach();
-        }
+        let form = cx.new(|cx| AuthForm::new(last_used, window, cx));
+        cx.subscribe(&form, |_, _, event: &AuthEvent, cx| match event {
+            AuthEvent::SignedIn(session) => cx.emit(AuthEvent::SignedIn(session.clone())),
+        })
+        .detach();
         let quality = sun::Quality {
-            beams: std::env::var("TAIYO_BEAMS")
-                .ok()
-                .and_then(|v| v.parse().ok())
-                .unwrap_or(0.5),
+            beams: 0.5,
             sphere: 1.0,
         };
-        let view = Self {
-            mode: Mode::SignIn,
-            name,
-            email,
-            password,
-            focus: cx.focus_handle(),
-            remember: true,
-            agree: false,
-            show_password: false,
-            submitting: false,
-            pressed: false,
-            error: None,
-            last_used,
+        Self {
+            form,
             hovers: Hovers::default(),
+            balanced: None,
             citation: 0,
             elapsed_ms: 0.0,
             citations_hovered: false,
@@ -227,117 +203,14 @@ impl AuthView {
             disc_image: Rc::default(),
             aurora: Rc::default(),
             scrim: Rc::default(),
-        };
-        window.focus(&view.focus);
-        view
-    }
-
-    fn set_mode(&mut self, mode: Mode, cx: &mut Context<Self>) {
-        if self.mode != mode {
-            self.mode = mode;
-            self.error = None;
-            self.pressed = false;
-            cx.notify();
         }
-    }
-
-    fn inputs(&self) -> Vec<Entity<TextInput>> {
-        match self.mode {
-            Mode::SignIn => vec![self.email.clone(), self.password.clone()],
-            Mode::SignUp => vec![self.name.clone(), self.email.clone(), self.password.clone()],
-        }
-    }
-
-    fn cycle_focus(&mut self, step: isize, window: &mut Window, cx: &mut Context<Self>) {
-        let inputs = self.inputs();
-        let current = inputs.iter().position(|i| i.read(cx).focus_handle.is_focused(window));
-        let next = match current {
-            Some(i) => (i as isize + step).rem_euclid(inputs.len() as isize) as usize,
-            None => 0,
-        };
-        window.focus(&inputs[next].read(cx).focus_handle);
-    }
-
-    fn submit(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        if self.mode == Mode::SignUp || self.submitting {
-            return;
-        }
-        let email = self.email.read(cx).content.trim().to_string();
-        let password = self.password.read(cx).content.to_string();
-        if !email.contains('@') {
-            self.error = Some("Enter a valid email address".into());
-            window.focus(&self.email.read(cx).focus_handle);
-            cx.notify();
-            return;
-        }
-        if password.is_empty() {
-            self.error = Some("Enter your password".into());
-            window.focus(&self.password.read(cx).focus_handle);
-            cx.notify();
-            return;
-        }
-        let remember = self.remember;
-        self.submitting = true;
-        self.error = None;
-        cx.notify();
-        let task = cx
-            .background_executor()
-            .spawn(async move { api::sign_in(&email, &password, remember) });
-        cx.spawn(async move |this, cx| {
-            let result = task.await;
-            this.update(cx, |this, cx| {
-                this.submitting = false;
-                match result {
-                    Ok(session) => cx.emit(AuthEvent::SignedIn(session)),
-                    Err(err) => this.error = Some(err.to_string().into()),
-                }
-                cx.notify();
-            })
-            .ok();
-        })
-        .detach();
-    }
-
-    fn hover_listener(
-        &self,
-        key: &'static str,
-        cx: &mut Context<Self>,
-    ) -> impl Fn(&bool, &mut Window, &mut gpui::App) + 'static {
-        cx.listener(move |this, hovered: &bool, _, cx| {
-            this.hovers.set(key, *hovered);
-            cx.notify();
-        })
     }
 
     // ------------------------------------------------------------ ticking --
-
     fn tick(&mut self, window: &mut Window) {
         let now = Instant::now();
-        if std::env::var("TAIYO_TRACE").is_ok() {
-            eprintln!(
-                "auth render dt={:?} viewport={:?}",
-                now.duration_since(self.last_tick),
-                window.viewport_size()
-            );
-        }
         let dt = now.duration_since(self.last_tick).as_secs_f32().clamp(0.0, 0.1);
         self.last_tick = now;
-
-        // `TAIYO_DEMO=signup@ms`: scripted switches for debug captures.
-        if let Ok(demo) = std::env::var("TAIYO_DEMO") {
-            let elapsed = self.started.elapsed().as_millis() as u64;
-            for step in demo.split(',') {
-                if let Some((action, at)) = step.split_once('@')
-                    && at.parse::<u64>().is_ok_and(|at| at <= elapsed)
-                {
-                    match action {
-                        "signup" => self.mode = Mode::SignUp,
-                        "signin" => self.mode = Mode::SignIn,
-                        _ => {}
-                    }
-                }
-            }
-        }
 
         if !self.citations_hovered {
             self.elapsed_ms += dt * 1000.0;
@@ -532,8 +405,7 @@ impl AuthView {
                 };
                 let e = anim::EASE_IN_OUT.ease(local);
                 let (tx, ty) = (lerp(from.0, to.0, e) * aw, lerp(from.1, to.1, e) * ah);
-                let skip = std::env::var("TAIYO_SKIP").unwrap_or_default();
-                if !skip.contains("aurora") {
+                {
                     let _ = window.paint_image(
                         Bounds::new(
                             point(px(x0 - w * 0.2 - pad + tx), px(y0 - h * 0.2 - pad + ty)),
@@ -579,9 +451,6 @@ impl AuthView {
                 }
                 if let Some((beams, sphere, beams_rect, sphere_rect)) = sun_images.clone() {
                     for (image, rect) in [(beams, beams_rect), (sphere, sphere_rect)] {
-                        if skip.contains("sun") {
-                            continue;
-                        }
                         let _ = window.paint_image(
                             Bounds::new(point(px(x0 + rect.0), px(y0 + rect.1)), size(px(rect.2), px(rect.3))),
                             Default::default(),
@@ -592,33 +461,10 @@ impl AuthView {
                     }
                 }
 
-                if std::env::var("TAIYO_TEST_IMAGE").is_ok() {
-                    let mut bytes = Vec::new();
-                    for i in 0..(60 * 20) {
-                        let c: [u8; 4] = match (i % 60) / 20 {
-                            0 => [0, 0, 255, 255],
-                            1 => [32, 184, 254, 255],
-                            _ => [255, 0, 0, 255],
-                        };
-                        bytes.extend_from_slice(&c);
-                    }
-                    let img = raster::bgra_image(60, 20, bytes);
-                    let _ = window.paint_image(
-                        Bounds::new(point(px(x0 + 600.0), px(y0 + 60.0)), size(px(120.0), px(40.0))),
-                        Default::default(),
-                        img,
-                        0,
-                        false,
-                    );
-                    window.paint_quad(gpui::fill(
-                        Bounds::new(point(px(x0 + 600.0), px(y0 + 110.0)), size(px(40.0), px(40.0))),
-                        crate::theme::rgb(0xfeb820),
-                    ));
-                }
                 // `.vignette`
                 let night = scene::NIGHT;
                 let veil = |a: f32| rgba(0x120a07, a);
-                if std::env::var("TAIYO_NO_VIGNETTE").is_err() {
+                {
                     paint::paint_gradient(
                         window,
                         &paint::rect_poly(x0, y0, w, h),
@@ -741,7 +587,7 @@ impl AuthView {
                             .h(px(39.))
                             .cursor_pointer()
                             .opacity(lerp(1.0, 0.8, logo_hover))
-                            .on_hover(self.hover_listener("logo", cx))
+                            .on_hover(hover_listener("logo", cx))
                             .child(icon("logo", 56.91, scene::BRAND).h(px(36.39)))
                             .child(
                                 spaced("Taiyō", "PT Serif", 26.0, 700.0)
@@ -768,7 +614,14 @@ impl AuthView {
         let mut quote_font = font("Inter");
         quote_font.weight = FontWeight(700.0);
         quote_font.style = FontStyle::Italic;
-        let width = balanced_width(window, &quote, &quote_font, quote_size, 520.0);
+        let width = match self.balanced {
+            Some((index, size, width)) if index == self.citation && size == quote_size => width,
+            _ => {
+                let width = balanced_width(window, &quote, &quote_font, quote_size, 520.0);
+                self.balanced = Some((self.citation, quote_size, width));
+                width
+            }
+        };
         let scrim = self.scrim.clone();
         let progress = (self.elapsed_ms / CITATION_MS).clamp(0.0, 1.0);
 
@@ -784,7 +637,7 @@ impl AuthView {
                     .py(px(8.))
                     .px(px(4.))
                     .cursor_pointer()
-                    .on_hover(self.hover_listener(key, cx))
+                    .on_hover(hover_listener(key, cx))
                     .on_click(cx.listener(move |this, _, _, cx| {
                         this.select_citation(i);
                         cx.notify();
@@ -801,7 +654,7 @@ impl AuthView {
                                         let offset = f32::from(b.size.width) * (progress - 1.0);
                                         let fill_b = Bounds::new(point(b.origin.x + px(offset), b.origin.y), b.size);
                                         let fill = paint::rounded_rect(fill_b, 4.0);
-                                        let shape = clip_convex(&pill, &fill);
+                                        let shape = paint::clip_convex(&pill, &fill);
                                         paint::paint_gradient(
                                             window,
                                             &shape,
@@ -852,9 +705,6 @@ impl AuthView {
                                 })
                             })
                             .clone();
-                        if std::env::var("TAIYO_SKIP").unwrap_or_default().contains("scrim") {
-                            return;
-                        }
                         let _ = window.paint_image(
                             Bounds::new(
                                 point(b.origin.x - px(72.0 + pad), b.origin.y - px(48.0 + pad)),
@@ -970,424 +820,6 @@ impl AuthView {
                     .children(dots),
             )
     }
-
-    // --------------------------------------------------------------- form --
-
-    fn render_tabs(&mut self, cx: &mut Context<Self>) -> impl IntoElement + use<> {
-        let tab = |this: &mut Self, mode: Mode, label: &'static str, key: &'static str, cx: &mut Context<Self>| {
-            let hover = this.hovers.ease(key, 150);
-            let active = this.mode == mode;
-            div()
-                .id(key)
-                .px(px(20.))
-                .py(px(8.))
-                .rounded_full()
-                .text_size(px(14.))
-                .line_height(px(21.))
-                .font_weight(FontWeight(700.))
-                .cursor_pointer()
-                .when(active, |el| el.bg(scene::PAPER).text_color(scene::PANEL_TOP))
-                .when(!active, |el| el.text_color(alpha(scene::PAPER, lerp(0.7, 1.0, hover))))
-                .on_hover(this.hover_listener(key, cx))
-                .on_click(cx.listener(move |this, _, _, cx| this.set_mode(mode, cx)))
-                .child(label)
-        };
-        div().flex().child(
-            div()
-                .flex()
-                .p(px(4.))
-                .gap(px(4.))
-                .rounded_full()
-                .border_1()
-                .border_color(alpha(scene::PAPER, 0.08))
-                .bg(alpha(scene::PAPER, 0.06))
-                .child(tab(self, Mode::SignUp, "Sign up", "tab-up", cx))
-                .child(tab(self, Mode::SignIn, "Sign in", "tab-in", cx)),
-        )
-    }
-
-    fn last_used_badge(&self, method: &str) -> Option<AnyElement> {
-        (self.last_used.as_deref() == Some(method)).then(|| {
-            div()
-                .absolute()
-                .right(px(12.))
-                .top(px(-9.))
-                .px(px(8.))
-                .py(px(2.))
-                .rounded_full()
-                .border_1()
-                .border_color(alpha(scene::GOLD, 0.55))
-                .bg(scene::NIGHT_RAISED)
-                .shadow(vec![ui::shadow(0.0, 2.0, 10.0, 0.0, alpha(scene::NIGHT, 0.6))])
-                .child(
-                    spaced("Last used", "Inter", 11.0, 800.0)
-                        .line_height(15.4)
-                        .spacing(0.22)
-                        .color(scene::GOLD_LIGHT),
-                )
-                .into_any_element()
-        })
-    }
-
-    fn social_button(
-        &mut self,
-        key: &'static str,
-        logo: &'static str,
-        label: &'static str,
-        cx: &mut Context<Self>,
-    ) -> impl IntoElement + use<> {
-        let hover = self.hovers.instant(key) as u8 as f32;
-        div()
-            .relative()
-            .flex_1()
-            .child(
-                ui::outline_button(key, hover)
-                    .h(px(48.))
-                    .gap(px(12.))
-                    .text_size(px(18.))
-                    .line_height(px(27.))
-                    .font_weight(FontWeight(500.))
-                    .on_hover(self.hover_listener(key, cx))
-                    .child(div().opacity(0.8).child(picture(logo, 20.0, 20.0)))
-                    .child(label),
-            )
-            .children(self.last_used_badge(key))
-    }
-
-    fn field(
-        &mut self,
-        label: &'static str,
-        input: &Entity<TextInput>,
-        start_icon: &'static str,
-        password: bool,
-        window: &mut Window,
-        cx: &mut Context<Self>,
-    ) -> impl IntoElement + use<> {
-        let focused = input.read(cx).focus_handle.is_focused(window);
-        let eye_hover = self.hovers.instant("eye") as u8 as f32;
-        let muted = alpha(colors::MUTED_FOREGROUND, 0.72);
-        div()
-            .flex()
-            .flex_col()
-            .gap(px(8.))
-            .child(
-                div()
-                    .text_size(px(14.))
-                    .line_height(px(16.))
-                    .font_weight(FontWeight(500.))
-                    .text_color(colors::FOREGROUND)
-                    .child(label),
-            )
-            .child(
-                ui::field_shell(focused)
-                    .child(
-                        div()
-                            .w(px(48.))
-                            .flex_none()
-                            .flex()
-                            .justify_center()
-                            .child(icon(start_icon, 20.0, muted)),
-                    )
-                    .child(div().flex_1().h(px(46.)).child(input.clone()))
-                    .when(password, |el| {
-                        el.child(
-                            div().w(px(48.)).flex_none().flex().justify_center().child(
-                                div()
-                                    .id("eye")
-                                    .size(px(28.))
-                                    .rounded_full()
-                                    .flex()
-                                    .items_center()
-                                    .justify_center()
-                                    .cursor_pointer()
-                                    .bg(ui::ghost_bg(eye_hover))
-                                    .on_hover(self.hover_listener("eye", cx))
-                                    .on_click(cx.listener(|this, _, _, cx| {
-                                        this.show_password = !this.show_password;
-                                        let masked = !this.show_password;
-                                        this.password.update(cx, |input, cx| {
-                                            input.masked = masked;
-                                            cx.notify();
-                                        });
-                                        cx.notify();
-                                    }))
-                                    .child(div().opacity(0.8).child(icon(
-                                        if self.show_password { "eye-off" } else { "eye" },
-                                        20.0,
-                                        muted,
-                                    ))),
-                            ),
-                        )
-                    }),
-            )
-    }
-
-    fn link(&mut self, key: &'static str, label: &'static str, cx: &mut Context<Self>) -> impl IntoElement + use<> {
-        let hovered = self.hovers.instant(key);
-        div()
-            .id(key)
-            .flex_none()
-            .text_color(scene::GOLD_LIGHT)
-            .font_weight(FontWeight(700.))
-            .cursor_pointer()
-            .when(hovered, |el| el.underline())
-            .on_hover(self.hover_listener(key, cx))
-            .child(label)
-    }
-
-    fn render_form(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement + use<> {
-        let sign_in = self.mode == Mode::SignIn;
-        let (title, subtitle, divider) = if sign_in {
-            (
-                "Welcome back",
-                "Pick up right where you left off.",
-                "or sign in with email",
-            )
-        } else {
-            (
-                "Step into the light",
-                "Create your free account — your library is waiting.",
-                "or sign up with email",
-            )
-        };
-        let title_size = (f32::from(window.viewport_size().width) * 0.034).clamp(30.0, 42.0);
-        let submit_hover = self.hovers.ease("submit", 200);
-        let disabled = !sign_in;
-        let name = self.name.clone();
-        let email = self.email.clone();
-        let password = self.password.clone();
-
-        let checkbox_row = if sign_in {
-            let remember = self.remember;
-            div()
-                .flex()
-                .items_center()
-                .justify_between()
-                .gap(px(12.))
-                .h(px(21.))
-                .child(
-                    div()
-                        .id("remember")
-                        .flex()
-                        .items_center()
-                        .gap(px(8.))
-                        .cursor_pointer()
-                        .on_click(cx.listener(|this, _, _, cx| {
-                            this.remember = !this.remember;
-                            cx.notify();
-                        }))
-                        .child(ui::checkbox(remember))
-                        .child(
-                            div()
-                                .text_size(px(14.))
-                                .line_height(px(16.))
-                                .font_weight(FontWeight(500.))
-                                .child("Remember me"),
-                        ),
-                )
-                .child(
-                    div()
-                        .text_size(px(14.))
-                        .line_height(px(21.))
-                        .child(self.link("forgot", "Forgot password?", cx)),
-                )
-                .into_any_element()
-        } else {
-            let agree = self.agree;
-            div()
-                .flex()
-                .items_center()
-                .gap(px(8.))
-                .text_size(px(14.))
-                .line_height(px(21.))
-                .font_weight(FontWeight(500.))
-                .child(
-                    div()
-                        .id("agree")
-                        .flex()
-                        .items_center()
-                        .gap(px(8.))
-                        .cursor_pointer()
-                        .on_click(cx.listener(|this, _, _, cx| {
-                            this.agree = !this.agree;
-                            cx.notify();
-                        }))
-                        .child(ui::checkbox(agree))
-                        .child("I agree to the"),
-                )
-                .child(self.link("terms", "Terms", cx))
-                .child("and")
-                .child(self.link("privacy", "Privacy Policy", cx))
-                .into_any_element()
-        };
-
-        let submit_label = if sign_in { "Sign in" } else { "Create account" };
-        let submitting = self.submitting;
-        let pressed = self.pressed && !disabled;
-        let submit = div()
-            .relative()
-            .mt(px(8.))
-            .child(
-                div()
-                    .id("submit")
-                    .relative()
-                    .h(px(48.))
-                    .w_full()
-                    .flex()
-                    .items_center()
-                    .justify_center()
-                    .when(!disabled, |el| el.cursor_pointer())
-                    .on_hover(self.hover_listener("submit", cx))
-                    .on_mouse_down(
-                        MouseButton::Left,
-                        cx.listener(|this, _, _, cx| {
-                            this.pressed = true;
-                            cx.notify();
-                        }),
-                    )
-                    .on_mouse_up(
-                        MouseButton::Left,
-                        cx.listener(|this, _, window, cx| {
-                            this.pressed = false;
-                            this.submit(window, cx);
-                        }),
-                    )
-                    .on_mouse_up_out(
-                        MouseButton::Left,
-                        cx.listener(|this, _, _, cx| {
-                            this.pressed = false;
-                            cx.notify();
-                        }),
-                    )
-                    .child(ui::sun_button(
-                        if disabled { 0.0 } else { submit_hover },
-                        pressed,
-                        disabled || submitting,
-                    ))
-                    .child(
-                        div()
-                            .relative()
-                            .text_size(px(16.))
-                            .line_height(px(24.))
-                            .font_weight(FontWeight(800.))
-                            .text_color(alpha(scene::INK, if disabled { 0.7 } else { 1.0 }))
-                            .when(submitting, |el| el.opacity(0.0))
-                            .child(submit_label),
-                    )
-                    .when(submitting, |el| {
-                        el.child(
-                            div()
-                                .absolute()
-                                .size_full()
-                                .flex()
-                                .items_center()
-                                .justify_center()
-                                .child(ui::spinner(16.0, scene::INK)),
-                        )
-                    }),
-            )
-            .children(sign_in.then(|| self.last_used_badge("email")).flatten());
-
-        let mut fields = div().flex().flex_col().gap(px(16.));
-        if !sign_in {
-            fields = fields.child(self.field("Display name", &name, "user-account", false, window, cx));
-        }
-        fields = fields
-            .child(self.field("Email", &email, "mail", false, window, cx))
-            .child(self.field("Password", &password, "lock", true, window, cx))
-            .child(checkbox_row);
-        if !sign_in {
-            // The Turnstile captcha's slot; there is no captcha to show here.
-            fields = fields.child(div().h(px(58.)));
-        }
-        fields = fields.child(submit);
-
-        let (prompt, switch, target) = if sign_in {
-            ("New to Taiyō?", "Create an account", Mode::SignUp)
-        } else {
-            ("Already reading with us?", "Sign in", Mode::SignIn)
-        };
-        let switch_link = self.link("switch", switch, cx);
-
-        div()
-            .w_full()
-            .max_w(px(430.))
-            .flex()
-            .flex_col()
-            .child(self.render_tabs(cx))
-            .child(
-                div().mt(px(28.)).child(
-                    spaced(title, "PT Serif", title_size, 700.0)
-                        .wrap(3)
-                        .line_height(title_size * 1.05)
-                        .spacing(-0.02 * title_size)
-                        .color(scene::PAPER),
-                ),
-            )
-            .child(
-                div()
-                    .mt(px(8.))
-                    .mb(px(24.))
-                    .text_size(px(16.))
-                    .line_height(px(24.))
-                    .text_color(alpha(scene::PAPER, 0.6))
-                    .child(subtitle),
-            )
-            .child(
-                div()
-                    .flex()
-                    .flex_col()
-                    .gap(px(20.))
-                    .children(self.error.clone().map(ui::error_alert))
-                    .child(
-                        div()
-                            .flex()
-                            .flex_col()
-                            .gap(px(20.))
-                            .child(
-                                div()
-                                    .flex()
-                                    .gap(px(12.))
-                                    .child(self.social_button("google", "google", "Google", cx))
-                                    .child(self.social_button("discord", "discord", "Discord", cx)),
-                            )
-                            .child(
-                                div()
-                                    .flex()
-                                    .items_center()
-                                    .gap(px(14.))
-                                    .child(div().flex_1().h(px(1.)).bg(alpha(scene::PAPER, 0.1)))
-                                    .child(
-                                        spaced(divider, "Inter", 12.0, 700.0)
-                                            .uppercase()
-                                            .line_height(18.0)
-                                            .spacing(0.96)
-                                            .color(alpha(scene::PAPER, 0.4)),
-                                    )
-                                    .child(div().flex_1().h(px(1.)).bg(alpha(scene::PAPER, 0.1))),
-                            ),
-                    )
-                    .child(fields),
-            )
-            .child(
-                div()
-                    .id("switch-row")
-                    .mt(px(24.))
-                    .flex()
-                    .justify_center()
-                    .gap(px(4.))
-                    .text_size(px(14.))
-                    .line_height(px(21.))
-                    .text_color(alpha(scene::PAPER, 0.55))
-                    .child(prompt)
-                    .child(
-                        div()
-                            .id("switch-target")
-                            .on_click(cx.listener(move |this, _, _, cx| this.set_mode(target, cx)))
-                            .child(switch_link),
-                    ),
-            )
-    }
 }
 
 impl Render for AuthView {
@@ -1397,14 +829,10 @@ impl Render for AuthView {
         let (vw, vh) = (f32::from(viewport.width), f32::from(viewport.height));
         // `grid-template-columns: 1.05fr 0.95fr` from the `lg` breakpoint.
         let scene_w = if vw >= 1024.0 { (vw * 0.525).round() } else { 0.0 };
-        let panel_px = (vw * 0.05).clamp(28.0, 76.0);
+        // The form is cached: the scene animating beside it does not redo it.
+        let form = AnyView::from(self.form.clone()).cached(StyleRefinement::default().w(px(vw - scene_w)).h_full());
 
         div()
-            .key_context("Auth")
-            .track_focus(&self.focus)
-            .on_action(cx.listener(|this, _: &Tab, window, cx| this.cycle_focus(1, window, cx)))
-            .on_action(cx.listener(|this, _: &TabPrev, window, cx| this.cycle_focus(-1, window, cx)))
-            .on_action(cx.listener(|this, _: &Submit, window, cx| this.submit(window, cx)))
             .size_full()
             .flex()
             .bg(scene::NIGHT)
@@ -1413,25 +841,7 @@ impl Render for AuthView {
             .text_size(px(16.))
             .line_height(px(24.))
             .when(scene_w > 0.0, |el| el.child(self.render_scene(scene_w, vh, window, cx)))
-            .child(
-                div()
-                    .id("panel")
-                    .flex_1()
-                    .h_full()
-                    .overflow_y_scroll()
-                    .bg(linear_gradient(
-                        180.0,
-                        linear_color_stop(scene::PANEL_TOP, 0.0),
-                        linear_color_stop(scene::PANEL_BOTTOM, 1.0),
-                    ))
-                    .flex()
-                    .flex_col()
-                    .items_center()
-                    .justify_center()
-                    .py(px(32.))
-                    .px(px(panel_px))
-                    .child(self.render_form(window, cx)),
-            )
+            .child(form)
     }
 }
 
@@ -1472,20 +882,4 @@ fn balanced_width(window: &mut Window, text: &str, font: &Font, size: f32, max: 
         }
     }
     px(hi.ceil() + 1.0)
-}
-
-/// The part of convex `subject` inside convex `clipper` (both clockwise).
-fn clip_convex(subject: &paint::Poly, clipper: &paint::Poly) -> paint::Poly {
-    let mut out = subject.clone();
-    for i in 0..clipper.len() {
-        let a = clipper[i];
-        let b = clipper[(i + 1) % clipper.len()];
-        // Keep the side of edge a→b the polygon's interior is on.
-        let (nx, ny) = (-(b.1 - a.1), b.0 - a.0);
-        out = paint::clip(&out, nx, ny, -(nx * a.0 + ny * a.1));
-        if out.is_empty() {
-            break;
-        }
-    }
-    out
 }

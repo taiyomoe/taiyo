@@ -6,10 +6,12 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 
-use gpui::RenderImage;
+use gpui::{AnyElement, Bounds, Context, Pixels, RenderImage, Window, canvas, div, prelude::*, px};
 use image::DynamicImage;
 
-use crate::{api, raster};
+use crate::theme::{colors, rgb};
+use crate::ui::icon;
+use crate::{anim, api, raster, skeleton};
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 pub enum Variant {
@@ -57,7 +59,14 @@ impl Images {
             let image = match cached {
                 Some(image) => image,
                 None => {
-                    let image = api::download_image(&url)?;
+                    // Covers arrive at print size (2000+ px); keep a copy no
+                    // bigger than the largest place they are drawn.
+                    let full = api::download_image(&url)?;
+                    let image = if full.width() > 800 || full.height() > 1200 {
+                        Arc::new(full.thumbnail(800, 1200))
+                    } else {
+                        full
+                    };
                     decoded.lock().unwrap().insert(url.clone(), image.clone());
                     image
                 }
@@ -71,6 +80,24 @@ impl Images {
                 }
             })
         })
+    }
+
+    /// Starts loading `url` at `variant` unless it is known; notifies when done.
+    pub fn want(&mut self, url: &str, variant: Variant, cx: &mut Context<Self>) {
+        let Some(job) = self.request(url, variant) else {
+            return;
+        };
+        let task = cx.background_executor().spawn(async move { job() });
+        let url = url.to_string();
+        cx.spawn(async move |this, cx| {
+            let result = task.await;
+            this.update(cx, |this, cx| {
+                this.finish(&url, variant, result);
+                cx.notify();
+            })
+            .ok();
+        })
+        .detach();
     }
 
     pub fn finish(&mut self, url: &str, variant: Variant, result: anyhow::Result<Arc<RenderImage>>) {
@@ -94,3 +121,46 @@ impl Images {
             .any(|s| matches!(s, Slot::Ready { at, .. } if at.elapsed().as_millis() < 220))
     }
 }
+
+/// `<Cover>`: a skeleton until the art arrives, then a 200ms fade-in.
+pub fn cover(images: &Images, url: Option<&str>, variant: Variant, radius: f32) -> AnyElement {
+    let frame = div().relative().size_full().rounded(px(radius)).overflow_hidden();
+    let Some(url) = url else {
+        return frame
+            .bg(colors::white(0.0))
+            .flex()
+            .items_center()
+            .justify_center()
+            .child(div().opacity(0.6).child(icon("book", 24.0, colors::MUTED_FOREGROUND)))
+            .into_any_element();
+    };
+    match images.get(url, variant) {
+        Some(Slot::Ready { image, at }) => {
+            let t = (at.elapsed().as_secs_f32() / 0.2).min(1.0);
+            let opacity = anim::EASE_OUT.ease(t);
+            let image = image.clone();
+            frame
+                .child(
+                    canvas(
+                        |_, _, _| {},
+                        move |b: Bounds<Pixels>, _, window: &mut Window, _| {
+                            let _ = window.paint_image(b, gpui::Corners::all(px(radius)), image.clone(), 0, false);
+                        },
+                    )
+                    .size_full()
+                    .opacity(opacity),
+                )
+                .into_any_element()
+        }
+        Some(Slot::Failed) => frame
+            .bg(rgb(0x121212))
+            .flex()
+            .items_center()
+            .justify_center()
+            .child(div().opacity(0.6).child(icon("book", 24.0, colors::MUTED_FOREGROUND)))
+            .into_any_element(),
+        _ => frame.child(skeleton::fill(radius)).into_any_element(),
+    }
+}
+
+// -------------------------------------------------------------- latest --

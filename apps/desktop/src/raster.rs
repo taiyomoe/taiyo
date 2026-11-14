@@ -121,7 +121,7 @@ pub fn bgra_image(width: u32, height: u32, bgra: Vec<u8>) -> Arc<RenderImage> {
 pub fn rgba_to_render_image(image: RgbaImage) -> Arc<RenderImage> {
     let (w, h) = image.dimensions();
     let mut raw = image.into_raw();
-    for px in raw.chunks_exact_mut(4) {
+    for px in raw.as_chunks_mut::<4>().0 {
         px.swap(0, 2);
     }
     bgra_image(w, h, raw)

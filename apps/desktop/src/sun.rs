@@ -573,9 +573,6 @@ impl SunWorker {
                         serial,
                     });
                     worker.0.lock().unwrap().latest = Some(frame);
-                    if std::env::var("TAIYO_SUN_PROFILE").is_ok() {
-                        eprintln!("sun frame {:?}", started.elapsed());
-                    }
                     // Never outrun the display.
                     let spent = started.elapsed();
                     if spent < Duration::from_millis(15) {

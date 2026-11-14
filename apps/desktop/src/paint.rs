@@ -136,10 +136,6 @@ impl Field {
     pub fn at(&self, x: f32, y: f32) -> f32 {
         self.a * x + self.b * y + self.c
     }
-
-    pub fn shifted(self, dt: f32) -> Self {
-        Self { c: self.c + dt, ..self }
-    }
 }
 
 fn premultiplied_mix(c0: Rgba, c1: Rgba, t: f32) -> Rgba {
@@ -309,4 +305,19 @@ pub fn paint_gradient_span(window: &mut Window, poly: &[(f32, f32)], field: Fiel
 
 pub fn rect_poly(x: f32, y: f32, w: f32, h: f32) -> Poly {
     vec![(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+}
+
+/// The part of convex `subject` inside convex `clipper` (both clockwise).
+pub fn clip_convex(subject: &[(f32, f32)], clipper: &[(f32, f32)]) -> Poly {
+    let mut out = subject.to_vec();
+    for i in 0..clipper.len() {
+        let a = clipper[i];
+        let b = clipper[(i + 1) % clipper.len()];
+        let (nx, ny) = (-(b.1 - a.1), b.0 - a.0);
+        out = clip(&out, nx, ny, -(nx * a.0 + ny * a.1));
+        if out.is_empty() {
+            break;
+        }
+    }
+    out
 }

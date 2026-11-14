@@ -33,3 +33,7 @@ codegen-units = 1
 # Debug captures that draw and present frames themselves (needs a gpui with a
 # public `Window::present`, patched in locally); see src/snapshot.rs.
 snapshot = []
+
+[lints.rust]
+# objc's msg_send! checks `feature = "cargo-clippy"` inside this crate.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(feature, values("cargo-clippy"))'] }
