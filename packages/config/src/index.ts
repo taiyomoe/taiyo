@@ -51,6 +51,10 @@ export const config = {
     // default limit of 268 megapixels. Long webtoon strips stay well under it.
     maxChapterPageDecodedPixels: 40_000_000,
     maxChapterPages: 500,
+    // Covers, banners, staff photos, avatars and profile banners: pixels decoded across every
+    // frame, and pixels produced across every frame of a cropped output.
+    maxDecodedPixels: 60_000_000,
+    maxFrames: 300,
     uploadUrlTtlSeconds: 600,
     stagingExpiryDays: 3,
     staleUploadReapHours: 24,

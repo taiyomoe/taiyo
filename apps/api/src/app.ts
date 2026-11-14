@@ -10,8 +10,6 @@ import { cors } from "hono/cors"
 import { createMiddleware } from "hono/factory"
 import { NONCE, secureHeaders } from "hono/secure-headers"
 import { readFile } from "node:fs/promises"
-import { createRequire } from "node:module"
-import path from "node:path"
 import type {
   AppContext,
   AppContextVariables,
@@ -22,6 +20,7 @@ import type {
 import type { Services } from "./services"
 import packageJson from "../package.json"
 import { corsAllowedOrigins, env } from "./env"
+import { ImageTooComplexError } from "./image-store"
 import { auditAuthRequest } from "./middlewares/audit-auth-middleware"
 import { checkOrigin } from "./middlewares/check-origin-middleware"
 import { auditLogsRouter } from "./routers/audit-logs-router"
@@ -59,10 +58,7 @@ const hyperdxIngestionKey = env.HYPERDX_INGESTION_KEY ?? ""
 // The reference runs on the session origin: serve its bundle from the locked dependency rather
 // than an unversioned CDN URL, so every release goes through the lockfile and the release-age delay.
 const scalarBundle = readFile(
-  path.join(
-    path.dirname(createRequire(import.meta.url).resolve("@scalar/api-reference")),
-    "browser/standalone.js",
-  ),
+  new URL("browser/standalone.js", import.meta.resolve("@scalar/api-reference")),
 )
 
 export const createApp = (services: Services) => {
@@ -169,6 +165,10 @@ export const createApp = (services: Services) => {
     .use(checkOrigin(corsAllowedOrigins))
     .notFound((c) => c.fail("NOT_FOUND"))
     .onError((err, c) => {
+      if (err instanceof ImageTooComplexError) {
+        return c.fail("IMAGE_TOO_COMPLEX")
+      }
+
       c.get("log").error(err)
 
       return c.fail(
