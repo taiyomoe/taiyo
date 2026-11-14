@@ -27,6 +27,10 @@ const genericErrors = {
     message: "Too many requests. Please slow down.",
     code: 429,
   },
+  PAYLOAD_TOO_LARGE: {
+    message: "The request body is too large.",
+    code: 413,
+  },
   INTERNAL_SERVER_ERROR: {
     message: "An internal server error occurred.",
     code: 500,

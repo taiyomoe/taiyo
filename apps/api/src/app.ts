@@ -6,6 +6,7 @@ import { evlog } from "evlog/hono"
 import { createHyperDXDrain } from "evlog/hyperdx"
 import { Hono } from "hono"
 import { openAPIRouteHandler } from "hono-openapi"
+import { bodyLimit } from "hono/body-limit"
 import { cors } from "hono/cors"
 import { createMiddleware } from "hono/factory"
 import { NONCE, secureHeaders } from "hono/secure-headers"
@@ -55,6 +56,10 @@ declare module "hono" {
 
 const hyperdxEndpoint = env.HYPERDX_ENDPOINT ?? ""
 const hyperdxIngestionKey = env.HYPERDX_INGESTION_KEY ?? ""
+const jsonBodyLimit = bodyLimit({
+  maxSize: config.input.maxJsonBodyBytes,
+  onError: (c) => c.fail("PAYLOAD_TOO_LARGE"),
+})
 // The reference runs on the session origin: serve its bundle from the locked dependency rather
 // than an unversioned CDN URL, so every release goes through the lockfile and the release-age delay.
 const scalarBundle = readFile(
@@ -163,6 +168,13 @@ export const createApp = (services: Services) => {
       }),
     )
     .use(checkOrigin(corsAllowedOrigins))
+    // Every body but a multipart upload is JSON, parsed whole in memory: bound it before anything
+    // reads it. Uploads keep their own per-file limits.
+    .use((c, next) =>
+      c.req.header("content-type")?.includes("multipart/form-data") === true
+        ? next()
+        : jsonBodyLimit(c, next),
+    )
     .notFound((c) => c.fail("NOT_FOUND"))
     .onError((err, c) => {
       if (err instanceof ImageTooComplexError) {
