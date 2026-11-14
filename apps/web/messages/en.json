@@ -2377,5 +2377,22 @@
   "og_stat_chapter": "Chapter",
   "og_stat_chapters": "Chapters",
   "og_stat_member": "Member",
-  "og_stat_members": "Members"
+  "og_stat_members": "Members",
+  "changelog_title": "Changelog",
+  "changelog_subtitle": "New features, improvements and fixes in Taiyō.",
+  "changelog_meta_title": "Taiyō — Changelog",
+  "shell_whats_new": "What's new",
+  "landing_footer_col_product": "Product",
+  "changelog_tag_accounts": "Accounts",
+  "changelog_tag_comments": "Comments",
+  "changelog_tag_groups": "Groups",
+  "changelog_tag_home": "Home",
+  "changelog_tag_lists": "Lists",
+  "changelog_tag_notifications": "Notifications",
+  "changelog_tag_offline": "Offline",
+  "changelog_tag_profiles": "Profiles",
+  "changelog_tag_reader": "Reader",
+  "changelog_tag_search": "Search",
+  "changelog_tag_titles": "Titles",
+  "changelog_tag_uploads": "Uploads"
 }

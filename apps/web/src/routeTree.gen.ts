@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
+import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DmcaRouteImport } from './routes/dmca'
 import { Route as LatestRouteImport } from './routes/latest'
@@ -65,6 +66,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangelogRoute = ChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -299,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
   '/notifications': typeof NotificationsRoute
@@ -347,6 +354,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
   '/notifications': typeof NotificationsRoute
@@ -397,6 +405,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
   '/notifications': typeof NotificationsRoute
@@ -448,6 +457,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/changelog'
     | '/dmca'
     | '/latest'
     | '/notifications'
@@ -496,6 +506,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/changelog'
     | '/dmca'
     | '/latest'
     | '/notifications'
@@ -545,6 +556,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/changelog'
     | '/dmca'
     | '/latest'
     | '/notifications'
@@ -595,6 +607,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  ChangelogRoute: typeof ChangelogRoute
   DmcaRoute: typeof DmcaRoute
   LatestRoute: typeof LatestRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -633,6 +646,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changelog': {
+      id: '/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof ChangelogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -1021,6 +1041,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  ChangelogRoute: ChangelogRoute,
   DmcaRoute: DmcaRoute,
   LatestRoute: LatestRoute,
   NotificationsRoute: NotificationsRoute,

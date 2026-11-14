@@ -6,6 +6,7 @@ import {
   Monitor,
   Moon,
   Settings,
+  Sparkles,
   Sun,
   User,
 } from "@taiyomoe/ui/components/icons"
@@ -152,6 +153,10 @@ export function UserMenu({ user }: { user: Session["user"] }) {
             {m.dashboard_name()}
           </MenuItem>
         ) : null}
+        <MenuItem render={<Link to="/changelog" />}>
+          <Sparkles />
+          {m.shell_whats_new()}
+        </MenuItem>
         <MenuSeparator />
         <MenuSub>
           <MenuSubTrigger>

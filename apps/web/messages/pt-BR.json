@@ -2354,5 +2354,22 @@
   "user_settings_notify_chapters_hint": "Títulos da sua biblioteca e grupos que você segue.",
   "user_settings_notify_replies_hint": "Quando alguém responde a um dos seus comentários.",
   "user_settings_notify_upvotes_hint": "Agrupados em uma notificação por comentário.",
-  "user_settings_notify_follows_hint": "Agrupados em uma notificação até você lê-la."
+  "user_settings_notify_follows_hint": "Agrupados em uma notificação até você lê-la.",
+  "changelog_title": "Novidades",
+  "changelog_subtitle": "Novos recursos, melhorias e correções no Taiyō.",
+  "changelog_meta_title": "Taiyō — Novidades",
+  "shell_whats_new": "Novidades",
+  "landing_footer_col_product": "Produto",
+  "changelog_tag_accounts": "Contas",
+  "changelog_tag_comments": "Comentários",
+  "changelog_tag_groups": "Grupos",
+  "changelog_tag_home": "Início",
+  "changelog_tag_lists": "Listas",
+  "changelog_tag_notifications": "Notificações",
+  "changelog_tag_offline": "Offline",
+  "changelog_tag_profiles": "Perfis",
+  "changelog_tag_reader": "Leitor",
+  "changelog_tag_search": "Pesquisa",
+  "changelog_tag_titles": "Títulos",
+  "changelog_tag_uploads": "Envios"
 }
