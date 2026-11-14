@@ -30,7 +30,7 @@ const styles = stylex.create({
   grid: {
     gap: "2.5rem",
     display: "grid",
-    gridTemplateColumns: { default: "1fr", [breakpoints.md]: "2fr repeat(2, 1fr)" },
+    gridTemplateColumns: { default: "1fr", [breakpoints.md]: "2fr repeat(3, 1fr)" },
   },
   brand: {
     color: scene.paper,
@@ -80,6 +80,14 @@ export const LandingFooter = () => (
             <TaiyoLogoLockup sx={styles.lockup} />
           </Link>
           <p sx={styles.tagline}>{m.landing_footer_tagline()}</p>
+        </div>
+        <div>
+          <div sx={styles.heading}>{m.landing_footer_col_product()}</div>
+          <div sx={styles.links}>
+            <Link to="/changelog" {...stylex.props(styles.link)}>
+              {m.changelog_title()}
+            </Link>
+          </div>
         </div>
         {env.VITE_DISCORD_INVITE_URL === undefined ? null : (
           <div>
