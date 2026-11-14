@@ -5,6 +5,7 @@ import {
   type OfflineChapter,
   type OfflineChapterSource,
   readOfflineChapters,
+  deleteOfflineChapters,
   registerOfflineWorker,
   removeOfflineChapter,
 } from "@/features/offline/lib/offline-chapters"
@@ -49,6 +50,23 @@ const load = () => {
     })
 
   return loading
+}
+
+export const clearOfflineChapters = async () => {
+  for (const { controller } of state.downloads.values()) {
+    controller.abort()
+  }
+
+  if (isOfflineSupported()) {
+    await deleteOfflineChapters()
+  }
+
+  loading = null
+  setState({
+    chapters: state.chapters === null ? null : [],
+    downloads: new Map(),
+    failed: new Set(),
+  })
 }
 
 export function useOfflineChapters() {
