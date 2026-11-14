@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { scene } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   eyebrow: {

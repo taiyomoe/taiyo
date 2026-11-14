@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { scene, sceneFont } from "@/components/scene/scene.stylex"
+import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 
 const styles = stylex.create({
   title: {

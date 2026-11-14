@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import { PointsAmount } from "@/features/shop/components/points-amount"
 import { m } from "@/paraglide/messages"
 

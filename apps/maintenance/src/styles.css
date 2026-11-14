@@ -1,0 +1,16 @@
+@import "@taiyomoe/ui/style.css";
+
+@import "@fontsource/pt-serif/700.css";
+
+@media (prefers-reduced-motion: reduce) {
+  [data-maintenance] *,
+  [data-maintenance] *::before,
+  [data-maintenance] *::after {
+    animation: none !important;
+  }
+}
+
+html {
+  background-color: #0d0705;
+  color-scheme: dark;
+}

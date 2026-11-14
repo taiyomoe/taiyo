@@ -1,12 +1,12 @@
-import type { Sx } from "@taiyomoe/ui/styles/sx"
 import type { CSSProperties, ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import type { Sx } from "../../styles/sx"
 
 /**
- * A scene layer driven by one of the global `scene-*` keyframes in styles.css.
+ * A scene layer driven by one of the global `scene-*` keyframes in scene.css.
  *
  * Those keyframes are global rather than `stylex.keyframes()` handles because
- * both the landing page and the auth screen share them. StyleX's `animationName`
+ * several pages share them. StyleX's `animationName`
  * only accepts a handle, so the animation has to ride the inline `style` prop —
  * which means merging it with whatever `stylex.props()` emits, every time.
  * This is that merge, written once.

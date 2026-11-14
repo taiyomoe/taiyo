@@ -1,9 +1,9 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Session } from "@/lib/session"
 import { layout } from "@/components/layout/layout.stylex"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 
 const styles = stylex.create({

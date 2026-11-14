@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Media } from "@/features/media/api/medias"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import { mediaPageStyles } from "@/features/media/components/media-page/media-page-styles"
 import {
   MEDIA_STATUS_BADGES,

@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { scene } from "@/components/scene/scene.stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 
 const STAR_SLOTS = [0, 1, 2, 3, 4]
 const styles = stylex.create({

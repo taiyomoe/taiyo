@@ -1,10 +1,10 @@
 import { Sun03Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
+import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { GhostAnchor } from "@/components/buttons/ghost-anchor"
 import { SunLink } from "@/components/buttons/sun-link"
-import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { Eyebrow } from "@/features/landing/components/eyebrow"
 import { m } from "@/paraglide/messages"
 

@@ -3,12 +3,12 @@ import { ArrowRight, Bell, CheckAll, Settings } from "@taiyomoe/ui/components/ic
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/ui/popover"
 import { Tabs, TabsList, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { range } from "remeda"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import {
   NOTIFICATION_CATEGORIES,
   type Notification,

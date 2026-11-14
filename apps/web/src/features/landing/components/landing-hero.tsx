@@ -1,13 +1,13 @@
 import { ArrowDown01Icon, Compass01Icon, Sun03Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
+import { Embers } from "@taiyomoe/ui/components/scene/embers"
+import { LandingSun } from "@taiyomoe/ui/components/scene/landing-sun"
+import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
-import { type PointerEvent, useRef, useState } from "react"
+import { useRef } from "react"
 import { GhostAnchor } from "@/components/buttons/ghost-anchor"
 import { SunLink } from "@/components/buttons/sun-link"
-import { Embers } from "@/components/scene/embers"
-import { scene, sceneFont } from "@/components/scene/scene.stylex"
-import { LandingSun, type Parallax } from "@/features/landing/components/landing-sun"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -87,25 +87,10 @@ const styles = stylex.create({
 
 export const LandingHero = () => {
   const heroRef = useRef<HTMLElement>(null)
-  const [parallax, setParallax] = useState<Parallax>({ x: 0, y: 0 })
-  // Pointer, not mouse, events: dragging the sun cancels the mouse events, and
-  // the parallax would then jump to the pointer when the drag ends.
-  const onPointerMove = (event: PointerEvent<HTMLElement>) => {
-    if (event.pointerType !== "mouse") {
-      return
-    }
-
-    const rect = event.currentTarget.getBoundingClientRect()
-
-    setParallax({
-      x: ((event.clientX - rect.left - rect.width / 2) / rect.width) * 40,
-      y: ((event.clientY - rect.top - rect.height / 2) / rect.height) * 40,
-    })
-  }
 
   return (
-    <section ref={heroRef} sx={styles.hero} onPointerMove={onPointerMove}>
-      <LandingSun parallax={parallax} surfaceRef={heroRef} />
+    <section ref={heroRef} sx={styles.hero}>
+      <LandingSun surfaceRef={heroRef} />
       <Embers count={30} />
       <div sx={styles.scrim} />
 
