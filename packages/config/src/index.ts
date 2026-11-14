@@ -47,6 +47,9 @@ export const config = {
     quality: 85,
     chapterPageQuality: 82,
     maxChapterPageSizeBytes: 15 * 1024 * 1024,
+    // Pixels decoded per page: a few kilobytes of flat colour can otherwise decode to sharp's
+    // default limit of 268 megapixels. Long webtoon strips stay well under it.
+    maxChapterPageDecodedPixels: 40_000_000,
     maxChapterPages: 500,
     uploadUrlTtlSeconds: 600,
     stagingExpiryDays: 3,
