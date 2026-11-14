@@ -120,5 +120,6 @@ export const config = {
     // Issues a 422 carries: enough to fix a request, while one issue per bad array element would
     // grow the response with the request.
     maxValidationIssues: 10,
+    maxJsonBodyBytes: 1024 * 1024,
   },
 } as const
