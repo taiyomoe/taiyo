@@ -4,6 +4,7 @@ import { getPublicImageUrl } from "@taiyomoe/s3"
 import { filetypeinfo } from "magic-bytes.js"
 import { createHash } from "node:crypto"
 import sharp, { type Metadata } from "sharp"
+import { withTranscodeSlot } from "./utils/transcode-slot"
 
 const ACCEPTED_FORMATS = {
   "image/jpeg": "jpeg",
@@ -30,25 +31,6 @@ export class CommentImageError extends Error {
   }
 }
 
-const MAX_CONCURRENT_TRANSCODES = 2
-let running = 0
-const waiting: Array<() => void> = []
-const withTranscodeSlot = async <T>(task: () => Promise<T>) => {
-  if (running >= MAX_CONCURRENT_TRANSCODES) {
-    await new Promise<void>((resolve) => {
-      waiting.push(resolve)
-    })
-  }
-
-  running += 1
-
-  try {
-    return await task()
-  } finally {
-    running -= 1
-    waiting.shift()?.()
-  }
-}
 const differenceHash = async (input: Buffer) => {
   const pixels = await sharp(input, {
     page: 0,

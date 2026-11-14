@@ -19,6 +19,7 @@ import type {
 import type { Services } from "./services"
 import packageJson from "../package.json"
 import { corsAllowedOrigins, env } from "./env"
+import { ImageTooComplexError } from "./image-store"
 import { auditAuthRequest } from "./middlewares/audit-auth-middleware"
 import { checkOrigin } from "./middlewares/check-origin-middleware"
 import { auditLogsRouter } from "./routers/audit-logs-router"
@@ -158,6 +159,10 @@ export const createApp = (services: Services) => {
     .use(checkOrigin(corsAllowedOrigins))
     .notFound((c) => c.fail("NOT_FOUND"))
     .onError((err, c) => {
+      if (err instanceof ImageTooComplexError) {
+        return c.fail("IMAGE_TOO_COMPLEX")
+      }
+
       c.get("log").error(err)
 
       return c.fail(
