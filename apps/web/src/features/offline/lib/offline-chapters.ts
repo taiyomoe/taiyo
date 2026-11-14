@@ -173,6 +173,10 @@ const saveOfflineChapter = async (
   return next
 }
 
+// The saved responses carry the account that downloaded them: the next person on this browser
+// must not read them, nor be served them by the service worker.
+export const deleteOfflineChapters = () => caches.delete(OFFLINE_CACHE)
+
 export const removeOfflineChapter = async (chapterId: string) => {
   const chapters = await readOfflineChapters()
   const kept = chapters.filter((entry) => entry.id !== chapterId)
