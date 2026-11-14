@@ -12,6 +12,12 @@ export default {
     response.headers.set("Content-Security-Policy", "frame-ancestors 'none'")
     response.headers.set("X-Frame-Options", "DENY")
 
+    // A rendered page embeds the visitor's session: a shared cache must never store it. Routes
+    // that serve the same response to everyone, such as the OG images, set their own.
+    if (!response.headers.has("Cache-Control")) {
+      response.headers.set("Cache-Control", "private, no-store")
+    }
+
     return response
   },
 }
