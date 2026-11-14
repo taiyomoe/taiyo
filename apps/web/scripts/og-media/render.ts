@@ -12,12 +12,12 @@
  * It needs ffmpeg with libx264, and a GPU: software WebGL takes minutes per frame.
  */
 import { chromium } from "@playwright/test"
+import * as shaders from "@taiyomoe/ui/utils/scene/shaders"
 import { Renderer } from "@takumi-rs/core"
 import { execFileSync } from "node:child_process"
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
-import * as shaders from "../../src/components/scene/sun/shaders.ts"
 
 const FPS = 30
 // The sun turns once per loop, so the loop also sets how fast it spins.

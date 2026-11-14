@@ -33,35 +33,6 @@ html:has([data-app-shell]) body {
   width: 1.25rem !important;
 }
 
-@keyframes scene-aurora {
-  0% {
-    transform: translate(-10%, 0);
-  }
-  50% {
-    transform: translate(10%, -4%);
-  }
-  100% {
-    transform: translate(-10%, 0);
-  }
-}
-
-@keyframes scene-ember-rise {
-  0% {
-    transform: translateY(0) translateX(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.9;
-  }
-  90% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(-78vh) translateX(var(--drift));
-    opacity: 0;
-  }
-}
-
 @keyframes scene-marquee {
   from {
     transform: translateX(0);

@@ -1,7 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import { useMemo } from "react"
-import { rand, round } from "./deterministic"
-import { scene } from "./scene.stylex"
+import type { CSSVariables } from "../../styles/sx"
+import { scene } from "../../styles/scene.stylex"
+import { rand, round } from "../../utils/scene/deterministic"
 const build = (count: number) =>
   Array.from({ length: count }).map((_, i) => {
     const size = round(2 + rand(i + 100) * 4)
@@ -37,22 +38,20 @@ export const Embers = ({ count = 26 }: { count?: number }) => {
 
   return (
     <div sx={styles.field}>
-      {embers.map((ember) => (
-        <span
-          key={ember.id}
-          className={emberProps.className}
-          style={{
-            ...emberProps.style,
-            left: `${ember.left}%`,
-            width: ember.size,
-            height: ember.size,
-            background: ember.gold ? scene.goldLight : scene.ember,
-            boxShadow: `0 0 ${ember.glow}px ${ember.gold ? scene.gold : scene.brand}`,
-            "--drift": ember.drift,
-            animation: `scene-ember-rise ${ember.dur}s linear ${ember.delay}s infinite`,
-          }}
-        />
-      ))}
+      {embers.map((ember) => {
+        const style: CSSVariables = {
+          ...emberProps.style,
+          left: `${ember.left}%`,
+          width: ember.size,
+          height: ember.size,
+          background: ember.gold ? scene.goldLight : scene.ember,
+          boxShadow: `0 0 ${ember.glow}px ${ember.gold ? scene.gold : scene.brand}`,
+          "--drift": ember.drift,
+          animation: `scene-ember-rise ${ember.dur}s linear ${ember.delay}s infinite`,
+        }
+
+        return <span key={ember.id} className={emberProps.className} style={style} />
+      })}
     </div>
   )
 }

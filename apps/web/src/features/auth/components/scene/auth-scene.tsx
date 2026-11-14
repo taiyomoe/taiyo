@@ -1,10 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
+import { Embers } from "@taiyomoe/ui/components/scene/embers"
+import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useRef } from "react"
-import { Embers } from "@/components/scene/embers"
-import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { AuthCitations } from "@/features/auth/components/scene/auth-citations"
 import { AuthSun } from "@/features/auth/components/scene/auth-sun"
 

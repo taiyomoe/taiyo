@@ -15,5 +15,10 @@ export default defineConfig({
       "unknown",
     ],
   },
-  ignorePatterns: [".agents/**", ".claude/**", "apps/web/src/routeTree.gen.ts"],
+  ignorePatterns: [
+    ".agents/**",
+    ".claude/**",
+    "apps/web/src/routeTree.gen.ts",
+    "apps/maintenance/src/routeTree.gen.ts",
+  ],
 })

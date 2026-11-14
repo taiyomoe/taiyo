@@ -1,8 +1,8 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { ProgressFill } from "@/components/carousel-dots/progress-fill"
-import { scene } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   dots: {

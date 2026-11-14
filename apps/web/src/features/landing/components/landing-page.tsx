@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { scene } from "@/components/scene/scene.stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { LandingCta } from "@/features/landing/components/landing-cta"
 import { LandingFlaws } from "@/features/landing/components/landing-flaws"
 import { LandingFooter } from "@/features/landing/components/landing-footer"

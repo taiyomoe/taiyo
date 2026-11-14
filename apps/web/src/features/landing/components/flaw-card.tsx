@@ -1,8 +1,8 @@
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
+import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
-import { scene, sceneFont } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   card: {

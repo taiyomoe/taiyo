@@ -7,7 +7,7 @@ import {
   UserGroupIcon,
 } from "@hugeicons/core-free-icons"
 import * as stylex from "@stylexjs/stylex"
-import { scene } from "@/components/scene/scene.stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { FlawCard } from "@/features/landing/components/flaw-card"
 import { Reveal } from "@/features/landing/components/reveal"
 import { Section } from "@/features/landing/components/section"

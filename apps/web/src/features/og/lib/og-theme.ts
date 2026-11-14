@@ -4,7 +4,7 @@ export const OG_HEIGHT = 630
 
 export const OG_PADDING = 64
 
-// The landing page's night palette (src/components/scene/scene.stylex.ts):
+// The landing page's night palette (packages/ui/src/styles/scene.stylex.ts):
 // StyleX variables do not exist outside the browser, so the cards repeat them.
 export const ogColors = {
   night: "#120a07",

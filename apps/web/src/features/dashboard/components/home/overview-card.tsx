@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { Card } from "@taiyomoe/ui/components/ui/card"
-import { sceneFont } from "@/components/scene/scene.stylex"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { homeStyles } from "@/features/dashboard/components/home/home-styles"
 
 const styles = stylex.create({
