@@ -39,15 +39,6 @@ html:has([data-app-shell]) body {
   width: 1.25rem !important;
 }
 
-@keyframes scene-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 @keyframes scene-bob {
   0%,
   100% {

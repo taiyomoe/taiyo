@@ -1,4 +1,4 @@
-import { ArrowDown01Icon, Compass01Icon, Sun03Icon } from "@hugeicons/core-free-icons"
+import { ArrowDown01Icon, Sun03Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { Embers } from "@taiyomoe/ui/components/scene/embers"
@@ -6,7 +6,6 @@ import { LandingSun } from "@taiyomoe/ui/components/scene/landing-sun"
 import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useRef } from "react"
-import { GhostAnchor } from "@/components/buttons/ghost-anchor"
 import { SunLink } from "@/components/buttons/sun-link"
 import { m } from "@/paraglide/messages"
 
@@ -102,14 +101,10 @@ export const LandingHero = () => {
             <HugeiconsIcon icon={Sun03Icon} size={20} />
             {m.landing_hero_cta_primary()}
           </SunLink>
-          <GhostAnchor href="#titles">
-            <HugeiconsIcon icon={Compass01Icon} size={19} />
-            {m.landing_hero_cta_secondary()}
-          </GhostAnchor>
         </div>
       </div>
 
-      <a href="#titles" aria-label={m.landing_hero_scroll_hint()} sx={styles.scrollCue}>
+      <a href="#reasons" aria-label={m.landing_hero_scroll_hint()} sx={styles.scrollCue}>
         <HugeiconsIcon
           icon={ArrowDown01Icon}
           size={22}
