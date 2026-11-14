@@ -1,9 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  /**
-   * Phase 0: Drop unused tables (MediaChapterComment, ScanMember, _ScanToScanMember).
-   */
   await db.schema
     .alterTable("MediaChapterComment")
     .dropConstraint("MediaChapterComment_parentId_fkey")
@@ -20,9 +17,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
   await db.schema.dropTable("_ScanToScanMember").execute()
 
-  /**
-   * Phase 1: Rename Scan to Group.
-   */
   await db.schema.alterType("ScanMemberRoles").renameTo("GroupMemberRoles").execute()
 
   await db.schema.alterType("ScanMemberPermissions").renameTo("GroupMemberPermissions").execute()
@@ -59,10 +53,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     db,
   )
 
-  /**
-   * Phase 2: Strip "Media" prefix from related tables.
-   */
-  // MediaBanner
   await db.schema.alterTable("MediaBanner").renameTo("Banner").execute()
 
   await db.schema.alterTable("Banner").renameConstraint("MediaBanner_pkey", "Banner_pkey").execute()
@@ -77,7 +67,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .renameConstraint("MediaBanner_uploaderId_fkey", "Banner_uploaderId_fkey")
     .execute()
 
-  // MediaChapter
   await db.schema.alterTable("MediaChapter").renameTo("Chapter").execute()
 
   await db.schema
@@ -95,7 +84,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .renameConstraint("MediaChapter_uploaderId_fkey", "Chapter_uploaderId_fkey")
     .execute()
 
-  // MediaCover
   await db.schema.alterTable("MediaCover").renameTo("Cover").execute()
 
   await db.schema.alterTable("Cover").renameConstraint("MediaCover_pkey", "Cover_pkey").execute()
@@ -110,7 +98,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .renameConstraint("MediaCover_uploaderId_fkey", "Cover_uploaderId_fkey")
     .execute()
 
-  // MediaTitle
   await db.schema.alterTable("MediaTitle").renameTo("Title").execute()
 
   await db.schema.alterTable("Title").renameConstraint("MediaTitle_pkey", "Title_pkey").execute()
@@ -118,6 +105,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`ALTER INDEX "MediaTitle_mediaId_language_priority_key" RENAME TO "Title_mediaId_language_priority_key"`.execute(
     db,
   )
+
   await db.schema
     .alterTable("Title")
     .renameConstraint("MediaTitle_mediaId_fkey", "Title_mediaId_fkey")
@@ -128,7 +116,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .renameConstraint("MediaTitle_creatorId_fkey", "Title_creatorId_fkey")
     .execute()
 
-  // MediaTracker
   await db.schema.alterTable("MediaTracker").renameTo("Tracker").execute()
 
   await db.schema
@@ -146,7 +133,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .renameConstraint("MediaTracker_creatorId_fkey", "Tracker_creatorId_fkey")
     .execute()
 
-  // _MediaChapterToGroup
   await db.schema.alterTable("_MediaChapterToGroup").renameTo("_ChapterToGroup").execute()
 
   await db.schema
@@ -157,6 +143,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`ALTER INDEX "_MediaChapterToGroup_B_index" RENAME TO "_ChapterToGroup_B_index"`.execute(
     db,
   )
+
   await db.schema
     .alterTable("_ChapterToGroup")
     .renameConstraint("_MediaChapterToGroup_A_fkey", "_ChapterToGroup_A_fkey")

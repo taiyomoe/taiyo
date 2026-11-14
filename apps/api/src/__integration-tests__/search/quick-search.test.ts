@@ -40,6 +40,13 @@ const sharesWord = (a: string, b: string) => {
 
   return words(a).some((word) => other.has(word))
 }
+const sharesWordWithSibling = (
+  row: { id: string; alt: string },
+  rows: ReadonlyArray<{ id: string; alt: string }>,
+) =>
+  rows.some(
+    (other) => other.id === row.id && other.alt !== row.alt && sharesWord(row.alt, other.alt),
+  )
 const indexedNormalMedia = async (services: Services) => {
   const media = defined(
     await services.db
@@ -101,9 +108,16 @@ describe("GET /search", () => {
       .where("alt.deletedAt", "is", null)
       .where("covers.isMainCover", "=", true)
       .where("covers.deletedAt", "is", null)
+      .orderBy("medias.id")
+      .orderBy("alt.title")
       .execute()
     const media = defined(
-      rows.find((row) => words(row.alt).length >= 2 && !sharesWord(row.alt, row.main)),
+      rows.find(
+        (row) =>
+          words(row.alt).length >= 2 &&
+          !sharesWord(row.alt, row.main) &&
+          !sharesWordWithSibling(row, rows),
+      ),
     )
 
     await waitForMediaDoc(services, media.id, (doc) => doc !== null)

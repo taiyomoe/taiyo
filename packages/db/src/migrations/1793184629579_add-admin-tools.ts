@@ -32,12 +32,15 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`CREATE INDEX "auditLogs_createdAt_idx" ON "auditLogs" ("createdAt" DESC, id DESC)`.execute(
     db,
   )
+
   await sql`CREATE INDEX "auditLogs_actor_idx" ON "auditLogs" ("actorId", "createdAt" DESC)`.execute(
     db,
   )
+
   await sql`
     CREATE INDEX "auditLogs_target_idx" ON "auditLogs" ("targetType", "targetId", "createdAt" DESC)
   `.execute(db)
+
   await sql`CREATE INDEX "auditLogs_action_idx" ON "auditLogs" (action, "createdAt" DESC)`.execute(
     db,
   )
@@ -63,12 +66,48 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     FOR EACH STATEMENT
     EXECUTE FUNCTION audit_logs_reject_change()
   `.execute(db)
+
+  await db.schema
+    .createIndex("userHistories_createdAt_idx")
+    .on("userHistories")
+    .column("createdAt")
+    .execute()
+
+  await db.schema
+    .createIndex("userLibraryEntries_createdAt_idx")
+    .on("userLibraryEntries")
+    .column("createdAt")
+    .execute()
+
+  await db.schema.createIndex("chapters_createdAt_idx").on("chapters").column("createdAt").execute()
+
+  await db.schema.createIndex("covers_createdAt_idx").on("covers").column("createdAt").execute()
+
+  await db.schema.createIndex("medias_createdAt_idx").on("medias").column("createdAt").execute()
+
+  await db.schema.createIndex("users_createdAt_idx").on("users").column("createdAt").execute()
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
+  await db.schema.dropIndex("userHistories_createdAt_idx").execute()
+
+  await db.schema.dropIndex("userLibraryEntries_createdAt_idx").execute()
+
+  await db.schema.dropIndex("chapters_createdAt_idx").execute()
+
+  await db.schema.dropIndex("covers_createdAt_idx").execute()
+
+  await db.schema.dropIndex("medias_createdAt_idx").execute()
+
+  await db.schema.dropIndex("users_createdAt_idx").execute()
+
   await db.schema.dropTable("auditLogs").execute()
+
   await sql`DROP FUNCTION audit_logs_reject_change()`.execute(db)
+
   await db.schema.dropType("AuditSeverity").execute()
+
   await db.schema.dropType("AuditActorType").execute()
+
   await db.schema.dropType("AuditOutcome").execute()
 }

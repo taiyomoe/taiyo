@@ -445,7 +445,6 @@ const COUNTRIES = [
 ] as const
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-  // Enums
   await db.schema
     .createType("Roles")
     .asEnum(["USER", "MODERATOR", "UPLOADER_INTERN", "UPLOADER", "ADMIN"])
@@ -563,7 +562,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
   await db.schema.createType("HomeLayout").asEnum(["ROWS", "COLUMNS"]).execute()
 
-  // Prisma migrations table
   await db.schema
     .createTable("_prisma_migrations")
     .addColumn("id", sql`varchar(36)`, (c) => c.primaryKey())
@@ -576,7 +574,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("applied_steps_count", "integer", (c) => c.notNull().defaultTo(0))
     .execute()
 
-  // VerificationToken
   await db.schema
     .createTable("VerificationToken")
     .addColumn("identifier", "text", (c) => c.notNull())
@@ -585,7 +582,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addPrimaryKeyConstraint("VerificationToken_pkey", ["identifier", "token"])
     .execute()
 
-  // User
   await db.schema
     .createTable("User")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -602,7 +598,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
   await db.schema.createIndex("User_id_idx").on("User").column("id").execute()
 
-  // Account
   await db.schema
     .createTable("Account")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -630,7 +625,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // UserProfile
   await db.schema
     .createTable("UserProfile")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -644,12 +638,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("city", "text")
     .addColumn("country", sql`"Countries"`)
     .addColumn("about", "text")
-    .addColumn("points", "integer", (c) =>
-      c
-        .notNull()
-        .defaultTo(0)
-        .check(sql`"points" >= 0`),
-    )
+    .addColumn("points", "integer", (c) => c.notNull().defaultTo(0))
     .addColumn("userId", "text", (c) =>
       c.notNull().references("User.id").onDelete("restrict").onUpdate("cascade"),
     )
@@ -662,7 +651,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // Media
   await db.schema
     .createTable("Media")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -691,7 +679,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // MediaBanner
   await db.schema
     .createTable("MediaBanner")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -710,7 +697,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // MediaChapter
   await db.schema
     .createTable("MediaChapter")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -735,7 +721,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // MediaChapterComment
   await db.schema
     .createTable("MediaChapterComment")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -756,7 +741,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // MediaCover
   await db.schema
     .createTable("MediaCover")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -778,7 +762,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // _UserFollow
   await db.schema
     .createTable("_UserFollow")
     .addColumn("A", "text", (c) =>
@@ -792,7 +775,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
   await db.schema.createIndex("_UserFollow_B_index").on("_UserFollow").column("B").execute()
 
-  // MediaTitle
   await db.schema
     .createTable("MediaTitle")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -820,7 +802,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // MediaTracker
   await db.schema
     .createTable("MediaTracker")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -838,7 +819,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // ScanMember
   await db.schema
     .createTable("ScanMember")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -852,7 +832,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     )
     .execute()
 
-  // Scan
   await db.schema
     .createTable("Scan")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -877,7 +856,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("deleterId", "text")
     .execute()
 
-  // Session
   await db.schema
     .createTable("Session")
     .addColumn("createdAt", sql`timestamp(3)`, (c) => c.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
@@ -896,7 +874,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // UserHistory
   await db.schema
     .createTable("UserHistory")
     .addColumn("progression", sql`jsonb[]`)
@@ -915,7 +892,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // UserLibrary
   await db.schema
     .createTable("UserLibrary")
     .addColumn("reading", sql`jsonb[]`, (c) => c.defaultTo(sql`ARRAY[]::jsonb[]`))
@@ -936,7 +912,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .unique()
     .execute()
 
-  // _MediaChapterToScan
   await db.schema
     .createTable("_MediaChapterToScan")
     .addColumn("A", "text", (c) =>
@@ -954,7 +929,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .column("B")
     .execute()
 
-  // _ScanToScanMember
   await db.schema
     .createTable("_ScanToScanMember")
     .addColumn("A", "text", (c) =>
@@ -972,7 +946,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .column("B")
     .execute()
 
-  // Task
   await db.schema
     .createTable("Task")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -984,7 +957,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("payload", "jsonb", (c) => c.notNull())
     .execute()
 
-  // UserSetting
   await db.schema
     .createTable("UserSetting")
     .addColumn("id", "text", (c) => c.primaryKey())
@@ -1014,44 +986,82 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 
 export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable("UserSetting").execute()
+
   await db.schema.dropTable("Task").execute()
+
   await db.schema.dropTable("_ScanToScanMember").execute()
+
   await db.schema.dropTable("_MediaChapterToScan").execute()
+
   await db.schema.dropTable("UserLibrary").execute()
+
   await db.schema.dropTable("UserHistory").execute()
+
   await db.schema.dropTable("Session").execute()
+
   await db.schema.dropTable("Scan").execute()
+
   await db.schema.dropTable("ScanMember").execute()
+
   await db.schema.dropTable("MediaTracker").execute()
+
   await db.schema.dropTable("MediaTitle").execute()
+
   await db.schema.dropTable("_UserFollow").execute()
+
   await db.schema.dropTable("MediaCover").execute()
+
   await db.schema.dropTable("MediaChapterComment").execute()
+
   await db.schema.dropTable("MediaChapter").execute()
+
   await db.schema.dropTable("MediaBanner").execute()
+
   await db.schema.dropTable("Media").execute()
+
   await db.schema.dropTable("UserProfile").execute()
+
   await db.schema.dropTable("Account").execute()
+
   await db.schema.dropTable("User").execute()
+
   await db.schema.dropTable("VerificationToken").execute()
+
   await db.schema.dropTable("_prisma_migrations").execute()
 
   await db.schema.dropType("HomeLayout").execute()
+
   await db.schema.dropType("TaskStatus").execute()
+
   await db.schema.dropType("TaskType").execute()
+
   await db.schema.dropType("ScanMemberPermissions").execute()
+
   await db.schema.dropType("ScanMemberRoles").execute()
+
   await db.schema.dropType("Trackers").execute()
+
   await db.schema.dropType("Languages").execute()
+
   await db.schema.dropType("Flag").execute()
+
   await db.schema.dropType("MediaGenres").execute()
+
   await db.schema.dropType("MediaCountryOfOrigin").execute()
+
   await db.schema.dropType("MediaDemography").execute()
+
   await db.schema.dropType("MediaSource").execute()
+
   await db.schema.dropType("MediaStatus").execute()
+
   await db.schema.dropType("MediaType").execute()
+
   await db.schema.dropType("ContentRating").execute()
+
   await db.schema.dropType("Countries").execute()
+
   await db.schema.dropType("Genders").execute()
+
   await db.schema.dropType("Roles").execute()
 }
