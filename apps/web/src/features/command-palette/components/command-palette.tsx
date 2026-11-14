@@ -29,12 +29,19 @@ export function CommandPalette({
   const [warm, setWarm] = useState(false)
 
   useEffect(() => {
-    const handle = requestIdleCallback(
-      () => {
-        setWarm(true)
-      },
-      { timeout: 2000 },
-    )
+    const warmUp = () => {
+      setWarm(true)
+    }
+
+    if (typeof requestIdleCallback === "undefined") {
+      const timer = setTimeout(warmUp, 1500)
+
+      return () => {
+        clearTimeout(timer)
+      }
+    }
+
+    const handle = requestIdleCallback(warmUp, { timeout: 2000 })
 
     return () => {
       cancelIdleCallback(handle)
