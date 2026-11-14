@@ -8,6 +8,7 @@ import {
 } from "@taiyomoe/s3"
 import sharp, { type Sharp } from "sharp"
 import type { ImageCrop } from "./utils/image-crop"
+import { withTranscodeSlot } from "./utils/transcode-slot"
 
 export type ImageExtension = "gif" | "jpg"
 
@@ -17,6 +18,14 @@ export type ImageTarget =
   | { kind: "staff"; staffId: string }
   | { kind: "avatar"; userId: string }
   | { kind: "profileBanner"; userId: string }
+
+export class ImageTooComplexError extends Error {
+  constructor() {
+    super("IMAGE_TOO_COMPLEX")
+  }
+}
+
+const decodeLimits = { limitInputPixels: config.images.maxDecodedPixels } as const
 
 export type ImageStoreDeps = {
   s3: S3Client
@@ -55,7 +64,7 @@ const mirror = (image: Sharp, area: ImageCrop) => image.flip(area.flipY).flop(ar
 // Each stage is materialised so the next one sees the real dimensions: libvips
 // rounds the bounding box of an arbitrary rotation its own way.
 const cropStill = async (input: Buffer, { area, width, height }: CropRequest) => {
-  const oriented = await mirror(sharp(input).autoOrient(), area).png().toBuffer()
+  const oriented = await mirror(sharp(input, decodeLimits).autoOrient(), area).png().toBuffer()
   const rotated = await sharp(oriented)
     .rotate(area.rotation, { background: "#000" })
     .png()
@@ -66,11 +75,11 @@ const cropStill = async (input: Buffer, { area, width, height }: CropRequest) =>
     .resize(width, height, { fit: "cover" })
 }
 const cropAnimated = async (input: Buffer, { area, width, height }: CropRequest) => {
-  const metadata = await sharp(input, { animated: true }).metadata()
+  const metadata = await sharp(input, { ...decodeLimits, animated: true }).metadata()
   const rect = toPixels(area, metadata.width, metadata.pageHeight ?? metadata.height)
 
   if (!area.flipY) {
-    return sharp(input, { animated: true })
+    return sharp(input, { ...decodeLimits, animated: true })
       .flop(area.flipX)
       .extract(rect)
       .resize(width, height, { fit: "cover" })
@@ -80,7 +89,7 @@ const cropAnimated = async (input: Buffer, { area, width, height }: CropRequest)
   // would also play the animation backwards: flip each frame on its own.
   const frames = await Promise.all(
     Array.from({ length: metadata.pages ?? 1 }, (_, page) =>
-      sharp(input, { page })
+      sharp(input, { ...decodeLimits, page })
         .flip()
         .flop(area.flipX)
         .extract(rect)
@@ -109,12 +118,27 @@ export const putImage = async (
   } = {},
 ): Promise<{ key: string; extension: ImageExtension }> => {
   const input = Buffer.from(await file.arrayBuffer())
-  const { format } = await sharp(input).metadata()
-  const { body, contentType, extension } =
-    format === "gif"
+  const metadata = await sharp(input, { ...decodeLimits, animated: true }).metadata()
+  const frames = metadata.format === "gif" ? (metadata.pages ?? 1) : 1
+  const framePixels = metadata.width * (metadata.pageHeight ?? metadata.height)
+  const outputPixels = crop === undefined ? framePixels : crop.width * crop.height
+
+  // A few kilobytes of GIF can hold hundreds of frames, each decoded and re-encoded at the
+  // output size: bound the work by its pixels, not by the upload's bytes.
+  if (
+    frames > config.images.maxFrames ||
+    Math.max(framePixels, outputPixels) * frames > config.images.maxDecodedPixels
+  ) {
+    throw new ImageTooComplexError()
+  }
+
+  const { body, contentType, extension } = await withTranscodeSlot(async () =>
+    metadata.format === "gif"
       ? {
           body: await (
-            crop === undefined ? sharp(input, { animated: true }) : await cropAnimated(input, crop)
+            crop === undefined
+              ? sharp(input, { ...decodeLimits, animated: true })
+              : await cropAnimated(input, crop)
           )
             .gif()
             .toBuffer(),
@@ -122,12 +146,15 @@ export const putImage = async (
           extension: "gif" as const,
         }
       : {
-          body: await (crop === undefined ? sharp(input).rotate() : await cropStill(input, crop))
+          body: await (
+            crop === undefined ? sharp(input, decodeLimits).rotate() : await cropStill(input, crop)
+          )
             .jpeg({ quality: config.images.quality })
             .toBuffer(),
           contentType: "image/jpeg",
           extension: "jpg" as const,
-        }
+        },
+  )
   let key: string
 
   if (target.kind === "staff") {

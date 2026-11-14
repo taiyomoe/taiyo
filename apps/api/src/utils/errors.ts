@@ -468,6 +468,10 @@ const imageErrors = {
     message: "The image exceeds the maximum allowed size.",
     code: 422,
   },
+  IMAGE_TOO_COMPLEX: {
+    message: "The image is too large: it has too many pixels or animation frames.",
+    code: 422,
+  },
 } as const
 const chapterUploadErrors = {
   CHAPTER_PAGES_ALREADY_UPLOADED: {

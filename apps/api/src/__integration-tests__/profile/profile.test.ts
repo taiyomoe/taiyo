@@ -1,5 +1,8 @@
 import { ListObjectsV2Command } from "@aws-sdk/client-s3"
+import { config } from "@taiyomoe/config"
+import sharp from "sharp"
 import { describe, expect } from "vitest"
+import { PROFILE_IMAGE_SIZES } from "../../utils/image-crop"
 import { signInAs } from "../helpers/auth"
 import { tinyGif, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
@@ -108,6 +111,25 @@ describe("GET /users/by-username/:username", () => {
   })
 })
 
+// Each frame lights a different pixel: the GIF encoder merges frames that look the same.
+const animatedGif = async (frames: number) => {
+  const side = 20
+  const images = await Promise.all(
+    Array.from({ length: frames }, (_, index) =>
+      sharp(Buffer.alloc(side * side * 3).fill(255, index * 3, index * 3 + 3), {
+        raw: { width: side, height: side, channels: 3 },
+      })
+        .png()
+        .toBuffer(),
+    ),
+  )
+  const gif = await sharp(images, { join: { animated: true } })
+    .gif()
+    .toBuffer()
+
+  return new File([new Uint8Array(gif)], "frames.gif", { type: "image/gif" })
+}
+
 describe("PUT /users/me/avatar", () => {
   test("stores the cropped avatar and replaces the previous one", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services)
@@ -149,6 +171,28 @@ describe("PUT /users/me/avatar", () => {
     }
 
     expect(res.body.code).toBe("INVALID_CROP")
+  })
+
+  test("rejects a GIF with too many frames, or too many output pixels", async ({
+    app,
+    services,
+  }) => {
+    const { headers } = await signInAs(services)
+    const upload = async (frames: number) =>
+      api(app, "/users/me/avatar", {
+        method: "PUT",
+        headers,
+        form: cropForm(await animatedGif(frames)),
+      })
+    const tooManyFrames = await upload(config.images.maxFrames + 1)
+    const { width, height } = PROFILE_IMAGE_SIZES.avatar
+    // Each frame is upscaled to the avatar's size.
+    const tooManyOutputPixels = await upload(
+      Math.floor(config.images.maxDecodedPixels / (width * height)) + 1,
+    )
+
+    expect(tooManyFrames.body).toMatchObject({ code: "IMAGE_TOO_COMPLEX" })
+    expect(tooManyOutputPixels.body).toMatchObject({ code: "IMAGE_TOO_COMPLEX" })
   })
 
   test("rejects a crop outside the image", async ({ app, services }) => {
