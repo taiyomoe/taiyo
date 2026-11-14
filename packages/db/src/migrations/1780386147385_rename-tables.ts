@@ -178,12 +178,9 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .renameConstraint("UserHistory_userId_fkey", "userHistories_userId_fkey")
     .execute()
 
-  await db.schema
-    .createIndex("userHistories_mediaId_userId_key")
-    .on("userHistories")
-    .columns(["mediaId", "userId"])
-    .unique()
-    .execute()
+  await sql`ALTER INDEX "UserHistory_mediaId_userId_key" RENAME TO "userHistories_mediaId_userId_key"`.execute(
+    db,
+  )
 
   // Banner
   await db.schema.alterTable("Banner").renameTo("banners").execute()
