@@ -10,8 +10,6 @@ import { cors } from "hono/cors"
 import { createMiddleware } from "hono/factory"
 import { NONCE, secureHeaders } from "hono/secure-headers"
 import { readFile } from "node:fs/promises"
-import { createRequire } from "node:module"
-import path from "node:path"
 import type {
   AppContext,
   AppContextVariables,
@@ -60,10 +58,7 @@ const hyperdxIngestionKey = env.HYPERDX_INGESTION_KEY ?? ""
 // The reference runs on the session origin: serve its bundle from the locked dependency rather
 // than an unversioned CDN URL, so every release goes through the lockfile and the release-age delay.
 const scalarBundle = readFile(
-  path.join(
-    path.dirname(createRequire(import.meta.url).resolve("@scalar/api-reference")),
-    "browser/standalone.js",
-  ),
+  new URL("browser/standalone.js", import.meta.resolve("@scalar/api-reference")),
 )
 
 export const createApp = (services: Services) => {

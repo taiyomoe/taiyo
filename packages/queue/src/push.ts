@@ -226,6 +226,8 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
     FROM "notifications" AS "n"
     INNER JOIN "users" AS "u" ON "u"."id" = "n"."userId"
     INNER JOIN "pushSubscriptions" AS "ps" ON "ps"."userId" = "n"."userId"
+    INNER JOIN "sessions" AS "s" ON "s"."id" = "ps"."sessionId"
+      AND "s"."expiresAt" > (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
     LEFT JOIN "chapters" AS "ch" ON "ch"."id" = "n"."chapterId"
     LEFT JOIN "medias" AS "m" ON "m"."id" = "ch"."mediaId"
     LEFT JOIN LATERAL (
