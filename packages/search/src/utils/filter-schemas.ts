@@ -1,37 +1,38 @@
 import { z } from "zod"
+import { MAX_FILTER_VALUES } from "./constants"
 
 export const enumFilter = <T extends readonly [string, ...string[]]>(values: T) =>
   z
     .object({
       eq: z.enum(values).optional(),
       neq: z.enum(values).optional(),
-      in: z.enum(values).array().nonempty().optional(),
-      notIn: z.enum(values).array().nonempty().optional(),
+      in: z.enum(values).array().nonempty().max(MAX_FILTER_VALUES).optional(),
+      notIn: z.enum(values).array().nonempty().max(MAX_FILTER_VALUES).optional(),
     })
     .strict()
 
 export const enumArrayFilter = <T extends readonly [string, ...string[]]>(values: T) =>
   z
     .object({
-      hasAll: z.enum(values).array().nonempty().optional(),
-      hasAny: z.enum(values).array().nonempty().optional(),
-      hasNone: z.enum(values).array().nonempty().optional(),
+      hasAll: z.enum(values).array().nonempty().max(MAX_FILTER_VALUES).optional(),
+      hasAny: z.enum(values).array().nonempty().max(MAX_FILTER_VALUES).optional(),
+      hasNone: z.enum(values).array().nonempty().max(MAX_FILTER_VALUES).optional(),
     })
     .strict()
 
 export const uuidArrayFilter = z
   .object({
-    hasAll: z.uuid().array().nonempty().optional(),
-    hasAny: z.uuid().array().nonempty().optional(),
-    hasNone: z.uuid().array().nonempty().optional(),
+    hasAll: z.uuid().array().nonempty().max(MAX_FILTER_VALUES).optional(),
+    hasAny: z.uuid().array().nonempty().max(MAX_FILTER_VALUES).optional(),
+    hasNone: z.uuid().array().nonempty().max(MAX_FILTER_VALUES).optional(),
   })
   .strict()
 
 export const stringArrayFilter = z
   .object({
-    hasAll: z.string().array().nonempty().optional(),
-    hasAny: z.string().array().nonempty().optional(),
-    hasNone: z.string().array().nonempty().optional(),
+    hasAll: z.string().array().nonempty().max(MAX_FILTER_VALUES).optional(),
+    hasAny: z.string().array().nonempty().max(MAX_FILTER_VALUES).optional(),
+    hasNone: z.string().array().nonempty().max(MAX_FILTER_VALUES).optional(),
   })
   .strict()
 

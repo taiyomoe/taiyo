@@ -113,5 +113,8 @@ export const config = {
     maxMediaTags: 100,
     maxMediaStaffs: 50,
     maxPendingSuggestions: 100,
+    // Issues a 422 carries: enough to fix a request, while one issue per bad array element would
+    // grow the response with the request.
+    maxValidationIssues: 10,
   },
 } as const
