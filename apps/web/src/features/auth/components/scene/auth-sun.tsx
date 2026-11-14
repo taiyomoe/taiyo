@@ -1,8 +1,8 @@
 import type { RefObject } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { Animated } from "@/components/scene/animated"
-import { scene } from "@/components/scene/scene.stylex"
-import { PlasmaSun } from "@/components/scene/sun/plasma-sun"
+import { Animated } from "@taiyomoe/ui/components/scene/animated"
+import { PlasmaSun } from "@taiyomoe/ui/components/scene/plasma-sun"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 
 const styles = stylex.create({
   root: {

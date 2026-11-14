@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { scene } from "@/components/scene/scene.stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { Reveal } from "@/features/landing/components/reveal"
 import { ReviewCard } from "@/features/landing/components/review-card"
 import { Section } from "@/features/landing/components/section"

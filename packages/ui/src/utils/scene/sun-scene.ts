@@ -12,12 +12,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three"
-import {
-  BEAMS_FRAGMENT,
-  PLANE_VERTEX,
-  PLASMA_FRAGMENT,
-  SPHERE_VERTEX,
-} from "@/components/scene/sun/shaders"
+import { BEAMS_FRAGMENT, PLANE_VERTEX, PLASMA_FRAGMENT, SPHERE_VERTEX } from "./shaders"
 
 const FOV = 30
 const CAMERA_Z = 12

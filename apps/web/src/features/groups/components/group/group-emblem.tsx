@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import { Check } from "@taiyomoe/ui/components/icons"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Group } from "@/features/groups/api/groups"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import { toneFor } from "@/features/groups/components/group-avatar"
 import { m } from "@/paraglide/messages"
 

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { LegalSection } from "@/features/legal/components/legal-page"
-import { scene } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   toc: {

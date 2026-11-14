@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
-import { sceneFont } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   section: {

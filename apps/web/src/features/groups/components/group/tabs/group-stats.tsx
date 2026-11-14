@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { Card } from "@taiyomoe/ui/components/ui/card"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { barY, defineChart } from "@tanstack/charts"
 import { Chart } from "@tanstack/charts/react"
@@ -11,7 +12,6 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { Suspense, useDeferredValue, useMemo } from "react"
 import { range } from "remeda"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import {
   ChartFrame,
   chartTheme,

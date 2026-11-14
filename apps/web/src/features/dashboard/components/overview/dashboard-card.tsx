@@ -2,9 +2,9 @@ import type { Sx } from "@taiyomoe/ui/styles/sx"
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { Card } from "@taiyomoe/ui/components/ui/card"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useId } from "react"
-import { sceneFont } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   card: {

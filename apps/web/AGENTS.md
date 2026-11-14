@@ -59,7 +59,7 @@ run in a throwaway scratch directory and its output was merged in here.
   global `@keyframes` the scene animations share, and the handful of descendant
   rules that reach into `@taiyomoe/ui`'s internals (see `[data-auth-fields]`).
   The brand-scene palette — always night, in both themes — lives in
-  `src/components/scene/scene.stylex.ts`, deliberately outside the semantic tokens.
+  `@taiyomoe/ui/styles/scene.stylex`, deliberately outside the semantic tokens.
 - **Devtools:** `@tanstack/react-devtools` + router devtools panel + `@tanstack/devtools-vite`.
 - **Routing:** `src/routes/*` → `src/routeTree.gen.ts` (generated; committed).
 - **Toolchain:** kept the CLI default (no Biome/ESLint). Lint/format are handled at
@@ -302,7 +302,7 @@ non-suspending `useQuery` with its own inline skeleton.
 - **The sun video, its poster and `sun.webp`** come from the landing page's
   shaders, rendered frame by frame in Chromium:
   `pnpm -F @taiyomoe/web render:og-media` (needs ffmpeg and a GPU). Rerun it
-  after changing `src/components/scene/sun/shaders.ts`.
+  after changing `packages/ui/src/utils/scene/shaders.ts`.
 
 ## Legal pages
 

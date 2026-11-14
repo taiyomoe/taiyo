@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { scene } from "@/components/scene/scene.stylex"
 
 const progress = stylex.keyframes({
   from: { transform: "translateX(-100%)" },

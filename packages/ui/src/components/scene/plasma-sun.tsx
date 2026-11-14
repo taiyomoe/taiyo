@@ -1,8 +1,8 @@
-import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
 import { type CSSProperties, type RefObject, useEffect, useRef, useState } from "react"
-import type { SunScene } from "@/components/scene/sun/sun-scene"
-import { scene } from "@/components/scene/scene.stylex"
+import type { Sx } from "../../styles/sx"
+import type { SunScene } from "../../utils/scene/sun-scene"
+import { scene } from "../../styles/scene.stylex"
 
 const styles = stylex.create({
   canvas: {
@@ -55,7 +55,7 @@ export const PlasmaSun = ({
     let disposed = false
     let instance: SunScene | null = null
 
-    void import("@/components/scene/sun/sun-scene")
+    void import("../../utils/scene/sun-scene")
       .then(({ createSunScene }) => {
         const canvas = canvasRef.current
         const anchor = anchorRef.current

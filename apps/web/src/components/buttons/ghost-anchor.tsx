@@ -1,8 +1,8 @@
 import type { ComponentProps } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { cn } from "@taiyomoe/ui/utils/cn"
-import { scene } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
   base: {

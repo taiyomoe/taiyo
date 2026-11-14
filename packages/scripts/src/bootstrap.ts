@@ -15,6 +15,7 @@ import {
 const PORT_KEYS = [
   "WEB_PORT",
   "API_PORT",
+  "MAINTENANCE_PORT",
   "DATABASE_PORT",
   "DRAGONFLY_PORT",
   "HYPERDX_PORT",
@@ -248,6 +249,9 @@ try {
     VITE_API_URL: apiUrl,
     VITE_BETTER_AUTH_URL: apiUrl,
   }))
+  syncAppEnv("maintenance", () => ({
+    PORT: get("MAINTENANCE_PORT"),
+  }))
 
   if (!flags["env-only"]) {
     if (!existsSync(join(repoRoot, "node_modules"))) {
@@ -323,6 +327,7 @@ try {
 
   Web            ${url("WEB_PORT")}
   API docs       ${url("API_PORT")}/docs
+  Maintenance    ${url("MAINTENANCE_PORT")} (\`pnpm -F @taiyomoe/maintenance dev\`)
 ${isHyperdxEnabled(root) ? `  HyperDX        ${url("HYPERDX_PORT")}\n` : ""}  RustFS console ${url("RUSTFS_CONSOLE_PORT")}
 
   Sign in with any dev account below at <username>@gmail.com, password "password123".

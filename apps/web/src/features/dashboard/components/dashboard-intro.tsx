@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import { renderWithName } from "@/components/user-name/with-name"
 import { useClientValue } from "@/hooks/use-client-value"
 import { m } from "@/paraglide/messages"
