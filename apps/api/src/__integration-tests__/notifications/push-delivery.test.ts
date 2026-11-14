@@ -5,6 +5,7 @@ import type { Services } from "../../services"
 import { postComment, postReply } from "../comments/helpers"
 import { signInAs } from "../helpers/auth"
 import { answerPushWith, getSentPushes } from "../helpers/push-sender"
+import { api } from "../helpers/request"
 import { seedChapter, seedGroup } from "../helpers/seed"
 import { test } from "../setup"
 import { setupMedia } from "./helpers"
@@ -14,7 +15,13 @@ const addDevice = async ({ db }: Services, userId: string, name: string) => {
 
   await db
     .insertInto("pushSubscriptions")
-    .values({ userId, endpoint, p256dh: "p256dh-key", auth: "auth-secret" })
+    .values((eb) => ({
+      userId,
+      sessionId: eb.selectFrom("sessions").select("id").where("userId", "=", userId).limit(1),
+      endpoint,
+      p256dh: "p256dh-key",
+      auth: "auth-secret",
+    }))
     .execute()
 
   return endpoint
@@ -59,6 +66,52 @@ describe("sendPendingPushes", () => {
     expect(message?.url).toMatch(/^\/notifications\/open\?id=[\w-]+&to=%2Fmedia%2F/)
     expect(message?.title).toMatch(/replied to your comment$/)
     expect(await send(services)).toMatchObject({ notifications: 0, sent: 0 })
+  })
+
+  test("stops pushing to a device once its session is signed out", async ({ app, services }) => {
+    const { mediaId } = await setupMedia(services)
+    const author = await signInAs(services)
+    const replier = await signInAs(services)
+    const endpoint = "https://push.example/send/lost-phone"
+
+    await api(app, "/users/me/push-subscriptions", {
+      method: "PUT",
+      headers: author.headers,
+      json: { endpoint, keys: { p256dh: "p256dh-key", auth: "auth-secret" } },
+    })
+
+    const root = await postComment(app, author.headers, { type: "MEDIA", id: mediaId })
+
+    await services.db.deleteFrom("sessions").where("userId", "=", author.userId).execute()
+    await postReply(app, replier.headers, root.id, "Did you see the last page?")
+
+    expect(await send(services)).toMatchObject({ sent: 0 })
+    expect(
+      await services.db
+        .selectFrom("pushSubscriptions")
+        .select("endpoint")
+        .where("userId", "=", author.userId)
+        .execute(),
+    ).toEqual([])
+  })
+
+  test("skips a device whose session has expired", async ({ app, services }) => {
+    const { mediaId } = await setupMedia(services)
+    const author = await signInAs(services)
+    const replier = await signInAs(services)
+
+    await addDevice(services, author.userId, "stale-tablet")
+
+    const root = await postComment(app, author.headers, { type: "MEDIA", id: mediaId })
+
+    await services.db
+      .updateTable("sessions")
+      .set({ expiresAt: new Date(Date.now() - 24 * 60 * 60 * 1000) })
+      .where("userId", "=", author.userId)
+      .execute()
+    await postReply(app, replier.headers, root.id, "Same here.")
+
+    expect(await send(services)).toMatchObject({ sent: 0 })
   })
 
   test("follows the per-type settings for new chapters", async ({ services }) => {

@@ -296,7 +296,13 @@ describe("activity pushes", () => {
   const addDevice = async ({ db }: Services, userId: string) => {
     await db
       .insertInto("pushSubscriptions")
-      .values({ userId, endpoint: `https://push.example/send/${userId}`, p256dh: "k", auth: "a" })
+      .values((eb) => ({
+        userId,
+        sessionId: eb.selectFrom("sessions").select("id").where("userId", "=", userId).limit(1),
+        endpoint: `https://push.example/send/${userId}`,
+        p256dh: "k",
+        auth: "a",
+      }))
       .execute()
   }
   const age = async ({ db }: Services, userId: string, minutes: number) => {

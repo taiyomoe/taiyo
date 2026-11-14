@@ -45,15 +45,23 @@ export const upsertPushSubscriptionHandler = new Hono().put(
   validateJson(bodySchema),
   withTransaction,
   async (c) => {
-    const { db, user } = c.var
+    const { db, user, session } = c.var
     const { endpoint, keys } = c.var.json
     const userAgent = c.req.header("user-agent")?.slice(0, 512) ?? null
     const { id } = await db
       .insertInto("pushSubscriptions")
-      .values({ userId: user.id, endpoint, p256dh: keys.p256dh, auth: keys.auth, userAgent })
+      .values({
+        userId: user.id,
+        sessionId: session.id,
+        endpoint,
+        p256dh: keys.p256dh,
+        auth: keys.auth,
+        userAgent,
+      })
       .onConflict((oc) =>
         oc.column("endpoint").doUpdateSet({
           userId: user.id,
+          sessionId: session.id,
           p256dh: keys.p256dh,
           auth: keys.auth,
           userAgent,
