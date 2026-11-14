@@ -14,7 +14,7 @@ const createWebApp = (services: Services) =>
 const authHeaders = (headers: Record<string, string> = {}) => ({
   "content-type": "application/json",
   origin: WEB_ORIGIN,
-  "x-forwarded-for": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
+  "cf-connecting-ip": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
   ...headers,
 })
 

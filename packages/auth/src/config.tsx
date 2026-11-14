@@ -159,6 +159,9 @@ export const createAuth = ({
     advanced: {
       database: { generateId: "uuid" },
       disableOriginCheck: false,
+      // Cloudflare sets cf-connecting-ip to the address it received the request from. The
+      // default, X-Forwarded-For, keeps whatever the client sent in front of that address.
+      ipAddress: { ipAddressHeaders: ["cf-connecting-ip"] },
       // The api sets the session cookie on its own host, yet the web SSR reads it from the
       // requests it receives and forwards it: when they run on sibling subdomains, the
       // cookie must be scoped to their shared parent domain to reach both.

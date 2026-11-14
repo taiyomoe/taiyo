@@ -34,11 +34,8 @@ export const rateLimit = ({
     windowMs,
     limit: (c) => (c.var.actor?.role === "ADMIN" ? Number.POSITIVE_INFINITY : limit),
     standardHeaders: "draft-7",
-    keyGenerator: (c) =>
-      c.var.user?.id ??
-      c.req.header("cf-connecting-ip") ??
-      c.req.header("x-forwarded-for")?.split(",")[0]?.trim() ??
-      "anon",
+    // Cloudflare sets cf-connecting-ip; the client writes X-Forwarded-For.
+    keyGenerator: (c) => c.var.user?.id ?? c.req.header("cf-connecting-ip") ?? "anon",
     // oxlint-disable-next-line typescript/strict-void-return
     handler: (c) => c.fail("RATE_LIMITED"),
   })

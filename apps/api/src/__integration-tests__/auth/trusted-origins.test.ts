@@ -11,7 +11,7 @@ const signIn = (auth: ReturnType<typeof createAuth>, origin: string) =>
         "content-type": "application/json",
         cookie: "theme=dark",
         origin,
-        "x-forwarded-for": `198.51.100.${Math.floor(Math.random() * 250)}`,
+        "cf-connecting-ip": `198.51.100.${Math.floor(Math.random() * 250)}`,
       },
       body: JSON.stringify({ email: "nobody@taiyo.test", password: "wrong-password" }),
     }),

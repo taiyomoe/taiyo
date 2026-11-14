@@ -20,7 +20,7 @@ const auth = async (
     headers: {
       cookie,
       origin: ORIGIN,
-      "x-forwarded-for": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
+      "cf-connecting-ip": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
       ...(json === undefined ? {} : { "content-type": "application/json" }),
     },
     ...(json === undefined ? {} : { body: JSON.stringify(json) }),
