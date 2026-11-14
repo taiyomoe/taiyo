@@ -28,7 +28,10 @@ import { adminPluginRoles } from "./admin-roles"
 import { clientEnv } from "./env/client"
 import { serverEnv } from "./env/server"
 import { afterHook } from "./utils/after-hook"
-import { createBeforeUserCreatedHook } from "./utils/before-user-created-hook"
+import {
+  createBeforeUserCreatedHook,
+  isUnverifiedSocialSignUp,
+} from "./utils/before-user-created-hook"
 
 const ADMIN_ACTIONS = new Map(
   Object.entries({
@@ -325,7 +328,10 @@ export const createAuth = ({
     databaseHooks: {
       user: {
         create: {
-          before: createBeforeUserCreatedHook({ db }),
+          before: async (user, ctx) =>
+            isUnverifiedSocialSignUp(user, ctx?.path)
+              ? false
+              : createBeforeUserCreatedHook({ db })(user),
           after: async ({ id }) => {
             await db.insertInto("userProfiles").values({ userId: id }).execute()
           },
