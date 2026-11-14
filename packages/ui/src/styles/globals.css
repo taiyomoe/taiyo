@@ -2,6 +2,7 @@
 @import "@fontsource-variable/jetbrains-mono";
 @import "./reset.css";
 @import "./structural.css";
+@import "./scene.css";
 
 :root {
   --font-heading: "Inter Variable", system-ui, sans-serif;

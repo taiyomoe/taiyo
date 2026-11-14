@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { LandingFooter } from "@/features/landing/components/landing-footer"
 import { LandingNav } from "@/features/landing/components/landing-nav"
 import { Section } from "@/features/landing/components/section"

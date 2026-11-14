@@ -1,10 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
+import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, font, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { SunLink } from "@/components/buttons/sun-link"
-import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

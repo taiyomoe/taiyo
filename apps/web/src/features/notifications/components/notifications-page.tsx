@@ -24,6 +24,7 @@ import {
 } from "@taiyomoe/ui/components/ui/input-group"
 import { Switch } from "@taiyomoe/ui/components/ui/switch"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link, Navigate } from "@tanstack/react-router"
@@ -32,7 +33,6 @@ import { range } from "remeda"
 import type { Session } from "@/lib/session"
 import { layout } from "@/components/layout/layout.stylex"
 import { PagePagination } from "@/components/pagination/page-pagination"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
 import {
   type Notification,

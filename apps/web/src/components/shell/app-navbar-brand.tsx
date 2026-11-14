@@ -3,10 +3,10 @@ import { Menu } from "@taiyomoe/ui/components/icons"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { useSidebar } from "@taiyomoe/ui/components/ui/sidebar"
+import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { layout } from "@/components/layout/layout.stylex"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

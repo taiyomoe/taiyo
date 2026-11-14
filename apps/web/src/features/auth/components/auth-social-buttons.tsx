@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { text } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { SocialProvider } from "@/lib/auth"
-import { scene } from "@/components/scene/scene.stylex"
 import { DiscordButton } from "@/features/auth/components/discord-button"
 import { GoogleButton } from "@/features/auth/components/google-button"
 import { LastUsed } from "@/features/auth/components/last-used"

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "maintenance_meta_title": "Taiyō — Maintenance",
+  "maintenance_title": "Un nouveau soleil se lève.",
+  "maintenance_subtitle": "Taiyō est hors ligne pendant quelques heures, le temps de migrer et de lancer la v2. Le compteur ci-dessous indique quand revenir.",
+  "maintenance_subtitle_no_countdown": "Taiyō est hors ligne pendant quelques heures, le temps de migrer et de lancer la v2. Revenez bientôt.",
+  "maintenance_countdown_label": "Temps restant avant le retour de Taiyō",
+  "maintenance_hours": "Heures",
+  "maintenance_minutes": "Minutes",
+  "maintenance_seconds": "Secondes",
+  "maintenance_almost_back": "D’une minute à l’autre… actualisez la page dans un instant.",
+  "maintenance_discord": "Actus sur Discord"
+}

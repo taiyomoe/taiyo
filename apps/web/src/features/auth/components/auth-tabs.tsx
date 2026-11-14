@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
+import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-import { scene } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
 const TABS = [
