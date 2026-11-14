@@ -46,7 +46,10 @@ describe("POST /chapters/:id/pages/upload-session", () => {
     expect(task?.status).toBe("PENDING")
   })
 
-  test("binds the declared content type into the upload URL", async ({ app, services }) => {
+  test("binds the declared content type and size into the upload URL", async ({
+    app,
+    services,
+  }) => {
     const { userId, headers } = await signInAs(services, { role: "ADMIN" })
     const chapter = await services.db
       .insertInto("chapters")
@@ -56,7 +59,7 @@ describe("POST /chapters/:id/pages/upload-session", () => {
     const res = await api<{ pages: Array<{ uploadUrl: string }> }>(
       app,
       `/chapters/${chapter.id}/pages/upload-session`,
-      { method: "POST", headers, json: { pages: [{ contentType: "image/png", size: 8 }] } },
+      { method: "POST", headers, json: { pages: [{ contentType: "image/png", size: 9 }] } },
     )
 
     if (!res.body.success) {
@@ -64,14 +67,11 @@ describe("POST /chapters/:id/pages/upload-session", () => {
     }
 
     const uploadUrl = res.body.data.pages[0]?.uploadUrl ?? ""
-    const put = (contentType: string) =>
-      fetch(uploadUrl, {
-        method: "PUT",
-        body: "<b>hi</b>",
-        headers: { "content-type": contentType },
-      })
+    const put = (contentType: string, body = "<b>hi</b>") =>
+      fetch(uploadUrl, { method: "PUT", body, headers: { "content-type": contentType } })
 
     expect((await put("text/html")).status).toBe(403)
+    expect((await put("image/png", "<b>hi!</b>")).status).toBe(403)
     expect((await put("image/png")).status).toBe(200)
   })
 
