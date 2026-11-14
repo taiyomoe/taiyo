@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Embers } from "@taiyomoe/ui/components/scene/embers"
 import { LandingSun } from "@taiyomoe/ui/components/scene/landing-sun"
 import { sceneFont, scene } from "@taiyomoe/ui/styles/scene.stylex"
-import { font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useRef } from "react"
 import { env } from "@/env/client"
 import { Countdown } from "@/features/maintenance/components/countdown"
@@ -10,6 +10,7 @@ import { MaintenanceHeader } from "@/features/maintenance/components/maintenance
 import { Starfield } from "@/features/maintenance/components/starfield"
 import { m } from "@/paraglide/messages"
 
+const mobileSunCap = "clamp(9rem, 30dvh, 13rem)"
 const styles = stylex.create({
   page: {
     overflow: "hidden",
@@ -33,8 +34,14 @@ const styles = stylex.create({
     position: "relative",
     textAlign: "center",
     zIndex: 1,
-    paddingBottom: "clamp(10rem, 28vh, 20rem)",
+    paddingBottom: {
+      default: `calc(${mobileSunCap} + 1.5rem)`,
+      [breakpoints.sm]: "clamp(10rem, 28vh, 20rem)",
+    },
     paddingTop: "clamp(1.5rem, 5vh, 4rem)",
+  },
+  sunOrbit: {
+    top: { default: `calc(100% - ${mobileSunCap})`, [breakpoints.sm]: "calc(116% - 470px)" },
   },
   title: {
     margin: 0,
@@ -57,7 +64,7 @@ export const MaintenancePage = () => {
   return (
     <div ref={pageRef} data-maintenance sx={styles.page}>
       <Starfield />
-      <LandingSun surfaceRef={pageRef} />
+      <LandingSun surfaceRef={pageRef} orbit={styles.sunOrbit} />
       <Embers count={30} />
       <MaintenanceHeader />
       <main sx={styles.main}>

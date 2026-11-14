@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { type RefObject, useEffect, useState } from "react"
+import type { Sx } from "../../styles/sx"
 import { scene } from "../../styles/scene.stylex"
 import { breakpoints } from "../../styles/tokens.stylex"
 import { Animated } from "./animated"
@@ -32,7 +33,13 @@ const styles = stylex.create({
   },
 })
 
-export const LandingSun = ({ surfaceRef }: { surfaceRef: RefObject<HTMLElement | null> }) => {
+export const LandingSun = ({
+  surfaceRef,
+  orbit,
+}: {
+  surfaceRef: RefObject<HTMLElement | null>
+  orbit?: Sx
+}) => {
   const [parallax, setParallax] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
@@ -64,7 +71,7 @@ export const LandingSun = ({ surfaceRef }: { surfaceRef: RefObject<HTMLElement |
       <Animated sx={styles.aurora} animation="scene-aurora 16s ease-in-out infinite" />
       <PlasmaSun
         surfaceRef={surfaceRef}
-        orbit={styles.orbit}
+        orbit={[styles.orbit, orbit]}
         orbitStyle={{
           transform: `translate(calc(-50% + ${parallax.x * -0.9}px), ${parallax.y * -0.6}px)`,
         }}
