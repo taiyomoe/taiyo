@@ -8,6 +8,7 @@ import { putImage } from "../image-store"
 import { audited } from "../middlewares/audited-middleware"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
+import { transcodeSlot } from "../middlewares/transcode-slot-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -58,6 +59,7 @@ export const updateMyAvatarHandler = new Hono().put(
   rateLimit({ prefix: "update-avatar", windowMs: 60_000, limit: 10 }),
   validateFormData(bodySchema),
   checkImages(),
+  transcodeSlot,
   withTransaction,
   async (c) => {
     const { auth, db, user } = c.var

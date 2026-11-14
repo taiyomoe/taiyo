@@ -9,6 +9,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
+import { transcodeSlot } from "../middlewares/transcode-slot-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -72,6 +73,7 @@ export const createBannersHandler = new Hono().post(
   validateFormData(createBannersSchema),
   checkImages(),
   checkMedia(),
+  transcodeSlot,
   withTransaction,
   async (c) => {
     const { db, media, user } = c.var
