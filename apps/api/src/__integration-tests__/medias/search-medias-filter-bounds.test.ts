@@ -7,7 +7,7 @@ import { test } from "../setup"
 const search = (app: Parameters<typeof api>[0], filter: unknown) =>
   api(app, "/medias/search", {
     method: "POST",
-    headers: { "x-forwarded-for": `203.0.113.${randomUUID()}` },
+    headers: { "cf-connecting-ip": `203.0.113.${randomUUID()}` },
     json: { filter },
   })
 

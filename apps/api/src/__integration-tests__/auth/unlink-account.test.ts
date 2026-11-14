@@ -11,7 +11,7 @@ const auth = async (app: Hono, path: string, cookie: string, json: unknown) => {
       cookie,
       origin: ORIGIN,
       "content-type": "application/json",
-      "x-forwarded-for": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
+      "cf-connecting-ip": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
     },
     body: JSON.stringify(json),
   })

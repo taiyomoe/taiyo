@@ -12,7 +12,7 @@ describe("POST /api/auth/update-user", () => {
         ...headers,
         origin: "http://localhost",
         "content-type": "application/json",
-        "x-forwarded-for": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
+        "cf-connecting-ip": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
       },
       body: JSON.stringify({ displayUsername: "test admin", image: "https://example.com/a.png" }),
     })

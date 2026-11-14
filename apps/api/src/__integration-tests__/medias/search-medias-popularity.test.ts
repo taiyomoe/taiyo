@@ -58,7 +58,7 @@ const waitForCount = async (
 const search = async (app: Hono, json: Record<string, unknown>) => {
   const res = await api<MediaHit[]>(app, "/medias/search", {
     method: "POST",
-    headers: { "x-forwarded-for": `198.51.100.${randomUUID()}` },
+    headers: { "cf-connecting-ip": `198.51.100.${randomUUID()}` },
     json: { perPage: 100, ...json },
   })
 
