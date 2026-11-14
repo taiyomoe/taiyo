@@ -8,7 +8,10 @@ import { Hono } from "hono"
 import { openAPIRouteHandler } from "hono-openapi"
 import { cors } from "hono/cors"
 import { createMiddleware } from "hono/factory"
-import { secureHeaders } from "hono/secure-headers"
+import { NONCE, secureHeaders } from "hono/secure-headers"
+import { readFile } from "node:fs/promises"
+import { createRequire } from "node:module"
+import path from "node:path"
 import type {
   AppContext,
   AppContextVariables,
@@ -53,6 +56,14 @@ declare module "hono" {
 
 const hyperdxEndpoint = env.HYPERDX_ENDPOINT ?? ""
 const hyperdxIngestionKey = env.HYPERDX_INGESTION_KEY ?? ""
+// The reference runs on the session origin: serve its bundle from the locked dependency rather
+// than an unversioned CDN URL, so every release goes through the lockfile and the release-age delay.
+const scalarBundle = readFile(
+  path.join(
+    path.dirname(createRequire(import.meta.url).resolve("@scalar/api-reference")),
+    "browser/standalone.js",
+  ),
+)
 
 export const createApp = (services: Services) => {
   const app = new Hono()
@@ -318,11 +329,39 @@ export const createApp = (services: Services) => {
         },
       }),
     )
+    .get("/docs/scalar.js", async (c) => {
+      c.header("Content-Type", "text/javascript; charset=utf-8")
+      c.header("Cache-Control", "public, max-age=86400")
+
+      return c.body(await scalarBundle)
+    })
     .get(
       "/docs",
-      Scalar({
-        theme: "deepSpace",
-        url: "/openapi.json",
+      secureHeaders({
+        contentSecurityPolicy: {
+          defaultSrc: ["'none'"],
+          scriptSrc: [NONCE],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          connectSrc: ["'self'"],
+          imgSrc: ["'self'", "data:"],
+          fontSrc: ["'self'", "data:"],
+          workerSrc: ["'self'", "blob:"],
+          baseUri: ["'none'"],
+          formAction: ["'none'"],
+          frameAncestors: ["'none'"],
+        },
+      }),
+      Scalar((c) => {
+        const nonce = c.get("secureHeadersNonce")
+
+        return {
+          theme: "deepSpace",
+          url: "/openapi.json",
+          cdn: "/docs/scalar.js",
+          telemetry: false,
+          withDefaultFonts: false,
+          ...(nonce === undefined ? {} : { nonce }),
+        }
       }),
     )
 

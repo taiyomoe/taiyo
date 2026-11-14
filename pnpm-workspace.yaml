@@ -10,6 +10,7 @@ allowBuilds:
   msw: false
   protobufjs: false
   sharp: true
+  vue-demi: false
 
 minimumReleaseAge: 10080 # 7 days
 
