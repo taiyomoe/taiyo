@@ -3,22 +3,12 @@ import { scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
 
 const styles = stylex.create({
-  tile: {
-    borderColor: `color-mix(in srgb, ${scene.goldPale} 12%, transparent)`,
-    borderRadius: "25px",
-    borderStyle: "solid",
-    borderWidth: "1px",
+  unit: {
     gap: "0.5rem",
-    paddingInline: "1rem",
     alignItems: "center",
-    backdropFilter: "blur(8px)",
-    backgroundColor: `color-mix(in srgb, ${scene.nightRaised} 72%, transparent)`,
-    boxShadow: "inset 0 1px rgba(255, 255, 255, 0.06), 0 16px 40px -16px rgba(0, 0, 0, 0.6)",
     display: "flex",
     flexDirection: "column",
-    minWidth: "clamp(6rem, 12vw, 9.25rem)",
-    paddingBottom: "1rem",
-    paddingTop: "1.25rem",
+    minWidth: "clamp(5rem, 9vw, 8rem)",
   },
   value: {
     color: scene.goldLight,
@@ -35,8 +25,8 @@ const styles = stylex.create({
   },
 })
 
-export const CountdownTile = ({ value, label }: { value: number; label: string }) => (
-  <div sx={styles.tile}>
+export const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
+  <div sx={styles.unit}>
     <span sx={styles.value}>{String(value).padStart(2, "0")}</span>
     <span sx={styles.label}>{label}</span>
   </div>

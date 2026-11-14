@@ -47,14 +47,6 @@ const styles = stylex.create({
     textWrap: "balance",
     maxWidth: "56.25rem",
   },
-  subtitle: {
-    margin: 0,
-    color: `color-mix(in srgb, ${scene.paper} 70%, transparent)`,
-    fontSize: "clamp(0.9375rem, 1.3vw, 1.0625rem)",
-    lineHeight: 1.6,
-    textWrap: "pretty",
-    maxWidth: "35rem",
-  },
 })
 const endsAt =
   env.VITE_MAINTENANCE_ENDS_AT === undefined ? null : Date.parse(env.VITE_MAINTENANCE_ENDS_AT)
@@ -70,9 +62,6 @@ export const MaintenancePage = () => {
       <MaintenanceHeader />
       <main sx={styles.main}>
         <h1 sx={styles.title}>{m.maintenance_title()}</h1>
-        <p sx={styles.subtitle}>
-          {endsAt === null ? m.maintenance_subtitle_no_countdown() : m.maintenance_subtitle()}
-        </p>
         {endsAt === null ? null : <Countdown endsAt={endsAt} />}
       </main>
     </div>

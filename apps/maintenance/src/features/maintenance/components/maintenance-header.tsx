@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
+import { DiscordLogo } from "@taiyomoe/ui/components/logos/discord-logo"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
 import { sceneFont, scene } from "@taiyomoe/ui/styles/scene.stylex"
 import { font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { env } from "@/env/client"
-import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   header: {
@@ -30,6 +30,7 @@ const styles = stylex.create({
     borderRadius: radius.full,
     borderStyle: "solid",
     borderWidth: "1px",
+    gap: "0.5rem",
     paddingInline: "1.125rem",
     alignItems: "center",
     backgroundColor: {
@@ -49,6 +50,11 @@ const styles = stylex.create({
     transitionProperty: "background-color, color",
     minHeight: "2.75rem",
   },
+  discordLogo: {
+    flexShrink: 0,
+    height: "auto",
+    width: "1.125rem",
+  },
 })
 
 export const MaintenanceHeader = () => (
@@ -56,7 +62,8 @@ export const MaintenanceHeader = () => (
     <TaiyoLogoLockup sx={styles.lockup} />
     {env.VITE_DISCORD_INVITE_URL === undefined ? null : (
       <a href={env.VITE_DISCORD_INVITE_URL} target="_blank" rel="noreferrer" sx={styles.discord}>
-        {m.maintenance_discord()}
+        <DiscordLogo aria-hidden {...stylex.props(styles.discordLogo)} />
+        Discord
       </a>
     )}
   </header>
