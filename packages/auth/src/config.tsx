@@ -232,6 +232,29 @@ export const createAuth = ({
           return
         }
 
+        // A linked provider is a new way into the account that outlives a password reset: like
+        // unlinking, it needs a recent sign-in rather than any session.
+        if (ctx.path === "/link-social") {
+          const session = await getAuthoritativeSessionFromCtx(ctx)
+          const { freshAge } = ctx.context.sessionConfig
+
+          if (session === null) {
+            throw new APIError("UNAUTHORIZED")
+          }
+
+          if (
+            freshAge !== 0 &&
+            Date.now() - new Date(session.session.createdAt).getTime() >= freshAge * 1000
+          ) {
+            throw new APIError("FORBIDDEN", {
+              code: "SESSION_NOT_FRESH",
+              message: "Session is not fresh",
+            })
+          }
+
+          return
+        }
+
         if (ctx.path === "/unlink-account") {
           const body = unlinkAccountBodySchema.safeParse(ctx.body)
           const account = body.success
