@@ -15,6 +15,7 @@ import {
 } from "../comment-images"
 import { audited } from "../middlewares/audited-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
+import { transcodeSlot } from "../middlewares/transcode-slot-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -69,6 +70,7 @@ export const uploadCommentImageHandler = new Hono().post(
     onError: (c) => c.fail("IMAGE_TOO_LARGE"),
   }),
   validateFormData(bodySchema),
+  transcodeSlot,
   withTransaction,
   async (c) => {
     const { db, s3, s3Bucket, user } = c.var

@@ -8,7 +8,6 @@ import {
 } from "@taiyomoe/s3"
 import sharp, { type Sharp } from "sharp"
 import type { ImageCrop } from "./utils/image-crop"
-import { withTranscodeSlot } from "./utils/transcode-slot"
 
 export type ImageExtension = "gif" | "jpg"
 
@@ -132,7 +131,7 @@ export const putImage = async (
     throw new ImageTooComplexError()
   }
 
-  const { body, contentType, extension } = await withTranscodeSlot(async () =>
+  const { body, contentType, extension } =
     metadata.format === "gif"
       ? {
           body: await (
@@ -153,8 +152,7 @@ export const putImage = async (
             .toBuffer(),
           contentType: "image/jpeg",
           extension: "jpg" as const,
-        },
-  )
+        }
   let key: string
 
   if (target.kind === "staff") {

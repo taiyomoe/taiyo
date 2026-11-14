@@ -4,7 +4,6 @@ import { getPublicImageUrl } from "@taiyomoe/s3"
 import { filetypeinfo } from "magic-bytes.js"
 import { createHash } from "node:crypto"
 import sharp, { type Metadata } from "sharp"
-import { withTranscodeSlot } from "./utils/transcode-slot"
 
 const ACCEPTED_FORMATS = {
   "image/jpeg": "jpeg",
@@ -54,88 +53,87 @@ const differenceHash = async (input: Buffer) => {
   return BigInt.asIntN(64, hash).toString()
 }
 
-export const processCommentImage = (input: Buffer) =>
-  withTranscodeSlot(async () => {
-    const detected = filetypeinfo(Array.from(input.subarray(0, 100)))
-      .map((type) => type.mime)
-      .find(
-        (mime): mime is keyof typeof ACCEPTED_FORMATS =>
-          mime !== undefined && mime in ACCEPTED_FORMATS,
+export const processCommentImage = async (input: Buffer) => {
+  const detected = filetypeinfo(Array.from(input.subarray(0, 100)))
+    .map((type) => type.mime)
+    .find(
+      (mime): mime is keyof typeof ACCEPTED_FORMATS =>
+        mime !== undefined && mime in ACCEPTED_FORMATS,
+    )
+
+  if (detected === undefined) {
+    throw new CommentImageError("INVALID_IMAGE")
+  }
+
+  const limits = {
+    limitInputPixels: config.comments.maxImageDecodedPixels,
+    failOn: "error",
+  } as const
+  let metadata: Metadata
+
+  try {
+    metadata = await sharp(input, { ...limits, animated: true }).metadata()
+  } catch {
+    throw new CommentImageError("INVALID_IMAGE")
+  }
+
+  if (metadata.format !== ACCEPTED_FORMATS[detected]) {
+    throw new CommentImageError("INVALID_IMAGE")
+  }
+
+  const frames = metadata.pages ?? 1
+  const frameHeight = metadata.pageHeight ?? metadata.height
+
+  if (
+    metadata.width > config.comments.maxImageDimension ||
+    frameHeight > config.comments.maxImageDimension ||
+    frames > config.comments.maxImageFrames ||
+    metadata.width * frameHeight * frames > config.comments.maxImageDecodedPixels
+  ) {
+    throw new CommentImageError("COMMENT_IMAGE_TOO_COMPLEX")
+  }
+
+  const animated = frames > 1
+  const maxDimension = animated
+    ? config.comments.maxAnimatedOutputDimension
+    : config.comments.maxStillOutputDimension
+
+  try {
+    const pipeline = animated
+      ? sharp(input, { ...limits, animated: true })
+      : sharp(input, limits).autoOrient()
+    const { data, info } = await pipeline
+      .resize({
+        width: maxDimension,
+        height: maxDimension,
+        fit: "inside",
+        withoutEnlargement: true,
+      })
+      .webp(
+        animated
+          ? {
+              quality: config.comments.animatedImageQuality,
+              effort: 3,
+              ...(metadata.loop === undefined ? {} : { loop: metadata.loop }),
+              ...(metadata.delay === undefined ? {} : { delay: metadata.delay }),
+            }
+          : { quality: config.comments.imageQuality, effort: 4 },
       )
+      .toBuffer({ resolveWithObject: true })
 
-    if (detected === undefined) {
-      throw new CommentImageError("INVALID_IMAGE")
+    return {
+      body: data,
+      width: info.width,
+      height: info.pageHeight ?? info.height,
+      animated,
+      byteSize: data.byteLength,
+      sha256: createHash("sha256").update(input).digest("hex"),
+      dhash: await differenceHash(input),
     }
-
-    const limits = {
-      limitInputPixels: config.comments.maxImageDecodedPixels,
-      failOn: "error",
-    } as const
-    let metadata: Metadata
-
-    try {
-      metadata = await sharp(input, { ...limits, animated: true }).metadata()
-    } catch {
-      throw new CommentImageError("INVALID_IMAGE")
-    }
-
-    if (metadata.format !== ACCEPTED_FORMATS[detected]) {
-      throw new CommentImageError("INVALID_IMAGE")
-    }
-
-    const frames = metadata.pages ?? 1
-    const frameHeight = metadata.pageHeight ?? metadata.height
-
-    if (
-      metadata.width > config.comments.maxImageDimension ||
-      frameHeight > config.comments.maxImageDimension ||
-      frames > config.comments.maxImageFrames ||
-      metadata.width * frameHeight * frames > config.comments.maxImageDecodedPixels
-    ) {
-      throw new CommentImageError("COMMENT_IMAGE_TOO_COMPLEX")
-    }
-
-    const animated = frames > 1
-    const maxDimension = animated
-      ? config.comments.maxAnimatedOutputDimension
-      : config.comments.maxStillOutputDimension
-
-    try {
-      const pipeline = animated
-        ? sharp(input, { ...limits, animated: true })
-        : sharp(input, limits).autoOrient()
-      const { data, info } = await pipeline
-        .resize({
-          width: maxDimension,
-          height: maxDimension,
-          fit: "inside",
-          withoutEnlargement: true,
-        })
-        .webp(
-          animated
-            ? {
-                quality: config.comments.animatedImageQuality,
-                effort: 3,
-                ...(metadata.loop === undefined ? {} : { loop: metadata.loop }),
-                ...(metadata.delay === undefined ? {} : { delay: metadata.delay }),
-              }
-            : { quality: config.comments.imageQuality, effort: 4 },
-        )
-        .toBuffer({ resolveWithObject: true })
-
-      return {
-        body: data,
-        width: info.width,
-        height: info.pageHeight ?? info.height,
-        animated,
-        byteSize: data.byteLength,
-        sha256: createHash("sha256").update(input).digest("hex"),
-        dhash: await differenceHash(input),
-      }
-    } catch {
-      throw new CommentImageError("INVALID_IMAGE")
-    }
-  })
+  } catch {
+    throw new CommentImageError("INVALID_IMAGE")
+  }
+}
 
 export const isCommentImageBlocked = async (
   db: Kysely<DB>,
