@@ -1,0 +1,52 @@
+import * as stylex from "@stylexjs/stylex"
+import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
+import { Embers } from "@taiyomoe/ui/components/scene/embers"
+import { scene, sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
+import { Link } from "@tanstack/react-router"
+import { useRef } from "react"
+import { AuthCitations } from "@/features/auth/components/scene/auth-citations"
+import { AuthSun } from "@/features/auth/components/scene/auth-sun"
+
+const styles = stylex.create({
+  root: {
+    overflow: "hidden",
+    paddingBlock: "2.75rem",
+    paddingInline: "3.5rem",
+    backgroundColor: scene.night,
+    display: { [breakpoints.lg]: "flex", default: "none" },
+    flexDirection: "column",
+    position: "relative",
+    touchAction: "pan-y pinch-zoom",
+  },
+  logo: {
+    opacity: { default: 1, ":hover": 0.8 },
+    position: "relative",
+    transitionDuration: "150ms",
+    transitionProperty: "opacity",
+    zIndex: 3,
+    width: "fit-content",
+  },
+  lockup: {
+    gap: "0.75rem",
+    fontFamily: sceneFont.display,
+    fontSize: "26px",
+    fontWeight: 700,
+    letterSpacing: "-0.02em",
+  },
+})
+
+export const AuthScene = () => {
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  return (
+    <div ref={rootRef} sx={styles.root}>
+      <AuthSun surfaceRef={rootRef} />
+      <Embers />
+      <Link to="/" {...stylex.props(styles.logo)}>
+        <TaiyoLogoLockup sx={styles.lockup} />
+      </Link>
+      <AuthCitations />
+    </div>
+  )
+}

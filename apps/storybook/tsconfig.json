@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@/storybook/*": ["./.storybook/*"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["*.ts", "src", ".storybook/*"]
+}

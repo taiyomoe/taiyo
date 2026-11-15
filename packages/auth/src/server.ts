@@ -1,16 +1,7 @@
-import NextAuth from "next-auth"
-import { cache } from "react"
+import type { Auth, Session, User } from "./config"
 
-import { authConfig } from "./config"
+export { captchaEndpoints, createAuth, rateLimitRules } from "./config"
 
-export type { Session } from "next-auth"
+export * from "./utils/before-user-created-hook"
 
-const { handlers, auth: defaultAuth, signIn, signOut } = NextAuth(authConfig)
-
-/**
- * This is the main way to get session data for your RSCs.
- * This will de-duplicate all calls to next-auth's default `auth()` function and only call it once per request
- */
-const auth = cache(defaultAuth)
-
-export { handlers, auth, signIn, signOut }
+export type { Auth, Session, User }

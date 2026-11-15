@@ -1,0 +1,339 @@
+import type * as React from "react"
+import * as stylex from "@stylexjs/stylex"
+import { DayPicker, type DayPickerProps } from "react-day-picker"
+import { calendarDayMarker } from "../../styles/markers.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
+import { ChevronLeft, ChevronRight, ChevronsUpDown } from "../icons"
+
+const styles = stylex.create({
+  root: {
+    "--cell-size": {
+      default: "2.5rem",
+      [breakpoints.sm]: "2.25rem",
+    },
+    width: "fit-content",
+  },
+  rootFull: {
+    width: "100%",
+  },
+  navButton: {
+    borderRadius: radius.lg,
+    alignItems: "center",
+    backgroundColor: {
+      default: null,
+      ":hover": colors.accent,
+    },
+    color: colors.foreground,
+    display: "flex",
+    fontSize: {
+      default: "1rem",
+      [breakpoints.sm]: "0.875rem",
+    },
+    justifyContent: "center",
+    opacity: {
+      default: null,
+      ":disabled": 0.64,
+    },
+    pointerEvents: {
+      default: null,
+      ":disabled": "none",
+    },
+    position: "relative",
+    height: "var(--cell-size)",
+    width: "var(--cell-size)",
+  },
+  captionLabel: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+    fontSize: {
+      default: "1rem",
+      [breakpoints.sm]: "0.875rem",
+    },
+    fontWeight: 500,
+    height: "100%",
+  },
+  day: {
+    borderRadius: radius.full,
+    paddingBlock: "1px",
+    fontSize: "0.875rem",
+    height: "var(--cell-size)",
+    width: "var(--cell-size)",
+  },
+  dayButton: {
+    borderRadius: "inherit",
+    alignItems: "center",
+    backgroundColor: {
+      default: null,
+      [stylex.when.ancestor("[data-selected]", calendarDayMarker)]: colors.primary,
+      ":hover": colors.accent,
+    },
+    color: {
+      default: colors.foreground,
+      [stylex.when.ancestor("[data-disabled]", calendarDayMarker)]:
+        `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
+      [stylex.when.ancestor("[data-outside]", calendarDayMarker)]:
+        `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
+      [stylex.when.ancestor("[data-selected]", calendarDayMarker)]: colors.primaryForeground,
+    },
+    display: "flex",
+    fontSize: {
+      default: "1rem",
+      [breakpoints.sm]: "0.875rem",
+    },
+    justifyContent: "center",
+    outlineColor: `color-mix(in srgb, ${colors.ring} 50%, transparent)`,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 3,
+    pointerEvents: {
+      default: null,
+      [stylex.when.ancestor("[data-disabled]", calendarDayMarker)]: "none",
+    },
+    position: "relative",
+    textDecorationLine: {
+      default: null,
+      [stylex.when.ancestor("[data-disabled]", calendarDayMarker)]: "line-through",
+    },
+    transitionProperty: "color, background-color, border-radius, box-shadow",
+    zIndex: {
+      default: null,
+      ":focus-visible": 1,
+    },
+    height: "var(--cell-size)",
+    width: "var(--cell-size)",
+  },
+  rangeStart: {
+    borderEndEndRadius: 0,
+    borderStartEndRadius: 0,
+  },
+  rangeMiddle: {
+    borderRadius: 0,
+    backgroundColor: colors.accent,
+    color: colors.foreground,
+  },
+  rangeEnd: {
+    borderEndStartRadius: 0,
+    borderStartStartRadius: 0,
+  },
+  dropdown: {
+    inset: 0,
+    backgroundColor: colors.popover,
+    opacity: 0,
+    position: "absolute",
+  },
+  dropdownRoot: {
+    borderColor: {
+      default: colors.input,
+      ":focus-within": colors.ring,
+    },
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    paddingInline: "calc(0.75rem - 1px)",
+    boxShadow: shadows.chip,
+    outlineColor: `color-mix(in srgb, ${colors.ring} 50%, transparent)`,
+    outlineStyle: {
+      default: "none",
+      ":focus-within": "solid",
+    },
+    outlineWidth: 3,
+    position: "relative",
+    height: {
+      default: "2.25rem",
+      [breakpoints.sm]: "2rem",
+    },
+  },
+  dropdowns: {
+    gap: "0.375rem",
+    alignItems: "center",
+    display: "flex",
+    fontSize: {
+      default: "1rem",
+      [breakpoints.sm]: "0.875rem",
+    },
+    justifyContent: "center",
+    height: "var(--cell-size)",
+    width: "100%",
+  },
+  hidden: {
+    visibility: "hidden",
+  },
+  month: {
+    width: "100%",
+  },
+  monthCaption: {
+    marginInline: "var(--cell-size)",
+    paddingInline: "0.25rem",
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center",
+    position: "relative",
+    zIndex: 2,
+    height: "var(--cell-size)",
+    marginBottom: "0.25rem",
+  },
+  months: {
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: {
+      default: "column",
+      [breakpoints.sm]: "row",
+    },
+    position: "relative",
+  },
+  nav: {
+    display: "flex",
+    justifyContent: "space-between",
+    position: "absolute",
+    zIndex: 1,
+    top: 0,
+    width: "100%",
+  },
+  outside: {
+    backgroundColor: {
+      "[data-selected]": `color-mix(in srgb, ${colors.accent} 50%, transparent)`,
+      default: null,
+    },
+    color: colors.mutedForeground,
+  },
+  weekday: {
+    padding: 0,
+    color: `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
+    fontSize: "0.75rem",
+    fontWeight: 500,
+    height: "var(--cell-size)",
+    width: "var(--cell-size)",
+  },
+  gridFull: {
+    tableLayout: "fixed",
+    width: "100%",
+  },
+  cellFull: {
+    width: "auto",
+  },
+  dayButtonFull: {
+    width: "100%",
+  },
+  chevron: {
+    flexShrink: 0,
+    opacity: 0.8,
+    pointerEvents: "none",
+    height: {
+      default: "1.125rem",
+      [breakpoints.sm]: "1rem",
+    },
+    width: {
+      default: "1.125rem",
+      [breakpoints.sm]: "1rem",
+    },
+  },
+})
+
+function mergeClassNames<K extends string>(
+  base: Record<K, string>,
+  overrides: NoInfer<Partial<Record<K, string>>> | undefined,
+): Record<K, string> {
+  const merged = { ...base }
+
+  for (const key in base) {
+    if (overrides?.[key] !== undefined && overrides[key] !== "") {
+      merged[key] = cn(base[key], overrides[key])
+    }
+  }
+
+  return merged
+}
+
+function withDefaultMode(props: DayPickerProps): DayPickerProps {
+  if (props.mode === undefined) {
+    return { ...props, mode: "single" }
+  }
+
+  return props
+}
+
+function CalendarChevron({
+  className,
+  orientation,
+  ...rest
+}: {
+  className?: string
+  orientation?: "left" | "right" | "up" | "down"
+}): React.ReactElement {
+  const chevronProps = stylex.props(styles.chevron)
+  const merged = cn(chevronProps.className, className)
+
+  if (orientation === "left") {
+    return (
+      <ChevronLeft className={merged} style={chevronProps.style} {...rest} aria-hidden="true" />
+    )
+  }
+
+  if (orientation === "right") {
+    return (
+      <ChevronRight className={merged} style={chevronProps.style} {...rest} aria-hidden="true" />
+    )
+  }
+
+  return (
+    <ChevronsUpDown className={merged} style={chevronProps.style} {...rest} aria-hidden="true" />
+  )
+}
+
+const calendarFormatters: NonNullable<DayPickerProps["formatters"]> = {
+  formatMonthDropdown: (date: Date) => date.toLocaleString("default", { month: "short" }),
+}
+
+export function Calendar({
+  fullWidth = false,
+  ...props
+}: DayPickerProps & { fullWidth?: boolean }): React.ReactElement {
+  const { className, classNames, showOutsideDays = true, components: userComponents } = props
+  const rootProps = stylex.props(styles.root, fullWidth && styles.rootFull)
+  const navButtonClassName = stylex.props(styles.navButton).className ?? ""
+  const defaultClassNames = {
+    button_next: navButtonClassName,
+    button_previous: navButtonClassName,
+    caption_label: stylex.props(styles.captionLabel).className ?? "",
+    day: stylex.props(styles.day, calendarDayMarker, fullWidth && styles.cellFull).className ?? "",
+    day_button: stylex.props(styles.dayButton, fullWidth && styles.dayButtonFull).className ?? "",
+    dropdown: stylex.props(styles.dropdown).className ?? "",
+    dropdown_root: stylex.props(styles.dropdownRoot).className ?? "",
+    dropdowns: stylex.props(styles.dropdowns).className ?? "",
+    hidden: stylex.props(styles.hidden).className ?? "",
+    month: stylex.props(styles.month).className ?? "",
+    month_caption: stylex.props(styles.monthCaption).className ?? "",
+    month_grid: stylex.props(fullWidth && styles.gridFull).className ?? "",
+    months: stylex.props(styles.months).className ?? "",
+    nav: stylex.props(styles.nav).className ?? "",
+    outside: stylex.props(styles.outside).className ?? "",
+    range_end: cn("range-end", stylex.props(styles.rangeEnd).className),
+    range_middle: cn("range-middle", stylex.props(styles.rangeMiddle).className),
+    range_start: cn("range-start", stylex.props(styles.rangeStart).className),
+    today: "calendar-today",
+    week_number: stylex.props(styles.weekday).className ?? "",
+    weekday: stylex.props(styles.weekday, fullWidth && styles.cellFull).className ?? "",
+  }
+  const mergedClassNames = mergeClassNames(defaultClassNames, classNames)
+  const mergedComponents = {
+    Chevron: CalendarChevron,
+    ...userComponents,
+  }
+
+  return (
+    <DayPicker
+      data-slot="calendar"
+      formatters={calendarFormatters}
+      style={rootProps.style ?? {}}
+      {...withDefaultMode(props)}
+      className={cn(rootProps.className, className)}
+      classNames={mergedClassNames}
+      components={mergedComponents}
+      showOutsideDays={showOutsideDays}
+    />
+  )
+}

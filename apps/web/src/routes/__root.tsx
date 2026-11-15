@@ -1,0 +1,170 @@
+import type { QueryClient } from "@tanstack/react-query"
+import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url"
+import ptSerifLatinBold from "@fontsource/pt-serif/files/pt-serif-latin-700-normal.woff2?url"
+import ptSerifLatinExtBold from "@fontsource/pt-serif/files/pt-serif-latin-ext-700-normal.woff2?url"
+import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
+import { ToastProvider } from "@taiyomoe/ui/components/ui/toast"
+import { TanStackDevtools } from "@tanstack/react-devtools"
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRouteWithContext,
+  redirect,
+} from "@tanstack/react-router"
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+import { createIsomorphicFn } from "@tanstack/react-start"
+import { getCookies } from "@tanstack/react-start/server"
+import { fromEntries, map, pipe } from "remeda"
+import type { FileRoutesById } from "@/routeTree.gen"
+import { env } from "@/env/client"
+import { UMAMI_PROXY_PATH } from "@/features/analytics/lib/umami"
+import { CommandPaletteProvider } from "@/features/command-palette/components/command-palette-provider"
+import { NotificationStream } from "@/features/notifications/components/notification-stream"
+import { siteOgMeta } from "@/features/og/lib/og-meta"
+import { sessionQueryOptions } from "@/lib/session"
+import {
+  THEME_COOKIE,
+  ThemeContext,
+  type ThemePreference,
+  darkThemeClassName,
+  systemThemeScript,
+  useThemeState,
+} from "@/lib/theme"
+import { getLocale } from "@/paraglide/runtime"
+import appCss from "../styles.css?url"
+
+const PUBLIC_ROUTES: Array<keyof FileRoutesById> = ["/", "/auth", "/terms", "/privacy", "/dmca"]
+const readCookies = createIsomorphicFn()
+  .server(() => getCookies())
+  .client(() =>
+    pipe(
+      document.cookie.split("; "),
+      map((cookie): [string, string | undefined] => {
+        const [name = "", value] = cookie.split("=")
+
+        return [name, value]
+      }),
+      fromEntries(),
+    ),
+  )
+
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: async ({ context, location, matches }) => {
+    const cookies = readCookies()
+    const theme = cookies[THEME_COOKIE]
+    const themePreference: ThemePreference =
+      theme === "light" || theme === "system" ? theme : "dark"
+    const session = await context.queryClient.query({ ...sessionQueryOptions, staleTime: "static" })
+
+    if (session === null && !matches.some((match) => PUBLIC_ROUTES.includes(match.routeId))) {
+      throw redirect({ to: "/auth/sign-in", search: { redirect: location.href } })
+    }
+
+    return {
+      session,
+      sidebarPrefs: readSidebarCookies(cookies),
+      themePreference,
+    }
+  },
+  head: ({ matches }) => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Taiyō" },
+      { name: "description", content: "Read, track, and organize the manga you love." },
+      { name: "apple-mobile-web-app-title", content: "Taiyō" },
+      { name: "theme-color", content: "#120a07" },
+      ...siteOgMeta(matches.map((match) => match.routeId)),
+    ],
+    links: [
+      {
+        rel: "preload",
+        href: interLatin,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "preload",
+        href: ptSerifLatinBold,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "preload",
+        href: ptSerifLatinExtBold,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+      { rel: "stylesheet", href: appCss },
+      ...(import.meta.env.DEV ? [{ rel: "stylesheet", href: "/virtual:stylex.css" }] : []),
+      { rel: "icon", type: "image/png", href: "/favicon-96x96.png", sizes: "96x96" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "shortcut icon", href: "/favicon.ico" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/site.webmanifest" },
+    ],
+    scripts: [
+      ...(import.meta.env.DEV ? [{ type: "module", src: "/@id/virtual:stylex:runtime" }] : []),
+      ...(env.VITE_UMAMI_WEBSITE_ID === undefined
+        ? []
+        : [
+            {
+              src: `${UMAMI_PROXY_PATH}/s.js`,
+              defer: true,
+              "data-website-id": env.VITE_UMAMI_WEBSITE_ID,
+            },
+          ]),
+    ],
+  }),
+  shellComponent: RootDocument,
+  component: RootComponent,
+})
+
+function RootComponent() {
+  const { session } = Route.useRouteContext()
+
+  return (
+    <ToastProvider>
+      <CommandPaletteProvider>
+        {session === null ? null : <NotificationStream key={session.user.id} />}
+        <Outlet />
+      </CommandPaletteProvider>
+    </ToastProvider>
+  )
+}
+
+function RootDocument({ children }: { children: React.ReactNode }) {
+  const { themePreference } = Route.useRouteContext()
+  const theme = useThemeState(themePreference)
+
+  return (
+    <html
+      className={theme.dark ? darkThemeClassName : undefined}
+      lang={getLocale()}
+      suppressHydrationWarning
+    >
+      <head>
+        {theme.preference === "system" ? (
+          <script dangerouslySetInnerHTML={{ __html: systemThemeScript }} />
+        ) : null}
+        <HeadContent />
+      </head>
+      <body>
+        <ThemeContext value={theme}>{children}</ThemeContext>
+        <TanStackDevtools
+          config={{ position: "bottom-right" }}
+          plugins={[
+            { name: "Tanstack Router", render: <TanStackRouterDevtoolsPanel /> },
+            { name: "Tanstack Query", render: <ReactQueryDevtoolsPanel /> },
+          ]}
+        />
+        <Scripts />
+      </body>
+    </html>
+  )
+}

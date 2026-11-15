@@ -1,0 +1,10 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "maintenance_meta_title": "Taiyō — Maintenance",
+  "maintenance_title": "A new sun is rising.",
+  "maintenance_countdown_label": "Time until Taiyō is back",
+  "maintenance_hours": "Hours",
+  "maintenance_minutes": "Minutes",
+  "maintenance_seconds": "Seconds",
+  "maintenance_almost_back": "Any minute now… refresh in a moment."
+}

@@ -1,0 +1,124 @@
+import { zodResolver } from "@hookform/resolvers/zod"
+import { LockPasswordIcon, Mail01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
+import * as stylex from "@stylexjs/stylex"
+import { Form } from "@taiyomoe/ui/components/ui/form"
+import { Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { SunButton } from "@/components/buttons/sun-button"
+import { ErrorAlert } from "@/components/feedback/error-alert"
+import { CheckboxField, InputField, PasswordField } from "@/components/fields/form-field"
+import { authFormStyles as sx } from "@/features/auth/components/auth-form-styles"
+import { AuthHeading } from "@/features/auth/components/auth-heading"
+import { AuthSocialButtons } from "@/features/auth/components/auth-social-buttons"
+import { AuthSwitchLink } from "@/features/auth/components/auth-switch-link"
+import { LastUsed } from "@/features/auth/components/last-used"
+import { TwoFactorForm } from "@/features/auth/components/two-factor-form"
+import { useAuthForm } from "@/features/auth/hooks/use-auth-form"
+import { useLastLoginMethod } from "@/features/auth/hooks/use-last-login-method"
+import { m } from "@/paraglide/messages"
+
+const signInSchema = z.object({
+  email: z.email(m.global_invalid_email()),
+  password: z.string().min(1, m.auth_enter_password()),
+  rememberMe: z.boolean(),
+})
+
+export const SignInForm = () => {
+  const auth = useAuthForm()
+  const lastUsed = useLastLoginMethod()
+  const [twoFactor, setTwoFactor] = useState(false)
+  const form = useForm({
+    resolver: zodResolver(signInSchema),
+    mode: "onTouched",
+    defaultValues: { email: "", password: "", rememberMe: true },
+    disabled: auth.disabled,
+  })
+  const isSubmitting = form.formState.isSubmitting
+  const isBusy = isSubmitting || auth.disabled
+  const onSubmit = form.handleSubmit(async (values) => {
+    const result = await auth.signIn(values)
+
+    if (result.ok && result.twoFactor === true) {
+      setTwoFactor(true)
+    }
+  })
+
+  if (twoFactor) {
+    return (
+      <TwoFactorForm
+        auth={auth}
+        onBack={() => {
+          auth.clearError()
+          form.resetField("password")
+          setTwoFactor(false)
+        }}
+      />
+    )
+  }
+
+  return (
+    <>
+      <AuthHeading title={m.auth_sign_in_title()} subtitle={m.auth_sign_in_subtitle()} />
+      <div sx={sx.stack}>
+        <ErrorAlert message={auth.error} />
+        <AuthSocialButtons
+          label={m.auth_divider_sign_in()}
+          pending={auth.socialPending}
+          disabled={isBusy}
+          onSelect={auth.onSocial}
+        />
+        <Form
+          data-auth-fields
+          sx={sx.fields}
+          onSubmit={(event) => {
+            void onSubmit(event)
+          }}
+          noValidate
+        >
+          <InputField
+            name="email"
+            control={form.control}
+            label={m.global_email()}
+            type="email"
+            startIcon={<HugeiconsIcon icon={Mail01Icon} />}
+            size="lg"
+            autoComplete="email"
+            placeholder={m.auth_email_placeholder()}
+          />
+          <PasswordField
+            startIcon={<HugeiconsIcon icon={LockPasswordIcon} />}
+            control={form.control}
+            name="password"
+            size="lg"
+            autoComplete="current-password"
+            placeholder="••••••••"
+          />
+          <div sx={sx.row}>
+            <CheckboxField control={form.control} name="rememberMe" label={m.auth_remember_me()} />
+            <Link
+              from="/auth"
+              search={({ redirect }) => ({ redirect })}
+              to="/auth/forgot-password"
+              {...stylex.props(sx.link, sx.linkNoWrap)}
+            >
+              {m.auth_forgot_password()}
+            </Link>
+          </div>
+          <LastUsed active={lastUsed === "email"}>
+            <SunButton block type="submit" sx={sx.submit} loading={isSubmitting} disabled={isBusy}>
+              {m.auth_sign_in()}
+            </SunButton>
+          </LastUsed>
+        </Form>
+      </div>
+      <AuthSwitchLink
+        prompt={m.auth_footer_no_account()}
+        label={m.auth_create_an_account()}
+        to="/auth/sign-up"
+      />
+    </>
+  )
+}

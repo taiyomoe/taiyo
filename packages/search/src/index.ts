@@ -1,0 +1,24 @@
+import type { DB, Kysely } from "@taiyomoe/db"
+import type { Meilisearch } from "meilisearch"
+import { getMeiliClient, SEARCH_INDEXES } from "./client"
+import { initMediasIndex } from "./medias/init-medias-index"
+
+export { getMeiliClient, SEARCH_INDEXES }
+
+export type { Meilisearch }
+
+export * from "./medias/drain-search-outbox"
+
+export type { MediaDocument } from "./medias/get-media-document"
+
+export * from "./medias/init-medias-index"
+
+export * from "./medias/media-search-schemas"
+
+export const indexInitializers = [
+  {
+    name: SEARCH_INDEXES.MEDIAS,
+    init: (deps: { db: Kysely<DB>; meili: Meilisearch }) =>
+      initMediasIndex({ ...deps, mediasIndex: SEARCH_INDEXES.MEDIAS }),
+  },
+]

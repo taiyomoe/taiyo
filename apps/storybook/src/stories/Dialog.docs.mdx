@@ -1,0 +1,44 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as DialogStories from "./Dialog.stories"
+
+<Meta title="UI/Dialog" />
+
+# Dialog
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/dialog.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Without close button](#without-close-button)
+  - [Bare footer](#bare-footer)
+  - [No mobile stick](#no-mobile-stick)
+- [Feedback](#feedback)
+
+## Overview
+
+Dialogs interrupt the user with a focused task or confirmation that requires attention. Use them sparingly for short flows like editing a record, confirming a destructive action, or surfacing required input.
+
+<Canvas of={DialogStories.Default} />
+
+### Without close button
+
+Pass `showCloseButton={false}` to hide the built-in close affordance when the dialog already provides explicit close actions in its footer.
+
+<Canvas of={DialogStories.WithoutCloseButton} />
+
+### Bare footer
+
+The footer accepts a `variant="bare"` to drop the divider and muted background, blending the actions with the panel for lighter-weight dialogs.
+
+<Canvas of={DialogStories.BareFooter} />
+
+### No mobile stick
+
+By default the dialog docks to the bottom of the viewport on small screens. Pass `bottomStickOnMobile={false}` to keep it centered on every breakpoint.
+
+<Canvas of={DialogStories.NoMobileStick} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

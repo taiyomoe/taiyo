@@ -1,0 +1,51 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import * as SheetStories from "./Sheet.stories"
+
+<Meta title="UI/Sheet" />
+
+# Sheet
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/sheet.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sides](#sides)
+  - [Inset](#inset)
+  - [Without close button](#without-close-button)
+  - [Non-dismissible](#non-dismissible)
+- [Feedback](#feedback)
+
+## Overview
+
+Sheets are slide-out panels that appear from the side of the screen, providing additional content or functionality without navigating away from the current page. They're perfect for forms, settings, or detailed views that need to be easily accessible but don't require a full page transition.
+
+<Canvas of={SheetStories.Default} />
+
+### Sides
+
+Sheets can appear from the left, right, top, or bottom of the screen via the `side` prop.
+
+<Canvas of={SheetStories.Sides} />
+
+### Inset
+
+The `inset` variant detaches the sheet from the viewport edges, rounding its corners and adding a margin around it.
+
+<Canvas of={SheetStories.Inset} />
+
+### Without close button
+
+Pass `showCloseButton={false}` to hide the built-in close affordance — useful when the sheet provides its own close action in the footer.
+
+<Canvas of={SheetStories.WithoutCloseButton} />
+
+### Non-dismissible
+
+By default the sheet is dismissible by clicking the backdrop or pressing escape. Pass `disablePointerDismissal` to require an explicit close action.
+
+<Canvas of={SheetStories.NonDismissible} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

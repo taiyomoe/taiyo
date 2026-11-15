@@ -1,0 +1,345 @@
+import { execFileSync, spawnSync } from "node:child_process"
+import { generateKeyPairSync } from "node:crypto"
+import { copyFileSync, existsSync } from "node:fs"
+import { createServer } from "node:net"
+import { join, relative } from "node:path"
+import { parseArgs } from "node:util"
+import {
+  type EnvValues,
+  readEnvFile,
+  repoRoot,
+  requireEnvValue,
+  writeEnvValues,
+} from "./env-file.ts"
+
+const PORT_KEYS = [
+  "WEB_PORT",
+  "API_PORT",
+  "MAINTENANCE_PORT",
+  "DATABASE_PORT",
+  "DRAGONFLY_PORT",
+  "HYPERDX_PORT",
+  "HYPERDX_OTLP_PORT",
+  "UMAMI_PORT",
+  "MEILISEARCH_PORT",
+  "RUSTFS_PORT",
+  "RUSTFS_CONSOLE_PORT",
+  "IMAGES_PORT",
+] as const
+const SLOT_STRIDE = 10
+const SLOT_COUNT = 10
+const rootEnvPath = join(repoRoot, ".env")
+const rootExamplePath = join(repoRoot, ".env.example")
+const { values: flags } = parseArgs({
+  options: {
+    slot: { type: "string" },
+    "env-only": { type: "boolean", default: false },
+  },
+})
+const step = (message: string) => {
+  console.log(`\n\u001B[1m→ ${message}\u001B[0m`)
+}
+const run = (command: string, args: string[]) => {
+  const result = spawnSync(command, args, { cwd: repoRoot, stdio: "inherit" })
+
+  if (result.error) {
+    throw result.error
+  }
+
+  if (result.status !== 0) {
+    throw new Error(`\`${command} ${args.join(" ")}\` exited with code ${result.status}`)
+  }
+}
+const capture = (command: string, args: string[]) =>
+  execFileSync(command, args, { cwd: repoRoot, encoding: "utf8" }).trim()
+const slotPorts = (base: EnvValues, slot: number) =>
+  Object.fromEntries(
+    PORT_KEYS.map((key) => [
+      key,
+      String(Number(requireEnvValue(base, key, rootExamplePath)) + slot * SLOT_STRIDE),
+    ]),
+  )
+const findFreeSlot = async (base: EnvValues) => {
+  const claimed = new Set<string>()
+  const worktrees = capture("git", ["worktree", "list", "--porcelain"])
+    .split("\n")
+    .filter((line) => line.startsWith("worktree "))
+    .map((line) => line.slice("worktree ".length))
+    .filter((path) => path !== repoRoot)
+
+  for (const worktree of worktrees) {
+    const values = readEnvFile(join(worktree, ".env"))
+
+    for (const key of PORT_KEYS) {
+      const value = values[key]
+
+      if (value !== undefined && value !== "") {
+        claimed.add(value)
+      }
+    }
+  }
+
+  for (let slot = 0; slot < SLOT_COUNT; slot++) {
+    const ports = Object.values(slotPorts(base, slot))
+
+    if (ports.some((port) => claimed.has(port))) {
+      continue
+    }
+
+    const free = await Promise.all(
+      ports.map(
+        (port) =>
+          new Promise<boolean>((resolvePort) => {
+            const server = createServer()
+
+            server.once("error", () => {
+              resolvePort(false)
+            })
+            server.listen(Number(port), "127.0.0.1", () => {
+              server.close(() => {
+                resolvePort(true)
+              })
+            })
+          }),
+      ),
+    )
+
+    if (free.every(Boolean)) {
+      return slot
+    }
+  }
+
+  throw new Error(
+    `Every port slot from 0 to ${SLOT_COUNT - 1} is taken. Free one, or pass --slot explicitly.`,
+  )
+}
+const localUrl = (port: string) => `http://localhost:${port}`
+const generateVapidKeys = () => {
+  const { publicKey, privateKey } = generateKeyPairSync("ec", { namedCurve: "prime256v1" })
+  const { x = "", y = "" } = publicKey.export({ format: "jwk" })
+  const { d = "" } = privateKey.export({ format: "jwk" })
+  const point = Buffer.concat([
+    Buffer.from([4]),
+    Buffer.from(x, "base64url"),
+    Buffer.from(y, "base64url"),
+  ])
+
+  return { VAPID_PUBLIC_KEY: point.toString("base64url"), VAPID_PRIVATE_KEY: d }
+}
+const isProfileEnabled = (root: EnvValues, profile: string) =>
+  (process.env.COMPOSE_PROFILES ?? root.COMPOSE_PROFILES ?? "")
+    .split(",")
+    .map((enabled) => enabled.trim())
+    .includes(profile)
+const syncAppEnv = (app: string, derive: (current: EnvValues) => EnvValues) => {
+  const path = join(repoRoot, "apps", app, ".env")
+  const created = !existsSync(path)
+
+  if (created) {
+    copyFileSync(join(repoRoot, "apps", app, ".env.example"), path)
+  }
+
+  const changed = writeEnvValues(path, derive(readEnvFile(path)))
+  const label = relative(repoRoot, path)
+
+  if (created) {
+    console.log(`${label} created`)
+  } else if (changed.length > 0) {
+    console.log(`${label} updated: ${changed.join(", ")}`)
+  } else {
+    console.log(`${label} already in sync`)
+  }
+}
+
+try {
+  step("Env files")
+  const base = readEnvFile(rootExamplePath)
+  const exists = existsSync(rootEnvPath)
+  const existing = exists ? readEnvFile(rootEnvPath) : {}
+  const missing = PORT_KEYS.filter((key) => existing[key] === undefined || existing[key] === "")
+
+  if (exists && flags.slot === undefined && missing.length === 0) {
+    console.log(".env exists, keeping its ports")
+  } else if (exists && flags.slot === undefined) {
+    const offset =
+      Number(existing.DATABASE_PORT) -
+      Number(requireEnvValue(base, "DATABASE_PORT", rootExamplePath))
+    const inferred = offset / SLOT_STRIDE
+    const slot =
+      Number.isInteger(inferred) && inferred >= 0 && inferred < SLOT_COUNT
+        ? inferred
+        : await findFreeSlot(base)
+    const ports = slotPorts(base, slot)
+
+    writeEnvValues(rootEnvPath, Object.fromEntries(missing.map((key) => [key, ports[key] ?? ""])))
+    console.log(`.env exists, added ${missing.join(", ")} from port slot ${slot}`)
+  } else {
+    const slot = flags.slot === undefined ? await findFreeSlot(base) : Number(flags.slot)
+
+    if (!Number.isInteger(slot) || slot < 0 || slot >= SLOT_COUNT) {
+      throw new Error(`--slot must be an integer from 0 to ${SLOT_COUNT - 1}`)
+    }
+
+    if (!exists) {
+      copyFileSync(rootExamplePath, rootEnvPath)
+    }
+
+    writeEnvValues(rootEnvPath, slotPorts(base, slot))
+    console.log(`.env ${exists ? "moved to" : "created on"} port slot ${slot}`)
+  }
+
+  const pushEnv = readEnvFile(rootEnvPath)
+
+  if ((pushEnv.VAPID_PRIVATE_KEY ?? "") === "") {
+    writeEnvValues(rootEnvPath, generateVapidKeys())
+    console.log(".env: generated a VAPID key pair for push notifications")
+  }
+
+  if ((pushEnv.VAPID_SUBJECT ?? "") === "") {
+    writeEnvValues(rootEnvPath, {
+      VAPID_SUBJECT: requireEnvValue(base, "VAPID_SUBJECT", rootExamplePath),
+    })
+  }
+
+  const root = readEnvFile(rootEnvPath)
+  const get = (key: string) => requireEnvValue(root, key, rootEnvPath)
+  const credentials = `${encodeURIComponent(get("DATABASE_USERNAME"))}:${encodeURIComponent(get("DATABASE_PASSWORD"))}`
+  const databaseUrl = `postgresql://${credentials}@localhost:${get("DATABASE_PORT")}/${get("DATABASE_NAME")}`
+  const s3Endpoint = localUrl(get("RUSTFS_PORT"))
+  const apiUrl = localUrl(get("API_PORT"))
+  const vapid = {
+    VAPID_PUBLIC_KEY: get("VAPID_PUBLIC_KEY"),
+    VAPID_PRIVATE_KEY: get("VAPID_PRIVATE_KEY"),
+    VAPID_SUBJECT: get("VAPID_SUBJECT"),
+  }
+  const bucketOf = ({ S3_BUCKET_NAME: bucket }: EnvValues) =>
+    bucket === undefined || bucket === "" ? "taiyo" : bucket
+  const s3 = (current: EnvValues) => ({
+    S3_ENDPOINT: s3Endpoint,
+    S3_ACCESS_KEY_ID: get("RUSTFS_ACCESS_KEY"),
+    S3_SECRET_ACCESS_KEY: get("RUSTFS_SECRET_KEY"),
+    S3_PUBLIC_URL: `${localUrl(get("IMAGES_PORT"))}/${bucketOf(current)}`,
+  })
+
+  syncAppEnv("api", (current) => ({
+    PORT: get("API_PORT"),
+    DATABASE_URL: databaseUrl,
+    DRAGONFLY_URL: `redis://localhost:${get("DRAGONFLY_PORT")}`,
+    HYPERDX_ENDPOINT: isProfileEnabled(root, "hyperdx") ? localUrl(get("HYPERDX_OTLP_PORT")) : "",
+    ...s3(current),
+    MEILISEARCH_HOST: localUrl(get("MEILISEARCH_PORT")),
+    MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
+    VITE_BETTER_AUTH_URL: apiUrl,
+    CORS_ALLOWED_ORIGINS: localUrl(get("WEB_PORT")),
+    ...vapid,
+  }))
+  syncAppEnv("worker", (current) => ({
+    DATABASE_URL: databaseUrl,
+    DRAGONFLY_URL: `redis://localhost:${get("DRAGONFLY_PORT")}`,
+    ...s3(current),
+    MEILISEARCH_HOST: localUrl(get("MEILISEARCH_PORT")),
+    MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
+    ...vapid,
+  }))
+  syncAppEnv("web", () => ({
+    PORT: get("WEB_PORT"),
+    API_PORT: get("API_PORT"),
+    IMAGES_PORT: get("IMAGES_PORT"),
+    RUSTFS_PORT: get("RUSTFS_PORT"),
+    S3_BUCKET_NAME: bucketOf(readEnvFile(join(repoRoot, "apps/api/.env"))),
+    VITE_API_URL: apiUrl,
+    VITE_BETTER_AUTH_URL: apiUrl,
+    UMAMI_INTERNAL_URL: isProfileEnabled(root, "umami") ? localUrl(get("UMAMI_PORT")) : "",
+  }))
+  syncAppEnv("maintenance", () => ({
+    PORT: get("MAINTENANCE_PORT"),
+  }))
+
+  if (!flags["env-only"]) {
+    if (!existsSync(join(repoRoot, "node_modules"))) {
+      step("Installing dependencies")
+      run("pnpm", ["install"])
+    }
+
+    step("Starting infrastructure")
+    run("docker", ["compose", "up", "-d", "--wait"])
+
+    step("Creating the S3 bucket")
+    run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-s3"])
+
+    step("Migrating the database")
+    run("pnpm", ["-F", "@taiyomoe/db", "kysely", "migrate", "latest"])
+
+    const userCount = capture("docker", [
+      "compose",
+      "exec",
+      "-T",
+      "postgres",
+      "psql",
+      "-U",
+      requireEnvValue(root, "DATABASE_USERNAME", rootEnvPath),
+      "-d",
+      requireEnvValue(root, "DATABASE_NAME", rootEnvPath),
+      "-tAc",
+      "select count(*) from users",
+    ])
+
+    if (userCount === "0") {
+      step("Seeding the database")
+      run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run"])
+    } else {
+      step("Database already has data, seeding only the dev accounts and featured medias")
+
+      for (const seed of ["1780056748390_dev-accounts", "1791888129084_featured-medias"]) {
+        run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run", "--specific", seed])
+      }
+    }
+
+    step("Indexing medias in Meilisearch")
+    run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-meilisearch"])
+
+    step("Creating dev sign-in sessions")
+    const sessions = capture("pnpm", ["--silent", "-F", "@taiyomoe/scripts", "cli", "dev-sessions"])
+      .split("\n")
+      .filter((line) => line.startsWith("{"))
+      .map((line) => {
+        const session: unknown = JSON.parse(line)
+
+        if (
+          typeof session !== "object" ||
+          session === null ||
+          !("username" in session) ||
+          !("cookie" in session) ||
+          typeof session.username !== "string" ||
+          typeof session.cookie !== "string"
+        ) {
+          throw new Error(`Unexpected dev-sessions output: ${line}`)
+        }
+
+        return { username: session.username, cookie: session.cookie }
+      })
+    const url = (key: string) => localUrl(requireEnvValue(root, key, rootEnvPath))
+    const width = Math.max(...sessions.map(({ username }) => username.length))
+    const cookies = sessions
+      .map(({ username, cookie }) => `    ${username.padEnd(width)} ${cookie}`)
+      .join("\n")
+
+    console.log(`
+\u001B[1mReady.\u001B[0m Start the apps with \`pnpm dev\`, or \`pnpm dev:tunnel\` for public URLs.
+
+  Web            ${url("WEB_PORT")}
+  API docs       ${url("API_PORT")}/docs
+  Maintenance    ${url("MAINTENANCE_PORT")} (\`pnpm -F @taiyomoe/maintenance dev\`)
+${isProfileEnabled(root, "hyperdx") ? `  HyperDX        ${url("HYPERDX_PORT")}\n` : ""}${isProfileEnabled(root, "umami") ? `  Umami          ${url("UMAMI_PORT")} (admin / umami)\n` : ""}  RustFS console ${url("RUSTFS_CONSOLE_PORT")}
+
+  Sign in with any dev account below at <username>@gmail.com, password "password123".
+
+  Or skip the form with a ready-made session cookie (valid 30 days, reused on
+  later runs). Under \`pnpm dev:tunnel\`, name it __Secure-better-auth.session_token.
+${cookies}
+`)
+  }
+} catch (error: unknown) {
+  console.error(`\n\u001B[31m${error instanceof Error ? error.message : String(error)}\u001B[0m`)
+  process.exit(1)
+}

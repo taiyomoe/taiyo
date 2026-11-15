@@ -1,0 +1,92 @@
+import { groupCreationAudit } from "@taiyomoe/audit"
+import { Hono } from "hono"
+import { describeRoute, resolver } from "hono-openapi"
+import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
+import { checkGroupCreationRequest } from "../middlewares/check-group-creation-request-middleware"
+import { withAuth } from "../middlewares/with-auth-middleware"
+import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { isGroupNameTaken } from "../utils/group-names"
+import { getOpenApiResponses } from "../utils/openapi-helper"
+import { apiSuccessEnvelope } from "../utils/schemas"
+
+export const approveGroupCreationRequestHandler = new Hono().post(
+  "/:id/approve",
+  describeRoute({
+    summary: "Approve a group creation request",
+    description:
+      "Approves a pending group creation request: creates the group with the requested name and description, and makes the requester its owner.\n\n**Required roles:** admin.",
+    tags: ["Group creation requests"],
+    responses: {
+      201: {
+        description: "Group creation request approved.",
+        content: {
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the group creation request." }),
+                  groupId: z.uuid().meta({ description: "The ID of the new group." }),
+                }),
+              ),
+            ),
+          },
+        },
+      },
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        404: "No group creation request with the given ID exists.",
+        409: "The request is no longer pending, or a group with this name already exists.",
+        422: "The provided ID is not a valid UUID.",
+      }),
+    },
+  }),
+  audited(groupCreationAudit.REQUEST_APPROVE),
+  withAuth("groupCreationRequest.review"),
+  checkGroupCreationRequest(),
+  withTransaction,
+  async (c) => {
+    const { db, groupCreationRequest, log, user } = c.var
+    const request = await db
+      .selectFrom("groupCreationRequests")
+      .select(["status", "userId", "name", "description"])
+      .where("id", "=", groupCreationRequest.id)
+      .forUpdate()
+      .executeTakeFirstOrThrow()
+
+    if (request.status !== "PENDING") {
+      return c.fail("GROUP_CREATION_REQUEST_NOT_PENDING")
+    }
+
+    if (await isGroupNameTaken(db, request.name)) {
+      return c.fail("GROUP_NAME_TAKEN")
+    }
+
+    const groupId = crypto.randomUUID()
+
+    log.set({ group: { id: groupId } })
+    c.var.audit.set({ target: { groupId, userId: request.userId, name: request.name } })
+
+    await db
+      .insertInto("groups")
+      .values({
+        id: groupId,
+        name: request.name,
+        description: request.description,
+        creatorId: user.id,
+      })
+      .execute()
+    await db
+      .insertInto("groupMemberships")
+      .values({ groupId, userId: request.userId, role: "OWNER", addedBy: user.id })
+      .execute()
+    await db
+      .updateTable("groupCreationRequests")
+      .set({ status: "APPROVED", reviewerId: user.id, groupId })
+      .where("id", "=", groupCreationRequest.id)
+      .execute()
+
+    return c.ok({ id: groupCreationRequest.id, groupId })
+  },
+)

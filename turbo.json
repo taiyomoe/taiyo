@@ -1,47 +1,42 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "ui": "tui",
+  "agentGuidance": false,
   "tasks": {
-    "topo": {
-      "dependsOn": ["^topo"]
-    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "next-env.d.ts"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.example"],
+      "outputs": ["dist/**", "storybook-static/**"]
     },
     "dev": {
-      "persistent": true,
-      "cache": false
-    },
-    "typecheck": {
-      "dependsOn": ["^topo"],
-      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
-    },
-    "clean": {
-      "cache": false
-    },
-    "//#clean": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     }
   },
   "globalEnv": [
     "DATABASE_URL",
-    "AUTH_URL",
-    "AUTH_SECRET",
-    "AUTH_DISCORD_ID",
-    "AUTH_DISCORD_SECRET",
-    "MEILISEARCH_ADMIN_KEY",
+    "VITE_BETTER_AUTH_URL",
+    "BETTER_AUTH_SECRET",
+    "BETTER_AUTH_COOKIE_DOMAIN",
+    "DISCORD_CLIENT_ID",
+    "DISCORD_CLIENT_SECRET",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "TURNSTILE_SECRET_KEY",
+    "VITE_TURNSTILE_SITE_KEY",
+    "VITE_API_URL",
+    "VITE_DISCORD_INVITE_URL",
+    "VITE_UMAMI_WEBSITE_ID",
+    "UMAMI_INTERNAL_URL",
+    "API_INTERNAL_URL",
+    "VITE_MAINTENANCE_ENDS_AT",
     "DRAGONFLY_URL",
-    "S3_URL",
-    "S3_ACCESS_KEY_ID",
-    "S3_SECRET_ACCESS_KEY",
-    "S3_CDN_BUCKET_NAME",
-    "S3_UPLOADS_BUCKET_NAME",
-    "CLICKHOUSE_URL",
-    "UMAMI_USER_ID",
-    "UMAMI_SECRET",
-    "GRAFANA_USERNAME",
-    "GRAFANA_PASSWORD",
-    "GRAFANA_LOKI_URL"
+    "CHAPTER_PROCESSING_CONCURRENCY",
+    "HYPERDX_INGESTION_KEY",
+    "RESEND_API_KEY",
+    "S3_PUBLIC_URL",
+    "S3_PRESIGN_ENDPOINT",
+    "NODE_ENV"
   ],
-  "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
+  "globalPassThroughEnv": ["CI", "npm_lifecycle_event"]
 }

@@ -1,0 +1,21 @@
+meta {
+  name: Set main cover
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{url}}/medias/:id/covers/:coverId/set-main
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+  coverId: 00000000-0000-0000-0000-000000000000
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

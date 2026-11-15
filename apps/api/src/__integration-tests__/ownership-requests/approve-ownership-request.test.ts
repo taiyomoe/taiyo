@@ -1,0 +1,269 @@
+import { randomUUID } from "node:crypto"
+import { describe, expect } from "vitest"
+import type { Services } from "../../services"
+import { signInAs } from "../helpers/auth"
+import { api } from "../helpers/request"
+import { test } from "../setup"
+
+const seedGroup = async (services: Services, creatorId: string) => {
+  const id = randomUUID()
+
+  await services.db
+    .insertInto("groups")
+    .values({ id, name: `Group ${id}`, creatorId })
+    .execute()
+
+  return id
+}
+const seedRequest = async (
+  services: Services,
+  opts: {
+    userId: string
+    groupId: string
+    status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED"
+  },
+) => {
+  const row = await services.db
+    .insertInto("groupOwnershipRequests")
+    .values({
+      userId: opts.userId,
+      groupId: opts.groupId,
+      status: opts.status,
+      message: null,
+    })
+    .returning("id")
+    .executeTakeFirstOrThrow()
+
+  return row.id
+}
+
+describe("POST /ownership-requests/:id/approve", () => {
+  test("grants OWNER membership and approves the request", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const { userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, requesterId)
+    const requestId = await seedRequest(services, { userId: requesterId, groupId })
+    const res = await api(app, `/ownership-requests/${requestId}/approve`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(201)
+
+    const request = await services.db
+      .selectFrom("groupOwnershipRequests")
+      .selectAll()
+      .where("id", "=", requestId)
+      .executeTakeFirst()
+    const membership = await services.db
+      .selectFrom("groupMemberships")
+      .selectAll()
+      .where("groupId", "=", groupId)
+      .where("userId", "=", requesterId)
+      .executeTakeFirst()
+
+    expect(request?.status).toBe("APPROVED")
+    expect(membership?.role).toBe("OWNER")
+  })
+
+  test("auto-cancels other pending requests on the same group", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const { userId: winnerId } = await signInAs(services)
+    const { userId: loserId } = await signInAs(services)
+    const groupId = await seedGroup(services, winnerId)
+    const winnerRequestId = await seedRequest(services, { userId: winnerId, groupId })
+    const loserRequestId = await seedRequest(services, { userId: loserId, groupId })
+
+    await api(app, `/ownership-requests/${winnerRequestId}/approve`, {
+      method: "POST",
+      headers,
+    })
+
+    const loser = await services.db
+      .selectFrom("groupOwnershipRequests")
+      .select("status")
+      .where("id", "=", loserRequestId)
+      .executeTakeFirst()
+
+    expect(loser?.status).toBe("CANCELLED")
+  })
+
+  test("returns OWNERSHIP_REQUEST_NOT_FOUND for an unknown id", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const res = await api(app, `/ownership-requests/${randomUUID()}/approve`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(404)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("OWNERSHIP_REQUEST_NOT_FOUND")
+  })
+
+  test("returns OWNERSHIP_REQUEST_NOT_PENDING when the request is closed", async ({
+    app,
+    services,
+  }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const { userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, requesterId)
+    const requestId = await seedRequest(services, {
+      userId: requesterId,
+      groupId,
+      status: "REJECTED",
+    })
+    const res = await api(app, `/ownership-requests/${requestId}/approve`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(409)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("OWNERSHIP_REQUEST_NOT_PENDING")
+
+    const membership = await services.db
+      .selectFrom("groupMemberships")
+      .select("role")
+      .where("groupId", "=", groupId)
+      .where("userId", "=", requesterId)
+      .executeTakeFirst()
+
+    expect(membership).toBeUndefined()
+  })
+
+  test("reports a closed request before an owned group", async ({ app, services }) => {
+    const { headers, userId: adminId } = await signInAs(services, { role: "ADMIN" })
+    const { userId: ownerId } = await signInAs(services)
+    const groupId = await seedGroup(services, adminId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({ userId: ownerId, groupId, role: "OWNER", addedBy: adminId })
+      .execute()
+
+    const requestId = await seedRequest(services, { userId: ownerId, groupId, status: "APPROVED" })
+    const res = await api(app, `/ownership-requests/${requestId}/approve`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(409)
+    expect(res.body).toMatchObject({ code: "OWNERSHIP_REQUEST_NOT_PENDING" })
+  })
+
+  test("returns GROUP_ALREADY_OWNED when an OWNER already exists", async ({ app, services }) => {
+    const { headers, userId: adminId } = await signInAs(services, { role: "ADMIN" })
+    const { userId: existingOwnerId } = await signInAs(services)
+    const { userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, adminId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({ userId: existingOwnerId, groupId, role: "OWNER", addedBy: adminId })
+      .execute()
+
+    const requestId = await seedRequest(services, { userId: requesterId, groupId })
+    const res = await api(app, `/ownership-requests/${requestId}/approve`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(409)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("GROUP_ALREADY_OWNED")
+  })
+
+  test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
+    const res = await api(app, `/ownership-requests/${randomUUID()}/approve`, { method: "POST" })
+
+    expect(res.status).toBe(401)
+  })
+
+  test("only admins can approve requests", async ({ app, services }) => {
+    const { userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, requesterId)
+    const requestId = await seedRequest(services, { userId: requesterId, groupId })
+
+    for (const role of ["MODERATOR", "UPLOADER", "UPLOADER_INTERN"] as const) {
+      const { headers } = await signInAs(services, { role })
+      const res = await api(app, `/ownership-requests/${requestId}/approve`, {
+        method: "POST",
+        headers,
+      })
+
+      expect(res.status).toBe(403)
+    }
+
+    const request = await services.db
+      .selectFrom("groupOwnershipRequests")
+      .select("status")
+      .where("id", "=", requestId)
+      .executeTakeFirstOrThrow()
+    const memberships = await services.db
+      .selectFrom("groupMemberships")
+      .select("userId")
+      .where("groupId", "=", groupId)
+      .execute()
+
+    expect(request.status).toBe("PENDING")
+    expect(memberships).toEqual([])
+  })
+
+  test("rejects USER role with FORBIDDEN", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+    const res = await api(app, `/ownership-requests/${randomUUID()}/approve`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(403)
+  })
+
+  test("concurrent approvals for the same group serialize — only one wins", async ({
+    app,
+    services,
+  }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const { userId: userA } = await signInAs(services)
+    const { userId: userB } = await signInAs(services)
+    const groupId = await seedGroup(services, userA)
+    const requestA = await seedRequest(services, { userId: userA, groupId })
+    const requestB = await seedRequest(services, { userId: userB, groupId })
+    const [resA, resB] = await Promise.all([
+      api(app, `/ownership-requests/${requestA}/approve`, { method: "POST", headers }),
+      api(app, `/ownership-requests/${requestB}/approve`, { method: "POST", headers }),
+    ])
+    const statuses = [resA.status, resB.status].sort((a, b) => a - b)
+
+    expect(statuses).toEqual([201, 409])
+
+    const loser = resA.status === 409 ? resA : resB
+
+    if (loser.body.success) {
+      throw new Error("Expected the losing approval to fail")
+    }
+
+    expect(["GROUP_ALREADY_OWNED", "OWNERSHIP_REQUEST_NOT_PENDING"]).toContain(loser.body.code)
+
+    const owners = await services.db
+      .selectFrom("groupMemberships")
+      .select("userId")
+      .where("groupId", "=", groupId)
+      .where("role", "=", "OWNER")
+      .execute()
+
+    expect(owners).toHaveLength(1)
+  })
+})

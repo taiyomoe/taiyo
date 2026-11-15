@@ -1,0 +1,20 @@
+import type { Insertable } from "kysely"
+import type { ContentRating, Language } from "../constants"
+import type { Generated, Timestamp } from "../types"
+
+export type Cover = {
+  id: Generated<string>
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
+  deletedAt: Timestamp | null
+  volume: string | null
+  contentRating: Generated<ContentRating>
+  isMainCover: Generated<boolean>
+  extension: Generated<"gif" | "jpg">
+  language: Language
+  mediaId: string
+  uploaderId: string
+  deleterId: string | null
+}
+
+export type NewCover = Insertable<Cover>

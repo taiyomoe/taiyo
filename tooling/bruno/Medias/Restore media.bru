@@ -1,0 +1,20 @@
+meta {
+  name: Restore media
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{url}}/medias/:id/restore
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,17 @@
+import type { Insertable } from "kysely"
+import type { ContentRating } from "../constants"
+import type { Generated, Timestamp } from "../types"
+
+export type Banner = {
+  id: Generated<string>
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
+  deletedAt: Timestamp | null
+  contentRating: Generated<ContentRating>
+  extension: Generated<"gif" | "jpg">
+  mediaId: string
+  uploaderId: string
+  deleterId: string | null
+}
+
+export type NewBanner = Insertable<Banner>

@@ -1,0 +1,75 @@
+import { groupInvitationAudit } from "@taiyomoe/audit"
+import { Hono } from "hono"
+import { describeRoute, resolver } from "hono-openapi"
+import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
+import { validateParam } from "../middlewares/validate-param-middleware"
+import { withAuth } from "../middlewares/with-auth-middleware"
+import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { getOpenApiResponses } from "../utils/openapi-helper"
+import { apiSuccessEnvelope } from "../utils/schemas"
+
+const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the invitation." }) })
+
+export const declineGroupInvitationHandler = new Hono().post(
+  "/:id/decline",
+  describeRoute({
+    summary: "Decline a group invitation",
+    description: "Declines a pending invitation sent to you.\n\n**Required access:** the invitee.",
+    tags: ["Group members"],
+    responses: {
+      201: {
+        description: "Invitation declined.",
+        content: {
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the invitation." }) }),
+              ),
+            ),
+          },
+        },
+      },
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        404: "No invitation with the given ID was sent to you.",
+        409: "The invitation is no longer pending.",
+        422: "The provided ID is not a valid UUID.",
+      }),
+    },
+  }),
+  audited(groupInvitationAudit.DECLINE),
+  withAuth(),
+  validateParam(paramSchema),
+  withTransaction,
+  async (c) => {
+    const { db, user } = c.var
+    const { id } = c.var.param
+    const invitation = await db
+      .selectFrom("groupInvitations")
+      .select(["status", "groupId"])
+      .where("id", "=", id)
+      .where("inviteeId", "=", user.id)
+      .forUpdate()
+      .executeTakeFirst()
+
+    if (invitation === undefined) {
+      return c.fail("GROUP_INVITATION_NOT_FOUND")
+    }
+
+    c.var.audit.set({ target: { groupId: invitation.groupId } })
+
+    if (invitation.status !== "PENDING") {
+      return c.fail("GROUP_INVITATION_NOT_PENDING")
+    }
+
+    await db
+      .updateTable("groupInvitations")
+      .set({ status: "DECLINED" })
+      .where("id", "=", id)
+      .execute()
+
+    return c.ok({ id })
+  },
+)

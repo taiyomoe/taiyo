@@ -1,0 +1,18 @@
+@import "@taiyomoe/ui/style.css";
+
+@import "@fontsource/pt-serif/700.css";
+
+@media (prefers-reduced-motion: reduce) {
+  [data-maintenance] *,
+  [data-maintenance] *::before,
+  [data-maintenance] *::after {
+    animation: none !important;
+  }
+}
+
+/* Safari on iOS 26 tints its status bar and toolbar with the body's background. */
+html,
+body {
+  background-color: #0d0705;
+  color-scheme: dark;
+}

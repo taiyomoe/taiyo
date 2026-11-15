@@ -1,0 +1,100 @@
+import type { DB } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
+import { DeleteObjectsCommand, getChapterPageKey, type S3Client } from "@taiyomoe/s3"
+import { sql, type Kysely } from "kysely"
+import { chapterUploadManifestSchema } from "./types"
+
+export type ReaperDeps = { db: Kysely<DB>; s3: S3Client; s3Bucket: string }
+
+export const reapStaleChapterUploads = async (
+  { db, s3, s3Bucket }: ReaperDeps,
+  now = new Date(),
+) => {
+  const cutoff = new Date(now.getTime() - config.images.staleUploadReapHours * 60 * 60 * 1000)
+  const abandoned = await db
+    .updateTable("chapters")
+    .set({ deletedAt: sql<Date>`CURRENT_TIMESTAMP`, deleterId: sql.ref("uploaderId") })
+    .where("status", "in", ["UPLOADING", "PENDING"])
+    .where("pages", "is", null)
+    .where("isExternal", "=", false)
+    .where("deletedAt", "is", null)
+    .where(sql<boolean>`"createdAt" < ${cutoff}::timestamptz`)
+    .returning(["id", "mediaId"])
+    .execute()
+  const stale = await db
+    .selectFrom("tasks")
+    .selectAll()
+    .where("type", "=", "UPLOAD_CHAPTER")
+    .where(
+      sql<boolean>`(
+        (status = 'PENDING' AND "createdAt" < ${cutoff}::timestamptz)
+        OR (status = 'FAILED' AND "updatedAt" < ${cutoff}::timestamptz)
+        OR (status = 'DOWNLOADING' AND "updatedAt" < ${cutoff}::timestamptz)
+      )`,
+    )
+    .execute()
+
+  if (stale.length === 0) {
+    return { reaped: 0, abandoned: abandoned.length, abandonedChapters: abandoned, tasks: [] }
+  }
+
+  const tasks = stale.map((t) => ({
+    id: t.id,
+    status: t.status,
+    manifest: chapterUploadManifestSchema.parse(t.payload),
+  }))
+  const chapters = await db
+    .selectFrom("chapters")
+    .select(["id", "pages"])
+    .where("id", "in", [...new Set(tasks.map((t) => t.manifest.chapterId))])
+    .execute()
+  const referencedPageIds = new Map(
+    chapters.map((c) => [c.id, new Set((c.pages ?? []).map((p) => p.id))]),
+  )
+  const keys = tasks.flatMap(({ manifest: m }) => {
+    const stagingKeys = m.pages.map((p) => ({ Key: p.stagingKey }))
+    const referenced = referencedPageIds.get(m.chapterId) ?? new Set<string>()
+
+    if (m.pages.some((p) => referenced.has(p.pageId))) {
+      return stagingKeys
+    }
+
+    return [
+      ...stagingKeys,
+      ...m.pages.map((p) => ({ Key: getChapterPageKey(m.mediaId, m.chapterId, p.pageId) })),
+    ]
+  })
+
+  // DeleteObjects caps at 1000 keys/call; chunk. Deleting absent keys is a no-op.
+  for (let i = 0; i < keys.length; i += 1000) {
+    await s3
+      .send(
+        new DeleteObjectsCommand({
+          Bucket: s3Bucket,
+          Delete: { Objects: keys.slice(i, i + 1000) },
+        }),
+      )
+      .catch(() => {})
+  }
+
+  await db
+    .deleteFrom("tasks")
+    .where(
+      "id",
+      "in",
+      stale.map((t) => t.id),
+    )
+    .execute()
+
+  return {
+    reaped: stale.length,
+    abandoned: abandoned.length,
+    abandonedChapters: abandoned,
+    tasks: tasks.map((t) => ({
+      id: t.id,
+      status: t.status,
+      chapterId: t.manifest.chapterId,
+      mediaId: t.manifest.mediaId,
+    })),
+  }
+}

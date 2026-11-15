@@ -1,0 +1,87 @@
+import { coverAudit } from "@taiyomoe/audit"
+import { Hono } from "hono"
+import { describeRoute, resolver } from "hono-openapi"
+import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
+import { checkCover } from "../middlewares/check-cover-middleware"
+import { validateJson } from "../middlewares/validate-json-middleware"
+import { withAuth } from "../middlewares/with-auth-middleware"
+import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
+import { getOpenApiResponses } from "../utils/openapi-helper"
+import { apiSuccessEnvelope, contentRatingSchema, mediaLanguageSchema } from "../utils/schemas"
+
+const updateCoverSchema = z
+  .object({
+    language: mediaLanguageSchema("The language of the cover.").optional(),
+    contentRating: contentRatingSchema("The content rating of the cover.").optional(),
+    volume: z
+      .number()
+      .min(1)
+      .nullable()
+      .optional()
+      .meta({ description: "The volume the cover belongs to, or `null` to clear it.", example: 2 }),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided.",
+  })
+
+export const updateCoverHandler = new Hono().patch(
+  "/:id",
+  describeRoute({
+    summary: "Update a cover",
+    description:
+      "Updates the details of a cover. At least one field is required, and omitted fields are left unchanged. To make the cover the main one, use the set-main route.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+    tags: ["Covers"],
+    responses: {
+      200: {
+        description: "Cover updated.",
+        content: {
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the updated cover." }),
+                }),
+              ),
+            ),
+          },
+        },
+      },
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        404: "No cover with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
+      }),
+    },
+  }),
+  audited(coverAudit.UPDATE),
+  withAuth("media.update"),
+  validateJson(updateCoverSchema),
+  checkCover(),
+  withTransaction,
+  async (c) => {
+    const { db, cover } = c.var
+    const body = c.var.json
+    const updates: Record<string, unknown> = {}
+
+    if (body.language !== undefined) {
+      updates.language = body.language
+    }
+
+    if (body.contentRating !== undefined) {
+      updates.contentRating = body.contentRating
+    }
+
+    if (body.volume !== undefined) {
+      updates.volume = body.volume === null ? null : String(body.volume)
+    }
+
+    c.var.audit.set({ target: { mediaId: cover.mediaId }, changes: auditChanges(cover, updates) })
+
+    await db.updateTable("covers").set(updates).where("id", "=", cover.id).execute()
+
+    return c.ok({ id: cover.id })
+  },
+)

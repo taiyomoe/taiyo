@@ -1,0 +1,65 @@
+@import "@taiyomoe/ui/style.css";
+
+@import "@fontsource/pt-serif/700.css";
+@import "@fontsource/pt-serif/700-italic.css";
+@import "@fontsource/pt-serif/400.css";
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Safari on iOS 26 tints its status bar and toolbar with the body's background, and
+   these pages paint the night scene whatever the theme. */
+html:has([data-landing], [data-auth-screen], [data-legal-page]) body {
+  background-color: #120a07;
+}
+
+html:has([data-app-shell]),
+html:has([data-app-shell]) body {
+  overscroll-behavior: none;
+}
+
+[data-auth-fields] [data-slot="input"] {
+  height: calc(3rem - 2px);
+  line-height: calc(3rem - 2px);
+  padding: 0;
+}
+
+[data-auth-fields] [data-slot="input-group-addon"] {
+  padding-inline: 1rem;
+}
+
+[data-auth-fields] [data-slot="input-group-addon"]:has(> button) {
+  padding-inline: 0.625rem;
+}
+
+[data-auth-fields] [data-slot="input-group-addon"] svg {
+  color: color-mix(in srgb, var(--muted-foreground) 72%, transparent);
+  height: 1.25rem !important;
+  width: 1.25rem !important;
+}
+
+@keyframes scene-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-auth-screen] *,
+  [data-auth-screen] *::before,
+  [data-auth-screen] *::after,
+  [data-landing] *,
+  [data-landing] *::before,
+  [data-landing] *::after {
+    animation: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -2,6 +2,313 @@
 
 ![Taiyō's banner](https://cdn.taiyo.moe/assets/banner-red.png)
 
-## git-flow
+A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch. The repo currently ships the backend (Hono API), a BullMQ worker that processes uploaded chapters, a Storybook component playground, and a TanStack Start web app with a landing page, auth forms and legal pages.
 
-Este projeto usa [git-flow](https://git-flow.readthedocs.io/en/latest/presentation.html).
+## 🌟 Features
+
+- **Multi-format support**: manga, manhwa, manhua, light novels
+- **Multi-language**: official Portuguese / French, technical capability for 100+ languages
+- **Typo-tolerant search**: Meilisearch-backed `/medias/search`
+- **Authentication**: email + magic-link + Discord/Google via Better Auth, with Turnstile captcha and Dragonfly-backed rate limits
+- **Content rating system**: Normal / Suggestive / NSFW / NSFL
+- **Library, history and follows**: per-user reading library, chapter history and user follows
+- **Chapter uploads**: upload sessions with background processing in a BullMQ worker
+- **Image pipeline**: server-side magic-byte validation, EXIF stripping, JPEG transcoding via sharp
+- **Group ownership workflow**: scanlation groups can be claimed by their actual owners through a request/approval flow; chapter and group mutations gate on membership (additive model — uploaders/mods/admins keep unconditional access)
+- **Observability**: HyperDX (OpenTelemetry) drains via evlog
+
+The web app (`apps/web`) does not browse, display or read manga yet — that frontend is still to be built.
+
+Not yet built (planned): the browse / detail / reader frontend and audit log instrumentation.
+
+## 🏗️ Architecture
+
+Monorepo powered by [Turborepo](https://turbo.build/) and [pnpm workspaces](https://pnpm.io/workspaces).
+
+### 📁 Project structure
+
+```no-highlight
+taiyo/
+├── apps/
+│   ├── api/               # Hono + hono-openapi backend, API_PORT (3002)
+│   ├── storybook/         # @taiyomoe/ui component playground, port 6006
+│   ├── web/               # TanStack Start (React) web app, WEB_PORT (3000)
+│   └── worker/            # BullMQ worker that processes chapter uploads
+├── packages/
+│   ├── auth/              # Better Auth config + plugins + lifecycle hooks
+│   ├── cache/             # Dragonfly (Redis-compatible) client
+│   ├── config/            # Shared configuration constants
+│   ├── db/                # Kysely setup, migrations, seeds, model types
+│   ├── email/             # Email templates (react-email)
+│   ├── queue/             # BullMQ queue, chapter processor and reaper
+│   ├── s3/                # S3 client + key helpers (works with RustFS / Garage / AWS)
+│   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
+│   ├── scripts/           # Bootstrap, tunnel and one-shot CLI scripts (init-s3, …)
+│   ├── search/            # Meilisearch client + media sync + filter translator
+│   ├── ui/                # Shared React components (StyleX + Base UI)
+│   └── utils/             # Pure utility helpers (unit-tested)
+├── docs/                  # Design proposals (group-ownership.md, …)
+├── .github/
+│   ├── actions/setup/     # pnpm + Node + install composite action
+│   └── workflows/         # ci-static, ci-unit, ci-integration
+└── tooling/
+    └── bruno/             # API request collections
+```
+
+### 🛠️ Tech stack
+
+**API (`apps/api`):**
+
+- [Hono](https://hono.dev/) + [hono-openapi](https://github.com/honojs/middleware/tree/main/packages/openapi-spec) for routes and a Scalar-rendered `/docs` UI
+- [Kysely](https://kysely.dev/) (typed SQL query builder) on [PostgreSQL](https://www.postgresql.org/)
+- [BullMQ](https://bullmq.io/) queues chapter processing for `apps/worker`
+- [Better Auth](https://www.better-auth.com/) (email/password + magic link + OAuth, with CASL-based ability checks)
+- [Zod 4](https://zod.dev/) for input validation
+- [sharp](https://sharp.pixelplumbing.com/) + [magic-bytes.js](https://github.com/LarsKoelpin/magic-bytes) for upload validation
+- [evlog](https://github.com/evlog/evlog) → HyperDX (OpenTelemetry) for structured logs
+
+**UI (`apps/storybook` + `packages/ui`):**
+
+- [React 19](https://react.dev/)
+- [StyleX](https://stylexjs.com/) — compile-time atomic CSS; the only styling layer in the repo
+- [Base UI](https://base-ui.com/) for accessible primitives
+- Storybook 10 for component documentation
+
+**Web (`apps/web`):**
+
+- [TanStack Start](https://tanstack.com/start) (React) — SSR + file-based routing on [TanStack Router](https://tanstack.com/router)
+- [Vite 8](https://vite.dev/) with the `tanstackStart()` plugin
+- [StyleX](https://stylexjs.com/) via `@stylexjs/unplugin`
+- Scaffolded with the TanStack CLI; per-app context (including [TanStack Intent](https://tanstack.com/intent) skill mappings) lives in [`apps/web/AGENTS.md`](./apps/web/AGENTS.md)
+
+**Infrastructure (`docker-compose.yml`):**
+
+- [PostgreSQL 18](https://www.postgresql.org/) — primary database
+- [Meilisearch](https://www.meilisearch.com/) — search index
+- [Dragonfly](https://www.dragonflydb.io/) — Redis-compatible cache (Better Auth secondary storage, rate limits)
+- [RustFS](https://rustfs.com/) — S3-compatible object store for cover/banner/staff images
+- [HyperDX](https://www.hyperdx.io/) — observability stack
+- [Umami](https://umami.is/) — cookieless audience measurement
+
+## 🚀 Getting started
+
+### Prerequisites
+
+- **Node.js**: see `engines.node` in `package.json` (`pnpm` will warn if mismatched)
+- **pnpm**: see `packageManager` in `package.json`
+- **Docker & Docker Compose** for local infrastructure
+
+### Setup
+
+```bash
+git clone https://github.com/taiyomoe/taiyo.git
+cd taiyo
+pnpm install
+pnpm bootstrap   # env files, Docker infra, S3 bucket, migrations, seed, search index
+pnpm dev         # API + web + worker (Storybook is excluded)
+```
+
+`pnpm bootstrap` is idempotent, so rerun it whenever something feels out of
+sync. It prints the local URLs when it finishes. For the first checkout these are:
+
+- Web: <http://localhost:3000>
+- API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
+- Storybook (run separately): `pnpm -F storybook dev` → <http://localhost:6006>
+
+**Dev accounts.** The seed creates one account per role, all with the password
+`password123`: `user@gmail.com` (`USER`), `intern@gmail.com` (`UPLOADER_INTERN`),
+`uploader@gmail.com` (`UPLOADER`), `moderator@gmail.com` (`MODERATOR`) and
+`admin@gmail.com` (`ADMIN`). It also creates the group "Taiyō Dev Scans", owned by
+`owner@gmail.com`, with `member@gmail.com` as a member allowed to upload and edit
+its chapters. The other seeded users have no password and cannot sign in. `pnpm bootstrap` also
+prints a ready-made session cookie for each, valid for 30 days and reused on
+later runs, to skip the sign-in form in scripts and headless browsers. Under
+`pnpm dev:tunnel`, send it as `__Secure-better-auth.session_token`.
+
+**Seed images.** The seed is an anonymized sample of production (see
+`packages/db/README.md`) that keeps the production media and chapter IDs. Apps
+load images through a local read-only proxy (`IMAGES_PORT`): it serves what is
+in your RustFS bucket and falls back to the production CDN for everything else,
+so the sample shows real covers and pages while uploads only ever land in
+RustFS. To work offline, download
+<https://cdn.taiyo.moe/dev/sample-images.zip>, unzip it into `output/`, and run
+`pnpm -F @taiyomoe/scripts cli upload-sample-images`.
+
+**Env files.** The root `.env` holds every local port and credential, and
+`bootstrap` derives the connection URLs in `apps/*/.env` from it. To change a
+port or a credential, edit the root `.env` and rerun `pnpm bootstrap`. Leave
+the rest of the app env files alone. Replace `BETTER_AUTH_SECRET` with your own
+(`npx auth secret`) for anything beyond local dev; social OAuth and Turnstile
+work without credentials, but those flows stay disabled. Backend tooling
+(`pnpm -F db kysely …`, `pnpm -F scripts cli`) and the integration tests all
+read `apps/api/.env`.
+
+**Several checkouts at once.** Every port is published on 127.0.0.1 only. Each
+checkout (a git worktree, say) claims a port slot: slot N shifts every port by
+10 × N. `bootstrap` picks the first slot that no other worktree claims and that
+is free on this machine, so two checkouts never collide. Pass `--slot N` to
+choose one yourself.
+
+**Public URLs.** `pnpm dev:tunnel` opens two [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
+quick tunnels and starts `pnpm dev` behind them. One tunnel serves the web app
+and one serves the API docs. The web app reaches the API through its own origin
+(`/_api` and `/api/auth` are proxied by Vite), so sign-in cookies work over the
+tunnel too. Images take the same route through `/_images`, and chapter page uploads are
+signed for the web tunnel so Vite can forward those `PUT`s to the local RustFS.
+The URLs change on every run and are never written to disk.
+
+**HyperDX** is what production ships logs to, but locally it is opt-in: set
+`COMPOSE_PROFILES="hyperdx"` in the root `.env` and rerun `pnpm bootstrap`. Its
+collector only accepts logs after you sign up in its UI; copy the ingestion key
+into `HYPERDX_INGESTION_KEY` in `apps/api/.env` to turn log shipping on. Without
+the profile, or until then, the API logs to stdout only.
+
+**Umami** measures production's audience and is opt-in locally too: add `umami` to
+`COMPOSE_PROFILES` (`"hyperdx,umami"` for both) and rerun `pnpm bootstrap`. Sign in
+with `admin` / `umami`, add a website, and put its id into `VITE_UMAMI_WEBSITE_ID` in
+`apps/web/.env`. The web relays the tracker under `/u` on its own origin, so only the
+script and the event endpoint of Umami are public.
+
+## 📝 Available scripts
+
+Root-level:
+
+```bash
+pnpm bootstrap          # set up or resync the local environment (idempotent)
+pnpm dev                # turbo run dev — API + web + worker (excludes Storybook)
+pnpm dev:tunnel         # pnpm dev behind cloudflared quick tunnels
+pnpm build              # turbo run build
+pnpm format             # oxfmt --check
+pnpm format:fix         # oxfmt (in place)
+pnpm lint               # oxlint (type-aware; doubles as the typecheck gate)
+pnpm lint:fix           # oxlint --fix
+pnpm lint:ws            # sherif — workspace dependency validation
+pnpm knip               # unused exports + dead deps
+pnpm lint:messages      # unused i18n messages + keys missing from a locale
+pnpm test:unit          # vitest (vitest.config.unit.ts)
+pnpm test:integration   # vitest (vitest.config.integration.ts) — requires pnpm bootstrap
+```
+
+Package-specific:
+
+```bash
+pnpm -F db kysely migrate latest   # apply migrations
+pnpm -F db kysely seed run         # seed the production sample
+pnpm -F storybook dev              # storybook dev server
+pnpm -F storybook build            # static storybook build
+pnpm -F api dev                    # tsx-watch the API
+pnpm -F web dev                    # TanStack Start dev server (WEB_PORT)
+pnpm -F web build                  # production build (client + SSR)
+```
+
+## 🔧 Development
+
+### Branches
+
+- `main` — production code
+- `rewrite` — current full-stack rebuild (this branch)
+- `feature/*`, `hotfix/*`, `release/*` — see git-flow
+
+### Code quality
+
+- **Linting + typecheck**: [oxlint](https://oxc.rs/docs/guide/usage/linter.html) with `typeAware: true` + `typeCheck: true` — this is the type gate; there's no separate `tsc --noEmit` step
+- **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)
+- **Workspace deps**: [sherif](https://github.com/QuiiBz/sherif)
+- **Dead code**: [knip](https://knip.dev/)
+- **Pre-commit**: [lefthook](https://github.com/evilmartians/lefthook) runs `format` + `lint` on staged files
+
+### Comments
+
+Code is expected to be self-explanatory, so the source tree carries almost no
+comments. Write one only when the reason cannot be read from the code and getting
+it wrong would break silently — a compiler quirk, a lock that prevents a race, a
+required-but-unused import. Never restate what the next line does.
+
+`packages/db/src/migrations/` and `packages/db/src/seeds/` are exempt: they are
+applied, frozen history.
+
+### Package management
+
+- Internal packages: `workspace:^`
+- Always `pnpm` (never `npm`/`yarn`)
+- Dependencies are updated by Dependabot (`.github/dependabot.yml`), with a 7-day cooldown
+
+### Testing
+
+- Unit tests live next to source under `__tests__/` (Vitest, fast)
+- Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.agents/skills/create-backend-route/SKILL.md` for the conventions.
+- That isolation is expensive, so on a busy machine the suite can saturate the box and produce a scattering of bare `Test timed out in 5000ms` failures in suites unrelated to whatever you changed — a different handful each run. That pattern is contention, not a regression. Re-run with `npx vitest run --config vitest.config.integration.ts --maxWorkers=2` before reading anything into it.
+- Tests that wait on an external clock (Meilisearch indexes asynchronously; the rate-limit test fires 61 sequential requests) carry an explicit per-test timeout. Prefer that over raising the global `testTimeout`, so suites that should be fast still fail fast.
+
+### Continuous integration
+
+Three independent workflows, one job each, all triggered on the same events and
+all running in parallel:
+
+| Workflow                               | Runs                                                 |
+| -------------------------------------- | ---------------------------------------------------- |
+| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`, `lint:messages` |
+| `.github/workflows/ci-unit.yml`        | `test:unit`                                          |
+| `.github/workflows/ci-integration.yml` | `test:integration`, against service containers       |
+
+All three run on pull requests and on direct pushes to `main` and `develop`,
+and install via the shared `.github/actions/setup` composite action. The two
+test workflows skip doc-only changes via `paths-ignore`; static analysis always
+runs, since `oxfmt` formats markdown too.
+
+## 🌐 Environment variables
+
+Env vars are split per app rather than living in one root file:
+
+| File               | Owns                                                                                                       | Loaded by                                                                                                                             |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `.env`             | Every local port and credential (`WEB_PORT`, `DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`, `pnpm bootstrap`                                                                                                    |
+| `apps/api/.env`    | All server-side vars — DB / cache / S3 / search / auth / email                                             | `apps/api`, the backend tooling in `packages/db` & `packages/scripts` (`--env-file=../../apps/api/.env`), and `pnpm test:integration` |
+| `apps/web/.env`    | `VITE_*` client vars, plus the dev server's `PORT` and `API_PORT`                                          | Vite (`apps/web` is its own `envDir`)                                                                                                 |
+| `apps/worker/.env` | DB / cache / S3 plus `CHAPTER_PROCESSING_CONCURRENCY` — a subset of `apps/api/.env`                        | `apps/worker` (`--env-file=.env`)                                                                                                     |
+
+Each `.env.example` documents its own file's variables, with local-development defaults. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`, which is where a variable's shape and whether it is required are defined.
+
+`pnpm bootstrap` writes every value in `apps/*/.env` that points at local infrastructure (ports, connection URLs, the S3 and Meilisearch credentials) from the root `.env`, so those never need syncing by hand. `apps/storybook` needs no env vars.
+
+## 📦 Package overview
+
+- **`@taiyomoe/db`** — Kysely + migrations + seeds + per-table model types
+- **`@taiyomoe/auth`** — Better Auth config, lifecycle hooks, server + client exports
+- **`@taiyomoe/cache`** — Dragonfly (ioredis) client, namespaced cache helpers
+- **`@taiyomoe/config`** — runtime constants (image limits, auth limits, OpenAPI metadata)
+- **`@taiyomoe/email`** — react-email templates + send helpers
+- **`@taiyomoe/queue`** — BullMQ queue, chapter-upload processor and stale-task reaper
+- **`@taiyomoe/s3`** — typed S3 client + key derivation
+- **`@taiyomoe/schemas`** — shared Zod schemas (pagination meta, etc.)
+- **`@taiyomoe/scripts`** — CLI scripts (init-s3, init-meilisearch, etc.)
+- **`@taiyomoe/search`** — Meilisearch client + media sync + search input schema
+- **`@taiyomoe/ui`** — React components on StyleX + Base UI
+- **`@taiyomoe/utils`** — pure helpers (unit-tested)
+
+## 🚀 Deployment
+
+The repo expects deployment via [Coolify](https://coolify.io/) onto S3-compatible storage (RustFS for `taiyo-ci`, Garage for production), with Cloudflare in front. Production secrets are not committed; `.env.prod` is gitignored.
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Branch off `develop`
+3. Make your changes
+4. Run `pnpm format:fix && pnpm lint:fix && pnpm test:unit && pnpm test:integration`
+5. Open a PR
+
+### Guidelines
+
+- Match existing patterns (especially handler / middleware / router structure under `apps/api`)
+- Conventional Commits style for messages
+- Add or update tests for any behavior change
+- Update docs when the public surface changes
+
+## 📄 License
+
+MIT — see [LICENSE](LICENSE).
+
+## 🙏 Acknowledgments
+
+- [MangaDex](https://mangadex.org/) for UI inspiration and manga data

@@ -1,0 +1,13 @@
+.git
+**/node_modules
+**/dist
+**/.turbo
+**/.output
+**/.tanstack
+**/storybook-static
+**/.env*
+!**/.env.example
+apps/web/e2e/.auth
+apps/web/test-results
+apps/web/playwright-report
+data

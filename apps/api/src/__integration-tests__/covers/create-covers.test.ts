@@ -1,0 +1,300 @@
+import { ListObjectsV2Command } from "@aws-sdk/client-s3"
+import { config } from "@taiyomoe/config"
+import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
+import { signInAs } from "../helpers/auth"
+import { fakeImageOfSize, invalidImage, tinyGif, tinyPng } from "../helpers/fixtures"
+import { api } from "../helpers/request"
+import { test } from "../setup"
+
+const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
+const SEEDED_MAIN_COVER_ID = "a56cc54d-7776-4787-9b21-97a4674b80bc"
+const getForm = async () => {
+  const form = new FormData()
+
+  form.append("covers.0.file", await tinyPng())
+  form.append("covers.0.language", "en")
+  form.append("covers.0.contentRating", "NORMAL")
+
+  return form
+}
+
+describe("POST /medias/:id/covers", () => {
+  test("adds a cover (DB + S3)", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const coversBefore = await services.db
+      .selectFrom("covers")
+      .select("id")
+      .where("mediaId", "=", SEEDED_MEDIA_ID)
+      .execute()
+    const res = await api<{ ids: string[] }>(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form: await getForm(),
+    })
+
+    expect(res.status).toBe(201)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.ids).toHaveLength(1)
+    const [coverId] = res.body.data.ids
+    const coversAfter = await services.db
+      .selectFrom("covers")
+      .select("id")
+      .where("mediaId", "=", SEEDED_MEDIA_ID)
+      .execute()
+
+    expect(coversAfter).toHaveLength(coversBefore.length + 1)
+
+    const s3Listing = await services.s3.send(
+      new ListObjectsV2Command({
+        Bucket: services.s3Bucket,
+        Prefix: `medias/${SEEDED_MEDIA_ID}/covers/${coverId}`,
+      }),
+    )
+
+    expect(s3Listing.Contents).toHaveLength(1)
+  }, 30_000)
+
+  test("replaces the main cover when a new cover is uploaded with main=true", async ({
+    app,
+    services,
+  }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm()
+
+    form.append("covers.0.main", "true")
+
+    const res = await api<{ ids: string[] }>(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(201)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const mainCovers = await services.db
+      .selectFrom("covers")
+      .select("id")
+      .where("mediaId", "=", SEEDED_MEDIA_ID)
+      .where("isMainCover", "=", true)
+      .where("deletedAt", "is", null)
+      .execute()
+
+    expect(mainCovers).toHaveLength(1)
+    expect(mainCovers[0]?.id).toBe(res.body.data.ids[0])
+
+    const previousMain = await services.db
+      .selectFrom("covers")
+      .select("isMainCover")
+      .where("id", "=", SEEDED_MAIN_COVER_ID)
+      .executeTakeFirstOrThrow()
+
+    expect(previousMain.isMainCover).toBe(false)
+  }, 30_000)
+
+  test("stores a gif upload as .gif and serves it under that url", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = new FormData()
+
+    form.append("covers.0.file", await tinyGif())
+    form.append("covers.0.language", "en")
+    form.append("covers.0.contentRating", "NORMAL")
+
+    const res = await api<{ ids: string[] }>(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(201)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const [coverId] = res.body.data.ids
+    const row = await services.db
+      .selectFrom("covers")
+      .select("extension")
+      .where("id", "=", defined(coverId))
+      .executeTakeFirstOrThrow()
+
+    expect(row.extension).toBe("gif")
+
+    const s3Listing = await services.s3.send(
+      new ListObjectsV2Command({
+        Bucket: services.s3Bucket,
+        Prefix: `medias/${SEEDED_MEDIA_ID}/covers/${coverId}`,
+      }),
+    )
+
+    expect(s3Listing.Contents?.map(({ Key }) => Key)).toEqual([
+      `medias/${SEEDED_MEDIA_ID}/covers/${coverId}.gif`,
+    ])
+
+    const detail = await api<{ url: string }>(app, `/covers/${coverId}`)
+
+    expect(detail.status).toBe(200)
+
+    if (!detail.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(detail.body)}`)
+    }
+
+    expect(detail.body.data.url).toContain(`/medias/${SEEDED_MEDIA_ID}/covers/${coverId}.gif`)
+  })
+
+  test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      form: await getForm(),
+    })
+
+    expect(res.status).toBe(401)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("UNAUTHORIZED")
+  })
+
+  test("rejects banned users with FORBIDDEN", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN", banned: true })
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form: await getForm(),
+    })
+
+    expect(res.status).toBe(403)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("FORBIDDEN")
+  })
+
+  test("rejects USER role with FORBIDDEN", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "USER" })
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form: await getForm(),
+    })
+
+    expect(res.status).toBe(403)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("FORBIDDEN")
+  })
+
+  test("returns VALIDATION_ERROR when no covers are sent", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = new FormData()
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(422)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("VALIDATION_ERROR")
+  })
+
+  test("returns MEDIA_NOT_FOUND for an unknown media", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const res = await api(app, `/medias/00000000-0000-0000-0000-000000000000/covers`, {
+      method: "POST",
+      headers,
+      form: await getForm(),
+    })
+
+    expect(res.status).toBe(404)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("MEDIA_NOT_FOUND")
+  })
+
+  test("returns IMAGE_TOO_LARGE one byte over the size limit", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm()
+
+    form.set("covers.0.file", fakeImageOfSize(config.images.maxSizeBytes + 1))
+
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(422)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("IMAGE_TOO_LARGE")
+  })
+
+  test("accepts the size limit exactly, failing later on content", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm()
+
+    form.set("covers.0.file", fakeImageOfSize(config.images.maxSizeBytes))
+
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(422)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("INVALID_IMAGE")
+  })
+
+  test("returns INVALID_IMAGE for a fake image file", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm()
+
+    form.set("covers.0.file", invalidImage())
+
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(422)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("INVALID_IMAGE")
+  })
+})

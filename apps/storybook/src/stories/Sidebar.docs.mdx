@@ -1,0 +1,65 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as SidebarStories from "./Sidebar.stories"
+
+<Meta title="UI/Sidebar" />
+
+# Sidebar
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/sidebar.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Floating](#floating)
+  - [Inset](#inset)
+  - [Collapsible Icon](#collapsible-icon)
+  - [Non Collapsible](#non-collapsible)
+  - [Initially Collapsed](#initially-collapsed)
+  - [Loading](#loading)
+- [Feedback](#feedback)
+
+## Overview
+
+`Sidebar` is the compositional shell behind the app's main navigation. Wrap your layout in a `SidebarProvider`, place a `Sidebar` with the usual `SidebarHeader` / `SidebarContent` / `SidebarFooter` slots, and render the page in a `SidebarInset`. The provider exposes open state via `useSidebar` and binds `Cmd/Ctrl + B` to toggle the panel.
+
+<Canvas of={SidebarStories.Default} />
+
+### Floating
+
+The `floating` variant detaches the sidebar from the viewport edge, adding rounded corners, a border, and a shadow.
+
+<Canvas of={SidebarStories.Floating} />
+
+### Inset
+
+The `inset` variant pushes the page content into a card-like container and shares the sidebar background colour.
+
+<Canvas of={SidebarStories.Inset} />
+
+### Collapsible Icon
+
+`collapsible="icon"` collapses the sidebar to an icon rail instead of sliding it off-canvas; menu button labels are replaced by tooltips while collapsed.
+
+<Canvas of={SidebarStories.CollapsibleIcon} />
+
+### Non Collapsible
+
+`collapsible="none"` renders the sidebar as a fixed-width column with no toggle behaviour.
+
+<Canvas of={SidebarStories.NonCollapsible} />
+
+### Initially Collapsed
+
+Pass `defaultOpen={false}` to the provider to start the sidebar in its collapsed state.
+
+<Canvas of={SidebarStories.InitiallyCollapsed} />
+
+### Loading
+
+`SidebarMenuSkeleton` renders a single menu-row placeholder; map over it while data loads.
+
+<Canvas of={SidebarStories.Loading} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

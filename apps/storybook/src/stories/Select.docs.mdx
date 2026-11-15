@@ -1,0 +1,65 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import * as SelectStories from "./Select.stories"
+
+<Meta title="UI/Select" />
+
+# Select
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/select.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sizes](#sizes)
+  - [Selected by default](#selected-by-default)
+  - [Disabled](#disabled)
+  - [Read only](#read-only)
+  - [Multiple](#multiple)
+  - [With groups](#with-groups)
+- [Feedback](#feedback)
+
+## Overview
+
+Select components allow users to choose from a list of options. They provide a clean, accessible interface for single or multiple selections with clear visual feedback, and are well suited for forms where users pick from predefined choices.
+
+<Canvas of={SelectStories.Default} />
+
+### Sizes
+
+`SelectTrigger` exposes three sizes — `sm`, `default`, and `lg` — to align with surrounding form density.
+
+<Canvas of={SelectStories.Sizes} />
+
+### Selected by default
+
+Pass `defaultValue` on the root `Select` to pre-select an item on mount.
+
+<Canvas of={SelectStories.SelectedByDefault} />
+
+### Disabled
+
+Disabled selects prevent user interaction and provide visual feedback that the field is not available.
+
+<Canvas of={SelectStories.Disabled} />
+
+### Read only
+
+Read-only selects display their current value but disallow changes; focus and keyboard navigation are preserved.
+
+<Canvas of={SelectStories.ReadOnly} />
+
+### Multiple
+
+Multiple selection allows users to choose several options at once, with each selected item clearly indicated with a checkmark.
+
+<Canvas of={SelectStories.Multiple} />
+
+### With groups
+
+Compose `SelectGroup`, `SelectGroupLabel`, and `SelectSeparator` to organize a long list of options into labelled sections.
+
+<Canvas of={SelectStories.WithGroups} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

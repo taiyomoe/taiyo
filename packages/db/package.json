@@ -2,36 +2,35 @@
   "name": "@taiyomoe/db",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./env": "./src/env.ts"
+    "./constants": "./src/constants.ts",
+    "./cosmetics": "./src/cosmetics.ts",
+    "./env": "./src/env.ts",
+    "./levels": "./src/levels.ts",
+    "./loot-boxes": "./src/loot-boxes.ts",
+    "./sample": "./src/sample.ts"
   },
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit",
-    "seed": "prisma migrate reset && pnpm -F @taiyomoe/logs run migrate",
-    "db": "prisma",
-    "postinstall": "prisma generate --no-hints"
-  },
-  "prisma": {
-    "schema": "./src/prisma/schema.prisma",
-    "seed": "cross-env PRISMA_SEED=1 tsx ./src/prisma/seed.ts"
+    "kysely": "node --env-file-if-exists=../../apps/api/.env node_modules/kysely-ctl/dist/bin.mjs"
   },
   "dependencies": {
-    "@faker-js/faker": "^9.3.0",
-    "@prisma/client": "^6.1.0",
-    "@t3-oss/env-core": "^0.11.1",
-    "prisma-json-types-generator": "^3.2.2",
-    "zod": "^3.24.1",
-    "zod-prisma-types": "^3.2.1"
+    "@better-auth/utils": "^0.5.1",
+    "@faker-js/faker": "^10.6.0",
+    "@t3-oss/env-core": "^0.13.11",
+    "kysely": "^0.29.8",
+    "mangadex-full-api": "^6.2.0",
+    "pg": "^8.23.1",
+    "radashi": "^13.0.4",
+    "validator": "^13.15.35",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@taiyomoe/meilisearch": "workspace:*",
-    "@taiyomoe/tsconfig": "workspace:*",
-    "cross-env": "^7.0.3",
-    "prisma": "^6.1.0",
-    "tsx": "^4.23.15"
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "@types/validator": "^13.15.10",
+    "kysely-ctl": "^0.22.0"
   }
 }

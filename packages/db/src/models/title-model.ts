@@ -1,0 +1,17 @@
+import type { Language } from "../constants"
+import type { Generated, Timestamp } from "../types"
+
+export type Title = {
+  id: Generated<string>
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
+  deletedAt: Timestamp | null
+  title: string
+  language: Language
+  priority: number
+  isAcronym: Generated<boolean>
+  isMainTitle: Generated<boolean>
+  mediaId: string
+  creatorId: string
+  deleterId: string | null
+}

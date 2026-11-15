@@ -1,0 +1,1 @@
+export const LATEST_UPDATES_PER_PAGE = 12

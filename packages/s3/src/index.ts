@@ -1,42 +1,83 @@
-import { S3Client } from "@aws-sdk/client-s3"
-import { AwsClient } from "aws4fetch"
+import {
+  CreateBucketCommand,
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  PutBucketCorsCommand,
+  PutBucketLifecycleConfigurationCommand,
+  PutBucketPolicyCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { env } from "./env"
 
-export const s3Client = new S3Client({
-  region: "auto",
-  endpoint: env.S3_URL,
-  credentials: {
-    accessKeyId: env.S3_ACCESS_KEY_ID,
-    secretAccessKey: env.S3_SECRET_ACCESS_KEY,
-  },
-})
+export const getS3Client = (endpoint = env.S3_ENDPOINT) =>
+  new S3Client({
+    region: "auto",
+    endpoint,
+    forcePathStyle: true,
+    credentials: {
+      accessKeyId: env.S3_ACCESS_KEY_ID,
+      secretAccessKey: env.S3_SECRET_ACCESS_KEY,
+    },
+  })
 
-export const presignedClient = new AwsClient({
-  region: "auto",
-  accessKeyId: env.S3_ACCESS_KEY_ID,
-  secretAccessKey: env.S3_SECRET_ACCESS_KEY,
-})
+export const getS3Bucket = () => env.S3_BUCKET_NAME
 
-export const getSignedUrl = async (
+export {
+  CreateBucketCommand,
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  PutBucketCorsCommand,
+  PutBucketLifecycleConfigurationCommand,
+  PutBucketPolicyCommand,
+  PutObjectCommand,
+  S3Client,
+}
+
+export const getCoverKey = (mediaId: string, fileName: string) =>
+  `medias/${mediaId}/covers/${fileName}`
+
+export const getBannerKey = (mediaId: string, fileName: string) =>
+  `medias/${mediaId}/banners/${fileName}`
+
+const presignClient =
+  env.S3_PRESIGN_ENDPOINT === undefined ? null : getS3Client(env.S3_PRESIGN_ENDPOINT)
+
+export const getPresignedUploadUrl = (
+  s3: S3Client,
+  bucket: string,
   key: string,
   contentType: string,
   contentLength: number,
-) => {
-  const result = await presignedClient.sign(
-    new Request(
-      `${env.S3_URL}/${env.S3_UPLOADS_BUCKET_NAME}/${key}?X-Amz-Expires=${300}`,
-      { method: "PUT" },
-    ),
-    {
-      aws: { signQuery: true, allHeaders: true },
-      headers: {
-        "Content-Type": contentType,
-        "Content-Length": String(contentLength),
-      },
-    },
+  expiresIn: number,
+) =>
+  getSignedUrl(
+    presignClient ?? s3,
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ContentType: contentType,
+      ContentLength: contentLength,
+    }),
+    // The presigner leaves both headers unsigned by default, which would let the uploader store
+    // any type (text/html included) and any size in the publicly readable bucket.
+    { expiresIn, signableHeaders: new Set(["content-type", "content-length"]) },
   )
 
-  return result.url
-}
+export const getChapterPageKey = (mediaId: string, chapterId: string, pageId: string) =>
+  `medias/${mediaId}/chapters/${chapterId}/${pageId}.jpg`
 
-export * from "@aws-sdk/client-s3"
+export const S3_PUBLIC_BASE = env.S3_PUBLIC_URL.replace(/\/+$/, "")
+
+export const getCoverUrl = (mediaId: string, coverId: string, extension: string) =>
+  `${S3_PUBLIC_BASE}/${getCoverKey(mediaId, `${coverId}.${extension}`)}`
+
+export const getBannerUrl = (mediaId: string, bannerId: string, extension: string) =>
+  `${S3_PUBLIC_BASE}/${getBannerKey(mediaId, `${bannerId}.${extension}`)}`
+
+export const getPublicImageUrl = (key: string) => `${S3_PUBLIC_BASE}/${key}`

@@ -1,0 +1,706 @@
+import type { ChapterStatus } from "@taiyomoe/db/constants"
+import { describe, expect, it } from "vitest"
+import {
+  type Actor,
+  type ActorMembership,
+  allows,
+  type ChapterTarget,
+  buildRules,
+  createPermissions,
+  GROUP_PERMISSIONS,
+  type GroupPermission,
+  type MediaSuggestionTarget,
+  type MemberTarget,
+  ROLES,
+  type Role,
+  type StaticPermissionPath,
+  toRole,
+} from ".."
+
+const GROUP_A = "00000000-0000-4000-8000-00000000000a"
+const GROUP_B = "00000000-0000-4000-8000-00000000000b"
+const ACTOR_ID = "00000000-0000-4000-8000-000000000001"
+const OTHER_ID = "00000000-0000-4000-8000-000000000002"
+const actor = (role: Role, memberships: ActorMembership[] = [], banned = false) =>
+  ({ id: ACTOR_ID, role, banned, memberships }) satisfies Actor
+const member = (groupId: string, permissions: GroupPermission[] = []) =>
+  ({ groupId, role: "MEMBER", permissions }) satisfies ActorMembership
+const owner = (groupId: string) =>
+  ({ groupId, role: "OWNER", permissions: [] }) satisfies ActorMembership
+const target = (overrides: Partial<MemberTarget> = {}) =>
+  ({
+    groupId: GROUP_A,
+    userId: OTHER_ID,
+    role: "MEMBER",
+    permissions: [],
+    ...overrides,
+  }) satisfies MemberTarget
+const chapter = (
+  groupIds: string[] = [],
+  uploaderId = OTHER_ID,
+  status: ChapterStatus = "PUBLISHED",
+) => ({ uploaderId, status, groupIds }) satisfies ChapterTarget
+const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
+  "dashboard.open": ROLES,
+  "dashboard.viewStats": ["MODERATOR", "ADMIN"],
+  "media.create": ["UPLOADER_INTERN", "UPLOADER", "ADMIN"],
+  "media.update": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
+  "media.suggest": ROLES,
+  "mediaSuggestion.review": ["UPLOADER", "MODERATOR", "ADMIN"],
+  "media.delete": ["UPLOADER", "ADMIN"],
+  "media.restore": ["ADMIN"],
+  "media.flag": ["MODERATOR", "ADMIN"],
+  "media.reindex": ["ADMIN"],
+  "staff.create": ["UPLOADER_INTERN", "UPLOADER", "ADMIN"],
+  "staff.update": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
+  "staff.delete": ["UPLOADER", "ADMIN"],
+  "chapter.publish": ["UPLOADER", "ADMIN"],
+  "chapter.submit": ROLES,
+  "chapter.review": ["UPLOADER", "ADMIN"],
+  "chapter.flag": ["UPLOADER", "MODERATOR", "ADMIN"],
+  "group.create": ["UPLOADER", "ADMIN"],
+  "group.delete": ["ADMIN"],
+  "pageReport.create": ROLES,
+  "pageReport.review": ["UPLOADER", "MODERATOR", "ADMIN"],
+  "ownershipRequest.create": ROLES,
+  "ownershipRequest.review": ["ADMIN"],
+  "groupCreationRequest.create": ROLES,
+  "groupCreationRequest.review": ["ADMIN"],
+  "groupReport.create": ROLES,
+  "groupReport.review": ["MODERATOR", "ADMIN"],
+  "comment.create": ROLES,
+  "comment.delete": ["MODERATOR", "ADMIN"],
+  "comment.review": ["MODERATOR", "ADMIN"],
+  "comment.removeImage": ["MODERATOR", "ADMIN"],
+  "user.list": ["MODERATOR", "ADMIN"],
+  "auditLog.read": ["ADMIN"],
+}
+const leaves = (node: object, prefix = ""): Array<[string, unknown]> =>
+  Object.entries(node).flatMap(([key, value]: [string, unknown]): Array<[string, unknown]> =>
+    typeof value === "object" && value !== null
+      ? leaves(value, `${prefix}${key}.`)
+      : [[`${prefix}${key}`, value]],
+  )
+const STATIC_PATHS = Object.keys(STATIC_MATRIX).filter((path): path is StaticPermissionPath =>
+  Object.hasOwn(STATIC_MATRIX, path),
+)
+
+describe("role matrix", () => {
+  it("covers every permission that takes no data", () => {
+    const staticPaths = leaves(buildRules(actor("ADMIN")))
+      .filter(([, rule]) => typeof rule === "boolean")
+      .map(([path]) => path)
+
+    expect([...staticPaths].sort()).toEqual([...STATIC_PATHS].sort())
+  })
+
+  describe.each(ROLES)("%s", (role) => {
+    for (const path of STATIC_PATHS) {
+      const expected = STATIC_MATRIX[path].includes(role)
+
+      it(`${expected ? "can" : "cannot"} ${path}`, () => {
+        expect(allows(actor(role), path)).toBe(expected)
+      })
+    }
+  })
+
+  it("lets admins do everything that takes no data", () => {
+    expect(STATIC_PATHS.every((path) => allows(actor("ADMIN"), path))).toBe(true)
+  })
+
+  it("agrees with the checker on every path that takes no data", () => {
+    const can = createPermissions(actor("UPLOADER"))
+
+    expect(allows(actor("UPLOADER"), "media.delete")).toBe(can("media.delete"))
+    expect(allows(actor("UPLOADER"), "user.list")).toBe(can("user.list"))
+    expect(allows(actor("USER", [], true), "media.suggest")).toBe(false)
+    expect(allows(null, "dashboard.open")).toBe(false)
+  })
+})
+
+describe("signed-out and banned users", () => {
+  const everything = (subject: Actor | null) => {
+    const can = createPermissions(subject)
+
+    return [
+      ...STATIC_PATHS.map((path) => allows(subject, path)),
+      can("mediaSuggestion.view", { authorId: ACTOR_ID, status: "PENDING" }),
+      can("mediaSuggestion.update", { authorId: ACTOR_ID, status: "PENDING" }),
+      can("mediaSuggestion.withdraw", { authorId: ACTOR_ID, status: "PENDING" }),
+      can("chapter.view", chapter([GROUP_A], ACTOR_ID, "PENDING")),
+      can("chapter.update", chapter([GROUP_A])),
+      can("chapter.withdraw", chapter([GROUP_A], ACTOR_ID, "PENDING")),
+      can("chapter.delete", chapter([GROUP_A])),
+      can("chapter.credit", { chapter: chapter([GROUP_A]), groupId: GROUP_B }),
+      can("chapter.uncredit", { chapter: chapter([GROUP_A]), groupId: GROUP_A }),
+      can("group.update", { id: GROUP_A }),
+      can("group.uploadChapters", { id: GROUP_A }),
+      can("group.manageMembers", { id: GROUP_A }),
+      can("group.transferOwnership", { id: GROUP_A }),
+      can("group.inviteMember", { groupId: GROUP_A, permissions: [] }),
+      can("group.updateMember", { member: target(), permissions: ["EDIT_CHAPTERS"] }),
+      can("group.removeMember", target()),
+      can("group.promoteMember", target()),
+      can("group.demoteMember", target({ role: "OWNER", userId: ACTOR_ID })),
+      can("user.ban", { id: OTHER_ID, role: "USER" }),
+      can("user.setRole", { id: OTHER_ID }),
+      can("user.impersonate", { id: OTHER_ID, role: "USER" }),
+      can("user.setPassword", { id: OTHER_ID, role: "USER" }),
+      can("user.manageSessions", { id: OTHER_ID, role: "USER" }),
+    ]
+  }
+
+  it("denies everything when signed out", () => {
+    expect(everything(null).some(Boolean)).toBe(false)
+  })
+
+  it("denies everything to a banned admin who owns the group", () => {
+    expect(everything(actor("ADMIN", [owner(GROUP_A), owner(GROUP_B)], true)).some(Boolean)).toBe(
+      false,
+    )
+  })
+
+  it("denies every permission tree query when signed out", () => {
+    const can = createPermissions(null)
+
+    expect(can("~any")).toBe(false)
+  })
+})
+
+describe("toRole", () => {
+  it("keeps known roles", () => {
+    for (const role of ROLES) {
+      expect(toRole(role)).toBe(role)
+    }
+  })
+
+  it("falls back to USER for anything else", () => {
+    for (const value of ["admin", "ROOT", "", null, undefined, 1, ["ADMIN"], { role: "ADMIN" }]) {
+      expect(toRole(value)).toBe("USER")
+    }
+  })
+})
+
+describe("chapters", () => {
+  it("lets uploaders, moderators and admins edit and delete any chapter", () => {
+    for (const role of ["UPLOADER", "MODERATOR", "ADMIN"] as const) {
+      const can = createPermissions(actor(role))
+
+      expect(can("chapter.update", chapter())).toBe(true)
+      expect(can("chapter.delete", chapter())).toBe(true)
+      expect(can("chapter.uncredit", { chapter: chapter([GROUP_A]), groupId: GROUP_A })).toBe(true)
+    }
+  })
+
+  it("does not let users or interns edit chapters outside their groups", () => {
+    for (const role of ["USER", "UPLOADER_INTERN"] as const) {
+      const can = createPermissions(actor(role))
+
+      expect(can("chapter.update", chapter([GROUP_A]))).toBe(false)
+      expect(can("chapter.delete", chapter([GROUP_A]))).toBe(false)
+    }
+  })
+
+  it("does not give uploading a chapter rights over it once it is published", () => {
+    const can = createPermissions(actor("USER"))
+
+    expect(can("chapter.update", chapter([], ACTOR_ID))).toBe(false)
+    expect(can("chapter.delete", chapter([], ACTOR_ID))).toBe(false)
+  })
+
+  it("lets a group owner edit and delete every chapter credited to the group", () => {
+    const can = createPermissions(actor("USER", [owner(GROUP_A)]))
+
+    expect(can("chapter.update", chapter([GROUP_A]))).toBe(true)
+    expect(can("chapter.delete", chapter([GROUP_A]))).toBe(true)
+    expect(can("chapter.update", chapter([GROUP_B]))).toBe(false)
+    expect(can("chapter.delete", chapter([GROUP_B]))).toBe(false)
+  })
+
+  it("gives members exactly the chapter permissions they were granted", () => {
+    const editor = createPermissions(actor("USER", [member(GROUP_A, ["EDIT_CHAPTERS"])]))
+    const deleter = createPermissions(actor("USER", [member(GROUP_A, ["DELETE_CHAPTERS"])]))
+    const uploader = createPermissions(actor("USER", [member(GROUP_A, ["UPLOAD_CHAPTERS"])]))
+    const bare = createPermissions(actor("USER", [member(GROUP_A)]))
+
+    expect(editor("chapter.update", chapter([GROUP_A]))).toBe(true)
+    expect(editor("chapter.delete", chapter([GROUP_A]))).toBe(false)
+    expect(deleter("chapter.update", chapter([GROUP_A]))).toBe(false)
+    expect(deleter("chapter.delete", chapter([GROUP_A]))).toBe(true)
+    expect(uploader("chapter.update", chapter([GROUP_A]))).toBe(false)
+    expect(uploader("group.uploadChapters", { id: GROUP_A })).toBe(true)
+    expect(bare("chapter.update", chapter([GROUP_A]))).toBe(false)
+    expect(bare("chapter.delete", chapter([GROUP_A]))).toBe(false)
+    expect(bare("group.uploadChapters", { id: GROUP_A })).toBe(false)
+  })
+
+  it("is enough to hold the permission in one of the credited groups", () => {
+    const can = createPermissions(actor("USER", [member(GROUP_A, ["DELETE_CHAPTERS"])]))
+
+    expect(can("chapter.delete", chapter([GROUP_B, GROUP_A]))).toBe(true)
+  })
+
+  it("lets editors credit any group but only remove credits of groups they edit for", () => {
+    const can = createPermissions(actor("USER", [member(GROUP_A, ["EDIT_CHAPTERS"])]))
+    const shared = chapter([GROUP_A, GROUP_B])
+
+    expect(can("chapter.credit", { chapter: chapter([GROUP_A]), groupId: GROUP_B })).toBe(true)
+    expect(can("chapter.credit", { chapter: chapter([GROUP_B]), groupId: GROUP_A })).toBe(false)
+    expect(can("chapter.uncredit", { chapter: shared, groupId: GROUP_A })).toBe(true)
+    expect(can("chapter.uncredit", { chapter: shared, groupId: GROUP_B })).toBe(false)
+    expect(can("chapter.uncredit", { chapter: chapter([GROUP_B]), groupId: GROUP_A })).toBe(false)
+  })
+
+  it("only uses the group the membership belongs to", () => {
+    const can = createPermissions(actor("USER", [member(GROUP_A, [...GROUP_PERMISSIONS])]))
+
+    expect(can("chapter.update", chapter([GROUP_B]))).toBe(false)
+    expect(can("group.uploadChapters", { id: GROUP_B })).toBe(false)
+    expect(can("group.update", { id: GROUP_B })).toBe(false)
+  })
+})
+
+describe("submissions", () => {
+  const pending = (uploaderId = OTHER_ID, groupIds: string[] = [GROUP_A]) =>
+    chapter(groupIds, uploaderId, "PENDING")
+  const rejected = (uploaderId = OTHER_ID) => chapter([GROUP_A], uploaderId, "REJECTED")
+
+  it("shows published chapters to everyone, signed in or not", () => {
+    expect(createPermissions(null)("chapter.view", chapter())).toBe(true)
+    expect(createPermissions(actor("USER"))("chapter.view", chapter())).toBe(true)
+  })
+
+  it("only shows unpublished chapters to their submitter and to reviewers", () => {
+    for (const unpublished of [pending(), rejected()]) {
+      expect(createPermissions(null)("chapter.view", unpublished)).toBe(false)
+      expect(createPermissions(actor("USER", [owner(GROUP_A)]))("chapter.view", unpublished)).toBe(
+        false,
+      )
+      expect(createPermissions(actor("MODERATOR"))("chapter.view", unpublished)).toBe(false)
+      expect(createPermissions(actor("UPLOADER_INTERN"))("chapter.view", unpublished)).toBe(false)
+      expect(createPermissions(actor("UPLOADER"))("chapter.view", unpublished)).toBe(true)
+      expect(createPermissions(actor("ADMIN"))("chapter.view", unpublished)).toBe(true)
+    }
+
+    expect(createPermissions(actor("USER"))("chapter.view", pending(ACTOR_ID))).toBe(true)
+    expect(createPermissions(actor("USER"))("chapter.view", rejected(ACTOR_ID))).toBe(true)
+  })
+
+  it("lets the submitter edit and withdraw only while pending", () => {
+    const can = createPermissions(actor("USER"))
+
+    expect(can("chapter.update", pending(ACTOR_ID))).toBe(true)
+    expect(can("chapter.withdraw", pending(ACTOR_ID))).toBe(true)
+    expect(can("chapter.credit", { chapter: pending(ACTOR_ID), groupId: GROUP_B })).toBe(true)
+    expect(can("chapter.uncredit", { chapter: pending(ACTOR_ID), groupId: GROUP_A })).toBe(true)
+    expect(can("chapter.update", rejected(ACTOR_ID))).toBe(false)
+    expect(can("chapter.withdraw", rejected(ACTOR_ID))).toBe(false)
+    expect(can("chapter.update", chapter([], ACTOR_ID))).toBe(false)
+    expect(can("chapter.withdraw", chapter([], ACTOR_ID))).toBe(false)
+    expect(can("chapter.delete", pending(ACTOR_ID))).toBe(false)
+  })
+
+  it("gives group permissions no hold over a submission that credits the group", () => {
+    const can = createPermissions(actor("USER", [owner(GROUP_A)]))
+
+    expect(can("chapter.update", pending())).toBe(false)
+    expect(can("chapter.delete", pending())).toBe(false)
+    expect(can("chapter.withdraw", pending())).toBe(false)
+    expect(can("chapter.uncredit", { chapter: pending(), groupId: GROUP_A })).toBe(false)
+  })
+
+  it("lets reviewers edit and delete submissions, not moderators", () => {
+    for (const role of ["UPLOADER", "ADMIN"] as const) {
+      const can = createPermissions(actor(role))
+
+      expect(can("chapter.update", pending())).toBe(true)
+      expect(can("chapter.delete", rejected())).toBe(true)
+      expect(can("chapter.withdraw", pending())).toBe(false)
+    }
+
+    const moderator = createPermissions(actor("MODERATOR"))
+
+    expect(moderator("chapter.update", pending())).toBe(false)
+    expect(moderator("chapter.delete", pending())).toBe(false)
+  })
+})
+
+describe("groups", () => {
+  it("lets uploaders, moderators, admins, owners and EDIT_GROUP members edit the group", () => {
+    for (const role of ["UPLOADER", "MODERATOR", "ADMIN"] as const) {
+      expect(createPermissions(actor(role))("group.update", { id: GROUP_A })).toBe(true)
+    }
+
+    expect(
+      createPermissions(actor("USER", [owner(GROUP_A)]))("group.update", { id: GROUP_A }),
+    ).toBe(true)
+    expect(
+      createPermissions(actor("USER", [member(GROUP_A, ["EDIT_GROUP"])]))("group.update", {
+        id: GROUP_A,
+      }),
+    ).toBe(true)
+    expect(
+      createPermissions(actor("USER", [member(GROUP_A)]))("group.update", { id: GROUP_A }),
+    ).toBe(false)
+    expect(createPermissions(actor("UPLOADER_INTERN"))("group.update", { id: GROUP_A })).toBe(false)
+  })
+
+  it("never lets owners or members delete their group", () => {
+    const can = createPermissions(actor("USER", [owner(GROUP_A)]))
+
+    expect(can("group.delete")).toBe(false)
+  })
+
+  it("lets owners upload, manage members and transfer ownership", () => {
+    const can = createPermissions(actor("USER", [owner(GROUP_A)]))
+
+    expect(can("group.uploadChapters", { id: GROUP_A })).toBe(true)
+    expect(can("group.manageMembers", { id: GROUP_A })).toBe(true)
+    expect(can("group.transferOwnership", { id: GROUP_A })).toBe(true)
+    expect(can("group.transferOwnership", { id: GROUP_B })).toBe(false)
+  })
+
+  it("does not let members transfer ownership, even with every permission", () => {
+    const can = createPermissions(actor("USER", [member(GROUP_A, [...GROUP_PERMISSIONS])]))
+
+    expect(can("group.transferOwnership", { id: GROUP_A })).toBe(false)
+    expect(can("group.promoteMember", target())).toBe(false)
+  })
+
+  it("does not let moderators or uploaders manage members", () => {
+    for (const role of ["UPLOADER", "MODERATOR", "UPLOADER_INTERN"] as const) {
+      const can = createPermissions(actor(role))
+
+      expect(can("group.manageMembers", { id: GROUP_A })).toBe(false)
+      expect(can("group.removeMember", target())).toBe(false)
+      expect(can("group.updateMember", { member: target(), permissions: [] })).toBe(false)
+      expect(can("group.promoteMember", target())).toBe(false)
+    }
+  })
+
+  describe("owners", () => {
+    const can = createPermissions(actor("USER", [owner(GROUP_A)]))
+
+    it("can grant and revoke any permission on members", () => {
+      expect(
+        can("group.updateMember", { member: target(), permissions: [...GROUP_PERMISSIONS] }),
+      ).toBe(true)
+      expect(
+        can("group.updateMember", {
+          member: target({ permissions: [...GROUP_PERMISSIONS] }),
+          permissions: [],
+        }),
+      ).toBe(true)
+    })
+
+    it("can remove and promote members", () => {
+      expect(can("group.removeMember", target({ permissions: ["MANAGE_MEMBERS"] }))).toBe(true)
+      expect(can("group.promoteMember", target())).toBe(true)
+    })
+
+    it("cannot edit, remove or demote another owner", () => {
+      const coOwner = target({ role: "OWNER" })
+
+      expect(can("group.updateMember", { member: coOwner, permissions: [] })).toBe(false)
+      expect(can("group.removeMember", coOwner)).toBe(false)
+      expect(can("group.demoteMember", coOwner)).toBe(false)
+    })
+
+    it("can step down", () => {
+      expect(can("group.demoteMember", target({ role: "OWNER", userId: ACTOR_ID }))).toBe(true)
+    })
+
+    it("has no say over other groups", () => {
+      const elsewhere = target({ groupId: GROUP_B })
+
+      expect(can("group.updateMember", { member: elsewhere, permissions: [] })).toBe(false)
+      expect(can("group.removeMember", elsewhere)).toBe(false)
+      expect(can("group.promoteMember", elsewhere)).toBe(false)
+    })
+  })
+
+  describe("invitations", () => {
+    it("lets owners and admins invite with any permissions", () => {
+      for (const can of [
+        createPermissions(actor("USER", [owner(GROUP_A)])),
+        createPermissions(actor("ADMIN")),
+      ]) {
+        expect(
+          can("group.inviteMember", { groupId: GROUP_A, permissions: [...GROUP_PERMISSIONS] }),
+        ).toBe(true)
+      }
+    })
+
+    it("lets managers invite with permissions they hold, except MANAGE_MEMBERS", () => {
+      const can = createPermissions(
+        actor("USER", [member(GROUP_A, ["MANAGE_MEMBERS", "UPLOAD_CHAPTERS"])]),
+      )
+
+      expect(can("group.inviteMember", { groupId: GROUP_A, permissions: [] })).toBe(true)
+      expect(
+        can("group.inviteMember", { groupId: GROUP_A, permissions: ["UPLOAD_CHAPTERS"] }),
+      ).toBe(true)
+      expect(
+        can("group.inviteMember", { groupId: GROUP_A, permissions: ["DELETE_CHAPTERS"] }),
+      ).toBe(false)
+      expect(can("group.inviteMember", { groupId: GROUP_A, permissions: ["MANAGE_MEMBERS"] })).toBe(
+        false,
+      )
+      expect(can("group.inviteMember", { groupId: GROUP_B, permissions: [] })).toBe(false)
+    })
+
+    it("does not let other members or staff invite", () => {
+      for (const can of [
+        createPermissions(actor("USER", [member(GROUP_A, ["UPLOAD_CHAPTERS", "EDIT_GROUP"])])),
+        createPermissions(actor("MODERATOR")),
+        createPermissions(actor("UPLOADER")),
+      ]) {
+        expect(can("group.inviteMember", { groupId: GROUP_A, permissions: [] })).toBe(false)
+      }
+    })
+  })
+
+  describe("members with MANAGE_MEMBERS", () => {
+    const can = createPermissions(
+      actor("USER", [member(GROUP_A, ["MANAGE_MEMBERS", "UPLOAD_CHAPTERS", "EDIT_CHAPTERS"])]),
+    )
+
+    it("can grant and revoke permissions they hold", () => {
+      expect(
+        can("group.updateMember", {
+          member: target(),
+          permissions: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
+        }),
+      ).toBe(true)
+      expect(
+        can("group.updateMember", {
+          member: target({ permissions: ["EDIT_CHAPTERS"] }),
+          permissions: [],
+        }),
+      ).toBe(true)
+    })
+
+    it("cannot grant permissions they do not hold", () => {
+      expect(
+        can("group.updateMember", { member: target(), permissions: ["DELETE_CHAPTERS"] }),
+      ).toBe(false)
+      expect(can("group.updateMember", { member: target(), permissions: ["EDIT_GROUP"] })).toBe(
+        false,
+      )
+    })
+
+    it("cannot hand out MANAGE_MEMBERS", () => {
+      expect(can("group.updateMember", { member: target(), permissions: ["MANAGE_MEMBERS"] })).toBe(
+        false,
+      )
+    })
+
+    it("cannot touch members who hold permissions they lack", () => {
+      const stronger = target({ permissions: ["DELETE_CHAPTERS"] })
+
+      expect(
+        can("group.updateMember", {
+          member: stronger,
+          permissions: ["DELETE_CHAPTERS", "EDIT_CHAPTERS"],
+        }),
+      ).toBe(false)
+      expect(can("group.removeMember", stronger)).toBe(false)
+    })
+
+    it("cannot touch other managers", () => {
+      const manager = target({ permissions: ["MANAGE_MEMBERS"] })
+
+      expect(
+        can("group.updateMember", {
+          member: manager,
+          permissions: ["MANAGE_MEMBERS", "EDIT_CHAPTERS"],
+        }),
+      ).toBe(false)
+      expect(can("group.removeMember", manager)).toBe(false)
+    })
+
+    it("cannot edit their own permissions", () => {
+      const self = target({
+        userId: ACTOR_ID,
+        permissions: ["MANAGE_MEMBERS", "UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
+      })
+
+      expect(can("group.updateMember", { member: self, permissions: [...GROUP_PERMISSIONS] })).toBe(
+        false,
+      )
+      expect(can("group.removeMember", self)).toBe(false)
+    })
+
+    it("can remove members whose permissions they all hold", () => {
+      expect(can("group.removeMember", target({ permissions: ["EDIT_CHAPTERS"] }))).toBe(true)
+      expect(can("group.removeMember", target())).toBe(true)
+    })
+
+    it("cannot touch owners", () => {
+      const groupOwner = target({ role: "OWNER" })
+
+      expect(can("group.updateMember", { member: groupOwner, permissions: [] })).toBe(false)
+      expect(can("group.removeMember", groupOwner)).toBe(false)
+      expect(can("group.demoteMember", groupOwner)).toBe(false)
+    })
+  })
+
+  it("lets admins manage any membership", () => {
+    const can = createPermissions(actor("ADMIN"))
+    const groupOwner = target({ role: "OWNER" })
+
+    expect(can("group.manageMembers", { id: GROUP_A })).toBe(true)
+    expect(can("group.updateMember", { member: groupOwner, permissions: ["EDIT_GROUP"] })).toBe(
+      true,
+    )
+    expect(can("group.removeMember", groupOwner)).toBe(true)
+    expect(can("group.promoteMember", target())).toBe(true)
+    expect(can("group.demoteMember", groupOwner)).toBe(true)
+  })
+
+  it("only promotes members and only demotes owners", () => {
+    const can = createPermissions(actor("ADMIN"))
+
+    expect(can("group.promoteMember", target({ role: "OWNER" }))).toBe(false)
+    expect(can("group.demoteMember", target())).toBe(false)
+  })
+})
+
+describe("users", () => {
+  it("lets moderators ban regular users only", () => {
+    const can = createPermissions(actor("MODERATOR"))
+
+    expect(can("user.ban", { id: OTHER_ID, role: "USER" })).toBe(true)
+
+    for (const role of ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"] as const) {
+      expect(can("user.ban", { id: OTHER_ID, role })).toBe(false)
+    }
+  })
+
+  it("lets admins ban anyone but themselves", () => {
+    const can = createPermissions(actor("ADMIN"))
+
+    for (const role of ROLES) {
+      expect(can("user.ban", { id: OTHER_ID, role })).toBe(true)
+    }
+
+    expect(can("user.ban", { id: ACTOR_ID, role: "ADMIN" })).toBe(false)
+  })
+
+  it("only lets admins change roles, never their own", () => {
+    expect(createPermissions(actor("ADMIN"))("user.setRole", { id: OTHER_ID })).toBe(true)
+    expect(createPermissions(actor("ADMIN"))("user.setRole", { id: ACTOR_ID })).toBe(false)
+
+    for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER", "MODERATOR"] as const) {
+      expect(createPermissions(actor(role))("user.setRole", { id: OTHER_ID })).toBe(false)
+    }
+  })
+
+  it("lets only admins impersonate, set passwords and manage sessions, never for admins", () => {
+    const actions = ["user.impersonate", "user.setPassword", "user.manageSessions"] as const
+    const admin = createPermissions(actor("ADMIN"))
+
+    for (const action of actions) {
+      for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER", "MODERATOR"] as const) {
+        expect(admin(action, { id: OTHER_ID, role })).toBe(true)
+
+        for (const actorRole of ["USER", "UPLOADER_INTERN", "UPLOADER", "MODERATOR"] as const) {
+          expect(createPermissions(actor(actorRole))(action, { id: OTHER_ID, role })).toBe(false)
+        }
+      }
+
+      expect(admin(action, { id: OTHER_ID, role: "ADMIN" })).toBe(false)
+      expect(admin(action, { id: ACTOR_ID, role: "ADMIN" })).toBe(false)
+    }
+  })
+
+  it("does not let users ban anyone", () => {
+    for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER"] as const) {
+      expect(createPermissions(actor(role))("user.ban", { id: OTHER_ID, role: "USER" })).toBe(false)
+    }
+  })
+})
+
+describe("uploading chapters", () => {
+  const uploading = (uploaderId = OTHER_ID) => chapter([GROUP_A], uploaderId, "UPLOADING")
+
+  it("are only visible to their uploader and to reviewers", () => {
+    expect(createPermissions(null)("chapter.view", uploading())).toBe(false)
+    expect(createPermissions(actor("USER", [owner(GROUP_A)]))("chapter.view", uploading())).toBe(
+      false,
+    )
+    expect(createPermissions(actor("MODERATOR"))("chapter.view", uploading())).toBe(false)
+    expect(createPermissions(actor("UPLOADER"))("chapter.view", uploading())).toBe(true)
+    expect(createPermissions(actor("USER"))("chapter.view", uploading(ACTOR_ID))).toBe(true)
+  })
+
+  it("can be edited and withdrawn by their uploader", () => {
+    const can = createPermissions(actor("USER", [member(GROUP_A, ["UPLOAD_CHAPTERS"])]))
+
+    expect(can("chapter.update", uploading(ACTOR_ID))).toBe(true)
+    expect(can("chapter.withdraw", uploading(ACTOR_ID))).toBe(true)
+    expect(can("chapter.withdraw", uploading())).toBe(false)
+    expect(can("chapter.update", uploading())).toBe(false)
+  })
+})
+
+describe("scheduled chapters", () => {
+  const scheduled = (uploaderId = OTHER_ID) => chapter([GROUP_A], uploaderId, "SCHEDULED")
+
+  it("are only visible to the people who manage them", () => {
+    expect(createPermissions(null)("chapter.view", scheduled())).toBe(false)
+    expect(createPermissions(actor("USER"))("chapter.view", scheduled())).toBe(false)
+    expect(createPermissions(actor("USER"))("chapter.view", scheduled(ACTOR_ID))).toBe(true)
+    expect(
+      createPermissions(actor("USER", [member(GROUP_A, ["EDIT_CHAPTERS"])]))(
+        "chapter.view",
+        scheduled(),
+      ),
+    ).toBe(true)
+    expect(createPermissions(actor("MODERATOR"))("chapter.view", scheduled())).toBe(true)
+  })
+
+  it("can be rescheduled by their uploader and group editors, and deleted like published ones", () => {
+    const editor = createPermissions(actor("USER", [member(GROUP_A, ["EDIT_CHAPTERS"])]))
+    const uploader = createPermissions(actor("USER"))
+
+    expect(editor("chapter.update", scheduled())).toBe(true)
+    expect(editor("chapter.delete", scheduled())).toBe(false)
+    expect(uploader("chapter.update", scheduled(ACTOR_ID))).toBe(true)
+    expect(uploader("chapter.withdraw", scheduled(ACTOR_ID))).toBe(false)
+    expect(createPermissions(actor("MODERATOR"))("chapter.delete", scheduled())).toBe(true)
+  })
+})
+
+describe("media suggestions", () => {
+  const suggestion = (authorId = OTHER_ID, status: MediaSuggestionTarget["status"] = "PENDING") =>
+    ({ authorId, status }) satisfies MediaSuggestionTarget
+
+  it("shows a suggestion to its author and to reviewers only", () => {
+    expect(createPermissions(null)("mediaSuggestion.view", suggestion())).toBe(false)
+    expect(createPermissions(actor("USER"))("mediaSuggestion.view", suggestion())).toBe(false)
+    expect(createPermissions(actor("UPLOADER_INTERN"))("mediaSuggestion.view", suggestion())).toBe(
+      false,
+    )
+    expect(createPermissions(actor("USER"))("mediaSuggestion.view", suggestion(ACTOR_ID))).toBe(
+      true,
+    )
+
+    for (const role of ["UPLOADER", "MODERATOR", "ADMIN"] as const) {
+      expect(createPermissions(actor(role))("mediaSuggestion.view", suggestion())).toBe(true)
+    }
+  })
+
+  it("lets only the author edit or withdraw, and only while pending", () => {
+    for (const action of ["mediaSuggestion.update", "mediaSuggestion.withdraw"] as const) {
+      expect(createPermissions(actor("USER"))(action, suggestion(ACTOR_ID))).toBe(true)
+      expect(createPermissions(actor("USER"))(action, suggestion(ACTOR_ID, "ACCEPTED"))).toBe(false)
+      expect(createPermissions(actor("USER"))(action, suggestion(ACTOR_ID, "REJECTED"))).toBe(false)
+      expect(createPermissions(actor("USER"))(action, suggestion(ACTOR_ID, "WITHDRAWN"))).toBe(
+        false,
+      )
+      expect(createPermissions(actor("ADMIN"))(action, suggestion())).toBe(false)
+      expect(createPermissions(actor("USER", [], true))(action, suggestion(ACTOR_ID))).toBe(false)
+    }
+  })
+})

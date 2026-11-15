@@ -1,0 +1,28 @@
+meta {
+  name: Update cover
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{url}}/medias/:id/covers/:coverId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+  coverId: 00000000-0000-0000-0000-000000000000
+}
+
+body:json {
+  {
+    "contentRating": "SUGGESTIVE",
+    "volume": 2
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

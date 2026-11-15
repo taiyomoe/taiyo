@@ -1,0 +1,58 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as ToggleStories from "./Toggle.stories"
+
+<Meta title="UI/Toggle" />
+
+# Toggle
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/toggle.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Variants](#variants)
+  - [Sizes](#sizes)
+  - [Pressed](#pressed)
+  - [Disabled](#disabled)
+  - [With Icon](#with-icon)
+- [Feedback](#feedback)
+
+## Overview
+
+A two-state button that flips between pressed and unpressed. Use it for formatting controls, view toggles, or any independent on/off affordance — group multiple together with `ToggleGroup` when the selection is mutually related.
+
+<Canvas of={ToggleStories.Default} />
+
+### Variants
+
+Toggle ships with a borderless `default` and a bordered `outline` style for use on neutral surfaces.
+
+<Canvas of={ToggleStories.Variants} />
+
+### Sizes
+
+Sizes (`sm`, `default`, `lg`) scale the toggle to match surrounding controls.
+
+<Canvas of={ToggleStories.Sizes} />
+
+### Pressed
+
+`defaultPressed` renders the toggle in its on state on first paint.
+
+<Canvas of={ToggleStories.Pressed} />
+
+### Disabled
+
+Disabled toggles ignore user interaction and lose hover/active feedback.
+
+<Canvas of={ToggleStories.Disabled} />
+
+### With Icon
+
+A common use case — icon-only toggles for rich-text formatting bars.
+
+<Canvas of={ToggleStories.WithIcon} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

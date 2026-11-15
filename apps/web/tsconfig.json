@@ -1,13 +1,15 @@
 {
-  "extends": "@taiyomoe/tsconfig/base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node", "vite/client"],
+    "allowJs": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": false,
+    "isolatedModules": true,
     "paths": {
-      "~/*": ["./src/*"]
-    },
-    "plugins": [{ "name": "next" }],
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+      "@/*": ["./src/*"]
+    }
   },
-  "include": [".", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["${configDir}/*.ts", "${configDir}/src", "${configDir}/e2e", "${configDir}/scripts"]
 }

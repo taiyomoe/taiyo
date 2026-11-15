@@ -1,0 +1,18 @@
+import type { Country, Gender } from "../constants"
+import type { LocalizedText } from "../json-types"
+import type { Generated, Timestamp } from "../types"
+
+export type UserProfile = {
+  id: Generated<string>
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
+  banner: string | null
+  birthDate: Timestamp | null
+  gender: Generated<Gender>
+  city: string | null
+  country: Country | null
+  about: Generated<LocalizedText>
+  points: Generated<number>
+  title: string | null
+  userId: string
+}

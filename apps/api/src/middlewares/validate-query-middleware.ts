@@ -1,0 +1,37 @@
+import type z from "zod"
+import { config } from "@taiyomoe/config"
+import { createMiddleware } from "hono/factory"
+import { withRequestSpec } from "../utils/openapi-helper"
+
+type Env<TSchema extends z.ZodType> = {
+  Variables: {
+    query: z.infer<TSchema>
+  }
+}
+
+export const validateQuery = <TSchema extends z.ZodType>(schema: TSchema) =>
+  withRequestSpec(
+    createMiddleware<
+      Env<TSchema>,
+      string,
+      {
+        in: { query: Record<string, string | string[]> }
+        out: { query: z.output<TSchema> }
+      }
+    >(async (c, next) => {
+      const validation = schema.safeParse(c.req.query())
+
+      if (!validation.success) {
+        return c.fail(
+          "VALIDATION_ERROR",
+          validation.error.issues.slice(0, config.input.maxValidationIssues),
+        )
+      }
+
+      c.set("query", validation.data)
+
+      return next()
+    }),
+    "query",
+    schema,
+  )

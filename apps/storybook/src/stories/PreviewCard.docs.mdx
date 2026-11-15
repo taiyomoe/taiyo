@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as PreviewCardStories from "./PreviewCard.stories"
+
+<Meta title="UI/PreviewCard" />
+
+# PreviewCard
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/preview-card.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Alignment](#alignment)
+  - [Instant Open](#instant-open)
+- [Feedback](#feedback)
+
+## Overview
+
+Preview cards (aka hover cards) show a rich preview of the entity behind a link when the user hovers or focuses the trigger. Use them for profile peeks, link previews, and other non-essential context that augments — but never replaces — the trigger's own meaning.
+
+<Canvas of={PreviewCardStories.Default} />
+
+### Alignment
+
+The `align` prop controls how the popup lines up along the trigger's edge.
+
+<Canvas of={PreviewCardStories.Alignment} />
+
+### Instant Open
+
+Override `delay` and `closeDelay` to open and close the preview without the default hover delay.
+
+<Canvas of={PreviewCardStories.InstantOpen} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

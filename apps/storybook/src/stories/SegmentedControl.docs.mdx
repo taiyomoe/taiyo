@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as SegmentedControlStories from "./SegmentedControl.stories"
+
+<Meta title="UI/SegmentedControl" />
+
+# SegmentedControl
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/segmented-control.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Small](#small)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+A segmented control picks exactly one value from a few options laid out as a pill. It is a radio group underneath, so arrow keys move the selection and one option always stays selected. Use `Tabs` instead when each option shows its own panel. Pass `fullWidth` to stretch it across its container.
+
+<Canvas of={SegmentedControlStories.Default} />
+
+### Small
+
+Set `size="sm"` on each `SegmentedControlItem` for dense surfaces such as settings sheets.
+
+<Canvas of={SegmentedControlStories.Small} />
+
+### Disabled
+
+`disabled` on the root dims every option and blocks changes.
+
+<Canvas of={SegmentedControlStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

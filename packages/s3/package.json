@@ -2,23 +2,19 @@
   "name": "@taiyomoe/s3",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./env": "./src/env.ts"
   },
-  "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1158.0",
-    "@t3-oss/env-core": "^0.11.1",
-    "aws4fetch": "^1.0.20",
-    "zod": "^3.24.1"
+    "@aws-sdk/client-s3": "^3.1164.0",
+    "@aws-sdk/s3-request-presigner": "^3.1164.0",
+    "@t3-oss/env-core": "^0.13.11",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*"
+    "@types/node": "^26.6.6"
   }
 }

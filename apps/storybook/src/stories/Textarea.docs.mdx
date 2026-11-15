@@ -1,0 +1,51 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as TextareaStories from "./Textarea.stories"
+
+<Meta title="UI/Textarea" />
+
+# Textarea
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/textarea.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sizes](#sizes)
+  - [Disabled](#disabled)
+  - [Invalid](#invalid)
+  - [Unstyled](#unstyled)
+- [Feedback](#feedback)
+
+## Overview
+
+The Textarea is a multi-line text input for longer free-form content such as comments, descriptions, or messages. It grows with its content (`field-sizing-content`) and surfaces focus, disabled, and invalid states consistent with the rest of the form controls.
+
+<Canvas of={TextareaStories.Default} />
+
+### Sizes
+
+The `size` prop accepts `"sm"`, `"default"`, and `"lg"`, which tune the min-height and padding to match different layout densities.
+
+<Canvas of={TextareaStories.Sizes} />
+
+### Disabled
+
+A disabled textarea blocks input and dims the field to signal that the value cannot be edited.
+
+<Canvas of={TextareaStories.Disabled} />
+
+### Invalid
+
+Setting `aria-invalid` surfaces a destructive border and matching focus ring, signalling a validation error.
+
+<Canvas of={TextareaStories.Invalid} />
+
+### Unstyled
+
+Pass `unstyled` to drop the bordered wrapper entirely — useful when embedding the textarea inside a custom container that already provides surface styling.
+
+<Canvas of={TextareaStories.Unstyled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

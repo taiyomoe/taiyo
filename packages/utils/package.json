@@ -2,31 +2,15 @@
   "name": "@taiyomoe/utils",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./i18n": "./src/i18n/index.ts",
-    "./env": "./src/env.ts"
-  },
-  "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
+    ".": "./src/index.ts"
   },
   "dependencies": {
-    "@prisma/client": "^6.1.0",
-    "@t3-oss/env-core": "^0.11.1",
-    "@taiyomoe/constants": "workspace:*",
-    "@taiyomoe/schemas": "workspace:*",
-    "accept-language-parser": "^1.5.0",
-    "deep-object-diff": "^1.1.9",
-    "mangadex-full-api": "^6.0.0",
-    "radash": "^12.1.0",
-    "zod": "^3.24.1"
-  },
-  "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*",
-    "@taiyomoe/types": "workspace:*",
-    "@types/accept-language-parser": "^1.5.6"
+    "@faker-js/faker": "^10.6.0",
+    "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "zod": "^4.6.7"
   }
 }

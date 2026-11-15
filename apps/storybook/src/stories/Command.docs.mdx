@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as CommandStories from "./Command.stories"
+
+<Meta title="UI/Command" />
+
+# Command
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/command.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Empty state](#empty-state)
+  - [Without footer](#without-footer)
+- [Feedback](#feedback)
+
+## Overview
+
+Command palettes provide a fast, keyboard-first launcher for actions and navigation. Pass an `items` array of groups (each with its own nested `items`) to the root `Command`, then materialize them with `CommandList`'s and `CommandCollection`'s function-children patterns. Per-item shortcuts, an empty-state message, and a footer with navigation hints round out the palette.
+
+<Canvas of={CommandStories.Default} />
+
+### Empty state
+
+When the typed query matches no items, `CommandEmpty` renders in place of the list. This story pre-seeds the input with a non-matching query so the empty state is visible immediately after the user opens the palette.
+
+<Canvas of={CommandStories.EmptyState} />
+
+### Without footer
+
+The `CommandFooter` is optional. Drop it when the palette is short enough that the keyboard hints would feel like noise.
+
+<Canvas of={CommandStories.WithoutFooter} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

@@ -1,131 +1,57 @@
-import type { Languages } from "@taiyomoe/db"
-import type {
-  CreateMediaMessageInput,
-  FeaturedMedia,
-  LatestMedia,
-  LatestReleaseGroupedLite,
-  RawLatestRelease,
-  UploadChapterMessageInput,
-  UploadCoverMessageInput,
-} from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
 import { env } from "./env"
-import { parseCache } from "./utils"
+import { parseCache } from "./utils/parse-cache"
 
 const HOUR = 60 * 60
-const DAY = 60 * 60 * 24
 const client = new DF(env.DRAGONFLY_URL)
+const INCREMENT_WITH_TTL = `
+local value = redis.call('INCR', KEYS[1])
+if value == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end
+return value
+`
 
 export const rawCacheClient = client
 
 export const cacheClient = {
+  users: {
+    auth: {
+      set: (id: string, value: string, ttl = 60) => client.setex(`users:auth:${id}`, ttl, value),
+      get: (id: string) => client.get(`users:auth:${id}`),
+      invalidate: (id: string) => client.del(`users:auth:${id}`).then(() => null),
+      getAndDelete: (id: string) => client.getdel(`users:auth:${id}`),
+      increment: (id: string, ttl: number) =>
+        client.eval(INCREMENT_WITH_TTL, 1, `users:auth:${id}`, ttl).then((value) => {
+          if (typeof value !== "number") {
+            throw new TypeError(`Expected a number reply, got ${typeof value}`)
+          }
+
+          return value
+        }),
+    },
+    stats: {
+      set: (key: string, value: unknown, ttl: number) =>
+        client.setex(`users:stats:${key}`, ttl, SuperJSON.stringify(value)),
+      get: <T>(key: string) => parseCache<T>(client.get(`users:stats:${key}`)),
+    },
+    verificationEmailSentAt: {
+      set: (id: string, value: Date) =>
+        client.setex(`users:verification-email-sent-at:${id}`, HOUR, SuperJSON.stringify(value)),
+      get: (id: string) => parseCache<Date>(client.get(`users:verification-email-sent-at:${id}`)),
+    },
+  },
   medias: {
-    /**
-     * Mutations
-     */
-    create: {
-      set: (input: Omit<CreateMediaMessageInput, "taskId">) =>
-        client.setex(
-          `medias:create:${input.id}`,
-          HOUR,
-          SuperJSON.stringify(input),
-        ),
-      get: (id: string) =>
-        parseCache<Omit<CreateMediaMessageInput, "taskId">>(
-          client.get(`medias:create:${id}`),
-        ),
-    },
-    /**
-     * Queries
-     */
-    latest: {
-      get: () => parseCache<LatestMedia[]>(client.get("medias:latest")),
-      set: (input: LatestMedia[]) =>
-        client.setex("medias:latest", HOUR, SuperJSON.stringify(input)),
-      invalidate: () => client.del("medias:latest"),
-    },
-    featured: (lang: Languages | "main") => ({
-      get: () =>
-        parseCache<FeaturedMedia[]>(client.get(`medias:featured:${lang}`)),
-      set: (input: FeaturedMedia[]) =>
-        client.setex(
-          `medias:featured:${lang}`,
-          DAY,
-          SuperJSON.stringify(input),
-        ),
-      invalidate: () => client.del(`medias:featured:${lang}`),
-    }),
-    invalidateAll: async () => {
-      const featuredMediasKeys = await client.keys("medias:featured:*")
-
-      for (const key of featuredMediasKeys) {
-        await client.del(key)
-      }
-
-      await client.del("medias:latest")
-      await client.del("chapters:latest")
-      await client.del("chapters:latest:grouped")
+    showcase: {
+      set: (key: string, value: unknown, ttl: number) =>
+        client.setex(`medias:showcase:${key}`, ttl, SuperJSON.stringify(value)),
+      get: <T>(key: string) => parseCache<T>(client.get(`medias:showcase:${key}`)),
     },
   },
-
-  covers: {
-    /**
-     * Mutations
-     */
-    upload: {
-      set: (input: Omit<UploadCoverMessageInput, "taskId">) =>
-        client.setex(
-          `covers:upload:${input.id}`,
-          HOUR,
-          SuperJSON.stringify(input),
-        ),
-      get: (id: string) =>
-        parseCache<Omit<UploadCoverMessageInput, "taskId">>(
-          client.get(`covers:upload:${id}`),
-        ),
-    },
-  },
-
-  chapters: {
-    /**
-     * Mutations
-     */
-    uploads: {
-      set: (input: Omit<UploadChapterMessageInput, "taskId">) =>
-        client.setex(
-          `chapters:uploads:${input.id}`,
-          HOUR,
-          SuperJSON.stringify(input),
-        ),
-      get: (id: string) =>
-        parseCache<Omit<UploadChapterMessageInput, "taskId">>(
-          client.get(`chapters:uploads:${id}`),
-        ),
-    },
-    /**
-     * Queries
-     */
-    latest: {
-      get: () => parseCache<RawLatestRelease[]>(client.get("chapters:latest")),
-      set: (input: RawLatestRelease[]) =>
-        client.setex("chapters:latest", DAY, SuperJSON.stringify(input)),
-    },
-    latestGroupedLite: {
-      get: () =>
-        parseCache<LatestReleaseGroupedLite[]>(
-          client.get("chapters:latest:grouped-lite"),
-        ),
-      set: (input: LatestReleaseGroupedLite[]) =>
-        client.setex(
-          "chapters:latest:grouped-lite",
-          DAY,
-          SuperJSON.stringify(input),
-        ),
-    },
-    invalidateAll: async () => {
-      await client.del("chapters:latest")
-      await client.del("chapters:latest:grouped-lite")
+  dashboard: {
+    overview: {
+      set: (key: string, value: unknown, ttl: number) =>
+        client.setex(`dashboard:overview:${key}`, ttl, SuperJSON.stringify(value)),
+      get: <T>(key: string) => parseCache<T>(client.get(`dashboard:overview:${key}`)),
     },
   },
   clear: () => client.flushdb(),

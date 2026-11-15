@@ -1,0 +1,51 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import * as CheckboxStories from "./Checkbox.stories"
+
+<Meta title="UI/Checkbox" />
+
+# Checkbox
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/checkbox.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Checked](#checked)
+  - [Indeterminate](#indeterminate)
+  - [Disabled](#disabled)
+  - [Invalid](#invalid)
+- [Feedback](#feedback)
+
+## Overview
+
+Checkboxes allow users to select one or more options from a set. They provide a clear visual indication of selection state and are commonly used in forms, settings, and lists where multiple selections are possible.
+
+<Canvas of={CheckboxStories.Default} />
+
+### Checked
+
+Checkboxes can be pre-selected by passing `defaultChecked` (uncontrolled) or `checked` (controlled).
+
+<Canvas of={CheckboxStories.Checked} />
+
+### Indeterminate
+
+The indeterminate state represents a partial selection — useful for a parent checkbox whose children are only partially checked.
+
+<Canvas of={CheckboxStories.Indeterminate} />
+
+### Disabled
+
+Disabled checkboxes prevent user interaction and provide visual feedback that the option is not available.
+
+<Canvas of={CheckboxStories.Disabled} />
+
+### Invalid
+
+Setting `aria-invalid` surfaces a destructive border, signalling a validation error.
+
+<Canvas of={CheckboxStories.Invalid} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

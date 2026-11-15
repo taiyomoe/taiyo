@@ -1,0 +1,25 @@
+import type { Insertable } from "kysely"
+import type { Generated, Timestamp } from "../types"
+
+export type Group = {
+  id: Generated<string>
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
+  deletedAt: Timestamp | null
+  name: string
+  description: string | null
+  logo: string | null
+  banner: string | null
+  website: string | null
+  discord: string | null
+  x: string | null
+  facebook: string | null
+  instagram: string | null
+  telegram: string | null
+  youtube: string | null
+  email: string | null
+  creatorId: string
+  deleterId: string | null
+}
+
+export type NewGroup = Insertable<Group>

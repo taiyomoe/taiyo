@@ -1,0 +1,47 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+@import "./reset.css";
+@import "./structural.css";
+@import "./scene.css";
+
+:root {
+  --font-heading: "Inter Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", monospace;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+
+  --background: oklch(94.2% 0 0);
+  --foreground: oklch(20.5% 0 0);
+  --card: oklch(99.3% 0 0);
+  --muted-foreground: oklch(47.7% 0 0);
+  --border: rgb(0 0 0 / 9%);
+  --primary: #f2452d;
+  --primary-foreground: #fff;
+  --ring: #f2452d;
+  --destructive: oklch(63.7% 0.237 25.331);
+  --info: oklch(62.3% 0.214 259.815);
+  --success: oklch(69.6% 0.17 162.48);
+  --warning: oklch(76.9% 0.188 70.08);
+  --sidebar-accent-foreground: oklch(20.5% 0 0);
+}
+
+.dark {
+  --background: color-mix(in srgb, oklch(14.5% 0 0) 99%, #fff);
+  --foreground: oklch(97% 0 0);
+  --card: color-mix(in srgb, oklch(14.5% 0 0) 92%, #fff);
+  --muted-foreground: oklch(64% 0 0);
+  --border: rgb(255 255 255 / 8%);
+  --destructive: color-mix(in srgb, oklch(63.7% 0.237 25.331) 90%, #fff);
+  --sidebar-accent-foreground: oklch(97% 0 0);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}

@@ -1,0 +1,66 @@
+import { bannerAudit } from "@taiyomoe/audit"
+import { Hono } from "hono"
+import { describeRoute, resolver } from "hono-openapi"
+import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
+import { checkBanner } from "../middlewares/check-banner-middleware"
+import { validateJson } from "../middlewares/validate-json-middleware"
+import { withAuth } from "../middlewares/with-auth-middleware"
+import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
+import { getOpenApiResponses } from "../utils/openapi-helper"
+import { apiSuccessEnvelope, contentRatingSchema } from "../utils/schemas"
+
+const updateBannerSchema = z.object({
+  contentRating: contentRatingSchema("The content rating of the banner."),
+})
+
+export const updateBannerHandler = new Hono().patch(
+  "/:id",
+  describeRoute({
+    summary: "Update a banner",
+    description:
+      "Updates the content rating of a banner.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+    tags: ["Banners"],
+    responses: {
+      200: {
+        description: "Banner updated.",
+        content: {
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the updated banner." }),
+                }),
+              ),
+            ),
+          },
+        },
+      },
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        404: "No banner with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
+      }),
+    },
+  }),
+  audited(bannerAudit.UPDATE),
+  withAuth("media.update"),
+  validateJson(updateBannerSchema),
+  checkBanner(),
+  withTransaction,
+  async (c) => {
+    const { db, banner } = c.var
+    const { contentRating } = c.var.json
+
+    c.var.audit.set({
+      target: { mediaId: banner.mediaId },
+      changes: auditChanges(banner, { contentRating }),
+    })
+
+    await db.updateTable("banners").set({ contentRating }).where("id", "=", banner.id).execute()
+
+    return c.ok({ id: banner.id })
+  },
+)

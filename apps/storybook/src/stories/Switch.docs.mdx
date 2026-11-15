@@ -1,0 +1,44 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as SwitchStories from "./Switch.stories"
+
+<Meta title="UI/Switch" />
+
+# Switch
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/switch.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Checked](#checked)
+  - [Disabled](#disabled)
+  - [Disabled Checked](#disabled-checked)
+- [Feedback](#feedback)
+
+## Overview
+
+Switches are binary toggles that turn an option on or off. They are typically used for settings that take effect immediately, without needing a confirmation step.
+
+<Canvas of={SwitchStories.Default} />
+
+### Checked
+
+Use `defaultChecked` (uncontrolled) or `checked` (controlled) to set the initial on state.
+
+<Canvas of={SwitchStories.Checked} />
+
+### Disabled
+
+A disabled switch prevents user interaction and dims the control to communicate that the setting is currently unavailable.
+
+<Canvas of={SwitchStories.Disabled} />
+
+### Disabled Checked
+
+The disabled state preserves the current value, so a switch can be both disabled and checked.
+
+<Canvas of={SwitchStories.DisabledChecked} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

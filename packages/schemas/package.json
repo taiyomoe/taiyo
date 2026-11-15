@@ -2,20 +2,14 @@
   "name": "@taiyomoe/schemas",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
-    ".": "./src/index.ts"
-  },
-  "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*"
+    ".": "./src/index.ts",
+    "./comment-content": "./src/comment-content.ts",
+    "./reader-settings": "./src/reader-settings.ts"
   },
   "dependencies": {
-    "@taiyomoe/constants": "workspace:*",
-    "zod": "^3.24.1"
+    "zod": "^4.6.7"
   }
 }

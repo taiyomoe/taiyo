@@ -1,0 +1,43 @@
+import type { DB, Kysely } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
+import z from "zod"
+
+export const chapterIdsSchema = z
+  .array(z.uuid())
+  .min(1)
+  .max(config.input.maxReviewBatch)
+  .transform((ids) => [...new Set(ids)])
+  .meta({
+    description: "The IDs of the chapters to act on. Duplicates are ignored.",
+    example: ["13548c83-8d1a-4163-8830-c8f16fcd2eb7", "9f1b2c3d-4e5f-4a7b-8c9d-0e1f2a3b4c5d"],
+  })
+
+export const skippedChapterSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the chapter." }),
+  reason: z.enum(["NOT_FOUND", "NOT_PENDING", "PAGES_MISSING"]).meta({
+    description:
+      "Why the chapter was left alone: it does not exist, it is not waiting for review, or its pages are not processed yet.",
+    example: "NOT_PENDING",
+  }),
+})
+
+export const lockReviewableChapters = async (db: Kysely<DB>, ids: readonly string[]) => {
+  const rows = await db
+    .selectFrom("chapters")
+    .innerJoin("medias", "medias.id", "chapters.mediaId")
+    .select([
+      "chapters.id",
+      "chapters.mediaId",
+      "chapters.status",
+      "chapters.pages",
+      "chapters.isExternal",
+    ])
+    .where("chapters.id", "in", ids)
+    .where("chapters.deletedAt", "is", null)
+    .where("medias.deletedAt", "is", null)
+    .forUpdate("chapters")
+    .execute()
+  const found = new Map(rows.map((row) => [row.id, row]))
+
+  return ids.map((id) => ({ id, row: found.get(id) }))
+}

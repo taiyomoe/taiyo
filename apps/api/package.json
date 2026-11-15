@@ -1,0 +1,52 @@
+{
+  "name": "@taiyomoe/api",
+  "version": "5.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./app": "./src/app.ts",
+    "./env": "./src/env.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "start": "node --env-file-if-exists=.env --import tsx src/index.ts",
+    "backfill:legacy-images": "node --env-file-if-exists=.env --import tsx src/backfills/import-legacy-images.ts"
+  },
+  "dependencies": {
+    "@hono-rate-limiter/redis": "^0.1.4",
+    "@hono/node-server": "^2.1.6",
+    "@scalar/api-reference": "^1.77.0",
+    "@scalar/hono-api-reference": "^0.12.18",
+    "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/audit": "workspace:^",
+    "@taiyomoe/auth": "workspace:^",
+    "@taiyomoe/cache": "workspace:^",
+    "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/email": "workspace:^",
+    "@taiyomoe/permissions": "workspace:^",
+    "@taiyomoe/queue": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/schemas": "workspace:^",
+    "@taiyomoe/search": "workspace:^",
+    "@taiyomoe/utils": "workspace:^",
+    "evlog": "^2.35.1",
+    "hono": "^4.13.17",
+    "hono-openapi": "^1.5.0",
+    "hono-rate-limiter": "^0.5.4",
+    "magic-bytes.js": "^1.13.1",
+    "radashi": "^13.0.4",
+    "sharp": "^0.35.5",
+    "tsx": "^4.23.15",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1164.0",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "kysely": "^0.29.8",
+    "pg": "^8.23.1"
+  }
+}

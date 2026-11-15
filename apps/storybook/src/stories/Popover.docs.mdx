@@ -1,0 +1,51 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as PopoverStories from "./Popover.stories"
+
+<Meta title="UI/Popover" />
+
+# Popover
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/popover.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sides](#sides)
+  - [Alignment](#alignment)
+  - [Tooltip Style](#tooltip-style)
+  - [Modal](#modal)
+- [Feedback](#feedback)
+
+## Overview
+
+Popovers are floating panels anchored to a trigger element. Use them for contextual forms, quick settings, or any short-lived UI that shouldn't take the user away from the current view.
+
+<Canvas of={PopoverStories.Default} />
+
+### Sides
+
+Use the `side` prop on `PopoverPopup` to position the popup relative to its trigger.
+
+<Canvas of={PopoverStories.Sides} />
+
+### Alignment
+
+The `align` prop controls how the popup lines up along the trigger's edge.
+
+<Canvas of={PopoverStories.Alignment} />
+
+### Tooltip Style
+
+Pass `tooltipStyle` to render a denser, smaller popup styled like a tooltip — useful for short, single-line hints.
+
+<Canvas of={PopoverStories.TooltipStyle} />
+
+### Modal
+
+Pass `modal` to trap focus inside the popover and block interaction with the rest of the page until it's dismissed.
+
+<Canvas of={PopoverStories.Modal} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

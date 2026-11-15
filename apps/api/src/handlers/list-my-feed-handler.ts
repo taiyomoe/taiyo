@@ -1,0 +1,79 @@
+import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
+import { Hono } from "hono"
+import { describeRoute, resolver } from "hono-openapi"
+import { validateQuery } from "../middlewares/validate-query-middleware"
+import { withAuth } from "../middlewares/with-auth-middleware"
+import { getOpenApiResponses } from "../utils/openapi-helper"
+import { apiSuccessEnvelope, chapterFeedItemSchema } from "../utils/schemas"
+
+export const listMyFeedHandler = new Hono().get(
+  "/me/feed",
+  describeRoute({
+    summary: "List my feed",
+    description:
+      "Lists the chapters released for the media in your library, newest first.\n\n**Authentication:** signed-in user.",
+    tags: ["Library"],
+    responses: {
+      200: {
+        description: "Your feed.",
+        content: {
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(chapterFeedItemSchema.array(), paginationMetaSchema),
+            ),
+          },
+        },
+      },
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
+    },
+  }),
+  withAuth(),
+  validateQuery(paginationQuerySchema),
+  async (c) => {
+    const { db, user } = c.var
+    const { page, perPage } = c.var.query
+    const base = db
+      .selectFrom("userLibraryEntries")
+      .innerJoin("chapters", "chapters.mediaId", "userLibraryEntries.mediaId")
+      .innerJoin("medias", "medias.id", "chapters.mediaId")
+      .where("userLibraryEntries.userId", "=", user.id)
+      .where("chapters.deletedAt", "is", null)
+      .where("chapters.status", "=", "PUBLISHED")
+      .where("medias.deletedAt", "is", null)
+    const [items, totalRow] = await Promise.all([
+      base
+        .select((eb) => [
+          "chapters.id",
+          "chapters.title",
+          "chapters.number",
+          "chapters.volume",
+          "chapters.language",
+          "chapters.contentRating",
+          "chapters.createdAt",
+          "chapters.mediaId",
+          "chapters.externalUrl",
+          "chapters.isExternal",
+          eb
+            .selectFrom("titles")
+            .whereRef("titles.mediaId", "=", "chapters.mediaId")
+            .where("titles.isMainTitle", "=", true)
+            .where("titles.deletedAt", "is", null)
+            .select("titles.title")
+            .limit(1)
+            .as("mediaTitle"),
+        ])
+        .orderBy("chapters.createdAt", "desc")
+        .orderBy("chapters.id", "desc")
+        .limit(perPage)
+        .offset((page - 1) * perPage)
+        .execute(),
+      base.select(db.fn.countAll().as("count")).executeTakeFirstOrThrow(),
+    ])
+
+    return c.ok(items, { page, perPage, total: Number(totalRow.count) })
+  },
+)

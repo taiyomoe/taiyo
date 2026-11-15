@@ -1,0 +1,51 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as TooltipStories from "./Tooltip.stories"
+
+<Meta title="UI/Tooltip" />
+
+# Tooltip
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/tooltip.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sides](#sides)
+  - [Alignment](#alignment)
+  - [Default Open](#default-open)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+Tooltips reveal a short hint about a control when it's hovered, focused, or long-pressed. Wrap your tree in `TooltipProvider` once, then compose individual tooltips with `Tooltip`, `TooltipTrigger`, and `TooltipPopup`.
+
+<Canvas of={TooltipStories.Default} />
+
+### Sides
+
+The `side` prop on `TooltipPopup` anchors the popup to a side of the trigger.
+
+<Canvas of={TooltipStories.Sides} />
+
+### Alignment
+
+`align` controls where the popup sits along the chosen side — useful when the trigger is wider than the tooltip.
+
+<Canvas of={TooltipStories.Alignment} />
+
+### Default Open
+
+`defaultOpen` shows the tooltip on mount — handy for onboarding hints or coach marks.
+
+<Canvas of={TooltipStories.DefaultOpen} />
+
+### Disabled
+
+A disabled tooltip never opens, no matter the trigger interaction.
+
+<Canvas of={TooltipStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀
