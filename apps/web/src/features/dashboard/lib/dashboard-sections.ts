@@ -30,7 +30,6 @@ type DashboardItem = AppSidebarSection["items"][number] & {
 
 type DashboardSection = Omit<AppSidebarSection, "items"> & { items: DashboardItem[] }
 
-const ANY_CHAPTER = { uploaderId: "", status: "PUBLISHED", groupIds: [] } as const
 const ANOTHER_USER = { id: "", role: "USER" } as const
 
 export const DASHBOARD_SECTIONS: DashboardSection[] = [
@@ -112,11 +111,17 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/suggestions",
         visible: (can) => can("mediaSuggestion.review"),
       },
-      { label: m.dashboard_nav_media, icon: Library, visible: (can) => can("media.update") },
+      {
+        label: m.dashboard_nav_media,
+        icon: Library,
+        to: "/dashboard/medias",
+        visible: (can) => can("media.update"),
+      },
       {
         label: m.dashboard_nav_chapters,
         icon: ListNumbered,
-        visible: (can) => can("chapter.update", ANY_CHAPTER),
+        to: "/dashboard/chapters",
+        visible: (can) => can("chapter.list"),
       },
       {
         label: m.dashboard_nav_covers,

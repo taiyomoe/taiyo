@@ -28,6 +28,8 @@ import { parseVolumeInput } from "@/features/media-images/lib/staged-cover"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
+type EditableCover = Pick<MediaCover, "id" | "volume" | "language" | "contentRating">
+
 const styles = stylex.create({
   fields: {
     gap: "1.25rem",
@@ -42,7 +44,7 @@ export function EditCoverDialog({
   onClose,
 }: {
   mediaId: string
-  cover: MediaCover | null
+  cover: EditableCover | null
   onClose: () => void
 }) {
   return (
@@ -69,7 +71,7 @@ function EditCoverForm({
   onDone,
 }: {
   mediaId: string
-  cover: MediaCover
+  cover: EditableCover
   onDone: () => void
 }) {
   const update = useUpdateCover(mediaId)

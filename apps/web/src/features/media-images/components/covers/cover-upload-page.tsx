@@ -7,6 +7,7 @@ import { getRouteApi } from "@tanstack/react-router"
 import { useState } from "react"
 import { LanguagePicker } from "@/components/fields/language-picker"
 import { DashboardPage } from "@/components/layout/dashboard-page"
+import { BackLink } from "@/features/catalog/components/shared/back-link"
 import { CoversManager } from "@/features/media-images/components/covers/covers-manager"
 import { ContentRatingSelect } from "@/features/media-images/components/shared/content-rating-select"
 import { managerStyles } from "@/features/media-images/components/shared/manager-styles"
@@ -14,9 +15,9 @@ import { MediaImagesSettings } from "@/features/media-images/components/shared/m
 import { PickTitleEmpty } from "@/features/media-images/components/shared/pick-title-empty"
 import { m } from "@/paraglide/messages"
 
-const routeApi = getRouteApi("/dashboard/covers")
+const routeApi = getRouteApi("/dashboard/covers/upload")
 
-export function CoversPage() {
+export function CoverUploadPage() {
   const prefill = routeApi.useLoaderData()
   const navigate = routeApi.useNavigate()
   const [media, setMedia] = useState(prefill.media)
@@ -24,7 +25,11 @@ export function CoversPage() {
   const [contentRating, setContentRating] = useState<ContentRating>("NORMAL")
 
   return (
-    <DashboardPage subtitle={m.media_covers_dashboard_subtitle()} title={m.dashboard_nav_covers()}>
+    <DashboardPage
+      eyebrow={<BackLink label={m.dashboard_nav_covers()} to="/dashboard/covers" />}
+      subtitle={m.media_covers_dashboard_subtitle()}
+      title={m.catalog_cover_upload_title()}
+    >
       <div sx={managerStyles.layout}>
         <MediaImagesSettings
           media={media}

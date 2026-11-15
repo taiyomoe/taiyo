@@ -48,7 +48,12 @@ const postImages = async (url: string, field: "covers" | "banners", entries: obj
 const useInvalidateMedia = (mediaId: string) => {
   const queryClient = useQueryClient()
 
-  return () => queryClient.invalidateQueries({ queryKey: ["medias", mediaId] })
+  return () =>
+    Promise.all(
+      [["medias", mediaId], ["covers"], ["banners"]].map((queryKey) =>
+        queryClient.invalidateQueries({ queryKey }),
+      ),
+    )
 }
 
 export function useUploadCovers(mediaId: string) {

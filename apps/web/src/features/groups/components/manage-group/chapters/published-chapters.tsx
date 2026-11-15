@@ -27,7 +27,7 @@ export function PublishedChapters({
   titled: boolean
   onPageChange: (page: number) => void
   onEdit: (chapter: EditableChapter) => void
-  onDelete: (chapterId: string) => void
+  onDelete: (chapter: EditableChapter) => void
 }) {
   return (
     <section sx={groupChaptersStyles.section}>

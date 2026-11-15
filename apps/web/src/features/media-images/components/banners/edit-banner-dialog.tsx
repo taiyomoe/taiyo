@@ -19,13 +19,15 @@ import { ContentRatingSelect } from "@/features/media-images/components/shared/c
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
+type EditableBanner = Pick<MediaBanner, "id" | "contentRating">
+
 export function EditBannerDialog({
   mediaId,
   banner,
   onClose,
 }: {
   mediaId: string
-  banner: MediaBanner | null
+  banner: EditableBanner | null
   onClose: () => void
 }) {
   return (
@@ -52,7 +54,7 @@ function EditBannerForm({
   onDone,
 }: {
   mediaId: string
-  banner: MediaBanner
+  banner: EditableBanner
   onDone: () => void
 }) {
   const update = useUpdateBanner(mediaId)

@@ -19,7 +19,7 @@ export function ScheduledChapters({
   chapters: UpcomingChapter[]
   can: Permissions
   onEdit: (chapter: EditableChapter) => void
-  onDelete: (chapterId: string) => void
+  onDelete: (chapter: EditableChapter) => void
 }) {
   return (
     <section sx={groupChaptersStyles.section}>
