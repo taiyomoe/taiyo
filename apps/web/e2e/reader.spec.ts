@@ -17,7 +17,6 @@ const MANHWA = {
   mediaId: "6c38ee07-cab3-4cec-a6d2-75276fd156ab",
   chapters: ["88c928d4-d135-442f-892c-5039026ee7ee", "aad9fa5c-852c-4405-93ea-b6483d3c698d"],
 }
-const SIGNED_OUT = { cookies: [], origins: [] }
 const [FIRST, SECOND] = MANGA.chapters
 const waitForHydration = async (page: Page, selector: string, timeout = 0) => {
   await page.waitForFunction(
@@ -59,9 +58,18 @@ const toolbarButton = async (page: Page, name: string) => {
 const pagesSchema = z.object({ pages: z.array(z.object({ id: z.string(), url: z.string() })) })
 const apiData = async (request: APIRequestContext, path: string) =>
   z.object({ data: z.unknown() }).parse(await (await request.get(`${API}${path}`)).json()).data
+const forgetReading = async ({ page }: { page: Page }) => {
+  await page.request.put(`${API}/users/me/reader-settings`, { data: {} })
 
-test.describe("reader, signed out", () => {
-  test.use({ storageState: SIGNED_OUT })
+  for (const chapterId of [...MANGA.chapters, ...MANHWA.chapters]) {
+    await page.request.delete(`${API}/users/me/history/${chapterId}`)
+  }
+}
+
+test.describe("reader", () => {
+  test.describe.configure({ mode: "serial" })
+  test.use({ storageState: "e2e/.auth/user.json" })
+  test.beforeEach(forgetReading)
 
   test("turns pages with the keyboard and the click zones", async ({ page }) => {
     await openReader(page)
@@ -148,7 +156,13 @@ test.describe("reader, signed out", () => {
 })
 
 test.describe("reader on a touch screen", () => {
-  test.use({ storageState: SIGNED_OUT, hasTouch: true, viewport: { width: 420, height: 860 } })
+  test.describe.configure({ mode: "serial" })
+  test.use({
+    storageState: "e2e/.auth/member.json",
+    hasTouch: true,
+    viewport: { width: 420, height: 860 },
+  })
+  test.beforeEach(forgetReading)
 
   const touch = async (page: Page) => {
     const session = await page.context().newCDPSession(page)
