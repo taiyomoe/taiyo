@@ -2,8 +2,8 @@ import type { ChangelogEntry } from "@/features/changelog/lib/changelog"
 
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
   {
-    id: "2026-11-14-taiyo-2",
-    date: "2026-11-14",
+    id: "2026-11-15-taiyo-2",
+    date: "2026-11-15",
     title: { en: "Taiyō 2.0", fr: "Taiyō 2.0", "pt-BR": "Taiyō 2.0" },
     image: {
       src: {
@@ -129,12 +129,30 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
             },
           },
           {
+            tag: "home",
+            text: {
+              en: "The newest titles on Taiyō get a carousel on the home page and a page of their own",
+              fr: "Les derniers titres arrivés sur Taiyō ont un carrousel sur l’accueil et leur propre page",
+              "pt-BR":
+                "Os títulos mais novos do Taiyō ganham um carrossel na página inicial e uma página própria",
+            },
+          },
+          {
             tag: "titles",
             text: {
               en: "Chapters are grouped by volume, with search, sorting and an unread filter",
               fr: "Les chapitres sont regroupés par volume, avec recherche, tri et un filtre des non-lus",
               "pt-BR":
                 "Os capítulos são agrupados por volume, com busca, ordenação e um filtro de não lidos",
+            },
+          },
+          {
+            tag: "titles",
+            text: {
+              en: "On a computer, a title's cover and reading buttons stay in view while you scroll its chapters",
+              fr: "Sur ordinateur, la couverture et les boutons de lecture d’un titre restent visibles pendant que vous parcourez ses chapitres",
+              "pt-BR":
+                "No computador, a capa e os botões de leitura de um título ficam visíveis enquanto você rola os capítulos",
             },
           },
           {
@@ -203,15 +221,6 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
               fr: "Ouvrez un titre au hasard depuis la barre latérale, la palette de commandes ou la recherche avancée",
               "pt-BR":
                 "Abra um título aleatório pela barra lateral, pela paleta de comandos ou pela pesquisa avançada",
-            },
-          },
-          {
-            tag: "search",
-            text: {
-              en: "A recently added page lists the newest titles on Taiyō",
-              fr: "Une page des ajouts récents liste les derniers titres arrivés sur Taiyō",
-              "pt-BR":
-                "Uma página de adicionados recentemente lista os títulos mais novos do Taiyō",
             },
           },
           {
