@@ -30,8 +30,8 @@ export function HomePage({ user }: { user: Session["user"] }) {
         </Suspense>
       </CatchBoundary>
       <div sx={styles.page}>
-        <LatestTitles />
         <LatestUpdates />
+        <LatestTitles />
       </div>
     </AppShell>
   )
