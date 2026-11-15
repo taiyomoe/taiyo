@@ -1,4 +1,3 @@
-import { SUPPORTED_LANGUAGES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -14,21 +13,22 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
   apiSuccessEnvelope,
   contentRatingsQuerySchema,
+  languageSchema,
   latestChapterFeedItemSchema,
 } from "../utils/schemas"
 
 const MAX_UPCOMING = 50
 const querySchema = z.object({
   contentRating: contentRatingsQuerySchema,
-  mediaId: z.uuid().optional().meta({ description: "Only list the chapters of this media." }),
-  groupId: z
-    .uuid()
-    .optional()
-    .meta({ description: "Only list the chapters credited to this group." }),
-  language: z
-    .enum(SUPPORTED_LANGUAGES)
-    .optional()
-    .meta({ description: "Only list chapters in this language." }),
+  mediaId: z.uuid().optional().meta({
+    description: "The ID of a media, to only list its chapters.",
+    example: "4e26b80f-6661-4f5f-93b4-6dfed052bbed",
+  }),
+  groupId: z.uuid().optional().meta({
+    description: "The ID of a group, to only list the chapters credited to it.",
+    example: "8d2f5a61-0c3b-4e7a-9f14-2b6c7d8e9f01",
+  }),
+  language: languageSchema("A language, to only list the chapters in it.").optional(),
 })
 const upcomingChapterSchema = latestChapterFeedItemSchema
   .omit({ createdAt: true, externalUrl: true })
@@ -47,7 +47,7 @@ export const listUpcomingChaptersHandler = new Hono().get(
     tags: ["Chapters"],
     responses: {
       200: {
-        description: "The upcoming chapters.",
+        description: "The matching upcoming chapters.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(upcomingChapterSchema.array())),

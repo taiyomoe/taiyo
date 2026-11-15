@@ -22,23 +22,30 @@ import {
 const querySchema = paginationQuerySchema.extend({
   contentRating: contentRatingsQuerySchema,
   chaptersPerMedia: z.coerce.number().int().min(1).max(20).default(5).meta({
-    description: "How many of each media's latest chapters to include (1-20).",
+    description: "The number of matching chapters to include per media, from 1 to 20.",
     example: 5,
   }),
-  uploaderId: z
-    .uuid()
-    .optional()
-    .meta({ description: "Only list the chapters uploaded by this user." }),
-  groupId: z
-    .uuid()
-    .optional()
-    .meta({ description: "Only list the chapters credited to this group." }),
-  mediaId: z.uuid().optional().meta({ description: "Only list the chapters of this media." }),
+  uploaderId: z.uuid().optional().meta({
+    description: "The ID of a user, to only list the chapters they uploaded.",
+    example: "2b7e9c14-5d3a-4f6b-8e1c-9a0d3f5b7c21",
+  }),
+  groupId: z.uuid().optional().meta({
+    description: "The ID of a group, to only list the chapters credited to it.",
+    example: "8d2f5a61-0c3b-4e7a-9f14-2b6c7d8e9f01",
+  }),
+  mediaId: z.uuid().optional().meta({
+    description: "The ID of a media, to only list its chapters.",
+    example: "4e26b80f-6661-4f5f-93b4-6dfed052bbed",
+  }),
   search: z.string().trim().min(1).max(100).optional().meta({
-    description: "Only list chapters whose title, number or media title matches.",
+    description:
+      "Text to only list the chapters whose title, number or media title matches, up to 100 characters.",
+    example: "boruto",
   }),
   order: z.enum(["latest", "oldest"]).default("latest").meta({
-    description: "`latest`: newest releases first. `oldest`: earliest releases first.",
+    description:
+      "How to sort medias and their chapters: `latest` puts the newest releases first, `oldest` the earliest ones. Defaults to `latest`.",
+    example: "latest",
   }),
 })
 
@@ -47,11 +54,11 @@ export const listLatestMediaUpdatesHandler = new Hono().get(
   describeRoute({
     summary: "List the latest updates by media",
     description:
-      "Lists the medias with the most recently released chapters, newest first, each with its latest chapters, filtered by content rating.\n\n**Authentication:** none.",
+      "Lists the medias with the most recently released chapters, newest first by default, each with its latest chapters. Chapters are filtered by content rating and optionally by uploader, group, media or a search on their title, number or media title; a media shows up when at least one of its chapters matches.\n\n**Authentication:** none.",
     tags: ["Chapters"],
     responses: {
       200: {
-        description: "The latest updated medias.",
+        description: "The matching medias.",
         content: {
           "application/json": {
             schema: resolver(

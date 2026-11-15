@@ -17,24 +17,28 @@ const querySchema = z.object({
     .string()
     .refine((value) => getAuditLogField(value) !== undefined, "Unknown field.")
     .meta({ description: "The KQL field to suggest values for.", example: "actor" }),
-  query: z
-    .string()
-    .max(200)
-    .default("")
-    .meta({ description: "What has been typed so far.", example: "adm" }),
+  query: z.string().max(200).default("").meta({
+    description: "What has been typed so far, up to 200 characters. Defaults to an empty string.",
+    example: "adm",
+  }),
 })
 const suggestionSchema = z.object({
-  value: z.string().meta({ description: "The value to insert into the query." }),
-  label: z.string().nullable().meta({ description: "A friendlier name to show, if any." }),
-  image: z.string().nullable().meta({ description: "An avatar to show, for users." }),
+  value: z
+    .string()
+    .meta({ description: "The value to insert into the query.", example: "media.CREATE" }),
+  label: z
+    .string()
+    .nullable()
+    .meta({ description: "A friendlier name to show, for users.", example: "Kaito" }),
+  image: z.string().nullable().meta({ description: "The URL of the avatar to show, for users." }),
   nameEffect: z
     .string()
     .nullable()
-    .meta({ description: "The user's equipped name effect, for users." }),
+    .meta({ description: "The name effect the user has equipped, for users." }),
   avatarBorder: z
     .string()
     .nullable()
-    .meta({ description: "The user's equipped avatar border, for users." }),
+    .meta({ description: "The avatar border the user has equipped, for users." }),
 })
 const event = sql.ref("auditLogs.event")
 const columns: Record<string, RawBuilder<unknown>> = {
@@ -60,20 +64,23 @@ const plain = (values: readonly string[], query: string) =>
 export const listAuditLogSuggestionsHandler = new Hono().get(
   "/suggestions",
   describeRoute({
-    summary: "Suggest audit log field values",
-    description:
-      "Suggests values for a KQL field as the query is typed: known actions, categories and resource types, users by name, and values seen in the last 30 days for everything else.\n\n**Required roles:** admin.",
+    summary: "List audit log value suggestions",
+    description: `Lists values for a KQL field that match what has been typed: the allowed values of enum fields, known actions, categories and resource types, users and other actors whose name starts with it, and the most frequent values of the last ${RECENT_DAYS} days for everything else. Number and date fields get no suggestions.\n\n**Required roles:** admin.`,
     tags: ["Audit logs"],
     responses: {
       200: {
-        description: "Matching values.",
+        description: "The matching values.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(suggestionSchema.array())),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth("auditLog.read"),

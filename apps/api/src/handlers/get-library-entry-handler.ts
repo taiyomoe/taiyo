@@ -7,13 +7,17 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ mediaId: z.uuid() })
+const paramSchema = z.object({
+  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+})
 const libraryEntrySchema = z.object({
-  mediaId: z.uuid(),
-  status: z.enum(USER_LIBRARY_STATUSES),
+  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+  status: z
+    .enum(USER_LIBRARY_STATUSES)
+    .meta({ description: "Your reading status for the media.", example: "READING" }),
   notify: z.boolean().meta({ description: "Whether new chapters of the media notify you." }),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  createdAt: z.iso.datetime().meta({ description: "When you added the media to your library." }),
+  updatedAt: z.iso.datetime().meta({ description: "When you last updated the entry." }),
 })
 
 export const getLibraryEntryHandler = new Hono().get(
@@ -21,7 +25,7 @@ export const getLibraryEntryHandler = new Hono().get(
   describeRoute({
     summary: "Get my library entry for a media",
     description:
-      "Returns your library entry for the media, or null when the media is not in your library.\n\n**Authentication:** signed-in user.",
+      "Returns your library entry for the media, or `null` when the media is not in your library.\n\n**Authentication:** signed-in user.",
     tags: ["Library"],
     responses: {
       200: {
@@ -33,7 +37,9 @@ export const getLibraryEntryHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

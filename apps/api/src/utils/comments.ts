@@ -36,8 +36,15 @@ export type CommentViewer = { id: string; canModerate: boolean } | null
 export const commentTargetSchema = z.object({
   targetType: z
     .enum(COMMENT_TARGET_TYPES)
-    .meta({ description: "What the comments are on.", example: "MEDIA" }),
-  targetId: z.uuid().meta({ description: "The id of the media, chapter, group or user." }),
+    .meta({ description: "The type of resource the comments are on.", example: "MEDIA" }),
+  targetId: z.uuid().meta({ description: "The ID of the media, chapter, group or user." }),
+})
+
+export const commentThreadTargetSchema = z.object({
+  type: z
+    .enum(COMMENT_TARGET_TYPES)
+    .meta({ description: "The type of resource the comment is on.", example: "CHAPTER" }),
+  id: z.uuid().meta({ description: "The ID of the media, chapter, group or user." }),
 })
 
 export const resolveCommentTarget = async (db: Kysely<DB>, { type, id }: CommentTarget) => {
@@ -185,56 +192,86 @@ export const visibleRootSql = sql<boolean>`(${liveCommentSql("c", "u")} or exist
 type CommentRow = Awaited<ReturnType<ReturnType<typeof selectComments>["executeTakeFirstOrThrow"]>>
 
 const commentImageSchema = z.object({
-  id: z.uuid(),
-  url: z.url().nullable().meta({ description: "Null once a moderator removed the image." }),
-  width: z.int(),
-  height: z.int(),
-  animated: z.boolean(),
-  favorited: z.boolean().meta({ description: "Whether it is in your favorites." }),
+  id: z.uuid().meta({ description: "The ID of the image." }),
+  url: z
+    .url()
+    .nullable()
+    .meta({ description: "The URL of the image, or `null` once a moderator removed it." }),
+  width: z.int().meta({ description: "The width of the image, in pixels.", example: 640 }),
+  height: z.int().meta({ description: "The height of the image, in pixels.", example: 480 }),
+  animated: z.boolean().meta({ description: "Whether the image is animated." }),
+  favorited: z.boolean().meta({ description: "Whether the image is in your favorites." }),
 })
 const commentAuthorSchema = userSummarySchema.extend({
-  title: z.string().nullable().meta({ description: "The author's equipped profile title." }),
-  role: z.enum(ROLES),
+  title: z
+    .string()
+    .nullable()
+    .meta({ description: "The profile title the author has equipped, if any." }),
+  role: z.enum(ROLES).meta({ description: "The role of the author.", example: "USER" }),
 })
 
 export const commentSchema = z.object({
-  id: z.uuid(),
-  parentId: z.uuid().nullable().meta({ description: "The top-level comment of a reply." }),
-  createdAt: z.iso.datetime(),
-  editedAt: z.iso.datetime().nullable().meta({ description: "When the author last edited it." }),
+  id: z.uuid().meta({ description: "The ID of the comment." }),
+  parentId: z
+    .uuid()
+    .nullable()
+    .meta({ description: "The ID of the top-level comment this reply belongs to, if any." }),
+  createdAt: z.iso.datetime().meta({ description: "When the comment was posted." }),
+  editedAt: z.iso
+    .datetime()
+    .nullable()
+    .meta({ description: "When the author last edited the comment, if any." }),
   removal: z
     .enum([...COMMENT_DELETIONS, "ACCOUNT_DELETED", "HIDDEN"])
     .nullable()
     .meta({
       description:
-        "Why the comment is gone, or null while it is visible. Removed comments only show up while they have visible replies.",
+        "Why the comment is gone, or `null` while it is visible: deleted by its author (`AUTHOR`), by the owner of the profile it is on (`PAGE_OWNER`) or by a moderator (`MODERATOR`), its author deleted their account (`ACCOUNT_DELETED`), or its author is banned (`HIDDEN`). A removed comment only shows up while it has visible replies.",
     }),
-  content: z.string().nullable().meta({ description: "Rich text, or null once removed." }),
-  author: commentAuthorSchema.nullable(),
+  content: z.string().nullable().meta({
+    description: "The rich text of the comment, or `null` once it is removed.",
+    example: "That last panel was incredible.",
+  }),
+  author: commentAuthorSchema
+    .nullable()
+    .meta({ description: "The author of the comment, or `null` once it is removed." }),
   replyTo: z
     .object({
-      id: z.uuid(),
-      author: z.object({ username: z.string(), displayUsername: z.string() }).nullable(),
+      id: z.uuid().meta({ description: "The ID of the reply this reply answers." }),
+      author: z
+        .object({
+          username: z
+            .string()
+            .meta({ description: "The username of the author.", example: "kaito" }),
+          displayUsername: z
+            .string()
+            .meta({ description: "The display name of the author.", example: "Kaito" }),
+        })
+        .nullable()
+        .meta({ description: "The author of the answered reply, or `null` once it is removed." }),
     })
     .nullable()
-    .meta({
-      description: "The reply this reply answers, if any. Its author is null once removed.",
-    }),
-  images: commentImageSchema.array(),
-  upvoteCount: z.int(),
-  viewerVoted: z.boolean(),
-  replyCount: z.int().meta({ description: "How many visible replies a top-level comment has." }),
-  canEdit: z.boolean(),
-  canDelete: z.boolean(),
-  canReport: z.boolean(),
+    .meta({ description: "The reply this reply answers, if any." }),
+  images: commentImageSchema
+    .array()
+    .meta({ description: "The images in the comment, empty once it is removed." }),
+  upvoteCount: z.int().meta({ description: "The number of upvotes on the comment.", example: 12 }),
+  viewerVoted: z.boolean().meta({ description: "Whether you upvoted the comment." }),
+  replyCount: z.int().meta({
+    description: "The number of visible replies to the comment. Always 0 for a reply.",
+    example: 4,
+  }),
+  canEdit: z.boolean().meta({ description: "Whether you can edit the comment." }),
+  canDelete: z.boolean().meta({ description: "Whether you can delete the comment." }),
+  canReport: z.boolean().meta({ description: "Whether you can report the comment." }),
 })
 
 export type CommentResponse = z.infer<typeof commentSchema>
 
 export const rootCommentSchema = commentSchema.extend({
-  replies: commentSchema
-    .array()
-    .meta({ description: "The first few replies, oldest first. Load the rest from /replies." }),
+  replies: commentSchema.array().meta({
+    description: `The first ${config.comments.previewReplies} visible replies, oldest first. List the rest with \`GET /comments/{id}/replies\`.`,
+  }),
 })
 
 export const loadCommentImages = async (
@@ -380,7 +417,13 @@ export const cursorQuerySchema = z
   .string()
   .max(200)
   .optional()
-  .meta({ description: "The `nextCursor` of the previous page." })
+  .meta({ description: "The `nextCursor` of the previous page. Omit it to get the first page." })
+
+export const nextCursorMetaSchema = z.object({
+  nextCursor: z.string().nullable().meta({
+    description: "The cursor to pass as `cursor` to get the next page, or `null` on the last page.",
+  }),
+})
 
 export const keysetAfter = (
   sort: CommentSort,
@@ -443,8 +486,9 @@ export const contentSchema = z
   .max(4000)
   .transform(normalizeCommentContent)
   .meta({
-    description: `Rich text, up to ${config.comments.maxTextLength} characters. Put an image on its own line as \`![](image:<id>)\`, or \`||![](image:<id>)||\` to hide it behind a spoiler; up to ${config.comments.maxImages} images.`,
-    example: "Bla bla bla\n![](image:7f0c6a8e-0000-4000-8000-000000000000)\nBla bla bla",
+    description: `The rich text of the comment, up to ${config.comments.maxTextLength} characters. Put an image on its own line as \`![](image:<id>)\`, or \`||![](image:<id>)||\` to hide it behind a spoiler, with up to ${config.comments.maxImages} images. Each image must be one you uploaded or added to your favorites.`,
+    example:
+      "That last panel was incredible.\n![](image:7f0c6a8e-0000-4000-8000-000000000000)\nCannot wait for the next chapter!",
   })
 
 export const checkContent = async (

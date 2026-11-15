@@ -14,7 +14,7 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const markMediaReadHandler = new Hono().put(
   "/:id/read",
   describeRoute({
-    summary: "Mark every chapter of a media as read",
+    summary: "Mark a media as read",
     description:
       "Marks every published chapter number of the media as finished: chapters you opened are completed, and one version of each number you never opened is added to your history. Marking chapters as read never earns points, and they stay out of your reading-history feed.\n\n**Authentication:** signed-in user.",
     tags: ["Reading history"],
@@ -26,9 +26,10 @@ export const markMediaReadHandler = new Hono().put(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  marked: z
-                    .int()
-                    .meta({ description: "How many history entries were added or completed." }),
+                  marked: z.int().meta({
+                    description: "The number of chapters newly marked as read.",
+                    example: 42,
+                  }),
                 }),
               ),
             ),
@@ -36,8 +37,10 @@ export const markMediaReadHandler = new Hono().put(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

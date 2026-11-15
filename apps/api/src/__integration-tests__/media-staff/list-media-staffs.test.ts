@@ -8,7 +8,7 @@ const SEEDED_STAFF_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2"
 type LinkItem = {
   staffId: string
   name: string
-  image: string | null
+  imageUrl: string | null
   role: string
 }
 
@@ -25,6 +25,8 @@ describe("GET /medias/:id/staffs", () => {
     expect(res.body.data.some((s) => s.staffId === SEEDED_STAFF_ID && s.role === "AUTHOR")).toBe(
       true,
     )
+    expect(res.body.data.every((s) => s.imageUrl === null || URL.canParse(s.imageUrl))).toBe(true)
+    expect(res.body.data.every((s) => !("image" in s))).toBe(true)
   })
 
   test("returns MEDIA_NOT_FOUND for an unknown media", async ({ app }) => {

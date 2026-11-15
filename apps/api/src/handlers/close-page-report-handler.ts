@@ -11,10 +11,16 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ reportId: z.uuid() })
+const paramSchema = z.object({
+  reportId: z.uuid().meta({
+    description: "The ID of the page report.",
+    example: "13548c83-8d1a-4163-8830-c8f16fcd2eb7",
+  }),
+})
 const bodySchema = z.object({
   status: z.enum(["RESOLVED", "DISMISSED"]).meta({
-    description: "RESOLVED once the page is fixed, DISMISSED when nothing was wrong.",
+    description:
+      "How the reports are closed: RESOLVED once the page is fixed, DISMISSED when nothing was wrong.",
     example: "RESOLVED",
   }),
 })
@@ -24,11 +30,8 @@ export const closePageReportHandler = new Hono().patch(
   describeRoute({
     summary: "Close a page report",
     description:
-      "Marks a report as resolved or dismissed, along with every other open report on the same page.\n\n**Required roles:** uploader, moderator, admin.",
+      "Closes a page report as resolved or dismissed, along with every other open report on the same page.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Page reports"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Reports closed.",
@@ -37,7 +40,10 @@ export const closePageReportHandler = new Hono().patch(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  closed: z.int().meta({ description: "How many open reports were closed." }),
+                  closed: z.int().meta({
+                    description: "The number of open reports on the page that were closed.",
+                    example: 3,
+                  }),
                 }),
               ),
             ),
@@ -45,9 +51,11 @@ export const closePageReportHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No page report with the given id exists.",
+        401: true,
+        403: true,
+        404: "No page report with the given ID exists.",
         409: "The report is already closed.",
-        422: "The request data failed validation.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

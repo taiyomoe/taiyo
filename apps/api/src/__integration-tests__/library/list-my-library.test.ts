@@ -101,4 +101,30 @@ describe("GET /users/me/library", () => {
 
     expect(res.status).toBe(401)
   })
+
+  test("leaves out the medias that were deleted", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+
+    await services.db
+      .insertInto("userLibraryEntries")
+      .values([
+        { userId, mediaId: SEEDED_MEDIA_IDS[0], status: "READING" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[1], status: "READING" },
+      ])
+      .execute()
+    await services.db
+      .updateTable("medias")
+      .set({ deletedAt: new Date() })
+      .where("id", "=", SEEDED_MEDIA_IDS[1])
+      .execute()
+
+    const res = await api<Array<{ mediaId: string }>>(app, "/users/me/library", { headers })
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.map((item) => item.mediaId)).toEqual([SEEDED_MEDIA_IDS[0]])
+    expect(res.body.meta).toMatchObject({ total: 1 })
+  })
 })

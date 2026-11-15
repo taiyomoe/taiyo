@@ -1,33 +1,42 @@
 import type { Media, Selectable } from "@taiyomoe/db"
 import { createMiddleware } from "hono/factory"
 import z from "zod"
+import { withRequestSpec } from "../utils/openapi-helper"
+
+const paramSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the media." }),
+})
 
 export const checkMedia = (opts: { includeDeleted?: boolean } = {}) =>
-  createMiddleware<{
-    Variables: { media: Selectable<Media> }
-  }>(async (c, next) => {
-    const parsed = z.uuid().safeParse(c.req.param("id"))
+  withRequestSpec(
+    createMiddleware<{
+      Variables: { media: Selectable<Media> }
+    }>(async (c, next) => {
+      const parsed = paramSchema.safeParse({ id: c.req.param("id") })
 
-    if (!parsed.success) {
-      return c.fail("VALIDATION_ERROR", parsed.error.issues)
-    }
+      if (!parsed.success) {
+        return c.fail("VALIDATION_ERROR", parsed.error.issues)
+      }
 
-    const id = parsed.data
-    const { db, log } = c.var
+      const { id } = parsed.data
+      const { db, log } = c.var
 
-    log.set({ media: { id } })
+      log.set({ media: { id } })
 
-    const base = db.selectFrom("medias").selectAll().where("id", "=", id)
-    const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
-    const media = await query.executeTakeFirst()
+      const base = db.selectFrom("medias").selectAll().where("id", "=", id)
+      const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
+      const media = await query.executeTakeFirst()
 
-    if (!media) {
-      return c.fail("MEDIA_NOT_FOUND")
-    }
+      if (!media) {
+        return c.fail("MEDIA_NOT_FOUND")
+      }
 
-    log.set({ media })
+      log.set({ media })
 
-    c.set("media", media)
+      c.set("media", media)
 
-    return next()
-  })
+      return next()
+    }),
+    "param",
+    paramSchema,
+  )

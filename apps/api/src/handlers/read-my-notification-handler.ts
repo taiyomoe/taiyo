@@ -10,29 +10,38 @@ import { timestampSql } from "../utils/comments"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid() })
+const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the notification." }) })
 
 export const readMyNotificationHandler = new Hono().post(
   "/me/notifications/:id/read",
   describeRoute({
-    summary: "Mark a notification as read",
+    summary: "Mark one of my notifications as read",
     description:
-      "Marks one of your notifications as read. Marking a read notification again keeps its first read time.\n\n**Authentication:** signed-in user.",
+      "Marks one of your notifications as read. Marking a read notification again keeps the time it was first read.\n\n**Authentication:** signed-in user.",
     tags: ["Notifications"],
     responses: {
       201: {
-        description: "The notification is read.",
+        description: "Notification marked as read.",
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ id: z.uuid(), readAt: z.iso.datetime() })),
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the notification." }),
+                  readAt: z.iso
+                    .datetime()
+                    .meta({ description: "When you first read the notification." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "You have no notification with the given id.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "You have no notification with the given ID.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

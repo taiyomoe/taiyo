@@ -15,7 +15,7 @@ export const deleteCommentHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a comment",
     description:
-      "Deletes a comment. Its author, the owner of the profile it was left on, and moderators may delete it. A top-level comment with replies stays as a placeholder saying who removed it; its replies stay.\n\n**Authentication:** signed-in user.",
+      "Deletes a comment. A top-level comment with visible replies stays as a placeholder saying who removed it, and its replies stay. Deleting someone else's comment also resolves its open reports.\n\n**Required access:** the author of the comment or the owner of the profile it is on, or moderator or admin.",
     tags: ["Comments"],
     responses: {
       200: {
@@ -25,8 +25,12 @@ export const deleteCommentHandler = new Hono().delete(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid(),
-                  deletion: z.enum(COMMENT_DELETIONS),
+                  id: z.uuid().meta({ description: "The ID of the comment." }),
+                  deletion: z.enum(COMMENT_DELETIONS).meta({
+                    description:
+                      "Who deleted the comment: its author (`AUTHOR`), the owner of the profile it is on (`PAGE_OWNER`), or a moderator (`MODERATOR`).",
+                    example: "AUTHOR",
+                  }),
                 }),
               ),
             ),
@@ -34,8 +38,10 @@ export const deleteCommentHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        403: "You may not delete this comment.",
-        404: "The comment doesn't exist or was already removed.",
+        401: true,
+        403: "You do not have permission to delete this comment.",
+        404: "No comment with the given ID exists, or it was already removed.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

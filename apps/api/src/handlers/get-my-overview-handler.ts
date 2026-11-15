@@ -8,25 +8,31 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const countsSchema = z.object({
-  pending: z.int(),
-  accepted: z.int(),
-  rejected: z.int(),
+  pending: z.int().meta({ description: "The number still waiting for review.", example: 2 }),
+  accepted: z.int().meta({ description: "The number accepted.", example: 14 }),
+  rejected: z.int().meta({ description: "The number rejected.", example: 1 }),
 })
+const queueCount = (description: string) => z.int().nullable().meta({ description, example: 5 })
 const overviewSchema = z.object({
-  chapters: countsSchema.meta({ description: "The user's chapters sent for review." }),
-  suggestions: countsSchema.meta({ description: "The user's media suggestions." }),
-  groups: z.int().meta({ description: "How many groups the user belongs to." }),
-  invitations: z.int().meta({ description: "Pending group invitations for the user." }),
+  chapters: countsSchema.meta({ description: "Your chapters sent for review." }),
+  suggestions: countsSchema.meta({ description: "Your media suggestions." }),
+  groups: z.int().meta({ description: "The number of groups you belong to.", example: 2 }),
+  invitations: z
+    .int()
+    .meta({ description: "The number of pending group invitations you received.", example: 1 }),
   queues: z
     .object({
-      chapters: z.int().nullable(),
-      suggestions: z.int().nullable(),
-      groupRequests: z.int().nullable(),
+      chapters: queueCount(
+        "The number of chapters waiting for review, or null when you cannot review chapters.",
+      ),
+      suggestions: queueCount(
+        "The number of media suggestions waiting for review, or null when you cannot review them.",
+      ),
+      groupRequests: queueCount(
+        "The number of group ownership and creation requests waiting for review, or null when you cannot review both kinds.",
+      ),
     })
-    .meta({
-      description:
-        "How much is waiting in each review queue the user can work on, or null for the queues they can't.",
-    }),
+    .meta({ description: "The number of items waiting in each review queue." }),
 })
 const count = (row: { count: string } | undefined) => Number(row?.count ?? 0)
 
@@ -35,7 +41,7 @@ export const getMyOverviewHandler = new Hono().get(
   describeRoute({
     summary: "Get my dashboard overview",
     description:
-      "Counts what the current user has waiting or decided: chapters sent for review, media suggestions, groups and invitations, plus the review queues they can work on.\n\n**Authentication:** signed-in user.",
+      "Returns your chapters sent for review and your media suggestions counted by outcome, the number of groups you belong to and of your pending invitations, and the size of each review queue you can work on. A chapter counts as accepted once approved, even while it waits for its scheduled release.\n\n**Authentication:** signed-in user.",
     tags: ["Users"],
     responses: {
       200: {
@@ -44,7 +50,7 @@ export const getMyOverviewHandler = new Hono().get(
           "application/json": { schema: resolver(apiSuccessEnvelope(overviewSchema)) },
         },
       },
-      ...getOpenApiResponses({}),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   withAuth(),
@@ -68,7 +74,7 @@ export const getMyOverviewHandler = new Hono().get(
         .select([
           pending,
           rejected,
-          sql<string>`count(*) filter (where "status" = 'PUBLISHED' and "reviewerId" is not null)`.as(
+          sql<string>`count(*) filter (where "status" in ('PUBLISHED', 'SCHEDULED') and "reviewerId" is not null)`.as(
             "accepted",
           ),
         ])

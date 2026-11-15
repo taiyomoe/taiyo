@@ -20,7 +20,7 @@ const updateCoverSchema = z
       .min(1)
       .nullable()
       .optional()
-      .meta({ description: "The volume of the cover, or null to clear.", example: 2 }),
+      .meta({ description: "The volume the cover belongs to, or `null` to clear it.", example: 2 }),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided.",
@@ -31,11 +31,8 @@ export const updateCoverHandler = new Hono().patch(
   describeRoute({
     summary: "Update a cover",
     description:
-      "Updates the metadata of a cover. Omitted fields are kept as-is. Send `null` explicitly to clear `volume`. Promoting a cover to main is done through the dedicated set-main endpoint.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Updates the details of a cover. At least one field is required, and omitted fields are left unchanged. To make the cover the main one, use the set-main route.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Covers"],
-    requestBody: {
-      content: { "application/json": await resolver(updateCoverSchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Cover updated.",
@@ -52,8 +49,10 @@ export const updateCoverHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No cover with the given id exists.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No cover with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

@@ -18,18 +18,15 @@ const createListSchema = z.object({
     .trim()
     .min(1)
     .max(config.input.maxNameLength)
-    .meta({ description: "Name of the list.", example: "Best shounen" }),
-  description: z
-    .string()
-    .trim()
-    .max(config.input.maxDescriptionLength)
-    .nullable()
-    .optional()
-    .meta({ description: "Optional description." }),
+    .meta({ description: "The name of the list.", example: "Best shounen" }),
+  description: z.string().trim().max(config.input.maxDescriptionLength).nullable().optional().meta({
+    description: "The description of the list, if any.",
+    example: "Battle manga I keep coming back to.",
+  }),
   visibility: z
     .enum(USER_LIST_VISIBILITIES)
     .default("PRIVATE")
-    .meta({ description: "Who can see the list. Defaults to PRIVATE." }),
+    .meta({ description: "Who can see the list. Defaults to PRIVATE.", example: "PUBLIC" }),
   mediaIds: listMediaIdsSchema.default([]),
 })
 
@@ -37,11 +34,8 @@ export const createListHandler = new Hono().post(
   "/me/lists",
   describeRoute({
     summary: "Create a list",
-    description: `Creates a custom user list, optionally with its titles in order. Defaults to PRIVATE. A user can own at most ${config.lists.maxPerUser} lists.\n\n**Authentication:** signed-in user.`,
+    description: `Creates a custom list, optionally with its titles in order. You can own at most ${config.lists.maxPerUser} lists.\n\n**Authentication:** signed-in user.`,
     tags: ["Custom lists"],
-    requestBody: {
-      content: { "application/json": await resolver(createListSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "List created.",
@@ -50,8 +44,10 @@ export const createListHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid().meta({ description: "The ID of the new list." }),
-                  visibility: z.enum(USER_LIST_VISIBILITIES),
+                  id: z.uuid().meta({ description: "The ID of the list." }),
+                  visibility: z
+                    .enum(USER_LIST_VISIBILITIES)
+                    .meta({ description: "Who can see the list.", example: "PRIVATE" }),
                 }),
               ),
             ),
@@ -59,9 +55,11 @@ export const createListHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "One of the titles doesn't exist.",
+        401: true,
+        403: true,
+        404: "One of the media does not exist.",
         409: "You already own the maximum number of lists.",
-        422: "The request data failed validation.",
+        422: "The request body failed validation.",
       }),
     },
   }),

@@ -15,21 +15,30 @@ export const leaveGroupHandler = new Hono().post(
   describeRoute({
     summary: "Leave a group",
     description:
-      "Removes your own membership from the group. Refuses if you are the last owner — promote someone else first.\n\n**Authentication:** signed-in user.",
+      "Leaves the group, ending your membership. The last owner cannot leave: promote another member to owner first.\n\n**Required access:** a member of the group.",
     tags: ["Group members"],
     responses: {
       201: {
-        description: "Left the group.",
+        description: "Group left.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ groupId: z.uuid(), userId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                  userId: z.uuid().meta({ description: "The ID of your user." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists, or you have no membership on the group.",
-        409: "Leaving would leave the group without an owner.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No group with the given ID exists, or you are not a member of the group.",
+        409: "You are the last owner of the group.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

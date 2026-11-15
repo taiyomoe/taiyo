@@ -19,7 +19,7 @@ import { apiSuccessEnvelope, contentRatingSchema, fileSchema } from "../utils/sc
 const createBannersSchema = z.object({
   banners: z
     .object({
-      file: fileSchema("The file of the banner."),
+      file: fileSchema("The image of the banner."),
       contentRating: contentRatingSchema("The content rating of the banner."),
     })
     .array()
@@ -37,11 +37,6 @@ export const createBannersHandler = new Hono().post(
     description:
       "Adds one or more banners to a media.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Banners"],
-    requestBody: {
-      content: {
-        "multipart/form-data": await resolver(createBannersSchema).toOpenAPISchema(),
-      },
-    },
     responses: {
       201: {
         description: "Banners added.",
@@ -50,10 +45,9 @@ export const createBannersHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  ids: z
-                    .uuid()
-                    .array()
-                    .meta({ description: "The IDs of the newly created banners." }),
+                  ids: z.uuid().array().meta({
+                    description: "The IDs of the new banners, in the order they were sent.",
+                  }),
                 }),
               ),
             ),
@@ -61,9 +55,11 @@ export const createBannersHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        422: `The request data failed validation, or an uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists.",
+        422: `The provided ID is not a valid UUID, or the request body failed validation, or one of the images is invalid, larger than ${config.images.maxSizeBytes / 1024 / 1024} MB or has too many pixels or frames.`,
+        429: "Too many requests, try again later.",
       }),
     },
   }),

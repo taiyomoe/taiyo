@@ -19,7 +19,7 @@ const querySchema = paginationQuerySchema.extend({
   language: z
     .enum(SUPPORTED_LANGUAGES)
     .optional()
-    .meta({ description: "Only list chapters in this language." }),
+    .meta({ description: "Only list chapters in this language.", example: "en" }),
   volume: z
     .string()
     .trim()
@@ -30,40 +30,40 @@ const querySchema = paginationQuerySchema.extend({
       description: `Only list chapters of this volume. Use \`${NO_VOLUME}\` for chapters without a volume.`,
       example: "12",
     }),
-  search: z
-    .string()
-    .trim()
-    .max(100)
-    .optional()
-    .meta({ description: "Matches the start of the chapter number or part of its title." }),
-  sort: z
-    .enum(["number", "createdAt"])
-    .default("number")
-    .meta({ description: "Order by chapter number or by upload date.", example: "number" }),
+  search: z.string().trim().max(100).optional().meta({
+    description:
+      "Only list chapters whose number starts with this text or whose title contains it, ignoring case.",
+    example: "11",
+  }),
+  sort: z.enum(["number", "createdAt"]).default("number").meta({
+    description: "Whether to sort by chapter number or by release date.",
+    example: "number",
+  }),
   order: sortDirectionSchema.default("asc"),
-  unread: z
-    .stringbool()
-    .default(false)
-    .meta({ description: "Only list chapters you have not read. Requires a signed-in user." }),
+  unread: z.stringbool().default(false).meta({
+    description:
+      "Whether to only list the chapter numbers you have not read. Requires you to be signed in.",
+    example: false,
+  }),
 })
 const chapterListItemSchema = latestChapterSchema.extend({
-  flag: z.enum(FLAGS).meta({ description: "Visibility flag of the chapter." }),
+  flag: z.enum(FLAGS).meta({ description: "The moderation flag of the chapter.", example: "OK" }),
   read: z.boolean().meta({
     description:
-      "Whether you have read a chapter with this number, in any language. Always false when signed out.",
+      "Whether you have read a chapter with this number, in any language. Always `false` when you are signed out.",
   }),
 })
 
 export const listChaptersHandler = new Hono().get(
   "/:id/chapters",
   describeRoute({
-    summary: "List chapters of a media",
+    summary: "List a media's chapters",
     description:
-      "Lists the chapters of a media, filtered by content rating and optionally by language, volume, search text and read state. A chapter counts as the stricter of its own rating and its media's.\n\n**Authentication:** none, except for `unread`.",
+      "Lists the published chapters of a media, filtered by content rating and optionally by language, volume, text and read state, lowest chapter number first by default. A chapter counts as the stricter of its own rating and its media's. Signed-in viewers also see which chapter numbers they have read, and can list only the unread ones.\n\n**Authentication:** optional.",
     tags: ["Chapters"],
     responses: {
       200: {
-        description: "Chapters of the media.",
+        description: "The matching chapters of the media.",
         content: {
           "application/json": {
             schema: resolver(
@@ -73,9 +73,9 @@ export const listChaptersHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        401: "`unread` was requested without a signed-in user.",
-        404: "No media with the given id exists.",
-        422: "The provided id is not a valid UUID or the query parameters failed validation.",
+        401: "`unread` is set and you are not signed in.",
+        404: "No media with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

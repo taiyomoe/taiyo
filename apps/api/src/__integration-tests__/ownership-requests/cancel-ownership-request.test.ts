@@ -74,7 +74,10 @@ describe("DELETE /ownership-requests/:id", () => {
     expect(res.body.code).toBe("OWNERSHIP_REQUEST_NOT_FOUND")
   })
 
-  test("rejects when caller is not the requester (FORBIDDEN)", async ({ app, services }) => {
+  test("hides the request from a caller who did not file it (OWNERSHIP_REQUEST_NOT_FOUND)", async ({
+    app,
+    services,
+  }) => {
     const { userId: requesterId } = await signInAs(services)
     const { headers: otherHeaders } = await signInAs(services)
     const groupId = await seedGroup(services, requesterId)
@@ -84,7 +87,8 @@ describe("DELETE /ownership-requests/:id", () => {
       headers: otherHeaders,
     })
 
-    expect(res.status).toBe(403)
+    expect(res.status).toBe(404)
+    expect(res.body).toMatchObject({ code: "OWNERSHIP_REQUEST_NOT_FOUND" })
   })
 
   test("returns OWNERSHIP_REQUEST_NOT_PENDING when the request is already closed", async ({

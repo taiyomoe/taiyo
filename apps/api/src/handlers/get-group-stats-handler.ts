@@ -14,28 +14,63 @@ const TOP_MEDIAS = 5
 const DAY_MS = 86_400_000
 const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
 const statsSchema = z.object({
-  chapterCount: z.int(),
-  pageCount: z.int().meta({ description: "Pages across every chapter of the group." }),
-  readCount: z.int().meta({ description: "How many times readers opened the group's chapters." }),
+  chapterCount: z
+    .int()
+    .meta({ description: "The number of published chapters by the group.", example: 342 }),
+  pageCount: z
+    .int()
+    .meta({ description: "The number of pages across those chapters.", example: 6840 }),
+  readCount: z.int().meta({
+    description:
+      "The number of times users read those chapters, counting each user once per chapter.",
+    example: 51230,
+  }),
   averageDaysBetweenReleases: z.number().nullable().meta({
-    description: "Average gap between two releases, in days. Null below two chapters.",
+    description:
+      "The average number of days between two releases, if the group has at least two chapters.",
+    example: 3.5,
   }),
   monthly: z
     .object({
-      month: z.string().meta({ description: "The month, as YYYY-MM.", example: "2026-10" }),
-      count: z.int(),
+      month: z.string().meta({ description: "The month, as `YYYY-MM`.", example: "2026-10" }),
+      count: z
+        .int()
+        .meta({ description: "The number of chapters released that month.", example: 12 }),
     })
     .array()
-    .meta({ description: "Chapters released in each of the last 12 months, oldest first." }),
-  topUploaders: userSummarySchema.extend({ count: z.int() }).array(),
+    .meta({
+      description: `The chapters released in each of the last ${MONTHS} months, oldest first.`,
+    }),
+  topUploaders: userSummarySchema
+    .extend({
+      count: z
+        .int()
+        .meta({ description: "The number of those chapters the user uploaded.", example: 120 }),
+    })
+    .array()
+    .meta({
+      description: `The ${TOP_UPLOADERS} users who uploaded the most chapters, most first.`,
+    }),
   mostRead: z
     .object({
-      id: z.uuid(),
-      title: z.string().nullable(),
-      coverUrl: z.string().nullable(),
-      readCount: z.int(),
+      id: z.uuid().meta({ description: "The ID of the media." }),
+      title: z.string().nullable().meta({
+        description: "The main title of the media, if any.",
+        example: "Vinland Saga",
+      }),
+      coverUrl: z
+        .url()
+        .nullable()
+        .meta({ description: "The URL of the media's main cover, if any." }),
+      readCount: z.int().meta({
+        description: "The number of times users read the group's chapters of the media.",
+        example: 8410,
+      }),
     })
-    .array(),
+    .array()
+    .meta({
+      description: `The ${TOP_MEDIAS} medias whose chapters were read the most, most first.`,
+    }),
 })
 
 export const getGroupStatsHandler = new Hono().get(
@@ -43,7 +78,7 @@ export const getGroupStatsHandler = new Hono().get(
   describeRoute({
     summary: "Get a group's stats",
     description:
-      "Aggregates the group's released chapters: totals, releases per month, top uploaders and most read medias.\n\n**Authentication:** none.",
+      "Returns stats on the group's published chapters that match the content ratings: totals, releases per month, top uploaders and most read medias.\n\n**Authentication:** none.",
     tags: ["Groups"],
     responses: {
       200: {
@@ -51,8 +86,8 @@ export const getGroupStatsHandler = new Hono().get(
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(statsSchema)) } },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The provided id or query parameters failed validation.",
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),
@@ -93,12 +128,14 @@ export const getGroupStatsHandler = new Hono().get(
         .execute(),
       chapters()
         .innerJoin("users", "users.id", "chapters.uploaderId")
-        .groupBy(["users.id", "users.username", "users.displayUsername", "users.image"])
+        .groupBy("users.id")
         .select([
           "users.id",
           "users.username",
           "users.displayUsername",
           "users.image",
+          "users.nameEffect",
+          "users.avatarBorder",
           sql<string>`count(*)`.as("count"),
         ])
         .orderBy("count", "desc")

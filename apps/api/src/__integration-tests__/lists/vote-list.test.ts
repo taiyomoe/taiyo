@@ -62,7 +62,7 @@ describe("PUT/DELETE /lists/:id/vote", () => {
       .executeTakeFirstOrThrow()
     const res = await api(app, `/lists/${list.id}/vote`, { method: "PUT", headers })
 
-    expect(res.status).toBe(409)
+    expect(res.status).toBe(403)
     expect(res.body).toMatchObject({ success: false, code: "LIST_SELF_VOTE" })
   })
 
@@ -72,6 +72,20 @@ describe("PUT/DELETE /lists/:id/vote", () => {
     const list = await services.db
       .insertInto("userLists")
       .values({ userId: ownerId, name: "Hidden", visibility: "PRIVATE" })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+    const res = await api(app, `/lists/${list.id}/vote`, { method: "PUT", headers })
+
+    expect(res.status).toBe(404)
+    expect(res.body).toMatchObject({ success: false, code: "LIST_NOT_FOUND" })
+  })
+
+  test("a list of a banned user cannot be upvoted", async ({ app, services }) => {
+    const { userId: ownerId } = await signInAs(services, { banned: true })
+    const { headers } = await signInAs(services)
+    const list = await services.db
+      .insertInto("userLists")
+      .values({ userId: ownerId, name: "Open", visibility: "PUBLIC" })
       .returning("id")
       .executeTakeFirstOrThrow()
     const res = await api(app, `/lists/${list.id}/vote`, { method: "PUT", headers })

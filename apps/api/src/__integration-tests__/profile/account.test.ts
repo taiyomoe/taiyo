@@ -85,6 +85,23 @@ describe("PATCH /users/me/account", () => {
     expect(res.status).toBe(200)
   })
 
+  test("returns the current names when the body changes nothing", async ({ app, services }) => {
+    const { userId, headers } = await signInAs(services)
+    const res = await api<Account>(app, "/users/me/account", { method: "PATCH", headers, json: {} })
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const user = await services.db
+      .selectFrom("users")
+      .select(["username", "displayUsername", "name"])
+      .where("id", "=", userId)
+      .executeTakeFirstOrThrow()
+
+    expect(res.body.data).toEqual(user)
+  })
+
   test("rejects a username with spaces", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const res = await api(app, "/users/me/account", {

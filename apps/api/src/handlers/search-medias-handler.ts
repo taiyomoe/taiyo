@@ -15,11 +15,12 @@ import z from "zod"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { getMainCoverUrls } from "../utils/latest-chapters"
+import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
-  apiErrorEnvelope,
   apiSuccessEnvelope,
   contentRatingSchema,
-  languageSchema,
+  storedLanguageSchema,
+  storedLocalizedTextSchema,
 } from "../utils/schemas"
 
 const quote = (value: string) => `"${value.replace(/"/g, '\\"')}"`
@@ -87,66 +88,91 @@ const mediaFilterSpec = {
   libraryCount: { kind: "count", attr: "libraryCount" },
   chapterCount: { kind: "count", attr: "chapterCount" },
 } satisfies FilterSpec<MediaDocument>
+const unixMs = <T extends z.ZodType>(schema: T, description: string) =>
+  schema.meta({ description: `${description} In Unix milliseconds.`, example: 1704067200000 })
 const mediaHitSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the media." }),
-  type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media." }),
-  status: z.enum(MEDIA_STATUSES).meta({ description: "The current release status." }),
-  source: z.enum(MEDIA_SOURCES).meta({ description: "The original source of the media." }),
-  demography: z.enum(MEDIA_DEMOGRAPHIES).meta({ description: "The target audience." }),
-  countryOfOrigin: z.enum(MEDIA_COUNTRIES_OF_ORIGIN).meta({
-    description: "The country where the media was originally created.",
-  }),
+  type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media.", example: "MANGA" }),
+  status: z
+    .enum(MEDIA_STATUSES)
+    .meta({ description: "The release status of the media.", example: "RELEASING" }),
+  source: z
+    .enum(MEDIA_SOURCES)
+    .meta({ description: "The original source of the media.", example: "ORIGINAL" }),
+  demography: z
+    .enum(MEDIA_DEMOGRAPHIES)
+    .meta({ description: "The target audience of the media.", example: "SHOUNEN" }),
+  countryOfOrigin: z
+    .enum(MEDIA_COUNTRIES_OF_ORIGIN)
+    .meta({ description: "The country the media originates from.", example: "JAPAN" }),
   contentRating: contentRatingSchema("The content rating of the media."),
-  flag: z.enum(FLAGS).meta({ description: "The moderation flag attached to the media." }),
-  createdAt: z
-    .number()
-    .int()
-    .meta({ description: "Creation timestamp (unix milliseconds).", example: 1704067200000 }),
-  updatedAt: z
-    .number()
-    .int()
-    .meta({ description: "Last update timestamp (unix milliseconds).", example: 1704067200000 }),
-  startDate: z
-    .number()
-    .int()
-    .nullable()
-    .meta({ description: "Release start timestamp (unix milliseconds)." }),
-  endDate: z
-    .number()
-    .int()
-    .nullable()
-    .meta({ description: "Release end timestamp (unix milliseconds)." }),
-  tagKeys: z.string().array().meta({ description: "All tag keys attached to this media." }),
-  spoilerTagKeys: z.string().array().meta({ description: "Tag keys marked as spoilers." }),
+  flag: z.enum(FLAGS).meta({ description: "The moderation flag of the media.", example: "OK" }),
+  createdAt: unixMs(z.int(), "When the media was created."),
+  updatedAt: unixMs(z.int(), "When the media was last updated."),
+  startDate: unixMs(z.int().nullable(), "When the media started releasing, if any."),
+  endDate: unixMs(z.int().nullable(), "When the media finished releasing, if any."),
+  tagKeys: z
+    .string()
+    .array()
+    .meta({ description: "The keys of the media's tags.", example: ["ACTION", "COMEDY"] }),
+  spoilerTagKeys: z
+    .string()
+    .array()
+    .meta({ description: "The keys of the media's spoiler tags.", example: ["TIME_TRAVEL"] }),
   linkProviders: z
     .string()
     .array()
-    .meta({ description: "External link provider keys present on this media." }),
-  titleLanguages: z.enum(LANGUAGES).array().meta({ description: "Languages with a title." }),
-  chapterLanguages: z.enum(LANGUAGES).array().meta({ description: "Languages with chapters." }),
-  coverLanguages: z.enum(LANGUAGES).array().meta({ description: "Languages with covers." }),
-  authorIds: z.uuid().array().meta({ description: "Staff IDs credited as AUTHOR." }),
-  artistIds: z.uuid().array().meta({ description: "Staff IDs credited as ARTIST." }),
+    .meta({
+      description: "The external sites the media has a link to.",
+      example: ["mangaDex", "anilist"],
+    }),
+  titleLanguages: z
+    .enum(LANGUAGES)
+    .array()
+    .meta({ description: "The languages of the media's titles.", example: ["en", "ja"] }),
+  chapterLanguages: z
+    .enum(LANGUAGES)
+    .array()
+    .meta({ description: "The languages of the media's published chapters.", example: ["en"] }),
+  coverLanguages: z
+    .enum(LANGUAGES)
+    .array()
+    .meta({ description: "The languages of the media's covers.", example: ["ja"] }),
+  titles: z
+    .string()
+    .array()
+    .meta({
+      description: "Every title of the media.",
+      example: ["One Punch Man", "ワンパンマン", "OPM"],
+    }),
+  synopsis: storedLocalizedTextSchema.meta({
+    description: "The synopsis of the media, keyed by language code.",
+  }),
+  staffNames: z
+    .string()
+    .array()
+    .meta({
+      description: "The names of the staff credited on the media.",
+      example: ["ONE", "Murata Yusuke"],
+    }),
+  authorIds: z.uuid().array().meta({ description: "The IDs of the staff credited as authors." }),
+  artistIds: z.uuid().array().meta({ description: "The IDs of the staff credited as artists." }),
   mainTitle: z
     .object({
-      title: z.string().meta({ description: "The main title text." }),
-      language: languageSchema("The language of the main title."),
+      title: z.string().meta({ description: "The text of the title.", example: "One Punch Man" }),
+      language: storedLanguageSchema("The language of the title."),
     })
     .nullable()
-    .meta({ description: "The main title of the media." }),
-  mainCoverId: z
-    .uuid()
-    .nullable()
-    .meta({ description: "The ID of the main cover, if one exists." }),
-  coverUrl: z.url().nullable().meta({ description: "The URL of the main cover, if one exists." }),
-  libraryCount: z.number().int().meta({
-    description: "How many readers have this media in their library.",
+    .meta({ description: "The main title of the media, if any." }),
+  mainCoverId: z.uuid().nullable().meta({ description: "The ID of the main cover, if any." }),
+  coverUrl: z.url().nullable().meta({ description: "The URL of the main cover, if any." }),
+  libraryCount: z.int().meta({
+    description: "The number of users with the media in their library.",
     example: 12_400,
   }),
   chapterCount: z
-    .number()
     .int()
-    .meta({ description: "How many chapters this media has.", example: 214 }),
+    .meta({ description: "The number of published chapters of the media.", example: 214 }),
 })
 
 // oxlint-disable-next-line taiyo/require-audited-route
@@ -155,34 +181,21 @@ export const searchMediasHandler = new Hono().post(
   describeRoute({
     summary: "Search medias",
     description:
-      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, date, or count fields, or by external IDs with `links` (a media matches when any of the given IDs does). Use `sort` to order by recency, title, chapter count, or how many readers have it in their library. Each result carries core metadata, the main title, the main cover id and URL, and both popularity counts — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
+      "Searches medias by text, tolerating typos, in their titles, synopses and staff names. `filter` narrows the results, including by IDs on external sites with `links` (a media matches when any of the given IDs does), and `sort` orders them, newest first by default. Each result carries the details of the media, its main title and cover, and its popularity counts: get the media for its full details.\n\n**Authentication:** none.",
     tags: ["Medias"],
-    requestBody: {
-      content: {
-        "application/json": await resolver(searchMediasInputSchema).toOpenAPISchema(),
-      },
-    },
     responses: {
-      200: {
-        description: "Matching medias.",
+      201: {
+        description: "The matching medias.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(mediaHitSchema.array(), paginationMetaSchema)),
           },
         },
       },
-      422: {
-        description: "The request data failed validation.",
-        content: { "application/json": { schema: resolver(apiErrorEnvelope) } },
-      },
-      429: {
-        description: "Too many requests — slow down.",
-        content: { "application/json": { schema: resolver(apiErrorEnvelope) } },
-      },
-      500: {
-        description: "An internal server error occurred.",
-        content: { "application/json": { schema: resolver(apiErrorEnvelope) } },
-      },
+      ...getOpenApiResponses({
+        422: "The request body failed validation.",
+        429: "Too many requests, try again later.",
+      }),
     },
   }),
   rateLimit({ prefix: "search-medias", windowMs: 60_000, limit: 60 }),

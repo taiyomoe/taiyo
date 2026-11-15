@@ -1,4 +1,4 @@
-import { LANGUAGES, PAGE_REPORT_REASONS, PAGE_REPORT_STATUSES, sql } from "@taiyomoe/db"
+import { PAGE_REPORT_REASONS, PAGE_REPORT_STATUSES, sql } from "@taiyomoe/db"
 import { getChapterPageKey, S3_PUBLIC_BASE } from "@taiyomoe/s3"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
@@ -8,39 +8,73 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getMainTitles } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, storedLanguageSchema } from "../utils/schemas"
 
 const querySchema = paginationQuerySchema.extend({
-  status: z
-    .enum(PAGE_REPORT_STATUSES)
-    .default("OPEN")
-    .meta({ description: "Which reports to list.", example: "OPEN" }),
+  status: z.enum(PAGE_REPORT_STATUSES).default("OPEN").meta({
+    description: "The status of the reports to list. Defaults to OPEN.",
+    example: "OPEN",
+  }),
 })
 const pageReportSchema = z.object({
-  id: z.uuid(),
-  reason: z.enum(PAGE_REPORT_REASONS),
-  comment: z.string().nullable(),
-  status: z.enum(PAGE_REPORT_STATUSES),
-  createdAt: z.iso.datetime(),
-  resolvedAt: z.iso.datetime().nullable(),
-  page: z
-    .int()
-    .nullable()
-    .meta({ description: "The page's position in the chapter, or null if it was removed." }),
-  pageId: z.uuid(),
-  pageUrl: z.url(),
-  samePageReports: z
-    .int()
-    .meta({ description: "How many open reports, this one included, point at the same page." }),
-  chapter: z.object({
-    id: z.uuid(),
-    number: z.number(),
-    title: z.string().nullable(),
-    language: z.enum(LANGUAGES),
-    mediaId: z.uuid(),
-    mediaTitle: z.string().nullable(),
+  id: z.uuid().meta({
+    description: "The ID of the report.",
+    example: "13548c83-8d1a-4163-8830-c8f16fcd2eb7",
   }),
-  reporter: z.object({ id: z.uuid(), username: z.string(), displayUsername: z.string() }),
+  reason: z
+    .enum(PAGE_REPORT_REASONS)
+    .meta({ description: "What is wrong with the page.", example: "BROKEN" }),
+  comment: z.string().nullable().meta({
+    description: "The details given by the reporter, if any.",
+    example: "The page is cut off halfway down.",
+  }),
+  status: z
+    .enum(PAGE_REPORT_STATUSES)
+    .meta({ description: "The status of the report.", example: "OPEN" }),
+  createdAt: z.iso.datetime().meta({ description: "When the report was created." }),
+  resolvedAt: z.iso
+    .datetime()
+    .nullable()
+    .meta({ description: "When the report was closed, if it was." }),
+  page: z.int().nullable().meta({
+    description:
+      "The position of the page in the chapter, starting at 1, or null if the page was removed.",
+    example: 7,
+  }),
+  pageId: z.uuid().meta({
+    description: "The ID of the page.",
+    example: "9f1b2c3d-4e5f-4a7b-8c9d-0e1f2a3b4c5d",
+  }),
+  pageUrl: z.url().meta({ description: "The URL of the page image." }),
+  samePageReports: z.int().meta({
+    description: "The number of open reports on the same page, this one included if it is open.",
+    example: 2,
+  }),
+  chapter: z
+    .object({
+      id: z.uuid().meta({ description: "The ID of the chapter." }),
+      number: z.number().meta({ description: "The chapter number.", example: 112 }),
+      title: z.string().nullable().meta({
+        description: "The title of the chapter, if any.",
+        example: "The Boy with the Sharingan",
+      }),
+      language: storedLanguageSchema("The language of the chapter."),
+      mediaId: z.uuid().meta({ description: "The ID of the media the chapter belongs to." }),
+      mediaTitle: z.string().nullable().meta({
+        description: "The main title of the media, if any.",
+        example: "Boruto: Naruto Next Generations",
+      }),
+    })
+    .meta({ description: "The chapter the page belongs to." }),
+  reporter: z
+    .object({
+      id: z.uuid().meta({ description: "The ID of the user." }),
+      username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
+      displayUsername: z
+        .string()
+        .meta({ description: "The display name of the user.", example: "Kaito" }),
+    })
+    .meta({ description: "The user who sent the report." }),
 })
 
 export const listPageReportsHandler = new Hono().get(
@@ -48,18 +82,22 @@ export const listPageReportsHandler = new Hono().get(
   describeRoute({
     summary: "List page reports",
     description:
-      "Lists reports about broken or wrong chapter pages, oldest first for open reports and newest first otherwise.\n\n**Required roles:** uploader, moderator, admin.",
+      "Lists the reports about broken or wrong chapter pages with the given status, oldest first for open reports and newest first otherwise.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Page reports"],
     responses: {
       200: {
-        description: "Page reports.",
+        description: "The matching page reports.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(pageReportSchema.array(), paginationMetaSchema)),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth("pageReport.review"),
@@ -70,9 +108,11 @@ export const listPageReportsHandler = new Hono().get(
     const base = db
       .selectFrom("pageReports")
       .innerJoin("chapters", "chapters.id", "pageReports.chapterId")
+      .innerJoin("medias", "medias.id", "chapters.mediaId")
       .innerJoin("users", "users.id", "pageReports.reporterId")
       .where("pageReports.status", "=", status)
       .where("chapters.deletedAt", "is", null)
+      .where("medias.deletedAt", "is", null)
     const [rows, totalRow] = await Promise.all([
       base
         .select((eb) => [

@@ -9,25 +9,33 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid() })
+const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the invitation." }) })
 
 export const declineGroupInvitationHandler = new Hono().post(
   "/:id/decline",
   describeRoute({
     summary: "Decline a group invitation",
-    description: "Declines a pending invitation.\n\n**Authentication:** the invitee.",
+    description: "Declines a pending invitation sent to you.\n\n**Required access:** the invitee.",
     tags: ["Group members"],
     responses: {
       201: {
         description: "Invitation declined.",
         content: {
-          "application/json": { schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))) },
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the invitation." }) }),
+              ),
+            ),
+          },
         },
       },
       ...getOpenApiResponses({
-        404: "No invitation with the given id was sent to you.",
-        409: "The invitation was already answered or cancelled.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No invitation with the given ID was sent to you.",
+        409: "The invitation is no longer pending.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

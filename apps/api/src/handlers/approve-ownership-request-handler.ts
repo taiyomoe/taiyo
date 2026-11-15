@@ -15,7 +15,7 @@ export const approveOwnershipRequestHandler = new Hono().post(
   describeRoute({
     summary: "Approve an ownership request",
     description:
-      "Grants the requester OWNER membership on the group, and auto-cancels every other pending request on the same group.\n\n**Required roles:** admin.",
+      "Approves a pending ownership request: the requester becomes an owner of the group, and every other pending request on the group is cancelled.\n\n**Required roles:** admin.",
     tags: ["Group ownership"],
     responses: {
       201: {
@@ -23,15 +23,23 @@ export const approveOwnershipRequestHandler = new Hono().post(
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ id: z.uuid(), groupId: z.uuid(), userId: z.uuid() })),
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the ownership request." }),
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                  userId: z.uuid().meta({ description: "The ID of the requester, now an owner." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No ownership request with the given id exists.",
+        401: true,
+        403: true,
+        404: "No ownership request with the given ID exists, or its group no longer exists.",
         409: "The request is no longer pending, or the group already has an owner.",
-        422: "The provided id is not a valid UUID.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

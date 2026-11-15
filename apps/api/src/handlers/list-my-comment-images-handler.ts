@@ -5,21 +5,24 @@ import z from "zod"
 import { toCommentImage } from "../comment-images"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { cursorQuerySchema, nextCursorMetaSchema } from "../utils/comments"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 import { commentImageSchema } from "./upload-comment-image-handler"
 
 const querySchema = z.object({
-  collection: z
-    .enum(["favorites", "uploads"])
-    .default("favorites")
-    .meta({ description: "Your favorites, or the images you uploaded and posted." }),
-  cursor: z
-    .string()
-    .max(200)
-    .optional()
-    .meta({ description: "The `nextCursor` of the previous page." }),
-  limit: z.coerce.number().int().min(1).max(60).default(30),
+  collection: z.enum(["favorites", "uploads"]).default("favorites").meta({
+    description: "Which images to list: your `favorites`, or the `uploads` you used in a comment.",
+    example: "favorites",
+  }),
+  cursor: cursorQuerySchema,
+  limit: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(60)
+    .default(30)
+    .meta({ description: "The number of images to return, from 1 to 60.", example: 30 }),
 })
 const cursorSchema = z.tuple([
   z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}$/),
@@ -44,23 +47,33 @@ export const listMyCommentImagesHandler = new Hono().get(
   describeRoute({
     summary: "List my comment images",
     description:
-      "Lists the images you can put in comments: your favorites, or the images you uploaded and posted, newest first.\n\n**Authentication:** signed-in user.",
+      "Lists the images you can put in comments: your favorites, most recently favorited first, or the images you uploaded and used in a comment, most recently uploaded first. Images a moderator removed are left out.\n\n**Authentication:** signed-in user.",
     tags: ["Comment images"],
     responses: {
       200: {
-        description: "A page of images.",
+        description: "Your comment images.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
-                commentImageSchema.extend({ favorited: z.boolean() }).array(),
-                z.object({ nextCursor: z.string().nullable() }),
+                commentImageSchema
+                  .extend({
+                    favorited: z
+                      .boolean()
+                      .meta({ description: "Whether the image is in your favorites." }),
+                  })
+                  .array(),
+                nextCursorMetaSchema,
               ),
             ),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth(),

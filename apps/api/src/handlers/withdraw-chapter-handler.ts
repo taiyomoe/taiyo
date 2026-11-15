@@ -16,21 +16,27 @@ export const withdrawChapterHandler = new Hono().post(
   describeRoute({
     summary: "Withdraw a submitted chapter",
     description:
-      "Deletes a chapter the current user submitted while it is still waiting for review, along with its pages.\n\n**Authentication:** the uploader of the chapter.",
+      "Withdraws a chapter you submitted while it is still uploading or waiting for review. The chapter and its pages are deleted.\n\n**Required access:** the user who uploaded the chapter.",
     tags: ["Chapter review"],
     responses: {
       201: {
-        description: "Submission withdrawn.",
+        description: "Chapter withdrawn.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the chapter." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
-        409: "The chapter is not waiting for review.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists.",
+        409: "The chapter is not uploading or waiting for review.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

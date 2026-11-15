@@ -12,8 +12,10 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const paramSchema = z.object({
-  id: z.uuid(),
-  groupId: z.uuid(),
+  groupId: z.uuid().meta({
+    description: "The ID of the group.",
+    example: "8d2f5a61-0c3b-4e7a-9f14-2b6c7d8e9f01",
+  }),
 })
 
 export const unlinkChapterGroupHandler = new Hono().delete(
@@ -21,22 +23,29 @@ export const unlinkChapterGroupHandler = new Hono().delete(
   describeRoute({
     summary: "Unlink a group from a chapter",
     description:
-      "Removes a group's credit from the chapter. Group members can only remove the credit of a group where they hold `EDIT_CHAPTERS`.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in the group being removed.",
+      "Removes a group's credit from a chapter. Once the chapter is published or scheduled, a group member can only remove the credit of a group where they hold the `EDIT_CHAPTERS` permission.\n\n**Required access:** uploader or admin, a moderator or a member of the removed group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading or pending.",
     tags: ["Chapter groups"],
     responses: {
       200: {
-        description: "Group unlinked from the chapter.",
+        description: "Group unlinked.",
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ chapterId: z.uuid(), groupId: z.uuid() })),
+              apiSuccessEnvelope(
+                z.object({
+                  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists, or no link with the group exists.",
-        422: "The provided path parameters failed validation.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists, or the group is not credited on it.",
+        422: "One of the provided IDs is not a valid UUID.",
       }),
     },
   }),

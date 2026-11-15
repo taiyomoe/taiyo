@@ -1,4 +1,5 @@
 import { STAFF_ROLES } from "@taiyomoe/db"
+import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -7,22 +8,24 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const mediaStaffItemSchema = z.object({
-  staffId: z.uuid().meta({ description: "The ID of the staff member." }),
-  name: z.string().meta({ description: "Name of the staff.", example: "Kishimoto Masashi" }),
-  image: z.string().nullable().meta({ description: "Storage key of the staff image, if any." }),
-  role: z.enum(STAFF_ROLES).meta({ description: "Role on this media." }),
+  staffId: z.uuid().meta({ description: "The ID of the staff." }),
+  name: z.string().meta({ description: "The name of the staff.", example: "Kishimoto Masashi" }),
+  imageUrl: z.url().nullable().meta({ description: "The URL of the staff's image, if any." }),
+  role: z
+    .enum(STAFF_ROLES)
+    .meta({ description: "The role of the staff on the media.", example: "AUTHOR" }),
 })
 
 export const listMediaStaffsHandler = new Hono().get(
   "/:id/staffs",
   describeRoute({
-    summary: "List staff linked to a media",
+    summary: "List a media's staff",
     description:
-      "Lists every staff member linked to the media with their role.\n\n**Authentication:** none.",
+      "Lists the staff credited on a media with their role, alphabetically by name. A staff with several roles appears once per role.\n\n**Authentication:** none.",
     tags: ["Media staff"],
     responses: {
       200: {
-        description: "Staff linked to the media.",
+        description: "The staff of the media.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(mediaStaffItemSchema.array())),
@@ -30,8 +33,8 @@ export const listMediaStaffsHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        404: "No media with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),
@@ -47,6 +50,11 @@ export const listMediaStaffsHandler = new Hono().get(
       .orderBy("staffs.name", "asc")
       .execute()
 
-    return c.ok(rows)
+    return c.ok(
+      rows.map(({ image, ...row }) => ({
+        ...row,
+        imageUrl: image === null ? null : getPublicImageUrl(image),
+      })),
+    )
   },
 )

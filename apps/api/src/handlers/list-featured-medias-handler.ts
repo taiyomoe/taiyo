@@ -9,6 +9,7 @@ import {
   apiSuccessEnvelope,
   contentRatingSchema,
   contentRatingsQuerySchema,
+  storedLocalizedTextSchema,
 } from "../utils/schemas"
 
 const featuredMediaSchema = z.object({
@@ -16,24 +17,30 @@ const featuredMediaSchema = z.object({
   title: z
     .string()
     .nullable()
-    .meta({ description: "The main title of the media.", example: "Eleceed" }),
-  synopsis: z
-    .record(z.string(), z.string())
-    .meta({ description: "The synopsis of the media, keyed by language." }),
+    .meta({ description: "The main title of the media, if any.", example: "Eleceed" }),
+  synopsis: storedLocalizedTextSchema.meta({
+    description: "The synopsis of the media, keyed by language code.",
+  }),
   tags: z
     .string()
     .array()
-    .meta({ description: "Keys of the media's non-spoiler tags.", example: ["ACTION", "COMEDY"] }),
+    .meta({
+      description: "The keys of the media's non-spoiler tags.",
+      example: ["ACTION", "COMEDY"],
+    }),
   contentRating: contentRatingSchema("The content rating of the media."),
   authors: z
     .string()
     .array()
     .meta({
-      description: "Names of the authors and artists credited on the media, authors first.",
+      description: "The names of the staff credited on the media, authors first.",
       example: ["Son Jae Ho", "ZHENA"],
     }),
-  coverUrl: z.url().nullable().meta({ description: "URL of the media's main cover, if any." }),
-  bannerUrl: z.url().nullable().meta({ description: "URL of the media's latest banner, if any." }),
+  coverUrl: z.url().nullable().meta({ description: "The URL of the media's main cover, if any." }),
+  bannerUrl: z
+    .url()
+    .nullable()
+    .meta({ description: "The URL of the media's newest banner, if any." }),
 })
 const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
 
@@ -42,7 +49,7 @@ export const listFeaturedMediasHandler = new Hono().get(
   describeRoute({
     summary: "List featured medias",
     description:
-      "Lists the medias curated for the home page carousel, in display order, filtered by content rating.\n\n**Authentication:** none.",
+      "Lists the medias featured on the home page carousel, in display order, filtered by content rating.\n\n**Authentication:** none.",
     tags: ["Medias"],
     responses: {
       200: {

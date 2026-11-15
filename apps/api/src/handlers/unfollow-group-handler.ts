@@ -13,18 +13,20 @@ export const unfollowGroupHandler = new Hono().delete(
   describeRoute({
     summary: "Unfollow a group",
     description:
-      "Stops following the group. Unfollowing a group you don't follow does nothing.\n\n**Authentication:** signed-in user.",
+      "Unfollows the group. Unfollowing a group you do not follow does nothing.\n\n**Authentication:** signed-in user.",
     tags: ["Group follows"],
     responses: {
       200: {
-        description: "You no longer follow the group.",
+        description: "Group unfollowed.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(groupFollowSchema)) },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

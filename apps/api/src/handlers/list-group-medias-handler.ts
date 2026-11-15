@@ -1,4 +1,4 @@
-import { CONTENT_RATINGS, MEDIA_COUNTRIES_OF_ORIGIN, sql } from "@taiyomoe/db"
+import { MEDIA_COUNTRIES_OF_ORIGIN, sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -8,38 +8,62 @@ import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { getMainCoverUrls, selectVisibleChapters } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, contentRatingsQuerySchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  contentRatingSchema,
+  contentRatingsQuerySchema,
+} from "../utils/schemas"
 
 const GROUP_MEDIA_SORTS = ["recent", "chapters", "title"] as const
 const querySchema = paginationQuerySchema.extend({
   contentRating: contentRatingsQuerySchema,
   sort: z.enum(GROUP_MEDIA_SORTS).default("recent").meta({
     description:
-      "`recent`: latest release first. `chapters`: most chapters by the group first. `title`: A to Z.",
+      "How to order the medias: `recent` puts the latest release by the group first, `chapters` the most chapters by the group first, and `title` sorts by main title from A to Z. Defaults to `recent`.",
+    example: "chapters",
   }),
 })
 const itemSchema = z.object({
-  id: z.uuid(),
-  title: z.string().nullable(),
-  coverUrl: z.string().nullable(),
-  countryOfOrigin: z.enum(MEDIA_COUNTRIES_OF_ORIGIN),
-  contentRating: z.enum(CONTENT_RATINGS),
-  authors: z.string().array(),
-  chapterCount: z.int().meta({ description: "Chapters of this media credited to the group." }),
-  latestNumber: z.number().meta({ description: "Highest chapter number released by the group." }),
-  latestAt: z.iso.datetime().meta({ description: "When the group's latest chapter came out." }),
+  id: z.uuid().meta({ description: "The ID of the media." }),
+  title: z
+    .string()
+    .nullable()
+    .meta({ description: "The main title of the media, if any.", example: "Vinland Saga" }),
+  coverUrl: z.url().nullable().meta({ description: "The URL of the media's main cover, if any." }),
+  countryOfOrigin: z
+    .enum(MEDIA_COUNTRIES_OF_ORIGIN)
+    .meta({ description: "The country the media originates from.", example: "JAPAN" }),
+  contentRating: contentRatingSchema("The content rating of the media."),
+  authors: z
+    .string()
+    .array()
+    .meta({
+      description: "The names of the media's authors, alphabetically.",
+      example: ["Makoto Yukimura"],
+    }),
+  chapterCount: z.int().meta({
+    description: "The number of matching chapters of the media credited to the group.",
+    example: 54,
+  }),
+  latestNumber: z.number().meta({
+    description: "The highest chapter number of the media released by the group.",
+    example: 212,
+  }),
+  latestAt: z.iso.datetime().meta({
+    description: "When the group's latest chapter of the media was released.",
+  }),
 })
 
 export const listGroupMediasHandler = new Hono().get(
   "/:id/medias",
   describeRoute({
-    summary: "List the medias of a group",
+    summary: "List a group's medias",
     description:
-      "Lists the medias the group has released chapters for, with how many chapters it released for each.\n\n**Authentication:** none.",
+      "Lists the medias the group has published chapters for, with its chapter count and latest release for each. Only chapters matching the content ratings count.\n\n**Authentication:** none.",
     tags: ["Groups"],
     responses: {
       200: {
-        description: "The group's medias.",
+        description: "The medias of the group.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)),
@@ -47,8 +71,8 @@ export const listGroupMediasHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The provided id or query parameters failed validation.",
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

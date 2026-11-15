@@ -184,6 +184,18 @@ describe("GET /audit-logs/histogram", () => {
 
     expect(res.status).toBe(422)
   })
+
+  test("rejects a range that ends before it starts", async ({ app, services }) => {
+    const { headers } = await seed(services)
+    const res = await api(
+      app,
+      "/audit-logs/histogram?interval=1h&from=2026-10-10T13:00:00.000Z&to=2026-10-10T10:00:00.000Z",
+      { headers },
+    )
+
+    expect(res.status).toBe(422)
+    expect(res.body).toMatchObject({ details: [{ code: "invalid_range", path: ["to"] }] })
+  })
 })
 
 describe("GET /audit-logs/facets", () => {

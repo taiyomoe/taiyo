@@ -24,23 +24,21 @@ const bodySchema = z.object({ content: contentSchema })
 export const updateCommentHandler = new Hono().patch(
   "/:id",
   describeRoute({
-    summary: "Edit a comment",
+    summary: "Update a comment",
     description:
-      "Replaces the text of one of your comments. It is marked as edited, and moderators can see the previous versions.\n\n**Authentication:** the comment's author.",
+      "Updates the text of one of your comments. It is marked as edited, and moderators can see the previous versions. Images already in the comment can stay even if you no longer have them.\n\n**Required access:** the author of the comment.",
     tags: ["Comments"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "Comment edited.",
+        description: "Comment updated.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(commentSchema)) } },
       },
       ...getOpenApiResponses({
-        403: "You are not the comment's author.",
-        404: "The comment doesn't exist or was removed.",
-        422: "The comment is empty, too long, has too many images, or uses an image you can't use.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: "You are not the author of the comment, or you do not have permission to perform this action.",
+        404: "No comment with the given ID exists, or it was removed.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation, or the comment is empty, too long, has too many images, or uses an image you cannot use.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

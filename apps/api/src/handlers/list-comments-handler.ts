@@ -15,6 +15,7 @@ import {
   keysetAfter,
   loadCommentImages,
   loadPreviewReplies,
+  nextCursorMetaSchema,
   resolveCommentTarget,
   rootCommentSchema,
   selectComments,
@@ -25,18 +26,16 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const querySchema = commentTargetSchema.extend({
-  sort: z
-    .enum(COMMENT_SORTS)
-    .default("newest")
-    .meta({ description: "Newest first, oldest first, or most upvoted first.", example: "newest" }),
+  sort: z.enum(COMMENT_SORTS).default("newest").meta({
+    description:
+      "The order of the comments: `newest` first, `oldest` first, or `top` for most upvoted first.",
+    example: "top",
+  }),
   cursor: cursorQuerySchema,
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(50)
-    .default(config.comments.perPage)
-    .meta({ description: "How many top-level comments to return (1-50).", example: 20 }),
+  limit: z.coerce.number().int().min(1).max(50).default(config.comments.perPage).meta({
+    description: "The number of top-level comments to return, from 1 to 50.",
+    example: 20,
+  }),
 })
 
 export const listCommentsHandler = new Hono().get(
@@ -44,21 +43,21 @@ export const listCommentsHandler = new Hono().get(
   describeRoute({
     summary: "List comments",
     description:
-      "Lists the top-level comments on a media, chapter, group or user profile, each with its first few replies. Pages are cursor-based: pass `nextCursor` back as `cursor`.\n\n**Authentication:** optional; signed-in viewers learn which comments they upvoted and may edit or delete.",
+      "Lists the top-level comments on a media, chapter, group or user profile in the order given by `sort`, each with its first replies. A removed comment only shows up while it has visible replies. Signed-in viewers also see which comments they upvoted and whether they can edit, delete or report them.\n\n**Authentication:** optional.",
     tags: ["Comments"],
     responses: {
       200: {
-        description: "A page of comments.",
+        description: "The comments on the resource.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
                 rootCommentSchema.array(),
-                z.object({
-                  nextCursor: z.string().nullable(),
-                  total: z
-                    .int()
-                    .meta({ description: "How many visible comments, replies included." }),
+                nextCursorMetaSchema.extend({
+                  total: z.int().meta({
+                    description: "The number of visible comments, replies included.",
+                    example: 42,
+                  }),
                 }),
               ),
             ),
@@ -66,7 +65,7 @@ export const listCommentsHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "The media, chapter, group or user doesn't exist.",
+        404: "The media, chapter, group or user does not exist.",
         422: "The query parameters failed validation.",
       }),
     },

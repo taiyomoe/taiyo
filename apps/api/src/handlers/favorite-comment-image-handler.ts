@@ -12,15 +12,18 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid() })
-const resultSchema = z.object({ id: z.uuid(), favorited: z.boolean() })
+const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the image." }) })
+const resultSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the image." }),
+  favorited: z.boolean().meta({ description: "Whether the image is in your favorites." }),
+})
 
 export const favoriteCommentImageHandler = new Hono()
   .put(
     "/:id/favorite",
     describeRoute({
       summary: "Favorite a comment image",
-      description: `Adds an image you saw in a comment, or one you uploaded, to your favorites so you can use it in your own comments. You can keep up to ${config.comments.maxFavoriteImages}.\n\n**Authentication:** signed-in user.`,
+      description: `Favorites an image you saw in a comment, or one you uploaded, so you can use it in your own comments. You can keep up to ${config.comments.maxFavoriteImages} favorite images, and favoriting an image twice changes nothing.\n\n**Authentication:** signed-in user.`,
       tags: ["Comment images"],
       responses: {
         200: {
@@ -28,9 +31,12 @@ export const favoriteCommentImageHandler = new Hono()
           content: { "application/json": { schema: resolver(apiSuccessEnvelope(resultSchema)) } },
         },
         ...getOpenApiResponses({
-          404: "The image doesn't exist, was removed, or isn't used in any comment you can see.",
-          409: "Your favorites are full.",
-          429: "Too many requests — slow down.",
+          401: true,
+          403: true,
+          404: "No image with the given ID exists, or it was removed, or you did not upload it and no visible comment uses it.",
+          409: "You already have the maximum number of favorite images.",
+          422: "The provided ID is not a valid UUID.",
+          429: "Too many requests, try again later.",
         }),
       },
     }),
@@ -100,14 +106,18 @@ export const favoriteCommentImageHandler = new Hono()
     describeRoute({
       summary: "Unfavorite a comment image",
       description:
-        "Removes an image from your favorites. Removing one that isn't there is a no-op.\n\n**Authentication:** signed-in user.",
+        "Unfavorites an image, removing it from your favorites. Unfavoriting an image that is not in your favorites changes nothing.\n\n**Authentication:** signed-in user.",
       tags: ["Comment images"],
       responses: {
         200: {
           description: "Image unfavorited.",
           content: { "application/json": { schema: resolver(apiSuccessEnvelope(resultSchema)) } },
         },
-        ...getOpenApiResponses({ 422: "The id is not a valid UUID." }),
+        ...getOpenApiResponses({
+          401: true,
+          403: true,
+          422: "The provided ID is not a valid UUID.",
+        }),
       },
     }),
     audited(commentImageAudit.UNFAVORITE),

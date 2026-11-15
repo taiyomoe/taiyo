@@ -18,7 +18,7 @@ const querySchema = paginationQuerySchema.extend({
   status: z
     .enum(MEDIA_SUGGESTION_STATUSES)
     .optional()
-    .meta({ description: "Only list suggestions with this status." }),
+    .meta({ description: "Only list the suggestions with this status.", example: "PENDING" }),
 })
 
 export const listMyMediaSuggestionsHandler = new Hono().get(
@@ -26,11 +26,11 @@ export const listMyMediaSuggestionsHandler = new Hono().get(
   describeRoute({
     summary: "List my media suggestions",
     description:
-      "Lists the media edits the current user suggested, newest first, with what reviewers accepted.\n\n**Authentication:** signed-in user.",
+      "Lists the media edits you suggested, newest first, with the fields reviewers accepted. Suggestions on deleted media are left out.\n\n**Authentication:** signed-in user.",
     tags: ["Media suggestions"],
     responses: {
       200: {
-        description: "The current user's suggestions.",
+        description: "Your media suggestions.",
         content: {
           "application/json": {
             schema: resolver(
@@ -39,7 +39,11 @@ export const listMyMediaSuggestionsHandler = new Hono().get(
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth(),

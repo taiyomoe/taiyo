@@ -37,7 +37,7 @@ const createMediaSchema = z.object({
   titles: z
     .object({
       title: z.string().min(1).max(config.input.maxNameLength).meta({
-        description: "The title of the media for the given language.",
+        description: "The title of the media in the given language.",
         example: "One Punch Man",
       }),
       language: mediaLanguageSchema("The language of the title."),
@@ -45,11 +45,10 @@ const createMediaSchema = z.object({
         description: "Whether the title is the main title of the media.",
         example: false,
       }),
-      priority: z
-        .int()
-        .min(1)
-        .default(1)
-        .meta({ description: "The priority of the title.", example: 1 }),
+      priority: z.int().min(1).default(1).meta({
+        description: "The rank of the title among the titles of its language, 1 first.",
+        example: 1,
+      }),
       isAcronym: z.boolean().default(false).meta({
         description: "Whether the title is an acronym.",
         example: false,
@@ -58,8 +57,7 @@ const createMediaSchema = z.object({
     .array()
     .min(1)
     .meta({
-      description:
-        "The titles of the media. At least one title is required and exactly one main title is required.",
+      description: "The titles of the media. Exactly one of them must be the main title.",
       examples: [
         {
           title: "One Punch Man",
@@ -96,7 +94,7 @@ const createMediaSchema = z.object({
     }),
   covers: z
     .object({
-      file: fileSchema("The file of the cover."),
+      file: fileSchema("The image of the cover."),
       language: mediaLanguageSchema("The language of the cover."),
       contentRating: contentRatingSchema("The content rating of the cover."),
       main: z.boolean().default(false).meta({
@@ -104,15 +102,14 @@ const createMediaSchema = z.object({
         example: false,
       }),
       volume: z.number().min(1).optional().meta({
-        description: "The volume of the cover.",
+        description: "The volume the cover belongs to.",
         example: 1,
       }),
     })
     .array()
     .min(1)
     .meta({
-      description:
-        "The covers of the media. At least one cover is required and exactly one main cover is required.",
+      description: "The covers of the media. Exactly one of them must be the main cover.",
       examples: [
         {
           file: "cover-1.jpg",
@@ -142,7 +139,7 @@ const createMediaSchema = z.object({
     }),
   banners: z
     .object({
-      file: fileSchema("The file of the banner."),
+      file: fileSchema("The image of the banner."),
       contentRating: contentRatingSchema("The content rating of the banner."),
     })
     .array()
@@ -155,7 +152,7 @@ const createMediaSchema = z.object({
       ],
     }),
   contentRating: contentRatingSchema("The content rating of the media."),
-  type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media." }),
+  type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media.", example: "MANGA" }),
   status: z.enum(MEDIA_STATUSES).meta({
     description: "The current release status of the media.",
     example: "RELEASING",
@@ -176,18 +173,18 @@ const createMediaSchema = z.object({
   links: mediaLinksSchema.default({}),
   staffs: z
     .object({
-      staffId: z
-        .uuid()
-        .meta({ description: "ID of an existing staff member.", example: crypto.randomUUID() }),
+      staffId: z.uuid().meta({
+        description: "The ID of the staff.",
+        example: "6f1d3c2b-8a4e-4f7a-9c1d-2e5b7a9c0d34",
+      }),
       role: z
         .enum(STAFF_ROLES)
-        .meta({ description: "Their role for this media.", example: "AUTHOR" }),
+        .meta({ description: "The role of the staff on the media.", example: "AUTHOR" }),
     })
     .array()
     .default([])
     .meta({
-      description:
-        "Authors and artists attached to this media. Every `staffId` must already exist.",
+      description: "The staff credits of the media, such as its authors and artists.",
     }),
 })
 
@@ -196,13 +193,8 @@ export const createMediaHandler = new Hono().post(
   describeRoute({
     summary: "Create a media",
     description:
-      "Creates a new media with its titles, covers, banners, tags, external links, and staff credits.\n\n**Required roles:** uploader intern, uploader, admin.",
+      "Creates a media with its titles, covers, banners, tags, links and staff credits.\n\n**Required roles:** uploader intern, uploader, admin.",
     tags: ["Medias"],
-    requestBody: {
-      content: {
-        "multipart/form-data": await resolver(createMediaSchema).toOpenAPISchema(),
-      },
-    },
     responses: {
       201: {
         description: "Media created.",
@@ -211,7 +203,7 @@ export const createMediaHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid().meta({ description: "The ID of the newly created media." }),
+                  id: z.uuid().meta({ description: "The ID of the new media." }),
                 }),
               ),
             ),
@@ -219,10 +211,12 @@ export const createMediaHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "One or more of the referenced staff members do not exist.",
-        409: "One or more of the provided links already belong to an existing media.",
-        422: `The request data failed validation, or an uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        404: "One of the staff members does not exist.",
+        409: "One of the links already belongs to another media.",
+        422: `The request body failed validation, or one of the images is invalid, larger than ${config.images.maxSizeBytes / 1024 / 1024} MB or has too many pixels or frames.`,
+        429: "Too many requests, try again later.",
       }),
     },
   }),
@@ -265,7 +259,12 @@ export const createMediaHandler = new Hono().post(
 
     if (body.staffs.length > 0) {
       const staffIds = Array.from(new Set(body.staffs.map((s) => s.staffId)))
-      const found = await db.selectFrom("staffs").select("id").where("id", "in", staffIds).execute()
+      const found = await db
+        .selectFrom("staffs")
+        .select("id")
+        .where("id", "in", staffIds)
+        .where("deletedAt", "is", null)
+        .execute()
       const foundIds = new Set(found.map((row) => row.id))
       const missing = staffIds.filter((id) => !foundIds.has(id))
 
@@ -311,6 +310,7 @@ export const createMediaHandler = new Hono().post(
       await db
         .insertInto("mediaStaffs")
         .values(body.staffs.map((staff) => ({ mediaId, ...staff })))
+        .onConflict((oc) => oc.doNothing())
         .execute()
     }
 

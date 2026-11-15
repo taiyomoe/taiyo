@@ -14,10 +14,10 @@ export const restoreMediaHandler = new Hono().post(
   describeRoute({
     summary: "Restore a deleted media",
     description:
-      "Restores a previously deleted media so that it appears in listings, search results, and detail endpoints again.\n\n**Required roles:** admin.",
+      "Restores a deleted media, so it appears in listings, search results and detail routes again.\n\n**Required roles:** admin.",
     tags: ["Medias"],
     responses: {
-      200: {
+      201: {
         description: "Media restored.",
         content: {
           "application/json": {
@@ -32,9 +32,11 @@ export const restoreMediaHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        409: "The media is not in a deleted state.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists.",
+        409: "The media is not deleted.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

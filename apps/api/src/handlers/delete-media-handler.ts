@@ -14,7 +14,7 @@ export const deleteMediaHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a media",
     description:
-      "Removes a media from listings, search results, and detail endpoints. The media can be restored later.\n\n**Required roles:** uploader, admin.",
+      "Deletes a media: it no longer appears in listings, search results or detail routes. An admin can restore it later.\n\n**Required roles:** uploader, admin.",
     tags: ["Medias"],
     responses: {
       200: {
@@ -32,9 +32,11 @@ export const deleteMediaHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        409: "The media has already been deleted.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists.",
+        409: "The media is already deleted.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

@@ -12,23 +12,31 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const cancelOwnershipRequestHandler = new Hono().delete(
   "/:id",
   describeRoute({
-    summary: "Cancel a pending ownership request",
+    summary: "Cancel an ownership request",
     description:
-      "Cancels a pending ownership request you previously filed. Only the original requester can cancel their own request, and only while it is still pending.\n\n**Authentication:** signed-in user.",
+      "Cancels a pending ownership request you filed.\n\n**Required access:** the requester.",
     tags: ["Group ownership"],
     responses: {
       200: {
         description: "Ownership request cancelled.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the ownership request." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No ownership request with the given id exists.",
+        401: true,
+        403: true,
+        404: "You filed no ownership request with the given ID.",
         409: "The request is no longer pending.",
-        422: "The provided id is not a valid UUID.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),
@@ -42,7 +50,7 @@ export const cancelOwnershipRequestHandler = new Hono().delete(
     c.var.audit.set({ target: { groupId: ownershipRequest.groupId } })
 
     if (ownershipRequest.userId !== user.id) {
-      return c.fail("FORBIDDEN")
+      return c.fail("OWNERSHIP_REQUEST_NOT_FOUND")
     }
 
     const transitioned = await db

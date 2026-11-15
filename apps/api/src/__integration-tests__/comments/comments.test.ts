@@ -384,6 +384,7 @@ describe("votes", () => {
       headers: author.headers,
     })
 
+    expect(self.status).toBe(403)
     expect(self.body).toMatchObject({ code: "COMMENT_SELF_VOTE" })
 
     const { data } = await listComments(app, target, { headers: voter.headers })

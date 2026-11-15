@@ -16,10 +16,20 @@ const bodySchema = z.object({
   about: z
     .partialRecord(z.enum(SUPPORTED_LANGUAGES), z.string().trim().max(2000))
     .optional()
-    .meta({ description: "About text, keyed by language. An empty string removes a language." }),
-  city: z.string().trim().max(64).nullable().optional().meta({ example: "Lisbon" }),
-  country: z.enum(COUNTRIES).nullable().optional().meta({ example: "pt" }),
-  gender: z.enum(GENDERS).optional(),
+    .meta({
+      description:
+        "The about text of your profile, keyed by language. Languages you omit stay unchanged, and an empty string removes a language.",
+      example: { en: "Reading isekai since 2015." },
+    }),
+  city: z.string().trim().max(64).nullable().optional().meta({
+    description: "The city you live in, or null or an empty string to remove it.",
+    example: "Lisbon",
+  }),
+  country: z.enum(COUNTRIES).nullable().optional().meta({
+    description: "The country you live in, as a lowercase ISO 3166-1 code, or null to remove it.",
+    example: "pt",
+  }),
+  gender: z.enum(GENDERS).optional().meta({ description: "Your gender.", example: "FEMALE" }),
   birthDate: z.iso
     .date()
     .nullable()
@@ -38,14 +48,29 @@ const bodySchema = z.object({
       },
       { message: `You must be at least ${MIN_AGE_YEARS} years old.` },
     )
-    .meta({ description: "Birth date, as YYYY-MM-DD.", example: "1998-04-12" }),
+    .meta({
+      description: `Your birth date, or null to remove it. You must be at least ${MIN_AGE_YEARS} years old.`,
+      example: "1998-04-12",
+    }),
 })
 const profileSchema = z.object({
-  about: z.partialRecord(z.enum(LANGUAGES), z.string()),
-  city: z.string().nullable(),
-  country: z.enum(COUNTRIES).nullable(),
-  gender: z.enum(GENDERS),
-  birthDate: z.iso.date().nullable(),
+  about: z.partialRecord(z.enum(LANGUAGES), z.string()).meta({
+    description: "The about text of your profile, keyed by language.",
+    example: { en: "Reading isekai since 2015." },
+  }),
+  city: z
+    .string()
+    .nullable()
+    .meta({ description: "The city you live in, if any.", example: "Lisbon" }),
+  country: z
+    .enum(COUNTRIES)
+    .nullable()
+    .meta({ description: "The country you live in, if any.", example: "pt" }),
+  gender: z.enum(GENDERS).meta({ description: "Your gender.", example: "FEMALE" }),
+  birthDate: z.iso
+    .date()
+    .nullable()
+    .meta({ description: "Your birth date, if any.", example: "1998-04-12" }),
 })
 
 export const updateMyProfileHandler = new Hono().patch(
@@ -55,15 +80,16 @@ export const updateMyProfileHandler = new Hono().patch(
     description:
       "Updates the given fields of your public profile and leaves the others unchanged.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Profile updated.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(profileSchema)) } },
       },
-      ...getOpenApiResponses({ 422: "The request data failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
+      }),
     },
   }),
   audited(userAudit.PROFILE_UPDATE, (c) => ({ id: c.var.user?.id })),
@@ -98,13 +124,14 @@ export const updateMyProfileHandler = new Hono().patch(
       ...(gender === undefined ? {} : { gender }),
       ...(birthDate === undefined ? {} : { birthDate }),
     }
+    const row = { userId: user.id, ...patch }
 
     c.var.audit.set({ changes: auditChanges(before ?? {}, patch) })
 
     const updated = await db
       .insertInto("userProfiles")
-      .values({ userId: user.id, ...patch })
-      .onConflict((oc) => oc.column("userId").doUpdateSet(patch))
+      .values(row)
+      .onConflict((oc) => oc.column("userId").doUpdateSet(row))
       .returning([
         "about",
         "city",

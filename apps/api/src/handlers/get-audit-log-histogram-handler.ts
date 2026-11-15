@@ -41,22 +41,33 @@ const CALENDAR_UNITS: Partial<Record<AuditLogHistogramInterval, string>> = {
   "1y": "year",
 }
 const querySchema = auditLogFilterSchema.extend({
-  from: z.iso.datetime().meta({ description: "Start of the histogram, inclusive." }),
-  to: z.iso.datetime().meta({ description: "End of the histogram, exclusive." }),
+  from: z.iso.datetime().meta({
+    description: "The start of the histogram, inclusive.",
+    example: "2026-10-10T00:00:00.000Z",
+  }),
+  to: z.iso.datetime().meta({
+    description: "The end of the histogram, exclusive. Must be after `from`.",
+    example: "2026-10-11T00:00:00.000Z",
+  }),
   interval: z.enum(AUDIT_LOG_HISTOGRAM_INTERVALS).meta({
-    description: "The width of each bucket. Day, week, month and year buckets follow `tz`.",
+    description: `The width of each bucket. The range can hold at most ${AUDIT_LOG_MAX_HISTOGRAM_BUCKETS} buckets. Day, week, month and year buckets follow \`tz\`.`,
     example: "1h",
   }),
   tz: timeZoneSchema.meta({
-    description: "IANA time zone that day, week, month and year buckets follow. Default: UTC.",
+    description:
+      "The IANA time zone that day, week, month and year buckets follow. Defaults to `UTC`.",
     example: "Europe/Paris",
   }),
 })
 const bucketSchema = z.object({
-  start: z.iso.datetime().meta({ description: "When the bucket starts." }),
-  success: z.int().meta({ description: "Successful actions in the bucket." }),
-  failure: z.int().meta({ description: "Failed actions in the bucket." }),
-  denied: z.int().meta({ description: "Denied actions in the bucket." }),
+  start: z.iso
+    .datetime()
+    .meta({ description: "When the bucket starts.", example: "2026-10-10T10:00:00.000Z" }),
+  success: z
+    .int()
+    .meta({ description: "The number of successful actions in the bucket.", example: 12 }),
+  failure: z.int().meta({ description: "The number of failed actions in the bucket.", example: 2 }),
+  denied: z.int().meta({ description: "The number of denied actions in the bucket.", example: 1 }),
 })
 
 export const getAuditLogHistogramHandler = new Hono().get(
@@ -64,19 +75,24 @@ export const getAuditLogHistogramHandler = new Hono().get(
   describeRoute({
     summary: "Count audit logs over time",
     description:
-      "Counts matching audit log entries per time bucket, split by outcome. Empty buckets are included, so the series is continuous. Takes the same filters as listing.\n\n**Required roles:** admin.",
+      "Counts matching audit log entries per time bucket, split by outcome, oldest bucket first. Empty buckets are included, so the series is continuous. Takes the same filters as listing audit logs.\n\n**Required roles:** admin.",
     tags: ["Audit logs"],
     responses: {
       200: {
-        description: "One bucket per interval between `from` and `to`.",
+        description: "The buckets between `from` and `to`.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  interval: z.enum(AUDIT_LOG_HISTOGRAM_INTERVALS),
-                  total: z.int().meta({ description: "Matching entries across all buckets." }),
-                  buckets: bucketSchema.array(),
+                  interval: z
+                    .enum(AUDIT_LOG_HISTOGRAM_INTERVALS)
+                    .meta({ description: "The width of each bucket.", example: "1h" }),
+                  total: z.int().meta({
+                    description: "The number of matching entries across all buckets.",
+                    example: 340,
+                  }),
+                  buckets: bucketSchema.array().meta({ description: "The buckets, oldest first." }),
                 }),
               ),
             ),
@@ -84,7 +100,9 @@ export const getAuditLogHistogramHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        422: "The query parameters or the KQL query failed validation, or the range holds too many buckets.",
+        401: true,
+        403: true,
+        422: `The query parameters failed validation, or the KQL query is invalid, or \`to\` is not after \`from\`, or the range needs more than ${AUDIT_LOG_MAX_HISTOGRAM_BUCKETS} buckets.`,
       }),
     },
   }),
@@ -95,10 +113,13 @@ export const getAuditLogHistogramHandler = new Hono().get(
     const { interval, tz, ...filters } = c.var.query
     const span = new Date(filters.to).getTime() - new Date(filters.from).getTime()
 
-    if (
-      span <= 0 ||
-      span / AUDIT_LOG_HISTOGRAM_INTERVAL_MS[interval] > AUDIT_LOG_MAX_HISTOGRAM_BUCKETS
-    ) {
+    if (span <= 0) {
+      return c.fail("VALIDATION_ERROR", [
+        { code: "invalid_range", path: ["to"], message: "`to` must be after `from`." },
+      ])
+    }
+
+    if (span / AUDIT_LOG_HISTOGRAM_INTERVAL_MS[interval] > AUDIT_LOG_MAX_HISTOGRAM_BUCKETS) {
       return c.fail("VALIDATION_ERROR", [
         {
           code: "too_many_buckets",

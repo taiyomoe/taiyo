@@ -4,8 +4,17 @@ import { tags } from "./tags"
 export const config = {
   openapi: {
     title: "Taiyō API",
-    description:
-      "Welcome to the Taiyō API! This is the official API for the Taiyō project. Here you can find all the information you need to build your own application.\n\nOh, and by the way, we're open-source https://github.com/taiyomoe/taiyo :)",
+    description: [
+      "Welcome to the Taiyō API, the API behind the Taiyō website. Everything the site does goes through these endpoints, so you can build your own app on top of them. Taiyō is open source: https://github.com/taiyomoe/taiyo.",
+      "## Responses",
+      "Every response is JSON wrapped in an envelope. A success has `success: true` and the payload in `data`; a failure has `success: false`, a stable error `code` and a human-readable `message`, plus `details` for validation errors. Both carry a `timestamp` and a `requestId` to quote when you report a problem.",
+      "## Authentication",
+      "Endpoints authenticate with the session cookie set when you sign in. Each endpoint ends its description with who can call it: **Authentication** says whether a session is needed, **Required roles** lists the roles allowed, and **Required access** names the resource-level access needed, such as being the owner of a list.",
+      "## Pagination",
+      "Paginated lists take `page` (from 1) and `perPage` query parameters and return `meta.page`, `meta.perPage` and `meta.total` next to `data`.",
+      "## Limits",
+      "A JSON request body larger than 1 MB fails with a 413 `PAYLOAD_TOO_LARGE`, whatever the endpoint. Endpoints that are rate limited list their 429 `RATE_LIMITED` response.",
+    ].join("\n\n"),
   },
   auth: {
     username: {
@@ -120,6 +129,7 @@ export const config = {
     // Issues a 422 carries: enough to fix a request, while one issue per bad array element would
     // grow the response with the request.
     maxValidationIssues: 10,
+    // Stated in `openapi.description`: change both together.
     maxJsonBodyBytes: 1024 * 1024,
   },
 } as const

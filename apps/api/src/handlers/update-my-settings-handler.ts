@@ -8,7 +8,8 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { refreshUserSessions } from "../utils/refresh-sessions"
+import { apiSuccessEnvelope, storedLanguageSchema } from "../utils/schemas"
 
 const bodySchema = z.object({
   contentRating: z
@@ -18,7 +19,7 @@ const bodySchema = z.object({
     .transform((ratings) => CONTENT_RATINGS.filter((rating) => ratings.includes(rating)))
     .optional()
     .meta({
-      description: "The content ratings to show. At least one is required.",
+      description: "The content ratings to show, at least one.",
       example: ["NORMAL", "SUGGESTIVE"],
     }),
   latestUpdatesLayout: z
@@ -35,7 +36,7 @@ const bodySchema = z.object({
     .meta({ description: "Whether others can see your library and reading stats.", example: true }),
   notifyChapters: z.boolean().optional().meta({
     description:
-      "Whether new chapters of the medias in your library and of the groups you follow notify you.",
+      "Whether new chapters of the media in your library and of the groups you follow notify you.",
     example: true,
   }),
   notifyReplies: z.boolean().optional().meta({
@@ -51,7 +52,7 @@ const bodySchema = z.object({
     example: true,
   }),
   pushLibraryChapters: z.boolean().optional().meta({
-    description: "Whether new chapters of the medias in your library are pushed to your devices.",
+    description: "Whether new chapters of the media in your library are pushed to your devices.",
     example: true,
   }),
   pushGroupChapters: z.boolean().optional().meta({
@@ -72,21 +73,30 @@ const bodySchema = z.object({
   }),
 })
 const settingsSchema = z.object({
-  contentRating: z.enum(CONTENT_RATINGS).array().optional(),
-  preferredTitles: z.string().optional(),
-  showFollowing: z.boolean().optional(),
-  showLibrary: z.boolean().optional(),
-  homeLayout: z.enum(["ROWS", "COLUMNS"]).optional(),
-  latestUpdatesLayout: z.enum(LATEST_UPDATES_LAYOUTS).optional(),
-  notifyChapters: z.boolean().optional(),
-  notifyReplies: z.boolean().optional(),
-  notifyLikes: z.boolean().optional(),
-  notifyFollows: z.boolean().optional(),
-  pushLibraryChapters: z.boolean().optional(),
-  pushGroupChapters: z.boolean().optional(),
-  pushReplies: z.boolean().optional(),
-  pushLikes: z.boolean().optional(),
-  pushFollows: z.boolean().optional(),
+  contentRating: z
+    .enum(CONTENT_RATINGS)
+    .array()
+    .optional()
+    .meta({ description: "The content ratings to show.", example: ["NORMAL", "SUGGESTIVE"] }),
+  preferredTitles: storedLanguageSchema(
+    "The language in which titles are shown when available.",
+  ).optional(),
+  showFollowing: bodySchema.shape.showFollowing,
+  showLibrary: bodySchema.shape.showLibrary,
+  homeLayout: z
+    .enum(["ROWS", "COLUMNS"])
+    .optional()
+    .meta({ description: "How the home page is laid out.", example: "ROWS" }),
+  latestUpdatesLayout: bodySchema.shape.latestUpdatesLayout,
+  notifyChapters: bodySchema.shape.notifyChapters,
+  notifyReplies: bodySchema.shape.notifyReplies,
+  notifyLikes: bodySchema.shape.notifyLikes,
+  notifyFollows: bodySchema.shape.notifyFollows,
+  pushLibraryChapters: bodySchema.shape.pushLibraryChapters,
+  pushGroupChapters: bodySchema.shape.pushGroupChapters,
+  pushReplies: bodySchema.shape.pushReplies,
+  pushLikes: bodySchema.shape.pushLikes,
+  pushFollows: bodySchema.shape.pushFollows,
 })
 
 export const updateMySettingsHandler = new Hono().patch(
@@ -94,11 +104,8 @@ export const updateMySettingsHandler = new Hono().patch(
   describeRoute({
     summary: "Update my settings",
     description:
-      "Updates the given settings of the signed-in user and leaves the others unchanged. Returns every stored setting.\n\n**Authentication:** signed-in user.",
+      "Updates the given settings and leaves the others unchanged. Returns every setting you have saved: a setting you never saved is omitted and takes its default value.\n\n**Authentication:** signed-in user.",
     tags: ["Settings"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Settings updated.",
@@ -107,7 +114,9 @@ export const updateMySettingsHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
       }),
     },
   }),
@@ -127,12 +136,8 @@ export const updateMySettingsHandler = new Hono().patch(
       .where("id", "=", user.id)
       .returning("settings")
       .executeTakeFirstOrThrow()
-    const { internalAdapter } = await auth.$context
-    const updatedUser = await internalAdapter.findUserById(user.id)
 
-    if (updatedUser) {
-      await internalAdapter.refreshUserSessions(updatedUser)
-    }
+    await refreshUserSessions(auth, user.id)
 
     return c.ok(settings)
   },

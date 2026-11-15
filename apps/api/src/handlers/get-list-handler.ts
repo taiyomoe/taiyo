@@ -23,20 +23,31 @@ import { isBannedSql } from "../utils/user-moderation"
 const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
 const listDetailSchema = listSummarySchema.extend({
   hiddenItemCount: z.int().meta({
-    description: "Titles on the list left out because they don't match the requested ratings.",
+    description:
+      "The number of titles on the list left out because they do not match the requested content ratings.",
+    example: 1,
   }),
   items: z
     .object({
-      mediaId: z.uuid(),
-      position: z.int(),
-      addedAt: z.iso.datetime(),
-      title: z.string().nullable().meta({ description: "The main title of the media." }),
-      coverUrl: z.url().nullable().meta({ description: "URL of the media's main cover." }),
-      type: z.enum(MEDIA_TYPES),
-      status: z.enum(MEDIA_STATUSES),
+      mediaId: z.uuid().meta({ description: "The ID of the media." }),
+      position: z.int().meta({ description: "The position of the media on the list.", example: 0 }),
+      addedAt: z.iso.datetime().meta({ description: "When the media was added to the list." }),
+      title: z.string().nullable().meta({
+        description: "The main title of the media, if any.",
+        example: "One Punch Man",
+      }),
+      coverUrl: z
+        .url()
+        .nullable()
+        .meta({ description: "The URL of the main cover of the media, if any." }),
+      type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media.", example: "MANGA" }),
+      status: z
+        .enum(MEDIA_STATUSES)
+        .meta({ description: "The release status of the media.", example: "RELEASING" }),
       contentRating: contentRatingSchema("The content rating of the media."),
     })
-    .array(),
+    .array()
+    .meta({ description: "The titles on the list that match the requested content ratings." }),
 })
 
 export const getListHandler = new Hono().get(
@@ -44,18 +55,18 @@ export const getListHandler = new Hono().get(
   describeRoute({
     summary: "Get a list",
     description:
-      "Returns a list with its titles in position order, filtered by content rating. PRIVATE lists are only visible to their owner.\n\n**Authentication:** none for PUBLIC lists; owner-only for PRIVATE.",
+      "Returns a list with its titles in position order, keeping only the titles that match the requested content ratings. Only the owner can see a `PRIVATE` list, or a list of a banned user. Signed-in viewers also see whether they upvoted the list.\n\n**Authentication:** optional.",
     tags: ["Custom lists"],
     responses: {
       200: {
-        description: "List details.",
+        description: "The list.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(listDetailSchema)) },
         },
       },
       ...getOpenApiResponses({
-        404: "No list with the given id exists or you cannot see it.",
-        422: "The provided id or query parameters are not valid.",
+        404: "No list with the given ID exists, or you cannot see it.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

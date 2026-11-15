@@ -1,10 +1,10 @@
-import { COMMENT_TARGET_TYPES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkComment } from "../middlewares/check-comment-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import {
+  commentThreadTargetSchema,
   getThreadTarget,
   liveCommentSql,
   loadCommentImages,
@@ -21,7 +21,7 @@ export const getCommentContextHandler = new Hono().get(
   describeRoute({
     summary: "Get a comment in context",
     description:
-      "Returns a comment for a permalink: its top-level comment, and the linked reply under it when the link points at a reply.\n\n**Authentication:** optional.",
+      "Returns a comment for a permalink: its top-level comment, and the linked reply under it when the link points at a reply. Signed-in viewers also see which of them they upvoted and whether they can edit, delete or report them.\n\n**Authentication:** optional.",
     tags: ["Comments"],
     responses: {
       200: {
@@ -31,9 +31,12 @@ export const getCommentContextHandler = new Hono().get(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  target: z.object({ type: z.enum(COMMENT_TARGET_TYPES), id: z.uuid() }),
+                  target: commentThreadTargetSchema.meta({
+                    description: "The resource the comment is on.",
+                  }),
                   comment: rootCommentSchema.meta({
-                    description: "The top-level comment. `replies` holds only the linked reply.",
+                    description:
+                      "The top-level comment. Its `replies` hold only the linked reply, if any.",
                   }),
                 }),
               ),
@@ -41,7 +44,10 @@ export const getCommentContextHandler = new Hono().get(
           },
         },
       },
-      ...getOpenApiResponses({ 404: "No such comment exists, or it was removed." }),
+      ...getOpenApiResponses({
+        404: "No comment with the given ID exists, or it was removed.",
+        422: "The provided ID is not a valid UUID.",
+      }),
     },
   }),
   checkComment(),
@@ -67,11 +73,10 @@ export const getCommentContextHandler = new Hono().get(
       return c.fail("COMMENT_NOT_FOUND")
     }
 
-    const images = await loadCommentImages(
-      db,
-      reply === undefined ? [root.id] : [root.id, reply.id],
-      viewerId,
-    )
+    const [images, target] = await Promise.all([
+      loadCommentImages(db, reply === undefined ? [root.id] : [root.id, reply.id], viewerId),
+      getThreadTarget(db, comment.threadId),
+    ])
     const context = {
       viewer: viewer === null ? null : { id: viewer.id, canModerate: can("comment.delete") },
       ownerId: comment.ownerId,
@@ -79,7 +84,7 @@ export const getCommentContextHandler = new Hono().get(
     }
 
     return c.ok({
-      target: await getThreadTarget(db, comment.threadId),
+      target,
       comment: {
         ...toComment(root, context),
         replies: reply === undefined ? [] : [toComment(reply, context)],

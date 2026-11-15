@@ -8,14 +8,23 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid(), pageId: z.uuid() })
+const paramSchema = z.object({
+  id: z.uuid().meta({
+    description: "The ID of the chapter.",
+    example: "13548c83-8d1a-4163-8830-c8f16fcd2eb7",
+  }),
+  pageId: z.uuid().meta({
+    description: "The ID of the page.",
+    example: "9f1b2c3d-4e5f-4a7b-8c9d-0e1f2a3b4c5d",
+  }),
+})
 
 export const deletePageBookmarkHandler = new Hono().delete(
   "/:id/bookmarks/:pageId",
   describeRoute({
     summary: "Remove a page bookmark",
     description:
-      "Removes your bookmark on a page. Removing a bookmark that doesn't exist succeeds.\n\n**Authentication:** signed-in user.",
+      "Removes your bookmark on a page. Removing a bookmark you do not have succeeds and changes nothing.\n\n**Authentication:** signed-in user.",
     tags: ["Bookmarks"],
     responses: {
       200: {
@@ -23,13 +32,20 @@ export const deletePageBookmarkHandler = new Hono().delete(
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ chapterId: z.uuid(), pageId: z.uuid() })),
+              apiSuccessEnvelope(
+                z.object({
+                  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+                  pageId: z.uuid().meta({ description: "The ID of the page." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        422: "An id is not a valid UUID.",
+        401: true,
+        403: true,
+        422: "One of the provided IDs is not a valid UUID.",
       }),
     },
   }),

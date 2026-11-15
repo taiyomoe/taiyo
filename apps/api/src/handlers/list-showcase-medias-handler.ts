@@ -12,15 +12,18 @@ const CACHE_TTL_SECONDS = 60 * 60
 const showcaseMediaSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the media." }),
   title: z.string().meta({ description: "The main title of the media.", example: "Eleceed" }),
-  coverUrl: z.url().meta({ description: "URL of the media's main cover." }),
-  chapterCount: z
-    .number()
-    .int()
-    .meta({ description: "How many chapter numbers have a published chapter.", example: 312 }),
+  coverUrl: z.url().meta({ description: "The URL of the media's main cover." }),
+  chapterCount: z.int().meta({
+    description: "The number of chapter numbers with a published chapter.",
+    example: 312,
+  }),
   tags: z
     .string()
     .array()
-    .meta({ description: "Keys of the media's non-spoiler tags.", example: ["ACTION", "COMEDY"] }),
+    .meta({
+      description: "The keys of the media's non-spoiler tags.",
+      example: ["ACTION", "COMEDY"],
+    }),
 })
 
 type ShowcaseMedia = z.infer<typeof showcaseMediaSchema>
@@ -96,8 +99,7 @@ export const listShowcaseMediasHandler = new Hono().get(
   "/showcase",
   describeRoute({
     summary: "List showcase medias",
-    description:
-      "Lists the most followed all-audience medias that have a cover, for the public landing page. Cached for an hour.\n\n**Authentication:** none.",
+    description: `Lists up to ${SHOWCASE_SIZE} all-audience medias with a cover for the public landing page, the ones in the most libraries first. The list is refreshed at most once an hour.\n\n**Authentication:** none.`,
     tags: ["Medias"],
     responses: {
       200: {

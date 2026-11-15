@@ -21,7 +21,7 @@ export const listTopListsHandler = new Hono().get(
   describeRoute({
     summary: "List top lists",
     description:
-      "Returns PUBLIC lists that hold at least one title, most upvoted first. Lists of banned users are left out.\n\n**Authentication:** optional; signed-in viewers also learn which lists they upvoted.",
+      "Lists the `PUBLIC` lists that hold at least one title, most upvoted first. Lists of banned users are left out. Signed-in viewers also see which lists they upvoted.\n\n**Authentication:** optional.",
     tags: ["Custom lists"],
     responses: {
       200: {

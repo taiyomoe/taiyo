@@ -65,6 +65,38 @@ const jsonBodyLimit = bodyLimit({
 const scalarBundle = readFile(
   new URL("browser/standalone.js", import.meta.resolve("@scalar/api-reference")),
 )
+const favicon = readFile(new URL("assets/favicon.svg", import.meta.url))
+// Scalar groups the sidebar by these; the OpenAPI types do not know vendor extensions.
+const scalarExtensions = {
+  "x-tagGroups": [
+    {
+      name: "Catalog",
+      tags: ["Medias", "Covers", "Banners", "Staffs", "Media staff", "Media suggestions", "Search"],
+    },
+    {
+      name: "Chapters",
+      tags: ["Chapters", "Chapter review", "Chapter groups", "Page reports"],
+    },
+    { name: "Reading", tags: ["Bookmarks", "Reading history", "Library", "Custom lists"] },
+    {
+      name: "Groups",
+      tags: [
+        "Groups",
+        "Group members",
+        "Group ownership",
+        "Group creation requests",
+        "Group follows",
+        "Group reports",
+      ],
+    },
+    { name: "Comments", tags: ["Comments", "Comment images", "Comment reports"] },
+    {
+      name: "Users",
+      tags: ["Users", "Profile", "Follows", "Notifications", "Settings", "Shop"],
+    },
+    { name: "Administration", tags: ["Dashboard", "Audit logs"] },
+  ],
+}
 
 export const createApp = (services: Services) => {
   const app = new Hono()
@@ -217,125 +249,147 @@ export const createApp = (services: Services) => {
     .get(
       "/openapi.json",
       openAPIRouteHandler(app, {
+        defaultValidationErrorResponse: false,
         documentation: {
           info: {
             title: config.openapi.title,
             version: packageJson.version,
             description: config.openapi.description,
           },
+          ...scalarExtensions,
           tags: [
             {
               name: "Medias",
               description:
-                "Manga, manhwa, manhua, light novels and other long-form comics. These endpoints create and curate the entries themselves along with everything attached to them — titles, covers, banners, external links and staff credits.",
-            },
-            {
-              name: "Search",
-              description:
-                "Type-ahead search across titles, groups and users at once, for quick-open UIs.",
+                "Manga, manhwa, manhua and other comics: their titles, synopses, links, tags and moderation state.",
             },
             {
               name: "Covers",
               description:
-                "Cover images attached to a media. List and create are scoped under the parent media; get/update/delete/set-main operate on the cover by its own id.",
+                "Cover images of a media. Listed and added under the media, read and edited by their own ID.",
             },
             {
               name: "Banners",
               description:
-                "Banner images attached to a media. List and create are scoped under the parent media; get/update/delete operate on the banner by its own id.",
+                "Banner images of a media. Listed and added under the media, read and edited by their own ID.",
             },
             {
               name: "Staffs",
-              description:
-                "Authors, artists and other staff members. Top-level resource referenced by medias via `mediaStaffs`.",
-            },
-            {
-              name: "Chapters",
-              description:
-                "Chapters of a media. List and create are scoped under the parent media; get/update/delete operate on the chapter by its own id.",
+              description: "Authors, artists and other people credited on medias.",
             },
             {
               name: "Media staff",
               description:
-                "Links between a media and the staff members credited on it. Each link carries a role (AUTHOR / ARTIST).",
-            },
-            {
-              name: "Groups",
-              description:
-                "Translation / scanlation groups. Top-level resource that can be linked to chapters via `chapterGroups`.",
-            },
-            {
-              name: "Chapter review",
-              description:
-                "Chapters uploaded by users who cannot publish directly wait for review here. Uploaders and admins approve or reject them.",
-            },
-            {
-              name: "Chapter groups",
-              description: "Links between a chapter and the groups that worked on it.",
-            },
-            {
-              name: "Group ownership",
-              description:
-                "Workflow for users to claim ownership of a group: request, approval, rejection, cancellation.",
-            },
-            {
-              name: "Group members",
-              description:
-                "Managing the membership of a group: invitations, permissions, removal, promotion, leaving.",
-            },
-            {
-              name: "Group creation requests",
-              description:
-                "Workflow for users to ask for a new group they will own: request, approval, rejection, cancellation.",
+                "Credits linking a staff member to a media, each with a role such as `AUTHOR` or `ARTIST`.",
             },
             {
               name: "Media suggestions",
               description:
-                "Edits to a media suggested by any signed-in user and reviewed field by field by uploaders, moderators and admins.",
+                "Edits to a media suggested by any signed-in user, reviewed field by field by uploaders, moderators and admins.",
+            },
+            {
+              name: "Chapters",
+              description: "Chapters of a media: listing, reading, uploading and editing them.",
+            },
+            {
+              name: "Chapter review",
+              description:
+                "Chapters waiting for review, sent by users who cannot publish directly. Uploaders and admins approve or reject them.",
+            },
+            {
+              name: "Chapter groups",
+              description: "Credits linking a chapter to the groups that worked on it.",
+            },
+            {
+              name: "Page reports",
+              description:
+                "Reports about a broken or wrong chapter page, and their review by moderators.",
+            },
+            { name: "Bookmarks", description: "Pages you bookmarked while reading." },
+            { name: "Reading history", description: "Your reading progress, chapter by chapter." },
+            {
+              name: "Library",
+              description:
+                "The medias you track in your library, with a status such as reading or completed.",
+            },
+            {
+              name: "Custom lists",
+              description:
+                "Reading lists made by users. Each list has an owner, a `PUBLIC` or `PRIVATE` visibility and an ordered set of medias.",
+            },
+            {
+              name: "Groups",
+              description: "Scanlation and translation groups that release chapters.",
+            },
+            {
+              name: "Group members",
+              description:
+                "The members of a group: invitations, permissions, promotion, removal and leaving.",
+            },
+            {
+              name: "Group ownership",
+              description: "Requests to claim ownership of an existing group, and their review.",
+            },
+            {
+              name: "Group creation requests",
+              description: "Requests to create a new group you will own, and their review.",
+            },
+            {
+              name: "Group follows",
+              description: "Following a group to hear about its new chapters.",
+            },
+            {
+              name: "Group reports",
+              description: "Reports about a group, and their review by moderators.",
+            },
+            {
+              name: "Comments",
+              description: "Comments and replies on medias, chapters, groups, users and lists.",
+            },
+            {
+              name: "Comment images",
+              description: "Images attached to comments, and your saved favorites.",
+            },
+            {
+              name: "Comment reports",
+              description: "Reports about a comment, and their review by moderators.",
+            },
+            { name: "Users", description: "User profiles, stats and moderation: roles and bans." },
+            {
+              name: "Profile",
+              description: "Your own profile: display name, avatar, banner, cosmetics and account.",
             },
             {
               name: "Follows",
               description:
-                "Following relationships between users. Each follow is a one-directional edge (A → B); reciprocity is two edges.",
+                "Following other users. A follow goes one way; following each other takes two follows.",
+            },
+            {
+              name: "Notifications",
+              description: "Your notifications and your devices' push subscriptions.",
+            },
+            {
+              name: "Settings",
+              description: "Your preferences, saved on your account so every device shares them.",
             },
             {
               name: "Shop",
               description:
-                "Spending reading points on cosmetics: direct purchases and loot boxes with published odds.",
+                "Spending reading points on cosmetics, through direct purchases or loot boxes with published odds.",
             },
             {
-              name: "Reading history",
-              description: "Per-chapter reading-progress records, scoped to the signed-in user.",
+              name: "Search",
+              description: "Type-ahead search across medias, groups and users at once.",
             },
             {
-              name: "Library",
+              name: "Dashboard",
               description:
-                "Per-user library — manga the user is reading / has read / etc., scoped to the signed-in user.",
-            },
-            {
-              name: "Notifications",
-              description:
-                "The signed-in user's notifications — new chapters of followed medias and groups, and replies to their comments.",
-            },
-            {
-              name: "Settings",
-              description:
-                "Preferences of the signed-in user, stored on their account so every device shares them.",
+                "Dashboard data: activity metrics, reading breakdowns and pending moderation work.",
             },
             {
               name: "Audit logs",
               description:
                 "Every recorded action: who did what, on which resource, when, from where, and whether it succeeded, failed or was denied.",
-            },
-            {
-              name: "Custom lists",
-              description:
-                "User-created reading lists. Each list is owned by one user, has a PUBLIC or PRIVATE visibility, and contains an ordered set of medias.",
-            },
-            {
-              name: "Dashboard",
-              description:
-                "Admin dashboard data for moderators and admins: activity metrics, reading breakdowns and pending moderation work.",
             },
           ],
         },
@@ -346,6 +400,12 @@ export const createApp = (services: Services) => {
       c.header("Cache-Control", "public, max-age=86400")
 
       return c.body(await scalarBundle)
+    })
+    .get("/docs/favicon.svg", async (c) => {
+      c.header("Content-Type", "image/svg+xml")
+      c.header("Cache-Control", "public, max-age=86400")
+
+      return c.body(await favicon)
     })
     .get(
       "/docs",
@@ -367,6 +427,8 @@ export const createApp = (services: Services) => {
         const nonce = c.get("secureHeadersNonce")
 
         return {
+          pageTitle: config.openapi.title,
+          favicon: "/docs/favicon.svg",
           theme: "deepSpace",
           url: "/openapi.json",
           cdn: "/docs/scalar.js",

@@ -13,14 +13,19 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const createReportSchema = z.object({
-  reason: z.enum(GROUP_REPORT_REASONS).meta({ description: "Why the group is reported." }),
+  reason: z
+    .enum(GROUP_REPORT_REASONS)
+    .meta({ description: "Why you report the group.", example: "STOLEN_WORK" }),
   details: z
     .string()
     .trim()
     .max(2000)
     .optional()
     .transform((value) => (value === undefined || value === "" ? null : value))
-    .meta({ description: "Anything that helps moderators look into it." }),
+    .meta({
+      description: "Anything that helps the moderators look into it, up to 2000 characters.",
+      example: "They post our chapters with our credits page cropped out.",
+    }),
 })
 
 export const createGroupReportHandler = new Hono().post(
@@ -28,27 +33,33 @@ export const createGroupReportHandler = new Hono().post(
   describeRoute({
     summary: "Report a group",
     description:
-      "Files a report about the group for moderators to review. The group never learns who sent it.\n\n**Authentication:** any signed-in user.",
+      "Reports the group to the moderators, who never tell the group who reported it. You can have one pending report per group.\n\n**Authentication:** signed-in user.",
     tags: ["Group reports"],
-    requestBody: {
-      content: { "application/json": await resolver(createReportSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Report filed.",
+        description: "Report created.",
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ id: z.uuid(), status: z.enum(GROUP_REPORT_STATUSES) })),
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the report." }),
+                  status: z
+                    .enum(GROUP_REPORT_STATUSES)
+                    .meta({ description: "The status of the report.", example: "PENDING" }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        409: "You already have a pending report for this group.",
-        422: "The request data failed validation.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        404: "No group with the given ID exists.",
+        409: "You already have a pending report on this group.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

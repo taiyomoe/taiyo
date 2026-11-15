@@ -9,18 +9,15 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 
 const groupListItemSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the group." }),
-  name: z.string().meta({ description: "Name of the group.", example: "scansPROJECT" }),
-  logo: z.string().nullable().meta({ description: "Storage key of the group logo, if any." }),
+  name: z.string().meta({ description: "The name of the group.", example: "scansPROJECT" }),
+  logo: z.string().nullable().meta({ description: "The key of the group's logo image, if any." }),
   owned: z.boolean().meta({ description: "Whether the group has an owner." }),
 })
 const querySchema = paginationQuerySchema.extend({
-  search: z
-    .string()
-    .trim()
-    .min(1)
-    .max(100)
-    .optional()
-    .meta({ description: "Only list groups whose name contains this text.", example: "akira" }),
+  search: z.string().trim().min(1).max(100).optional().meta({
+    description: "Only list groups whose name contains this text, ignoring case.",
+    example: "akira",
+  }),
 })
 
 export const listGroupsHandler = new Hono().get(
@@ -28,11 +25,11 @@ export const listGroupsHandler = new Hono().get(
   describeRoute({
     summary: "List groups",
     description:
-      "Lists groups alphabetically by name, optionally filtered by name.\n\n**Authentication:** none.",
+      "Lists groups alphabetically by name, optionally only those whose name contains the search text.\n\n**Authentication:** none.",
     tags: ["Groups"],
     responses: {
       200: {
-        description: "Matching groups.",
+        description: "The matching groups.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(groupListItemSchema.array(), paginationMetaSchema)),

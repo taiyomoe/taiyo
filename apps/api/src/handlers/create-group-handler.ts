@@ -21,20 +21,18 @@ const createGroupSchema = z.object({
     .string()
     .min(1)
     .max(config.input.maxNameLength)
-    .meta({ description: "Name of the group.", example: "Akira Scans" }),
-  description: z
-    .string()
-    .max(config.input.maxDescriptionLength)
-    .nullable()
-    .optional()
-    .meta({ description: "Description of the group." }),
-  website: groupLinkSchema("Website URL."),
+    .meta({ description: "The name of the group.", example: "Akira Scans" }),
+  description: z.string().max(config.input.maxDescriptionLength).nullable().optional().meta({
+    description: "The description of the group.",
+    example: "Translating seinen manga into English since 2019.",
+  }),
+  website: groupLinkSchema("The URL of the group's website."),
   discord: groupDiscordSchema,
-  x: groupLinkSchema("X / Twitter URL."),
-  facebook: groupLinkSchema("Facebook URL."),
-  instagram: groupLinkSchema("Instagram URL."),
-  telegram: groupLinkSchema("Telegram URL."),
-  youtube: groupLinkSchema("YouTube URL."),
+  x: groupLinkSchema("The URL of the group's X profile."),
+  facebook: groupLinkSchema("The URL of the group's Facebook page."),
+  instagram: groupLinkSchema("The URL of the group's Instagram profile."),
+  telegram: groupLinkSchema("The URL of the group's Telegram channel."),
+  youtube: groupLinkSchema("The URL of the group's YouTube channel."),
   email: groupEmailSchema,
 })
 
@@ -42,11 +40,9 @@ export const createGroupHandler = new Hono().post(
   "/",
   describeRoute({
     summary: "Create a group",
-    description: "Creates a group.\n\n**Required roles:** uploader, admin.",
+    description:
+      "Creates a group right away, without review and without any member.\n\n**Required roles:** uploader, admin.",
     tags: ["Groups"],
-    requestBody: {
-      content: { "application/json": await resolver(createGroupSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Group created.",
@@ -55,14 +51,18 @@ export const createGroupHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid().meta({ description: "The ID of the newly created group." }),
+                  id: z.uuid().meta({ description: "The ID of the group." }),
                 }),
               ),
             ),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The request data failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
+      }),
     },
   }),
   audited(groupAudit.CREATE),

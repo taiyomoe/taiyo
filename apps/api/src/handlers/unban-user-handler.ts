@@ -3,6 +3,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
+import { authorizeUser } from "../middlewares/authorize-user-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { auditChanges } from "../utils/audit"
@@ -12,27 +13,34 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const unbanUserHandler = new Hono().post(
   "/:id/unban",
   describeRoute({
-    summary: "Lift a user's ban",
+    summary: "Unban a user",
     description:
-      "Lifts a ban right away. What was rejected because of it stays rejected.\n\n**Required roles:** admin, or moderator for regular users.",
+      "Unbans a user right away. What was rejected because of the ban stays rejected. Moderators can only unban users with the `USER` role, and you cannot unban yourself.\n\n**Required roles:** moderator, admin.",
     tags: ["Users"],
     responses: {
       201: {
-        description: "Ban lifted.",
+        description: "User unbanned.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the user." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: "You are not a moderator or admin, you are a moderator and the user is not a regular user, or the user is you.",
+        404: "No user with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),
   audited(adminAudit.USER_UNBAN),
   withAuth(),
+  authorizeUser("ban"),
   checkUser({ includeBanned: true }),
   async (c) => {
     const { can, db, targetUser } = c.var

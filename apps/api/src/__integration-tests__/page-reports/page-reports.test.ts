@@ -116,6 +116,33 @@ describe("page reports", () => {
     })
   })
 
+  test("leaves out the reports on a deleted media", async ({ app, services }) => {
+    const { chapterId, pages } = await seedPages(services)
+    const reporter = await signInAs(services)
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+
+    await api(app, `/chapters/${chapterId}/pages/${pages[0]?.id ?? ""}/reports`, {
+      method: "POST",
+      headers: reporter.headers,
+      json: { reason: "WRONG_ORDER" },
+    })
+    await services.db
+      .updateTable("medias")
+      .set({ deletedAt: new Date() })
+      .where("id", "=", (eb) =>
+        eb.selectFrom("chapters").select("mediaId").where("id", "=", chapterId),
+      )
+      .execute()
+
+    const reports = dataOf(
+      await api<Report[]>(app, "/chapters/page-reports?perPage=100", {
+        headers: moderator.headers,
+      }),
+    )
+
+    expect(reports.filter((report) => report.chapter.id === chapterId)).toEqual([])
+  })
+
   test("closing a report closes every open report on the same page", async ({ app, services }) => {
     const { chapterId, pages } = await seedPages(services)
     const firstReporter = await signInAs(services)

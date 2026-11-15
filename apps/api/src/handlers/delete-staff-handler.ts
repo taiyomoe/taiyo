@@ -14,7 +14,7 @@ export const deleteStaffHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a staff",
     description:
-      "Removes a staff. The staff can be restored later.\n\n**Required roles:** uploader, admin.",
+      "Deletes a staff. It no longer appears in staff listings or on the medias it was linked to.\n\n**Required roles:** uploader, admin.",
     tags: ["Staffs"],
     responses: {
       200: {
@@ -32,8 +32,10 @@ export const deleteStaffHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        404: "No staff with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No staff with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

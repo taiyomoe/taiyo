@@ -23,30 +23,30 @@ const createChapterUploadSessionSchema = z.object({
       z.object({
         contentType: z
           .enum(imageMimeKeys)
-          .meta({ description: "MIME type of the page image.", example: "image/jpeg" }),
-        size: z.int().positive().max(config.images.maxChapterPageSizeBytes).meta({
-          description: "Size of the page image in bytes.",
-          example: 512000,
-        }),
+          .meta({ description: "The MIME type of the page image.", example: "image/jpeg" }),
+        size: z
+          .int()
+          .positive()
+          .max(config.images.maxChapterPageSizeBytes)
+          .meta({
+            description: `The size of the page image in bytes, up to ${config.images.maxChapterPageSizeBytes}.`,
+            example: 512000,
+          }),
       }),
     )
     .min(1)
     .max(config.images.maxChapterPages)
-    .meta({ description: "Ordered list of pages to include in this chapter." }),
+    .meta({
+      description: `The pages of the chapter, in reading order, up to ${config.images.maxChapterPages}.`,
+    }),
 })
 
 export const createChapterUploadSessionHandler = new Hono().post(
   "/:id/pages/upload-session",
   describeRoute({
     summary: "Open a chapter page upload session",
-    description:
-      "Opens an upload session for a chapter's pages. Returns one-time upload URLs for each page; upload each page to its URL, then call finalize. Sessions expire after 10 minutes.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in a group credited on the chapter.",
+    description: `Opens an upload session for the pages of a chapter that has none yet, and returns one upload URL per page. Upload each image to its URL with a \`PUT\`, then finalize the upload. The URLs expire after ${config.images.uploadUrlTtlSeconds / 60} minutes.\n\n**Required access:** uploader or admin, a moderator or a member of a credited group with the \`EDIT_CHAPTERS\` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.`,
     tags: ["Chapters"],
-    requestBody: {
-      content: {
-        "application/json": await resolver(createChapterUploadSessionSchema).toOpenAPISchema(),
-      },
-    },
     responses: {
       201: {
         description: "Upload session opened.",
@@ -55,20 +55,23 @@ export const createChapterUploadSessionHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  taskId: z.uuid().meta({ description: "ID of the upload task." }),
+                  taskId: z.uuid().meta({
+                    description: "The ID of the upload task, to finalize the upload with.",
+                    example: "6f0c2e1a-3b4d-4c5e-8f9a-0b1c2d3e4f5a",
+                  }),
                   pages: z
                     .array(
                       z.object({
-                        index: z
-                          .int()
-                          .nonnegative()
-                          .meta({ description: "Zero-based page index." }),
+                        index: z.int().nonnegative().meta({
+                          description: "The zero-based position of the page.",
+                          example: 0,
+                        }),
                         uploadUrl: z
                           .url()
-                          .meta({ description: "One-time upload URL for this page." }),
+                          .meta({ description: "The one-time URL to upload the page image to." }),
                       }),
                     )
-                    .meta({ description: "Per-page upload URLs, in order." }),
+                    .meta({ description: "The upload URL of each page, in reading order." }),
                 }),
               ),
             ),
@@ -76,9 +79,12 @@ export const createChapterUploadSessionHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
-        409: "This chapter already has pages, or is only hosted on the group's site.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists.",
+        409: "The chapter already has pages, or it is only hosted on the group's site.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

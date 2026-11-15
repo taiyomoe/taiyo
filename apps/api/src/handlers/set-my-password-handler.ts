@@ -14,7 +14,9 @@ const bodySchema = z.object({
     .string()
     .min(config.auth.password.minLength)
     .max(config.auth.password.maxLength)
-    .meta({ description: "The password to sign in with from now on." }),
+    .meta({
+      description: `The password to sign in with from now on, from ${config.auth.password.minLength} to ${config.auth.password.maxLength} characters.`,
+    }),
 })
 
 export const setMyPasswordHandler = new Hono().post(
@@ -22,23 +24,30 @@ export const setMyPasswordHandler = new Hono().post(
   describeRoute({
     summary: "Set my password",
     description:
-      "Adds a password to an account that only signs in with Discord, Google or a magic link. Use the auth change-password endpoint when a password already exists.\n\n**Authentication:** signed-in user.",
+      "Sets a password on your account when it only signs in with Discord, Google or a magic link. When your account already has a password, use the auth change-password endpoint instead.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Password set.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ hasPassword: z.literal(true) }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  hasPassword: z
+                    .literal(true)
+                    .meta({ description: "Whether your account has a password." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        409: "The account already has a password.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        409: "Your account already has a password.",
+        422: "The request body failed validation.",
       }),
     },
   }),

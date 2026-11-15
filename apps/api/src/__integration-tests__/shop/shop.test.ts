@@ -145,6 +145,7 @@ describe("POST /shop/purchases", () => {
       const res = await buy(app, headers, { kind: "AVATAR_BORDER", key })
 
       expect(res.status).toBe(404)
+      expect(res.body).toMatchObject({ code: "COSMETIC_NOT_FOUND" })
     }
 
     const badKind = await buy(app, headers, { kind: "BADGE", key: "halo" })

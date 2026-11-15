@@ -15,7 +15,12 @@ import {
 } from "../utils/dashboard-overview"
 import { getMainTitles } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, storedLanguageSchema, timeZoneSchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  storedLanguageSchema,
+  timeZoneSchema,
+  userSummarySchema,
+} from "../utils/schemas"
 
 const CACHE_TTL_SECONDS: Record<DashboardRange, number> = {
   "24h": 60,
@@ -34,11 +39,11 @@ type DashboardActivityKind = (typeof DASHBOARD_ACTIVITY_KINDS)[number]
 const querySchema = z.object({
   range: z.enum(DASHBOARD_RANGES).default("30d").meta({
     description:
-      "The period to report on: 24 hourly, 7 or 30 daily, 13 weekly or 12 monthly buckets. Default: 30d.",
+      "The period to report on: 24 hourly, 7 or 30 daily, 13 weekly or 12 monthly buckets. Defaults to `30d`.",
     example: "30d",
   }),
   tz: timeZoneSchema.meta({
-    description: "IANA time zone the buckets and reading hours follow. Default: UTC.",
+    description: "The IANA time zone the buckets and reading hours follow. Defaults to `UTC`.",
     example: "America/Sao_Paulo",
   }),
 })
@@ -77,64 +82,70 @@ const dashboardOverviewSchema = z.object({
       description: "The start of each current bucket, oldest first.",
       example: ["2026-09-15T03:00:00.000Z", "2026-09-16T03:00:00.000Z"],
     }),
-  metrics: z.object({
-    reads: metricSchema.meta({
-      description: "Chapters opened for the first time by signed-in users.",
-    }),
-    uniqueReaders: metricSchema.meta({
-      description:
-        "Distinct users who opened a chapter for the first time. Totals are distinct over the whole window.",
-    }),
-    libraryAdds: metricSchema.meta({ description: "Medias added to a library." }),
-    chaptersUploaded: metricSchema.meta({ description: "Chapters uploaded and not deleted." }),
-    newAccounts: metricSchema.meta({ description: "Accounts created." }),
-  }),
+  metrics: z
+    .object({
+      reads: metricSchema.meta({
+        description: "The number of chapters opened for the first time by signed-in users.",
+      }),
+      uniqueReaders: metricSchema.meta({
+        description:
+          "The number of distinct users who opened a chapter for the first time. Totals count each user once over the whole window.",
+      }),
+      libraryAdds: metricSchema.meta({
+        description: "The number of medias added to a library.",
+      }),
+      chaptersUploaded: metricSchema.meta({
+        description: "The number of chapters uploaded that are published and not deleted.",
+      }),
+      newAccounts: metricSchema.meta({ description: "The number of accounts created." }),
+    })
+    .meta({ description: "The activity metrics, each with its current and previous window." }),
   readsByLanguage: z
     .object({
       language: storedLanguageSchema("The language of the chapters read."),
-      reads: z.int().meta({ description: "Reads in the current window.", example: 940 }),
+      reads: z.int().meta({
+        description: "The number of reads in the current window.",
+        example: 940,
+      }),
     })
     .array()
     .meta({ description: "The five most read languages in the current window, most read first." }),
   otherLanguageReads: z.int().meta({
-    description: "Reads of every other language in the current window.",
+    description: "The number of reads of every other language in the current window.",
     example: 120,
   }),
   topMedias: z
     .object({
       id: z.uuid().meta({ description: "The ID of the media." }),
-      title: z.string().nullable().meta({ description: "The main title of the media." }),
-      coverUrl: z.url().nullable().meta({ description: "URL of the media's main cover, if any." }),
-      reads: z.int().meta({ description: "Reads in the current window.", example: 310 }),
+      title: z
+        .string()
+        .nullable()
+        .meta({ description: "The main title of the media, if any.", example: "Chainsaw Man" }),
+      coverUrl: z
+        .url()
+        .nullable()
+        .meta({ description: "The URL of the media's main cover, if any." }),
+      reads: z.int().meta({
+        description: "The number of reads in the current window.",
+        example: 310,
+      }),
     })
     .array()
     .meta({ description: "The eight most read medias in the current window, most read first." }),
   readingHours: z.int().array().array().meta({
     description:
-      "Reads in the current window by local weekday (rows, Monday first) and local hour (columns, 0-23).",
+      "The number of reads in the current window by local weekday (rows, Monday first) and local hour (columns, 0-23).",
   }),
-  topUploaders: z
-    .object({
-      id: z.uuid().meta({ description: "The ID of the user." }),
-      username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
-      displayUsername: z
-        .string()
-        .meta({ description: "The display name of the user.", example: "Kaito" }),
-      image: z.string().nullable().meta({ description: "URL of the user's avatar, if any." }),
-      nameEffect: z
-        .string()
-        .nullable()
-        .meta({ description: "The user's equipped name effect, if any." }),
-      avatarBorder: z
-        .string()
-        .nullable()
-        .meta({ description: "The user's equipped avatar border, if any." }),
+  topUploaders: userSummarySchema
+    .extend({
       chapters: z.int().meta({
-        description: "Chapters the user uploaded in the current window, not deleted.",
+        description:
+          "The number of chapters the user uploaded in the current window that are published and not deleted.",
         example: 42,
       }),
       previousChapters: z.int().meta({
-        description: "Chapters the user uploaded in the previous window, not deleted.",
+        description:
+          "The number of chapters the user uploaded in the previous window that are published and not deleted.",
         example: 35,
       }),
     })
@@ -146,19 +157,22 @@ const dashboardOverviewSchema = z.object({
   catalogMix: z
     .object({
       type: z.enum(MEDIA_TYPES).meta({ description: "The media type.", example: "MANGA" }),
-      count: z.int().meta({ description: "How many medias have this type.", example: 412 }),
+      count: z.int().meta({ description: "The number of medias of this type.", example: 412 }),
     })
     .array()
     .meta({ description: "Every media type with its number of medias, all time." }),
   attention: z
     .object({
       pendingOwnershipRequests: z.int().meta({
-        description: "Group ownership requests awaiting review.",
+        description: "The number of group ownership requests awaiting review.",
         example: 3,
       }),
-      failedUploads: z.int().meta({ description: "Chapter uploads that failed.", example: 1 }),
+      failedUploads: z.int().meta({
+        description: "The number of chapter uploads that failed.",
+        example: 1,
+      }),
     })
-    .meta({ description: "Things waiting on a moderator." }),
+    .meta({ description: "The work waiting on a moderator." }),
   recentActivity: z
     .object({
       kind: z
@@ -170,36 +184,24 @@ const dashboardOverviewSchema = z.object({
       }),
       count: z.int().meta({
         description:
-          "How many events the item groups. Uploads by one user to one media within the same hour are grouped.",
+          "The number of events the item groups. Uploads of one kind by one user to one media within the same hour are grouped.",
         example: 3,
       }),
-      actor: z
-        .object({
-          id: z.uuid().meta({ description: "The ID of the user." }),
-          username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
-          displayUsername: z
-            .string()
-            .meta({ description: "The display name of the user.", example: "Kaito" }),
-          image: z.string().nullable().meta({ description: "URL of the user's avatar, if any." }),
-          nameEffect: z
-            .string()
-            .nullable()
-            .meta({ description: "The user's equipped name effect, if any." }),
-          avatarBorder: z
-            .string()
-            .nullable()
-            .meta({ description: "The user's equipped avatar border, if any." }),
-        })
-        .meta({ description: "The user behind the activity." }),
+      actor: userSummarySchema.meta({ description: "The user behind the activity." }),
       media: z
         .object({
           id: z.uuid().meta({ description: "The ID of the media." }),
-          title: z.string().nullable().meta({ description: "The main title of the media." }),
+          title: z
+            .string()
+            .nullable()
+            .meta({ description: "The main title of the media, if any.", example: "Chainsaw Man" }),
         })
         .meta({ description: "The media the activity happened on." }),
     })
     .array()
-    .meta({ description: "The six latest uploads and media creations, newest first." }),
+    .meta({
+      description: "The six latest chapter and cover uploads and media creations, newest first.",
+    }),
 })
 
 export const getDashboardOverviewHandler = new Hono().get(
@@ -207,7 +209,7 @@ export const getDashboardOverviewHandler = new Hono().get(
   describeRoute({
     summary: "Get the dashboard overview",
     description:
-      "Activity metrics bucketed over the requested range and compared with the period before it, plus reading breakdowns, the catalog mix, pending moderation work and the latest uploads. The range-dependent part is cached per range and time zone for one minute (24h), five minutes (7d, 30d) or fifteen minutes (90d, 12m); the catalog mix, pending work and latest uploads are always live.\n\n**Authentication:** moderator or admin.",
+      "Returns the activity metrics bucketed over the requested range and compared with the period before it, plus reading breakdowns, the catalog mix, pending moderation work and the latest uploads. The range-dependent figures can be up to one minute (`24h`), five minutes (`7d`, `30d`) or fifteen minutes (`90d`, `12m`) old; the catalog mix, pending work and latest uploads are always current.\n\n**Required roles:** moderator, admin.",
     tags: ["Dashboard"],
     responses: {
       200: {
@@ -219,6 +221,8 @@ export const getDashboardOverviewHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
+        401: true,
+        403: true,
         422: "The query parameters failed validation.",
       }),
     },

@@ -1,4 +1,4 @@
-import { LANGUAGES, sql } from "@taiyomoe/db"
+import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { group } from "radashi"
@@ -9,36 +9,59 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { selectVisibleChapters } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, contentRatingsQuerySchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  contentRatingsQuerySchema,
+  storedLanguageSchema,
+} from "../utils/schemas"
 
 const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
 const readerChapterSchema = z.object({
-  id: z.uuid().meta({ description: "The ID of the chapter." }),
+  id: z.uuid().meta({
+    description: "The ID of the chapter.",
+    example: "13548c83-8d1a-4163-8830-c8f16fcd2eb7",
+  }),
   number: z.number().meta({ description: "The chapter number.", example: 118 }),
-  volume: z.string().nullable().meta({ description: "The volume of the chapter, if any." }),
-  title: z.string().nullable().meta({ description: "The title of the chapter, if any." }),
-  language: z.enum(LANGUAGES).meta({ description: "The language of the chapter." }),
+  volume: z
+    .string()
+    .nullable()
+    .meta({ description: "The volume of the chapter, if any.", example: "12" }),
+  title: z.string().nullable().meta({
+    description: "The title of the chapter, if any.",
+    example: "The Boy with the Sharingan",
+  }),
+  language: storedLanguageSchema("The language of the chapter."),
   isExternal: z
     .boolean()
     .meta({ description: "Whether the chapter is only hosted on the group's site." }),
-  pageCount: z.int().meta({ description: "How many pages the chapter has on Taiyō." }),
+  pageCount: z
+    .int()
+    .meta({ description: "The number of pages the chapter has on Taiyō.", example: 19 }),
   groups: z
-    .object({ id: z.uuid(), name: z.string() })
+    .object({
+      id: z.uuid().meta({ description: "The ID of the group." }),
+      name: z.string().meta({ description: "The name of the group.", example: "Sunray Scans" }),
+    })
     .array()
-    .meta({ description: "The groups credited on the chapter." }),
+    .meta({ description: "The groups credited on the chapter, alphabetically by name." }),
 })
 const readerSchema = z.object({
   chapters: readerChapterSchema.array().meta({
     description:
-      "Every chapter of the media matching the content ratings, by number then upload date. Always includes the requested chapter.",
+      "Every published chapter of the media matching the content ratings, by number then release date. Always includes the requested chapter.",
   }),
   history: z
     .object({
-      pageId: z.uuid().nullable().meta({ description: "The page you last stopped on." }),
+      pageId: z
+        .uuid()
+        .nullable()
+        .meta({ description: "The ID of the page you last stopped on, if any." }),
       completed: z.boolean().meta({ description: "Whether you finished the chapter." }),
     })
     .nullable()
-    .meta({ description: "Your progress on the requested chapter, if you are signed in." }),
+    .meta({
+      description: "Your progress on the requested chapter, if you are signed in and opened it.",
+    }),
 })
 const readerColumns = [
   "chapters.id",
@@ -53,20 +76,20 @@ const readerColumns = [
 export const getChapterReaderHandler = new Hono().get(
   "/:id/reader",
   describeRoute({
-    summary: "Get what the reader needs around a chapter",
+    summary: "Get the reader data of a chapter",
     description:
-      "Lists the media's chapters in a compact shape, so the reader can find the previous and next chapters and other versions of this one, along with your progress on it.\n\n**Authentication:** none. Signed-in users also get their progress.",
+      "Returns every chapter of the chapter's media in a compact shape, so the reader can find the previous and next chapters and the other versions of this one. A chapter that is not published yet follows the same visibility rules as when getting the chapter. Signed-in viewers also get their progress on the chapter.\n\n**Authentication:** optional.",
     tags: ["Chapters"],
     responses: {
       200: {
-        description: "The chapter index and your progress.",
+        description: "The chapters of the media and your progress.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(readerSchema)) },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
-        422: "The provided id is not a valid UUID or the query parameters failed validation.",
+        404: "No chapter with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

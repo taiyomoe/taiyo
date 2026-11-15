@@ -21,13 +21,8 @@ export const createOwnershipRequestHandler = new Hono().post(
   describeRoute({
     summary: "Request ownership of a group",
     description:
-      "Files a claim on an unowned group, with a message and at least one public link proving the requester runs it. An admin will review and approve or reject.\n\n**Authentication:** any signed-in user.",
+      "Requests ownership of a group that has no owner, with a message and public links proving you run it. An admin reviews the request and approves or rejects it.\n\n**Authentication:** signed-in user.",
     tags: ["Group ownership"],
-    requestBody: {
-      content: {
-        "application/json": await resolver(createOwnershipRequestSchema).toOpenAPISchema(),
-      },
-    },
     responses: {
       201: {
         description: "Ownership request created.",
@@ -36,8 +31,11 @@ export const createOwnershipRequestHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid().meta({ description: "The ID of the new ownership request." }),
-                  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES),
+                  id: z.uuid().meta({ description: "The ID of the ownership request." }),
+                  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES).meta({
+                    description: "The status of the ownership request.",
+                    example: "PENDING",
+                  }),
                 }),
               ),
             ),
@@ -45,9 +43,11 @@ export const createOwnershipRequestHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        409: "The group is already owned, or you already have a pending request for this group.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No group with the given ID exists.",
+        409: "The group already has an owner, or you already have a pending ownership request for it.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

@@ -29,11 +29,8 @@ export const updateMediaHandler = new Hono().patch(
   describeRoute({
     summary: "Update a media",
     description:
-      "Updates a media's details, titles and staff credits. Omitted fields are kept as-is. `titles` and `staffs` replace the current lists. Send `null` explicitly to clear `startDate` or `endDate`.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Updates the details, titles and staff credits of a media. At least one field is required, and omitted fields are left unchanged. `titles` and `staffs` replace the current lists, and `null` clears `startDate` or `endDate`.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Medias"],
-    requestBody: {
-      content: { "application/json": await resolver(updateMediaSchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Media updated.",
@@ -50,9 +47,11 @@ export const updateMediaHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists, or one of the staff members does not exist.",
-        409: "One or more of the provided links already belong to another media.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists, or one of the staff members does not exist.",
+        409: "One of the links already belongs to another media.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

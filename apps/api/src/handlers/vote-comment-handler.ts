@@ -13,19 +13,12 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const voteResultSchema = z.object({
-  upvoteCount: z.int(),
-  viewerVoted: z.boolean(),
+  upvoteCount: z.int().meta({ description: "The number of upvotes on the comment.", example: 12 }),
+  viewerVoted: z.boolean().meta({ description: "Whether you upvoted the comment." }),
 })
-const responses = (summary: string) => ({
-  200: {
-    description: summary,
-    content: { "application/json": { schema: resolver(apiSuccessEnvelope(voteResultSchema)) } },
-  },
-  ...getOpenApiResponses({
-    404: "The comment doesn't exist or was removed.",
-    409: "You can't upvote your own comment.",
-    429: "Too many requests — slow down.",
-  }),
+const voteResponse = (description: string) => ({
+  description,
+  content: { "application/json": { schema: resolver(apiSuccessEnvelope(voteResultSchema)) } },
 })
 
 export const voteCommentHandler = new Hono()
@@ -34,9 +27,18 @@ export const voteCommentHandler = new Hono()
     describeRoute({
       summary: "Upvote a comment",
       description:
-        "Upvotes a comment. Upvoting twice is a no-op.\n\n**Authentication:** signed-in user.",
+        "Upvotes a comment. You cannot upvote your own comment, and upvoting a comment twice changes nothing.\n\n**Authentication:** signed-in user.",
       tags: ["Comments"],
-      responses: responses("Comment upvoted."),
+      responses: {
+        200: voteResponse("Comment upvoted."),
+        ...getOpenApiResponses({
+          401: true,
+          403: "Your account is banned, or you are trying to upvote your own comment.",
+          404: "No comment with the given ID exists, or it was removed.",
+          422: "The provided ID is not a valid UUID.",
+          429: "Too many requests, try again later.",
+        }),
+      },
     }),
     audited(commentAudit.VOTE),
     withAuth(),
@@ -83,11 +85,20 @@ export const voteCommentHandler = new Hono()
   .delete(
     "/:id/vote",
     describeRoute({
-      summary: "Remove an upvote",
+      summary: "Remove a comment upvote",
       description:
-        "Takes back your upvote on a comment. Removing a missing upvote is a no-op.\n\n**Authentication:** signed-in user.",
+        "Removes your upvote from a comment. Removing an upvote you did not give changes nothing.\n\n**Authentication:** signed-in user.",
       tags: ["Comments"],
-      responses: responses("Upvote removed."),
+      responses: {
+        200: voteResponse("Upvote removed."),
+        ...getOpenApiResponses({
+          401: true,
+          403: true,
+          404: "No comment with the given ID exists.",
+          422: "The provided ID is not a valid UUID.",
+          429: "Too many requests, try again later.",
+        }),
+      },
     }),
     audited(commentAudit.UNVOTE),
     withAuth(),

@@ -17,7 +17,10 @@ const reorderSchema = z.object({
     .array(z.uuid())
     .min(1)
     .max(config.images.maxChapterPages)
-    .meta({ description: "Every page ID of the chapter, in the new order." }),
+    .meta({
+      description: "The IDs of every page of the chapter, in the new order.",
+      example: ["9f1b2c3d-4e5f-4a7b-8c9d-0e1f2a3b4c5d", "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d"],
+    }),
 })
 
 export const reorderChapterPagesHandler = new Hono().patch(
@@ -25,24 +28,27 @@ export const reorderChapterPagesHandler = new Hono().patch(
   describeRoute({
     summary: "Reorder a chapter's pages",
     description:
-      "Sets the order of the chapter's pages. The list must contain every page of the chapter exactly once.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in a group credited on the chapter, or the uploader of a chapter waiting for review.",
+      "Reorders the pages of a chapter. The list must contain every page of the chapter exactly once.\n\n**Required access:** uploader or admin, a moderator or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.",
     tags: ["Chapters"],
-    requestBody: {
-      content: { "application/json": await resolver(reorderSchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Pages reordered.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the chapter." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists.",
         409: "The chapter has no processed pages yet.",
-        422: "The list does not match the chapter's pages.",
+        422: "The provided ID is not a valid UUID, the request body failed validation, or the page IDs do not list every page of the chapter exactly once.",
       }),
     },
   }),

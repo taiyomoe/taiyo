@@ -88,4 +88,33 @@ describe("GET /ownership-requests/mine", () => {
 
     expect(res.status).toBe(422)
   })
+
+  test("leaves out the requests on a deleted group", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+    const groupId = await seedGroup(services, userId)
+    const deletedGroupId = await seedGroup(services, userId)
+
+    await services.db
+      .insertInto("groupOwnershipRequests")
+      .values([
+        { userId, groupId, message: "kept" },
+        { userId, groupId: deletedGroupId, message: "on a deleted group" },
+      ])
+      .execute()
+    await services.db
+      .updateTable("groups")
+      .set({ deletedAt: new Date() })
+      .where("id", "=", deletedGroupId)
+      .execute()
+
+    const res = await api<Array<{ message: string | null }>>(app, "/ownership-requests/mine", {
+      headers,
+    })
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.map((request) => request.message)).toEqual(["kept"])
+  })
 })

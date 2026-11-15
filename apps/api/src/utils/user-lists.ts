@@ -10,32 +10,30 @@ import {
 import { group } from "radashi"
 import z from "zod"
 import { getMainCoverUrls } from "./latest-chapters"
-
-const listOwnerSchema = z.object({
-  id: z.uuid(),
-  username: z.string(),
-  displayUsername: z.string(),
-  image: z.string().nullable(),
-  nameEffect: z.string().nullable().meta({ description: "The owner's equipped name effect." }),
-  avatarBorder: z.string().nullable().meta({ description: "The owner's equipped avatar border." }),
-})
+import { userSummarySchema } from "./schemas"
 
 export const listSummarySchema = z.object({
-  id: z.uuid(),
-  name: z.string().meta({ description: "Name of the list.", example: "Best shounen" }),
-  description: z.string().nullable(),
-  visibility: z.enum(USER_LIST_VISIBILITIES),
-  itemCount: z.int().meta({ description: "How many titles the list holds." }),
-  upvoteCount: z.int(),
+  id: z.uuid().meta({ description: "The ID of the list." }),
+  name: z.string().meta({ description: "The name of the list.", example: "Best shounen" }),
+  description: z.string().nullable().meta({
+    description: "The description of the list, if any.",
+    example: "Fights, friendship and training arcs.",
+  }),
+  visibility: z.enum(USER_LIST_VISIBILITIES).meta({
+    description: "Who can see the list: everyone (`PUBLIC`) or only its owner (`PRIVATE`).",
+    example: "PUBLIC",
+  }),
+  itemCount: z.int().meta({ description: "The number of titles on the list.", example: 12 }),
+  upvoteCount: z.int().meta({ description: "The number of upvotes on the list.", example: 34 }),
   viewerVoted: z.boolean().meta({ description: "Whether you upvoted the list." }),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
-  owner: listOwnerSchema,
+  createdAt: z.iso.datetime().meta({ description: "When the list was created." }),
+  updatedAt: z.iso.datetime().meta({ description: "When the list was last updated." }),
+  owner: userSummarySchema.meta({ description: "The owner of the list." }),
   coverUrls: z
     .url()
     .array()
     .meta({
-      description: `Main covers of the first titles (up to ${config.lists.previewCovers}) that match the requested content ratings.`,
+      description: `The URLs of the main covers of the first titles on the list (up to ${config.lists.previewCovers}) that match the requested content ratings.`,
     }),
 })
 
@@ -224,5 +222,5 @@ export const listMediaIdsSchema = z
   .max(config.lists.maxItems)
   .refine((ids) => new Set(ids).size === ids.length, { message: "Titles must be unique." })
   .meta({
-    description: `Ordered IDs of the titles on the list, at most ${config.lists.maxItems}.`,
+    description: `The IDs of the medias on the list, in order, without duplicates and at most ${config.lists.maxItems}.`,
   })

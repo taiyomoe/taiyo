@@ -28,25 +28,26 @@ export const createMediaSuggestionHandler = new Hono().post(
     summary: "Suggest an edit to a media",
     description: `Sends changes to a media's details, titles, tags, links or staff credits for review. Only the fields that differ from the media are kept. A user can have one pending suggestion per media, and at most ${config.input.maxPendingSuggestions} pending suggestions in total.\n\n**Authentication:** signed-in user.`,
     tags: ["Media suggestions"],
-    requestBody: {
-      content: {
-        "application/json": await resolver(mediaSuggestionBodySchema).toOpenAPISchema(),
-      },
-    },
     responses: {
       201: {
         description: "Suggestion sent.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the new suggestion." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists, or one of the staff members does not exist.",
-        409: "The user already has a pending suggestion for this media or too many pending suggestions, or a link already belongs to another media.",
-        422: "The request data failed validation, or the suggestion changes nothing.",
-        429: "Too many suggestions were sent recently.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists, or one of the staff members does not exist.",
+        409: "You already have a pending suggestion for this media, or you have too many pending suggestions, or one of the links already belongs to another media.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation, or the suggestion does not change anything.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

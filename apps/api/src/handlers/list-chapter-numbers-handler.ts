@@ -15,20 +15,27 @@ export const listChapterNumbersHandler = new Hono().get(
   describeRoute({
     summary: "List a media's chapter numbers",
     description:
-      "Lists the numbers of a media's published chapters in one language, sorted, so uploaders can spot chapters that are already on Taiyō.\n\n**Authentication:** none.",
+      "Lists the numbers of a media's published chapters in one language, lowest first, so uploaders can spot the chapters already on Taiyō.\n\n**Authentication:** none.",
     tags: ["Chapters"],
     responses: {
       200: {
         description: "The chapter numbers.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.number().array())),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z
+                  .number()
+                  .array()
+                  .meta({ description: "The chapter numbers.", example: [1, 2, 2.5, 3] }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        422: "The query parameters failed validation.",
+        404: "No media with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

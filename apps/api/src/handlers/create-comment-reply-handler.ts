@@ -27,20 +27,19 @@ export const createCommentReplyHandler = new Hono().post(
   describeRoute({
     summary: "Reply to a comment",
     description:
-      "Replies to a comment. Replying to a reply files the answer under the same top-level comment and records who it answers.\n\n**Authentication:** signed-in user.",
+      "Replies to a comment. Replying to a reply files the answer under the same top-level comment and records which reply it answers. The author of the comment is notified, unless it is you or they turned reply notifications off.\n\n**Authentication:** signed-in user.",
     tags: ["Comments"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Reply posted.",
+        description: "Reply created.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(commentSchema)) } },
       },
       ...getOpenApiResponses({
-        404: "The comment doesn't exist or was removed.",
-        422: "The reply is empty, too long, has too many images, or uses an image you can't use.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        404: "No comment with the given ID exists, or it was removed.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation, or the reply is empty, too long, has too many images, or uses an image you cannot use.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

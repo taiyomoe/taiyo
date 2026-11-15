@@ -11,8 +11,11 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const versionSchema = z.object({
-  content: z.string(),
-  writtenAt: z.iso.datetime(),
+  content: z.string().meta({
+    description: "The rich text of the version.",
+    example: "That last panel was incredible.",
+  }),
+  writtenAt: z.iso.datetime().meta({ description: "When the version was written." }),
 })
 
 export const listCommentRevisionsHandler = new Hono().get(
@@ -20,32 +23,53 @@ export const listCommentRevisionsHandler = new Hono().get(
   describeRoute({
     summary: "List a comment's revisions",
     description:
-      "Returns a comment's current text, even once removed, and every earlier version, newest first.\n\n**Required roles:** moderator, admin.",
+      "Lists the earlier versions of a comment, newest first, along with its current text, kept even once the comment is removed.\n\n**Required roles:** moderator, admin.",
     tags: ["Comments"],
     responses: {
       200: {
-        description: "The comment's versions.",
+        description: "The versions of the comment.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  current: versionSchema.extend({
-                    deletedAt: z.iso.datetime().nullable(),
-                    deletion: z.enum(COMMENT_DELETIONS).nullable(),
-                  }),
-                  revisions: versionSchema.array(),
-                  images: z
-                    .object({ id: z.uuid(), url: z.url().nullable() })
+                  current: versionSchema
+                    .extend({
+                      deletedAt: z.iso
+                        .datetime()
+                        .nullable()
+                        .meta({ description: "When the comment was deleted, if it was." }),
+                      deletion: z.enum(COMMENT_DELETIONS).nullable().meta({
+                        description:
+                          "Who deleted the comment, if anyone: its author (`AUTHOR`), the owner of the profile it is on (`PAGE_OWNER`), or a moderator (`MODERATOR`).",
+                        example: "MODERATOR",
+                      }),
+                    })
+                    .meta({ description: "The current version of the comment." }),
+                  revisions: versionSchema
                     .array()
-                    .meta({ description: "The images the current version shows." }),
+                    .meta({ description: "The earlier versions of the comment, newest first." }),
+                  images: z
+                    .object({
+                      id: z.uuid().meta({ description: "The ID of the image." }),
+                      url: z.url().nullable().meta({
+                        description: "The URL of the image, or `null` once a moderator removed it.",
+                      }),
+                    })
+                    .array()
+                    .meta({ description: "The images in the current version." }),
                 }),
               ),
             ),
           },
         },
       },
-      ...getOpenApiResponses({ 404: "No such comment exists." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        404: "No comment with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
+      }),
     },
   }),
   audited(commentAudit.REVISIONS_LIST),

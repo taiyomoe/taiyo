@@ -8,9 +8,9 @@ import { apiSuccessEnvelope, contentRatingSchema } from "../utils/schemas"
 
 const bannerDetailSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the banner." }),
-  mediaId: z.uuid().meta({ description: "The ID of the media this banner belongs to." }),
+  mediaId: z.uuid().meta({ description: "The ID of the media the banner belongs to." }),
   url: z.url().meta({
-    description: "URL of the banner image.",
+    description: "The URL of the banner image.",
     example:
       "https://cdn.taiyo.moe/medias/4e26b80f-6661-4f5f-93b4-6dfed052bbed/banners/8f2c1d7e-5a3b-4c9d-b1e0-6a7f8d9c0b1a.jpg",
   }),
@@ -23,18 +23,18 @@ export const getBannerHandler = new Hono().get(
   "/:id",
   describeRoute({
     summary: "Get a banner",
-    description: "Fetches a banner by id.\n\n**Authentication:** none.",
+    description: "Returns a banner by ID.\n\n**Authentication:** none.",
     tags: ["Banners"],
     responses: {
       200: {
-        description: "Banner details.",
+        description: "The banner.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(bannerDetailSchema)) },
         },
       },
       ...getOpenApiResponses({
-        404: "No banner with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        404: "No banner with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

@@ -27,33 +27,39 @@ const createInvitationSchema = z.object({
     .trim()
     .min(config.auth.username.minLength)
     .max(config.auth.username.maxLength)
-    .meta({ description: "Username of the person to invite.", example: "kaito" }),
-  permissions: groupPermissionsSchema.default([]),
+    .meta({ description: "The username of the user to invite.", example: "kaito" }),
+  permissions: groupPermissionsSchema.default([]).meta({
+    description: "The group permissions the user gets on joining. Defaults to none.",
+    example: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
+  }),
 })
 
 export const createGroupInvitationHandler = new Hono().post(
   "/:id/invitations",
   describeRoute({
-    summary: "Invite someone to a group",
-    description: `Invites a user to the group by username with a set of group permissions. The invitee accepts or declines from their dashboard, and gets an email if they have a verified address. Invitations expire after ${INVITATION_LIFETIME_DAYS} days. Members with \`MANAGE_MEMBERS\` can only grant permissions they hold, never \`MANAGE_MEMBERS\`.\n\n**Authentication:** group owner, member with \`MANAGE_MEMBERS\`, admin.`,
+    summary: "Invite a user to a group",
+    description: `Invites a user to the group by username, with the group permissions they get on joining. The user answers from their dashboard, gets an email if their address is verified, and has ${INVITATION_LIFETIME_DAYS} days to answer. A member with the \`MANAGE_MEMBERS\` permission can only grant permissions they hold, and never \`MANAGE_MEMBERS\`.\n\n**Required access:** the group owner, a member with the \`MANAGE_MEMBERS\` permission, or admin.`,
     tags: ["Group members"],
-    requestBody: {
-      content: { "application/json": await resolver(createInvitationSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Invitation sent.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the invitation." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists, or no user has this username.",
-        409: "The user is already a member or already has a pending invitation.",
-        422: "The request data failed validation.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: "You cannot invite members to the group or grant these permissions, or your account is banned.",
+        404: "No group with the given ID exists, or no user has this username.",
+        409: "The user is already a member of the group, or already has a pending invitation to it.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

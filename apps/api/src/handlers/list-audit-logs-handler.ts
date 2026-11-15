@@ -22,10 +22,10 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const listAuditLogsQuerySchema = paginationQuerySchema.extend(auditLogFilterSchema.shape).extend({
-  sort: z
-    .enum(["desc", "asc"])
-    .default("desc")
-    .meta({ description: "`desc` for newest first (default), `asc` for oldest first." }),
+  sort: z.enum(["desc", "asc"]).default("desc").meta({
+    description: "`desc` for newest first, `asc` for oldest first. Defaults to `desc`.",
+    example: "desc",
+  }),
 })
 
 export const listAuditLogsHandler = new Hono().get(
@@ -33,18 +33,22 @@ export const listAuditLogsHandler = new Hono().get(
   describeRoute({
     summary: "List audit logs",
     description:
-      "Lists every recorded action, newest first. `q` takes a KQL query; the other filters combine with it using AND. Listing the audit log is itself recorded.\n\n**Required roles:** admin.",
+      "Lists the recorded actions, newest first by default. `q` takes a KQL query, and the other filters combine with it using AND. Listing the audit log is itself recorded in it.\n\n**Required roles:** admin.",
     tags: ["Audit logs"],
     responses: {
       200: {
-        description: "Matching audit log entries.",
+        description: "The matching audit log entries.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(auditLogSchema.array(), paginationMetaSchema)),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters, or the KQL query, failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation, or the KQL query is invalid.",
+      }),
     },
   }),
   audited(auditLogAudit.LIST),

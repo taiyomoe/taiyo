@@ -23,12 +23,21 @@ export const countCommentsHandler = new Hono().get(
         description: "The comment count.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ total: z.int() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  total: z.int().meta({
+                    description: "The number of visible comments, replies included.",
+                    example: 42,
+                  }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "The media, chapter, group or user doesn't exist.",
+        404: "The media, chapter, group or user does not exist.",
         422: "The query parameters failed validation.",
       }),
     },

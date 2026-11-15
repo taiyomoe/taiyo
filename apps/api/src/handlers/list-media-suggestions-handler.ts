@@ -16,13 +16,13 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const listMediaSuggestionsHandler = new Hono().get(
   "/",
   describeRoute({
-    summary: "List media suggestions waiting for review",
+    summary: "List pending media suggestions",
     description:
-      "Lists pending media suggestions, oldest first, with the fields each one changes and the ones that changed on the media since.\n\n**Required roles:** uploader, moderator, admin.",
+      "Lists the media suggestions waiting for review, oldest first, with the fields each one changes and the ones that changed on the media since. Suggestions on deleted media are left out.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Media suggestions"],
     responses: {
       200: {
-        description: "Suggestions waiting for review.",
+        description: "The pending media suggestions.",
         content: {
           "application/json": {
             schema: resolver(
@@ -31,7 +31,11 @@ export const listMediaSuggestionsHandler = new Hono().get(
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth("mediaSuggestion.review"),

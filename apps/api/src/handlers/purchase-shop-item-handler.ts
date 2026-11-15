@@ -13,13 +13,21 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 import { cosmeticRefSchema, grantCosmetic, isImpersonating, spendPoints } from "../utils/shop"
 
 const bodySchema = z.object({
-  kind: z.enum(COSMETIC_KINDS).meta({ description: "The kind of cosmetic to buy." }),
-  key: z.string().min(1).max(64).meta({ description: "The cosmetic's key.", example: "solar" }),
+  kind: z
+    .enum(COSMETIC_KINDS)
+    .meta({ description: "The kind of cosmetic to buy.", example: "NAME_EFFECT" }),
+  key: z
+    .string()
+    .min(1)
+    .max(64)
+    .meta({ description: "The key of the cosmetic to buy.", example: "sakura" }),
 })
 const purchaseSchema = z.object({
-  item: cosmeticRefSchema,
-  price: z.number().int(),
-  balance: z.number().int().meta({ description: "Your points after the purchase." }),
+  item: cosmeticRefSchema.meta({ description: "The cosmetic bought." }),
+  price: z.int().meta({ description: "The points the cosmetic cost.", example: 300 }),
+  balance: z
+    .int()
+    .meta({ description: "The number of points you have after the purchase.", example: 950 }),
 })
 
 export const purchaseShopItemHandler = new Hono().post(
@@ -27,22 +35,20 @@ export const purchaseShopItemHandler = new Hono().post(
   describeRoute({
     summary: "Buy a cosmetic",
     description:
-      "Buys a cosmetic sold in the shop with your points. Cosmetics that unlock through a role, an achievement or a loot box can't be bought.\n\n**Authentication:** signed-in user, not while impersonating.",
+      "Buys a cosmetic sold in the shop with your points. Cosmetics that unlock through a role, an achievement or a loot box cannot be bought. You cannot buy while impersonating a user.\n\n**Authentication:** signed-in user.",
     tags: ["Shop"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Cosmetic bought.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(purchaseSchema)) } },
       },
       ...getOpenApiResponses({
-        403: "You are impersonating this user.",
-        404: "No cosmetic with this kind and key exists.",
-        409: "The cosmetic isn't for sale, you already own it, or you don't have enough points.",
-        422: "The request data failed validation.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: "You do not have permission to perform this action, or you are impersonating a user.",
+        404: "No cosmetic with the given kind and key exists.",
+        409: "The cosmetic is not for sale, or you already own it, or you do not have enough points.",
+        422: "The request body failed validation.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),
@@ -63,7 +69,7 @@ export const purchaseShopItemHandler = new Hono().post(
     }
 
     if (definition === undefined) {
-      return c.fail("NOT_FOUND")
+      return c.fail("COSMETIC_NOT_FOUND")
     }
 
     if (definition.unlock.type !== "shop") {

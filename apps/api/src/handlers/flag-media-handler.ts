@@ -14,11 +14,11 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 
 const flagMediaSchema = z.object({
   flag: z.enum(FLAGS).meta({
-    description: "The new moderation flag to apply.",
+    description: "The moderation flag to set on the media.",
     example: "STAFF_ONLY",
   }),
   reason: z.string().min(1).max(500).meta({
-    description: "A short explanation for the change.",
+    description: "Why the flag changes.",
     example: "Locked while we wait for a takedown response.",
   }),
 })
@@ -28,21 +28,21 @@ export const flagMediaHandler = new Hono().post(
   describeRoute({
     summary: "Set a media's moderation flag",
     description:
-      "Sets the moderation flag on a media. A reason must accompany the new flag.\n\n**Required roles:** moderator, admin.",
+      "Sets the moderation flag of a media, with the reason for the change.\n\n**Required roles:** moderator, admin.",
     tags: ["Medias"],
-    requestBody: {
-      content: { "application/json": await resolver(flagMediaSchema).toOpenAPISchema() },
-    },
     responses: {
-      200: {
-        description: "Flag updated.",
+      201: {
+        description: "Flag set.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
                   id: z.uuid().meta({ description: "The ID of the media." }),
-                  flag: z.enum(FLAGS).meta({ description: "The newly applied flag." }),
+                  flag: z.enum(FLAGS).meta({
+                    description: "The new moderation flag of the media.",
+                    example: "STAFF_ONLY",
+                  }),
                 }),
               ),
             ),
@@ -50,8 +50,10 @@ export const flagMediaHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

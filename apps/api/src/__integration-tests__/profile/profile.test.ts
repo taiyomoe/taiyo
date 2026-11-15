@@ -60,6 +60,20 @@ describe("PATCH /users/me/profile", () => {
     expect(row).toEqual({ about: { en: "Hello" }, city: "Lisbon", country: "pt", gender: "FEMALE" })
   })
 
+  test("returns the profile when the body changes nothing", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+    const first = await api(app, "/users/me/profile", { method: "PATCH", headers, json: {} })
+
+    expect(first.status).toBe(200)
+
+    await api(app, "/users/me/profile", { method: "PATCH", headers, json: { city: "Lisbon" } })
+
+    const res = await api(app, "/users/me/profile", { method: "PATCH", headers, json: {} })
+
+    expect(res.status).toBe(200)
+    expect(res.body).toMatchObject({ success: true, data: { city: "Lisbon" } })
+  })
+
   test("rejects a birth date under the minimum age", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const res = await api(app, "/users/me/profile", {

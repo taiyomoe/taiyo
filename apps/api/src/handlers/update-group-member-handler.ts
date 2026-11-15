@@ -15,13 +15,16 @@ import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid(), userId: z.uuid() })
+const paramSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the group." }),
+  userId: z.uuid().meta({ description: "The ID of the member." }),
+})
 const updateMemberSchema = z.object({
   permissions: z
     .array(z.enum(GROUP_PERMISSIONS))
     .max(GROUP_PERMISSIONS.length)
     .meta({
-      description: "The member's full set of group permissions. Replaces the current set.",
+      description: "The full set of group permissions of the member, replacing the current one.",
       example: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
     }),
 })
@@ -31,22 +34,22 @@ export const updateGroupMemberHandler = new Hono().patch(
   describeRoute({
     summary: "Update a member's permissions",
     description:
-      "Replaces the group permissions of a member. Owners can set any permission on members. Members with `MANAGE_MEMBERS` can only grant or revoke permissions they hold themselves, never `MANAGE_MEMBERS`, and cannot edit themselves, other managers, or members holding permissions they lack. Owners' permissions can only be changed by admins.\n\n**Authentication:** group owner, member with `MANAGE_MEMBERS`, admin.",
+      "Updates the group permissions of a member, replacing them all. The group owner can set any permissions on a member who is not an owner; a member with the `MANAGE_MEMBERS` permission can only grant or revoke permissions they hold, never `MANAGE_MEMBERS`, and cannot edit themselves, other managers or members holding permissions they lack. Only an admin can change an owner's permissions.\n\n**Required access:** the group owner, a member with the `MANAGE_MEMBERS` permission, or admin.",
     tags: ["Group members"],
-    requestBody: {
-      content: { "application/json": await resolver(updateMemberSchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "Permissions updated.",
+        description: "Member permissions updated.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  groupId: z.uuid(),
-                  userId: z.uuid(),
-                  permissions: z.array(z.enum(GROUP_PERMISSIONS)),
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                  userId: z.uuid().meta({ description: "The ID of the member." }),
+                  permissions: z.array(z.enum(GROUP_PERMISSIONS)).meta({
+                    description: "The new group permissions of the member.",
+                    example: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
+                  }),
                 }),
               ),
             ),
@@ -54,8 +57,10 @@ export const updateGroupMemberHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists, or the user has no membership on the group.",
-        422: "The request data failed validation.",
+        401: true,
+        403: "You cannot change this member's permissions, or your account is banned.",
+        404: "No group with the given ID exists, or the user is not a member of the group.",
+        422: "One of the provided IDs is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

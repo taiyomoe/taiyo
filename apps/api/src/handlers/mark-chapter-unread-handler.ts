@@ -14,20 +14,26 @@ export const markChapterUnreadHandler = new Hono().delete(
   describeRoute({
     summary: "Mark a chapter as unread",
     description:
-      "Removes every version of this chapter number from your history, so the number shows as unread again. Points already earned for it are kept and are not earned a second time.\n\n**Authentication:** signed-in user.",
+      "Marks a published chapter as unread by removing every version of its number from your history, in any language. Points already earned for it are kept and cannot be earned a second time.\n\n**Authentication:** signed-in user.",
     tags: ["Reading history"],
     responses: {
       200: {
         description: "Chapter marked as unread.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ chapterId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ chapterId: z.uuid().meta({ description: "The ID of the chapter." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

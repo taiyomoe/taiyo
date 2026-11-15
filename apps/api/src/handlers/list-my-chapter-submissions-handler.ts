@@ -17,7 +17,7 @@ const querySchema = paginationQuerySchema.extend({
   status: z
     .enum(CHAPTER_STATUSES)
     .optional()
-    .meta({ description: "Only list submissions with this status." }),
+    .meta({ description: "Only list submissions with this status.", example: "PENDING" }),
 })
 
 export const listMyChapterSubmissionsHandler = new Hono().get(
@@ -25,11 +25,11 @@ export const listMyChapterSubmissionsHandler = new Hono().get(
   describeRoute({
     summary: "List my chapter submissions",
     description:
-      "Lists the chapters the current user submitted for review: the ones still waiting, the rejected ones with their reason, and the ones that were approved. Newest first.\n\n**Authentication:** signed-in user.",
+      "Lists the chapters you submitted for review, newest first: the ones still waiting, the rejected ones with their reason, and the approved ones.\n\n**Authentication:** signed-in user.",
     tags: ["Chapter review"],
     responses: {
       200: {
-        description: "The current user's submissions.",
+        description: "Your chapter submissions.",
         content: {
           "application/json": {
             schema: resolver(
@@ -38,7 +38,11 @@ export const listMyChapterSubmissionsHandler = new Hono().get(
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth(),

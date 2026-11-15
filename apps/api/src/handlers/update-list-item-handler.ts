@@ -13,37 +13,49 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 import { touchList } from "../utils/user-lists"
 
-const paramSchema = z.object({ id: z.uuid(), mediaId: z.uuid() })
+const paramSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the list." }),
+  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+})
 const bodySchema = z.object({
-  position: z.int().nonnegative().meta({ description: "New position." }),
+  position: z
+    .int()
+    .nonnegative()
+    .meta({ description: "The new position of the media on the list.", example: 2 }),
 })
 
 export const updateListItemHandler = new Hono().patch(
   "/:id/items/:mediaId",
   describeRoute({
-    summary: "Reposition a media on a list",
+    summary: "Move a media on a list",
     description:
-      "Updates the position of a media on a list. Other items are not renumbered automatically; clients can produce gap-free ordering on the client side if they care.\n\n**Authentication:** list owner.",
+      "Moves a media to a new position on one of your lists. The other titles keep their positions: they are not renumbered.\n\n**Required access:** the owner of the list.",
     tags: ["Custom lists"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "Item repositioned.",
+        description: "Media moved.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
-                z.object({ listId: z.uuid(), mediaId: z.uuid(), position: z.int() }),
+                z.object({
+                  listId: z.uuid().meta({ description: "The ID of the list." }),
+                  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+                  position: z.int().meta({
+                    description: "The new position of the media on the list.",
+                    example: 2,
+                  }),
+                }),
               ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No list with the given id exists, or no such item on the list.",
-        422: "The request data failed validation.",
+        401: true,
+        403: "You are not the owner of the list, or you do not have permission to perform this action.",
+        404: "No list with the given ID exists, or the media is not on the list.",
+        422: "One of the provided IDs is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

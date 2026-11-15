@@ -1,4 +1,4 @@
-import { LANGUAGES, sql } from "@taiyomoe/db"
+import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -8,26 +8,45 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { selectVisibleChapters } from "../utils/latest-chapters"
 import { isOpenedHistory, selectReadChapterNumber } from "../utils/media-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, contentRatingsQuerySchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  contentRatingsQuerySchema,
+  storedLanguageSchema,
+} from "../utils/schemas"
 
-const paramSchema = z.object({ mediaId: z.uuid() })
+const paramSchema = z.object({
+  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+})
 const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
 const chapterRefSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the chapter." }),
   number: z.number().meta({ description: "The chapter number.", example: 118 }),
-  volume: z.string().nullable().meta({ description: "The volume of the chapter, if any." }),
-  title: z.string().nullable().meta({ description: "The title of the chapter, if any." }),
-  language: z.enum(LANGUAGES).meta({ description: "The language of the chapter." }),
+  volume: z
+    .string()
+    .nullable()
+    .meta({ description: "The volume of the chapter, if any.", example: "12" }),
+  title: z
+    .string()
+    .nullable()
+    .meta({ description: "The title of the chapter, if any.", example: "The Black Swordsman" }),
+  language: storedLanguageSchema("The language of the chapter."),
 })
 const progressSchema = z.object({
-  readCount: z.int().meta({ description: "How many distinct chapter numbers you have read." }),
-  totalCount: z.int().meta({ description: "How many distinct chapter numbers the media has." }),
+  readCount: z.int().meta({
+    description: "The number of distinct chapter numbers you have read.",
+    example: 87,
+  }),
+  totalCount: z.int().meta({
+    description: "The number of distinct chapter numbers the media has.",
+    example: 120,
+  }),
   lastRead: chapterRefSchema
     .extend({
-      readAt: z.iso.datetime().meta({ description: "When you last opened it." }),
-      completed: z.boolean().meta({ description: "Whether you finished it." }),
+      readAt: z.iso.datetime().meta({ description: "When you last opened the chapter." }),
+      completed: z.boolean().meta({ description: "Whether you finished the chapter." }),
       page: z.int().nullable().meta({
-        description: "The 1-based page you were last on, or null when none was recorded.",
+        description: "The page you were last on, counted from 1, if any.",
+        example: 14,
       }),
     })
     .nullable()
@@ -43,7 +62,7 @@ export const getReadingProgressHandler = new Hono().get(
   describeRoute({
     summary: "Get my reading progress on a media",
     description:
-      "Summarises what you have read of a media and which chapter to continue with, counting only chapters that match the content ratings. A chapter number counts as read once you opened it in any language.\n\n**Authentication:** signed-in user.",
+      "Returns what you have read of a media and which chapter to continue with, counting only chapters that match the content ratings. A chapter number counts as read once you opened it in any language.\n\n**Authentication:** signed-in user.",
     tags: ["Reading history"],
     responses: {
       200: {
@@ -53,7 +72,9 @@ export const getReadingProgressHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        422: "The provided id is not a valid UUID or the query parameters failed validation.",
+        401: true,
+        403: true,
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

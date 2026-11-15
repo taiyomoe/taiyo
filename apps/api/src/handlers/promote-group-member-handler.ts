@@ -12,27 +12,39 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid(), userId: z.uuid() })
+const paramSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the group." }),
+  userId: z.uuid().meta({ description: "The ID of the member to promote." }),
+})
 
 export const promoteGroupMemberHandler = new Hono().post(
   "/:id/members/:userId/promote",
   describeRoute({
-    summary: "Promote a member to OWNER",
+    summary: "Promote a member to owner",
     description:
-      "Changes a member's role from MEMBER to OWNER. The member keeps their stored permissions, which apply again if they are demoted later.\n\n**Authentication:** group owner, admin.",
+      "Promotes a member of the group to owner. Their stored permissions are kept and apply again if they are demoted later. Promoting an owner changes nothing.\n\n**Required access:** the group owner, or admin.",
     tags: ["Group members"],
     responses: {
       201: {
         description: "Member promoted.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ groupId: z.uuid(), userId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                  userId: z.uuid().meta({ description: "The ID of the promoted user." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists, or the user has no membership on the group.",
-        422: "The provided path parameters failed validation.",
+        401: true,
+        403: "You are not an owner of the group, or your account is banned.",
+        404: "No group with the given ID exists, or the user is not a member of the group.",
+        422: "One of the provided IDs is not a valid UUID.",
       }),
     },
   }),

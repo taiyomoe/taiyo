@@ -11,40 +11,47 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { pushEndpointSchema } from "../utils/push-subscriptions"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
+const TESTS_PER_MINUTE = 5
 const bodySchema = z.object({ endpoint: pushEndpointSchema })
 
 export const testPushSubscriptionHandler = new Hono().post(
   "/me/push-subscriptions/test",
   describeRoute({
-    summary: "Send a test push to this device",
-    description:
-      "Sends a test notification to one of your subscribed devices, so you can check that pushes reach it.\n\n**Authentication:** signed-in user.",
+    summary: "Send a test push to my device",
+    description: `Sends a test push notification to one of your subscribed devices, so you can check that pushes reach it. You can send at most ${TESTS_PER_MINUTE} tests per minute.\n\n**Authentication:** signed-in user.`,
     tags: ["Notifications"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "The push service accepted the notification.",
+        description: "Test push sent.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ endpoint: z.string() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  endpoint: z
+                    .string()
+                    .meta({ description: "The push service URL of the device that got the test." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "This device is not subscribed.",
-        410: "The push service dropped this device's subscription; it was forgotten.",
-        422: "The endpoint failed validation.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        404: "None of your devices is subscribed with the given endpoint.",
+        410: "The push service no longer accepts the subscription of this device, so it was removed. Subscribe again.",
+        422: "The request body failed validation.",
+        429: "Too many requests, try again later.",
         502: "The push service did not accept the notification.",
-        503: "The server does not send pushes.",
+        503: "Push notifications are not configured on this server.",
       }),
     },
   }),
   audited(notificationAudit.PUSH_TEST, () => ({})),
   withAuth(),
-  rateLimit({ prefix: "test-push", windowMs: 60_000, limit: 5 }),
+  rateLimit({ prefix: "test-push", windowMs: 60_000, limit: TESTS_PER_MINUTE }),
   validateJson(bodySchema),
   async (c) => {
     const { db, user, pushSender } = c.var

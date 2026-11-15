@@ -13,18 +13,27 @@ export const deleteMyBannerHandler = new Hono().delete(
   "/me/banner",
   describeRoute({
     summary: "Remove my profile banner",
-    description: "Removes your profile banner.\n\n**Authentication:** signed-in user.",
+    description:
+      "Removes your profile banner. Removing a banner you do not have does nothing.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
     responses: {
       200: {
         description: "Banner removed.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ bannerUrl: z.null() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  bannerUrl: z
+                    .null()
+                    .meta({ description: "The URL of your profile banner, now null." }),
+                }),
+              ),
+            ),
           },
         },
       },
-      ...getOpenApiResponses({}),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   audited(userAudit.BANNER_REMOVE, (c) => ({ id: c.var.user?.id })),

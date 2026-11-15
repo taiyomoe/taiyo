@@ -59,6 +59,39 @@ describe("roles", () => {
     expect((await userRow(services, target.userId)).role).toBe("UPLOADER")
     expect(after.status).not.toBe(403)
   })
+
+  test("are refused to a non-admin before the user is looked up", async ({ app, services }) => {
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const missing = await api(app, `/users/${crypto.randomUUID()}/role`, {
+      method: "PATCH",
+      headers: moderator.headers,
+      json: { role: "UPLOADER" },
+    })
+    const invalid = await api(app, "/users/not-a-uuid/role", {
+      method: "PATCH",
+      headers: moderator.headers,
+      json: {},
+    })
+
+    expect(missing.status).toBe(403)
+    expect(invalid.status).toBe(403)
+  })
+})
+
+describe("ban rights", () => {
+  test("are checked before the user is looked up", async ({ app, services }) => {
+    const user = await signInAs(services)
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const missingId = crypto.randomUUID()
+    const unban = (userId: string, headers: Record<string, string>) =>
+      api(app, `/users/${userId}/unban`, { method: "POST", headers })
+
+    expect((await ban(app, missingId, user.headers)).status).toBe(403)
+    expect((await unban(missingId, user.headers)).status).toBe(403)
+    expect((await ban(app, "not-a-uuid", user.headers, {})).status).toBe(403)
+    expect((await ban(app, missingId, moderator.headers)).status).toBe(404)
+    expect((await unban(missingId, moderator.headers)).status).toBe(404)
+  })
 })
 
 describe("role cosmetics", () => {
@@ -274,13 +307,26 @@ describe("GET /users/me/overview", () => {
       pages: [{ id: "00000000-0000-4000-8000-000000000002" }],
     })
     await seedChapter(services, { mediaId, uploaderId: user.userId, number: 2, status: "REJECTED" })
+    const scheduledId = await seedChapter(services, {
+      mediaId,
+      uploaderId: user.userId,
+      number: 3,
+      status: "SCHEDULED",
+      publishInHours: 24,
+    })
+
+    await services.db
+      .updateTable("chapters")
+      .set({ reviewerId: reviewer.userId })
+      .where("id", "=", scheduledId)
+      .execute()
 
     const mine = await api(app, "/users/me/overview", { headers: user.headers })
     const theirs = await api(app, "/users/me/overview", { headers: reviewer.headers })
 
     expect(mine.body).toMatchObject({
       data: {
-        chapters: { pending: 1, accepted: 0, rejected: 1 },
+        chapters: { pending: 1, accepted: 1, rejected: 1 },
         queues: { chapters: null, suggestions: null, groupRequests: null },
       },
     })

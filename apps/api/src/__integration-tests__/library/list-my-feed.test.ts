@@ -15,6 +15,7 @@ type FeedRow = {
   createdAt: string
   mediaId: string
   mediaTitle: string | null
+  isExternal: boolean
 }
 
 describe("GET /users/me/feed", () => {
@@ -46,6 +47,8 @@ describe("GET /users/me/feed", () => {
 
     for (const row of res.body.data) {
       expect(row.mediaTitle).toEqual(expect.any(String))
+      expect(typeof row.isExternal).toBe("boolean")
+      expect(row).toHaveProperty("externalUrl")
       expect(row).not.toHaveProperty("pages")
     }
   })

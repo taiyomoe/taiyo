@@ -11,10 +11,11 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid() })
+const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the report." }) })
 const bodySchema = z.object({
   status: z.enum(["RESOLVED", "DISMISSED"]).meta({
-    description: "RESOLVED once acted on, DISMISSED when the comment is fine.",
+    description:
+      "How to close the report: `RESOLVED` once you acted on it, `DISMISSED` when the comment is fine.",
     example: "DISMISSED",
   }),
 })
@@ -24,11 +25,8 @@ export const closeCommentReportHandler = new Hono().patch(
   describeRoute({
     summary: "Close a comment report",
     description:
-      "Marks a report as resolved or dismissed, along with every other open report on the same comment. Deleting the comment as a moderator resolves its reports on its own.\n\n**Required roles:** moderator, admin.",
+      "Closes a report as resolved or dismissed, along with every other open report on the same comment. Deleting the comment as a moderator already resolves its reports.\n\n**Required roles:** moderator, admin.",
     tags: ["Comment reports"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Reports closed.",
@@ -37,7 +35,9 @@ export const closeCommentReportHandler = new Hono().patch(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  closed: z.int().meta({ description: "How many open reports were closed." }),
+                  closed: z
+                    .int()
+                    .meta({ description: "The number of reports closed.", example: 2 }),
                 }),
               ),
             ),
@@ -45,9 +45,11 @@ export const closeCommentReportHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No comment report with the given id exists.",
+        401: true,
+        403: true,
+        404: "No comment report with the given ID exists.",
         409: "The report is already closed.",
-        422: "The request data failed validation.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

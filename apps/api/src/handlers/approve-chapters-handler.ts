@@ -1,4 +1,5 @@
 import { chapterReviewAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -22,26 +23,34 @@ export const approveChaptersHandler = new Hono().post(
   "/approve",
   describeRoute({
     summary: "Approve submitted chapters in bulk",
-    description:
-      "Publishes several chapters waiting for review at once, as they are. Chapters that are not waiting for review or have no processed pages yet are skipped and reported.\n\n**Required roles:** uploader, admin.",
+    description: `Approves up to ${config.input.maxReviewBatch} chapters waiting for review at once, as they are. Each one is released right away, or at its \`publishAt\` time if that is still ahead. Chapters that do not exist, are not waiting for review or have no processed pages yet are skipped and reported.\n\n**Required roles:** uploader, admin.`,
     tags: ["Chapter review"],
-    requestBody: {
-      content: { "application/json": await resolver(approveSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "The approved chapters and the ones that were skipped.",
+        description: "The approved and skipped chapters.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
-                z.object({ approved: z.uuid().array(), skipped: skippedChapterSchema.array() }),
+                z.object({
+                  approved: z
+                    .uuid()
+                    .array()
+                    .meta({ description: "The IDs of the chapters that were approved." }),
+                  skipped: skippedChapterSchema
+                    .array()
+                    .meta({ description: "The chapters that were left alone, and why." }),
+                }),
               ),
             ),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The request data failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
+      }),
     },
   }),
   audited(chapterReviewAudit.APPROVE_MANY),

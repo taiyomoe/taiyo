@@ -95,10 +95,7 @@ export function UserRow({
         ) : null}
       </div>
       <div sx={styles.actions}>
-        <UserRoleSelect
-          editable={!self && can("user.setRole", { id: user.id, role: user.role })}
-          user={user}
-        />
+        <UserRoleSelect editable={!self && can("user.setRole", { id: user.id })} user={user} />
         <UserBanActions
           canBan={can("user.ban", { id: user.id, role: user.role })}
           onBan={onBan}

@@ -5,6 +5,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { deleteChapterPages } from "../chapter-pages"
 import { audited } from "../middlewares/audited-middleware"
+import { authorizeUser } from "../middlewares/authorize-user-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -15,14 +16,15 @@ import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 
 const BAN_NOTE = "This account was banned."
 const banSchema = z.object({
-  reason: reviewNoteSchema.meta({ description: "Why the user is banned. They see it." }),
-  days: z
-    .int()
-    .min(1)
-    .max(3650)
-    .nullable()
-    .default(null)
-    .meta({ description: "How many days the ban lasts, or null for a permanent ban." }),
+  reason: reviewNoteSchema.meta({
+    description: "Why the user is banned. The user sees it.",
+    example: "Repeated spam in the comments.",
+  }),
+  days: z.int().min(1).max(3650).nullable().default(null).meta({
+    description:
+      "The number of days the ban lasts, from 1 to 3650, or null for a permanent ban. Defaults to null.",
+    example: 7,
+  }),
 })
 
 export const banUserHandler = new Hono().post(
@@ -30,11 +32,8 @@ export const banUserHandler = new Hono().post(
   describeRoute({
     summary: "Ban a user",
     description:
-      "Bans a user, for a number of days or for good, and signs them out everywhere. Their chapters waiting for review, media suggestions and group requests are rejected, and the group invitations they sent are cancelled. Their group memberships stay but grant nothing while the ban lasts.\n\n**Required roles:** admin, or moderator for regular users.",
+      "Bans a user for a number of days or permanently, signs the user out everywhere, rejects the user's chapters awaiting review, media suggestions and group requests, and cancels the group invitations the user sent. The user's group memberships stay but grant nothing while the ban lasts. Moderators can only ban users with the `USER` role, and you cannot ban yourself.\n\n**Required roles:** moderator, admin.",
     tags: ["Users"],
-    requestBody: {
-      content: { "application/json": await resolver(banSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "User banned.",
@@ -43,10 +42,12 @@ export const banUserHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid(),
-                  rejectedChapters: z
-                    .int()
-                    .meta({ description: "How many pending chapters were rejected." }),
+                  id: z.uuid().meta({ description: "The ID of the banned user." }),
+                  rejectedChapters: z.int().meta({
+                    description:
+                      "The number of the user's chapters awaiting review that were rejected.",
+                    example: 3,
+                  }),
                 }),
               ),
             ),
@@ -54,13 +55,16 @@ export const banUserHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given id exists.",
-        422: "The request data failed validation.",
+        401: true,
+        403: "You are not a moderator or admin, you are a moderator and the user is not a regular user, or the user is you.",
+        404: "No user with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),
   audited(adminAudit.USER_BAN),
   withAuth(),
+  authorizeUser("ban"),
   validateJson(banSchema),
   checkUser({ includeBanned: true }),
   withTransaction,

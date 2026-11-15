@@ -22,22 +22,28 @@ const approveSchema = z.object({
     .max(config.input.maxChapterTitleLength)
     .nullable()
     .optional()
-    .meta({ description: "Corrected title, or null to clear it." }),
-  number: z.number().nonnegative().optional().meta({ description: "Corrected chapter number." }),
-  volume: z
-    .string()
-    .trim()
-    .min(1)
-    .max(config.input.maxVolumeLength)
-    .nullable()
+    .meta({
+      description: "The corrected title of the chapter, or null to clear it.",
+      example: "The Boy with the Sharingan",
+    }),
+  number: z
+    .number()
+    .nonnegative()
     .optional()
-    .meta({ description: "Corrected volume, or null to clear it." }),
-  language: languageSchema("Corrected language.").optional(),
+    .meta({ description: "The corrected chapter number.", example: 112 }),
+  volume: z.string().trim().min(1).max(config.input.maxVolumeLength).nullable().optional().meta({
+    description: "The corrected volume of the chapter, or null to clear it.",
+    example: "12",
+  }),
+  language: languageSchema("The corrected language of the chapter.").optional(),
   groupIds: z
     .array(z.uuid())
     .max(config.input.maxChapterGroups)
     .optional()
-    .meta({ description: "Corrected list of credited groups. Replaces the current credits." }),
+    .meta({
+      description: "The IDs of the groups to credit on the chapter. Replaces the current credits.",
+      example: ["13548c83-8d1a-4163-8830-c8f16fcd2eb7"],
+    }),
 })
 
 export const approveChapterHandler = new Hono().post(
@@ -45,24 +51,27 @@ export const approveChapterHandler = new Hono().post(
   describeRoute({
     summary: "Approve a submitted chapter",
     description:
-      "Publishes a chapter that was waiting for review, optionally correcting its details and credits first. The chapter then shows up as just released. It must have processed pages.\n\n**Required roles:** uploader, admin.",
+      "Approves a chapter waiting for review, optionally correcting its details and credits first. The chapter is released right away as a new chapter, or at its `publishAt` time if that is still ahead. It must have processed pages, unless it is only hosted on the group's site.\n\n**Required roles:** uploader, admin.",
     tags: ["Chapter review"],
-    requestBody: {
-      content: { "application/json": await resolver(approveSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Chapter published.",
+        description: "Chapter approved.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the chapter." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists, or one of the groups does not exist.",
-        409: "The chapter is not waiting for review, or has no pages yet.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists, or one of the groups does not exist.",
+        409: "The chapter is not waiting for review, or it has no processed pages yet.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),
