@@ -11,6 +11,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
+import { authorizeUserRole } from "../middlewares/authorize-user-role-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -63,15 +64,12 @@ export const setUserRoleHandler = new Hono().patch(
   }),
   audited(adminAudit.ROLE_SET),
   withAuth(),
+  authorizeUserRole,
   validateJson(roleSchema),
   checkUser({ includeBanned: true }),
   async (c) => {
-    const { auth, can, db, targetUser } = c.var
+    const { auth, db, targetUser } = c.var
     const { role } = c.var.json
-
-    if (!can("user.setRole", { id: targetUser.id, role: targetUser.role })) {
-      return c.fail("FORBIDDEN")
-    }
 
     c.var.audit.set({ changes: auditChanges(targetUser, { role }) })
 

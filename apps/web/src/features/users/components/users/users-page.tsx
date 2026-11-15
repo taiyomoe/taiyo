@@ -58,7 +58,7 @@ export function UsersPage() {
     placeholderData: (previous) => previous,
   })
   const [banning, setBanning] = useState<ManagedUser | null>(null)
-  const isAdmin = can("user.setRole", { id: "", role: "USER" })
+  const isAdmin = can("user.setRole", { id: "" })
   const update = (patch: Partial<UsersFilter>) => {
     const next = { ...filter, ...patch, page: patch.page ?? 1 }
 

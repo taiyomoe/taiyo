@@ -143,7 +143,7 @@ describe("signed-out and banned users", () => {
       can("group.promoteMember", target()),
       can("group.demoteMember", target({ role: "OWNER", userId: ACTOR_ID })),
       can("user.ban", { id: OTHER_ID, role: "USER" }),
-      can("user.setRole", { id: OTHER_ID, role: "USER" }),
+      can("user.setRole", { id: OTHER_ID }),
       can("user.impersonate", { id: OTHER_ID, role: "USER" }),
       can("user.setPassword", { id: OTHER_ID, role: "USER" }),
       can("user.manageSessions", { id: OTHER_ID, role: "USER" }),
@@ -588,17 +588,11 @@ describe("users", () => {
   })
 
   it("only lets admins change roles, never their own", () => {
-    expect(createPermissions(actor("ADMIN"))("user.setRole", { id: OTHER_ID, role: "USER" })).toBe(
-      true,
-    )
-    expect(createPermissions(actor("ADMIN"))("user.setRole", { id: ACTOR_ID, role: "ADMIN" })).toBe(
-      false,
-    )
+    expect(createPermissions(actor("ADMIN"))("user.setRole", { id: OTHER_ID })).toBe(true)
+    expect(createPermissions(actor("ADMIN"))("user.setRole", { id: ACTOR_ID })).toBe(false)
 
     for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER", "MODERATOR"] as const) {
-      expect(createPermissions(actor(role))("user.setRole", { id: OTHER_ID, role: "USER" })).toBe(
-        false,
-      )
+      expect(createPermissions(actor(role))("user.setRole", { id: OTHER_ID })).toBe(false)
     }
   })
 

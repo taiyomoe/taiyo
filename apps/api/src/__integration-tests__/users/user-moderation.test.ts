@@ -59,6 +59,23 @@ describe("roles", () => {
     expect((await userRow(services, target.userId)).role).toBe("UPLOADER")
     expect(after.status).not.toBe(403)
   })
+
+  test("are refused to a non-admin before the user is looked up", async ({ app, services }) => {
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const missing = await api(app, `/users/${crypto.randomUUID()}/role`, {
+      method: "PATCH",
+      headers: moderator.headers,
+      json: { role: "UPLOADER" },
+    })
+    const invalid = await api(app, "/users/not-a-uuid/role", {
+      method: "PATCH",
+      headers: moderator.headers,
+      json: {},
+    })
+
+    expect(missing.status).toBe(403)
+    expect(invalid.status).toBe(403)
+  })
 })
 
 describe("role cosmetics", () => {
