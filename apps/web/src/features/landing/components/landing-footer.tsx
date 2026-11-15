@@ -67,9 +67,6 @@ export const LandingFooter = () => (
       <div sx={styles.row}>
         <p sx={styles.tagline}>{m.landing_footer_tagline()}</p>
         <nav sx={styles.links}>
-          <Link to="/changelog" {...stylex.props(styles.link)}>
-            {m.changelog_title()}
-          </Link>
           {env.VITE_DISCORD_INVITE_URL === undefined ? null : (
             <a href={env.VITE_DISCORD_INVITE_URL} rel="noreferrer" target="_blank" sx={styles.link}>
               {m.landing_footer_discord()}

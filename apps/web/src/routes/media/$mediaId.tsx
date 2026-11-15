@@ -16,6 +16,7 @@ import { MediaPage } from "@/features/media/components/media-page/media-page"
 import { getMainTitle, getSynopsis } from "@/features/media/lib/media-labels"
 import { CHAPTERS_PER_PAGE, MEDIA_TABS } from "@/features/media/lib/media-page"
 import { pageOgMeta } from "@/features/og/lib/og-meta"
+import { serveLinkPreview } from "@/features/og/lib/og-preview"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -41,6 +42,12 @@ const searchSchema = z.object({
 })
 
 export const Route = createFileRoute("/media/$mediaId")({
+  server: {
+    handlers: {
+      GET: ({ request, params, next }) =>
+        serveLinkPreview({ request, next, kind: "media", id: params.mediaId }),
+    },
+  },
   validateSearch: searchSchema,
   loaderDeps: ({ search }) => search,
   loader: async ({ context, params: { mediaId }, deps }) => {
