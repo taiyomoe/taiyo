@@ -20,6 +20,7 @@ const PORT_KEYS = [
   "DRAGONFLY_PORT",
   "HYPERDX_PORT",
   "HYPERDX_OTLP_PORT",
+  "UMAMI_PORT",
   "MEILISEARCH_PORT",
   "RUSTFS_PORT",
   "RUSTFS_CONSOLE_PORT",
@@ -125,11 +126,11 @@ const generateVapidKeys = () => {
 
   return { VAPID_PUBLIC_KEY: point.toString("base64url"), VAPID_PRIVATE_KEY: d }
 }
-const isHyperdxEnabled = (root: EnvValues) =>
+const isProfileEnabled = (root: EnvValues, profile: string) =>
   (process.env.COMPOSE_PROFILES ?? root.COMPOSE_PROFILES ?? "")
     .split(",")
-    .map((profile) => profile.trim())
-    .includes("hyperdx")
+    .map((enabled) => enabled.trim())
+    .includes(profile)
 const syncAppEnv = (app: string, derive: (current: EnvValues) => EnvValues) => {
   const path = join(repoRoot, "apps", app, ".env")
   const created = !existsSync(path)
@@ -224,7 +225,7 @@ try {
     PORT: get("API_PORT"),
     DATABASE_URL: databaseUrl,
     DRAGONFLY_URL: `redis://localhost:${get("DRAGONFLY_PORT")}`,
-    HYPERDX_ENDPOINT: isHyperdxEnabled(root) ? localUrl(get("HYPERDX_OTLP_PORT")) : "",
+    HYPERDX_ENDPOINT: isProfileEnabled(root, "hyperdx") ? localUrl(get("HYPERDX_OTLP_PORT")) : "",
     ...s3(current),
     MEILISEARCH_HOST: localUrl(get("MEILISEARCH_PORT")),
     MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
@@ -248,6 +249,7 @@ try {
     S3_BUCKET_NAME: bucketOf(readEnvFile(join(repoRoot, "apps/api/.env"))),
     VITE_API_URL: apiUrl,
     VITE_BETTER_AUTH_URL: apiUrl,
+    UMAMI_INTERNAL_URL: isProfileEnabled(root, "umami") ? localUrl(get("UMAMI_PORT")) : "",
   }))
   syncAppEnv("maintenance", () => ({
     PORT: get("MAINTENANCE_PORT"),
@@ -328,7 +330,7 @@ try {
   Web            ${url("WEB_PORT")}
   API docs       ${url("API_PORT")}/docs
   Maintenance    ${url("MAINTENANCE_PORT")} (\`pnpm -F @taiyomoe/maintenance dev\`)
-${isHyperdxEnabled(root) ? `  HyperDX        ${url("HYPERDX_PORT")}\n` : ""}  RustFS console ${url("RUSTFS_CONSOLE_PORT")}
+${isProfileEnabled(root, "hyperdx") ? `  HyperDX        ${url("HYPERDX_PORT")}\n` : ""}${isProfileEnabled(root, "umami") ? `  Umami          ${url("UMAMI_PORT")} (admin / umami)\n` : ""}  RustFS console ${url("RUSTFS_CONSOLE_PORT")}
 
   Sign in with any dev account below at <username>@gmail.com, password "password123".
 

@@ -46,6 +46,36 @@ services:
     volumes:
       - "hyperdx:/data/db"
 
+  umami:
+    image: "ghcr.io/umami-software/umami:3.4.1"
+    profiles: ["umami"]
+    restart: unless-stopped
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://umami:umami@umami-db:5432/umami
+      - APP_SECRET=$UMAMI_APP_SECRET
+      - DISABLE_TELEMETRY=1
+    ports:
+      - "127.0.0.1:$UMAMI_PORT:3000"
+
+  umami-db:
+    image: "postgres:18-alpine"
+    profiles: ["umami"]
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=umami
+      - POSTGRES_PASSWORD=umami
+      - POSTGRES_DB=umami
+    volumes:
+      - "umami-db:/var/lib/postgresql"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
   meilisearch:
     image: "getmeili/meilisearch:latest"
     restart: unless-stopped
@@ -96,5 +126,6 @@ volumes:
   postgres:
   dragonfly:
   hyperdx:
+  umami-db:
   meilisearch:
   rustfs:

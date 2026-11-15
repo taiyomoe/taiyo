@@ -18,6 +18,8 @@ import { createIsomorphicFn } from "@tanstack/react-start"
 import { getCookies } from "@tanstack/react-start/server"
 import { fromEntries, map, pipe } from "remeda"
 import type { FileRoutesById } from "@/routeTree.gen"
+import { env } from "@/env/client"
+import { UMAMI_PROXY_PATH } from "@/features/analytics/lib/umami"
 import { CommandPaletteProvider } from "@/features/command-palette/components/command-palette-provider"
 import { NotificationStream } from "@/features/notifications/components/notification-stream"
 import { siteOgMeta } from "@/features/og/lib/og-meta"
@@ -106,7 +108,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/site.webmanifest" },
     ],
-    scripts: import.meta.env.DEV ? [{ type: "module", src: "/@id/virtual:stylex:runtime" }] : [],
+    scripts: [
+      ...(import.meta.env.DEV ? [{ type: "module", src: "/@id/virtual:stylex:runtime" }] : []),
+      ...(env.VITE_UMAMI_WEBSITE_ID === undefined
+        ? []
+        : [
+            {
+              src: `${UMAMI_PROXY_PATH}/s.js`,
+              defer: true,
+              "data-website-id": env.VITE_UMAMI_WEBSITE_ID,
+            },
+          ]),
+    ],
   }),
   shellComponent: RootDocument,
   component: RootComponent,
