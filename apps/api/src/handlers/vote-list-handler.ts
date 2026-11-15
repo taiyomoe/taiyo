@@ -27,15 +27,14 @@ export const voteListHandler = new Hono()
     describeRoute({
       summary: "Upvote a list",
       description:
-        "Upvotes a `PUBLIC` list of a user who is not banned. Upvoting a list twice changes nothing.\n\n**Authentication:** signed-in user.",
+        "Upvotes a `PUBLIC` list of a user who is not banned. You cannot upvote your own list, and upvoting a list twice changes nothing.\n\n**Authentication:** signed-in user.",
       tags: ["Custom lists"],
       responses: {
         200: voteResponse("List upvoted."),
         ...getOpenApiResponses({
           401: true,
-          403: true,
+          403: "Your account is banned, or you are trying to upvote your own list.",
           404: "No list with the given ID exists, or it is `PRIVATE`, or its owner is banned.",
-          409: "You cannot upvote your own list.",
           422: "The provided ID is not a valid UUID.",
           429: "Too many requests, try again later.",
         }),

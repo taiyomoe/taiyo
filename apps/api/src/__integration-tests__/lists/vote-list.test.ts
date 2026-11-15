@@ -62,7 +62,7 @@ describe("PUT/DELETE /lists/:id/vote", () => {
       .executeTakeFirstOrThrow()
     const res = await api(app, `/lists/${list.id}/vote`, { method: "PUT", headers })
 
-    expect(res.status).toBe(409)
+    expect(res.status).toBe(403)
     expect(res.body).toMatchObject({ success: false, code: "LIST_SELF_VOTE" })
   })
 

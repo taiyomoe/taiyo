@@ -353,8 +353,8 @@ const commentErrors = {
     code: 409,
   },
   COMMENT_SELF_VOTE: {
-    message: "You can't upvote your own comment.",
-    code: 409,
+    message: "You cannot upvote your own comment.",
+    code: 403,
   },
   COMMENT_REPORT_EXISTS: {
     message: "You already reported this comment, and the report is still open.",
@@ -459,8 +459,8 @@ const listErrors = {
     code: 409,
   },
   LIST_SELF_VOTE: {
-    message: "You can't upvote your own list.",
-    code: 409,
+    message: "You cannot upvote your own list.",
+    code: 403,
   },
 } as const
 const imageErrors = {

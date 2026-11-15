@@ -27,15 +27,14 @@ export const voteCommentHandler = new Hono()
     describeRoute({
       summary: "Upvote a comment",
       description:
-        "Upvotes a comment. Upvoting a comment twice changes nothing.\n\n**Authentication:** signed-in user.",
+        "Upvotes a comment. You cannot upvote your own comment, and upvoting a comment twice changes nothing.\n\n**Authentication:** signed-in user.",
       tags: ["Comments"],
       responses: {
         200: voteResponse("Comment upvoted."),
         ...getOpenApiResponses({
           401: true,
-          403: true,
+          403: "Your account is banned, or you are trying to upvote your own comment.",
           404: "No comment with the given ID exists, or it was removed.",
-          409: "You cannot upvote your own comment.",
           422: "The provided ID is not a valid UUID.",
           429: "Too many requests, try again later.",
         }),
