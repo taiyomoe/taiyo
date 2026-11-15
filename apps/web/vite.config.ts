@@ -13,8 +13,8 @@ type StylexOptions = NonNullable<Parameters<typeof stylex.vite>[0]> & {
 const config = defineConfig(({ mode }) => {
   const env = loadEnv(mode, import.meta.dirname, "")
   const apiOrigin = `http://localhost:${env.API_PORT ?? 3002}`
-  const imagesOrigin = `http://localhost:${env.IMAGES_PORT ?? 54902}`
-  const s3Origin = `http://localhost:${env.RUSTFS_PORT ?? 54900}`
+  const imagesOrigin = `http://127.0.0.1:${env.IMAGES_PORT ?? 54902}`
+  const s3Origin = `http://127.0.0.1:${env.RUSTFS_PORT ?? 54900}`
   const stylexOptions: StylexOptions = {
     useCSSLayers: { before: ["base", "structural"] },
     dev: process.env.NODE_ENV === "development",

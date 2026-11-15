@@ -114,6 +114,10 @@ const findFreeSlot = async (base: EnvValues) => {
   )
 }
 const localUrl = (port: string) => `http://localhost:${port}`
+// Docker publishes on 127.0.0.1 only. Through localhost, a client tries ::1 first, and when the
+// ephemeral port it draws equals the service port, the socket connects to itself and hangs.
+const SERVICE_HOST = "127.0.0.1"
+const serviceUrl = (port: string) => `http://${SERVICE_HOST}:${port}`
 const generateVapidKeys = () => {
   const { publicKey, privateKey } = generateKeyPairSync("ec", { namedCurve: "prime256v1" })
   const { x = "", y = "" } = publicKey.export({ format: "jwk" })
@@ -204,8 +208,8 @@ try {
   const root = readEnvFile(rootEnvPath)
   const get = (key: string) => requireEnvValue(root, key, rootEnvPath)
   const credentials = `${encodeURIComponent(get("DATABASE_USERNAME"))}:${encodeURIComponent(get("DATABASE_PASSWORD"))}`
-  const databaseUrl = `postgresql://${credentials}@localhost:${get("DATABASE_PORT")}/${get("DATABASE_NAME")}`
-  const s3Endpoint = localUrl(get("RUSTFS_PORT"))
+  const databaseUrl = `postgresql://${credentials}@${SERVICE_HOST}:${get("DATABASE_PORT")}/${get("DATABASE_NAME")}`
+  const s3Endpoint = serviceUrl(get("RUSTFS_PORT"))
   const apiUrl = localUrl(get("API_PORT"))
   const vapid = {
     VAPID_PUBLIC_KEY: get("VAPID_PUBLIC_KEY"),
@@ -224,10 +228,10 @@ try {
   syncAppEnv("api", (current) => ({
     PORT: get("API_PORT"),
     DATABASE_URL: databaseUrl,
-    DRAGONFLY_URL: `redis://localhost:${get("DRAGONFLY_PORT")}`,
-    HYPERDX_ENDPOINT: isProfileEnabled(root, "hyperdx") ? localUrl(get("HYPERDX_OTLP_PORT")) : "",
+    DRAGONFLY_URL: `redis://${SERVICE_HOST}:${get("DRAGONFLY_PORT")}`,
+    HYPERDX_ENDPOINT: isProfileEnabled(root, "hyperdx") ? serviceUrl(get("HYPERDX_OTLP_PORT")) : "",
     ...s3(current),
-    MEILISEARCH_HOST: localUrl(get("MEILISEARCH_PORT")),
+    MEILISEARCH_HOST: serviceUrl(get("MEILISEARCH_PORT")),
     MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
     VITE_BETTER_AUTH_URL: apiUrl,
     CORS_ALLOWED_ORIGINS: localUrl(get("WEB_PORT")),
@@ -235,9 +239,9 @@ try {
   }))
   syncAppEnv("worker", (current) => ({
     DATABASE_URL: databaseUrl,
-    DRAGONFLY_URL: `redis://localhost:${get("DRAGONFLY_PORT")}`,
+    DRAGONFLY_URL: `redis://${SERVICE_HOST}:${get("DRAGONFLY_PORT")}`,
     ...s3(current),
-    MEILISEARCH_HOST: localUrl(get("MEILISEARCH_PORT")),
+    MEILISEARCH_HOST: serviceUrl(get("MEILISEARCH_PORT")),
     MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
     ...vapid,
   }))
@@ -249,7 +253,7 @@ try {
     S3_BUCKET_NAME: bucketOf(readEnvFile(join(repoRoot, "apps/api/.env"))),
     VITE_API_URL: apiUrl,
     VITE_BETTER_AUTH_URL: apiUrl,
-    UMAMI_INTERNAL_URL: isProfileEnabled(root, "umami") ? localUrl(get("UMAMI_PORT")) : "",
+    UMAMI_INTERNAL_URL: isProfileEnabled(root, "umami") ? serviceUrl(get("UMAMI_PORT")) : "",
   }))
   syncAppEnv("maintenance", () => ({
     PORT: get("MAINTENANCE_PORT"),
