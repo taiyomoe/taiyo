@@ -139,6 +139,26 @@ describe("POST /ownership-requests/:id/approve", () => {
     expect(membership).toBeUndefined()
   })
 
+  test("reports a closed request before an owned group", async ({ app, services }) => {
+    const { headers, userId: adminId } = await signInAs(services, { role: "ADMIN" })
+    const { userId: ownerId } = await signInAs(services)
+    const groupId = await seedGroup(services, adminId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({ userId: ownerId, groupId, role: "OWNER", addedBy: adminId })
+      .execute()
+
+    const requestId = await seedRequest(services, { userId: ownerId, groupId, status: "APPROVED" })
+    const res = await api(app, `/ownership-requests/${requestId}/approve`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(409)
+    expect(res.body).toMatchObject({ code: "OWNERSHIP_REQUEST_NOT_PENDING" })
+  })
+
   test("returns GROUP_ALREADY_OWNED when an OWNER already exists", async ({ app, services }) => {
     const { headers, userId: adminId } = await signInAs(services, { role: "ADMIN" })
     const { userId: existingOwnerId } = await signInAs(services)
