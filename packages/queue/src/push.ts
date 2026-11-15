@@ -3,7 +3,7 @@ import { config } from "@taiyomoe/config"
 import { getCoverUrl } from "@taiyomoe/s3"
 import { getCommentText } from "@taiyomoe/schemas/comment-content"
 import { sql, type Kysely } from "kysely"
-import webpush from "web-push"
+import { generateRequestDetails } from "web-push"
 import { env } from "./env"
 
 type PushTarget = { endpoint: string; p256dh: string; auth: string }
@@ -41,7 +41,7 @@ export const createWebPushSender = ({
 
   const vapidDetails = { subject, publicKey, privateKey }
   const send: PushSender = async ({ endpoint, p256dh, auth }, message) => {
-    const { method, headers, body } = webpush.generateRequestDetails(
+    const { method, headers, body } = generateRequestDetails(
       { endpoint, keys: { p256dh, auth } },
       JSON.stringify(message),
       { vapidDetails, TTL: config.notifications.pushTtlSeconds, urgency: "normal" },
