@@ -1,4 +1,5 @@
 import { STAFF_ROLES } from "@taiyomoe/db"
+import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -9,7 +10,7 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 const mediaStaffItemSchema = z.object({
   staffId: z.uuid().meta({ description: "The ID of the staff." }),
   name: z.string().meta({ description: "The name of the staff.", example: "Kishimoto Masashi" }),
-  image: z.string().nullable().meta({ description: "The path of the staff's image, if any." }),
+  imageUrl: z.url().nullable().meta({ description: "The URL of the staff's image, if any." }),
   role: z
     .enum(STAFF_ROLES)
     .meta({ description: "The role of the staff on the media.", example: "AUTHOR" }),
@@ -49,6 +50,11 @@ export const listMediaStaffsHandler = new Hono().get(
       .orderBy("staffs.name", "asc")
       .execute()
 
-    return c.ok(rows)
+    return c.ok(
+      rows.map(({ image, ...row }) => ({
+        ...row,
+        imageUrl: image === null ? null : getPublicImageUrl(image),
+      })),
+    )
   },
 )
