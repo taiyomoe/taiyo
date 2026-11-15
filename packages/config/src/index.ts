@@ -12,6 +12,8 @@ export const config = {
       "Endpoints authenticate with the session cookie set when you sign in. Each endpoint ends its description with who can call it: **Authentication** says whether a session is needed, **Required roles** lists the roles allowed, and **Required access** names the resource-level access needed, such as being the owner of a list.",
       "## Pagination",
       "Paginated lists take `page` (from 1) and `perPage` query parameters and return `meta.page`, `meta.perPage` and `meta.total` next to `data`.",
+      "## Limits",
+      "A JSON request body larger than 1 MB fails with a 413 `PAYLOAD_TOO_LARGE`, whatever the endpoint. Endpoints that are rate limited list their 429 `RATE_LIMITED` response.",
     ].join("\n\n"),
   },
   auth: {
@@ -127,6 +129,7 @@ export const config = {
     // Issues a 422 carries: enough to fix a request, while one issue per bad array element would
     // grow the response with the request.
     maxValidationIssues: 10,
+    // Stated in `openapi.description`: change both together.
     maxJsonBodyBytes: 1024 * 1024,
   },
 } as const
