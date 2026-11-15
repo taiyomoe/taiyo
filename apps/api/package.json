@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
-    "start": "node --env-file-if-exists=.env --import tsx src/index.ts"
+    "start": "node --env-file-if-exists=.env --import tsx src/index.ts",
+    "backfill:legacy-images": "node --env-file-if-exists=.env --import tsx src/backfills/import-legacy-images.ts"
   },
   "dependencies": {
     "@hono-rate-limiter/redis": "^0.1.4",

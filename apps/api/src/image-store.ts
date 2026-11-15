@@ -17,6 +17,8 @@ export type ImageTarget =
   | { kind: "staff"; staffId: string }
   | { kind: "avatar"; userId: string }
   | { kind: "profileBanner"; userId: string }
+  | { kind: "groupLogo"; groupId: string }
+  | { kind: "groupBanner"; groupId: string }
 
 export class ImageTooComplexError extends Error {
   constructor() {
@@ -161,6 +163,10 @@ export const putImage = async (
     key = `users/${target.userId}/avatars/${crypto.randomUUID()}.${extension}`
   } else if (target.kind === "profileBanner") {
     key = `users/${target.userId}/banners/${crypto.randomUUID()}.${extension}`
+  } else if (target.kind === "groupLogo") {
+    key = `groups/${target.groupId}/logos/${crypto.randomUUID()}.${extension}`
+  } else if (target.kind === "groupBanner") {
+    key = `groups/${target.groupId}/banners/${crypto.randomUUID()}.${extension}`
   } else if (target.kind === "cover") {
     key = getCoverKey(target.mediaId, `${target.id}.${extension}`)
   } else {
