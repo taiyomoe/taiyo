@@ -148,6 +148,8 @@
   "home_featured_go_to": "Afficher {title}",
   "home_featured_empty_title": "Aucun titre à la une",
   "home_featured_empty_description": "Aucun des titres à la une cette semaine ne correspond à votre filtre de contenu.",
+  "home_recently_added_previous": "Titres précédents",
+  "home_recently_added_next": "Titres suivants",
   "home_latest_title": "Dernières mises à jour",
   "home_latest_see_all": "Tout voir",
   "home_latest_layout": "Disposition",
