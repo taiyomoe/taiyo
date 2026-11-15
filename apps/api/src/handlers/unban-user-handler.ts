@@ -3,6 +3,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
+import { authorizeUser } from "../middlewares/authorize-user-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { auditChanges } from "../utils/audit"
@@ -31,7 +32,7 @@ export const unbanUserHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         401: true,
-        403: "You are not a moderator or admin, the user is you, or you are a moderator and the user is not a regular user.",
+        403: "You are not a moderator or admin, you are a moderator and the user is not a regular user, or the user is you.",
         404: "No user with the given ID exists.",
         422: "The provided ID is not a valid UUID.",
       }),
@@ -39,6 +40,7 @@ export const unbanUserHandler = new Hono().post(
   }),
   audited(adminAudit.USER_UNBAN),
   withAuth(),
+  authorizeUser("ban"),
   checkUser({ includeBanned: true }),
   async (c) => {
     const { can, db, targetUser } = c.var

@@ -5,6 +5,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { deleteChapterPages } from "../chapter-pages"
 import { audited } from "../middlewares/audited-middleware"
+import { authorizeUser } from "../middlewares/authorize-user-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -63,6 +64,7 @@ export const banUserHandler = new Hono().post(
   }),
   audited(adminAudit.USER_BAN),
   withAuth(),
+  authorizeUser("ban"),
   validateJson(banSchema),
   checkUser({ includeBanned: true }),
   withTransaction,

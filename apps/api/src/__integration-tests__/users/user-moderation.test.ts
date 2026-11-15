@@ -78,6 +78,22 @@ describe("roles", () => {
   })
 })
 
+describe("ban rights", () => {
+  test("are checked before the user is looked up", async ({ app, services }) => {
+    const user = await signInAs(services)
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const missingId = crypto.randomUUID()
+    const unban = (userId: string, headers: Record<string, string>) =>
+      api(app, `/users/${userId}/unban`, { method: "POST", headers })
+
+    expect((await ban(app, missingId, user.headers)).status).toBe(403)
+    expect((await unban(missingId, user.headers)).status).toBe(403)
+    expect((await ban(app, "not-a-uuid", user.headers, {})).status).toBe(403)
+    expect((await ban(app, missingId, moderator.headers)).status).toBe(404)
+    expect((await unban(missingId, moderator.headers)).status).toBe(404)
+  })
+})
+
 describe("role cosmetics", () => {
   test("are unequipped when the role that grants them is removed", async ({ app, services }) => {
     const admin = await signInAs(services, { role: "ADMIN" })
