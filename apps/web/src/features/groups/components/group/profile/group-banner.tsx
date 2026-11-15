@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Group } from "@/features/groups/api/groups"
+import { navbarBleed } from "@/components/shell/navbar-bleed"
 import { toneFor } from "@/features/groups/components/group-avatar"
 
 const styles = stylex.create({
@@ -13,7 +14,9 @@ const styles = stylex.create({
     width: "100%",
   },
   image: {
+    inset: 0,
     objectFit: "cover",
+    position: "absolute",
     height: "100%",
     width: "100%",
   },
@@ -32,7 +35,7 @@ const styles = stylex.create({
 
 export function GroupBanner({ group }: { group: Group }) {
   return (
-    <div sx={styles.banner}>
+    <div sx={[styles.banner, navbarBleed.banner]}>
       {group.banner === null || group.banner === "" ? (
         <div aria-hidden sx={styles.placeholder(toneFor(group.id))} />
       ) : (
@@ -46,6 +49,7 @@ export function GroupBanner({ group }: { group: Group }) {
         />
       )}
       <div aria-hidden sx={styles.shade} />
+      <div aria-hidden sx={navbarBleed.scrim} />
     </div>
   )
 }

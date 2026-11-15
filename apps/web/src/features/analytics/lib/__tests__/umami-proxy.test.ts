@@ -63,6 +63,33 @@ describe("proxyToUmami", () => {
     })
   })
 
+  it("turns off a tracker that still sends the query string, without reaching Umami", async () => {
+    const response = await proxyToUmami(
+      send(
+        { "content-type": "application/json" },
+        '{"type":"event","payload":{"url":"/chapters/1?page=9"}}',
+      ),
+      "api/send",
+    )
+
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(response.status).toBe(200)
+    expect(await response.json()).toEqual({ disabled: true })
+  })
+
+  it("forwards a page sent without its query string", async () => {
+    const response = await proxyToUmami(
+      send(
+        { "content-type": "application/json" },
+        '{"type":"event","payload":{"url":"/chapters/1"}}',
+      ),
+      "api/send",
+    )
+
+    expect(fetchMock).toHaveBeenCalledOnce()
+    expect(await response.json()).toEqual({ cache: "token" })
+  })
+
   it("relays no other path of Umami", async () => {
     const response = await proxyToUmami(
       new Request("https://site.test/u/api/auth/login"),
