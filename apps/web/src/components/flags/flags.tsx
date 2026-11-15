@@ -49,15 +49,23 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
 })
-const USER_COUNTRY_FLAGS = import.meta.glob<FlagComponent>(
-  "/node_modules/country-flag-icons/react/3x2/*/index.js",
-  { import: "default" },
-)
+const USER_COUNTRY_FLAGS = import.meta.glob<string>("/node_modules/country-flag-icons/3x2/*.svg", {
+  query: "?url",
+  import: "default",
+})
 
-export function Flag({ flag: Icon, sx }: { flag: FlagComponent | null; sx?: Sx }) {
+export function Flag({ flag: Icon, sx }: { flag: FlagComponent | string | null; sx?: Sx }) {
+  if (Icon === null) {
+    return <span aria-hidden sx={[styles.flag, sx]} />
+  }
+
   return (
     <span aria-hidden sx={[styles.flag, sx]}>
-      {Icon === null ? null : <Icon {...stylex.props(styles.svg)} />}
+      {typeof Icon === "string" ? (
+        <img alt="" decoding="async" src={Icon} sx={styles.svg} />
+      ) : (
+        <Icon {...stylex.props(styles.svg)} />
+      )}
     </span>
   )
 }
@@ -88,18 +96,16 @@ export function CountryFlag({ country }: { country: LatestMediaUpdate["countryOf
 }
 
 export function UserCountryFlag({ country }: { country: string }) {
-  const [loaded, setLoaded] = useState<{ country: string; flag: FlagComponent } | null>(null)
+  const [loaded, setLoaded] = useState<{ country: string; src: string } | null>(null)
 
   useEffect(() => {
     let cancelled = false
     const load =
-      USER_COUNTRY_FLAGS[
-        `/node_modules/country-flag-icons/react/3x2/${country.toUpperCase()}/index.js`
-      ]
+      USER_COUNTRY_FLAGS[`/node_modules/country-flag-icons/3x2/${country.toUpperCase()}.svg`]
 
-    void load?.().then((flag) => {
+    void load?.().then((src) => {
       if (!cancelled) {
-        setLoaded({ country, flag })
+        setLoaded({ country, src })
       }
     })
 
@@ -108,5 +114,5 @@ export function UserCountryFlag({ country }: { country: string }) {
     }
   }, [country])
 
-  return <Flag flag={loaded?.country === country ? loaded.flag : null} />
+  return <Flag flag={loaded?.country === country ? loaded.src : null} />
 }
