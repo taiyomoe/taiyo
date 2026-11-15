@@ -47,7 +47,7 @@ export function AppShell({
     >
       <AppNavbar overlay={overlayNavbar} user={user} />
       <div sx={styles.body}>
-        <AppSidebar sections={sections} />
+        <AppSidebar fullHeight={overlayNavbar} sections={sections} />
         <SidebarInset sx={styles.inset}>{children}</SidebarInset>
       </div>
       <UploadTray />

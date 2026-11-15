@@ -1,7 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
+import { useSidebar } from "@taiyomoe/ui/components/ui/sidebar"
 import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
+import { useEffect, useRef } from "react"
 import type { Session } from "@/lib/session"
 import { layout } from "@/components/layout/layout.stylex"
 import { AppNavbarBrand } from "@/components/shell/app-navbar-brand"
@@ -9,43 +11,57 @@ import { AppNavbarSearch } from "@/components/shell/app-navbar-search"
 import { UserMenu } from "@/components/shell/user-menu"
 import { NotificationBell } from "@/features/notifications/components/notification-bell"
 import { useCurrentHref } from "@/hooks/use-current-href"
-import { useWindowScrolled } from "@/hooks/use-window-scrolled"
 import { m } from "@/paraglide/messages"
 
+const FILL_DISTANCE = 160
 const styles = stylex.create({
   header: {
     insetInline: 0,
     alignItems: "center",
-    backdropFilter: "blur(16px) saturate(180%)",
-    backgroundColor: `color-mix(in srgb, ${colors.background} 72%, transparent)`,
     display: "flex",
     position: "fixed",
-    transitionDuration: {
-      default: motion.enterLarge,
-      [consts.reducedMotion]: "0s",
-    },
-    transitionProperty: "background-color, border-color, backdrop-filter",
-    transitionTimingFunction: motion.easeOut,
     zIndex: 30,
-    borderBottomColor: colors.sidebarBorder,
-    borderBottomStyle: "solid",
-    borderBottomWidth: 1,
     height: "var(--navbar-height)",
     top: 0,
   },
-  headerOverlay: {
-    backdropFilter: {
-      default: "blur(0px) saturate(100%)",
-      [breakpoints.md]: "blur(16px) saturate(180%)",
+  surface: {
+    inset: 0,
+    display: "flex",
+    pointerEvents: "none",
+    position: "absolute",
+    zIndex: -1,
+  },
+  pane: {
+    backgroundColor: `color-mix(in srgb, ${colors.background} 72%, transparent)`,
+    borderBottomColor: colors.sidebarBorder,
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
+  },
+  paneOverlay: {
+    opacity: "var(--navbar-fill, 0)",
+  },
+  sidePane: {
+    flexShrink: 0,
+    transitionDuration: {
+      default: motion.slide,
+      [consts.reducedMotion]: "0s",
     },
-    backgroundColor: {
-      default: "transparent",
-      [breakpoints.md]: `color-mix(in srgb, ${colors.background} 72%, transparent)`,
+    transitionProperty: "width",
+    transitionTimingFunction: motion.easeOut,
+    width: 0,
+  },
+  sidePaneOpen: {
+    width: {
+      default: 0,
+      [breakpoints.md]: "var(--sidebar-width)",
     },
-    borderBottomColor: {
-      default: "transparent",
-      [breakpoints.md]: colors.sidebarBorder,
-    },
+  },
+  instant: {
+    transitionDuration: "0s",
+  },
+  mainPane: {
+    backdropFilter: "blur(16px) saturate(180%)",
+    flexGrow: 1,
   },
   actions: {
     flex: "1",
@@ -66,10 +82,46 @@ export function AppNavbar({
   user: Session["user"] | null
   overlay?: boolean
 }) {
-  const scrolled = useWindowScrolled()
+  const header = useRef<HTMLElement>(null)
+  const { open, resizing } = useSidebar()
+
+  useEffect(() => {
+    const element = header.current
+
+    if (!overlay || element === null) {
+      return undefined
+    }
+
+    const update = () => {
+      element.style.setProperty(
+        "--navbar-fill",
+        String(Math.min(window.scrollY / FILL_DISTANCE, 1)),
+      )
+    }
+
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+
+    return () => {
+      window.removeEventListener("scroll", update)
+      element.style.removeProperty("--navbar-fill")
+    }
+  }, [overlay])
 
   return (
-    <header sx={[styles.header, overlay && !scrolled && styles.headerOverlay]}>
+    <header ref={header} sx={styles.header}>
+      <div aria-hidden sx={styles.surface}>
+        <div
+          sx={[
+            styles.pane,
+            overlay && styles.paneOverlay,
+            styles.sidePane,
+            open && styles.sidePaneOpen,
+            resizing && styles.instant,
+          ]}
+        />
+        <div sx={[styles.pane, overlay && styles.paneOverlay, styles.mainPane]} />
+      </div>
       <AppNavbarBrand />
       <div sx={styles.actions}>
         <AppNavbarSearch />
