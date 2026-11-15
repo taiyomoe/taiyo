@@ -1,6 +1,6 @@
 ---
 name: create-backend-route
-description: Use when adding a new HTTP route to `apps/api` — a Hono handler in `src/handlers/` wired into a router in `src/routers/`. Covers OpenAPI spec, JSON/multipart validation, auth, error codes, transactions, evlog context, pre-checks, and offset pagination. Triggers on "add a route", "create an endpoint", "new handler in apps/api". Skip for tweaks to existing handlers that don't introduce a new route.
+description: Use when adding a new HTTP route to `apps/api` — a Hono handler in `src/handlers/` wired into a router in `src/routers/`. Covers OpenAPI spec and prose conventions, JSON/multipart validation, auth, error codes, transactions, evlog context, pre-checks, and offset pagination. Triggers on "add a route", "create an endpoint", "new handler in apps/api". Skip for tweaks to existing handlers that don't introduce a new route.
 ---
 
 # create-backend-route
@@ -11,81 +11,82 @@ A route is a Hono handler exported from `apps/api/src/handlers/<verb>-<resource>
 
 - One handler per file. Name: `<verb>-<resource>-handler.ts` (`update-media-handler.ts`, `list-medias-handler.ts`, `delete-media-handler.ts`).
 - Export a `Hono` instance: `export const xxxHandler = new Hono().get|post|patch|delete("/<path>", ...middlewares, async (c) => {...})`.
-- Mount it in `src/routers/<resource>-router.ts` via `.route("/", xxxHandler)`. Register the router from `src/index.ts` if new.
+- Mount it in `src/routers/<resource>-router.ts` via `.route("/", xxxHandler)`. Register the router in `src/app.ts` if new.
 
 ## OpenAPI spec (`describeRoute`)
 
 ```ts
 describeRoute({
   summary: "...",
-  description: "...",         // consumer-facing only, no internals
+  description: "...\n\n**Required roles:** uploader, admin.",
   tags: ["Medias"],
-  requestBody: { ... },        // omit on GET / DELETE without body
   responses: {
     201: { description: "...", content: { "application/json": { schema: resolver(apiSuccessEnvelope(...)) } } },
-    ...getOpenApiResponses({ 404: "...", 409: "...", 422: "..." }),
+    ...getOpenApiResponses({ 401: true, 403: true, 404: "...", 422: "..." }),
   },
 })
 ```
 
 Rules:
 
-- `description`: explain the contract from a consumer's POV. **Never leak internals** — do not mention transactions, DB tables, evlog, S3, "we do X behind the scenes". Just what the endpoint does and what it returns.
+- **Request side is generated.** The `validate*` middlewares and the `checkX()` middlewares feed hono-openapi through `withRequestSpec` (`utils/openapi-helper.ts`): query params, path params and the request body come from the schema they validate. Leave `requestBody` and `parameters` out of `describeRoute`; put the documentation on the schema itself, as `.meta({ description, example })` on every field.
 - Every field gets `.meta({ description, example })`. Array fields also get `.meta({ description, examples: [...] })` on the array itself. Examples must be realistic and varied.
 - Wrap success bodies in `apiSuccessEnvelope(dataSchema)`. For paginated lists, pass a `meta` schema as the second argument: `apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)`.
-- Build error responses with `getOpenApiResponses({ <status>: "<description>" })`. 401/403/500 are added automatically. **Every `c.fail(code)` you can emit must be represented here.**
-- `tags`: exactly one tag per route, matching the resource (`["Medias"]`).
+- The success status is what `c.ok` sends: **201 on POST, 200 otherwise**.
+- Build error responses with `getOpenApiResponses({ <status>: "<description>" | true })`. Only `500` is added automatically; `true` takes the generic description. **Every `c.fail(code)` the route can emit, from the handler, its helpers and its middlewares, is listed**, and nothing else:
+  - `withAuth(...)` → `401: true` and `403: true` (or a 403 string covering the generic denial plus the route's own forbidden cases).
+  - `checkX()` → its `X_NOT_FOUND` 404 and a 422 for a malformed ID; `validate*` → 422; `rateLimit` → 429.
+  - Public and `withOptionalAuth` routes carry no 401/403 unless the handler fails with them itself.
+- `tags`: exactly one tag, declared in the `tags` list of `app.ts` and placed in one of its `x-tagGroups`. Reuse an existing tag before adding one.
+- `apps/api/src/__integration-tests__/openapi.test.ts` checks the generated spec: access footer, single declared tag, 401/403 placement, every path parameter documented and described. Run it after touching a route.
 
 ### Prose conventions
 
-Write for the API consumer. They don't care about implementation. Specifically:
+Write for the API consumer: describe what the caller sees, in American English and the present tense. Address the caller as **you/your**; another user is "the user". Write "does not", "cannot", "is not" in full, in descriptions and in the error messages of `errors.ts`. Write **ID** in uppercase in prose ("by ID"). Put enum values, field names and param names in backticks in route descriptions (`` `PRIVATE` ``, `` `perPage` ``). Describe effects, never the machinery (tables, transactions, S3, Redis, Meilisearch, queues, caches).
 
-- **Summary**: short, verb-first, no "a new" filler. ✅ `"Create a media"`, `"Update a cover"`, `"Delete a banner"`, `"Set the main cover"`, `"Refresh a media in search"`. ❌ `"Create a new media"`, `"Force a media to be reindexed in search"`, `"Update a cover's metadata"`.
-- **Description**: state what the endpoint does and any consumer-visible constraints (e.g. "the main cover cannot be deleted"). Keep it to 1–3 sentences. Markdown is rendered (Scalar UI).
-- **Response 200 description**: noun-form, one short phrase, period. ✅ `"Media updated."`, `"Covers of the media."`, `"Matching medias."` ❌ `"Media updated successfully."`, `"Returns the covers of the media."`
-- **Banned phrasing** (these leak internals):
-  - `soft-delete` / `soft-deleted` → just `delete` / `deleted`. If reversibility matters to the consumer, say "can be restored later".
-  - `non-deleted` / `not yet deleted` → don't mention; consumers assume listings show current state.
-  - `Marks the X as deleted` / `Sets deletedAt` → say "Removes X from listings" or "Deletes X".
-  - `the underlying file is retained` / `kept in storage` → drop. Say "can be restored later" if relevant.
-  - `Recomputes the search document` / `pushes to the index` / `after a backfill` → describe the user-visible effect, e.g. "so that search reflects the current state".
-  - `Stored for moderation audit` / `Stored for compliance` → drop. The field is just "A short explanation for the change."
-  - `Restricted to moderators` (in description body) → move to the **Required roles** footer (see below).
-  - `Patches the metadata of an existing X` → `Updates the metadata of X`. (`Patches` and `existing` add nothing.)
+- **Summary**: verb first, sentence case, no final period, at most 7 words. Caller-scoped routes say "my" (`"List my library"`), another user's say "a user's" (`"List a user's lists"`). ✅ `"Create a media"`, `"Set the main cover"`, `"Demote a group owner"`. ❌ `"Create a new media"`, `"Demote an OWNER to MEMBER"`.
+- **Description**: 1–3 sentences, then the access footer. The first verb mirrors the summary: Get → "Returns …", List → "Lists …", Create → "Creates …", Update → "Updates …", Delete → "Deletes …", Remove → "Removes …". Mention the order of a list ("newest first") and consumer-visible limits. On an optional-auth route, say what signed-in viewers also get ("Signed-in viewers also see whether they follow the user.").
+- **2xx response**: noun phrase + period. ✅ `"The group."`, `"The matching groups."`, `"Your library."`, `"Group created."`, `"Chapter marked as read."`.
+- **Error responses**: one sentence per status, from the caller's side; several causes on one status joined with ", or ".
+  - 404 by path ID: `"No group with the given ID exists."`; referenced ID in the body: `"One of the staff members does not exist."`
+  - 422, in this order as needed: `"The provided ID is not a valid UUID"`, `"the query parameters failed validation"`, `"the request body failed validation"`, then the route's own cases. E.g. `"The provided ID is not a valid UUID, or the request body failed validation."`
+  - 409 states a conflict with the resource's state (`"You already follow this user."`); an action the caller may never take (acting on yourself, someone else's resource) is a 403. 429: `"Too many requests, try again later."`
+- **Field descriptions**: a sentence with a period. IDs `"The ID of the group."`; booleans `"Whether …"`; timestamps `"When …"`; counts `"The number of …"`; other values `"The name of the group."`; nullable fields end with `", if any."`.
+- **Deletions**: say "Deletes X" or "Removes X from listings"; promise "can be restored later" only when a restore route exists.
 
-### Permissions footer
+### Access footer
 
-Every route's `description` ends with **one line** stating who can call it. Derive from `withAuth(action, subject)` and the role table in `abilities.ts`. Current mapping for `Media`:
+Every route's `description` ends with a blank line and exactly **one** footer line, derived from the route's real checks and `packages/permissions/src/rules.ts`:
 
-| `withAuth(...)` | Footer |
+| Route | Footer |
 |---|---|
-| (none, public route) | `**Authentication:** none.` |
-| `("create" \| "update" \| "delete", "Media")` | `**Required roles:** uploader, moderator, admin.` |
-| `("manage", "Media")` | `**Required roles:** moderator, admin.` |
+| public, never reads a session | `**Authentication:** none.` |
+| `withOptionalAuth` | `**Authentication:** optional.` |
+| `withAuth()`, any non-banned user | `**Authentication:** signed-in user.` |
+| `withAuth("x.y")` gated on global roles | `**Required roles:** <roles>.` lowercase, in the order `uploader intern, uploader, moderator, admin` (e.g. `media.delete: is("UPLOADER","ADMIN")` → `uploader, admin`) |
+| access depends on the resource (owner, author, invitee, group permission), possibly with roles | `**Required access:** <who>.` e.g. `the owner of the list.`, ``the group owner or a member with the `MANAGE_MEMBERS` permission.`` |
 
-Format inside `describeRoute({ description: ... })`:
-
-```ts
-description:
-  "Updates the metadata of a media. Omitted fields are kept as-is.\n\n**Required roles:** uploader, moderator, admin.",
-```
-
-Footer is a blank line + bolded label + values. Always match the actual `withAuth(...)` line beneath — when you change one, change the other.
+Extra restrictions ("you cannot ban yourself", "not while impersonating") go in the description body. When the route's checks change, change the footer with them.
 
 ## Auth
 
-Every route uses `withAuth(action, resource)`. Pick the pair from `apps/api/src/middlewares/abilities.ts`. **If no existing pair fits, ask the user** — do not invent abilities silently.
+- `withAuth(path?)` signs the caller in and, with a path, enforces a **static** permission from `packages/permissions/src/rules.ts` (one that needs no target, e.g. `withAuth("pageReport.review")`). Without a path it only requires a signed-in, non-banned user.
+- Target-dependent permissions (`group.manageMembers`, `user.ban`…) are checked with `c.var.can("x.y", target)` once the target is known, or in an `authorize-*` middleware (`authorize-group-middleware.ts`).
+- Check the caller's rights **before** loading the target whenever the rule allows it, so a caller without the right gets 403 and learns nothing about the ID (`authorize-user-middleware.ts` runs before `checkUser`).
+- **If no existing permission fits, ask the user**: permissions are shared with the web app.
 
 ## Validation
 
-Always use the project's own `validate-*-middleware.ts` helpers — they fail with `c.fail("VALIDATION_ERROR", issues)` so every error stays in the standard envelope. **Never** use `validator(...)` from `hono-openapi` directly: it responds with its own non-envelope shape.
+Always use the project's own middlewares: they fail with `c.fail("VALIDATION_ERROR", issues)` so every error stays in the standard envelope, and they document the request in the spec. `validator(...)` from `hono-openapi` answers in its own non-envelope shape.
 
-- **JSON body** (default for mutations): `validateJson(schema)` → `c.var.json`. If no `validate-json-middleware.ts` exists yet, mirror `validate-query-middleware.ts` to create one (ask the user first).
+- **JSON body** (default for mutations): `validateJson(schema)` → `c.var.json`.
 - **Multipart** (only when the request contains a `File`): `validateFormData(schema)` → `c.var.formData!`. Add `checkImages()` after it when images are uploaded.
 - **Query**: `validateQuery(schema)` → `c.var.query`.
-- **Path params**: `validateParam(schema)` → `c.var.param`.
+- **Path params**: `checkX()` validates and loads `:id` (`checkGroup()`, `checkMedia()`…); any other path param goes through `validateParam(z.object({...}))` → `c.var.param`, so it is both checked and documented.
+- Resolve what the handler needs during validation (`.transform`) rather than looking it up again in the handler, so the handler never re-checks what validation guaranteed.
+- A field with a fallback is `.default(x).catch(x)`, not `.catch(x)` alone: the spec then shows it as optional.
 
-Reuse schemas from `apps/api/src/utils/schemas.ts` (`languageSchema`, `contentRatingSchema`, `fileSchema`, `paginationQuerySchema`, `paginationMetaSchema`, `apiSuccessEnvelope`). If you're tempted to inline a schema that's already used elsewhere as a literal, **hoist it into `schemas.ts` and update existing callers** before reusing.
+Reuse schemas from `apps/api/src/utils/schemas.ts` and `@taiyomoe/schemas` (`languageSchema`, `storedLanguageSchema`, `contentRatingSchema`, `fileSchema`, `userSummarySchema`, `paginationQuerySchema`, `paginationMetaSchema`, `apiSuccessEnvelope`). If you're tempted to inline a schema that's already used elsewhere as a literal, **hoist it into `schemas.ts` and update existing callers** before reusing.
 
 ## Transactions
 
@@ -239,12 +240,13 @@ expect(after).toHaveLength(before.length + 1)  // or +0 for rollback
 
 ## Final checklist
 
-- [ ] Handler in `src/handlers/`, mounted in the right router (router registered in `src/index.ts` if new).
-- [ ] `describeRoute` includes summary, description (no internals), tags, request schema, **every possible response** including each `c.fail` code.
-- [ ] Summary is verb-first and short; response 200 description is noun-form; no "successfully" / "soft-delete" / "non-deleted" / "underlying file" anywhere in the prose.
-- [ ] `description` ends with a permissions footer (`**Authentication:** none.` or `**Required roles:** …`) that matches the actual `withAuth(...)` call.
-- [ ] `tags` is a single-element array matching the resource (no slash-grouped tags).
-- [ ] `withAuth(action, resource)` with a real ability pair (asked if unsure).
+- [ ] Handler in `src/handlers/`, mounted in the right router (router registered in `src/app.ts` if new).
+- [ ] `describeRoute` has summary, description, one declared tag and **every possible response**, each `c.fail` code included; no hand-written `requestBody` or `parameters`.
+- [ ] Every field of the request and response schemas has a `.meta({ description })`.
+- [ ] Prose follows the conventions: verb-first summary, matching first verb, noun-form 2xx, canonical error sentences.
+- [ ] `description` ends with the one access footer matching the route's real checks; 401/403 listed exactly when a session is required.
+- [ ] Permissions come from `rules.ts`, checked before the target is loaded when possible (asked if none fits).
+- [ ] `openapi.test.ts` passes.
 - [ ] Schemas reused from `utils/schemas.ts`; shared inline schemas hoisted.
 - [ ] Mutations wrapped in `withTransaction`.
 - [ ] Pre-checks for referenced ids and conflicts, each mapped to a real code in `errors.ts`.
