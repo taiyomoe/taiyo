@@ -117,6 +117,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               src: `${UMAMI_PROXY_PATH}/s.js`,
               defer: true,
               "data-website-id": env.VITE_UMAMI_WEBSITE_ID,
+              // The reader rewrites `?page=` on every page turn: only a new path is a new view.
+              "data-exclude-search": "true",
             },
           ]),
     ],
