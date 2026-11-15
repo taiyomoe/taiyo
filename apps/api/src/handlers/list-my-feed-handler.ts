@@ -36,15 +36,16 @@ export const listMyFeedHandler = new Hono().get(
   async (c) => {
     const { db, user } = c.var
     const { page, perPage } = c.var.query
+    const base = db
+      .selectFrom("userLibraryEntries")
+      .innerJoin("chapters", "chapters.mediaId", "userLibraryEntries.mediaId")
+      .innerJoin("medias", "medias.id", "chapters.mediaId")
+      .where("userLibraryEntries.userId", "=", user.id)
+      .where("chapters.deletedAt", "is", null)
+      .where("chapters.status", "=", "PUBLISHED")
+      .where("medias.deletedAt", "is", null)
     const [items, totalRow] = await Promise.all([
-      db
-        .selectFrom("userLibraryEntries")
-        .innerJoin("chapters", "chapters.mediaId", "userLibraryEntries.mediaId")
-        .innerJoin("medias", "medias.id", "chapters.mediaId")
-        .where("userLibraryEntries.userId", "=", user.id)
-        .where("chapters.deletedAt", "is", null)
-        .where("chapters.status", "=", "PUBLISHED")
-        .where("medias.deletedAt", "is", null)
+      base
         .select((eb) => [
           "chapters.id",
           "chapters.title",
@@ -70,16 +71,7 @@ export const listMyFeedHandler = new Hono().get(
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
-      db
-        .selectFrom("userLibraryEntries")
-        .innerJoin("chapters", "chapters.mediaId", "userLibraryEntries.mediaId")
-        .innerJoin("medias", "medias.id", "chapters.mediaId")
-        .where("userLibraryEntries.userId", "=", user.id)
-        .where("chapters.deletedAt", "is", null)
-        .where("chapters.status", "=", "PUBLISHED")
-        .where("medias.deletedAt", "is", null)
-        .select(db.fn.countAll().as("count"))
-        .executeTakeFirstOrThrow(),
+      base.select(db.fn.countAll().as("count")).executeTakeFirstOrThrow(),
     ])
 
     return c.ok(items, { page, perPage, total: Number(totalRow.count) })
