@@ -39,8 +39,6 @@ export const showcaseMediasQueryOptions = () =>
     staleTime: 60 * 60 * 1000,
   })
 
-export type ShowcaseMedia = InferResponseType<typeof api.medias.showcase.$get, 200>["data"][number]
-
 export const mediaQueryOptions = (mediaId: string) =>
   queryOptions({
     queryKey: ["medias", mediaId],
