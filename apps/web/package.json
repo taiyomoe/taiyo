@@ -39,7 +39,7 @@
     "@taiyomoe/permissions": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/ui": "workspace:^",
-    "@takumi-rs/core": "^2.19.0",
+    "@takumi-rs/core": "^2.20.0",
     "@tanstack/charts": "^1.1.0",
     "@tanstack/markdown": "^1.0.0",
     "@tanstack/react-devtools": "^0.10.14",
