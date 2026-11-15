@@ -106,6 +106,9 @@ jobs:
             if [ -n "${{ vars.VITE_DISCORD_INVITE_URL }}" ]; then
               echo "VITE_DISCORD_INVITE_URL=${{ vars.VITE_DISCORD_INVITE_URL }}"
             fi
+            if [ -n "${{ vars.VITE_UMAMI_WEBSITE_ID }}" ]; then
+              echo "VITE_UMAMI_WEBSITE_ID=${{ vars.VITE_UMAMI_WEBSITE_ID }}"
+            fi
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 

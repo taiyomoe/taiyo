@@ -20,7 +20,7 @@ function RouteComponent() {
     <LegalPage
       eyebrow="Legal"
       title="Privacy Policy"
-      updated="12 November 2026"
+      updated="15 November 2026"
       intro="This policy explains what Taiyō collects, why we collect it, who else sees it, and the control you have over it. We have tried to write it in plain language rather than in the shape of a liability shield."
       sections={[
         {
@@ -93,6 +93,15 @@ function RouteComponent() {
                 keep the Service running, to investigate abuse, and to diagnose faults.
               </p>
               <p sx={prose.p}>
+                <strong sx={prose.strong}>Audience measurement.</strong> To know how many people
+                visit and how they find us, we count visits with Umami, which we host ourselves: the
+                pages you view, the site that sent you, your browser, operating system, device type,
+                screen size and language, and the country, region and city derived from your IP
+                address. Umami sets no cookie and does not store your IP address; it groups your
+                page views under an identifier that changes every month, so it cannot follow you
+                over time or across sites.
+              </p>
+              <p sx={prose.p}>
                 <strong sx={prose.strong}>Anti-abuse signals.</strong> When you sign up we use
                 Cloudflare Turnstile to tell humans from bots. Turnstile receives technical signals
                 from your browser; it is designed not to profile you across sites.
@@ -120,6 +129,11 @@ function RouteComponent() {
                   . Legal basis: our legitimate interest in a service that is not overrun.
                 </li>
                 <li>
+                  <strong sx={prose.strong}>To understand our audience</strong> — how many people
+                  visit, which pages they read and where they come from, measured without cookies.
+                  Legal basis: our legitimate interest in improving the Service.
+                </li>
+                <li>
                   <strong sx={prose.strong}>To communicate with you</strong> — verification emails,
                   password resets, group invitations, and notices about material changes. Legal
                   basis: performance of our contract, and our legitimate interest in keeping you
@@ -145,8 +159,9 @@ function RouteComponent() {
             <p sx={prose.p}>
               We use one strictly necessary cookie: a session cookie that keeps you signed in. It is
               required for the Service to work, so it is not subject to consent. Your display
-              preferences are stored on your account rather than in a cookie. We do not use
-              advertising or cross-site tracking cookies.
+              preferences are stored on your account rather than in a cookie. Our audience
+              measurement uses no cookie either. We do not use advertising or cross-site tracking
+              cookies.
             </p>
           ),
         },
@@ -213,7 +228,8 @@ function RouteComponent() {
               </p>
               <p sx={prose.p}>
                 Server logs are kept for a short period, normally no more than 90 days, and then
-                deleted. Backups roll off on their own schedule.
+                deleted. Audience measurement data is deleted after 90 days. Backups roll off on
+                their own schedule.
               </p>
             </>
           ),

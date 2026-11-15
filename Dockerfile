@@ -44,6 +44,7 @@ ARG VITE_API_URL
 ARG VITE_BETTER_AUTH_URL
 ARG VITE_TURNSTILE_SITE_KEY
 ARG VITE_DISCORD_INVITE_URL
+ARG VITE_UMAMI_WEBSITE_ID
 # Vite runs directly: `pnpm run` would first re-check the install and fire the root
 # postinstall, which needs git.
 WORKDIR /repo/apps/web
