@@ -1,6 +1,5 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
-import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useEffect, useState } from "react"
 
 // One lazy chunk per flag, so a profile only downloads the flag it shows.
@@ -10,7 +9,7 @@ const FLAGS = import.meta.glob<string>("/node_modules/country-flag-icons/3x2/*.s
 })
 const styles = stylex.create({
   flag: {
-    borderRadius: radius.sm,
+    borderRadius: "0.14rem",
     boxShadow: "0 0 0 1px rgb(0 0 0 / 10%)",
     display: "inline-block",
     flexShrink: 0,
