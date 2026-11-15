@@ -20,13 +20,10 @@ const querySchema = paginationQuerySchema.extend({
       "Only list the chapters whose title or media title contains this text, or whose number is this number.",
     example: "one punch",
   }),
-  mediaId: z
-    .uuid()
-    .optional()
-    .meta({
-      description: "Only list the chapters of this media.",
-      example: "4e26b80f-6661-4f5f-93b4-6dfed052bbed",
-    }),
+  mediaId: z.uuid().optional().meta({
+    description: "Only list the chapters of this media.",
+    example: "4e26b80f-6661-4f5f-93b4-6dfed052bbed",
+  }),
   language: z
     .enum(LANGUAGES)
     .optional()

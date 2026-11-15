@@ -108,6 +108,31 @@ describe("POST /medias", () => {
     expect(media.endDate).toBeNull()
   })
 
+  test("keeps a numeric title as text", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm({ skipTitle: true })
+
+    form.append("titles.0.title", "86")
+    form.append("titles.0.language", "ja")
+    form.append("titles.0.main", "true")
+
+    const res = await api<{ id: string }>(app, "/medias", { method: "POST", headers, form })
+
+    expect(res.status).toBe(201)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const title = await services.db
+      .selectFrom("titles")
+      .select("title")
+      .where("mediaId", "=", res.body.data.id)
+      .executeTakeFirstOrThrow()
+
+    expect(title.title).toBe("86")
+  })
+
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     const form = await getForm()
     const res = await api(app, "/medias", { method: "POST", form })

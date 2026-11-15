@@ -37,7 +37,7 @@ import {
 const createMediaSchema = z.object({
   titles: z
     .object({
-      title: z.string().min(1).max(config.input.maxNameLength).meta({
+      title: z.coerce.string().min(1).max(config.input.maxNameLength).meta({
         description: "The title of the media in the given language.",
         example: "One Punch Man",
       }),
@@ -153,20 +153,14 @@ const createMediaSchema = z.object({
       ],
     }),
   synopsis: mediaSynopsisSchema.default({}),
-  startDate: z.iso
-    .datetime()
-    .optional()
-    .meta({
-      description: "When the media started releasing, if known.",
-      example: "2009-06-03T00:00:00.000Z",
-    }),
-  endDate: z.iso
-    .datetime()
-    .optional()
-    .meta({
-      description: "When the media finished releasing, if it did.",
-      example: "2023-11-27T00:00:00.000Z",
-    }),
+  startDate: z.iso.datetime().optional().meta({
+    description: "When the media started releasing, if known.",
+    example: "2009-06-03T00:00:00.000Z",
+  }),
+  endDate: z.iso.datetime().optional().meta({
+    description: "When the media finished releasing, if it did.",
+    example: "2023-11-27T00:00:00.000Z",
+  }),
   contentRating: contentRatingSchema("The content rating of the media."),
   type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media.", example: "MANGA" }),
   status: z.enum(MEDIA_STATUSES).meta({
