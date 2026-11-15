@@ -34,7 +34,7 @@ const GENRE_KEYS = Object.entries(config.tags)
 const querySchema = z.object({
   contentRating: contentRatingsQuerySchema.meta({
     description:
-      "Comma-separated content ratings of the media to include in the genre and top media stats. Defaults to the default user setting.",
+      "Comma-separated content ratings of the media to count in the reading stats, except the streaks. Defaults to the default user setting.",
   }),
 })
 const countField = (description: string, example: number) => z.int().meta({ description, example })
@@ -170,6 +170,8 @@ const getReading = async (db: Kysely<DB>, userId: string, contentRatings: Conten
     .innerJoin("medias", "medias.id", "chapters.mediaId")
     .where("userHistories.userId", "=", userId)
     .where("userHistories.completed", "=", true)
+    .where("medias.deletedAt", "is", null)
+    .where("medias.contentRating", "in", contentRatings)
   const since = new Date(Date.now() - ACTIVITY_DAYS * DAY_MS)
   const [totals, activity, byType, byLanguage, top, genres] = await Promise.all([
     completed
@@ -202,8 +204,6 @@ const getReading = async (db: Kysely<DB>, userId: string, contentRatings: Conten
       .limit(TOP_LANGUAGES)
       .execute(),
     completed
-      .where("medias.deletedAt", "is", null)
-      .where("medias.contentRating", "in", contentRatings)
       .select((eb) => ["medias.id", eb.fn.countAll<string>().as("count")])
       .groupBy("medias.id")
       .orderBy("count", "desc")
