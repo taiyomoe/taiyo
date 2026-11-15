@@ -147,6 +147,56 @@ describe("POST /chapters/:id/pages/finalize", () => {
     expect(res.body.code).toBe("CHAPTER_UPLOAD_SESSION_NOT_FOUND")
   })
 
+  test("returns CHAPTER_PAGES_ALREADY_UPLOADED when another session already gave the chapter pages", async ({
+    app,
+    services,
+  }) => {
+    const { userId, headers } = await signInAs(services, { role: "ADMIN" })
+    const chapter = await services.db
+      .insertInto("chapters")
+      .values({
+        mediaId: SEEDED_MEDIA_ID,
+        number: 98_009,
+        language: "en",
+        uploaderId: userId,
+        pages: [{ id: crypto.randomUUID() }],
+      })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+    const uploadId = crypto.randomUUID()
+    const taskId = crypto.randomUUID()
+
+    await services.db
+      .insertInto("tasks")
+      .values({
+        id: taskId,
+        type: "UPLOAD_CHAPTER",
+        status: "PENDING",
+        sessionId: uploadId,
+        payload: {
+          chapterId: chapter.id,
+          mediaId: SEEDED_MEDIA_ID,
+          uploadId,
+          pages: [
+            {
+              pageId: crypto.randomUUID(),
+              stagingKey: `staging/chapters/${chapter.id}/${uploadId}/0`,
+            },
+          ],
+        },
+      })
+      .execute()
+
+    const res = await api(app, `/chapters/${chapter.id}/pages/finalize`, {
+      method: "POST",
+      headers,
+      json: { taskId },
+    })
+
+    expect(res.status).toBe(409)
+    expect(res.body).toMatchObject({ success: false, code: "CHAPTER_PAGES_ALREADY_UPLOADED" })
+  })
+
   test("returns CHAPTER_UPLOAD_SESSION_NOT_FOUND when task belongs to a different chapter", async ({
     app,
     services,

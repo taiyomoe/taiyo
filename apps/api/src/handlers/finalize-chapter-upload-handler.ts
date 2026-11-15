@@ -49,6 +49,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
         401: true,
         403: true,
         404: "No chapter with the given ID exists, or it has no pending upload session with the given task ID.",
+        409: "The chapter already has pages.",
         422: "The provided ID is not a valid UUID, or the request body failed validation.",
         429: "Too many requests, try again later.",
       }),
@@ -82,6 +83,10 @@ export const finalizeChapterUploadHandler = new Hono().post(
       task.status !== "PENDING"
     ) {
       return c.fail("CHAPTER_UPLOAD_SESSION_NOT_FOUND")
+    }
+
+    if (chapter.pages !== null && chapter.pages.length > 0) {
+      return c.fail("CHAPTER_PAGES_ALREADY_UPLOADED")
     }
 
     await chapterUploadQueue.enqueue({ taskId })
