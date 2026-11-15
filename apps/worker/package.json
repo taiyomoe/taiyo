@@ -19,7 +19,7 @@
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",
     "bullmq": "^6.6.0",
-    "evlog": "^2.34.0",
+    "evlog": "^2.35.1",
     "tsx": "^4.23.15",
     "zod": "^4.6.7"
   },
