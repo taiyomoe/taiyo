@@ -18,7 +18,7 @@
     "@taiyomoe/queue": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",
-    "bullmq": "^6.6.0",
+    "bullmq": "^6.7.2",
     "evlog": "^2.35.1",
     "tsx": "^4.23.15",
     "zod": "^4.6.7"
