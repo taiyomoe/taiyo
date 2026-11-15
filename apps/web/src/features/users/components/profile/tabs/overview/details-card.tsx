@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Calendar, Crown, Globe, Tag, User } from "@taiyomoe/ui/components/icons"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UserProfile } from "@/features/users/api/profile"
-import { LazyCountryFlag } from "@/components/flags/lazy-country-flag"
+import { UserCountryFlag } from "@/components/flags/flags"
 import { profileStyles } from "@/features/users/components/profile/profile-styles"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
 import { GENDER_LABELS } from "@/features/users/lib/cosmetic-labels"
@@ -91,7 +91,7 @@ export function DetailsCard({ profile }: { profile: UserProfile }) {
           <Detail icon={<Globe size={16} />} term={m.profile_detail_location()}>
             {profile.country === null ? null : (
               <span sx={styles.flag}>
-                <LazyCountryFlag country={profile.country} />
+                <UserCountryFlag country={profile.country} />
               </span>
             )}
             {location}
