@@ -280,7 +280,7 @@ const userErrors = {
 } as const
 const followErrors = {
   FOLLOW_SELF: {
-    message: "You can't follow yourself.",
+    message: "You cannot follow yourself.",
     code: 409,
   },
   ALREADY_FOLLOWING: {
@@ -288,13 +288,13 @@ const followErrors = {
     code: 409,
   },
   NOT_FOLLOWING: {
-    message: "You don't follow this user.",
+    message: "You do not follow this user.",
     code: 404,
   },
 } as const
 const profileErrors = {
   COSMETIC_LOCKED: {
-    message: "You haven't unlocked this cosmetic yet.",
+    message: "You have not unlocked this cosmetic yet.",
     code: 403,
   },
   INVALID_CROP: {
@@ -373,7 +373,7 @@ const commentErrors = {
     code: 404,
   },
   COMMENT_IMAGE_BLOCKED: {
-    message: "This image was removed by a moderator and can't be uploaded again.",
+    message: "This image was removed by a moderator and cannot be uploaded again.",
     code: 422,
   },
   COMMENT_IMAGE_TOO_COMPLEX: {
@@ -391,7 +391,7 @@ const shopErrors = {
     code: 404,
   },
   NOT_FOR_SALE: {
-    message: "This cosmetic can't be bought directly.",
+    message: "This cosmetic cannot be bought directly.",
     code: 409,
   },
   ALREADY_OWNED: {
@@ -399,7 +399,7 @@ const shopErrors = {
     code: 409,
   },
   INSUFFICIENT_POINTS: {
-    message: "You don't have enough points.",
+    message: "You do not have enough points.",
     code: 409,
   },
   LOOT_BOX_EXHAUSTED: {
@@ -407,7 +407,7 @@ const shopErrors = {
     code: 409,
   },
   SHOP_IMPERSONATION: {
-    message: "Points can't be spent while impersonating a user.",
+    message: "Points cannot be spent while impersonating a user.",
     code: 403,
   },
 } as const
