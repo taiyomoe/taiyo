@@ -69,7 +69,7 @@ export const purchaseShopItemHandler = new Hono().post(
     }
 
     if (definition === undefined) {
-      return c.fail("NOT_FOUND")
+      return c.fail("COSMETIC_NOT_FOUND")
     }
 
     if (definition.unlock.type !== "shop") {

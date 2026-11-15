@@ -386,6 +386,10 @@ const commentErrors = {
   },
 } as const
 const shopErrors = {
+  COSMETIC_NOT_FOUND: {
+    message: "The requested cosmetic was not found.",
+    code: 404,
+  },
   NOT_FOR_SALE: {
     message: "This cosmetic can't be bought directly.",
     code: 409,
