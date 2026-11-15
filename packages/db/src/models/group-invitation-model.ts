@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { GroupInvitationStatus, GroupPermission } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -13,5 +12,3 @@ export type GroupInvitation = {
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
 }
-
-export type NewGroupInvitation = Insertable<GroupInvitation>

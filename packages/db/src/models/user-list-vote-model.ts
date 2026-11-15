@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type UserListVote = {
@@ -6,5 +5,3 @@ export type UserListVote = {
   userId: string
   createdAt: Generated<Timestamp>
 }
-
-export type NewUserListVote = Insertable<UserListVote>

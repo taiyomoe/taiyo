@@ -12,7 +12,7 @@ import { buildRules, toRole } from "./rules"
 
 export type Permissions = ReturnType<typeof createCheck<PermissionsDefinition>>
 
-export type PermissionPath = RulesPaths<PermissionsDefinition>
+type PermissionPath = RulesPaths<PermissionsDefinition>
 
 export type StaticPermissionPath = {
   [P in PermissionPath]: DataAtPath<PermissionsDefinition, P> extends [] ? P : never

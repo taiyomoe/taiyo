@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type CommentImageFavorite = {
@@ -6,5 +5,3 @@ export type CommentImageFavorite = {
   imageId: string
   createdAt: Generated<Timestamp>
 }
-
-export type NewCommentImageFavorite = Insertable<CommentImageFavorite>

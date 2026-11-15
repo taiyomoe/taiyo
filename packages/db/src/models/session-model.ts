@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type Session = {
@@ -12,5 +11,3 @@ export type Session = {
   ipAddress: string | null
   userAgent: string | null
 }
-
-export type NewSession = Insertable<Session>

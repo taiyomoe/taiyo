@@ -9,13 +9,10 @@ export type AuditLogField = {
   suggest?: boolean
 }
 
-export const AUDIT_LOG_OUTCOMES = ["success", "failure", "denied"] as const
-
-export const AUDIT_LOG_SEVERITIES = ["low", "medium", "high", "critical"] as const
-
-export const AUDIT_LOG_ACTOR_TYPES = ["user", "system", "api", "agent"] as const
-
-export const AUDIT_LOG_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const
+const AUDIT_LOG_OUTCOMES = ["success", "failure", "denied"] as const
+const AUDIT_LOG_SEVERITIES = ["low", "medium", "high", "critical"] as const
+const AUDIT_LOG_ACTOR_TYPES = ["user", "system", "api", "agent"] as const
+const AUDIT_LOG_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const
 
 export const AUDIT_LOG_FIELDS: readonly AuditLogField[] = [
   {

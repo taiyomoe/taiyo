@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Language } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -16,5 +15,3 @@ export type Title = {
   creatorId: string
   deleterId: string | null
 }
-
-export type NewTitle = Insertable<Title>

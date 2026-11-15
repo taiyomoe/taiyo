@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { NotificationType } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -13,5 +12,3 @@ export type Notification = {
   readAt: Timestamp | null
   pushedAt: Timestamp | null
 }
-
-export type NewNotification = Insertable<Notification>

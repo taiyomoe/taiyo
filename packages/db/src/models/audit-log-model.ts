@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { AuditActorType, AuditOutcome, AuditSeverity } from "../constants"
 import type { Generated, Json, Timestamp } from "../types"
 
@@ -19,5 +18,3 @@ export type AuditLog = {
   idempotencyKey: string | null
   event: Json
 }
-
-export type NewAuditLog = Insertable<AuditLog>

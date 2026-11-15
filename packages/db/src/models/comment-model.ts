@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { CommentDeletion } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -17,5 +16,3 @@ export type Comment = {
   deletion: CommentDeletion | null
   deleterId: string | null
 }
-
-export type NewComment = Insertable<Comment>

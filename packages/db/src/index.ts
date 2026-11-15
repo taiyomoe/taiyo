@@ -127,6 +127,4 @@ export * from "./models/user-model"
 
 export * from "./models/verification-model"
 
-export * from "./types"
-
-export type { Generated } from "./types"
+export type { Json } from "./types"

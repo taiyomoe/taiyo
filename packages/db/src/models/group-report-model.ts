@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { GroupReportReason, GroupReportStatus } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -14,5 +13,3 @@ export type GroupReport = {
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
 }
-
-export type NewGroupReport = Insertable<GroupReport>
