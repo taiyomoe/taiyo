@@ -108,9 +108,11 @@ export const listPageReportsHandler = new Hono().get(
     const base = db
       .selectFrom("pageReports")
       .innerJoin("chapters", "chapters.id", "pageReports.chapterId")
+      .innerJoin("medias", "medias.id", "chapters.mediaId")
       .innerJoin("users", "users.id", "pageReports.reporterId")
       .where("pageReports.status", "=", status)
       .where("chapters.deletedAt", "is", null)
+      .where("medias.deletedAt", "is", null)
     const [rows, totalRow] = await Promise.all([
       base
         .select((eb) => [

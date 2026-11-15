@@ -52,7 +52,18 @@ export const listMyLibraryHandler = new Hono().get(
   async (c) => {
     const { db, user } = c.var
     const { page, perPage, status } = c.var.query
-    let base = db.selectFrom("userLibraryEntries").where("userId", "=", user.id)
+    let base = db
+      .selectFrom("userLibraryEntries")
+      .where("userId", "=", user.id)
+      .where((eb) =>
+        eb.exists(
+          eb
+            .selectFrom("medias")
+            .select("medias.id")
+            .whereRef("medias.id", "=", "userLibraryEntries.mediaId")
+            .where("medias.deletedAt", "is", null),
+        ),
+      )
 
     if (status) {
       base = base.where("status", "=", status)
