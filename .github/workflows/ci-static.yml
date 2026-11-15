@@ -41,6 +41,6 @@ jobs:
         if: ${{ !cancelled() }}
         run: pnpm knip
 
-      - name: Unused messages
+      - name: i18n messages
         if: ${{ !cancelled() }}
         run: pnpm lint:messages
