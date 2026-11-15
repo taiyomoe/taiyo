@@ -13,7 +13,7 @@
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
-    "bullmq": "^6.6.0",
+    "bullmq": "^6.7.2",
     "kysely": "^0.29.8",
     "magic-bytes.js": "^1.13.1",
     "sharp": "^0.35.5",
