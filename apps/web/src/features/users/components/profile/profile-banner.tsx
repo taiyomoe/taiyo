@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Image } from "@taiyomoe/ui/components/icons"
 import { breakpoints, colors, consts, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UserProfile } from "@/features/users/api/profile"
+import { navbarBleed } from "@/components/shell/navbar-bleed"
 import { ProfileImageMenu } from "@/features/users/components/profile/profile-image-menu"
 import { useProfileImageUpload } from "@/features/users/components/profile/use-profile-image-upload"
 import { m } from "@/paraglide/messages"
@@ -17,7 +18,9 @@ const styles = stylex.create({
     width: "100%",
   },
   image: {
+    inset: 0,
     objectFit: "cover",
+    position: "absolute",
     height: "100%",
     width: "100%",
   },
@@ -68,7 +71,7 @@ const styles = stylex.create({
     transitionProperty: "opacity, transform, background-color",
     transitionTimingFunction: motion.easeOut,
     right: { default: "1rem", [breakpoints.md]: "2rem" },
-    top: "1rem",
+    top: "calc(var(--navbar-height) + 1rem)",
   },
 })
 
@@ -77,7 +80,7 @@ export function ProfileBanner({ profile, isOwner }: { profile: UserProfile; isOw
   const second = (first + 2) % TONES.length
 
   return (
-    <div sx={[styles.banner, stylex.defaultMarker()]}>
+    <div sx={[styles.banner, navbarBleed.banner, stylex.defaultMarker()]}>
       {profile.bannerUrl === null ? (
         <div
           aria-hidden
@@ -97,6 +100,7 @@ export function ProfileBanner({ profile, isOwner }: { profile: UserProfile; isOw
         />
       )}
       <div aria-hidden sx={styles.shade} />
+      <div aria-hidden sx={navbarBleed.scrim} />
       {isOwner ? <BannerControls profile={profile} /> : null}
     </div>
   )

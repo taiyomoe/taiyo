@@ -21,8 +21,14 @@ const styles = stylex.create({
     padding: 0,
     gap: "0.625rem",
     listStyle: "none",
-    display: "flex",
+    columnGap: { [breakpoints.lg]: "0.875rem", default: null },
+    display: { [breakpoints.lg]: "grid", default: "flex" },
     flexDirection: "column",
+    gridTemplateColumns: {
+      [breakpoints.lg]:
+        "calc(0.375rem + 1.6875rem) minmax(0, 1fr) minmax(0, 16rem) minmax(0, 9rem) 4.75rem auto",
+      default: null,
+    },
   },
   row: {
     borderColor: colors.border,
@@ -40,8 +46,10 @@ const styles = stylex.create({
     boxShadow: shadows.chip,
     columnGap: { [breakpoints.lg]: "0.875rem", default: "0.75rem" },
     display: "grid",
+    gridColumnEnd: { [breakpoints.lg]: -1, default: null },
+    gridColumnStart: { [breakpoints.lg]: 1, default: null },
     gridTemplateColumns: {
-      [breakpoints.lg]: "1.6875rem minmax(0, 1fr) minmax(0, 16rem) minmax(0, 9rem) 4.75rem 4rem",
+      [breakpoints.lg]: "subgrid",
       default: "2.125rem minmax(0, 1fr) auto",
     },
     rowGap: "0.25rem",

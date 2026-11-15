@@ -53,6 +53,12 @@ const styles = stylex.create({
     height: "calc(100svh - var(--navbar-height))",
     top: "var(--navbar-height)",
   },
+  containerFullHeight: {
+    backgroundColor: colors.sidebar,
+    height: "100svh",
+    paddingTop: "var(--navbar-height)",
+    top: 0,
+  },
   content: {
     gap: "0.5rem",
     paddingBlock: "0.75rem",
@@ -110,7 +116,13 @@ const styles = stylex.create({
   },
 })
 
-export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection[] | undefined }) {
+export function AppSidebar({
+  sections,
+  fullHeight,
+}: {
+  sections?: readonly AppSidebarSection[] | undefined
+  fullHeight: boolean
+}) {
   const matchRoute = useMatchRoute()
   const { setOpenMobile } = useSidebar()
   const randomTitle = useRandomTitle()
@@ -160,7 +172,7 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
   ]
 
   return (
-    <Sidebar sx={styles.container}>
+    <Sidebar sx={[styles.container, fullHeight && styles.containerFullHeight]}>
       <SidebarContent sx={styles.content}>
         {(sections ?? defaultSections).map((section, index) => (
           <SidebarGroup key={section.label?.() ?? index} sx={styles.group}>
