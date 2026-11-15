@@ -1,0 +1,1 @@
+export const RECENTLY_ADDED_COUNT = 20

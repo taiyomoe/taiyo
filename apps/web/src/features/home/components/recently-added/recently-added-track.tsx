@@ -5,10 +5,10 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { useDeferredValue } from "react"
 import { range } from "remeda"
 import {
-  LatestTitleCard,
-  LatestTitleCardSkeleton,
-} from "@/features/home/components/latest-titles/latest-title-card"
-import { LATEST_TITLES_COUNT } from "@/features/home/lib/latest-titles"
+  RecentlyAddedCard,
+  RecentlyAddedCardSkeleton,
+} from "@/features/home/components/recently-added/recently-added-card"
+import { RECENTLY_ADDED_COUNT } from "@/features/home/lib/recently-added"
 import { recentlyAddedQueryOptions } from "@/features/recently-added/api/recently-added"
 import { ContentFilterEmpty } from "@/features/settings/components/content-filter"
 import { useSettings } from "@/lib/settings"
@@ -47,10 +47,10 @@ const styles = stylex.create({
   },
 })
 
-export function LatestTitlesTrack({ viewportRef }: { viewportRef: EmblaRootNodeRefType }) {
+export function RecentlyAddedTrack({ viewportRef }: { viewportRef: EmblaRootNodeRefType }) {
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const { data } = useSuspenseQuery(
-    recentlyAddedQueryOptions(contentRatings, 1, LATEST_TITLES_COUNT),
+    recentlyAddedQueryOptions(contentRatings, 1, RECENTLY_ADDED_COUNT),
   )
 
   if (data.data.length === 0) {
@@ -73,7 +73,7 @@ export function LatestTitlesTrack({ viewportRef }: { viewportRef: EmblaRootNodeR
             role="group"
             sx={styles.slide}
           >
-            <LatestTitleCard hit={hit} />
+            <RecentlyAddedCard hit={hit} />
           </div>
         ))}
       </div>
@@ -81,13 +81,13 @@ export function LatestTitlesTrack({ viewportRef }: { viewportRef: EmblaRootNodeR
   )
 }
 
-export function LatestTitlesTrackSkeleton() {
+export function RecentlyAddedTrackSkeleton() {
   return (
     <div aria-hidden sx={styles.viewport}>
       <div sx={styles.container}>
         {range(0, 6).map((index) => (
           <div key={index} sx={styles.slide}>
-            <LatestTitleCardSkeleton />
+            <RecentlyAddedCardSkeleton />
           </div>
         ))}
       </div>

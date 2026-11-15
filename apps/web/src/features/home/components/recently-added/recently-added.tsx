@@ -7,9 +7,9 @@ import { CatchBoundary, Link } from "@tanstack/react-router"
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react"
 import { Suspense, useEffect, useState } from "react"
 import {
-  LatestTitlesTrack,
-  LatestTitlesTrackSkeleton,
-} from "@/features/home/components/latest-titles/latest-titles-track"
+  RecentlyAddedTrack,
+  RecentlyAddedTrackSkeleton,
+} from "@/features/home/components/recently-added/recently-added-track"
 import { m } from "@/paraglide/messages"
 
 type EmblaApi = NonNullable<UseEmblaCarouselType[1]>
@@ -61,7 +61,7 @@ const styles = stylex.create({
   },
 })
 
-export function LatestTitles() {
+export function RecentlyAdded() {
   const [viewportRef, emblaApi] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
@@ -92,17 +92,17 @@ export function LatestTitles() {
   }, [emblaApi])
 
   return (
-    <section aria-labelledby="latest-titles" aria-roledescription="carousel" sx={styles.section}>
+    <section aria-labelledby="recently-added" aria-roledescription="carousel" sx={styles.section}>
       <div sx={styles.header}>
-        <h2 id="latest-titles" sx={styles.heading}>
+        <h2 id="recently-added" sx={styles.heading}>
           <span aria-hidden sx={styles.accent} />
-          {m.home_titles_title()}
+          {m.shell_nav_recently_added()}
         </h2>
         <div sx={styles.actions}>
           {canPrev || canNext ? (
             <div sx={styles.arrows}>
               <Button
-                aria-label={m.home_titles_previous()}
+                aria-label={m.home_recently_added_previous()}
                 disabled={!canPrev}
                 onClick={() => emblaApi?.goToPrev()}
                 size="icon-sm"
@@ -111,7 +111,7 @@ export function LatestTitles() {
                 <ChevronLeft />
               </Button>
               <Button
-                aria-label={m.home_titles_next()}
+                aria-label={m.home_recently_added_next()}
                 disabled={!canNext}
                 onClick={() => emblaApi?.goToNext()}
                 size="icon-sm"
@@ -132,9 +132,9 @@ export function LatestTitles() {
           </Button>
         </div>
       </div>
-      <CatchBoundary errorComponent={() => null} getResetKey={() => "latest-titles"}>
-        <Suspense fallback={<LatestTitlesTrackSkeleton />}>
-          <LatestTitlesTrack viewportRef={viewportRef} />
+      <CatchBoundary errorComponent={() => null} getResetKey={() => "recently-added"}>
+        <Suspense fallback={<RecentlyAddedTrackSkeleton />}>
+          <RecentlyAddedTrack viewportRef={viewportRef} />
         </Suspense>
       </CatchBoundary>
     </section>

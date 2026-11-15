@@ -93,7 +93,7 @@ const styles = stylex.create({
   },
 })
 
-export function LatestTitleCard({ hit }: { hit: SearchHit }) {
+export function RecentlyAddedCard({ hit }: { hit: SearchHit }) {
   const title = hit.mainTitle?.title
 
   return (
@@ -128,7 +128,7 @@ export function LatestTitleCard({ hit }: { hit: SearchHit }) {
   )
 }
 
-export function LatestTitleCardSkeleton() {
+export function RecentlyAddedCardSkeleton() {
   return (
     <div aria-hidden sx={styles.card}>
       <CoverSkeleton sx={styles.cover} />
