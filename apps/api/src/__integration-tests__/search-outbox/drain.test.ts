@@ -20,6 +20,8 @@ const touchMedias = async ({ db }: Services, ids: string[]) => {
   await db.updateTable("medias").set({ deletedAt: null }).where("id", "in", ids).execute()
 }
 
+test.override({ search: true })
+
 describe("drainSearchOutbox", () => {
   test(
     "pushes the current state of an enqueued media",

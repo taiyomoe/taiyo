@@ -172,41 +172,45 @@ describe("unpublished chapters", () => {
     expect(facets.body.data.volumes.map((row) => row.volume)).toEqual([null])
   })
 
-  test("are left out of the search index until published", async ({ services }) => {
-    const { userId } = await signInAs(services)
-    const chapterIds = await Promise.all(
-      (
-        [
-          { number: 9999, language: "zu", status: "PENDING" },
-          { number: 9998, language: "xh", status: "UPLOADING" },
-        ] as const
-      ).map((chapter) =>
-        seedChapter(services, { mediaId: SEEDED_MEDIA_ID, uploaderId: userId, ...chapter }),
-      ),
-    )
+  describe("in search", () => {
+    test.override({ search: true })
 
-    await drainSearchOutbox(services)
+    test("are left out of the search index until published", async ({ services }) => {
+      const { userId } = await signInAs(services)
+      const chapterIds = await Promise.all(
+        (
+          [
+            { number: 9999, language: "zu", status: "PENDING" },
+            { number: 9998, language: "xh", status: "UPLOADING" },
+          ] as const
+        ).map((chapter) =>
+          seedChapter(services, { mediaId: SEEDED_MEDIA_ID, uploaderId: userId, ...chapter }),
+        ),
+      )
 
-    const hidden = await waitForMediaDoc(services, SEEDED_MEDIA_ID, (doc) => doc !== null)
+      await drainSearchOutbox(services)
 
-    expect(hidden?.chapterLanguages).not.toContain("zu")
-    expect(hidden?.chapterLanguages).not.toContain("xh")
+      const hidden = await waitForMediaDoc(services, SEEDED_MEDIA_ID, (doc) => doc !== null)
 
-    await services.db
-      .updateTable("chapters")
-      .set({ status: "PUBLISHED" })
-      .where("id", "in", chapterIds)
-      .execute()
-    await drainSearchOutbox(services)
+      expect(hidden?.chapterLanguages).not.toContain("zu")
+      expect(hidden?.chapterLanguages).not.toContain("xh")
 
-    const shown = await waitForMediaDoc(
-      services,
-      SEEDED_MEDIA_ID,
-      (doc) => doc?.chapterLanguages.includes("zu") === true,
-    )
+      await services.db
+        .updateTable("chapters")
+        .set({ status: "PUBLISHED" })
+        .where("id", "in", chapterIds)
+        .execute()
+      await drainSearchOutbox(services)
 
-    expect(shown?.chapterLanguages).toEqual(expect.arrayContaining(["zu", "xh"]))
-  }, 30_000)
+      const shown = await waitForMediaDoc(
+        services,
+        SEEDED_MEDIA_ID,
+        (doc) => doc?.chapterLanguages.includes("zu") === true,
+      )
+
+      expect(shown?.chapterLanguages).toEqual(expect.arrayContaining(["zu", "xh"]))
+    }, 30_000)
+  })
 
   test("are left out of the feed and reading progress", async ({ app, services }) => {
     const { submitter, mediaId, pending, rejected, uploading, scheduled } = await setup(services)

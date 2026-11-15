@@ -160,11 +160,12 @@ Every new route gets a co-located integration test that hits real Postgres / S3 
 For each test the fixture provides:
 
 - A fresh Postgres database, cloned from a template that already has migrations + `pnpm -F db kysely seed run` applied.
-- A fresh S3 bucket.
-- A `services` bundle: `{ db, s3, s3Bucket, meili, auth }`.
+- A fresh S3 bucket, created on the first S3 command.
+- Its own Meilisearch index name, with no index behind it. Tests that read the index opt in with `test.override({ search: true })` at the top of their file or `describe`: the index is then created with its primary key, its settings and the seeded medias. Meilisearch runs tasks one at a time, so the other tests stay out of its queue.
+- A `services` bundle: `{ db, s3, s3Bucket, meili, mediasIndex, auth }`.
 - An `app` built via `createApp(services)`.
 
-Everything is torn down at the end of the test. **Do not** add `beforeEach`/`afterEach` for cleanup, do not truncate tables, do not manage state across tests.
+Everything is cleaned up for you: buckets and indexes after each test, databases at the end of their file. **Do not** add `beforeEach`/`afterEach` for cleanup, do not truncate tables, do not manage state across tests.
 
 ### Read everything off the fixture
 

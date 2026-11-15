@@ -28,6 +28,8 @@ const getIds = async (services: Services, app: Hono, links: unknown) => {
   return res.body.data.map(({ id }) => id)
 }
 
+test.override({ search: true })
+
 describe("POST /medias/search links filter", () => {
   test("finds a media by its MangaDex id", async ({ app, services }) => {
     expect(await getIds(services, app, { mangaDex: SEEDED_MANGADEX_ID })).toEqual([SEEDED_MEDIA_ID])
