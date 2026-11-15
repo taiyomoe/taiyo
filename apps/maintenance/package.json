@@ -23,7 +23,7 @@
   "devDependencies": {
     "@inlang/paraglide-js": "^2.29.3",
     "@stylexjs/unplugin": "^0.19.1",
-    "@tanstack/router-plugin": "^1.168.48",
+    "@tanstack/router-plugin": "^1.169.0",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
