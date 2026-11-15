@@ -5,7 +5,7 @@ import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
 
 type Reference = { kind: "media" | "group" | "staff" | "user" | "chapter"; id: string }
 
-export type AuditLogPreview = {
+type AuditLogPreview = {
   kind: "media" | "group" | "staff" | "user"
   id: string
   label: string | null
