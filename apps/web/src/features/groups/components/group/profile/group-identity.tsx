@@ -183,7 +183,7 @@ function GroupInlineStats({ group }: { group: Group }) {
     {
       value: group.mediaCount,
       label: group.mediaCount === 1 ? m.group_inline_title() : m.group_inline_titles(),
-      tab: "titles",
+      tab: "media",
     },
   ]
 

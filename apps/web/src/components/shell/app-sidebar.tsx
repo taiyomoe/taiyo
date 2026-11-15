@@ -132,7 +132,7 @@ export function AppSidebar({
       label: m.shell_nav_browse,
       items: [
         { label: m.shell_nav_home, icon: Home, to: "/" },
-        { label: m.shell_nav_advanced_search, icon: Sliders, to: "/titles" },
+        { label: m.shell_nav_advanced_search, icon: Sliders, to: "/media" },
         { label: m.shell_nav_recently_added, icon: Sparkles, to: "/recently-added" },
         {
           label: m.shell_nav_random_title,
