@@ -122,7 +122,8 @@ test.describe("reader", () => {
       }
 
       await page.mouse.wheel(0, 1500)
-      await page.waitForTimeout(200)
+      // The reader writes the page in the URL once it has settled for half a second.
+      await page.waitForTimeout(700)
     }
 
     await expect(page).toHaveURL(new RegExp(`/chapters/${MANHWA.chapters[1]}`))
