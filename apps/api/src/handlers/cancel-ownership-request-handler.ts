@@ -33,8 +33,8 @@ export const cancelOwnershipRequestHandler = new Hono().delete(
       },
       ...getOpenApiResponses({
         401: true,
-        403: "You did not file this request, or your account is banned.",
-        404: "No ownership request with the given ID exists.",
+        403: true,
+        404: "You filed no ownership request with the given ID.",
         409: "The request is no longer pending.",
         422: "The provided ID is not a valid UUID.",
       }),
@@ -50,7 +50,7 @@ export const cancelOwnershipRequestHandler = new Hono().delete(
     c.var.audit.set({ target: { groupId: ownershipRequest.groupId } })
 
     if (ownershipRequest.userId !== user.id) {
-      return c.fail("FORBIDDEN")
+      return c.fail("OWNERSHIP_REQUEST_NOT_FOUND")
     }
 
     const transitioned = await db
