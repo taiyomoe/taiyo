@@ -14,11 +14,11 @@ export const setMainCoverHandler = new Hono().post(
   describeRoute({
     summary: "Set the main cover",
     description:
-      "Makes the given cover the main cover for its media, replacing any previous main cover.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Sets the cover as the main cover of its media, replacing the previous main cover.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Covers"],
     responses: {
-      200: {
-        description: "Main cover updated.",
+      201: {
+        description: "Main cover set.",
         content: {
           "application/json": {
             schema: resolver(
@@ -32,8 +32,10 @@ export const setMainCoverHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No cover with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No cover with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

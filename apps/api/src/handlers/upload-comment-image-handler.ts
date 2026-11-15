@@ -28,27 +28,26 @@ const bodySchema = z.object({
     .file()
     .max(config.comments.maxImageSizeBytes)
     .mime([...COMMENT_IMAGE_MIME_TYPES])
-    .meta({ description: `A JPEG, PNG, GIF, WebP or AVIF image up to ${MAX_MB} MB.` }),
+    .meta({
+      description: `The image to upload: a JPEG, PNG, GIF, WebP or AVIF file up to ${MAX_MB} MB.`,
+    }),
 })
 
 export const commentImageSchema = z.object({
-  id: z.uuid(),
-  url: z.url(),
-  width: z.int(),
-  height: z.int(),
-  animated: z.boolean(),
-  uploaderId: z.uuid(),
+  id: z.uuid().meta({ description: "The ID of the image." }),
+  url: z.url().meta({ description: "The URL of the image." }),
+  width: z.int().meta({ description: "The width of the image, in pixels.", example: 640 }),
+  height: z.int().meta({ description: "The height of the image, in pixels.", example: 480 }),
+  animated: z.boolean().meta({ description: "Whether the image is animated." }),
+  uploaderId: z.uuid().meta({ description: "The ID of the user who uploaded the image." }),
 })
 
 export const uploadCommentImageHandler = new Hono().post(
   "/",
   describeRoute({
     summary: "Upload a comment image",
-    description: `Uploads an image or GIF to use in comments. It is checked, stripped of metadata and re-encoded as WebP; animations stay animated. Uploading the same file twice returns the first upload. An image no comment uses and nobody favorited is deleted after ${config.comments.orphanImageHours} hours.\n\n**Authentication:** signed-in user.`,
+    description: `Uploads an image or GIF to use in comments. It is stripped of metadata and re-encoded as WebP, animations included, and uploading the same file twice returns the first upload. An image no comment uses and nobody favorited is deleted after ${config.comments.orphanImageHours} hours.\n\n**Authentication:** signed-in user.`,
     tags: ["Comment images"],
-    requestBody: {
-      content: { "multipart/form-data": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Image uploaded.",
@@ -57,8 +56,11 @@ export const uploadCommentImageHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        422: `The file is not a valid image, is larger than ${MAX_MB} MB or ${config.comments.maxImageDimension} pixels on a side, has more than ${config.comments.maxImageFrames} frames, or was blocked by a moderator.`,
-        429: "Too many uploads — slow down.",
+        401: true,
+        403: true,
+        409: "The same image was removed while you uploaded it, try again.",
+        422: `The request body failed validation, or the file is not a valid image, weighs more than ${MAX_MB} MB, is wider or taller than ${config.comments.maxImageDimension} pixels, has more than ${config.comments.maxImageFrames} frames or too many pixels in total, or was blocked by a moderator.`,
+        429: "Too many uploads, try again later.",
       }),
     },
   }),

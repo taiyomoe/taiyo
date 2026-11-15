@@ -32,7 +32,10 @@ const acceptSchema = z.object({
       description:
         "The fields to accept, with the values to apply. A reviewer can adjust a suggested value before accepting it. Fields left out are rejected.",
     }),
-  note: suggestionNoteSchema.meta({ description: "A note for the author." }),
+  note: suggestionNoteSchema.meta({
+    description: "A note for the author of the suggestion, if any.",
+    example: "Kept the start date, the end date has no source.",
+  }),
 })
 
 export const acceptMediaSuggestionHandler = new Hono().post(
@@ -40,24 +43,27 @@ export const acceptMediaSuggestionHandler = new Hono().post(
   describeRoute({
     summary: "Accept a media suggestion",
     description:
-      "Applies some or all of a suggestion's fields to the media, with the reviewer's adjustments, and closes it.\n\n**Required roles:** uploader, moderator, admin.",
+      "Accepts some or all of the fields of a pending suggestion and applies them to the media, with your adjustments. The changes are credited to the author of the suggestion.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Media suggestions"],
-    requestBody: {
-      content: { "application/json": await resolver(acceptSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Suggestion accepted and applied.",
+        description: "Suggestion accepted.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the suggestion." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No suggestion with the given id exists, its media was deleted, or one of the staff members does not exist.",
-        409: "The suggestion was already reviewed or withdrawn, or a link already belongs to another media.",
-        422: "The request data failed validation, or it accepts a field the suggestion does not change.",
+        401: true,
+        403: true,
+        404: "No suggestion with the given ID exists, or its media was deleted, or one of the staff members does not exist.",
+        409: "The suggestion is no longer pending, or one of the links already belongs to another media.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation, or it accepts a field the suggestion does not change.",
       }),
     },
   }),

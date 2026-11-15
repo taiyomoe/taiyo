@@ -16,22 +16,28 @@ const PAGES_PER_POINT = 20
 const DAILY_PAGE_LIMIT = 1200
 const rewardSchema = z
   .object({
-    pages: z.int().meta({ description: "How many pages of this chapter earned credit." }),
-    points: z.int().meta({ description: "How many points were added to your balance." }),
+    pages: z
+      .int()
+      .meta({ description: "The number of pages of the chapter that earned credit.", example: 19 }),
+    points: z
+      .int()
+      .meta({ description: "The number of points added to your balance.", example: 1 }),
   })
   .nullable()
   .meta({
     description:
-      "What finishing the chapter earned you, or null when it earned nothing: the chapter number was already credited, you uploaded it, the daily limit is reached, or not enough time passed since you opened it or last earned credit.",
+      "What finishing the chapter earned you, or null when it earned nothing: the request did not complete it, the chapter number was already credited, you uploaded it, the daily limit is reached, or not enough time passed since you opened it or last earned credit.",
   })
 const updateHistorySchema = z
   .object({
-    pageId: z
-      .uuid()
-      .nullable()
+    pageId: z.uuid().nullable().optional().meta({
+      description: "The ID of the page you are on, or null to clear it.",
+      example: "9f1b2c3d-4e5f-4a7b-8c9d-0e1f2a3b4c5d",
+    }),
+    completed: z
+      .boolean()
       .optional()
-      .meta({ description: "ID of the page currently being viewed, or null to clear." }),
-    completed: z.boolean().optional().meta({ description: "Mark the chapter as fully read." }),
+      .meta({ description: "Whether you finished the chapter.", example: true }),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided.",
@@ -40,12 +46,9 @@ const updateHistorySchema = z
 export const updateChapterHistoryHandler = new Hono().patch(
   "/:id/history",
   describeRoute({
-    summary: "Update reading progress for a chapter",
-    description: `Updates your progress on this chapter — last page viewed, completed flag. Requires the chapter to already be in your history (via POST /chapters/:id/open).\n\nCompleting a chapter credits its pages towards points, one point per ${PAGES_PER_POINT} pages, once per chapter number. Credit accrues at most one page per ${SECONDS_PER_PAGE} seconds, counted from when you opened the chapter or last earned credit, whichever is later, and at most ${DAILY_PAGE_LIMIT} pages per 24 hours.\n\n**Authentication:** signed-in user.`,
+    summary: "Update the reading progress of a chapter",
+    description: `Updates your progress on a published chapter: the page you are on and whether you finished it. At least one field is required, and you must have opened the chapter first.\n\nFinishing a chapter credits its pages towards points, one point per ${PAGES_PER_POINT} pages, once per chapter number. Credit accrues at most one page per ${SECONDS_PER_PAGE} seconds, counted from when you opened the chapter or last earned credit, whichever is later, and at most ${DAILY_PAGE_LIMIT} pages per 24 hours.\n\n**Authentication:** signed-in user.`,
     tags: ["Reading history"],
-    requestBody: {
-      content: { "application/json": await resolver(updateHistorySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Progress updated.",
@@ -53,15 +56,21 @@ export const updateChapterHistoryHandler = new Hono().patch(
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
-                z.object({ userId: z.uuid(), chapterId: z.uuid(), reward: rewardSchema }),
+                z.object({
+                  userId: z.uuid().meta({ description: "Your user ID." }),
+                  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+                  reward: rewardSchema,
+                }),
               ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists, or you haven't opened it yet.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists, or you have not opened it yet.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

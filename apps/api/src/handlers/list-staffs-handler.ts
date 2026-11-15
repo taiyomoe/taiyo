@@ -9,21 +9,15 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const querySchema = paginationQuerySchema.extend({
-  search: z
-    .string()
-    .trim()
-    .min(1)
-    .max(100)
-    .optional()
-    .meta({ description: "Only list staffs whose name contains this text." }),
+  search: z.string().trim().min(1).max(100).optional().meta({
+    description: "Only list staffs whose name contains this text, ignoring case.",
+    example: "Kishimoto",
+  }),
 })
 const staffListItemSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the staff." }),
-  name: z.string().meta({ description: "Name of the staff.", example: "Kishimoto Masashi" }),
-  imageUrl: z
-    .url()
-    .nullable()
-    .meta({ description: "Public URL of the staff image, if any.", example: null }),
+  name: z.string().meta({ description: "The name of the staff.", example: "Kishimoto Masashi" }),
+  imageUrl: z.url().nullable().meta({ description: "The URL of the staff's image, if any." }),
 })
 
 export const listStaffsHandler = new Hono().get(
@@ -35,7 +29,7 @@ export const listStaffsHandler = new Hono().get(
     tags: ["Staffs"],
     responses: {
       200: {
-        description: "Matching staffs.",
+        description: "The matching staffs.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(staffListItemSchema.array(), paginationMetaSchema)),

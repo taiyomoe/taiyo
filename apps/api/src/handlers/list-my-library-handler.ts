@@ -10,15 +10,18 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 
 const querySchema = paginationQuerySchema.extend({
   status: z.enum(USER_LIBRARY_STATUSES).optional().meta({
-    description: "Filter by bucket. Default: all buckets.",
+    description: "Only list the entries with this status. Defaults to every status.",
+    example: "READING",
   }),
 })
 const libraryItemSchema = z.object({
-  mediaId: z.uuid(),
-  status: z.enum(USER_LIBRARY_STATUSES),
+  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+  status: z
+    .enum(USER_LIBRARY_STATUSES)
+    .meta({ description: "The status of the media in your library.", example: "READING" }),
   notify: z.boolean().meta({ description: "Whether new chapters of the media notify you." }),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  createdAt: z.iso.datetime().meta({ description: "When you added the media to your library." }),
+  updatedAt: z.iso.datetime().meta({ description: "When you last changed the entry." }),
 })
 
 export const listMyLibraryHandler = new Hono().get(
@@ -26,11 +29,11 @@ export const listMyLibraryHandler = new Hono().get(
   describeRoute({
     summary: "List my library",
     description:
-      "Returns your library entries, most-recently-updated first. Filter by `status` to scope to one bucket.\n\n**Authentication:** signed-in user.",
+      "Lists the entries of your library, most recently updated first.\n\n**Authentication:** signed-in user.",
     tags: ["Library"],
     responses: {
       200: {
-        description: "Your library entries.",
+        description: "Your library.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(libraryItemSchema.array(), paginationMetaSchema)),
@@ -38,6 +41,8 @@ export const listMyLibraryHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
+        401: true,
+        403: true,
         422: "The query parameters failed validation.",
       }),
     },
@@ -57,6 +62,7 @@ export const listMyLibraryHandler = new Hono().get(
       base
         .select(["mediaId", "status", "notify", "createdAt", "updatedAt"])
         .orderBy("updatedAt", "desc")
+        .orderBy("mediaId", "desc")
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),

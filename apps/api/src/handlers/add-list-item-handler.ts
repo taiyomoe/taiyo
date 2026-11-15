@@ -14,40 +14,44 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 import { countListItems, touchList } from "../utils/user-lists"
 
 const addItemSchema = z.object({
-  mediaId: z.uuid().meta({ description: "ID of an existing media to add." }),
-  position: z
-    .int()
-    .nonnegative()
-    .optional()
-    .meta({ description: "Insert position. Default: end of the list." }),
+  mediaId: z.uuid().meta({ description: "The ID of the media to add." }),
+  position: z.int().nonnegative().optional().meta({
+    description: "The position of the media on the list. Defaults to the end of the list.",
+    example: 3,
+  }),
 })
 
 export const addListItemHandler = new Hono().post(
   "/:id/items",
   describeRoute({
     summary: "Add a media to a list",
-    description: `Adds a media to a list. If \`position\` is omitted, the media goes to the end. A list holds at most ${config.lists.maxItems} titles.\n\n**Authentication:** list owner.`,
+    description: `Adds a media to one of your lists, at the end unless you give a \`position\`. The other titles keep their positions. A list holds at most ${config.lists.maxItems} titles.\n\n**Required access:** the owner of the list.`,
     tags: ["Custom lists"],
-    requestBody: {
-      content: { "application/json": await resolver(addItemSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Item added.",
+        description: "Media added to the list.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
-                z.object({ listId: z.uuid(), mediaId: z.uuid(), position: z.int() }),
+                z.object({
+                  listId: z.uuid().meta({ description: "The ID of the list." }),
+                  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+                  position: z
+                    .int()
+                    .meta({ description: "The position of the media on the list.", example: 3 }),
+                }),
               ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No list or media with the given id exists.",
-        409: "This media is already on the list, or the list is full.",
-        422: "The request data failed validation.",
+        401: true,
+        403: "You are not the owner of the list, or you do not have permission to perform this action.",
+        404: "No list with the given ID exists, or the media does not exist.",
+        409: "The media is already on the list, or the list is full.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

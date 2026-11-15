@@ -22,34 +22,49 @@ import { cosmeticUnlockSchema as unlockSchema } from "../utils/shop"
 
 const itemSchema = <T extends readonly [string, ...string[]]>(keys: T) =>
   z.object({
-    key: z.enum(keys),
-    rarity: z.enum(COSMETIC_RARITIES),
-    unlock: unlockSchema,
-    unlocked: z.boolean(),
+    key: z.enum(keys).meta({ description: "The key of the cosmetic.", example: keys[0] }),
+    rarity: z
+      .enum(COSMETIC_RARITIES)
+      .meta({ description: "The rarity of the cosmetic.", example: "rare" }),
+    unlock: unlockSchema.meta({ description: "How the cosmetic unlocks." }),
+    unlocked: z.boolean().meta({ description: "Whether you unlocked the cosmetic." }),
   })
 const cosmeticsSchema = z.object({
-  nameEffect: z.enum(NAME_EFFECT_KEYS).nullable(),
-  title: z.enum(USER_TITLE_KEYS).nullable(),
-  avatarBorder: z.enum(AVATAR_BORDER_KEYS).nullable(),
-  progress: z.record(z.enum(ACHIEVEMENT_METRICS), z.number().int()),
-  nameEffects: itemSchema(NAME_EFFECT_KEYS).array(),
-  titles: itemSchema(USER_TITLE_KEYS).array(),
-  avatarBorders: itemSchema(AVATAR_BORDER_KEYS).array(),
+  nameEffect: z
+    .enum(NAME_EFFECT_KEYS)
+    .nullable()
+    .meta({ description: "The name effect you have equipped, if any." }),
+  title: z
+    .enum(USER_TITLE_KEYS)
+    .nullable()
+    .meta({ description: "The profile title you have equipped, if any." }),
+  avatarBorder: z
+    .enum(AVATAR_BORDER_KEYS)
+    .nullable()
+    .meta({ description: "The avatar border you have equipped, if any." }),
+  progress: z
+    .record(z.enum(ACHIEVEMENT_METRICS), z.int())
+    .meta({ description: "Your current value for each achievement metric." }),
+  nameEffects: itemSchema(NAME_EFFECT_KEYS).array().meta({ description: "Every name effect." }),
+  titles: itemSchema(USER_TITLE_KEYS).array().meta({ description: "Every profile title." }),
+  avatarBorders: itemSchema(AVATAR_BORDER_KEYS)
+    .array()
+    .meta({ description: "Every avatar border." }),
 })
 
 export const getMyCosmeticsHandler = new Hono().get(
   "/me/cosmetics",
   describeRoute({
-    summary: "List my cosmetics",
+    summary: "Get my cosmetics",
     description:
-      "Lists every name effect, profile title and avatar border, whether you unlocked it and how it unlocks, along with what you have equipped and your progress towards achievement unlocks.\n\n**Authentication:** signed-in user.",
+      "Returns every name effect, profile title and avatar border, whether you unlocked each one and how it unlocks, along with what you have equipped and your progress towards achievement unlocks.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
     responses: {
       200: {
         description: "Your cosmetics.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(cosmeticsSchema)) } },
       },
-      ...getOpenApiResponses({}),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   withAuth(),

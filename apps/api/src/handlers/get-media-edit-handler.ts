@@ -12,24 +12,32 @@ export const getMediaEditHandler = new Hono().get(
   describeRoute({
     summary: "Get a media for editing",
     description:
-      "Returns every editable field of a media in the shape `PATCH /medias/:id` and suggestions accept, along with the current user's pending suggestion for it, if any.\n\n**Authentication:** signed-in user.",
+      "Returns every editable field of a media, in the shape `PATCH /medias/{id}` and suggestions accept, along with your pending suggestion for the media, if any.\n\n**Authentication:** signed-in user.",
     tags: ["Media suggestions"],
     responses: {
       200: {
-        description: "The editable fields and the user's pending suggestion.",
+        description: "The editable fields of the media and your pending suggestion.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  current: mediaEditViewSchema,
+                  current: mediaEditViewSchema
+                    .required()
+                    .meta({ description: "The current editable fields of the media." }),
                   suggestion: z
                     .object({
-                      id: z.uuid(),
-                      note: z.string().nullable(),
-                      changes: mediaEditViewSchema,
+                      id: z.uuid().meta({ description: "The ID of the suggestion." }),
+                      note: z
+                        .string()
+                        .nullable()
+                        .meta({ description: "Your note for the reviewers, if any." }),
+                      changes: mediaEditViewSchema.meta({
+                        description: "The fields the suggestion changes, with their new values.",
+                      }),
                     })
-                    .nullable(),
+                    .nullable()
+                    .meta({ description: "Your pending suggestion for the media, if any." }),
                 }),
               ),
             ),
@@ -37,8 +45,10 @@ export const getMediaEditHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

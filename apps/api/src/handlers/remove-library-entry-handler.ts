@@ -9,27 +9,35 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ mediaId: z.uuid() })
+const paramSchema = z.object({ mediaId: z.uuid().meta({ description: "The ID of the media." }) })
 
 export const removeLibraryEntryHandler = new Hono().delete(
   "/me/library/:mediaId",
   describeRoute({
     summary: "Remove a media from my library",
     description:
-      "Removes the entry. The media itself is untouched.\n\n**Authentication:** signed-in user.",
+      "Removes a media from your library. The media itself is not affected.\n\n**Authentication:** signed-in user.",
     tags: ["Library"],
     responses: {
       200: {
         description: "Library entry removed.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ mediaId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  mediaId: z.uuid().meta({ description: "The ID of the removed media." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "You don't have a library entry for this media.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "The media is not in your library.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

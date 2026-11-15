@@ -22,25 +22,25 @@ import {
 
 const createStaffSchema = z.object({
   name: z.string().min(1).max(config.input.maxNameLength).meta({
-    description: "Name of the staff member.",
+    description: "The name of the staff.",
     example: "Kishimoto Masashi",
   }),
-  bio: localizedTextSchema.optional(),
-  links: staffLinksSchema.optional(),
-  file: fileSchema("Optional image for the staff.").optional(),
+  bio: localizedTextSchema
+    .optional()
+    .meta({ description: "The biography of the staff, keyed by language code." }),
+  links: staffLinksSchema
+    .optional()
+    .meta({ description: "The links of the staff, keyed by provider." }),
+  file: fileSchema("The image of the staff.").optional(),
 })
 
 export const createStaffHandler = new Hono().post(
   "/",
   describeRoute({
     summary: "Create a staff",
-    description: "Creates a staff member.\n\n**Required roles:** uploader intern, uploader, admin.",
+    description:
+      "Creates a staff, optionally with a biography, links and an image.\n\n**Required roles:** uploader intern, uploader, admin.",
     tags: ["Staffs"],
-    requestBody: {
-      content: {
-        "multipart/form-data": await resolver(createStaffSchema).toOpenAPISchema(),
-      },
-    },
     responses: {
       201: {
         description: "Staff created.",
@@ -49,7 +49,7 @@ export const createStaffHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid().meta({ description: "The ID of the newly created staff." }),
+                  id: z.uuid().meta({ description: "The ID of the new staff." }),
                 }),
               ),
             ),
@@ -57,8 +57,10 @@ export const createStaffHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        422: `The request data failed validation, or the uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        422: `The request body failed validation, or the image is invalid, larger than ${config.images.maxSizeBytes / 1024 / 1024} MB or has too many pixels or frames.`,
+        429: "Too many requests, try again later.",
       }),
     },
   }),

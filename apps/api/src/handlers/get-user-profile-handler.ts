@@ -12,77 +12,118 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 import { isBannedSql } from "../utils/user-moderation"
 
 const paramSchema = z.object({
-  username: z.string().trim().min(1).max(100),
+  username: z
+    .string()
+    .trim()
+    .min(1)
+    .max(100)
+    .meta({ description: "The username of the user, case-insensitive.", example: "kaito" }),
 })
 const userProfileSchema = z.object({
-  id: z.uuid(),
-  username: z.string(),
-  displayUsername: z.string(),
-  image: z.string().nullable(),
-  nameEffect: z.string().nullable().meta({ description: "The equipped name effect, if any." }),
-  avatarBorder: z.string().nullable().meta({ description: "The equipped avatar border, if any." }),
-  title: z.string().nullable().meta({ description: "The equipped profile title, if any." }),
-  role: z.enum(ROLES),
-  createdAt: z.iso.datetime(),
-  bannerUrl: z.url().nullable(),
-  about: z
-    .partialRecord(z.enum(LANGUAGES), z.string())
-    .meta({ description: "About text, keyed by language." }),
-  city: z.string().nullable(),
-  country: z.enum(COUNTRIES).nullable(),
-  gender: z.enum(GENDERS),
-  birthDate: z.iso.date().nullable().meta({ description: "Birth date, as YYYY-MM-DD." }),
-  points: z.number().int(),
-  xp: z
-    .number()
+  id: z.uuid().meta({ description: "The ID of the user." }),
+  username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
+  displayUsername: z
+    .string()
+    .meta({ description: "The display name of the user.", example: "Kaito" }),
+  image: z.string().nullable().meta({ description: "The URL of the user's avatar, if any." }),
+  nameEffect: z
+    .string()
+    .nullable()
+    .meta({ description: "The name effect the user has equipped, if any.", example: "sunrise" }),
+  avatarBorder: z
+    .string()
+    .nullable()
+    .meta({ description: "The avatar border the user has equipped, if any." }),
+  title: z
+    .string()
+    .nullable()
+    .meta({ description: "The profile title the user has equipped, if any." }),
+  role: z.enum(ROLES).meta({ description: "The role of the user.", example: "UPLOADER" }),
+  createdAt: z.iso.datetime().meta({ description: "When the user signed up." }),
+  bannerUrl: z.url().nullable().meta({ description: "The URL of the user's banner, if any." }),
+  about: z.partialRecord(z.enum(LANGUAGES), z.string()).meta({
+    description: "The about text of the user, keyed by language.",
+    example: { en: "Translating seinen since 2019." },
+  }),
+  city: z
+    .string()
+    .nullable()
+    .meta({ description: "The city of the user, if any.", example: "Lisbon" }),
+  country: z
+    .enum(COUNTRIES)
+    .nullable()
+    .meta({ description: "The country of the user, if any.", example: "pt" }),
+  gender: z
+    .enum(GENDERS)
+    .meta({ description: "The gender of the user.", example: "NOT_SPECIFIED" }),
+  birthDate: z.iso
+    .date()
+    .nullable()
+    .meta({ description: "The birth date of the user, if any.", example: "1998-04-12" }),
+  points: z.int().meta({ description: "The number of points the user can spend.", example: 1250 }),
+  xp: z.int().meta({
+    description: "The lifetime experience of the user: one point per page read and credited.",
+    example: 48210,
+  }),
+  followerCount: z
     .int()
-    .meta({ description: "Lifetime experience: one point per page read and credited." }),
-  followerCount: z.number().int(),
-  followingCount: z.number().int(),
+    .meta({ description: "The number of users following the user.", example: 37 }),
+  followingCount: z
+    .int()
+    .meta({ description: "The number of users the user follows.", example: 12 }),
   followingHidden: z
     .boolean()
     .meta({ description: "Whether the user hides who they follow from you." }),
-  uploadCount: z.number().int().meta({ description: "Published chapters the user uploaded." }),
-  commentCount: z.number().int().meta({ description: "Comments left on this profile." }),
-  listCount: z
-    .number()
+  uploadCount: z.int().meta({
+    description: "The number of published chapters the user uploaded.",
+    example: 214,
+  }),
+  commentCount: z
     .int()
-    .meta({ description: "Lists the user owns that you can see: PUBLIC ones, or all of yours." }),
+    .meta({ description: "The number of comments on the user's profile.", example: 9 }),
+  listCount: z.int().meta({
+    description:
+      "The number of lists the user owns that you can see: PUBLIC ones, or all of them when the user is you.",
+    example: 3,
+  }),
   viewerFollows: z
     .boolean()
     .nullable()
-    .meta({ description: "Whether you follow this user, or null when signed out." }),
+    .meta({ description: "Whether you follow the user, or null when you are signed out." }),
   followsViewer: z
     .boolean()
     .nullable()
-    .meta({ description: "Whether this user follows you, or null when signed out." }),
+    .meta({ description: "Whether the user follows you, or null when you are signed out." }),
   groups: z
     .object({
-      id: z.uuid(),
-      name: z.string(),
-      logoUrl: z.url().nullable(),
-      role: z.enum(GROUP_MEMBERSHIP_ROLES),
+      id: z.uuid().meta({ description: "The ID of the group." }),
+      name: z.string().meta({ description: "The name of the group.", example: "Sunray Scans" }),
+      logoUrl: z.url().nullable().meta({ description: "The URL of the group's logo, if any." }),
+      role: z
+        .enum(GROUP_MEMBERSHIP_ROLES)
+        .meta({ description: "The role of the user in the group.", example: "MEMBER" }),
     })
-    .array(),
+    .array()
+    .meta({ description: "The groups the user belongs to, alphabetically by name." }),
 })
 
 export const getUserProfileHandler = new Hono().get(
   "/by-username/:username",
   describeRoute({
-    summary: "Get a user profile",
+    summary: "Get a user's profile",
     description:
-      "Fetches the public profile of a user by username (case-insensitive): identity, about text, follow counts and the groups they belong to. Banned users are not found.\n\n**Authentication:** optional; signed-in viewers also learn whether they follow the user.",
+      "Returns the profile of the user with the given username: identity, about text, counts and the groups the user belongs to. Banned users are not found. Signed-in viewers also see whether they follow the user and whether the user follows them.\n\n**Authentication:** optional.",
     tags: ["Users"],
     responses: {
       200: {
-        description: "The user profile.",
+        description: "The user's profile.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(userProfileSchema)) },
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given username exists.",
-        422: "The username failed validation.",
+        404: "No user with the given username exists, or the user is banned.",
+        422: "The provided username is not valid.",
       }),
     },
   }),

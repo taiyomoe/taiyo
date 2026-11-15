@@ -11,15 +11,14 @@ export const streamMyNotificationsHandler = new Hono().get(
   "/me/notifications/stream",
   describeRoute({
     summary: "Stream changes to my notifications",
-    description:
-      "Opens a server-sent events stream. A `change` event arrives whenever your notifications change — a new one, or one read from another tab — and the client refetches what it shows. A `ping` comment keeps the connection alive every 25 seconds, and the server closes the stream after 30 minutes so the session is checked again on reconnect.\n\n**Authentication:** signed-in user.",
+    description: `Streams changes to your notifications as server-sent events. A \`ready\` event arrives once the stream is open, then a \`change\` event whenever your notifications change (a new one, or one read from another tab), so you can fetch them again. A \`ping\` comment keeps the connection alive every ${HEARTBEAT_MS / 1000} seconds, and the stream closes after ${MAX_DURATION_MS / 60_000} minutes so your session is checked again when you reconnect.\n\n**Authentication:** signed-in user.`,
     tags: ["Notifications"],
     responses: {
       200: {
-        description: "The event stream.",
+        description: "The event stream of your notification changes.",
         content: { "text/event-stream": { schema: { type: "string" } } },
       },
-      ...getOpenApiResponses(),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   withAuth(),

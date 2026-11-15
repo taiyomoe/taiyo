@@ -8,35 +8,56 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, groupSummarySchema } from "../utils/schemas"
 
 const querySchema = z.object({
-  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES).optional(),
+  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES).optional().meta({
+    description: "Only list requests with this status. Lists every status when omitted.",
+    example: "PENDING",
+  }),
 })
 const itemSchema = z.object({
-  id: z.uuid(),
-  groupId: z.uuid(),
-  group: groupSummarySchema,
-  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES),
-  message: z.string().nullable(),
-  proofLinks: z.url().array(),
-  reviewerNote: z.string().nullable(),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  id: z.uuid().meta({ description: "The ID of the ownership request." }),
+  groupId: z.uuid().meta({ description: "The ID of the group." }),
+  group: groupSummarySchema.meta({ description: "The group you asked to own." }),
+  status: z
+    .enum(GROUP_OWNERSHIP_REQUEST_STATUSES)
+    .meta({ description: "The status of the ownership request.", example: "PENDING" }),
+  message: z.string().nullable().meta({
+    description: "The requester's message to the admins, if any.",
+    example: "I founded Akira Scans in 2019 and still lead the team.",
+  }),
+  proofLinks: z
+    .url()
+    .array()
+    .meta({
+      description: "The public links proving the requester's claim.",
+      example: ["https://discord.gg/akira-scans"],
+    }),
+  reviewerNote: z.string().nullable().meta({
+    description: "The note the admin left for the requester, if any.",
+    example: "No proof of ownership.",
+  }),
+  createdAt: z.iso.datetime().meta({ description: "When the request was filed." }),
+  updatedAt: z.iso.datetime().meta({ description: "When the request was last updated." }),
 })
 
 export const listMyOwnershipRequestsHandler = new Hono().get(
   "/mine",
   describeRoute({
-    summary: "List ownership requests I have filed",
+    summary: "List my ownership requests",
     description:
-      "Returns the current user's ownership requests across all groups.\n\n**Authentication:** signed-in user.",
+      "Lists the ownership requests you filed across every group, newest first.\n\n**Authentication:** signed-in user.",
     tags: ["Group ownership"],
     responses: {
       200: {
-        description: "The current user's ownership requests.",
+        description: "Your ownership requests.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(itemSchema.array())) },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth(),

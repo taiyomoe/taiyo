@@ -1,6 +1,6 @@
 import { auditLogAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
-import { paginationQuerySchema } from "@taiyomoe/schemas"
+import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -24,41 +24,49 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 
 const GROUP_GAP = "30 minutes"
 const querySchema = paginationQuerySchema.extend(auditLogFilterSchema.shape).extend({
-  sort: z
-    .enum(["desc", "asc"])
-    .default("desc")
-    .meta({ description: "`desc` for the latest groups first (default), `asc` for the oldest." }),
+  sort: z.enum(["desc", "asc"]).default("desc").meta({
+    description:
+      "`desc` for the groups with the latest entries first, `asc` for the groups with the oldest entries first. Defaults to `desc`.",
+    example: "desc",
+  }),
 })
 const groupSchema = z.object({
-  count: z.int().meta({ description: "How many entries the group holds." }),
-  first: z.iso.datetime().meta({ description: "When the oldest entry was recorded." }),
-  last: z.iso.datetime().meta({ description: "When the latest entry was recorded." }),
-  targets: z.int().meta({ description: "How many distinct resources the entries touched." }),
+  count: z.int().meta({ description: "The number of entries in the group.", example: 14 }),
+  first: z.iso.datetime().meta({ description: "When the oldest entry of the group was recorded." }),
+  last: z.iso.datetime().meta({ description: "When the latest entry of the group was recorded." }),
+  targets: z.int().meta({
+    description: "The number of distinct resources the entries of the group were performed on.",
+    example: 9,
+  }),
   entry: auditLogSchema.meta({ description: "The latest entry of the group." }),
 })
-const metaSchema = z.object({
-  page: z.int(),
-  perPage: z.int(),
-  total: z.int().meta({ description: "How many groups match." }),
-  entries: z.int().meta({ description: "How many entries the matching groups hold." }),
+const metaSchema = paginationMetaSchema.extend({
+  total: z.int().meta({ description: "The number of matching groups.", example: 87 }),
+  entries: z
+    .int()
+    .meta({ description: "The number of entries in the matching groups.", example: 932 }),
 })
 
 export const listAuditLogGroupsHandler = new Hono().get(
   "/groups",
   describeRoute({
-    summary: "List audit logs, grouped",
-    description: `Lists matching entries grouped into runs: consecutive entries by the same actor with the same action and outcome, each recorded within ${GROUP_GAP} of the previous one. Signed-out actors are grouped per IP address. Takes the same filters as listing, and is recorded the same way.\n\n**Required roles:** admin.`,
+    summary: "List grouped audit logs",
+    description: `Lists matching entries grouped into runs of consecutive entries by the same actor with the same action and outcome, each recorded within ${GROUP_GAP} of the previous one, latest runs first. Signed-out actors are grouped per IP address. Takes the same filters as listing audit logs, and listing them is itself recorded in the audit log.\n\n**Required roles:** admin.`,
     tags: ["Audit logs"],
     responses: {
       200: {
-        description: "Matching groups, with the latest entry of each.",
+        description: "The matching groups, with the latest entry of each.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(groupSchema.array(), metaSchema)),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters, or the KQL query, failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation, or the KQL query is invalid.",
+      }),
     },
   }),
   audited(auditLogAudit.LIST),

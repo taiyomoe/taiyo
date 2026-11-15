@@ -13,18 +13,27 @@ export const readAllMyNotificationsHandler = new Hono().post(
   describeRoute({
     summary: "Mark all my notifications as read",
     description:
-      "Marks every unread notification of yours as read and returns how many changed.\n\n**Authentication:** signed-in user.",
+      "Marks all your unread notifications as read and returns how many changed.\n\n**Authentication:** signed-in user.",
     tags: ["Notifications"],
     responses: {
       201: {
-        description: "Your notifications are read.",
+        description: "Notifications marked as read.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ count: z.int().nonnegative() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  count: z.int().nonnegative().meta({
+                    description: "The number of notifications marked as read.",
+                    example: 4,
+                  }),
+                }),
+              ),
+            ),
           },
         },
       },
-      ...getOpenApiResponses(),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   audited(notificationAudit.READ_ALL),

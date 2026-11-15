@@ -1,41 +1,31 @@
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
-import z from "zod"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
-
-const followingItemSchema = z.object({
-  id: z.uuid(),
-  username: z.string(),
-  displayUsername: z.string(),
-  image: z.string().nullable(),
-  nameEffect: z.string().nullable(),
-  avatarBorder: z.string().nullable(),
-})
+import { apiSuccessEnvelope, userSummarySchema } from "../utils/schemas"
 
 export const listFollowingHandler = new Hono().get(
   "/:id/following",
   describeRoute({
-    summary: "List users the given user follows",
+    summary: "List the users a user follows",
     description:
-      "Lists the users that the given user is following. The list is empty when the user hides it, unless you are that user.\n\n**Authentication:** optional.",
+      "Lists the users the user follows, alphabetically by username. The list is empty when the user hides it, unless you are that user.\n\n**Authentication:** optional.",
     tags: ["Follows"],
     responses: {
       200: {
-        description: "Users the given user follows.",
+        description: "The users the user follows.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(followingItemSchema.array(), paginationMetaSchema)),
+            schema: resolver(apiSuccessEnvelope(userSummarySchema.array(), paginationMetaSchema)),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given id exists.",
-        422: "The provided id is not a valid UUID or the query parameters failed validation.",
+        404: "No user with the given ID exists, or the user is banned.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

@@ -7,16 +7,35 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const itemSchema = z.object({
-  id: z.uuid(),
-  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES),
-  name: z.string(),
-  description: z.string().nullable(),
-  message: z.string(),
-  proofLinks: z.url().array(),
-  reviewerNote: z.string().nullable(),
-  groupId: z.uuid().nullable(),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  id: z.uuid().meta({ description: "The ID of the request." }),
+  status: z
+    .enum(GROUP_OWNERSHIP_REQUEST_STATUSES)
+    .meta({ description: "The status of the request.", example: "PENDING" }),
+  name: z
+    .string()
+    .meta({ description: "The name of the requested group.", example: "Akira Scans" }),
+  description: z.string().nullable().meta({
+    description: "The description of the requested group, if any.",
+    example: "Seinen and josei scanlations since 2018.",
+  }),
+  message: z.string().meta({ description: "Who you are and why the request should be approved." }),
+  proofLinks: z
+    .url()
+    .array()
+    .meta({
+      description: "The public links proving the claim.",
+      example: ["https://discord.gg/akira-scans"],
+    }),
+  reviewerNote: z.string().nullable().meta({
+    description: "The explanation the reviewer left, if any.",
+    example: "No proof of activity.",
+  }),
+  groupId: z
+    .uuid()
+    .nullable()
+    .meta({ description: "The ID of the group created from the request, if any." }),
+  createdAt: z.iso.datetime().meta({ description: "When you sent the request." }),
+  updatedAt: z.iso.datetime().meta({ description: "When the request was last updated." }),
 })
 
 export const listMyGroupCreationRequestsHandler = new Hono().get(
@@ -24,16 +43,16 @@ export const listMyGroupCreationRequestsHandler = new Hono().get(
   describeRoute({
     summary: "List my group creation requests",
     description:
-      "Returns the current user's requests for new groups, newest first.\n\n**Authentication:** signed-in user.",
+      "Lists your requests for new groups, newest first.\n\n**Authentication:** signed-in user.",
     tags: ["Group creation requests"],
     responses: {
       200: {
-        description: "The current user's group creation requests.",
+        description: "Your group creation requests.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(itemSchema.array())) },
         },
       },
-      ...getOpenApiResponses(),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   withAuth(),

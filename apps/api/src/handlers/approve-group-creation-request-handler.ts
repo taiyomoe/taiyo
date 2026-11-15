@@ -15,21 +15,30 @@ export const approveGroupCreationRequestHandler = new Hono().post(
   describeRoute({
     summary: "Approve a group creation request",
     description:
-      "Creates the requested group and makes the requester its owner.\n\n**Required roles:** admin.",
+      "Approves a pending group creation request: creates the group with the requested name and description, and makes the requester its owner.\n\n**Required roles:** admin.",
     tags: ["Group creation requests"],
     responses: {
       201: {
-        description: "Request approved and group created.",
+        description: "Group creation request approved.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid(), groupId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the group creation request." }),
+                  groupId: z.uuid().meta({ description: "The ID of the new group." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No request with the given id exists.",
-        409: "The request is no longer pending, or a group already has this name.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No group creation request with the given ID exists.",
+        409: "The request is no longer pending, or a group with this name already exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

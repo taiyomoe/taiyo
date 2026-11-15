@@ -17,7 +17,7 @@ export const getMediaSuggestionHandler = new Hono().get(
   describeRoute({
     summary: "Get a media suggestion",
     description:
-      "Returns a suggestion with, for each field it changes, the suggested value, the value when it was made, and the value on the media right now.\n\n**Authentication:** the author of the suggestion, or an uploader, moderator or admin.",
+      "Returns a media suggestion with, for each field it changes, the suggested value, the value when it was made, and the value on the media right now.\n\n**Required access:** the author of the suggestion, or uploader, moderator or admin.",
     tags: ["Media suggestions"],
     responses: {
       200: {
@@ -29,8 +29,10 @@ export const getMediaSuggestionHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No suggestion with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No suggestion with the given ID exists, or its media was deleted, or you cannot see it.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

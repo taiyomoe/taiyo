@@ -16,18 +16,24 @@ export const deleteMyAvatarHandler = new Hono().delete(
   describeRoute({
     summary: "Remove my avatar",
     description:
-      "Removes your avatar, so your initial shows instead.\n\n**Authentication:** signed-in user.",
+      "Removes your avatar, so your initial shows instead. Removing an avatar you do not have does nothing.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
     responses: {
       200: {
         description: "Avatar removed.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ image: z.null() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  image: z.null().meta({ description: "The URL of your avatar, now null." }),
+                }),
+              ),
+            ),
           },
         },
       },
-      ...getOpenApiResponses({}),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   audited(userAudit.AVATAR_REMOVE, (c) => ({ id: c.var.user?.id })),

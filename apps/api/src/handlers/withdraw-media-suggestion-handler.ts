@@ -14,21 +14,27 @@ export const withdrawMediaSuggestionHandler = new Hono().post(
   describeRoute({
     summary: "Withdraw a media suggestion",
     description:
-      "Withdraws a suggestion that is still waiting for review.\n\n**Authentication:** the author of the suggestion.",
+      "Withdraws one of your suggestions that is still waiting for review.\n\n**Required access:** the author of the suggestion.",
     tags: ["Media suggestions"],
     responses: {
       201: {
         description: "Suggestion withdrawn.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the suggestion." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No suggestion with the given id exists.",
-        409: "The suggestion was already reviewed or withdrawn.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: "You are not the author of the suggestion, or you do not have permission to perform this action.",
+        404: "No suggestion with the given ID exists, or its media was deleted, or you cannot see it.",
+        409: "The suggestion is no longer pending.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

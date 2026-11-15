@@ -27,10 +27,13 @@ const updateStaffSchema = z
       .min(1)
       .max(config.input.maxNameLength)
       .optional()
-      .meta({ description: "New name of the staff.", example: "Kishimoto Masashi" }),
-    bio: localizedTextSchema.optional(),
+      .meta({ description: "The new name of the staff.", example: "Oda Eiichiro" }),
+    bio: localizedTextSchema.optional().meta({
+      description:
+        "The biography of the staff, keyed by language code. Send an empty string for a language to clear it, and omit a language to leave it unchanged.",
+    }),
     links: staffLinksSchema.optional(),
-    file: fileSchema("Optional new image for the staff. Replaces any current image.").optional(),
+    file: fileSchema("The new image of the staff. Replaces the current one.").optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided.",
@@ -41,13 +44,8 @@ export const updateStaffHandler = new Hono().patch(
   describeRoute({
     summary: "Update a staff",
     description:
-      "Updates a staff. Omitted fields are kept as-is. For `bio` and `links`, only the provided keys are touched; send an empty value for a key to clear it.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Updates a staff. At least one field is required, and omitted fields are left unchanged. For `bio` and `links`, only the given keys change, and an empty string clears a key.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Staffs"],
-    requestBody: {
-      content: {
-        "multipart/form-data": await resolver(updateStaffSchema).toOpenAPISchema(),
-      },
-    },
     responses: {
       200: {
         description: "Staff updated.",
@@ -64,8 +62,10 @@ export const updateStaffHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No staff with the given id exists.",
-        422: `The request data failed validation, or the uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
+        401: true,
+        403: true,
+        404: "No staff with the given ID exists.",
+        422: `The provided ID is not a valid UUID, or the request body failed validation, or the image is invalid, larger than ${config.images.maxSizeBytes / 1024 / 1024} MB or has too many pixels or frames.`,
       }),
     },
   }),

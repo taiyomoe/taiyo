@@ -14,21 +14,26 @@ export const deleteListHandler = new Hono().delete(
   "/:id",
   describeRoute({
     summary: "Delete a list",
-    description:
-      "Soft-deletes a list. The list can be restored later.\n\n**Authentication:** list owner.",
+    description: "Deletes one of your lists.\n\n**Required access:** the owner of the list.",
     tags: ["Custom lists"],
     responses: {
       200: {
         description: "List deleted.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the list." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No list with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: "You are not the owner of the list, or you do not have permission to perform this action.",
+        404: "No list with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

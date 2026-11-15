@@ -18,13 +18,10 @@ const transferSchema = z.object({
 export const transferGroupOwnershipHandler = new Hono().post(
   "/:id/transfer",
   describeRoute({
-    summary: "Transfer group ownership",
+    summary: "Transfer a group's ownership",
     description:
-      "Makes another member of the group an OWNER and demotes you to MEMBER in one step.\n\n**Authentication:** group owner.",
+      "Transfers your ownership of the group to another member: they become an owner and you become a regular member, in one step.\n\n**Required access:** the group owner.",
     tags: ["Group members"],
-    requestBody: {
-      content: { "application/json": await resolver(transferSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Ownership transferred.",
@@ -32,16 +29,23 @@ export const transferGroupOwnershipHandler = new Hono().post(
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
-                z.object({ groupId: z.uuid(), fromUserId: z.uuid(), toUserId: z.uuid() }),
+                z.object({
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                  fromUserId: z
+                    .uuid()
+                    .meta({ description: "The ID of your user, now a regular member." }),
+                  toUserId: z.uuid().meta({ description: "The ID of the new owner." }),
+                }),
               ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        403: "You are not an owner of the group.",
-        404: "No group with the given id exists, or the target user has no membership on the group.",
-        422: "The request data failed validation, or the target is yourself.",
+        401: true,
+        403: "You are not an owner of the group, or your account is banned.",
+        404: "No group with the given ID exists, or the new owner is not a member of the group.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation, or `toUserId` is your own ID.",
       }),
     },
   }),

@@ -7,14 +7,19 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, groupSummarySchema } from "../utils/schemas"
 
 const membershipSchema = z.object({
-  group: groupSummarySchema,
-  role: z.enum(GROUP_MEMBERSHIP_ROLES),
+  group: groupSummarySchema.meta({ description: "The group." }),
+  role: z
+    .enum(GROUP_MEMBERSHIP_ROLES)
+    .meta({ description: "Your role in the group.", example: "MEMBER" }),
   permissions: z
     .enum(GROUP_PERMISSIONS)
     .array()
-    .meta({ description: "Stored permissions. Owners hold every permission regardless." }),
-  memberCount: z.int().meta({ description: "How many people belong to the group." }),
-  joinedAt: z.iso.datetime(),
+    .meta({
+      description: "Your permissions in the group. Owners hold every permission regardless.",
+      example: ["UPLOAD_CHAPTERS"],
+    }),
+  memberCount: z.int().meta({ description: "The number of members of the group.", example: 8 }),
+  joinedAt: z.iso.datetime().meta({ description: "When you joined the group." }),
 })
 
 export const listMyGroupsHandler = new Hono().get(
@@ -22,16 +27,16 @@ export const listMyGroupsHandler = new Hono().get(
   describeRoute({
     summary: "List my groups",
     description:
-      "Lists the groups the current user belongs to, with their role and permissions in each, owned groups first.\n\n**Authentication:** signed-in user.",
+      "Lists the groups you belong to, with your role and permissions in each, the groups you own first, then alphabetically by name.\n\n**Authentication:** signed-in user.",
     tags: ["Group members"],
     responses: {
       200: {
-        description: "The current user's memberships.",
+        description: "Your group memberships.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(membershipSchema.array())) },
         },
       },
-      ...getOpenApiResponses(),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   withAuth(),

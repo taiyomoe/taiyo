@@ -11,7 +11,7 @@ export const listMyFeedHandler = new Hono().get(
   describeRoute({
     summary: "List my feed",
     description:
-      "Lists the most recently released chapters of the medias in your library, newest first.\n\n**Authentication:** signed-in user.",
+      "Lists the chapters released for the media in your library, newest first.\n\n**Authentication:** signed-in user.",
     tags: ["Library"],
     responses: {
       200: {
@@ -25,6 +25,8 @@ export const listMyFeedHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
+        401: true,
+        403: true,
         422: "The query parameters failed validation.",
       }),
     },
@@ -52,6 +54,8 @@ export const listMyFeedHandler = new Hono().get(
           "chapters.contentRating",
           "chapters.createdAt",
           "chapters.mediaId",
+          "chapters.externalUrl",
+          "chapters.isExternal",
           eb
             .selectFrom("titles")
             .whereRef("titles.mediaId", "=", "chapters.mediaId")

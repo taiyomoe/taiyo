@@ -12,9 +12,11 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const paramSchema = z.object({
-  id: z.uuid(),
-  staffId: z.uuid(),
-  role: z.enum(STAFF_ROLES),
+  id: z.uuid().meta({ description: "The ID of the media." }),
+  staffId: z.uuid().meta({ description: "The ID of the staff." }),
+  role: z
+    .enum(STAFF_ROLES)
+    .meta({ description: "The role of the staff on the media.", example: "AUTHOR" }),
 })
 
 export const unlinkMediaStaffHandler = new Hono().delete(
@@ -22,7 +24,7 @@ export const unlinkMediaStaffHandler = new Hono().delete(
   describeRoute({
     summary: "Unlink a staff from a media",
     description:
-      "Removes a single (staff, role) link from the media. Other roles for the same staff are unaffected.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Unlinks a staff from a media for the given role. The other roles of the staff on the media are kept.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Media staff"],
     responses: {
       200: {
@@ -32,9 +34,12 @@ export const unlinkMediaStaffHandler = new Hono().delete(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  mediaId: z.uuid(),
-                  staffId: z.uuid(),
-                  role: z.enum(STAFF_ROLES),
+                  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+                  staffId: z.uuid().meta({ description: "The ID of the staff." }),
+                  role: z.enum(STAFF_ROLES).meta({
+                    description: "The role of the staff on the media.",
+                    example: "AUTHOR",
+                  }),
                 }),
               ),
             ),
@@ -42,8 +47,10 @@ export const unlinkMediaStaffHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists, or no link between the staff and the media with that role exists.",
-        422: "The provided path parameters failed validation.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists, or the staff is not linked to the media with this role.",
+        422: "One of the provided IDs is not a valid UUID, or the role is not a valid staff role.",
       }),
     },
   }),

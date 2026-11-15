@@ -16,6 +16,16 @@ describe("GET /docs", () => {
     expect(html).not.toMatch(/<script[^>]+src="https?:/)
   })
 
+  test("names the page after the API and serves its favicon", async ({ app }) => {
+    const html = await (await app.request("/docs")).text()
+    const res = await app.request("/docs/favicon.svg")
+
+    expect(html).toContain("<title>Taiyō API</title>")
+    expect(html).toContain('"favicon": "/docs/favicon.svg"')
+    expect(res.status).toBe(200)
+    expect(res.headers.get("content-type")).toBe("image/svg+xml")
+  })
+
   test("serves the bundled reference script", async ({ app }) => {
     const res = await app.request("/docs/scalar.js")
 

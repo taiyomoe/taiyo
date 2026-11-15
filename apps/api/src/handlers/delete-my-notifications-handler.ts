@@ -15,29 +15,41 @@ const bodySchema = z.object({
     .array()
     .min(1)
     .max(config.notifications.maxBulkIds)
-    .meta({ description: "The notifications to delete. Ids that aren't yours are skipped." }),
+    .meta({
+      description: `The IDs of the notifications to delete, at most ${config.notifications.maxBulkIds}. IDs of notifications that are not yours are skipped.`,
+    }),
 })
 
 export const deleteMyNotificationsHandler = new Hono().delete(
   "/me/notifications",
   describeRoute({
-    summary: "Delete notifications",
+    summary: "Delete my notifications",
     description:
-      "Deletes several of your notifications and returns how many went. Someone who upvoted or followed you again after you deleted their notification can notify you once more.\n\n**Authentication:** signed-in user.",
+      "Deletes the given notifications and returns how many were deleted. Someone who upvotes or follows you again after you deleted their notification can notify you once more.\n\n**Authentication:** signed-in user.",
     tags: ["Notifications"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "The notifications are deleted.",
+        description: "Notifications deleted.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ count: z.int().nonnegative() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  count: z
+                    .int()
+                    .nonnegative()
+                    .meta({ description: "The number of notifications deleted.", example: 4 }),
+                }),
+              ),
+            ),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The body failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
+      }),
     },
   }),
   audited(notificationAudit.DELETE),

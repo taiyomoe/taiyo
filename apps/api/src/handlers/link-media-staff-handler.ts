@@ -14,8 +14,10 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 const linkMediaStaffSchema = z.object({
   staffId: z
     .uuid()
-    .meta({ description: "ID of an existing staff member.", example: crypto.randomUUID() }),
-  role: z.enum(STAFF_ROLES).meta({ description: "Their role for this media.", example: "AUTHOR" }),
+    .meta({ description: "The ID of the staff.", example: "6f1d3c2b-8a4e-4f7a-9c1d-2e5b7a9c0d34" }),
+  role: z
+    .enum(STAFF_ROLES)
+    .meta({ description: "The role of the staff on the media.", example: "AUTHOR" }),
 })
 
 export const linkMediaStaffHandler = new Hono().post(
@@ -23,11 +25,8 @@ export const linkMediaStaffHandler = new Hono().post(
   describeRoute({
     summary: "Link a staff to a media",
     description:
-      "Adds a staff to a media with the given role.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Links a staff to a media with the given role. A staff can be linked to the same media with several roles.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Media staff"],
-    requestBody: {
-      content: { "application/json": await resolver(linkMediaStaffSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Staff linked to the media.",
@@ -36,9 +35,12 @@ export const linkMediaStaffHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  mediaId: z.uuid(),
-                  staffId: z.uuid(),
-                  role: z.enum(STAFF_ROLES),
+                  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+                  staffId: z.uuid().meta({ description: "The ID of the staff." }),
+                  role: z.enum(STAFF_ROLES).meta({
+                    description: "The role of the staff on the media.",
+                    example: "AUTHOR",
+                  }),
                 }),
               ),
             ),
@@ -46,9 +48,11 @@ export const linkMediaStaffHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id or no staff with the given id exists.",
-        409: "This staff is already linked to the media with that role.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists, or the staff does not exist.",
+        409: "The staff is already linked to the media with this role.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

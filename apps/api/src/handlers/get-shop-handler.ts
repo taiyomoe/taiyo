@@ -18,53 +18,87 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 import { cosmeticUnlockSchema, getPointBalance } from "../utils/shop"
 
 const shopSchema = z.object({
-  balance: z.number().int().meta({ description: "Your spendable points." }),
-  equipped: z.object({
-    nameEffect: z.enum(NAME_EFFECT_KEYS).nullable(),
-    title: z.enum(USER_TITLE_KEYS).nullable(),
-    avatarBorder: z.enum(AVATAR_BORDER_KEYS).nullable(),
-  }),
+  balance: z.int().meta({ description: "The number of points you can spend.", example: 1250 }),
+  equipped: z
+    .object({
+      nameEffect: z
+        .enum(NAME_EFFECT_KEYS)
+        .nullable()
+        .meta({ description: "The name effect you have equipped, if any.", example: "gold" }),
+      title: z
+        .enum(USER_TITLE_KEYS)
+        .nullable()
+        .meta({ description: "The title you have equipped, if any." }),
+      avatarBorder: z
+        .enum(AVATAR_BORDER_KEYS)
+        .nullable()
+        .meta({ description: "The avatar border you have equipped, if any." }),
+    })
+    .meta({ description: "The cosmetics you have equipped." }),
   items: z
     .object({
-      kind: z.enum(COSMETIC_KINDS),
-      key: z.string(),
-      rarity: z.enum(COSMETIC_RARITIES),
+      kind: z.enum(COSMETIC_KINDS).meta({ description: "The kind of cosmetic." }),
+      key: z.string().meta({ description: "The key of the cosmetic.", example: "sakura" }),
+      rarity: z
+        .enum(COSMETIC_RARITIES)
+        .meta({ description: "The rarity of the cosmetic.", example: "rare" }),
       unlock: cosmeticUnlockSchema,
-      owned: z.boolean(),
-      unlocked: z.boolean(),
+      owned: z.boolean().meta({ description: "Whether you own the cosmetic." }),
+      unlocked: z.boolean().meta({
+        description:
+          "Whether you can equip the cosmetic: you own it, it is free, or you meet its role or achievement rule.",
+      }),
     })
-    .array(),
+    .array()
+    .meta({ description: "Every cosmetic, by kind." }),
   lootBoxes: z
     .object({
-      key: z.enum(LOOT_BOX_KEYS),
-      price: z.number().int(),
-      duplicateRefund: z.number().int(),
-      owned: z.number().int().meta({ description: "How many of the box's items you own." }),
-      total: z.number().int().meta({ description: "How many items the box can drop." }),
+      key: z.enum(LOOT_BOX_KEYS).meta({ description: "The key of the loot box.", example: "gold" }),
+      price: z.int().meta({ description: "The price of the loot box, in points.", example: 750 }),
+      duplicateRefund: z.int().meta({
+        description: "The points refunded when the box drops a cosmetic you already own.",
+        example: 300,
+      }),
+      owned: z.int().meta({
+        description: "The number of cosmetics the box can drop that you own.",
+        example: 4,
+      }),
+      total: z
+        .int()
+        .meta({ description: "The number of cosmetics the box can drop.", example: 18 }),
       odds: z
         .object({
-          rarity: z.enum(COSMETIC_RARITIES),
-          chance: z.number().meta({ description: "The chance to roll this rarity, from 0 to 1." }),
-          items: z.number().int(),
+          rarity: z
+            .enum(COSMETIC_RARITIES)
+            .meta({ description: "The rarity rolled.", example: "epic" }),
+          chance: z
+            .number()
+            .meta({ description: "The chance to roll this rarity, from 0 to 1.", example: 0.24 }),
+          items: z.int().meta({
+            description: "The number of cosmetics of this rarity the box can drop.",
+            example: 6,
+          }),
         })
-        .array(),
+        .array()
+        .meta({ description: "The drop odds of each rarity the box can drop." }),
     })
-    .array(),
+    .array()
+    .meta({ description: "Every loot box." }),
 })
 
 export const getShopHandler = new Hono().get(
   "/",
   describeRoute({
-    summary: "Browse the shop",
+    summary: "Get the shop",
     description:
-      "Lists every cosmetic with its price or unlock rule and whether you own it, the loot boxes with their exact drop odds, and your point balance.\n\nA loot box rolls a rarity by its weights, then one item of that rarity uniformly. A duplicate refunds part of the price.\n\n**Authentication:** signed-in user.",
+      "Returns every cosmetic with its unlock rule and whether you own it, the loot boxes with their exact drop odds, and your point balance. A loot box rolls a rarity by its odds, then one cosmetic of that rarity uniformly, and a duplicate refunds part of the price.\n\n**Authentication:** signed-in user.",
     tags: ["Shop"],
     responses: {
       200: {
         description: "The shop.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(shopSchema)) } },
       },
-      ...getOpenApiResponses({}),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   withAuth(),

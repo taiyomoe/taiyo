@@ -18,11 +18,11 @@ export const listChapterReviewQueueHandler = new Hono().get(
   describeRoute({
     summary: "List chapters waiting for review",
     description:
-      "Lists the chapters submitted for review, oldest first, with their media, credits and uploader.\n\n**Required roles:** uploader, admin.",
+      "Lists the chapters waiting for review, oldest first, with their media, credits and uploader. Chapters whose pages are still being processed are left out.\n\n**Required roles:** uploader, admin.",
     tags: ["Chapter review"],
     responses: {
       200: {
-        description: "Chapters waiting for review.",
+        description: "The chapters waiting for review.",
         content: {
           "application/json": {
             schema: resolver(
@@ -31,7 +31,11 @@ export const listChapterReviewQueueHandler = new Hono().get(
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth("chapter.review"),

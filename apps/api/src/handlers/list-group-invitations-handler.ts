@@ -9,12 +9,18 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, userSummarySchema } from "../utils/schemas"
 
 const invitationSchema = z.object({
-  id: z.uuid(),
-  permissions: z.enum(GROUP_PERMISSIONS).array(),
-  invitee: userSummarySchema,
-  inviter: userSummarySchema,
-  expiresAt: z.iso.datetime(),
-  createdAt: z.iso.datetime(),
+  id: z.uuid().meta({ description: "The ID of the invitation." }),
+  permissions: z
+    .enum(GROUP_PERMISSIONS)
+    .array()
+    .meta({
+      description: "The group permissions the user gets on joining.",
+      example: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
+    }),
+  invitee: userSummarySchema.meta({ description: "The invited user." }),
+  inviter: userSummarySchema.meta({ description: "The user who sent the invitation." }),
+  expiresAt: z.iso.datetime().meta({ description: "When the invitation expires." }),
+  createdAt: z.iso.datetime().meta({ description: "When the invitation was sent." }),
 })
 
 export const listGroupInvitationsHandler = new Hono().get(
@@ -22,18 +28,20 @@ export const listGroupInvitationsHandler = new Hono().get(
   describeRoute({
     summary: "List a group's pending invitations",
     description:
-      "Lists the invitations of the group that are still waiting for an answer and have not expired, newest first.\n\n**Authentication:** group owner, member with `MANAGE_MEMBERS`, admin.",
+      "Lists the invitations to the group that are still waiting for an answer and have not expired, newest first.\n\n**Required access:** the group owner, a member with the `MANAGE_MEMBERS` permission, or admin.",
     tags: ["Group members"],
     responses: {
       200: {
-        description: "Pending invitations.",
+        description: "The pending invitations to the group.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(invitationSchema.array())) },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: "You cannot manage the members of the group, or your account is banned.",
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

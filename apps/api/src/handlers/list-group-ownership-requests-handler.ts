@@ -10,31 +10,50 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 
 const querySchema = z.object({
   status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES).optional().meta({
-    description: "Filter by status. Default: no filter.",
+    description: "Only list requests with this status. Lists every status when omitted.",
+    example: "PENDING",
   }),
 })
 const ownershipRequestSchema = z.object({
-  id: z.uuid(),
-  userId: z.uuid(),
-  groupId: z.uuid(),
-  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES),
-  message: z.string().nullable(),
-  reviewerId: z.uuid().nullable(),
-  reviewerNote: z.string().nullable(),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  id: z.uuid().meta({ description: "The ID of the ownership request." }),
+  userId: z.uuid().meta({ description: "The ID of the requester." }),
+  groupId: z.uuid().meta({ description: "The ID of the group." }),
+  status: z
+    .enum(GROUP_OWNERSHIP_REQUEST_STATUSES)
+    .meta({ description: "The status of the ownership request.", example: "PENDING" }),
+  message: z.string().nullable().meta({
+    description: "The requester's message to the admins, if any.",
+    example: "I founded Akira Scans in 2019 and still lead the team.",
+  }),
+  proofLinks: z
+    .url()
+    .array()
+    .meta({
+      description: "The public links proving the requester's claim.",
+      example: ["https://discord.gg/akira-scans"],
+    }),
+  reviewerId: z
+    .uuid()
+    .nullable()
+    .meta({ description: "The ID of the admin who reviewed the request, if any." }),
+  reviewerNote: z.string().nullable().meta({
+    description: "The note the admin left for the requester, if any.",
+    example: "No proof of ownership.",
+  }),
+  createdAt: z.iso.datetime().meta({ description: "When the request was filed." }),
+  updatedAt: z.iso.datetime().meta({ description: "When the request was last updated." }),
 })
 
 export const listGroupOwnershipRequestsHandler = new Hono().get(
   "/:id/ownership-requests",
   describeRoute({
-    summary: "List ownership requests for a group",
+    summary: "List a group's ownership requests",
     description:
-      "Admins see every request on the group. Everyone else sees only their own.\n\n**Authentication:** signed-in user.",
+      "Lists the ownership requests on the group, newest first. Admins see every request; everyone else sees only their own.\n\n**Authentication:** signed-in user.",
     tags: ["Group ownership"],
     responses: {
       200: {
-        description: "Matching ownership requests.",
+        description: "The matching ownership requests.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(ownershipRequestSchema.array())),
@@ -42,8 +61,10 @@ export const listGroupOwnershipRequestsHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The provided id or query parameters failed validation.",
+        401: true,
+        403: true,
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

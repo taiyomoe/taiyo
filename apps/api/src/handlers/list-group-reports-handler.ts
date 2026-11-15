@@ -9,21 +9,31 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, groupSummarySchema, userSummarySchema } from "../utils/schemas"
 
 const querySchema = paginationQuerySchema.extend({
-  status: z
-    .enum(GROUP_REPORT_STATUSES)
-    .default("PENDING")
-    .meta({ description: "Only list reports with this status. Default: PENDING." }),
+  status: z.enum(GROUP_REPORT_STATUSES).default("PENDING").meta({
+    description: "Only list reports with this status. Defaults to `PENDING`.",
+    example: "PENDING",
+  }),
 })
 const itemSchema = z.object({
-  id: z.uuid(),
-  reason: z.enum(GROUP_REPORT_REASONS),
-  details: z.string().nullable(),
-  status: z.enum(GROUP_REPORT_STATUSES),
-  reviewerNote: z.string().nullable(),
-  group: groupSummarySchema,
-  reporter: userSummarySchema,
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  id: z.uuid().meta({ description: "The ID of the report." }),
+  reason: z
+    .enum(GROUP_REPORT_REASONS)
+    .meta({ description: "Why the group was reported.", example: "STOLEN_WORK" }),
+  details: z.string().nullable().meta({
+    description: "The details given by the reporter, if any.",
+    example: "They post our chapters with our credits page cropped out.",
+  }),
+  status: z
+    .enum(GROUP_REPORT_STATUSES)
+    .meta({ description: "The status of the report.", example: "PENDING" }),
+  reviewerNote: z.string().nullable().meta({
+    description: "The note the moderator left when reviewing the report, if any.",
+    example: "Confirmed with the original group.",
+  }),
+  group: groupSummarySchema.meta({ description: "The reported group." }),
+  reporter: userSummarySchema.meta({ description: "The user who filed the report." }),
+  createdAt: z.iso.datetime().meta({ description: "When the report was filed." }),
+  updatedAt: z.iso.datetime().meta({ description: "When the report was last updated." }),
 })
 
 export const listGroupReportsHandler = new Hono().get(
@@ -31,18 +41,22 @@ export const listGroupReportsHandler = new Hono().get(
   describeRoute({
     summary: "List group reports",
     description:
-      "Lists reports filed against groups. Pending reports come oldest first so the queue is worked in order.\n\n**Required roles:** moderator, admin.",
+      "Lists the reports on groups with the given status. Pending reports come oldest first so the queue is worked in order, others newest first. Reports on deleted groups are left out.\n\n**Required roles:** moderator, admin.",
     tags: ["Group reports"],
     responses: {
       200: {
-        description: "Group reports.",
+        description: "The matching group reports.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth("groupReport.review"),

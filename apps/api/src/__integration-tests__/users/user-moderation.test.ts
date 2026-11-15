@@ -274,13 +274,26 @@ describe("GET /users/me/overview", () => {
       pages: [{ id: "00000000-0000-4000-8000-000000000002" }],
     })
     await seedChapter(services, { mediaId, uploaderId: user.userId, number: 2, status: "REJECTED" })
+    const scheduledId = await seedChapter(services, {
+      mediaId,
+      uploaderId: user.userId,
+      number: 3,
+      status: "SCHEDULED",
+      publishInHours: 24,
+    })
+
+    await services.db
+      .updateTable("chapters")
+      .set({ reviewerId: reviewer.userId })
+      .where("id", "=", scheduledId)
+      .execute()
 
     const mine = await api(app, "/users/me/overview", { headers: user.headers })
     const theirs = await api(app, "/users/me/overview", { headers: reviewer.headers })
 
     expect(mine.body).toMatchObject({
       data: {
-        chapters: { pending: 1, accepted: 0, rejected: 1 },
+        chapters: { pending: 1, accepted: 1, rejected: 1 },
         queues: { chapters: null, suggestions: null, groupRequests: null },
       },
     })

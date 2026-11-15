@@ -3,7 +3,9 @@ import z from "zod"
 
 export const groupFollowSchema = z.object({
   following: z.boolean().meta({ description: "Whether you follow the group." }),
-  followerCount: z.int().meta({ description: "How many users follow the group." }),
+  followerCount: z
+    .int()
+    .meta({ description: "The number of users who follow the group.", example: 128 }),
 })
 
 export const getGroupFollow = async (db: Kysely<DB>, groupId: string, userId: string) => {

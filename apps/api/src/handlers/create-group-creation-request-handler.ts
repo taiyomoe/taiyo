@@ -20,7 +20,7 @@ const createSchema = z.object({
     .trim()
     .min(1)
     .max(config.input.maxNameLength)
-    .meta({ description: "Name of the new group.", example: "Akira Scans" }),
+    .meta({ description: "The name of the group to create.", example: "Akira Scans" }),
   description: z
     .string()
     .trim()
@@ -28,7 +28,10 @@ const createSchema = z.object({
     .max(config.input.maxDescriptionLength)
     .nullable()
     .optional()
-    .meta({ description: "Description of the new group." }),
+    .meta({
+      description: "The description of the group to create.",
+      example: "Translating seinen manga into English since 2019.",
+    }),
   message: requestMessageSchema,
   proofLinks: proofLinksSchema,
 })
@@ -37,28 +40,32 @@ export const createGroupCreationRequestHandler = new Hono().post(
   "/",
   describeRoute({
     summary: "Request a new group",
-    description: `Asks the admins to create a group with the requester as its owner. Refused when an existing group already has the name, since that group should be claimed instead. A user can have at most ${MAX_PENDING} pending requests.\n\n**Authentication:** any signed-in user.`,
+    description: `Requests a new group with you as its owner, for an admin to review. A group that already exists under this name must be claimed with an ownership request instead. You can have at most ${MAX_PENDING} pending requests.\n\n**Authentication:** signed-in user.`,
     tags: ["Group creation requests"],
-    requestBody: {
-      content: { "application/json": await resolver(createSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Request created.",
+        description: "Group creation request created.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
-                z.object({ id: z.uuid(), status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES) }),
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the group creation request." }),
+                  status: z
+                    .enum(GROUP_OWNERSHIP_REQUEST_STATUSES)
+                    .meta({ description: "The status of the request.", example: "PENDING" }),
+                }),
               ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        409: "A group already has this name, you already asked for it, or you have too many pending requests.",
-        422: "The request data failed validation.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        409: "A group with this name already exists, or you already have a pending request for this name, or you have too many pending requests.",
+        422: "The request body failed validation.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

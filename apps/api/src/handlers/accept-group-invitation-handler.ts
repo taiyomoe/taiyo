@@ -12,28 +12,37 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid() })
+const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the invitation." }) })
 
 export const acceptGroupInvitationHandler = new Hono().post(
   "/:id/accept",
   describeRoute({
     summary: "Accept a group invitation",
     description:
-      "Joins the group with the permissions from the invitation. Refused if the invitation expired, or if the person who sent it can no longer grant those permissions.\n\n**Authentication:** the invitee.",
+      "Accepts an invitation sent to you, and joins the group with the permissions it grants. It fails if the invitation expired, or if its sender can no longer grant those permissions.\n\n**Required access:** the invitee.",
     tags: ["Group members"],
     responses: {
       201: {
         description: "Invitation accepted.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid(), groupId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the invitation." }),
+                  groupId: z.uuid().meta({ description: "The ID of the group you joined." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No invitation with the given id was sent to you.",
-        409: "The invitation was already answered, expired or is no longer valid, or you are already a member.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No invitation with the given ID was sent to you, or its group no longer exists.",
+        409: "The invitation is no longer pending or has expired, or its sender can no longer grant its permissions, or you are already a member of the group.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

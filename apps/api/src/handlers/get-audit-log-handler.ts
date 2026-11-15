@@ -10,14 +10,16 @@ import { auditLogSchema, fromAuditLogs, selectAuditLogs, toAuditLog } from "../u
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid() })
+const paramSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the audit log entry." }),
+})
 
 export const getAuditLogHandler = new Hono().get(
   "/:id",
   describeRoute({
     summary: "Get an audit log entry",
     description:
-      "Fetches one recorded action by id. Reading an entry is itself recorded.\n\n**Required roles:** admin.",
+      "Returns the recorded action with the given ID. Reading an entry is itself recorded in the audit log.\n\n**Required roles:** admin.",
     tags: ["Audit logs"],
     responses: {
       200: {
@@ -27,8 +29,10 @@ export const getAuditLogHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No audit log entry with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No audit log entry with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

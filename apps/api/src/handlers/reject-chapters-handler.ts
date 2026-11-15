@@ -1,4 +1,5 @@
 import { chapterReviewAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -19,7 +20,8 @@ import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 const rejectSchema = z.object({
   chapterIds: chapterIdsSchema,
   reason: reviewNoteSchema.meta({
-    description: "Why the chapters were rejected, for the uploader.",
+    description: "Why the chapters were rejected, shown to their uploaders, up to 2000 characters.",
+    example: "The pages are blurry. Please upload a cleaner scan.",
   }),
 })
 
@@ -27,26 +29,34 @@ export const rejectChaptersHandler = new Hono().post(
   "/reject",
   describeRoute({
     summary: "Reject submitted chapters in bulk",
-    description:
-      "Rejects several chapters waiting for review at once with the same reason, and deletes their pages. Chapters that are not waiting for review are skipped and reported.\n\n**Required roles:** uploader, admin.",
+    description: `Rejects up to ${config.input.maxReviewBatch} chapters waiting for review at once with the same reason, and deletes their pages. Chapters that do not exist or are not waiting for review are skipped and reported.\n\n**Required roles:** uploader, admin.`,
     tags: ["Chapter review"],
-    requestBody: {
-      content: { "application/json": await resolver(rejectSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "The rejected chapters and the ones that were skipped.",
+        description: "The rejected and skipped chapters.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
-                z.object({ rejected: z.uuid().array(), skipped: skippedChapterSchema.array() }),
+                z.object({
+                  rejected: z
+                    .uuid()
+                    .array()
+                    .meta({ description: "The IDs of the chapters that were rejected." }),
+                  skipped: skippedChapterSchema
+                    .array()
+                    .meta({ description: "The chapters that were left alone, and why." }),
+                }),
               ),
             ),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The request data failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
+      }),
     },
   }),
   audited(chapterReviewAudit.REJECT_MANY),

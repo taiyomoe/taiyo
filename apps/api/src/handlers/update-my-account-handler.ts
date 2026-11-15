@@ -14,12 +14,10 @@ import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const bodySchema = z.object({
-  username: z
-    .string()
-    .trim()
-    .regex(config.auth.username.regex)
-    .optional()
-    .meta({ description: "The handle used in your profile URL.", example: "sunny_reader" }),
+  username: z.string().trim().regex(config.auth.username.regex).optional().meta({
+    description: "The handle used in your profile URL. It is saved in lowercase.",
+    example: "sunny_reader",
+  }),
   displayName: z
     .string()
     .trim()
@@ -28,9 +26,12 @@ const bodySchema = z.object({
     .meta({ description: "The name shown next to your content.", example: "Sunny Reader" }),
 })
 const accountSchema = z.object({
-  username: z.string(),
-  displayUsername: z.string(),
-  name: z.string(),
+  username: z.string().meta({ description: "Your username.", example: "sunny_reader" }),
+  displayUsername: z.string().meta({ description: "Your display name.", example: "Sunny Reader" }),
+  name: z.string().meta({
+    description: "Your display name, as the auth endpoints return it.",
+    example: "Sunny Reader",
+  }),
 })
 
 export const updateMyAccountHandler = new Hono().patch(
@@ -38,19 +39,18 @@ export const updateMyAccountHandler = new Hono().patch(
   describeRoute({
     summary: "Update my account",
     description:
-      "Changes your username or display name. Both stay unique across Taiyō, ignoring case.\n\n**Authentication:** signed-in user.",
+      "Updates your username, your display name, or both, and leaves the omitted one unchanged. Both stay unique across Taiyō, ignoring case.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Account updated.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(accountSchema)) } },
       },
       ...getOpenApiResponses({
-        409: "The username or display name is already taken.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        409: "The username or the display name is already taken.",
+        422: "The request body failed validation.",
       }),
     },
   }),
@@ -70,6 +70,10 @@ export const updateMyAccountHandler = new Hono().patch(
     const patch = {
       ...(username === undefined ? {} : { username: username.toLowerCase() }),
       ...(displayName === undefined ? {} : { displayUsername: displayName, name: displayName }),
+    }
+
+    if (Object.keys(patch).length === 0) {
+      return c.ok(before)
     }
 
     if (patch.username !== undefined && patch.username !== before.username) {

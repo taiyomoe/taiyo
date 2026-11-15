@@ -1,4 +1,4 @@
-import { LANGUAGES, sql } from "@taiyomoe/db"
+import { sql } from "@taiyomoe/db"
 import { getChapterPageKey, S3_PUBLIC_BASE } from "@taiyomoe/s3"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
@@ -7,24 +7,30 @@ import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, storedLanguageSchema } from "../utils/schemas"
 
 const querySchema = paginationQuerySchema.extend({
   mediaId: z
     .uuid()
     .optional()
-    .meta({ description: "Only list bookmarks on chapters of this media." }),
+    .meta({ description: "Only list bookmarks on chapters of the media with this ID." }),
 })
 const bookmarkSchema = z.object({
-  chapterId: z.uuid(),
-  pageId: z.uuid(),
-  page: z.int().meta({ description: "The bookmarked page's position in the chapter, from 1." }),
-  url: z.url().meta({ description: "The page image." }),
-  mediaId: z.uuid(),
-  chapterNumber: z.number(),
-  chapterTitle: z.string().nullable(),
-  chapterLanguage: z.enum(LANGUAGES),
-  createdAt: z.iso.datetime(),
+  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+  pageId: z.uuid().meta({ description: "The ID of the bookmarked page." }),
+  page: z.int().meta({
+    description: "The position of the bookmarked page in the chapter, counted from 1.",
+    example: 14,
+  }),
+  url: z.url().meta({ description: "The URL of the page image." }),
+  mediaId: z.uuid().meta({ description: "The ID of the media the chapter belongs to." }),
+  chapterNumber: z.number().meta({ description: "The chapter number.", example: 112 }),
+  chapterTitle: z
+    .string()
+    .nullable()
+    .meta({ description: "The title of the chapter, if any.", example: "The Black Swordsman" }),
+  chapterLanguage: storedLanguageSchema("The language of the chapter."),
+  createdAt: z.iso.datetime().meta({ description: "When you bookmarked the page." }),
 })
 
 export const listMyBookmarksHandler = new Hono().get(
@@ -32,7 +38,7 @@ export const listMyBookmarksHandler = new Hono().get(
   describeRoute({
     summary: "List my page bookmarks",
     description:
-      "Returns your page bookmarks, newest first. Bookmarks on deleted or unpublished chapters, or on pages that were removed from their chapter, are left out.\n\n**Authentication:** signed-in user.",
+      "Lists your page bookmarks, newest first. Bookmarks on deleted or unpublished chapters, or on pages that were removed from their chapter, are left out.\n\n**Authentication:** signed-in user.",
     tags: ["Bookmarks"],
     responses: {
       200: {
@@ -44,6 +50,8 @@ export const listMyBookmarksHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
+        401: true,
+        403: true,
         422: "The query parameters failed validation.",
       }),
     },

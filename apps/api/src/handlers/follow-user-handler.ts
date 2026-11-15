@@ -14,24 +14,30 @@ export const followUserHandler = new Hono().post(
   "/:id/follow",
   describeRoute({
     summary: "Follow a user",
-    description:
-      "Creates a follow edge from you to the given user.\n\n**Authentication:** signed-in user.",
+    description: "Follows the user with the given ID.\n\n**Authentication:** signed-in user.",
     tags: ["Follows"],
     responses: {
       201: {
-        description: "Follow edge created.",
+        description: "User followed.",
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ followerId: z.uuid(), followingId: z.uuid() })),
+              apiSuccessEnvelope(
+                z.object({
+                  followerId: z.uuid().meta({ description: "Your ID." }),
+                  followingId: z.uuid().meta({ description: "The ID of the followed user." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given id exists.",
-        409: "You can't follow yourself, or you already follow this user.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No user with the given ID exists, or the user is banned.",
+        409: "The user is you, or you already follow this user.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),
@@ -46,21 +52,16 @@ export const followUserHandler = new Hono().post(
       return c.fail("FOLLOW_SELF")
     }
 
-    const existing = await db
-      .selectFrom("userFollows")
-      .select("followerId")
-      .where("followerId", "=", user.id)
-      .where("followingId", "=", targetUser.id)
-      .executeTakeFirst()
-
-    if (existing) {
-      return c.fail("ALREADY_FOLLOWING")
-    }
-
-    await db
+    const inserted = await db
       .insertInto("userFollows")
       .values({ followerId: user.id, followingId: targetUser.id })
-      .execute()
+      .onConflict((oc) => oc.doNothing())
+      .returning("followerId")
+      .executeTakeFirst()
+
+    if (!inserted) {
+      return c.fail("ALREADY_FOLLOWING")
+    }
 
     if (
       await recordActivity(db, { type: "FOLLOW", recipientId: targetUser.id, actorId: user.id })

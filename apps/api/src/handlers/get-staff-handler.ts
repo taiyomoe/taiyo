@@ -8,10 +8,12 @@ import { apiSuccessEnvelope, staffLinksSchema, storedLocalizedTextSchema } from 
 
 const staffDetailSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the staff." }),
-  name: z.string().meta({ description: "Name of the staff.", example: "Kishimoto Masashi" }),
-  bio: storedLocalizedTextSchema,
-  links: staffLinksSchema,
-  imageUrl: z.url().nullable().meta({ description: "Public URL of the staff image, if any." }),
+  name: z.string().meta({ description: "The name of the staff.", example: "Kishimoto Masashi" }),
+  bio: storedLocalizedTextSchema.meta({
+    description: "The biography of the staff, keyed by language code.",
+  }),
+  links: staffLinksSchema.meta({ description: "The links of the staff, keyed by provider." }),
+  imageUrl: z.url().nullable().meta({ description: "The URL of the staff's image, if any." }),
   createdAt: z.iso.datetime().meta({ description: "When the staff was created." }),
   updatedAt: z.iso.datetime().meta({ description: "When the staff was last updated." }),
 })
@@ -20,18 +22,18 @@ export const getStaffHandler = new Hono().get(
   "/:id",
   describeRoute({
     summary: "Get a staff",
-    description: "Fetches a staff by id.\n\n**Authentication:** none.",
+    description: "Returns a staff by ID.\n\n**Authentication:** none.",
     tags: ["Staffs"],
     responses: {
       200: {
-        description: "Staff details.",
+        description: "The staff.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(staffDetailSchema)) },
         },
       },
       ...getOpenApiResponses({
-        404: "No staff with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        404: "No staff with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

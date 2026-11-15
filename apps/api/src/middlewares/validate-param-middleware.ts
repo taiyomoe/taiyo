@@ -1,6 +1,7 @@
 import type z from "zod"
 import { config } from "@taiyomoe/config"
 import { createMiddleware } from "hono/factory"
+import { withRequestSpec } from "../utils/openapi-helper"
 
 type Env<TSchema extends z.ZodType> = {
   Variables: {
@@ -9,21 +10,25 @@ type Env<TSchema extends z.ZodType> = {
 }
 
 export const validateParam = <TSchema extends z.ZodType>(schema: TSchema) =>
-  createMiddleware<
-    Env<TSchema>,
-    string,
-    { in: { param: Record<string, string> }; out: { param: z.output<TSchema> } }
-  >(async (c, next) => {
-    const validation = schema.safeParse(c.req.param())
+  withRequestSpec(
+    createMiddleware<
+      Env<TSchema>,
+      string,
+      { in: { param: Record<string, string> }; out: { param: z.output<TSchema> } }
+    >(async (c, next) => {
+      const validation = schema.safeParse(c.req.param())
 
-    if (!validation.success) {
-      return c.fail(
-        "VALIDATION_ERROR",
-        validation.error.issues.slice(0, config.input.maxValidationIssues),
-      )
-    }
+      if (!validation.success) {
+        return c.fail(
+          "VALIDATION_ERROR",
+          validation.error.issues.slice(0, config.input.maxValidationIssues),
+        )
+      }
 
-    c.set("param", validation.data)
+      c.set("param", validation.data)
 
-    return next()
-  })
+      return next()
+    }),
+    "param",
+    schema,
+  )

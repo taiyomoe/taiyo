@@ -4,7 +4,6 @@ import {
   type ContentRating,
   type DB,
   type Kysely,
-  LANGUAGES,
   MEDIA_TYPES,
   sql,
   USER_LIBRARY_STATUSES,
@@ -17,7 +16,11 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { getMainCoverUrls, getMainTitles } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, contentRatingsQuerySchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  contentRatingsQuerySchema,
+  storedLanguageSchema,
+} from "../utils/schemas"
 
 const CACHE_TTL_SECONDS = 120
 const ACTIVITY_DAYS = 365
@@ -28,51 +31,106 @@ const DAY_MS = 86_400_000
 const GENRE_KEYS = Object.entries(config.tags)
   .filter(([, tag]) => tag.category === "Genre")
   .map(([key]) => key)
-const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
+const querySchema = z.object({
+  contentRating: contentRatingsQuerySchema.meta({
+    description:
+      "Comma-separated content ratings of the media to include in the genre and top media stats. Defaults to the default user setting.",
+  }),
+})
+const countField = (description: string, example: number) => z.int().meta({ description, example })
 const readingSchema = z.object({
-  chaptersRead: z.number().int(),
-  mediasRead: z.number().int(),
-  currentStreak: z
-    .number()
-    .int()
-    .meta({ description: "Consecutive days with a read, up to today." }),
-  longestStreak: z.number().int().meta({ description: "Longest run of consecutive reading days." }),
+  chaptersRead: countField("The number of chapters the user finished.", 1342),
+  mediasRead: countField("The number of media the user finished at least one chapter of.", 58),
+  currentStreak: countField(
+    "The number of consecutive days, up to today or yesterday, on which the user finished a chapter.",
+    6,
+  ),
+  longestStreak: countField(
+    `The longest run of consecutive days on which the user finished a chapter, over the last ${ACTIVITY_DAYS} days.`,
+    21,
+  ),
   genres: z
-    .object({ genre: z.string(), count: z.number().int() })
+    .object({
+      genre: z.string().meta({ description: "The key of the genre tag.", example: "ACTION" }),
+      count: countField("The number of media with the genre the user read.", 23),
+    })
     .array()
-    .meta({ description: "Titles read per genre tag, most read first." }),
-  byType: z.object({ type: z.enum(MEDIA_TYPES), count: z.number().int() }).array(),
-  byLanguage: z.object({ language: z.enum(LANGUAGES), count: z.number().int() }).array(),
+    .meta({ description: "The number of media read per genre, most read first." }),
+  byType: z
+    .object({
+      type: z.enum(MEDIA_TYPES).meta({ description: "The type of media.", example: "MANGA" }),
+      count: countField("The number of media of the type the user read.", 41),
+    })
+    .array()
+    .meta({ description: "The number of media read per type, most read first." }),
+  byLanguage: z
+    .object({
+      language: storedLanguageSchema("The language of the chapters."),
+      count: countField("The number of chapters in the language the user finished.", 980),
+    })
+    .array()
+    .meta({
+      description: `The number of chapters finished per language, most read first, for the top ${TOP_LANGUAGES} languages.`,
+    }),
   topMedias: z
     .object({
-      id: z.uuid(),
-      title: z.string().nullable(),
-      coverUrl: z.url().nullable(),
-      chapters: z.number().int(),
+      id: z.uuid().meta({ description: "The ID of the media." }),
+      title: z
+        .string()
+        .nullable()
+        .meta({ description: "The main title of the media.", example: "Vagabond" }),
+      coverUrl: z
+        .url()
+        .nullable()
+        .meta({ description: "The URL of the media's main cover, if any." }),
+      chapters: countField("The number of chapters of the media the user finished.", 327),
     })
-    .array(),
+    .array()
+    .meta({
+      description: `The ${TOP_MEDIAS} media the user finished the most chapters of, most read first.`,
+    }),
 })
 const statsSchema = z.object({
-  reading: readingSchema
-    .nullable()
-    .meta({ description: "Null when the user keeps their library private." }),
+  reading: readingSchema.nullable().meta({
+    description:
+      "The reading stats of the user, or null when the user hides their library from you.",
+  }),
   library: z
     .object({
-      total: z.number().int(),
-      byStatus: z.record(z.enum(USER_LIBRARY_STATUSES), z.number().int()),
+      total: countField("The number of media in the user's library.", 74),
+      byStatus: z
+        .record(z.enum(USER_LIBRARY_STATUSES), z.int())
+        .meta({ description: "The number of media in the user's library per reading status." }),
     })
-    .nullable(),
-  uploads: z.object({
-    chapters: z.number().int(),
-    medias: z.number().int(),
-    languages: z.number().int(),
-    firstAt: z.iso.datetime().nullable(),
-    lastAt: z.iso.datetime().nullable(),
-    monthly: z
-      .object({ month: z.string().meta({ example: "2026-04" }), count: z.number().int() })
-      .array()
-      .meta({ description: `Published uploads per month over the last ${UPLOAD_MONTHS} months.` }),
-  }),
+    .nullable()
+    .meta({
+      description:
+        "The library stats of the user, or null when the user hides their library from you.",
+    }),
+  uploads: z
+    .object({
+      chapters: countField("The number of published chapters the user uploaded.", 214),
+      medias: countField("The number of media the user uploaded published chapters to.", 9),
+      languages: countField("The number of languages the user uploaded published chapters in.", 2),
+      firstAt: z.iso
+        .datetime()
+        .nullable()
+        .meta({ description: "When the user's first published chapter was uploaded, if any." }),
+      lastAt: z.iso
+        .datetime()
+        .nullable()
+        .meta({ description: "When the user's latest published chapter was uploaded, if any." }),
+      monthly: z
+        .object({
+          month: z.string().meta({ description: "The month, as YYYY-MM.", example: "2026-04" }),
+          count: countField("The number of published chapters the user uploaded that month.", 18),
+        })
+        .array()
+        .meta({
+          description: `The number of published chapters uploaded per month over the last ${UPLOAD_MONTHS} months, oldest first.`,
+        }),
+    })
+    .meta({ description: "The upload stats of the user." }),
 })
 
 type Stats = z.infer<typeof statsSchema>
@@ -274,7 +332,7 @@ export const getUserStatsHandler = new Hono().get(
   "/:id/stats",
   describeRoute({
     summary: "Get a user's stats",
-    description: `Reading, library and upload statistics of a user. Reading and library stats are null when the user hides their library, unless you are that user. Results are cached for ${CACHE_TTL_SECONDS / 60} minutes.\n\n**Authentication:** optional.`,
+    description: `Returns the reading, library and upload statistics of a user. Reading and library stats are \`null\` when the user hides their library, unless you are that user. The statistics can be up to ${CACHE_TTL_SECONDS / 60} minutes old.\n\n**Authentication:** optional.`,
     tags: ["Users"],
     responses: {
       200: {
@@ -282,8 +340,8 @@ export const getUserStatsHandler = new Hono().get(
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(statsSchema)) } },
       },
       ...getOpenApiResponses({
-        404: "No user with the given id exists.",
-        422: "The provided id is not a valid UUID or the query parameters failed validation.",
+        404: "No user with the given ID exists, or the user is banned.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

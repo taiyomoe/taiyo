@@ -20,43 +20,72 @@ import {
   uuidArrayFilter,
 } from "../utils/filter-schemas"
 
+const filterOn = <T extends z.ZodType>(filter: T, description: string) =>
+  filter.optional().meta({ description })
+
 export const mediaFilterSchema = z
   .object({
-    type: enumFilter(MEDIA_TYPES).optional(),
-    status: enumFilter(MEDIA_STATUSES).optional(),
-    source: enumFilter(MEDIA_SOURCES).optional(),
-    demography: enumFilter(MEDIA_DEMOGRAPHIES).optional(),
-    countryOfOrigin: enumFilter(MEDIA_COUNTRIES_OF_ORIGIN).optional(),
-    contentRating: enumFilter(CONTENT_RATINGS).optional(),
-    flag: enumFilter(FLAGS).optional(),
-    tags: stringArrayFilter.optional(),
-    spoilerTags: stringArrayFilter.optional(),
-    linkProviders: stringArrayFilter.optional(),
-    titleLanguages: enumArrayFilter(MEDIA_LANGUAGES).optional(),
-    chapterLanguages: enumArrayFilter(SUPPORTED_LANGUAGES).optional(),
-    coverLanguages: enumArrayFilter(MEDIA_LANGUAGES).optional(),
-    authors: uuidArrayFilter.optional(),
-    artists: uuidArrayFilter.optional(),
-    createdAt: dateFilter.optional(),
-    updatedAt: dateFilter.optional(),
-    startDate: dateFilter.optional(),
-    endDate: dateFilter.optional(),
-    libraryCount: countFilter.optional(),
-    chapterCount: countFilter.optional(),
+    type: filterOn(enumFilter(MEDIA_TYPES), "Filters on the type of the media."),
+    status: filterOn(enumFilter(MEDIA_STATUSES), "Filters on the release status of the media."),
+    source: filterOn(enumFilter(MEDIA_SOURCES), "Filters on the original source of the media."),
+    demography: filterOn(
+      enumFilter(MEDIA_DEMOGRAPHIES),
+      "Filters on the target audience of the media.",
+    ),
+    countryOfOrigin: filterOn(
+      enumFilter(MEDIA_COUNTRIES_OF_ORIGIN),
+      "Filters on the country the media originates from.",
+    ),
+    contentRating: filterOn(
+      enumFilter(CONTENT_RATINGS),
+      "Filters on the content rating of the media.",
+    ),
+    flag: filterOn(enumFilter(FLAGS), "Filters on the moderation flag of the media."),
+    tags: filterOn(stringArrayFilter, "Filters on the keys of the media's tags."),
+    spoilerTags: filterOn(stringArrayFilter, "Filters on the keys of the media's spoiler tags."),
+    linkProviders: filterOn(
+      stringArrayFilter,
+      "Filters on the external sites the media has a link to, such as `mangaDex`.",
+    ),
+    titleLanguages: filterOn(
+      enumArrayFilter(MEDIA_LANGUAGES),
+      "Filters on the languages of the media's titles.",
+    ),
+    chapterLanguages: filterOn(
+      enumArrayFilter(SUPPORTED_LANGUAGES),
+      "Filters on the languages of the media's chapters.",
+    ),
+    coverLanguages: filterOn(
+      enumArrayFilter(MEDIA_LANGUAGES),
+      "Filters on the languages of the media's covers.",
+    ),
+    authors: filterOn(uuidArrayFilter, "Filters on the IDs of the staff credited as authors."),
+    artists: filterOn(uuidArrayFilter, "Filters on the IDs of the staff credited as artists."),
+    createdAt: filterOn(dateFilter, "Filters on when the media was created."),
+    updatedAt: filterOn(dateFilter, "Filters on when the media was last updated."),
+    startDate: filterOn(dateFilter, "Filters on when the media started releasing."),
+    endDate: filterOn(dateFilter, "Filters on when the media finished releasing."),
+    libraryCount: filterOn(
+      countFilter,
+      "Filters on the number of users with the media in their library.",
+    ),
+    chapterCount: filterOn(countFilter, "Filters on the number of chapters of the media."),
   })
   .strict()
 
 export const mediaSortSchema = z
   .object({
-    field: z.enum([
-      "createdAt",
-      "updatedAt",
-      "startDate",
-      "endDate",
-      "mainTitle",
-      "libraryCount",
-      "chapterCount",
-    ]),
+    field: z
+      .enum([
+        "createdAt",
+        "updatedAt",
+        "startDate",
+        "endDate",
+        "mainTitle",
+        "libraryCount",
+        "chapterCount",
+      ])
+      .meta({ description: "The field to sort by.", example: "libraryCount" }),
     direction: sortDirectionSchema.default("desc"),
   })
   .array()
@@ -64,9 +93,17 @@ export const mediaSortSchema = z
 
 export const searchMediasInputSchema = z
   .object({
-    q: z.string().max(200).default(""),
-    filter: mediaFilterSchema.default({}),
-    sort: mediaSortSchema.default([{ field: "createdAt", direction: "desc" }]),
+    q: z.string().max(200).default("").meta({
+      description:
+        "The text to search for in the titles, synopses and staff names, tolerating typos. Empty matches every media.",
+      example: "one punch",
+    }),
+    filter: mediaFilterSchema
+      .default({})
+      .meta({ description: "The filters every result must match." }),
+    sort: mediaSortSchema.default([{ field: "createdAt", direction: "desc" }]).meta({
+      description: "Up to 3 sort criteria, applied in order. Defaults to the newest medias first.",
+    }),
   })
   .extend(paginationQuerySchema.shape)
 

@@ -22,9 +22,6 @@ export const updateBannerHandler = new Hono().patch(
     description:
       "Updates the content rating of a banner.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Banners"],
-    requestBody: {
-      content: { "application/json": await resolver(updateBannerSchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Banner updated.",
@@ -41,8 +38,10 @@ export const updateBannerHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No banner with the given id exists.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No banner with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

@@ -15,7 +15,7 @@ export const deleteChapterHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a chapter",
     description:
-      "Removes a chapter. The chapter can be restored later.\n\n**Authentication:** uploader, moderator, admin — or a member with `DELETE_CHAPTERS` in a group credited on the chapter.",
+      "Deletes a chapter, whatever its status. It no longer shows up anywhere.\n\n**Required access:** uploader or admin, or a moderator or a member of a credited group with the `DELETE_CHAPTERS` permission when the chapter is published or scheduled.",
     tags: ["Chapters"],
     responses: {
       200: {
@@ -33,8 +33,10 @@ export const deleteChapterHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

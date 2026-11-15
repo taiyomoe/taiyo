@@ -9,10 +9,12 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid() })
+const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the report." }) })
 const reviewSchema = z.object({
   status: z.enum(["RESOLVED", "DISMISSED"]).meta({
-    description: "RESOLVED when action was taken on the group, DISMISSED when nothing was wrong.",
+    description:
+      "The outcome of the review: RESOLVED when action was taken on the group, DISMISSED when nothing was wrong.",
+    example: "RESOLVED",
   }),
   note: z
     .string()
@@ -20,7 +22,10 @@ const reviewSchema = z.object({
     .max(2000)
     .optional()
     .transform((value) => (value === undefined || value === "" ? null : value))
-    .meta({ description: "Internal note about the decision." }),
+    .meta({
+      description: "An internal note about the decision, up to 2000 characters.",
+      example: "Confirmed with the original group.",
+    }),
 })
 
 export const reviewGroupReportHandler = new Hono().post(
@@ -28,24 +33,27 @@ export const reviewGroupReportHandler = new Hono().post(
   describeRoute({
     summary: "Review a group report",
     description:
-      "Closes a pending report as resolved or dismissed.\n\n**Required roles:** moderator, admin.",
+      "Reviews a pending report on a group, closing it as resolved or dismissed.\n\n**Required roles:** moderator, admin.",
     tags: ["Group reports"],
-    requestBody: {
-      content: { "application/json": await resolver(reviewSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Report reviewed.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the report." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No report with the given id exists.",
+        401: true,
+        403: true,
+        404: "No group report with the given ID exists.",
         409: "The report was already reviewed.",
-        422: "The request data failed validation.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),
@@ -59,7 +67,7 @@ export const reviewGroupReportHandler = new Hono().post(
     const { status, note } = c.var.json
     const report = await db
       .selectFrom("groupReports")
-      .select(["id", "groupId", "status"])
+      .select("groupId")
       .where("id", "=", id)
       .executeTakeFirst()
 

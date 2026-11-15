@@ -24,22 +24,21 @@ const bodySchema = commentTargetSchema.extend({ content: contentSchema })
 export const createCommentHandler = new Hono().post(
   "/",
   describeRoute({
-    summary: "Post a comment",
+    summary: "Create a comment",
     description:
-      "Posts a top-level comment on a media, chapter, group or user profile. Images must be ones you uploaded or added to your favorites.\n\n**Authentication:** signed-in user.",
+      "Creates a top-level comment on a media, chapter, group or user profile.\n\n**Authentication:** signed-in user.",
     tags: ["Comments"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Comment posted.",
+        description: "Comment created.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(commentSchema)) } },
       },
       ...getOpenApiResponses({
-        404: "The media, chapter, group or user doesn't exist.",
-        422: "The comment is empty, too long, has too many images, or uses an image you can't use.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        404: "The media, chapter, group or user does not exist.",
+        422: "The request body failed validation, or the comment is empty, too long, has too many images, or uses an image you cannot use.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

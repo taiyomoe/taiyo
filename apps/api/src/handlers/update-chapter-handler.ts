@@ -1,6 +1,6 @@
 import { chapterAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
-import { CONTENT_RATINGS, FLAGS, sql } from "@taiyomoe/db"
+import { FLAGS, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { omit } from "radashi"
@@ -14,28 +14,32 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
 import { externalUrlSchema, isFuture, publishAtSchema, toPublishAt } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
+import { apiSuccessEnvelope, contentRatingSchema, languageSchema } from "../utils/schemas"
 
 const updateChapterSchema = z
   .object({
-    title: z
-      .string()
-      .min(1)
-      .max(config.input.maxChapterTitleLength)
-      .nullable()
+    title: z.string().min(1).max(config.input.maxChapterTitleLength).nullable().optional().meta({
+      description: "The title of the chapter, or null to clear it.",
+      example: "The Boy with the Sharingan",
+    }),
+    number: z
+      .number()
+      .nonnegative()
       .optional()
-      .meta({ description: "Title or null to clear." }),
-    number: z.number().nonnegative().optional().meta({ description: "Chapter number." }),
+      .meta({ description: "The chapter number.", example: 112 }),
     volume: z
       .string()
       .min(1)
       .max(config.input.maxVolumeLength)
       .nullable()
       .optional()
-      .meta({ description: "Volume or null to clear." }),
-    language: languageSchema("Language of the chapter.").optional(),
-    contentRating: z.enum(CONTENT_RATINGS).optional().meta({ description: "Content rating." }),
-    flag: z.enum(FLAGS).optional().meta({ description: "Visibility flag." }),
+      .meta({ description: "The volume of the chapter, or null to clear it.", example: "12" }),
+    language: languageSchema("The language of the chapter.").optional(),
+    contentRating: contentRatingSchema("The content rating of the chapter.").optional(),
+    flag: z
+      .enum(FLAGS)
+      .optional()
+      .meta({ description: "Who can read the chapter.", example: "OK" }),
     publishAt: publishAtSchema,
     externalUrl: externalUrlSchema,
   })
@@ -48,11 +52,8 @@ export const updateChapterHandler = new Hono().patch(
   describeRoute({
     summary: "Update a chapter",
     description:
-      "Updates the metadata of a chapter. Omitted fields are kept as-is. Send `null` for `title` or `volume` to clear them.\n\n`publishAt` reschedules a chapter that is not out yet; `null` or a past time releases a scheduled chapter now. A chapter that is already out cannot be scheduled again. An external chapter always keeps an `externalUrl`.\n\nChanging `flag` requires the uploader, moderator or admin role. The uploader of a scheduled chapter who could not edit it once out may only change `publishAt`.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in a group credited on the chapter.",
+      "Updates the details of a chapter. Omitted fields are kept as they are; at least one field is required. Setting `publishAt` to `null` or a past time releases a scheduled chapter right away, but a chapter that is already out cannot be scheduled again. An external chapter always keeps its `externalUrl`.\n\nChanging `flag` requires the uploader, moderator or admin role. The user who uploaded a scheduled chapter can only change its `publishAt`, unless they could also edit it once out.\n\n**Required access:** uploader or admin, a moderator or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.",
     tags: ["Chapters"],
-    requestBody: {
-      content: { "application/json": await resolver(updateChapterSchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Chapter updated.",
@@ -69,9 +70,11 @@ export const updateChapterHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
-        409: "The chapter is already out and cannot be scheduled.",
-        422: "The request data failed validation, or it removes the link of an external chapter.",
+        401: true,
+        403: "You do not have permission to edit this chapter, to change its `flag`, or to change anything but its `publishAt`.",
+        404: "No chapter with the given ID exists.",
+        409: "The chapter is already out and cannot be scheduled again.",
+        422: "The provided ID is not a valid UUID, the request body failed validation, or it removes the `externalUrl` of an external chapter.",
       }),
     },
   }),

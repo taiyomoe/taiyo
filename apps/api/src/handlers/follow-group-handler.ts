@@ -16,15 +16,17 @@ export const followGroupHandler = new Hono().post(
       "Follows the group. Following a group you already follow does nothing.\n\n**Authentication:** signed-in user.",
     tags: ["Group follows"],
     responses: {
-      200: {
-        description: "You follow the group.",
+      201: {
+        description: "Group followed.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(groupFollowSchema)) },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

@@ -7,12 +7,18 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, groupSummarySchema, userSummarySchema } from "../utils/schemas"
 
 const invitationSchema = z.object({
-  id: z.uuid(),
-  permissions: z.enum(GROUP_PERMISSIONS).array(),
-  group: groupSummarySchema,
-  inviter: userSummarySchema,
-  expiresAt: z.iso.datetime(),
-  createdAt: z.iso.datetime(),
+  id: z.uuid().meta({ description: "The ID of the invitation." }),
+  permissions: z
+    .enum(GROUP_PERMISSIONS)
+    .array()
+    .meta({
+      description: "The permissions you get in the group if you accept.",
+      example: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
+    }),
+  group: groupSummarySchema.meta({ description: "The group you are invited to." }),
+  inviter: userSummarySchema.meta({ description: "The user who invited you." }),
+  expiresAt: z.iso.datetime().meta({ description: "When the invitation expires." }),
+  createdAt: z.iso.datetime().meta({ description: "When the invitation was sent." }),
 })
 
 export const listMyGroupInvitationsHandler = new Hono().get(
@@ -20,16 +26,16 @@ export const listMyGroupInvitationsHandler = new Hono().get(
   describeRoute({
     summary: "List my group invitations",
     description:
-      "Lists the invitations to join a group that the current user has not answered yet and that have not expired, newest first.\n\n**Authentication:** signed-in user.",
+      "Lists the invitations to join a group that you have not answered yet and that have not expired, newest first.\n\n**Authentication:** signed-in user.",
     tags: ["Group members"],
     responses: {
       200: {
-        description: "Pending invitations.",
+        description: "Your pending group invitations.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(invitationSchema.array())) },
         },
       },
-      ...getOpenApiResponses(),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   withAuth(),

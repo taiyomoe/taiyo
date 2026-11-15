@@ -10,25 +10,40 @@ import {
 } from "@taiyomoe/db"
 import z from "zod"
 
+const envelopeTimestampSchema = z.iso
+  .datetime()
+  .meta({ description: "When the response was sent.", example: "2026-09-21T14:03:11.221Z" })
+const envelopeRequestIdSchema = z.string().meta({
+  description: "The ID of the request, to quote when you report a problem.",
+  example: "d4ad2782-b978-43a1-8946-1c9c6351a62c",
+})
+
 export const apiSuccessEnvelope = <T extends z.ZodType, M extends z.ZodType = z.ZodNever>(
   data: T,
   meta?: M,
 ) =>
   z.object({
-    success: z.literal(true),
+    success: z.literal(true).meta({ description: "Whether the request succeeded." }),
     data,
     ...(meta ? { meta } : {}),
-    timestamp: z.iso.datetime(),
-    requestId: z.string(),
+    timestamp: envelopeTimestampSchema,
+    requestId: envelopeRequestIdSchema,
   })
 
 export const apiErrorEnvelope = z.object({
-  success: z.literal(false),
-  code: z.string(),
-  message: z.string(),
-  timestamp: z.iso.datetime(),
-  requestId: z.string(),
-  details: z.unknown().optional(),
+  success: z.literal(false).meta({ description: "Whether the request succeeded." }),
+  code: z
+    .string()
+    .meta({ description: "The stable code of the error.", example: "MEDIA_NOT_FOUND" }),
+  message: z.string().meta({
+    description: "A human-readable explanation of the error.",
+    example: "The requested media was not found.",
+  }),
+  timestamp: envelopeTimestampSchema,
+  requestId: envelopeRequestIdSchema,
+  details: z.unknown().optional().meta({
+    description: "More about the error, such as the failed fields of a validation error.",
+  }),
 })
 
 const TIME_ZONES = new Set(["UTC", ...Intl.supportedValuesOf("timeZone")])
@@ -84,7 +99,7 @@ export const mediaTagsSchema = z
   })
   .array()
   .meta({
-    description: "List of tags that describe elements and themes of the media.",
+    description: "The tags describing the elements and themes of the media.",
     examples: [
       { key: "COWBOYS", isSpoiler: false },
       { key: "AWARD_WINNING", isSpoiler: false },
@@ -95,36 +110,52 @@ const httpUrlSchema = z.url({ protocol: /^https?$/ }).max(config.input.maxUrlLen
 
 export const mediaLinksSchema = z
   .object({
-    mangaDex: z.uuid().exactOptional().meta({ description: "MangaDex series UUID." }),
-    anilist: z.int().positive().exactOptional().meta({ description: "AniList numeric media ID." }),
+    mangaDex: z.uuid().exactOptional().meta({ description: "The ID of the media on MangaDex." }),
+    anilist: z
+      .int()
+      .positive()
+      .exactOptional()
+      .meta({ description: "The ID of the media on AniList." }),
     myAnimeList: z
       .int()
       .positive()
       .exactOptional()
-      .meta({ description: "MyAnimeList numeric media ID." }),
-    animePlanet: httpUrlSchema.exactOptional().meta({ description: "Anime-Planet URL." }),
-    bookWalker: httpUrlSchema.exactOptional().meta({ description: "BookWalker series URL." }),
-    mangaUpdates: httpUrlSchema.exactOptional().meta({ description: "MangaUpdates series URL." }),
-    novelUpdates: httpUrlSchema.exactOptional().meta({ description: "NovelUpdates series URL." }),
-    kitsu: httpUrlSchema.exactOptional().meta({ description: "Kitsu manga URL." }),
-    amazon: httpUrlSchema.exactOptional().meta({ description: "Amazon product URL." }),
-    eBookJapan: httpUrlSchema.exactOptional().meta({ description: "eBookJapan product URL." }),
+      .meta({ description: "The ID of the media on MyAnimeList." }),
+    animePlanet: httpUrlSchema
+      .exactOptional()
+      .meta({ description: "The URL of the media on Anime-Planet." }),
+    bookWalker: httpUrlSchema
+      .exactOptional()
+      .meta({ description: "The URL of the media on BookWalker." }),
+    mangaUpdates: httpUrlSchema
+      .exactOptional()
+      .meta({ description: "The URL of the media on MangaUpdates." }),
+    novelUpdates: httpUrlSchema
+      .exactOptional()
+      .meta({ description: "The URL of the media on NovelUpdates." }),
+    kitsu: httpUrlSchema.exactOptional().meta({ description: "The URL of the media on Kitsu." }),
+    amazon: httpUrlSchema.exactOptional().meta({ description: "The URL of the media on Amazon." }),
+    eBookJapan: httpUrlSchema
+      .exactOptional()
+      .meta({ description: "The URL of the media on eBookJapan." }),
     raw: httpUrlSchema
       .exactOptional()
-      .meta({ description: "URL to the original raw publication." }),
+      .meta({ description: "The URL of the original raw publication." }),
     officialENTranslation: httpUrlSchema
       .exactOptional()
-      .meta({ description: "URL to the official English translation." }),
+      .meta({ description: "The URL of the official English translation." }),
     officialFRTranslation: httpUrlSchema
       .exactOptional()
-      .meta({ description: "URL to the official French translation." }),
+      .meta({ description: "The URL of the official French translation." }),
     officialPTBRTranslation: httpUrlSchema
       .exactOptional()
-      .meta({ description: "URL to the official Brazilian Portuguese translation." }),
-    cdJapan: httpUrlSchema.exactOptional().meta({ description: "CDJapan product URL." }),
+      .meta({ description: "The URL of the official Brazilian Portuguese translation." }),
+    cdJapan: httpUrlSchema
+      .exactOptional()
+      .meta({ description: "The URL of the media on CDJapan." }),
   })
   .meta({
-    description: "External references for this media.",
+    description: "The links of the media on external sites.",
     example: {
       mangaDex: "0ca1627e-95dd-4118-892a-f144adf02256",
       anilist: 31224,
@@ -135,7 +166,7 @@ export const mediaLinksSchema = z
 export const mediaSynopsisSchema = z
   .partialRecord(z.enum(SUPPORTED_LANGUAGES), z.string().max(config.input.maxSynopsisLength))
   .meta({
-    description: "Synopsis text keyed by language code.",
+    description: "The synopsis of the media, keyed by language code.",
     example: {
       en: "After defeating monsters in one punch, Saitama searches for a real challenge.",
     },
@@ -144,7 +175,7 @@ export const mediaSynopsisSchema = z
 export const localizedTextSchema = z
   .partialRecord(z.enum(SUPPORTED_LANGUAGES), z.string().max(config.input.maxDescriptionLength))
   .meta({
-    description: "Localized text keyed by language code. Send empty string to clear a key.",
+    description: "Localized text keyed by language code. Send an empty string to clear a key.",
     example: { en: "Manga artist known for ...", pt_br: "..." },
   })
 
@@ -158,25 +189,25 @@ const linkUrlField = (description: string) =>
 
 export const staffLinksSchema = z
   .object({
-    website: linkUrlField("Personal website URL."),
-    twitter: linkUrlField("Twitter / X handle URL."),
-    youtube: linkUrlField("YouTube channel URL."),
-    tumblr: linkUrlField("Tumblr URL."),
-    discord: linkUrlField("Discord server / profile URL."),
-    fanbox: linkUrlField("Pixiv Fanbox URL."),
-    fantia: linkUrlField("Fantia URL."),
-    pixiv: linkUrlField("Pixiv URL."),
-    melonBooks: linkUrlField("Melonbooks URL."),
-    namicomi: linkUrlField("NamiComi URL."),
-    naver: linkUrlField("Naver blog / page URL."),
-    nicoVideo: linkUrlField("NicoNico Video URL."),
-    skeb: linkUrlField("Skeb URL."),
-    weibo: linkUrlField("Weibo URL."),
-    booth: linkUrlField("Booth URL."),
+    website: linkUrlField("The URL of the staff's personal website."),
+    twitter: linkUrlField("The URL of the staff's X profile."),
+    youtube: linkUrlField("The URL of the staff's YouTube channel."),
+    tumblr: linkUrlField("The URL of the staff's Tumblr."),
+    discord: linkUrlField("The URL of the staff's Discord server or profile."),
+    fanbox: linkUrlField("The URL of the staff's Pixiv Fanbox."),
+    fantia: linkUrlField("The URL of the staff's Fantia."),
+    pixiv: linkUrlField("The URL of the staff's Pixiv profile."),
+    melonBooks: linkUrlField("The URL of the staff's Melonbooks page."),
+    namicomi: linkUrlField("The URL of the staff's NamiComi page."),
+    naver: linkUrlField("The URL of the staff's Naver blog or page."),
+    nicoVideo: linkUrlField("The URL of the staff's Niconico Video channel."),
+    skeb: linkUrlField("The URL of the staff's Skeb page."),
+    weibo: linkUrlField("The URL of the staff's Weibo profile."),
+    booth: linkUrlField("The URL of the staff's Booth shop."),
   })
   .meta({
     description:
-      "Provider links for the staff. Send empty string for a provider to clear it. Omit a provider to leave it unchanged.",
+      "The links of the staff, keyed by provider. Send an empty string for a provider to clear it, and omit a provider to leave it unchanged.",
     example: { twitter: "https://x.com/example", pixiv: "https://www.pixiv.net/users/123" },
   })
 
@@ -258,26 +289,29 @@ export const latestChapterFeedItemSchema = latestChapterSchema.extend({
 
 export const latestMediaUpdateSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the media." }),
-  title: z.string().nullable().meta({ description: "The main title of the media." }),
-  coverUrl: z.url().nullable().meta({ description: "URL of the media's main cover, if any." }),
+  title: z.string().nullable().meta({ description: "The main title of the media, if any." }),
+  coverUrl: z.url().nullable().meta({ description: "The URL of the media's main cover, if any." }),
   countryOfOrigin: z
     .enum(MEDIA_COUNTRIES_OF_ORIGIN)
     .meta({ description: "The country the media originates from.", example: "JAPAN" }),
   contentRating: contentRatingSchema("The content rating of the media."),
   chapterCount: z.int().meta({
-    description: "How many chapters of the media match the requested content ratings.",
+    description: "The number of chapters of the media that match the filters.",
     example: 12,
   }),
   chapters: latestChapterSchema
     .array()
-    .meta({ description: "The most recent matching chapters of the media, newest first." }),
+    .meta({ description: "The matching chapters of the media, in the requested order." }),
 })
 
 export const groupPermissionsSchema = z
   .enum(GROUP_PERMISSIONS)
   .array()
   .max(GROUP_PERMISSIONS.length)
-  .meta({ description: "Group permissions.", example: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"] })
+  .meta({
+    description: "The group permissions to grant.",
+    example: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
+  })
 
 export const proofLinksSchema = z
   .url({ protocol: /^https?$/, normalize: true })
@@ -287,16 +321,15 @@ export const proofLinksSchema = z
   .max(5)
   .transform((links) => [...new Set(links)])
   .meta({
-    description: "Public links proving the claim, such as the group's site or announcement posts.",
+    description:
+      "From 1 to 5 public links proving your claim, such as the group's site or announcement posts. Duplicates are ignored.",
     example: ["https://discord.gg/akira-scans"],
   })
 
-export const requestMessageSchema = z
-  .string()
-  .trim()
-  .min(1)
-  .max(2000)
-  .meta({ description: "Who you are and why the request should be approved." })
+export const requestMessageSchema = z.string().trim().min(1).max(2000).meta({
+  description: "Who you are and why the request should be approved, up to 2000 characters.",
+  example: "I founded Akira Scans in 2019 and still lead the team.",
+})
 
 export const reviewNoteSchema = z
   .string()
@@ -306,18 +339,26 @@ export const reviewNoteSchema = z
   .meta({ description: "Explanation shown to the requester.", example: "No proof of ownership." })
 
 export const userSummarySchema = z.object({
-  id: z.uuid(),
-  username: z.string(),
-  displayUsername: z.string(),
-  image: z.string().nullable(),
-  nameEffect: z.string().nullable(),
-  avatarBorder: z.string().nullable(),
+  id: z.uuid().meta({ description: "The ID of the user." }),
+  username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
+  displayUsername: z
+    .string()
+    .meta({ description: "The display name of the user.", example: "Kaito" }),
+  image: z.string().nullable().meta({ description: "The URL of the user's avatar, if any." }),
+  nameEffect: z
+    .string()
+    .nullable()
+    .meta({ description: "The name effect the user has equipped, if any.", example: "gold" }),
+  avatarBorder: z
+    .string()
+    .nullable()
+    .meta({ description: "The avatar border the user has equipped, if any." }),
 })
 
 export const groupSummarySchema = z.object({
-  id: z.uuid(),
-  name: z.string(),
-  logo: z.string().nullable(),
+  id: z.uuid().meta({ description: "The ID of the group." }),
+  name: z.string().meta({ description: "The name of the group.", example: "Akira Scans" }),
+  logo: z.string().nullable().meta({ description: "The key of the group's logo image, if any." }),
 })
 
 const emptyToNull = z.literal("").transform(() => null)
@@ -329,19 +370,35 @@ export const groupDiscordSchema = z
   .union([httpUrlSchema, z.string().regex(/^(\/invite\/)?[A-Za-z0-9-]{2,64}$/), emptyToNull])
   .nullable()
   .optional()
-  .meta({ description: "Discord invite link or code." })
+  .meta({
+    description: "The Discord invite link or code of the group. Send an empty string to clear it.",
+    example: "akira-scans",
+  })
 
 export const groupEmailSchema = z
   .union([z.email().max(config.input.maxUrlLength), emptyToNull])
   .nullable()
   .optional()
-  .meta({ description: "Contact email." })
+  .meta({
+    description: "The contact email of the group. Send an empty string to clear it.",
+    example: "contact@akira-scans.com",
+  })
 
 export const chapterSubmissionSchema = latestChapterFeedItemSchema.extend({
-  status: z.enum(CHAPTER_STATUSES).meta({ description: "Where the chapter is in review." }),
-  rejectionReason: z.string().nullable().meta({ description: "Why the chapter was rejected." }),
-  reviewedAt: z.iso.datetime().nullable().meta({ description: "When the chapter was reviewed." }),
-  pageCount: z.int().meta({ description: "How many processed pages the chapter has." }),
+  status: z
+    .enum(CHAPTER_STATUSES)
+    .meta({ description: "The review status of the chapter.", example: "PENDING" }),
+  rejectionReason: z
+    .string()
+    .nullable()
+    .meta({ description: "Why the chapter was rejected, if any.", example: "Pages are blurry." }),
+  reviewedAt: z.iso
+    .datetime()
+    .nullable()
+    .meta({ description: "When the chapter was reviewed, if any." }),
+  pageCount: z
+    .int()
+    .meta({ description: "The number of processed pages the chapter has.", example: 24 }),
   publishAt: z.iso
     .datetime()
     .nullable()

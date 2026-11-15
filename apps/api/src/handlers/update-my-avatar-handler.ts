@@ -18,7 +18,7 @@ import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope, fileSchema } from "../utils/schemas"
 
 const bodySchema = z.object({
-  file: fileSchema("The original image. Animated GIFs stay animated."),
+  file: fileSchema("The original image, in PNG, JPEG, GIF or WebP. Animated GIFs stay animated."),
   crop: imageCropSchema,
 })
 
@@ -33,24 +33,27 @@ export const getOwnedAvatarKey = (userId: string, image: string | null) => {
 export const updateMyAvatarHandler = new Hono().put(
   "/me/avatar",
   describeRoute({
-    summary: "Change my avatar",
-    description: `Crops the uploaded image to a ${PROFILE_IMAGE_SIZES.avatar.width}×${PROFILE_IMAGE_SIZES.avatar.height} square and makes it your avatar. The previous uploaded avatar is deleted.\n\n**Authentication:** signed-in user.`,
+    summary: "Update my avatar",
+    description: `Updates your avatar: crops the uploaded image to a ${PROFILE_IMAGE_SIZES.avatar.width}×${PROFILE_IMAGE_SIZES.avatar.height} square and replaces your previous uploaded avatar.\n\n**Authentication:** signed-in user.`,
     tags: ["Profile"],
-    requestBody: {
-      content: { "multipart/form-data": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "Avatar changed.",
+        description: "Avatar updated.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ image: z.url() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ image: z.url().meta({ description: "The URL of your new avatar." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        422: `The request data failed validation, the crop is invalid, or the image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        422: `The request body failed validation, the file is not a valid image, is larger than ${config.images.maxSizeBytes / 1024 / 1024} MB or has too many pixels or animation frames, or the crop rotates a GIF.`,
+        429: "Too many requests, try again later.",
       }),
     },
   }),

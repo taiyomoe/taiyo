@@ -14,23 +14,24 @@ const bodySchema = z.object({ endpoint: pushEndpointSchema })
 export const deletePushSubscriptionHandler = new Hono().delete(
   "/me/push-subscriptions",
   describeRoute({
-    summary: "Unsubscribe this device from push notifications",
+    summary: "Delete my push subscription",
     description:
-      "Forgets the push subscription with the given endpoint. Unsubscribing a device that is not subscribed does nothing.\n\n**Authentication:** signed-in user.",
+      "Deletes your push subscription with the given endpoint, so the device stops receiving push notifications. Deleting a subscription that does not exist does nothing.\n\n**Authentication:** signed-in user.",
     tags: ["Notifications"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "The device no longer receives pushes.",
+        description: "Push subscription deleted.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ endpoint: z.string() }))),
+            schema: resolver(apiSuccessEnvelope(bodySchema)),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The endpoint failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
+      }),
     },
   }),
   audited(notificationAudit.PUSH_UNSUBSCRIBE, () => ({})),

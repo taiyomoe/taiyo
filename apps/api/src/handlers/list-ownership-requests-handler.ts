@@ -9,23 +9,39 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, groupSummarySchema, userSummarySchema } from "../utils/schemas"
 
 const querySchema = paginationQuerySchema.extend({
-  status: z
-    .enum(GROUP_OWNERSHIP_REQUEST_STATUSES)
-    .default("PENDING")
-    .meta({ description: "Only list requests with this status. Default: PENDING." }),
+  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES).default("PENDING").meta({
+    description: "Only list requests with this status. Defaults to `PENDING`.",
+    example: "PENDING",
+  }),
 })
 const itemSchema = z.object({
-  id: z.uuid(),
-  status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES),
-  message: z.string().nullable(),
-  proofLinks: z.url().array(),
-  reviewerNote: z.string().nullable(),
-  group: groupSummarySchema.extend({
-    owned: z.boolean().meta({ description: "Whether the group has an owner right now." }),
+  id: z.uuid().meta({ description: "The ID of the ownership request." }),
+  status: z
+    .enum(GROUP_OWNERSHIP_REQUEST_STATUSES)
+    .meta({ description: "The status of the ownership request.", example: "PENDING" }),
+  message: z.string().nullable().meta({
+    description: "The requester's message to the admins, if any.",
+    example: "I founded Akira Scans in 2019 and still lead the team.",
   }),
-  requester: userSummarySchema,
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  proofLinks: z
+    .url()
+    .array()
+    .meta({
+      description: "The public links proving the requester's claim.",
+      example: ["https://discord.gg/akira-scans"],
+    }),
+  reviewerNote: z.string().nullable().meta({
+    description: "The note the admin left for the requester, if any.",
+    example: "No proof of ownership.",
+  }),
+  group: groupSummarySchema
+    .extend({
+      owned: z.boolean().meta({ description: "Whether the group has an owner right now." }),
+    })
+    .meta({ description: "The group the requester asked to own." }),
+  requester: userSummarySchema.meta({ description: "The user who filed the request." }),
+  createdAt: z.iso.datetime().meta({ description: "When the request was filed." }),
+  updatedAt: z.iso.datetime().meta({ description: "When the request was last updated." }),
 })
 
 export const listOwnershipRequestsHandler = new Hono().get(
@@ -33,18 +49,22 @@ export const listOwnershipRequestsHandler = new Hono().get(
   describeRoute({
     summary: "List ownership requests",
     description:
-      "Lists ownership requests across every group, oldest first so the queue is worked in order.\n\n**Required roles:** admin.",
+      "Lists the ownership requests with the given status across every group. Pending requests come oldest first so the queue is worked in order, others newest first. Requests on deleted groups are left out.\n\n**Required roles:** admin.",
     tags: ["Group ownership"],
     responses: {
       200: {
-        description: "Ownership requests.",
+        description: "The matching ownership requests.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth("ownershipRequest.review"),

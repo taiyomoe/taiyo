@@ -40,11 +40,13 @@ const mediaEditTitleSchema = z.object({
   isMainTitle: z
     .boolean()
     .default(false)
-    .meta({ description: "Whether this is the main title of the media." }),
+    .meta({ description: "Whether the title is the main title of the media." }),
 })
 const mediaEditStaffSchema = z.object({
-  staffId: z.uuid().meta({ description: "The ID of the staff member." }),
-  role: z.enum(STAFF_ROLES).meta({ description: "The staff member's role.", example: "AUTHOR" }),
+  staffId: z.uuid().meta({ description: "The ID of the staff." }),
+  role: z
+    .enum(STAFF_ROLES)
+    .meta({ description: "The role of the staff on the media.", example: "AUTHOR" }),
 })
 
 export const mediaEditSchema = z.object({
@@ -64,7 +66,10 @@ export const mediaEditSchema = z.object({
         "Every title of the media, replacing the current ones. Titles of the same language are ranked in the order given.",
     }),
   synopsis: mediaSynopsisSchema.exactOptional(),
-  type: z.enum(MEDIA_TYPES).exactOptional().meta({ description: "The type of the media." }),
+  type: z
+    .enum(MEDIA_TYPES)
+    .exactOptional()
+    .meta({ description: "The type of the media.", example: "MANGA" }),
   status: z.enum(MEDIA_STATUSES).exactOptional().meta({
     description: "The current release status of the media.",
     example: "RELEASING",
@@ -86,12 +91,12 @@ export const mediaEditSchema = z.object({
     .datetime()
     .nullable()
     .exactOptional()
-    .meta({ description: "The release start date, or null to clear." }),
+    .meta({ description: "When the media started releasing, or `null` to clear it." }),
   endDate: z.iso
     .datetime()
     .nullable()
     .exactOptional()
-    .meta({ description: "The release end date, or null to clear." }),
+    .meta({ description: "When the media finished releasing, or `null` to clear it." }),
   tags: mediaTagsSchema
     .max(config.input.maxMediaTags)
     .refine((tags) => new Set(tags.map((tag) => tag.key)).size === tags.length, {
@@ -107,11 +112,14 @@ export const mediaEditSchema = z.object({
 })
 
 const mediaEditStaffViewSchema = mediaEditStaffSchema.extend({
-  name: z.string().meta({ description: "The name of the staff member.", example: "ONE" }),
+  name: z.string().meta({ description: "The name of the staff.", example: "ONE" }),
 })
 
 export const mediaEditViewSchema = mediaEditSchema.extend({
-  staffs: mediaEditStaffViewSchema.array().exactOptional(),
+  staffs: mediaEditStaffViewSchema
+    .array()
+    .exactOptional()
+    .meta({ description: "Every staff credit of the media." }),
 })
 
 export const mediaEditFieldSchema = z.enum(MEDIA_EDIT_FIELDS)

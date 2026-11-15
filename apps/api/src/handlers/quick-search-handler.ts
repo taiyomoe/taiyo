@@ -8,64 +8,82 @@ import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { getMainCoverUrls } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, contentRatingsQuerySchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  contentRatingsQuerySchema,
+  storedLocalizedTextSchema,
+  userSummarySchema,
+} from "../utils/schemas"
 import { isBannedSql } from "../utils/user-moderation"
 
 const querySchema = z.object({
-  q: z.string().trim().min(1).max(100).meta({ description: "The text to search for." }),
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(10)
-    .default(5)
-    .meta({ description: "Maximum results per kind." }),
+  q: z.string().trim().min(1).max(100).meta({
+    description: "The text to search for, from 1 to 100 characters.",
+    example: "frieren",
+  }),
+  limit: z.coerce.number().int().min(1).max(10).default(5).meta({
+    description: "The maximum number of results of each kind, from 1 to 10. Defaults to 5.",
+    example: 5,
+  }),
   contentRating: contentRatingsQuerySchema,
 })
 const quickSearchSchema = z.object({
   titles: z
     .object({
-      id: z.uuid(),
-      title: z.string().meta({ description: "The main title of the media." }),
+      id: z.uuid().meta({ description: "The ID of the media." }),
+      title: z
+        .string()
+        .meta({ description: "The main title of the media.", example: "Sousou no Frieren" }),
       matchedTitle: z.string().nullable().meta({
         description:
-          "The alternative title the query matched best, when it matched one better than the main title.",
+          "The alternative title the query matched best, when it matched one better than the main title, if any.",
+        example: "Frieren: Beyond Journey's End",
       }),
-      synopsis: z
-        .record(z.string(), z.string())
-        .meta({ description: "The synopsis of the media, keyed by language." }),
-      type: z.enum(MEDIA_TYPES),
-      status: z.enum(MEDIA_STATUSES),
-      startDate: z.number().int().nullable(),
-      coverUrl: z.url().nullable(),
+      synopsis: storedLocalizedTextSchema.meta({
+        description: "The synopsis of the media, keyed by language.",
+      }),
+      type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media.", example: "MANGA" }),
+      status: z
+        .enum(MEDIA_STATUSES)
+        .meta({ description: "The publication status of the media.", example: "RELEASING" }),
+      startDate: z.int().nullable().meta({
+        description: "When the media started, in milliseconds since the Unix epoch, if known.",
+        example: 1_587_772_800_000,
+      }),
+      coverUrl: z
+        .url()
+        .nullable()
+        .meta({ description: "The URL of the media's main cover, if any." }),
     })
-    .array(),
+    .array()
+    .meta({ description: "The best matching titles, most relevant first." }),
   groups: z
     .object({
-      id: z.uuid(),
-      name: z.string(),
-      description: z.string().nullable(),
-      logoUrl: z.url().nullable(),
+      id: z.uuid().meta({ description: "The ID of the group." }),
+      name: z.string().meta({ description: "The name of the group.", example: "Sunray Scans" }),
+      description: z
+        .string()
+        .nullable()
+        .meta({ description: "The description of the group, if any." }),
+      logoUrl: z.url().nullable().meta({ description: "The URL of the group's logo, if any." }),
     })
-    .array(),
-  users: z
-    .object({
-      id: z.uuid(),
-      username: z.string(),
-      displayUsername: z.string(),
-      image: z.string().nullable(),
-      nameEffect: z.string().nullable(),
-      avatarBorder: z.string().nullable(),
-    })
-    .array(),
+    .array()
+    .meta({
+      description:
+        "The best matching groups: exact name matches first, then prefix matches, then by name.",
+    }),
+  users: userSummarySchema.array().meta({
+    description:
+      "The best matching users: exact username matches first, then prefix matches, then by username.",
+  }),
 })
 
 export const quickSearchHandler = new Hono().get(
   "/",
   describeRoute({
-    summary: "Quick search",
+    summary: "Search titles, groups and users",
     description:
-      "Searches titles, groups and users at once and returns the best few of each, for type-ahead UIs such as the command palette. Titles go through the typo-tolerant media index and respect `contentRating`; groups and users match on name, exact and prefix matches first. Banned users are never returned.\n\n**Authentication:** none.",
+      "Searches titles, groups and users at once and returns the best few of each, for type-ahead UIs such as the command palette. Titles tolerate typos and respect `contentRating`; groups and users match on name. Banned users are never returned.\n\n**Authentication:** none.",
     tags: ["Search"],
     responses: {
       200: {
@@ -76,7 +94,7 @@ export const quickSearchHandler = new Hono().get(
       },
       ...getOpenApiResponses({
         422: "The query parameters failed validation.",
-        429: "Too many requests — slow down.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),
@@ -87,21 +105,33 @@ export const quickSearchHandler = new Hono().get(
     const { q, limit, contentRating } = c.var.query
     const pattern = `%${q.replace(/[\\%_]/g, "\\$&")}%`
     const prefix = `${q.replace(/[\\%_]/g, "\\$&")}%`
-    const [titleHits, groups, users] = await Promise.all([
-      meili.index<MediaDocument>(mediasIndex).search(q, {
-        filter: `contentRating IN [${contentRating.map((rating) => `"${rating}"`).join(", ")}]`,
-        attributesToRetrieve: [
-          "id",
-          "mainTitle",
-          "titles",
-          "synopsis",
-          "type",
-          "status",
-          "startDate",
-        ],
-        showMatchesPosition: true,
-        limit,
-      }),
+    const [[titleHits, covers], groups, users] = await Promise.all([
+      meili
+        .index<MediaDocument>(mediasIndex)
+        .search(q, {
+          filter: `contentRating IN [${contentRating.map((rating) => `"${rating}"`).join(", ")}]`,
+          attributesToRetrieve: [
+            "id",
+            "mainTitle",
+            "titles",
+            "synopsis",
+            "type",
+            "status",
+            "startDate",
+          ],
+          showMatchesPosition: true,
+          limit,
+        })
+        .then(
+          async (hits) =>
+            [
+              hits,
+              await getMainCoverUrls(
+                db,
+                hits.hits.map((hit) => hit.id),
+              ),
+            ] as const,
+        ),
       db
         .selectFrom("groups")
         .select(["id", "name", "description", "logo"])
@@ -137,10 +167,6 @@ export const quickSearchHandler = new Hono().get(
         .limit(limit)
         .execute(),
     ])
-    const covers = await getMainCoverUrls(
-      db,
-      titleHits.hits.map((hit) => hit.id),
-    )
 
     return c.ok({
       titles: titleHits.hits.flatMap((hit) => {

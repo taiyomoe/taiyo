@@ -11,19 +11,22 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 import { isBannedSql, managedUserSchema } from "../utils/user-moderation"
 
 const querySchema = paginationQuerySchema.extend({
-  search: z
-    .string()
-    .trim()
-    .min(1)
-    .max(100)
+  search: z.string().trim().min(1).max(100).optional().meta({
+    description: "Only list the users whose username or display name contains this text.",
+    example: "kaito",
+  }),
+  role: z
+    .enum(ROLES)
     .optional()
-    .meta({ description: "Only list users whose username contains this text." }),
-  role: z.enum(ROLES).optional().meta({ description: "Only list users with this role." }),
+    .meta({ description: "Only list the users with this role.", example: "UPLOADER" }),
   banned: z
     .enum(["true", "false"])
     .transform((value) => value === "true")
     .optional()
-    .meta({ description: "Only list banned, or not banned, users." }),
+    .meta({
+      description: "Only list the users who are banned right now (`true`) or not (`false`).",
+      example: "true",
+    }),
 })
 
 export const listUsersHandler = new Hono().get(
@@ -35,14 +38,18 @@ export const listUsersHandler = new Hono().get(
     tags: ["Users"],
     responses: {
       200: {
-        description: "Matching users.",
+        description: "The matching users.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(managedUserSchema.array(), paginationMetaSchema)),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth("user.list"),

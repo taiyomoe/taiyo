@@ -15,29 +15,48 @@ const keySchema = z.string().min(1).max(256)
 const bodySchema = z.object({
   endpoint: pushEndpointSchema,
   keys: z
-    .object({ p256dh: keySchema, auth: keySchema })
+    .object({
+      p256dh: keySchema.meta({
+        description: "The public key of the subscription, base64url-encoded.",
+        example:
+          "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM",
+      }),
+      auth: keySchema.meta({
+        description: "The authentication secret of the subscription, base64url-encoded.",
+        example: "tBHItJI5svbpez7KI4CCXg",
+      }),
+    })
     .meta({ description: "The keys from the browser's `PushSubscription`." }),
 })
 
 export const upsertPushSubscriptionHandler = new Hono().put(
   "/me/push-subscriptions",
   describeRoute({
-    summary: "Subscribe this device to push notifications",
-    description: `Saves the browser's push subscription for the signed-in user. Saving an endpoint another account used moves it to you, and saving it again refreshes its keys. Only your ${config.notifications.maxPushSubscriptions} most recently saved devices are kept.\n\n**Authentication:** signed-in user.`,
+    summary: "Subscribe my device to push notifications",
+    description: `Subscribes the device to push notifications with the browser's push subscription. The subscription lasts as long as your current session. Saving an endpoint another account used moves it to you, and saving it again refreshes its keys. Only your ${config.notifications.maxPushSubscriptions} most recently saved devices are kept.\n\n**Authentication:** signed-in user.`,
     tags: ["Notifications"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "The device is subscribed.",
+        description: "Device subscribed.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ endpoint: z.string() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  endpoint: z
+                    .string()
+                    .meta({ description: "The push service URL of the subscribed device." }),
+                }),
+              ),
+            ),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The subscription failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
+      }),
     },
   }),
   audited(notificationAudit.PUSH_SUBSCRIBE, () => ({})),

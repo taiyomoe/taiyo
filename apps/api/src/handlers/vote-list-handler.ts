@@ -10,21 +10,15 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
+import { isBannedSql } from "../utils/user-moderation"
 
 const voteResultSchema = z.object({
-  upvoteCount: z.int(),
-  viewerVoted: z.boolean(),
+  upvoteCount: z.int().meta({ description: "The number of upvotes on the list.", example: 34 }),
+  viewerVoted: z.boolean().meta({ description: "Whether you upvoted the list." }),
 })
-const responses = (summary: string) => ({
-  200: {
-    description: summary,
-    content: { "application/json": { schema: resolver(apiSuccessEnvelope(voteResultSchema)) } },
-  },
-  ...getOpenApiResponses({
-    404: "No PUBLIC list with the given id exists.",
-    409: "You can't upvote your own list.",
-    429: "Too many requests — slow down.",
-  }),
+const voteResponse = (description: string) => ({
+  description,
+  content: { "application/json": { schema: resolver(apiSuccessEnvelope(voteResultSchema)) } },
 })
 
 export const voteListHandler = new Hono()
@@ -33,9 +27,19 @@ export const voteListHandler = new Hono()
     describeRoute({
       summary: "Upvote a list",
       description:
-        "Upvotes a PUBLIC list. Upvoting twice is a no-op.\n\n**Authentication:** signed-in user.",
+        "Upvotes a `PUBLIC` list of a user who is not banned. Upvoting a list twice changes nothing.\n\n**Authentication:** signed-in user.",
       tags: ["Custom lists"],
-      responses: responses("List upvoted."),
+      responses: {
+        200: voteResponse("List upvoted."),
+        ...getOpenApiResponses({
+          401: true,
+          403: true,
+          404: "No list with the given ID exists, or it is `PRIVATE`, or its owner is banned.",
+          409: "You cannot upvote your own list.",
+          422: "The provided ID is not a valid UUID.",
+          429: "Too many requests, try again later.",
+        }),
+      },
     }),
     audited(listAudit.VOTE),
     withAuth(),
@@ -49,7 +53,13 @@ export const voteListHandler = new Hono()
         return c.fail("LIST_SELF_VOTE")
       }
 
-      if (list.visibility !== "PUBLIC") {
+      const owner = await db
+        .selectFrom("users")
+        .select(isBannedSql.as("banned"))
+        .where("id", "=", list.userId)
+        .executeTakeFirstOrThrow()
+
+      if (list.visibility !== "PUBLIC" || owner.banned) {
         return c.fail("LIST_NOT_FOUND")
       }
 
@@ -74,9 +84,18 @@ export const voteListHandler = new Hono()
     describeRoute({
       summary: "Remove a list upvote",
       description:
-        "Takes back your upvote on a list. Removing a missing upvote is a no-op.\n\n**Authentication:** signed-in user.",
+        "Removes your upvote from a list. Removing an upvote you did not give changes nothing.\n\n**Authentication:** signed-in user.",
       tags: ["Custom lists"],
-      responses: responses("Upvote removed."),
+      responses: {
+        200: voteResponse("Upvote removed."),
+        ...getOpenApiResponses({
+          401: true,
+          403: true,
+          404: "No list with the given ID exists.",
+          422: "The provided ID is not a valid UUID.",
+          429: "Too many requests, try again later.",
+        }),
+      },
     }),
     audited(listAudit.UNVOTE),
     withAuth(),

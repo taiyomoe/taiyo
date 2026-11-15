@@ -13,7 +13,8 @@ export const deleteGroupHandler = new Hono().delete(
   "/:id",
   describeRoute({
     summary: "Delete a group",
-    description: "Removes a group. The group can be restored later.\n\n**Required roles:** admin.",
+    description:
+      "Deletes the group, which then no longer shows up in listings or by ID.\n\n**Required roles:** admin.",
     tags: ["Groups"],
     responses: {
       200: {
@@ -23,7 +24,7 @@ export const deleteGroupHandler = new Hono().delete(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid().meta({ description: "The ID of the deleted group." }),
+                  id: z.uuid().meta({ description: "The ID of the group." }),
                 }),
               ),
             ),
@@ -31,8 +32,10 @@ export const deleteGroupHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

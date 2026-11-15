@@ -9,14 +9,19 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid(), pageId: z.uuid() })
+const paramSchema = z.object({
+  pageId: z.uuid().meta({
+    description: "The ID of the page.",
+    example: "9f1b2c3d-4e5f-4a7b-8c9d-0e1f2a3b4c5d",
+  }),
+})
 
 export const putPageBookmarkHandler = new Hono().put(
   "/:id/bookmarks/:pageId",
   describeRoute({
     summary: "Bookmark a page",
     description:
-      "Bookmarks one page of a chapter. Bookmarking a page twice keeps a single bookmark.\n\n**Authentication:** signed-in user.",
+      "Bookmarks one page of a published chapter. Bookmarking a page twice keeps a single bookmark.\n\n**Authentication:** signed-in user.",
     tags: ["Bookmarks"],
     responses: {
       200: {
@@ -24,14 +29,21 @@ export const putPageBookmarkHandler = new Hono().put(
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ chapterId: z.uuid(), pageId: z.uuid() })),
+              apiSuccessEnvelope(
+                z.object({
+                  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+                  pageId: z.uuid().meta({ description: "The ID of the page." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists, or it has no such page.",
-        422: "An id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists, or it has no page with the given ID.",
+        422: "One of the provided IDs is not a valid UUID.",
       }),
     },
   }),

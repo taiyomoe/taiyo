@@ -23,46 +23,52 @@ import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const bodySchema = z.object({
-  nameEffect: z
-    .enum(NAME_EFFECT_KEYS)
-    .nullable()
-    .optional()
-    .meta({ description: "The name effect to equip, or null to show your plain name." }),
+  nameEffect: z.enum(NAME_EFFECT_KEYS).nullable().optional().meta({
+    description: "The name effect to equip, or null to show your plain name.",
+    example: "sunrise",
+  }),
   title: z
     .enum(USER_TITLE_KEYS)
     .nullable()
     .optional()
-    .meta({ description: "The profile title to equip, or null for none." }),
+    .meta({ description: "The profile title to equip, or null for none.", example: "bookworm" }),
   avatarBorder: z
     .enum(AVATAR_BORDER_KEYS)
     .nullable()
     .optional()
-    .meta({ description: "The avatar border to equip, or null for none." }),
+    .meta({ description: "The avatar border to equip, or null for none.", example: "halo" }),
 })
 const equippedSchema = z.object({
-  nameEffect: z.enum(NAME_EFFECT_KEYS).nullable(),
-  title: z.enum(USER_TITLE_KEYS).nullable(),
-  avatarBorder: z.enum(AVATAR_BORDER_KEYS).nullable(),
+  nameEffect: z
+    .enum(NAME_EFFECT_KEYS)
+    .nullable()
+    .meta({ description: "The name effect you have equipped, if any.", example: "sunrise" }),
+  title: z
+    .enum(USER_TITLE_KEYS)
+    .nullable()
+    .meta({ description: "The profile title you have equipped, if any.", example: "bookworm" }),
+  avatarBorder: z
+    .enum(AVATAR_BORDER_KEYS)
+    .nullable()
+    .meta({ description: "The avatar border you have equipped, if any.", example: "halo" }),
 })
 
 export const updateMyCosmeticsHandler = new Hono().patch(
   "/me/cosmetics",
   describeRoute({
-    summary: "Equip cosmetics",
+    summary: "Update my cosmetics",
     description:
-      "Equips a name effect, a profile title and/or an avatar border you have unlocked. A name effect shows wherever your name does, and a border wherever your avatar does.\n\n**Authentication:** signed-in user.",
+      "Updates the name effect, profile title and avatar border you have equipped. Omitted fields stay unchanged, null unequips, and you can only equip cosmetics you have unlocked. A name effect shows wherever your name does, and a border wherever your avatar does.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "Cosmetics equipped.",
+        description: "Cosmetics updated.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(equippedSchema)) } },
       },
       ...getOpenApiResponses({
-        403: "You haven't unlocked one of the requested cosmetics.",
-        422: "The request data failed validation.",
+        401: true,
+        403: "You do not have permission to perform this action, or you have not unlocked one of the requested cosmetics.",
+        422: "The request body failed validation.",
       }),
     },
   }),

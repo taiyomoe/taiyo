@@ -13,23 +13,29 @@ export const unfollowUserHandler = new Hono().delete(
   "/:id/follow",
   describeRoute({
     summary: "Unfollow a user",
-    description:
-      "Removes the follow edge from you to the given user.\n\n**Authentication:** signed-in user.",
+    description: "Unfollows a user.\n\n**Authentication:** signed-in user.",
     tags: ["Follows"],
     responses: {
       200: {
-        description: "Follow edge removed.",
+        description: "User unfollowed.",
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ followerId: z.uuid(), followingId: z.uuid() })),
+              apiSuccessEnvelope(
+                z.object({
+                  followerId: z.uuid().meta({ description: "Your ID." }),
+                  followingId: z.uuid().meta({ description: "The ID of the unfollowed user." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given id exists, or you don't follow them.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No user with the given ID exists, the user is banned, or you do not follow the user.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

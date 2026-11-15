@@ -25,7 +25,10 @@ const bodySchema = z.object({
     .pipe(z.string().trim().max(config.comments.maxReportDetailsLength))
     .optional()
     .transform((value) => (value === "" ? undefined : value))
-    .meta({ description: "Anything moderators should know, up to 500 characters." }),
+    .meta({
+      description: `Anything the moderators should know, up to ${config.comments.maxReportDetailsLength} characters.`,
+      example: "Reveals the ending of the series without a spoiler tag.",
+    }),
 })
 
 export const createCommentReportHandler = new Hono().post(
@@ -33,24 +36,28 @@ export const createCommentReportHandler = new Hono().post(
   describeRoute({
     summary: "Report a comment",
     description:
-      "Reports a comment to the moderators. You can have one open report per comment, and can't report your own.\n\n**Authentication:** signed-in user.",
+      "Reports a comment to the moderators. You can have one open report per comment, and you cannot report your own comments.\n\n**Authentication:** signed-in user.",
     tags: ["Comment reports"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Report created.",
         content: {
-          "application/json": { schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))) },
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the report." }) }),
+              ),
+            ),
+          },
         },
       },
       ...getOpenApiResponses({
-        403: "You can't report your own comment.",
-        404: "The comment doesn't exist or was removed.",
+        401: true,
+        403: "You cannot report your own comment, or you do not have permission to perform this action.",
+        404: "No comment with the given ID exists, or it was removed.",
         409: "You already have an open report on this comment.",
-        422: "The request data failed validation.",
-        429: "You sent too many reports in a short time.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

@@ -11,15 +11,15 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ mediaId: z.uuid() })
+const paramSchema = z.object({ mediaId: z.uuid().meta({ description: "The ID of the media." }) })
 const bodySchema = z.object({
   status: z.enum(USER_LIBRARY_STATUSES).meta({
-    description: "Which bucket to put the media in.",
+    description: "The status of the media in your library.",
     example: "READING",
   }),
   notify: z.boolean().optional().meta({
     description:
-      "Whether new chapters of the media notify you. Left out, a new entry notifies and an existing entry keeps its choice. Entries in DROPPED or COMPLETED never notify.",
+      "Whether new chapters of the media notify you. When omitted, a new entry notifies and an existing entry keeps its choice. Entries in `DROPPED` or `COMPLETED` never notify.",
     example: true,
   }),
 })
@@ -27,25 +27,27 @@ const bodySchema = z.object({
 export const upsertLibraryEntryHandler = new Hono().put(
   "/me/library/:mediaId",
   describeRoute({
-    summary: "Add or move a media in my library",
+    summary: "Add a media to my library",
     description:
-      "Upserts a library entry. Adds the media to the chosen bucket; if it was already in another bucket, moves it. Also turns new-chapter notifications on or off for the media. Idempotent.\n\n**Authentication:** signed-in user.",
+      "Adds a media to your library with the given status, or changes its status when it is already there. Also turns notifications for new chapters of the media on or off.\n\n**Authentication:** signed-in user.",
     tags: ["Library"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "Library entry upserted.",
+        description: "Library entry saved.",
         content: {
           "application/json": {
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  userId: z.uuid(),
-                  mediaId: z.uuid(),
-                  status: z.enum(USER_LIBRARY_STATUSES),
-                  notify: z.boolean(),
+                  userId: z.uuid().meta({ description: "Your ID." }),
+                  mediaId: z.uuid().meta({ description: "The ID of the media." }),
+                  status: z.enum(USER_LIBRARY_STATUSES).meta({
+                    description: "The status of the media in your library.",
+                    example: "READING",
+                  }),
+                  notify: z
+                    .boolean()
+                    .meta({ description: "Whether new chapters of the media notify you." }),
                 }),
               ),
             ),
@@ -53,8 +55,10 @@ export const upsertLibraryEntryHandler = new Hono().put(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No media with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

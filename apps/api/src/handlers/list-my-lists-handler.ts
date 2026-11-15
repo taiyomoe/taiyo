@@ -12,14 +12,13 @@ import { listSummarySchema, selectListSummaries, toListSummaries } from "../util
 const querySchema = paginationQuerySchema.extend({
   contentRating: contentRatingsQuerySchema,
   mediaId: z.uuid().optional().meta({
-    description: "A media to look up: each list then says whether it holds that media.",
+    description: "The ID of a media to look up: each list then says whether it holds that media.",
   }),
 })
 const myListSchema = listSummarySchema.extend({
-  hasMedia: z
-    .boolean()
-    .nullable()
-    .meta({ description: "Whether the list holds `mediaId`, or null when it wasn't given." }),
+  hasMedia: z.boolean().nullable().meta({
+    description: "Whether the list holds the media given in `mediaId`, if any.",
+  }),
 })
 
 export const listMyListsHandler = new Hono().get(
@@ -27,7 +26,7 @@ export const listMyListsHandler = new Hono().get(
   describeRoute({
     summary: "List my lists",
     description:
-      "Returns your custom lists, most-recently-updated first.\n\n**Authentication:** signed-in user.",
+      "Lists your custom lists, most recently updated first. Pass `mediaId` to also learn which of them hold that media.\n\n**Authentication:** signed-in user.",
     tags: ["Custom lists"],
     responses: {
       200: {
@@ -38,7 +37,11 @@ export const listMyListsHandler = new Hono().get(
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
   withAuth(),

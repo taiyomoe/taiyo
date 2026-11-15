@@ -16,11 +16,11 @@ export const listUserListsHandler = new Hono().get(
   describeRoute({
     summary: "List a user's lists",
     description:
-      "Returns a user's lists, most recently updated first. Only PUBLIC lists are included, unless you are that user.\n\n**Authentication:** optional.",
+      "Lists a user's custom lists, most recently updated first. Only `PUBLIC` lists are included, unless you are that user. Signed-in viewers also see whether they upvoted each list.\n\n**Authentication:** optional.",
     tags: ["Custom lists"],
     responses: {
       200: {
-        description: "The user's lists.",
+        description: "The custom lists of the user.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(listSummarySchema.array(), paginationMetaSchema)),
@@ -28,8 +28,8 @@ export const listUserListsHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given id exists.",
-        422: "The provided id is not a valid UUID or the query parameters failed validation.",
+        404: "No user with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

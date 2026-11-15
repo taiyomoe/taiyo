@@ -13,6 +13,7 @@ import {
   keysetAfter,
   liveCommentSql,
   loadCommentImages,
+  nextCursorMetaSchema,
   selectComments,
   toComment,
 } from "../utils/comments"
@@ -27,7 +28,7 @@ const querySchema = z.object({
     .min(1)
     .max(50)
     .default(config.comments.repliesPerPage)
-    .meta({ description: "How many replies to return (1-50).", example: 10 }),
+    .meta({ description: "The number of replies to return, from 1 to 50.", example: 10 }),
 })
 
 export const listCommentRepliesHandler = new Hono().get(
@@ -35,25 +36,20 @@ export const listCommentRepliesHandler = new Hono().get(
   describeRoute({
     summary: "List a comment's replies",
     description:
-      "Lists the replies to a top-level comment, oldest first. Pages are cursor-based: pass `nextCursor` back as `cursor`.\n\n**Authentication:** optional.",
+      "Lists the visible replies to a top-level comment, oldest first. Given a reply, lists the replies to its top-level comment. Signed-in viewers also see which replies they upvoted and whether they can edit, delete or report them.\n\n**Authentication:** optional.",
     tags: ["Comments"],
     responses: {
       200: {
-        description: "A page of replies.",
+        description: "The replies to the comment.",
         content: {
           "application/json": {
-            schema: resolver(
-              apiSuccessEnvelope(
-                commentSchema.array(),
-                z.object({ nextCursor: z.string().nullable() }),
-              ),
-            ),
+            schema: resolver(apiSuccessEnvelope(commentSchema.array(), nextCursorMetaSchema)),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No such comment exists.",
-        422: "The id or query parameters failed validation.",
+        404: "No comment with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

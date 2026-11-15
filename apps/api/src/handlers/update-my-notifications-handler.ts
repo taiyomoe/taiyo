@@ -16,30 +16,45 @@ const bodySchema = z.object({
     .array()
     .min(1)
     .max(config.notifications.maxBulkIds)
-    .meta({ description: "The notifications to change. Ids that aren't yours are skipped." }),
-  read: z.boolean().meta({ description: "True marks them read, false marks them unread." }),
+    .meta({
+      description: `The IDs of the notifications to change, at most ${config.notifications.maxBulkIds}. IDs of notifications that are not yours are skipped.`,
+    }),
+  read: z.boolean().meta({
+    description: "Whether to mark the notifications as read (`true`) or unread (`false`).",
+    example: true,
+  }),
 })
 
 export const updateMyNotificationsHandler = new Hono().patch(
   "/me/notifications",
   describeRoute({
-    summary: "Mark notifications as read or unread",
+    summary: "Mark my notifications as read or unread",
     description:
-      "Marks several of your notifications as read or unread and returns how many changed. A notification read again keeps its first read time.\n\n**Authentication:** signed-in user.",
+      "Marks several of your notifications as read or unread and returns how many changed. A notification that is already read keeps the time it was first read.\n\n**Authentication:** signed-in user.",
     tags: ["Notifications"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "The notifications changed.",
+        description: "Notifications updated.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ count: z.int().nonnegative() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  count: z.int().nonnegative().meta({
+                    description: "The number of notifications that changed.",
+                    example: 3,
+                  }),
+                }),
+              ),
+            ),
           },
         },
       },
-      ...getOpenApiResponses({ 422: "The body failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The request body failed validation.",
+      }),
     },
   }),
   audited(notificationAudit.MARK),

@@ -27,26 +27,36 @@ const createChapterSchema = z
       .max(config.input.maxChapterTitleLength)
       .nullable()
       .optional()
-      .meta({ description: "Title of the chapter, if any.", example: "The Beginning" }),
-    number: z.number().nonnegative().meta({ description: "Chapter number.", example: 1 }),
+      .meta({ description: "The title of the chapter, if any.", example: "The Beginning" }),
+    number: z
+      .number()
+      .nonnegative()
+      .meta({ description: "The number of the chapter.", example: 112 }),
     volume: z
       .string()
       .min(1)
       .max(config.input.maxVolumeLength)
       .nullable()
       .optional()
-      .meta({ description: "Volume of the chapter, if any.", example: "1" }),
-    language: languageSchema("Language of the chapter."),
+      .meta({ description: "The volume of the chapter, if any.", example: "12" }),
+    language: languageSchema("The language of the chapter."),
     contentRating: z
       .enum(CONTENT_RATINGS)
       .optional()
-      .meta({ description: "Content rating.", example: "NORMAL" }),
-    flag: z.enum(FLAGS).optional().meta({ description: "Visibility flag.", example: "OK" }),
+      .meta({ description: "The content rating of the chapter.", example: "NORMAL" }),
+    flag: z.enum(FLAGS).optional().meta({
+      description:
+        "The moderation flag of the chapter. Setting it requires the uploader, moderator or admin role.",
+      example: "OK",
+    }),
     groupIds: z
       .array(z.uuid())
       .max(config.input.maxChapterGroups)
       .default([])
-      .meta({ description: "Groups credited on the chapter.", example: [crypto.randomUUID()] }),
+      .meta({
+        description: "The IDs of the groups credited on the chapter.",
+        example: ["9b2f4c1e-3d5a-4e7b-8c9d-0a1b2c3d4e5f"],
+      }),
     publishAt: publishAtSchema,
     externalUrl: externalUrlSchema,
     isExternal: z.boolean().default(false).meta({
@@ -63,11 +73,8 @@ export const createChapterHandler = new Hono().post(
   "/:id/chapters",
   describeRoute({
     summary: "Create a chapter",
-    description: `Creates a chapter under a media and credits the given groups. Pages are uploaded through a dedicated route afterwards, unless \`isExternal\` is set: an external chapter only links to \`externalUrl\`.\n\nWhen the uploader is an uploader or an admin, or credits a group where they hold \`UPLOAD_CHAPTERS\`, the chapter is published as soon as its pages are processed, or right away when it is external. With a future \`publishAt\` it is scheduled instead and goes live at that time. Otherwise it waits for review, hidden from everyone but its uploader and the reviewers; a user can have at most ${config.input.maxPendingChapters} chapters waiting. Setting \`flag\` requires the uploader, moderator or admin role.\n\n**Authentication:** any signed-in user.`,
+    description: `Creates a chapter of a media crediting the given groups: its pages are uploaded afterwards, unless it is external (\`isExternal\`) and only links to \`externalUrl\`. If you are uploader or admin, or credit a group where you have the \`UPLOAD_CHAPTERS\` permission, it is published once its pages are processed (right away when external), or scheduled when \`publishAt\` is in the future. Otherwise it waits for review, hidden from everyone but you and the reviewers, and you can have at most ${config.input.maxPendingChapters} chapters waiting.\n\n**Authentication:** signed-in user.`,
     tags: ["Chapters"],
-    requestBody: {
-      content: { "application/json": await resolver(createChapterSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Chapter created.",
@@ -76,10 +83,11 @@ export const createChapterHandler = new Hono().post(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid().meta({ description: "The ID of the newly created chapter." }),
+                  id: z.uuid().meta({ description: "The ID of the new chapter." }),
                   status: z.enum(CHAPTER_STATUSES).meta({
                     description:
-                      "UPLOADING until its pages are processed, PUBLISHED or SCHEDULED for an external chapter, or PENDING when it waits for review.",
+                      "The status of the chapter: `UPLOADING` until its pages are processed, `PUBLISHED` or `SCHEDULED` for an external chapter, or `PENDING` when it waits for review.",
+                    example: "UPLOADING",
                   }),
                 }),
               ),
@@ -88,8 +96,11 @@ export const createChapterHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists, or one of the groups does not exist.",
-        422: "The request data failed validation.",
+        401: true,
+        403: "You do not have permission to perform this action, or you set `flag` without the uploader, moderator or admin role.",
+        404: "No media with the given ID exists, or one of the groups does not exist.",
+        409: "You already have too many chapters waiting for review.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

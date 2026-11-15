@@ -19,22 +19,29 @@ export const rejectGroupCreationRequestHandler = new Hono().post(
   describeRoute({
     summary: "Reject a group creation request",
     description:
-      "Rejects a pending request for a new group with a note shown to the requester.\n\n**Required roles:** admin.",
+      "Rejects a pending group creation request, with a note shown to the requester.\n\n**Required roles:** admin.",
     tags: ["Group creation requests"],
-    requestBody: {
-      content: { "application/json": await resolver(rejectSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Request rejected.",
+        description: "Group creation request rejected.",
         content: {
-          "application/json": { schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))) },
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the group creation request." }),
+                }),
+              ),
+            ),
+          },
         },
       },
       ...getOpenApiResponses({
-        404: "No request with the given id exists.",
+        401: true,
+        403: true,
+        404: "No group creation request with the given ID exists.",
         409: "The request is no longer pending.",
-        422: "The request data failed validation.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

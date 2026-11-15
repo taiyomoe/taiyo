@@ -1,4 +1,4 @@
-import { type RawBuilder, sql } from "@taiyomoe/db"
+import { AUDIT_ACTOR_TYPES, type RawBuilder, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -16,45 +16,60 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 
 const LIMIT = 8
 const valueSchema = z.object({
-  value: z.string().meta({ description: "The field value, exactly as KQL matches it." }),
-  count: z.int().meta({ description: "How many matching entries have it." }),
+  value: z
+    .string()
+    .meta({ description: "The value of the field, exactly as KQL matches it.", example: "media" }),
+  count: z
+    .int()
+    .meta({ description: "The number of matching entries with this value.", example: 42 }),
 })
 const actorValueSchema = valueSchema.extend({
-  type: z.string().meta({ description: "The kind of actor." }),
-  displayName: z.string().nullable().meta({ description: "The actor's display name." }),
-  image: z.string().nullable().meta({ description: "The actor's avatar, if a user." }),
+  type: z.enum(AUDIT_ACTOR_TYPES).meta({ description: "The kind of actor.", example: "user" }),
+  displayName: z
+    .string()
+    .nullable()
+    .meta({ description: "The display name of the actor, if any.", example: "Kaito" }),
+  image: z.string().nullable().meta({ description: "The URL of the user's avatar, if any." }),
   nameEffect: z
     .string()
     .nullable()
-    .meta({ description: "The actor's equipped name effect, if a user." }),
+    .meta({ description: "The name effect the user has equipped, if any." }),
   avatarBorder: z
     .string()
     .nullable()
-    .meta({ description: "The actor's equipped avatar border, if a user." }),
+    .meta({ description: "The avatar border the user has equipped, if any." }),
 })
+const topValuesSchema = (field: string) =>
+  valueSchema.array().meta({ description: `The most common ${field}, most frequent first.` })
 const facetsSchema = z.object({
-  total: z.int().meta({ description: "How many entries match." }),
-  category: valueSchema.array(),
-  action: valueSchema.array(),
-  actor: actorValueSchema.array(),
-  outcome: valueSchema.array(),
-  severity: valueSchema.array(),
-  targetType: valueSchema.array(),
-  ip: valueSchema.array(),
+  total: z.int().meta({ description: "The number of matching entries.", example: 1280 }),
+  category: topValuesSchema("action categories"),
+  action: topValuesSchema("actions"),
+  actor: actorValueSchema.array().meta({
+    description: "The most common actors, most frequent first. `value` is the ID of the actor.",
+  }),
+  outcome: topValuesSchema("outcomes"),
+  severity: topValuesSchema("severities"),
+  targetType: topValuesSchema("kinds of resource"),
+  ip: topValuesSchema("IP addresses"),
 })
 
 export const getAuditLogFacetsHandler = new Hono().get(
   "/facets",
   describeRoute({
-    summary: "Break audit logs down by field",
-    description: `Returns the most common values of the main fields among matching entries, up to ${LIMIT} per field. Takes the same filters as listing.\n\n**Required roles:** admin.`,
+    summary: "Get the top audit log values",
+    description: `Returns the most common values of the main fields among matching entries, up to ${LIMIT} per field, and how many entries match. Takes the same filters as listing audit logs.\n\n**Required roles:** admin.`,
     tags: ["Audit logs"],
     responses: {
       200: {
         description: "The top values per field.",
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(facetsSchema)) } },
       },
-      ...getOpenApiResponses({ 422: "The query parameters or the KQL query failed validation." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        422: "The query parameters failed validation, or the KQL query is invalid.",
+      }),
     },
   }),
   withAuth("auditLog.read"),

@@ -9,9 +9,9 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const getGroupFollowHandler = new Hono().get(
   "/:id/follow",
   describeRoute({
-    summary: "Get whether you follow a group",
+    summary: "Get my follow state for a group",
     description:
-      "Tells whether you follow the group, with its follower count.\n\n**Authentication:** signed-in user.",
+      "Returns whether you follow the group, with its follower count.\n\n**Authentication:** signed-in user.",
     tags: ["Group follows"],
     responses: {
       200: {
@@ -21,8 +21,10 @@ export const getGroupFollowHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

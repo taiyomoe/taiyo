@@ -31,31 +31,40 @@ const excerptOf = (content: string | null) =>
     .join("")
 const escapeLike = (value: string) => value.replace(/[\\%_]/g, (match) => `\\${match}`)
 const notificationBaseSchema = z.object({
-  id: z.uuid(),
+  id: z.uuid().meta({ description: "The ID of the notification." }),
   lastEventAt: z.iso.datetime().meta({
     description: "When the latest event behind the notification happened.",
   }),
-  readAt: z.iso.datetime().nullable().meta({ description: "When you read it, or null." }),
+  readAt: z.iso
+    .datetime()
+    .nullable()
+    .meta({ description: "When you read the notification, if any." }),
 })
 const commentTargetSchema = z
   .object({
-    type: z.enum(COMMENT_TARGET_TYPES),
-    id: z.uuid(),
+    type: z
+      .enum(COMMENT_TARGET_TYPES)
+      .meta({ description: "The kind of page the thread is on.", example: "CHAPTER" }),
+    id: z.uuid().meta({ description: "The ID of the media, chapter, group or user." }),
     username: z.string().nullable().meta({
-      description: "The profile owner's username when the thread is on a profile.",
+      description: "The username of the profile owner when the thread is on a profile, if any.",
+      example: "kaito",
     }),
     title: z.string().nullable().meta({
       description:
-        "What the thread is about: the media's main title, the group's name or the profile owner's display name.",
+        "What the thread is about: the main title of the media, the name of the group or the display name of the profile owner, if any.",
+      example: "Solo Leveling",
     }),
     chapterNumber: z.number().nullable().meta({
-      description: "The chapter's number when the thread is on a chapter.",
+      description: "The number of the chapter when the thread is on a chapter, if any.",
+      example: 112,
     }),
   })
   .meta({ description: "What the comment thread is about." })
 const actorsSchema = z.object({
   count: z.int().positive().meta({
-    description: "How many people are behind the notification, leaving out those who took it back.",
+    description:
+      "The number of people behind the notification, leaving out those who took it back.",
   }),
   latest: userSummarySchema
     .array()
@@ -64,51 +73,74 @@ const actorsSchema = z.object({
 
 export const notificationSchema = z.discriminatedUnion("type", [
   notificationBaseSchema.extend({
-    type: z.literal("CHAPTER_PUBLISHED"),
-    chapter: z.object({
-      id: z.uuid(),
-      title: z.string().nullable(),
-      number: z.number(),
-      volume: z.string().nullable(),
-      language: storedLanguageSchema("The language of the chapter."),
-      mediaId: z.uuid(),
-      mediaTitle: z.string().nullable().meta({ description: "The main title of the media." }),
-      mediaCoverUrl: z.url().nullable().meta({ description: "The main cover of the media." }),
-      groups: z
-        .object({ id: z.uuid(), name: z.string() })
-        .array()
-        .meta({ description: "The groups credited on the chapter." }),
-    }),
+    type: z.literal("CHAPTER_PUBLISHED").meta({ description: "The kind of notification." }),
+    chapter: z
+      .object({
+        id: z.uuid().meta({ description: "The ID of the chapter." }),
+        title: z
+          .string()
+          .nullable()
+          .meta({ description: "The title of the chapter, if any.", example: "Arise" }),
+        number: z.number().meta({ description: "The number of the chapter.", example: 112 }),
+        volume: z
+          .string()
+          .nullable()
+          .meta({ description: "The volume of the chapter, if any.", example: "12" }),
+        language: storedLanguageSchema("The language of the chapter."),
+        mediaId: z.uuid().meta({ description: "The ID of the media the chapter belongs to." }),
+        mediaTitle: z
+          .string()
+          .nullable()
+          .meta({ description: "The main title of the media, if any.", example: "Solo Leveling" }),
+        mediaCoverUrl: z
+          .url()
+          .nullable()
+          .meta({ description: "The URL of the main cover of the media, if any." }),
+        groups: z
+          .object({
+            id: z.uuid().meta({ description: "The ID of the group." }),
+            name: z
+              .string()
+              .meta({ description: "The name of the group.", example: "Sunray Scans" }),
+          })
+          .array()
+          .meta({ description: "The groups credited on the chapter, alphabetically by name." }),
+      })
+      .meta({ description: "The chapter that came out." }),
   }),
   notificationBaseSchema.extend({
-    type: z.literal("COMMENT_REPLY"),
-    comment: z.object({
-      id: z.uuid().meta({ description: "The ID of the reply." }),
-      rootId: z.uuid().meta({ description: "The ID of the comment that opens the thread." }),
-      excerpt: z
-        .string()
-        .meta({ description: "The start of the reply's text, without its images." }),
-      viewerVoted: z.boolean().meta({ description: "Whether you upvoted the reply." }),
-      target: commentTargetSchema,
-      author: userSummarySchema,
-    }),
+    type: z.literal("COMMENT_REPLY").meta({ description: "The kind of notification." }),
+    comment: z
+      .object({
+        id: z.uuid().meta({ description: "The ID of the reply." }),
+        rootId: z.uuid().meta({ description: "The ID of the comment that opens the thread." }),
+        excerpt: z
+          .string()
+          .meta({ description: "The start of the reply's text, without its images." }),
+        viewerVoted: z.boolean().meta({ description: "Whether you upvoted the reply." }),
+        target: commentTargetSchema,
+        author: userSummarySchema.meta({ description: "The user who replied." }),
+      })
+      .meta({ description: "The reply to your comment." }),
   }),
   notificationBaseSchema.extend({
-    type: z.literal("COMMENT_LIKE"),
-    comment: z.object({
-      id: z.uuid().meta({ description: "The ID of your comment." }),
-      excerpt: z
-        .string()
-        .meta({ description: "The start of your comment's text, without its images." }),
-      target: commentTargetSchema,
-    }),
+    type: z.literal("COMMENT_LIKE").meta({ description: "The kind of notification." }),
+    comment: z
+      .object({
+        id: z.uuid().meta({ description: "The ID of your comment." }),
+        excerpt: z
+          .string()
+          .meta({ description: "The start of your comment's text, without its images." }),
+        target: commentTargetSchema,
+      })
+      .meta({ description: "Your upvoted comment." }),
     upvoteCount: z.int().positive().meta({
       description:
-        "How many people upvoted your comment since the notification opened, leaving out those who took it back. Upvotes stay anonymous.",
+        "The number of people who upvoted your comment since the notification opened, leaving out those who took it back. Upvotes stay anonymous.",
     }),
   }),
   notificationBaseSchema.extend({
-    type: z.literal("FOLLOW"),
+    type: z.literal("FOLLOW").meta({ description: "The kind of notification." }),
     actors: actorsSchema.meta({ description: "Who started following you." }),
   }),
 ])
@@ -116,16 +148,20 @@ export const notificationSchema = z.discriminatedUnion("type", [
 export const notificationFiltersSchema = z.object({
   category: z.enum(NOTIFICATION_CATEGORY_NAMES).optional().meta({
     description:
-      "Only this kind: new chapters, replies to your comments, or activity (upvotes and follows).",
+      "Only list this kind: new chapters, replies to your comments, or activity (upvotes and follows).",
     example: "chapters",
   }),
   unread: z
     .enum(["true", "false"])
     .transform((value) => value === "true")
     .optional()
-    .meta({ description: "Only the notifications you haven't read.", example: "true" }),
+    .meta({
+      description: "Whether to only list the notifications you have not read.",
+      example: "true",
+    }),
   q: z.string().trim().max(100).optional().meta({
-    description: "Matches titles, chapter titles, groups, repliers, followers and comment text.",
+    description:
+      "Only list the notifications whose media titles, chapter titles, groups, repliers, followers or comment text contain this text.",
     example: "solo",
   }),
 })

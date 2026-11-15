@@ -12,7 +12,10 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const linkChapterGroupSchema = z.object({
-  groupId: z.uuid().meta({ description: "ID of an existing group.", example: crypto.randomUUID() }),
+  groupId: z.uuid().meta({
+    description: "The ID of the group to credit.",
+    example: "8d2f5a61-0c3b-4e7a-9f14-2b6c7d8e9f01",
+  }),
 })
 
 export const linkChapterGroupHandler = new Hono().post(
@@ -20,26 +23,30 @@ export const linkChapterGroupHandler = new Hono().post(
   describeRoute({
     summary: "Link a group to a chapter",
     description:
-      "Credits a group on a chapter. Anyone who can edit the chapter can credit any group.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in a group credited on the chapter.",
+      "Credits a group on a chapter. Anyone who can edit the chapter's credits can credit any group.\n\n**Required access:** uploader or admin, a moderator or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading or pending.",
     tags: ["Chapter groups"],
-    requestBody: {
-      content: { "application/json": await resolver(linkChapterGroupSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
-        description: "Group linked to the chapter.",
+        description: "Group linked.",
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ chapterId: z.uuid(), groupId: z.uuid() })),
+              apiSuccessEnvelope(
+                z.object({
+                  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id or no group with the given id exists.",
-        409: "This group is already linked to the chapter.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists, or the group does not exist.",
+        409: "The group is already credited on the chapter.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

@@ -13,7 +13,10 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 
 const rejectSchema = z.object({
-  reason: reviewNoteSchema,
+  reason: reviewNoteSchema.meta({
+    description: "Why the chapter was rejected, shown to the uploader, up to 2000 characters.",
+    example: "The pages are blurry. Please upload a cleaner scan.",
+  }),
 })
 
 export const rejectChapterHandler = new Hono().post(
@@ -21,24 +24,27 @@ export const rejectChapterHandler = new Hono().post(
   describeRoute({
     summary: "Reject a submitted chapter",
     description:
-      "Rejects a chapter that was waiting for review. The reason is shown to the uploader, the pages are deleted from storage and the chapter is kept as a record. Submitting it again means uploading it again.\n\n**Required roles:** uploader, admin.",
+      "Rejects a chapter waiting for review. The uploader sees the reason, the pages are deleted and the chapter stays listed as rejected. Submitting it again means uploading it again.\n\n**Required roles:** uploader, admin.",
     tags: ["Chapter review"],
-    requestBody: {
-      content: { "application/json": await resolver(rejectSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Chapter rejected.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the chapter." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists.",
         409: "The chapter is not waiting for review.",
-        422: "The request data failed validation.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

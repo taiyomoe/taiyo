@@ -15,22 +15,29 @@ export const openChapterHandler = new Hono().post(
   describeRoute({
     summary: "Open a chapter",
     description:
-      "Records that you've opened this chapter. Subsequent calls bump the timestamp; the chapter shows up in your reading-history feed.\n\n**Authentication:** signed-in user.",
+      "Opens a published chapter in your history, so it shows up in your reading history feed. Opening it again moves it back to the top.\n\n**Authentication:** signed-in user.",
     tags: ["Reading history"],
     responses: {
       201: {
-        description: "History entry upserted.",
+        description: "Chapter opened.",
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ userId: z.uuid(), chapterId: z.uuid() })),
+              apiSuccessEnvelope(
+                z.object({
+                  userId: z.uuid().meta({ description: "Your user ID." }),
+                  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+                }),
+              ),
             ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

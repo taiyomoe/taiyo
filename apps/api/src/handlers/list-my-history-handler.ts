@@ -1,4 +1,3 @@
-import { LANGUAGES } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -7,17 +6,20 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { isOpenedHistory } from "../utils/media-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, storedLanguageSchema } from "../utils/schemas"
 
 const historyItemSchema = z.object({
-  chapterId: z.uuid(),
-  chapterNumber: z.number(),
-  chapterTitle: z.string().nullable(),
-  chapterLanguage: z.enum(LANGUAGES),
-  mediaId: z.uuid(),
-  pageId: z.uuid().nullable(),
-  completed: z.boolean(),
-  updatedAt: z.iso.datetime(),
+  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+  chapterNumber: z.number().meta({ description: "The chapter number.", example: 112 }),
+  chapterTitle: z
+    .string()
+    .nullable()
+    .meta({ description: "The title of the chapter, if any.", example: "The Black Swordsman" }),
+  chapterLanguage: storedLanguageSchema("The language of the chapter."),
+  mediaId: z.uuid().meta({ description: "The ID of the media the chapter belongs to." }),
+  pageId: z.uuid().nullable().meta({ description: "The ID of the page you were last on, if any." }),
+  completed: z.boolean().meta({ description: "Whether you finished the chapter." }),
+  updatedAt: z.iso.datetime().meta({ description: "When you last read the chapter." }),
 })
 
 export const listMyHistoryHandler = new Hono().get(
@@ -25,7 +27,7 @@ export const listMyHistoryHandler = new Hono().get(
   describeRoute({
     summary: "List my reading history",
     description:
-      "Returns your reading-history feed in reverse-chronological order. Entries whose chapter has been deleted, and chapters you only marked as read, are excluded.\n\n**Authentication:** signed-in user.",
+      "Lists the chapters you read, most recently read first. Deleted and unpublished chapters, and chapters you only marked as read, are left out.\n\n**Authentication:** signed-in user.",
     tags: ["Reading history"],
     responses: {
       200: {
@@ -37,6 +39,8 @@ export const listMyHistoryHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
+        401: true,
+        403: true,
         422: "The query parameters failed validation.",
       }),
     },
@@ -67,6 +71,7 @@ export const listMyHistoryHandler = new Hono().get(
           "userHistories.updatedAt",
         ])
         .orderBy("userHistories.updatedAt", "desc")
+        .orderBy("userHistories.chapterId", "desc")
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),

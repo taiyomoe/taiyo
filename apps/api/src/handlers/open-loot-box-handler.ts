@@ -20,14 +20,23 @@ import {
 } from "../utils/shop"
 
 const paramSchema = z.object({
-  box: z.enum(LOOT_BOX_KEYS).meta({ description: "The loot box to open." }),
+  box: z
+    .enum(LOOT_BOX_KEYS)
+    .meta({ description: "The key of the loot box to open.", example: "gold" }),
 })
 const openingSchema = z.object({
-  box: z.enum(LOOT_BOX_KEYS),
-  item: cosmeticRefSchema,
-  duplicate: z.boolean().meta({ description: "Whether you already owned the item." }),
-  refund: z.number().int().meta({ description: "Points refunded for a duplicate." }),
-  balance: z.number().int().meta({ description: "Your points after the opening." }),
+  box: z
+    .enum(LOOT_BOX_KEYS)
+    .meta({ description: "The key of the loot box opened.", example: "gold" }),
+  item: cosmeticRefSchema.meta({ description: "The cosmetic the box dropped." }),
+  duplicate: z.boolean().meta({ description: "Whether you already owned the cosmetic." }),
+  refund: z.int().meta({
+    description: "The points refunded for a duplicate, or 0.",
+    example: 300,
+  }),
+  balance: z
+    .int()
+    .meta({ description: "The number of points you have after the opening.", example: 950 }),
 })
 
 export const openLootBoxHandler = new Hono().post(
@@ -35,7 +44,7 @@ export const openLootBoxHandler = new Hono().post(
   describeRoute({
     summary: "Open a loot box",
     description:
-      "Buys and opens a loot box. The server rolls a rarity by the box's weights, then one item of that rarity uniformly, using a cryptographically secure generator. Rolling an item you already own refunds part of the price.\n\n**Authentication:** signed-in user, not while impersonating.",
+      "Buys and opens a loot box: rolls a rarity by the box's odds, then one cosmetic of that rarity uniformly, using a cryptographically secure generator. Rolling a cosmetic you already own refunds part of the price. You cannot open a loot box while impersonating a user.\n\n**Authentication:** signed-in user.",
     tags: ["Shop"],
     responses: {
       201: {
@@ -43,10 +52,11 @@ export const openLootBoxHandler = new Hono().post(
         content: { "application/json": { schema: resolver(apiSuccessEnvelope(openingSchema)) } },
       },
       ...getOpenApiResponses({
-        403: "You are impersonating this user.",
-        409: "You don't have enough points, or you already own everything the box can drop.",
-        422: "The loot box doesn't exist.",
-        429: "Too many requests — slow down.",
+        401: true,
+        403: "You do not have permission to perform this action, or you are impersonating a user.",
+        409: "You do not have enough points, or you already own everything the box can drop.",
+        422: "The `box` path parameter is not a known loot box.",
+        429: "Too many requests, try again later.",
       }),
     },
   }),

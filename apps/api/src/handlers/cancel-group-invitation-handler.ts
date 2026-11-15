@@ -11,26 +11,37 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid(), invitationId: z.uuid() })
+const paramSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the group." }),
+  invitationId: z.uuid().meta({ description: "The ID of the invitation." }),
+})
 
 export const cancelGroupInvitationHandler = new Hono().delete(
   "/:id/invitations/:invitationId",
   describeRoute({
-    summary: "Cancel an invitation",
+    summary: "Cancel a group invitation",
     description:
-      "Cancels a pending invitation. The person who sent it can always cancel it; others need to be able to send the same invitation themselves.\n\n**Authentication:** the inviter, group owner, member with `MANAGE_MEMBERS`, admin.",
+      "Cancels a pending invitation to the group. The member who sent it can always cancel it; anyone else must be allowed to send the same invitation themselves.\n\n**Required access:** the inviter, the group owner, a member with the `MANAGE_MEMBERS` permission, or admin.",
     tags: ["Group members"],
     responses: {
       200: {
         description: "Invitation cancelled.",
         content: {
-          "application/json": { schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))) },
+          "application/json": {
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the invitation." }) }),
+              ),
+            ),
+          },
         },
       },
       ...getOpenApiResponses({
-        404: "No group or invitation with the given id exists.",
-        409: "The invitation was already answered or cancelled.",
-        422: "The provided path parameters failed validation.",
+        401: true,
+        403: "You did not send the invitation and cannot send it yourself, or your account is banned.",
+        404: "No group with the given ID exists, or the group has no invitation with the given ID.",
+        409: "The invitation is no longer pending.",
+        422: "One of the provided IDs is not a valid UUID.",
       }),
     },
   }),

@@ -14,20 +14,26 @@ export const markChapterReadHandler = new Hono().put(
   describeRoute({
     summary: "Mark a chapter as read",
     description:
-      "Marks the chapter as finished in your history without opening it. Marking a chapter as read never earns points, and chapters you only marked as read stay out of your reading-history feed.\n\n**Authentication:** signed-in user.",
+      "Marks a published chapter as finished in your history without opening it. Marking a chapter as read never earns points, and chapters you only marked as read stay out of your reading history feed.\n\n**Authentication:** signed-in user.",
     tags: ["Reading history"],
     responses: {
       200: {
         description: "Chapter marked as read.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ chapterId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ chapterId: z.uuid().meta({ description: "The ID of the chapter." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No chapter with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No chapter with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

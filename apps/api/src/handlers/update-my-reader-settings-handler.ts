@@ -13,24 +13,31 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const updateMyReaderSettingsHandler = new Hono().put(
   "/me/reader-settings",
   describeRoute({
-    summary: "Save my reader settings",
+    summary: "Set my reader settings",
     description:
-      "Replaces the reader settings saved to your account. Unknown settings are dropped, and missing or out-of-range ones are saved as their defaults.\n\n**Authentication:** signed-in user.",
+      "Sets the reader settings saved to your account, replacing the previous ones. Unknown settings are dropped, and missing or invalid ones are saved as their defaults.\n\n**Authentication:** signed-in user.",
     tags: ["Settings"],
-    requestBody: {
-      content: { "application/json": await resolver(readerSettingsSchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Reader settings saved.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ settings: readerSettingsSchema }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  settings: readerSettingsSchema.meta({
+                    description: "Your saved reader settings.",
+                  }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        422: "The request body is not an object.",
+        401: true,
+        403: true,
+        422: "The request body is not a JSON object.",
       }),
     },
   }),

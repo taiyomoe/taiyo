@@ -14,48 +14,59 @@ import {
 
 const querySchema = z.object({
   contentRating: contentRatingsQuerySchema,
-  language: z
-    .enum(SUPPORTED_LANGUAGES)
-    .optional()
-    .meta({ description: "Narrow the volume facet to this language." }),
+  language: z.enum(SUPPORTED_LANGUAGES).optional().meta({
+    description: "Only count the chapters in this language in `total` and `volumes`.",
+    example: "en",
+  }),
 })
 const facetsSchema = z.object({
-  total: z.int().meta({ description: "How many chapters match the language filter." }),
+  total: z.int().meta({ description: "The number of matching chapters.", example: 214 }),
   volumes: z
     .object({
-      volume: z.string().nullable().meta({ description: "The volume, or null for no volume." }),
-      count: z.int().meta({ description: "How many chapters the volume has." }),
-      firstNumber: z.number().meta({ description: "The lowest chapter number in the volume." }),
-      lastNumber: z.number().meta({ description: "The highest chapter number in the volume." }),
+      volume: z
+        .string()
+        .nullable()
+        .meta({ description: "The volume, or `null` for chapters without one.", example: "12" }),
+      count: z
+        .int()
+        .meta({ description: "The number of matching chapters in the volume.", example: 9 }),
+      firstNumber: z
+        .number()
+        .meta({ description: "The lowest chapter number in the volume.", example: 101 }),
+      lastNumber: z
+        .number()
+        .meta({ description: "The highest chapter number in the volume.", example: 110 }),
     })
     .array()
-    .meta({ description: "Volumes, latest first." }),
+    .meta({ description: "The volumes of the matching chapters, latest first." }),
   languages: z
     .object({
-      language: storedLanguageSchema("The language."),
-      count: z.int().meta({ description: "How many chapters are in this language." }),
+      language: storedLanguageSchema("The language of the chapters."),
+      count: z.int().meta({ description: "The number of chapters in the language.", example: 120 }),
     })
     .array()
-    .meta({ description: "Languages, most chapters first." }),
+    .meta({
+      description: "The languages of the chapters, most chapters first, ignoring `language`.",
+    }),
 })
 
 export const listChapterFacetsHandler = new Hono().get(
   "/:id/chapters/facets",
   describeRoute({
-    summary: "List the chapter facets of a media",
+    summary: "List a media's chapter facets",
     description:
-      "Summarises the chapters of a media by volume and language, for building chapter filters. The language facet ignores the `language` filter.\n\n**Authentication:** none.",
+      "Lists the published chapters of a media counted by volume and by language, to build chapter filters. The language counts ignore the `language` filter.\n\n**Authentication:** none.",
     tags: ["Chapters"],
     responses: {
       200: {
-        description: "Chapter facets of the media.",
+        description: "The chapter facets of the media.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(facetsSchema)) },
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
-        422: "The provided id is not a valid UUID or the query parameters failed validation.",
+        404: "No media with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),

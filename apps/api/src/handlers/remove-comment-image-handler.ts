@@ -12,12 +12,13 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid() })
+const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the image." }) })
 const bodySchema = z.object({
-  block: z
-    .boolean()
-    .default(true)
-    .meta({ description: "Also refuse future uploads of this image and close lookalikes." }),
+  block: z.boolean().default(true).meta({
+    description:
+      "Whether to also refuse future uploads of the image and of close lookalikes. Defaults to `true`.",
+    example: true,
+  }),
 })
 
 export const removeCommentImageHandler = new Hono().delete(
@@ -25,11 +26,8 @@ export const removeCommentImageHandler = new Hono().delete(
   describeRoute({
     summary: "Remove a comment image everywhere",
     description:
-      "Deletes an image's file, takes it out of everyone's favorites, and shows a placeholder wherever a comment used it. By default the image is also blocked from being uploaded again.\n\n**Required roles:** moderator, admin.",
+      "Removes an image for good: every comment that used it shows a placeholder instead, and it leaves everyone's favorites. By default, the image is also blocked from being uploaded again.\n\n**Required roles:** moderator, admin.",
     tags: ["Comment images"],
-    requestBody: {
-      content: { "application/json": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Image removed.",
@@ -38,15 +36,23 @@ export const removeCommentImageHandler = new Hono().delete(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid(),
-                  comments: z.int().meta({ description: "How many comments used it." }),
+                  id: z.uuid().meta({ description: "The ID of the image." }),
+                  comments: z.int().meta({
+                    description: "The number of comments that used the image.",
+                    example: 3,
+                  }),
                 }),
               ),
             ),
           },
         },
       },
-      ...getOpenApiResponses({ 404: "The image doesn't exist or was already removed." }),
+      ...getOpenApiResponses({
+        401: true,
+        403: true,
+        404: "No image with the given ID exists, or it was already removed.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
+      }),
     },
   }),
   audited(commentImageAudit.REMOVE),

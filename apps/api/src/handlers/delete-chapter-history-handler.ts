@@ -9,27 +9,37 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ chapterId: z.uuid() })
+const paramSchema = z.object({
+  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+})
 
 export const deleteChapterHistoryHandler = new Hono().delete(
   "/me/history/:chapterId",
   describeRoute({
     summary: "Remove a chapter from my history",
     description:
-      "Drops one entry from your reading history. The chapter itself is untouched.\n\n**Authentication:** signed-in user.",
+      "Removes the chapter from your reading history. The chapter itself is not affected.\n\n**Authentication:** signed-in user.",
     tags: ["Reading history"],
     responses: {
       200: {
         description: "History entry removed.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ chapterId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  chapterId: z.uuid().meta({ description: "The ID of the chapter." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "You don't have a history entry for this chapter.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "Your reading history has no entry for the chapter with the given ID.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

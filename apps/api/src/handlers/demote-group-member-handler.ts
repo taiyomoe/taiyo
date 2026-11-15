@@ -12,28 +12,40 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid(), userId: z.uuid() })
+const paramSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the group." }),
+  userId: z.uuid().meta({ description: "The ID of the owner to demote." }),
+})
 
 export const demoteGroupMemberHandler = new Hono().post(
   "/:id/members/:userId/demote",
   describeRoute({
-    summary: "Demote an OWNER to MEMBER",
+    summary: "Demote a group owner",
     description:
-      "Changes a member's role from OWNER to MEMBER. Owners can only demote themselves; admins can demote anyone. Refuses if this would leave the group with no owners, unless an admin does it.\n\n**Authentication:** group owner (self only), admin.",
+      "Demotes an owner of the group to a regular member, with the permissions stored for them. An owner can only demote themselves, and not as the last owner; an admin can demote any owner. Demoting a member who is not an owner changes nothing.\n\n**Required access:** the group owner, for themselves only, or admin.",
     tags: ["Group members"],
     responses: {
       201: {
         description: "Member demoted.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ groupId: z.uuid(), userId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                  userId: z.uuid().meta({ description: "The ID of the demoted user." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists, or the user has no membership on the group.",
-        409: "Demoting this user would leave the group without an owner.",
-        422: "The provided path parameters failed validation.",
+        401: true,
+        403: "You cannot demote this member, or your account is banned.",
+        404: "No group with the given ID exists, or the user is not a member of the group.",
+        409: "The user is the last owner of the group.",
+        422: "One of the provided IDs is not a valid UUID.",
       }),
     },
   }),

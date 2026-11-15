@@ -18,24 +18,30 @@ export const rejectOwnershipRequestHandler = new Hono().post(
   "/:id/reject",
   describeRoute({
     summary: "Reject an ownership request",
-    description: "Rejects a pending ownership request.\n\n**Required roles:** admin.",
+    description:
+      "Rejects a pending ownership request, with a note shown to the requester.\n\n**Required roles:** admin.",
     tags: ["Group ownership"],
-    requestBody: {
-      content: { "application/json": await resolver(rejectSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Ownership request rejected.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  id: z.uuid().meta({ description: "The ID of the ownership request." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No ownership request with the given id exists.",
+        401: true,
+        403: true,
+        404: "No ownership request with the given ID exists.",
         409: "The request is no longer pending.",
-        422: "The request data failed validation.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

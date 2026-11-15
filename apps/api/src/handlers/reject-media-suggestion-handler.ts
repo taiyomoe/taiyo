@@ -12,7 +12,10 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 
 const rejectSchema = z.object({
-  note: reviewNoteSchema,
+  note: reviewNoteSchema.meta({
+    description: "Why the suggestion is rejected, shown to its author.",
+    example: "No source for the end date.",
+  }),
 })
 
 export const rejectMediaSuggestionHandler = new Hono().post(
@@ -20,24 +23,27 @@ export const rejectMediaSuggestionHandler = new Hono().post(
   describeRoute({
     summary: "Reject a media suggestion",
     description:
-      "Rejects a whole suggestion with a note for its author. Nothing is applied.\n\n**Required roles:** uploader, moderator, admin.",
+      "Rejects a whole pending suggestion with a note for its author. Nothing is applied to the media.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Media suggestions"],
-    requestBody: {
-      content: { "application/json": await resolver(rejectSchema).toOpenAPISchema() },
-    },
     responses: {
       201: {
         description: "Suggestion rejected.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ id: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({ id: z.uuid().meta({ description: "The ID of the suggestion." }) }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No suggestion with the given id exists.",
-        409: "The suggestion was already reviewed or withdrawn.",
-        422: "The request data failed validation.",
+        401: true,
+        403: true,
+        404: "No suggestion with the given ID exists, or its media was deleted.",
+        409: "The suggestion is no longer pending.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
   }),

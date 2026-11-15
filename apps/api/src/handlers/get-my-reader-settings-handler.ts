@@ -11,20 +11,26 @@ export const getMyReaderSettingsHandler = new Hono().get(
   describeRoute({
     summary: "Get my reader settings",
     description:
-      "Returns the reader settings saved to your account, so every device reads the same way. Settings that are missing or out of range come back as their defaults.\n\n**Authentication:** signed-in user.",
+      "Returns the reader settings saved to your account, so every device reads the same way. Settings that are missing or out of range come back as their defaults, and `settings` is `null` when you never saved any.\n\n**Authentication:** signed-in user.",
     tags: ["Settings"],
     responses: {
       200: {
-        description: "Your reader settings, or null when you never saved any.",
+        description: "Your reader settings.",
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(z.object({ settings: readerSettingsSchema.nullable() })),
+              apiSuccessEnvelope(
+                z.object({
+                  settings: readerSettingsSchema.nullable().meta({
+                    description: "Your reader settings, or null when you never saved any.",
+                  }),
+                }),
+              ),
             ),
           },
         },
       },
-      ...getOpenApiResponses({}),
+      ...getOpenApiResponses({ 401: true, 403: true }),
     },
   }),
   withAuth(),

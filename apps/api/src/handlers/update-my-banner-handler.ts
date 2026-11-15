@@ -17,31 +17,36 @@ import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, fileSchema } from "../utils/schemas"
 
 const bodySchema = z.object({
-  file: fileSchema("The original image. Animated GIFs stay animated."),
+  file: fileSchema("The original image, in PNG, JPEG, GIF or WebP. Animated GIFs stay animated."),
   crop: imageCropSchema,
 })
 
 export const updateMyBannerHandler = new Hono().put(
   "/me/banner",
   describeRoute({
-    summary: "Change my profile banner",
-    description: `Crops the uploaded image to ${PROFILE_IMAGE_SIZES.banner.width}×${PROFILE_IMAGE_SIZES.banner.height} and makes it your profile banner. The previous banner is deleted.\n\n**Authentication:** signed-in user.`,
+    summary: "Update my profile banner",
+    description: `Updates your profile banner: crops the uploaded image to ${PROFILE_IMAGE_SIZES.banner.width}×${PROFILE_IMAGE_SIZES.banner.height} and replaces your previous banner.\n\n**Authentication:** signed-in user.`,
     tags: ["Profile"],
-    requestBody: {
-      content: { "multipart/form-data": await resolver(bodySchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
-        description: "Banner changed.",
+        description: "Profile banner updated.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ bannerUrl: z.url() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  bannerUrl: z.url().meta({ description: "The URL of your new profile banner." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        422: `The request data failed validation, the crop is invalid, or the image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
-        429: "Too many requests — slow down.",
+        401: true,
+        403: true,
+        422: `The request body failed validation, the file is not a valid image, is larger than ${config.images.maxSizeBytes / 1024 / 1024} MB or has too many pixels or animation frames, or the crop rotates a GIF.`,
+        429: "Too many requests, try again later.",
       }),
     },
   }),

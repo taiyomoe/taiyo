@@ -14,7 +14,7 @@ export const deleteBannerHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a banner",
     description:
-      "Removes a banner. The banner can be restored later.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Deletes a banner.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Banners"],
     responses: {
       200: {
@@ -32,8 +32,10 @@ export const deleteBannerHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        404: "No banner with the given id exists.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No banner with the given ID exists.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

@@ -14,7 +14,7 @@ export const deleteCoverHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a cover",
     description:
-      "Removes a cover. The cover can be restored later. The main cover cannot be deleted — promote another cover to main first.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Deletes a cover. The main cover of a media cannot be deleted: set another cover as main first.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Covers"],
     responses: {
       200: {
@@ -32,9 +32,11 @@ export const deleteCoverHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        404: "No cover with the given id exists.",
-        409: "The main cover cannot be deleted.",
-        422: "The provided id is not a valid UUID.",
+        401: true,
+        403: true,
+        404: "No cover with the given ID exists.",
+        409: "The cover is the main cover of its media.",
+        422: "The provided ID is not a valid UUID.",
       }),
     },
   }),

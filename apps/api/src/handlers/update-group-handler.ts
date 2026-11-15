@@ -24,20 +24,30 @@ const imageKeyField = (kind: "logos" | "banners") =>
     .regex(new RegExp(`^groups/[0-9a-f-]{36}/${kind}/[0-9a-f-]{36}\\.(jpg|gif)$`))
     .nullable()
     .optional()
-    .meta({ description: `Storage key of the group image, under \`groups/<id>/${kind}/\`.` })
+    .meta({
+      description: `The key of an image uploaded for this group, under \`groups/<id>/${kind}/\`.`,
+    })
 const updateGroupSchema = z
   .object({
-    name: z.string().min(1).max(config.input.maxNameLength).optional(),
-    description: z.string().max(config.input.maxDescriptionLength).nullable().optional(),
+    name: z
+      .string()
+      .min(1)
+      .max(config.input.maxNameLength)
+      .optional()
+      .meta({ description: "The name of the group.", example: "Akira Scans" }),
+    description: z.string().max(config.input.maxDescriptionLength).nullable().optional().meta({
+      description: "The description of the group.",
+      example: "Translating seinen manga into English since 2019.",
+    }),
     logo: imageKeyField("logos"),
     banner: imageKeyField("banners"),
-    website: groupLinkSchema("Website URL."),
+    website: groupLinkSchema("The URL of the group's website."),
     discord: groupDiscordSchema,
-    x: groupLinkSchema("X / Twitter URL."),
-    facebook: groupLinkSchema("Facebook URL."),
-    instagram: groupLinkSchema("Instagram URL."),
-    telegram: groupLinkSchema("Telegram URL."),
-    youtube: groupLinkSchema("YouTube URL."),
+    x: groupLinkSchema("The URL of the group's X profile."),
+    facebook: groupLinkSchema("The URL of the group's Facebook page."),
+    instagram: groupLinkSchema("The URL of the group's Instagram profile."),
+    telegram: groupLinkSchema("The URL of the group's Telegram channel."),
+    youtube: groupLinkSchema("The URL of the group's YouTube channel."),
     email: groupEmailSchema,
   })
   .refine((data) => Object.keys(data).length > 0, {
@@ -49,11 +59,8 @@ export const updateGroupHandler = new Hono().patch(
   describeRoute({
     summary: "Update a group",
     description:
-      "Updates a group. Omitted fields are kept as-is. Send `null` to clear a nullable field.\n\n**Authentication:** uploader, moderator, admin — or a group owner or member with `EDIT_GROUP`.",
+      "Updates the group. Omitted fields are left unchanged, and `null` clears an optional field. A new logo or banner must be an image uploaded for this group.\n\n**Required access:** uploader, moderator or admin, or the group owner or a member with the `EDIT_GROUP` permission.",
     tags: ["Groups"],
-    requestBody: {
-      content: { "application/json": await resolver(updateGroupSchema).toOpenAPISchema() },
-    },
     responses: {
       200: {
         description: "Group updated.",
@@ -62,7 +69,7 @@ export const updateGroupHandler = new Hono().patch(
             schema: resolver(
               apiSuccessEnvelope(
                 z.object({
-                  id: z.uuid().meta({ description: "The ID of the updated group." }),
+                  id: z.uuid().meta({ description: "The ID of the group." }),
                 }),
               ),
             ),
@@ -70,8 +77,10 @@ export const updateGroupHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists.",
-        422: "The request data failed validation.",
+        401: true,
+        403: "You cannot edit the group, or your account is banned.",
+        404: "No group with the given ID exists.",
+        422: "The provided ID is not a valid UUID, or the request body failed validation, or an image is not one uploaded for this group.",
       }),
     },
   }),

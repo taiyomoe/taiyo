@@ -12,28 +12,39 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const paramSchema = z.object({ id: z.uuid(), userId: z.uuid() })
+const paramSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the group." }),
+  userId: z.uuid().meta({ description: "The ID of the member to remove." }),
+})
 
 export const removeGroupMemberHandler = new Hono().delete(
   "/:id/members/:userId",
   describeRoute({
     summary: "Remove a member from a group",
     description:
-      "Removes a member from the group. Owners can remove members, and members with `MANAGE_MEMBERS` can remove members whose permissions they all hold, except other managers. Nobody but an admin can remove an owner, and only admins can remove the last one. Use leave to remove yourself.\n\n**Authentication:** group owner, member with `MANAGE_MEMBERS`, admin.",
+      "Removes a member from the group. The group owner can remove any member who is not an owner; a member with the `MANAGE_MEMBERS` permission can remove members whose permissions they all hold, except managers and themselves. Only an admin can remove an owner, even the last one.\n\n**Required access:** the group owner, a member with the `MANAGE_MEMBERS` permission, or admin.",
     tags: ["Group members"],
     responses: {
       200: {
         description: "Member removed.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(z.object({ groupId: z.uuid(), userId: z.uuid() }))),
+            schema: resolver(
+              apiSuccessEnvelope(
+                z.object({
+                  groupId: z.uuid().meta({ description: "The ID of the group." }),
+                  userId: z.uuid().meta({ description: "The ID of the removed user." }),
+                }),
+              ),
+            ),
           },
         },
       },
       ...getOpenApiResponses({
-        404: "No group with the given id exists, or the user has no membership on the group.",
-        409: "Removing this user would leave the group without an owner.",
-        422: "The provided path parameters failed validation.",
+        401: true,
+        403: "You cannot remove this member, or your account is banned.",
+        404: "No group with the given ID exists, or the user is not a member of the group.",
+        422: "One of the provided IDs is not a valid UUID.",
       }),
     },
   }),
