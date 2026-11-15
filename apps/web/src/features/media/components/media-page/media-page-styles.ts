@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { breakpoints, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { layout } from "@/components/layout/layout.stylex"
+import { mediaPageQueries } from "@/features/media/components/media-page/media-page.stylex"
 
 export const mediaPageStyles = stylex.create({
   layout: {
@@ -23,12 +24,15 @@ export const mediaPageStyles = stylex.create({
   },
   aside: {
     gap: "1.25rem",
+    alignSelf: { default: null, [mediaPageQueries.stickyAside]: "start" },
     display: { [breakpoints.lg]: "flex", default: "contents" },
     flexDirection: "column",
     gridColumnEnd: "aside",
     gridColumnStart: "aside",
     gridRowEnd: "aside",
     gridRowStart: "aside",
+    position: { default: null, [mediaPageQueries.stickyAside]: "sticky" },
+    top: "calc(var(--navbar-height) + 1rem)",
   },
   coverSlot: {
     gridColumnEnd: "cover",

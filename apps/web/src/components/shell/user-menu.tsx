@@ -33,6 +33,7 @@ import { use } from "react"
 import { filter, isTruthy, join, map, pipe, take } from "remeda"
 import type { Session } from "@/lib/session"
 import { AvatarBorder } from "@/components/avatar-border/avatar-border"
+import { Flag } from "@/components/flags/flags"
 import { canOpenDashboard } from "@/features/dashboard/lib/dashboard"
 import { ContentFilterItems } from "@/features/settings/components/content-filter"
 import { useAuthActions } from "@/hooks/use-auth-actions"
@@ -90,20 +91,6 @@ const styles = stylex.create({
     alignItems: "center",
     display: "flex",
   },
-  flag: {
-    borderRadius: "0.1875rem",
-    overflow: "hidden",
-    boxShadow: `0 0 0 1px ${colors.border}`,
-    display: "inline-flex",
-    flexShrink: 0,
-    height: "0.75rem",
-    width: "1.125rem",
-  },
-  flagSvg: {
-    display: "block",
-    height: "100%",
-    width: "100%",
-  },
 })
 
 export function UserMenu({ user }: { user: Session["user"] }) {
@@ -113,7 +100,7 @@ export function UserMenu({ user }: { user: Session["user"] }) {
     mutationFn: () => auth.signOut(),
   })
   const locale = getLocale()
-  const LanguageFlag = LANGUAGES.find(({ value }) => value === locale)?.flag ?? UnitedStatesFlag
+  const localeFlag = LANGUAGES.find(({ value }) => value === locale)?.flag ?? UnitedStatesFlag
   const ThemeIcon = THEMES.find(({ value }) => value === theme.preference)?.icon ?? Moon
 
   return (
@@ -187,9 +174,7 @@ export function UserMenu({ user }: { user: Session["user"] }) {
         </MenuSub>
         <MenuSub>
           <MenuSubTrigger>
-            <span sx={styles.flag}>
-              <LanguageFlag {...stylex.props(styles.flagSvg)} />
-            </span>
+            <Flag flag={localeFlag} />
             {m.shell_language()}
           </MenuSubTrigger>
           <MenuSubPopup sx={styles.subPopup}>
@@ -199,12 +184,10 @@ export function UserMenu({ user }: { user: Session["user"] }) {
               }}
               value={locale}
             >
-              {LANGUAGES.map(({ value, label, flag: Flag }) => (
+              {LANGUAGES.map(({ value, label, flag }) => (
                 <MenuRadioItem key={value} lang={value} value={value}>
                   <span sx={styles.radioLabel}>
-                    <span sx={styles.flag}>
-                      <Flag {...stylex.props(styles.flagSvg)} />
-                    </span>
+                    <Flag flag={flag} />
                     {label}
                   </span>
                 </MenuRadioItem>

@@ -6,11 +6,20 @@ import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
 import { ToastProvider } from "@taiyomoe/ui/components/ui/toast"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
-import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRouteWithContext,
+  redirect,
+} from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { createIsomorphicFn } from "@tanstack/react-start"
 import { getCookies } from "@tanstack/react-start/server"
 import { fromEntries, map, pipe } from "remeda"
+import type { FileRoutesById } from "@/routeTree.gen"
+import { env } from "@/env/client"
+import { UMAMI_PROXY_PATH } from "@/features/analytics/lib/umami"
 import { CommandPaletteProvider } from "@/features/command-palette/components/command-palette-provider"
 import { NotificationStream } from "@/features/notifications/components/notification-stream"
 import { siteOgMeta } from "@/features/og/lib/og-meta"
@@ -26,6 +35,7 @@ import {
 import { getLocale } from "@/paraglide/runtime"
 import appCss from "../styles.css?url"
 
+const PUBLIC_ROUTES: Array<keyof FileRoutesById> = ["/", "/auth", "/terms", "/privacy", "/dmca"]
 const readCookies = createIsomorphicFn()
   .server(() => getCookies())
   .client(() =>
@@ -41,14 +51,19 @@ const readCookies = createIsomorphicFn()
   )
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async ({ context }) => {
+  beforeLoad: async ({ context, location, matches }) => {
     const cookies = readCookies()
     const theme = cookies[THEME_COOKIE]
     const themePreference: ThemePreference =
       theme === "light" || theme === "system" ? theme : "dark"
+    const session = await context.queryClient.query({ ...sessionQueryOptions, staleTime: "static" })
+
+    if (session === null && !matches.some((match) => PUBLIC_ROUTES.includes(match.routeId))) {
+      throw redirect({ to: "/auth/sign-in", search: { redirect: location.href } })
+    }
 
     return {
-      session: await context.queryClient.query({ ...sessionQueryOptions, staleTime: "static" }),
+      session,
       sidebarPrefs: readSidebarCookies(cookies),
       themePreference,
     }
@@ -93,7 +108,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/site.webmanifest" },
     ],
-    scripts: import.meta.env.DEV ? [{ type: "module", src: "/@id/virtual:stylex:runtime" }] : [],
+    scripts: [
+      ...(import.meta.env.DEV ? [{ type: "module", src: "/@id/virtual:stylex:runtime" }] : []),
+      ...(env.VITE_UMAMI_WEBSITE_ID === undefined
+        ? []
+        : [
+            {
+              src: `${UMAMI_PROXY_PATH}/s.js`,
+              defer: true,
+              "data-website-id": env.VITE_UMAMI_WEBSITE_ID,
+            },
+          ]),
+    ],
   }),
   shellComponent: RootDocument,
   component: RootComponent,

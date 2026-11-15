@@ -42,11 +42,11 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       [breakpoints.lg]: "1.6875rem minmax(0, 1fr) minmax(0, 16rem) minmax(0, 9rem) 4.75rem 4rem",
-      default: "1.6875rem minmax(0, 1fr) auto",
+      default: "2.125rem minmax(0, 1fr) auto",
     },
     rowGap: "0.25rem",
     minHeight: "3.25rem",
-    paddingLeft: "0.8125rem",
+    paddingLeft: "0.375rem",
     paddingRight: "0.875rem",
   },
   rowCover: {
@@ -63,7 +63,7 @@ const styles = stylex.create({
   },
   rowCoverImage: {
     borderRadius: `calc(${radius.md} - 0.375rem)`,
-    width: "1.6875rem",
+    width: { [breakpoints.lg]: "1.6875rem", default: "2.125rem" },
   },
   rowMain: {
     gridColumnEnd: "main",

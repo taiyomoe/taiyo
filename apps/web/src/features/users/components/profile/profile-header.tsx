@@ -5,7 +5,7 @@ import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { Session } from "@/lib/session"
-import { LazyCountryFlag } from "@/components/flags/lazy-country-flag"
+import { UserCountryFlag } from "@/components/flags/flags"
 import { UserName } from "@/components/user-name/user-name"
 import { ProfileActions } from "@/features/users/components/profile/profile-actions"
 import { ProfileAvatar } from "@/features/users/components/profile/profile-avatar"
@@ -143,7 +143,7 @@ export function ProfileHeader({
               {profile.country === null ? (
                 <Globe size={16} />
               ) : (
-                <LazyCountryFlag country={profile.country} />
+                <UserCountryFlag country={profile.country} />
               )}
               <span sx={styles.metaText}>{location}</span>
             </li>

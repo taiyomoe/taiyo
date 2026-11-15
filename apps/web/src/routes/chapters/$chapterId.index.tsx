@@ -7,6 +7,7 @@ import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { getMainTitle } from "@/features/media/lib/media-labels"
 import { pageOgMeta } from "@/features/og/lib/og-meta"
+import { serveLinkPreview } from "@/features/og/lib/og-preview"
 import { chapterReaderQueryOptions } from "@/features/reader/api/reader"
 import { ReaderPage } from "@/features/reader/components/reader-page"
 import { chapterQueryOptions } from "@/features/uploads/api/submissions"
@@ -19,6 +20,12 @@ const searchSchema = z.object({
 })
 
 export const Route = createFileRoute("/chapters/$chapterId/")({
+  server: {
+    handlers: {
+      GET: ({ request, params, next }) =>
+        serveLinkPreview({ request, next, kind: "chapters", id: params.chapterId }),
+    },
+  },
   validateSearch: searchSchema,
   shouldReload: false,
   loader: async ({ context, params: { chapterId }, location }) => {

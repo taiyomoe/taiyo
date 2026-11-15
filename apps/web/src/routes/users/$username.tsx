@@ -7,6 +7,7 @@ import { latestMediaUpdatesQueryOptions } from "@/features/chapters/api/chapters
 import { commentsQueryOptions } from "@/features/comments/api/comments"
 import { userListsQueryOptions } from "@/features/lists/api/lists"
 import { pageOgMeta } from "@/features/og/lib/og-meta"
+import { serveLinkPreview } from "@/features/og/lib/og-preview"
 import { userProfileQueryOptions, userStatsQueryOptions } from "@/features/users/api/profile"
 import { ProfileNotFoundPage } from "@/features/users/components/profile/profile-not-found-page"
 import { ProfilePage } from "@/features/users/components/profile/profile-page"
@@ -21,6 +22,12 @@ const searchSchema = z.object({
 })
 
 export const Route = createFileRoute("/users/$username")({
+  server: {
+    handlers: {
+      GET: ({ request, params, next }) =>
+        serveLinkPreview({ request, next, kind: "users", id: params.username }),
+    },
+  },
   validateSearch: searchSchema,
   loaderDeps: ({ search }) => ({ tab: search.tab ?? "profile", page: search.page ?? 1 }),
   loader: async ({ context, params: { username }, deps }) => {

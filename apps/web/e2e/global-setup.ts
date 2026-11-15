@@ -9,7 +9,7 @@ export default async (config: FullConfig) => {
     ["--silent", "-F", "@taiyomoe/scripts", "cli", "dev-sessions"],
     { cwd: resolve(import.meta.dirname, "../../.."), encoding: "utf8" },
   )
-  const cookie = output
+  const sessions = output
     .split("\n")
     .map((line): unknown => (line.startsWith("{") ? JSON.parse(line) : null))
     .flatMap((session) =>
@@ -17,43 +17,47 @@ export default async (config: FullConfig) => {
       session !== null &&
       "username" in session &&
       "cookie" in session &&
-      session.username === "admin" &&
+      typeof session.username === "string" &&
       typeof session.cookie === "string"
-        ? [session.cookie]
+        ? [{ username: session.username, cookie: session.cookie }]
         : [],
-    )[0]
+    )
 
-  if (cookie === undefined) {
+  if (!sessions.some((session) => session.username === "admin")) {
     throw new Error("dev-sessions printed no admin session; run `pnpm bootstrap` first")
   }
 
-  const separator = cookie.indexOf("=")
-  const name = cookie.slice(0, separator)
-  const value = cookie.slice(separator + 1)
-
   mkdirSync(resolve(import.meta.dirname, ".auth"), { recursive: true })
-  writeFileSync(
-    resolve(import.meta.dirname, ".auth/admin.json"),
-    JSON.stringify({
-      cookies: [
-        {
-          name,
-          value,
-          domain: "localhost",
-          path: "/",
-          expires: -1,
-          httpOnly: true,
-          secure: false,
-          sameSite: "Lax",
-        },
-      ],
-      origins: [],
-    }),
-  )
+
+  for (const { username, cookie } of sessions) {
+    const separator = cookie.indexOf("=")
+
+    writeFileSync(
+      resolve(import.meta.dirname, `.auth/${username}.json`),
+      JSON.stringify({
+        cookies: [
+          {
+            name: cookie.slice(0, separator),
+            value: cookie.slice(separator + 1),
+            domain: "localhost",
+            path: "/",
+            expires: -1,
+            httpOnly: true,
+            secure: false,
+            sameSite: "Lax",
+          },
+        ],
+        origins: [],
+      }),
+    )
+  }
 
   const baseURL = config.projects[0]?.use.baseURL
   const browser = await chromium.launch()
-  const page = await browser.newPage(baseURL === undefined ? {} : { baseURL })
+  const page = await browser.newPage({
+    ...(baseURL === undefined ? {} : { baseURL }),
+    storageState: resolve(import.meta.dirname, ".auth/admin.json"),
+  })
 
   for (const [path, root] of [
     ["/", "header"],

@@ -3,7 +3,10 @@ import { config } from "@taiyomoe/config"
 import { hc } from "hono/client"
 import { z } from "zod"
 import type { OgKind } from "@/features/og/lib/og-meta"
+import { getRichTextSummary } from "@/components/rich-text/rich-text-document"
 import { env } from "@/env/client"
+import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
+import { getMainTitle, getSynopsis } from "@/features/media/lib/media-labels"
 import {
   chapterOgCard,
   groupOgCard,
@@ -13,6 +16,7 @@ import {
   userOgCard,
 } from "@/features/og/lib/og-cards"
 import { unwrap, unwrapEnvelope } from "@/lib/envelope"
+import { m } from "@/paraglide/messages"
 
 // Cards are cached and shared, so they are always drawn as an anonymous
 // visitor sees the page: the app's own client would forward the viewer's
@@ -59,7 +63,52 @@ const LOADERS: Record<OgKind, (id: string, host: string) => Promise<OgCard>> = {
     groupOgCard(await unwrap(await api.groups[":id"].$get({ param: { id } })), host),
   lists: async (id, host) => listOgCard(await loadList(id), host),
 }
+const PREVIEWS: Record<
+  OgKind,
+  (id: string) => Promise<{ title: string | null; description: string | null }>
+> = {
+  media: async (id) => {
+    const media = await loadMedia(id)
+
+    return {
+      title: getMainTitle(media.titles),
+      description: getRichTextSummary(getSynopsis(media.synopsis)),
+    }
+  },
+  chapters: async (id) => {
+    const chapter = await unwrap(await api.chapters[":id"].$get({ param: { id } }))
+    const media = await loadMedia(chapter.mediaId)
+
+    return {
+      title: `${getChapterLabel(chapter)} · ${getMainTitle(media.titles) ?? m.media_untitled()}`,
+      description: null,
+    }
+  },
+  users: async (username) => {
+    const user = await loadUser(username)
+
+    return {
+      title: user.displayUsername,
+      description: getRichTextSummary(Object.values(user.about).find(Boolean)),
+    }
+  },
+  groups: async (id) => {
+    const group = await unwrap(await api.groups[":id"].$get({ param: { id } }))
+
+    return { title: group.name, description: getRichTextSummary(group.description) }
+  },
+  lists: async (id) => {
+    const list = await loadList(id)
+
+    return { title: list.name, description: getRichTextSummary(list.description) }
+  },
+}
+const isPageId = (kind: OgKind, id: string) => kind === "users" || uuid.safeParse(id).success
 
 /** Builds the card of a page, or null when the page does not exist or is not public. */
 export const loadOgCard = async (kind: OgKind, id: string, host: string) =>
-  kind !== "users" && !uuid.safeParse(id).success ? null : LOADERS[kind](id, host).catch(() => null)
+  isPageId(kind, id) ? LOADERS[kind](id, host).catch(() => null) : null
+
+/** The text of a page's link preview, or null when the page does not exist or is not public. */
+export const loadOgPreview = async (kind: OgKind, id: string) =>
+  isPageId(kind, id) ? PREVIEWS[kind](id).catch(() => null) : null

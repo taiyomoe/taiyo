@@ -181,7 +181,7 @@ export const searchMediasHandler = new Hono().post(
   describeRoute({
     summary: "Search medias",
     description:
-      "Searches medias by text, tolerating typos, in their titles, synopses and staff names. `filter` narrows the results and `sort` orders them, newest first by default. Each result carries the details of the media, its main title and cover, and its popularity counts: get the media for its full details.\n\n**Authentication:** none.",
+      "Searches medias by text, tolerating typos, in their titles, synopses and staff names. `filter` narrows the results, including by IDs on external sites with `links` (a media matches when any of the given IDs does), and `sort` orders them, newest first by default. Each result carries the details of the media, its main title and cover, and its popularity counts: get the media for its full details.\n\n**Authentication:** none.",
     tags: ["Medias"],
     responses: {
       201: {
@@ -308,6 +308,15 @@ export const searchMediasHandler = new Hono().post(
           break
         }
       }
+    }
+
+    const links = Object.entries(input.filter.links ?? {})
+
+    // Matches when any of the given links does, so a caller can try every id it knows at once.
+    if (links.length > 0) {
+      clauses.push(
+        `linkValues IN [${links.map(([provider, value]) => quote(`${provider}:${value}`)).join(", ")}]`,
+      )
     }
 
     const result = await c.var.meili.index<MediaDocument>(c.var.mediasIndex).search(input.q, {

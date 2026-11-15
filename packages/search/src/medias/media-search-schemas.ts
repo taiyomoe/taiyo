@@ -47,6 +47,20 @@ export const mediaFilterSchema = z
       stringArrayFilter,
       "Filters on the external sites the media has a link to, such as `mangaDex`.",
     ),
+    links: filterOn(
+      z
+        .object({
+          mangaDex: z.uuid().optional().meta({ description: "The MangaDex series UUID." }),
+          anilist: z.int().positive().optional().meta({ description: "The AniList media ID." }),
+          myAnimeList: z
+            .int()
+            .positive()
+            .optional()
+            .meta({ description: "The MyAnimeList media ID." }),
+        })
+        .strict(),
+      "Filters on the media's IDs on external sites.",
+    ),
     titleLanguages: filterOn(
       enumArrayFilter(MEDIA_LANGUAGES),
       "Filters on the languages of the media's titles.",

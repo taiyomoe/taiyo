@@ -27,6 +27,10 @@ const styles = stylex.create({
     borderTopStyle: "solid",
     borderTopWidth: 1,
   },
+  linked: {
+    contentVisibility: "visible",
+    borderTopColor: "transparent",
+  },
   replies: {
     display: "flex",
     flexDirection: "column",
@@ -68,7 +72,7 @@ export const CommentThread = memo(function CommentThread({
         }
 
   return (
-    <div sx={styles.thread}>
+    <div sx={[styles.thread, highlightedId !== null && styles.linked]}>
       <CommentItem
         comment={root}
         highlighted={root.id === highlightedId}

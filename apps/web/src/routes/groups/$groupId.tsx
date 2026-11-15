@@ -23,6 +23,7 @@ import {
   GROUP_TITLES_PER_PAGE,
 } from "@/features/groups/lib/group-page"
 import { pageOgMeta } from "@/features/og/lib/og-meta"
+import { serveLinkPreview } from "@/features/og/lib/og-preview"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -37,6 +38,12 @@ const searchSchema = z.object({
 })
 
 export const Route = createFileRoute("/groups/$groupId")({
+  server: {
+    handlers: {
+      GET: ({ request, params, next }) =>
+        serveLinkPreview({ request, next, kind: "groups", id: params.groupId }),
+    },
+  },
   validateSearch: searchSchema,
   loaderDeps: ({ search }) => search,
   loader: async ({ context, params: { groupId }, deps }) => {

@@ -47,6 +47,7 @@ import { Route as ListsListIdRouteImport } from './routes/lists/$listId'
 import { Route as ListsNewRouteImport } from './routes/lists/new'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
 import { Route as NotificationsOpenRouteImport } from './routes/notifications_.open'
+import { Route as USplatRouteImport } from './routes/u/$'
 import { Route as UsersUsernameRouteImport } from './routes/users/$username'
 import { Route as ChaptersChapterIdIndexRouteImport } from './routes/chapters/$chapterId.index'
 import { Route as ChaptersChapterIdSourceRouteImport } from './routes/chapters/$chapterId.source'
@@ -248,6 +249,11 @@ const NotificationsOpenRoute = NotificationsOpenRouteImport.update({
   path: '/notifications/open',
   getParentRoute: () => rootRouteImport,
 } as any)
+const USplatRoute = USplatRouteImport.update({
+  id: '/u/$',
+  path: '/u/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsersUsernameRoute = UsersUsernameRouteImport.update({
   id: '/users/$username',
   path: '/users/$username',
@@ -337,6 +343,7 @@ export interface FileRoutesByFullPath {
   '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/notifications/open': typeof NotificationsOpenRoute
+  '/u/$': typeof USplatRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/notifications/open': typeof NotificationsOpenRoute
+  '/u/$': typeof USplatRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard': typeof DashboardIndexRoute
   '/groups': typeof GroupsIndexRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/lists/new': typeof ListsNewRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/notifications_/open': typeof NotificationsOpenRoute
+  '/u/$': typeof USplatRoute
   '/users/$username': typeof UsersUsernameRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
@@ -489,6 +498,7 @@ export interface FileRouteTypes {
     | '/lists/new'
     | '/media/$mediaId'
     | '/notifications/open'
+    | '/u/$'
     | '/users/$username'
     | '/dashboard/'
     | '/groups/'
@@ -538,6 +548,7 @@ export interface FileRouteTypes {
     | '/lists/new'
     | '/media/$mediaId'
     | '/notifications/open'
+    | '/u/$'
     | '/users/$username'
     | '/dashboard'
     | '/groups'
@@ -588,6 +599,7 @@ export interface FileRouteTypes {
     | '/lists/new'
     | '/media/$mediaId'
     | '/notifications_/open'
+    | '/u/$'
     | '/users/$username'
     | '/dashboard/'
     | '/groups/'
@@ -622,6 +634,7 @@ export interface RootRouteChildren {
   ListsNewRoute: typeof ListsNewRoute
   MediaMediaIdRoute: typeof MediaMediaIdRoute
   NotificationsOpenRoute: typeof NotificationsOpenRoute
+  USplatRoute: typeof USplatRoute
   UsersUsernameRoute: typeof UsersUsernameRoute
   GroupsIndexRoute: typeof GroupsIndexRoute
   ListsIndexRoute: typeof ListsIndexRoute
@@ -900,6 +913,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsOpenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/u/$': {
+      id: '/u/$'
+      path: '/u/$'
+      fullPath: '/u/$'
+      preLoaderRoute: typeof USplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/users/$username': {
       id: '/users/$username'
       path: '/users/$username'
@@ -1056,6 +1076,7 @@ const rootRouteChildren: RootRouteChildren = {
   ListsNewRoute: ListsNewRoute,
   MediaMediaIdRoute: MediaMediaIdRoute,
   NotificationsOpenRoute: NotificationsOpenRoute,
+  USplatRoute: USplatRoute,
   UsersUsernameRoute: UsersUsernameRoute,
   GroupsIndexRoute: GroupsIndexRoute,
   ListsIndexRoute: ListsIndexRoute,
