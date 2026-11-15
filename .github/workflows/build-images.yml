@@ -5,7 +5,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Pull requests only build, to catch a broken Dockerfile before merge. Images are
-# pushed from develop alone, so no workflow triggered by a fork ever gets write access
+# pushed from main alone, so no workflow triggered by a fork ever gets write access
 # to the registry.
 on:
   pull_request:
@@ -15,7 +15,7 @@ on:
       - ".github/ISSUE_TEMPLATE/**"
       - "LICENSE"
   push:
-    branches: ["develop"]
+    branches: ["main"]
     paths-ignore:
       - "**.md"
       - "docs/**"
@@ -143,16 +143,16 @@ jobs:
           cache-from: type=gha,scope=${{ matrix.app }}
 
   # Points taiyo-deploy at the images just pushed. Argo CD then runs the migrations and
-  # starts the new api and web next to the live ones; traffic only switches once the
-  # Rollouts are promoted.
+  # starts the new api and web next to the live ones; the Rollouts switch traffic over
+  # as soon as the new pods are ready.
   release:
     name: Release to the cluster
     needs: build
-    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/develop' }}
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     # Holds TAIYO_DEPLOY_KEY (write access to taiyomoe/taiyo-deploy) and only accepts
-    # develop: no pull request can read it.
+    # main: no pull request can read it.
     environment: release
     concurrency:
       group: release
@@ -167,11 +167,11 @@ jobs:
 
       - name: Point the release at this commit
         run: |
-          # Runs of successive pushes can finish out of order: only the head of develop
+          # Runs of successive pushes can finish out of order: only the head of main
           # releases, so an older run never overwrites a newer tag.
-          head=$(git ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" refs/heads/develop | cut -f1)
+          head=$(git ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" refs/heads/main | cut -f1)
           if [ "$head" != "$GITHUB_SHA" ]; then
-            echo "develop moved on to $head: its own run releases it."
+            echo "main moved on to $head: its own run releases it."
             exit 0
           fi
 
