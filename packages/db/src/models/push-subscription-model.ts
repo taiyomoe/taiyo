@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type PushSubscription = {
@@ -12,5 +11,3 @@ export type PushSubscription = {
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
 }
-
-export type NewPushSubscription = Insertable<PushSubscription>

@@ -22,8 +22,7 @@ import {
 
 const filterOn = <T extends z.ZodType>(filter: T, description: string) =>
   filter.optional().meta({ description })
-
-export const mediaFilterSchema = z
+const mediaFilterSchema = z
   .object({
     type: filterOn(enumFilter(MEDIA_TYPES), "Filters on the type of the media."),
     status: filterOn(enumFilter(MEDIA_STATUSES), "Filters on the release status of the media."),
@@ -86,8 +85,7 @@ export const mediaFilterSchema = z
     chapterCount: filterOn(countFilter, "Filters on the number of chapters of the media."),
   })
   .strict()
-
-export const mediaSortSchema = z
+const mediaSortSchema = z
   .object({
     field: z
       .enum([
@@ -122,5 +120,3 @@ export const searchMediasInputSchema = z
   .extend(paginationQuerySchema.shape)
 
 export type MediaSort = z.infer<typeof mediaSortSchema>
-
-export type SearchMediasInput = z.infer<typeof searchMediasInputSchema>

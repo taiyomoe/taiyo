@@ -39,9 +39,6 @@ export const LOOT_BOXES: Record<LootBoxKey, LootBoxDefinition> = {
   },
 }
 
-export const isLootBoxKey = (value: unknown): value is LootBoxKey =>
-  LOOT_BOX_KEYS.some((key) => key === value)
-
 export type LootBoxItem = { kind: CosmeticKind; key: string; rarity: CosmeticRarity }
 
 export const LOOT_BOX_POOL: readonly LootBoxItem[] = COSMETIC_KINDS.flatMap((kind) =>

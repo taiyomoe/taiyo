@@ -1,7 +1,6 @@
 import type * as React from "react"
 import {
   Share08Icon,
-  FavouriteIcon,
   AtIcon,
   SentIcon,
   Alert02Icon,
@@ -98,10 +97,7 @@ import {
   BookmarkAdd02Icon,
   BookmarkRemove02Icon,
   Download04Icon,
-  ZoomInIcon,
-  ZoomOutIcon,
   Delete02Icon,
-  WifiOffIcon,
   TickDouble02Icon,
   Mortarboard01Icon,
   TextBoldIcon,
@@ -399,13 +395,7 @@ export const BookmarkRemove: (props: IconProps) => React.ReactElement = icon(Boo
 
 export const Download: (props: IconProps) => React.ReactElement = icon(Download04Icon)
 
-export const ZoomIn: (props: IconProps) => React.ReactElement = icon(ZoomInIcon)
-
-export const ZoomOut: (props: IconProps) => React.ReactElement = icon(ZoomOutIcon)
-
 export const Trash: (props: IconProps) => React.ReactElement = icon(Delete02Icon)
-
-export const Offline: (props: IconProps) => React.ReactElement = icon(WifiOffIcon)
 
 export const CheckAll: (props: IconProps) => React.ReactElement = icon(TickDouble02Icon)
 
@@ -463,8 +453,6 @@ export const ImageAdd: (props: IconProps) => React.ReactElement = icon(ImageAdd0
 export const ImageMissing: (props: IconProps) => React.ReactElement = icon(ImageNotFound01Icon)
 
 export const Share: (props: IconProps) => React.ReactElement = icon(Share08Icon)
-
-export const Heart: (props: IconProps) => React.ReactElement = icon(FavouriteIcon)
 
 export const At: (props: IconProps) => React.ReactElement = icon(AtIcon)
 

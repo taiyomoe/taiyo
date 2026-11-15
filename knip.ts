@@ -11,7 +11,24 @@ import type { KnipConfig } from "knip"
  */
 const importMatcher = /@import\s+(?:url\(\s*)?["']([^"']+)["']/g
 const config: KnipConfig = {
-  ignoreWorkspaces: ["./packages/db"],
+  // Every package is private to the monorepo: an export nothing imports is dead, entry file or not.
+  includeEntryExports: true,
+  ignoreIssues: {
+    // kysely-ctl loads these by convention and calls their exports.
+    "packages/db/kysely.config.ts": ["exports"],
+    "packages/db/src/{migrations,seeds,fixtures}/*.ts": ["exports"],
+    // coss primitives: the kit keeps its whole surface so components can be composed as documented.
+    "packages/ui/src/components/ui/*.tsx": ["exports", "types"],
+  },
+  workspaces: {
+    "packages/db": {
+      entry: [
+        "kysely.config.ts",
+        "src/{migrations,seeds,fixtures,backfills}/*.ts",
+        "src/migrate.ts",
+      ],
+    },
+  },
   ignore: ["apps/web/public/**"],
   ignoreBinaries: ["cloudflared"],
   compilers: {

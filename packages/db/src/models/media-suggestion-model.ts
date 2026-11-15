@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { MediaEditField, MediaSuggestionStatus } from "../constants"
 import type { MediaEdit } from "../json-types"
 import type { Generated, Timestamp } from "../types"
@@ -18,5 +17,3 @@ export type MediaSuggestion = {
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
 }
-
-export type NewMediaSuggestion = Insertable<MediaSuggestion>

@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type UserHistory = {
@@ -9,5 +8,3 @@ export type UserHistory = {
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
 }
-
-export type NewUserHistory = Insertable<UserHistory>

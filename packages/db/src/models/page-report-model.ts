@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { PageReportReason, PageReportStatus } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -14,5 +13,3 @@ export type PageReport = {
   resolvedAt: Timestamp | null
   createdAt: Generated<Timestamp>
 }
-
-export type NewPageReport = Insertable<PageReport>

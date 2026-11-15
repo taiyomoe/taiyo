@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { GroupMembershipRole, GroupPermission } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -10,5 +9,3 @@ export type GroupMembership = {
   createdAt: Generated<Timestamp>
   addedBy: string
 }
-
-export type NewGroupMembership = Insertable<GroupMembership>

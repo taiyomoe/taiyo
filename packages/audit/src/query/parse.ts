@@ -1,7 +1,7 @@
 import { type AuditLogField, getAuditLogField } from "./fields"
 import { validateKql } from "./validate"
 
-export type KqlTokenType =
+type KqlTokenType =
   | "whitespace"
   | "lparen"
   | "rparen"

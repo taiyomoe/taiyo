@@ -7,15 +7,15 @@ export type Generated<T> =
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>
 
-export type JsonPrimitive = boolean | number | string | null
+type JsonPrimitive = boolean | number | string | null
 
-export type JsonObject = {
+type JsonObject = {
   [x: string]: JsonValue | undefined
 }
 
-export type JsonArray = JsonValue[]
+type JsonArray = JsonValue[]
 
-export type JsonValue = JsonArray | JsonObject | JsonPrimitive
+type JsonValue = JsonArray | JsonObject | JsonPrimitive
 
 export type Json = JsonValue
 

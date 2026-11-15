@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type CommentThread = {
@@ -9,5 +8,3 @@ export type CommentThread = {
   profileId: string | null
   createdAt: Generated<Timestamp>
 }
-
-export type NewCommentThread = Insertable<CommentThread>
