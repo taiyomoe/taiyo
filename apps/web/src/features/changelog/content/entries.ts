@@ -14,10 +14,10 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
       width: 1800,
       height: 1200,
       alt: {
-        en: "Taiyō 2.0: a title page with a Continue reading button, the notifications inbox and a reading level card",
-        fr: "Taiyō 2.0 : une page de titre avec le bouton Continuer, la boîte de réception des notifications et une carte de niveau de lecture",
+        en: "Taiyō 2.0: a media page with a Continue reading button, the notifications inbox and a reading level card",
+        fr: "Taiyō 2.0 : une page d’œuvre avec le bouton Continuer, la boîte de réception des notifications et une carte de niveau de lecture",
         "pt-BR":
-          "Taiyō 2.0: uma página de título com o botão Continuar, a caixa de entrada de notificações e um cartão de nível de leitura",
+          "Taiyō 2.0: uma página de obra com o botão Continuar, a caixa de entrada de notificações e um cartão de nível de leitura",
       },
     },
     body: {
@@ -34,13 +34,13 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
         { heading: "Never miss a chapter" },
         "New chapters from your library and the groups you follow, replies to your comments, upvotes and new followers all land in your inbox as they happen. Turn on push notifications to get them on your device, and pick exactly which ones you want.",
         { heading: "Comments everywhere" },
-        "Titles, chapters, groups and profiles all have a comment section. Reply to others, upvote, hide spoilers, and add emoji, images and GIFs. In the reader, comments open in a drawer without losing your page.",
+        "Media, chapters, groups and profiles all have a comment section. Reply to others, upvote, hide spoilers, and add emoji, images and GIFs. In the reader, comments open in a drawer without losing your page.",
         { heading: "A profile that's yours" },
         "Your profile shows your reading history, stats and level, which grows with every page you read. Reading also earns points to spend in the shop on avatar borders, name effects and titles, or on a loot box opened in 3D.",
         { heading: "Lists" },
-        "Collect your favourite titles into lists, arrange them by dragging, and keep them private or share them. The most upvoted lists make it to the top lists page.",
+        "Collect your favourite media into lists, arrange them by dragging, and keep them private or share them. The most upvoted lists make it to the top lists page.",
         { heading: "Find your next read" },
-        "Advanced search filters by tags, authors, content rating, format, demographic, year, status and language, and keeps every filter in the link so you can share it. Press Ctrl K (⌘K on Mac) on any page to jump to a title, a group, a user or a page.",
+        "Advanced search filters by tags, authors, content rating, format, demographic, year, status and language, and keeps every filter in the link so you can share it. Press Ctrl K (⌘K on Mac) on any page to jump to a media, a group, a user or a page.",
         { heading: "Built for scanlation groups" },
         "Claim your group, invite your members and choose what each of them can do. Drop in whole folders or ZIP and CBZ archives, and Taiyō reads the chapter numbers from the file names. Schedule releases, link chapters to your own site, and keep browsing while uploads run in the background.",
         { heading: "In your language" },
@@ -59,13 +59,13 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
         { heading: "Ne ratez plus aucun chapitre" },
         "Les nouveaux chapitres de votre bibliothèque et des groupes que vous suivez, les réponses à vos commentaires, les votes et les nouveaux abonnés arrivent dans votre boîte de réception en temps réel. Activez les notifications push pour les recevoir sur votre appareil, et choisissez précisément celles qui vous intéressent.",
         { heading: "Des commentaires partout" },
-        "Les titres, les chapitres, les groupes et les profils ont tous leur section de commentaires. Répondez aux autres, votez, masquez les spoilers et ajoutez des emojis, des images et des GIF. Dans le lecteur, les commentaires s’ouvrent dans un panneau sans vous faire perdre votre page.",
+        "Les œuvres, les chapitres, les groupes et les profils ont tous leur section de commentaires. Répondez aux autres, votez, masquez les spoilers et ajoutez des emojis, des images et des GIF. Dans le lecteur, les commentaires s’ouvrent dans un panneau sans vous faire perdre votre page.",
         { heading: "Un profil à votre image" },
         "Votre profil affiche votre historique de lecture, vos statistiques et votre niveau, qui progresse à chaque page lue. La lecture vous rapporte aussi des points à dépenser dans la boutique en bordures d’avatar, effets de nom et titres, ou dans un coffre qui s’ouvre en 3D.",
         { heading: "Listes" },
-        "Rassemblez vos titres préférés dans des listes, réorganisez-les par glisser-déposer, et gardez-les pour vous ou partagez-les. Les listes qui recueillent le plus de votes arrivent sur la page des meilleures listes.",
+        "Rassemblez vos œuvres préférées dans des listes, réorganisez-les par glisser-déposer, et gardez-les pour vous ou partagez-les. Les listes qui recueillent le plus de votes arrivent sur la page des meilleures listes.",
         { heading: "Trouvez votre prochaine lecture" },
-        "La recherche avancée filtre par tags, auteurs, classification du contenu, format, démographie, année, statut et langue, et garde chaque filtre dans le lien pour que vous puissiez le partager. Appuyez sur Ctrl K (⌘K sur Mac) depuis n’importe quelle page pour accéder à un titre, un groupe, un utilisateur ou une page.",
+        "La recherche avancée filtre par tags, auteurs, classification du contenu, format, démographie, année, statut et langue, et garde chaque filtre dans le lien pour que vous puissiez le partager. Appuyez sur Ctrl K (⌘K sur Mac) depuis n’importe quelle page pour accéder à une œuvre, un groupe, un utilisateur ou une page.",
         { heading: "Pensé pour les groupes de scantrad" },
         "Revendiquez votre groupe, invitez vos membres et choisissez ce que chacun peut faire. Déposez des dossiers entiers ou des archives ZIP et CBZ, et Taiyō lit les numéros de chapitre dans les noms de fichiers. Programmez vos sorties, liez des chapitres à votre propre site et continuez à naviguer pendant que les envois se poursuivent en arrière-plan.",
         { heading: "Dans votre langue" },
@@ -84,13 +84,13 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
         { heading: "Nunca perca um capítulo" },
         "Novos capítulos da sua biblioteca e dos grupos que você segue, respostas aos seus comentários, votos e novos seguidores chegam na sua caixa de entrada na hora. Ative as notificações push para recebê-las no seu dispositivo e escolha exatamente quais você quer receber.",
         { heading: "Comentários em todo lugar" },
-        "Títulos, capítulos, grupos e perfis têm uma seção de comentários. Responda aos outros, vote, esconda spoilers e adicione emojis, imagens e GIFs. No leitor, os comentários abrem em uma gaveta sem você perder a página.",
+        "Obras, capítulos, grupos e perfis têm uma seção de comentários. Responda aos outros, vote, esconda spoilers e adicione emojis, imagens e GIFs. No leitor, os comentários abrem em uma gaveta sem você perder a página.",
         { heading: "Um perfil com a sua cara" },
         "Seu perfil mostra seu histórico de leitura, suas estatísticas e seu nível, que sobe a cada página lida. Ler também rende pontos para gastar na loja com bordas de avatar, efeitos de nome e títulos, ou em um baú aberto em 3D.",
         { heading: "Listas" },
-        "Reúna seus títulos favoritos em listas, organize-os arrastando e mantenha as listas privadas ou compartilhe. As listas mais votadas chegam à página de melhores listas.",
+        "Reúna suas obras favoritas em listas, organize-as arrastando e mantenha as listas privadas ou compartilhe. As listas mais votadas chegam à página de melhores listas.",
         { heading: "Encontre sua próxima leitura" },
-        "A pesquisa avançada filtra por tags, autores, classificação de conteúdo, formato, demografia, ano, status e idioma, e mantém cada filtro no link para você compartilhar. Aperte Ctrl K (⌘K no Mac) em qualquer página para ir direto a um título, grupo, usuário ou página.",
+        "A pesquisa avançada filtra por tags, autores, classificação de conteúdo, formato, demografia, ano, status e idioma, e mantém cada filtro no link para você compartilhar. Aperte Ctrl K (⌘K no Mac) em qualquer página para ir direto a uma obra, grupo, usuário ou página.",
         { heading: "Feito para grupos de scan" },
         "Reivindique seu grupo, convide seus membros e escolha o que cada um pode fazer. Solte pastas inteiras ou arquivos ZIP e CBZ, e o Taiyō lê os números dos capítulos pelos nomes dos arquivos. Agende lançamentos, vincule capítulos ao seu próprio site e continue navegando enquanto os envios rodam em segundo plano.",
         { heading: "No seu idioma" },
@@ -131,10 +131,10 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
           {
             tag: "home",
             text: {
-              en: "The newest titles on Taiyō get a carousel on the home page and a page of their own",
-              fr: "Les derniers titres arrivés sur Taiyō ont un carrousel sur l’accueil et leur propre page",
+              en: "The newest media on Taiyō get a carousel on the home page and a page of their own",
+              fr: "Les dernières œuvres arrivées sur Taiyō ont un carrousel sur l’accueil et leur propre page",
               "pt-BR":
-                "Os títulos mais novos do Taiyō ganham um carrossel na página inicial e uma página própria",
+                "As obras mais novas do Taiyō ganham um carrossel na página inicial e uma página própria",
             },
           },
           {
@@ -149,27 +149,26 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
           {
             tag: "titles",
             text: {
-              en: "On a computer, a title's cover and reading buttons stay in view while you scroll its chapters",
-              fr: "Sur ordinateur, la couverture et les boutons de lecture d’un titre restent visibles pendant que vous parcourez ses chapitres",
+              en: "On a computer, a media's cover and reading buttons stay in view while you scroll its chapters",
+              fr: "Sur ordinateur, la couverture et les boutons de lecture d’une œuvre restent visibles pendant que vous parcourez ses chapitres",
               "pt-BR":
-                "No computador, a capa e os botões de leitura de um título ficam visíveis enquanto você rola os capítulos",
+                "No computador, a capa e os botões de leitura de uma obra ficam visíveis enquanto você rola os capítulos",
             },
           },
           {
             tag: "titles",
             text: {
-              en: "Browse every cover and banner of a title, and open or download them full size",
-              fr: "Parcourez toutes les couvertures et bannières d’un titre, et ouvrez-les ou téléchargez-les en taille réelle",
-              "pt-BR":
-                "Veja todas as capas e banners de um título, e abra ou baixe em tamanho real",
+              en: "Browse every cover and banner of a media, and open or download them full size",
+              fr: "Parcourez toutes les couvertures et bannières d’une œuvre, et ouvrez-les ou téléchargez-les en taille réelle",
+              "pt-BR": "Veja todas as capas e banners de uma obra, e abra ou baixe em tamanho real",
             },
           },
           {
             tag: "titles",
             text: {
-              en: "Suggest edits to a title's information, reviewed field by field",
-              fr: "Suggérez des modifications aux informations d’un titre, vérifiées champ par champ",
-              "pt-BR": "Sugira edições nas informações de um título, revisadas campo por campo",
+              en: "Suggest edits to a media's information, reviewed field by field",
+              fr: "Suggérez des modifications aux informations d’une œuvre, vérifiées champ par champ",
+              "pt-BR": "Sugira edições nas informações de uma obra, revisadas campo por campo",
             },
           },
           {
@@ -192,18 +191,17 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
           {
             tag: "notifications",
             text: {
-              en: "Mute new chapters for a single title without removing it from your library",
-              fr: "Coupez les notifications de nouveaux chapitres d’un titre sans le retirer de votre bibliothèque",
-              "pt-BR": "Silencie os novos capítulos de um título sem tirá-lo da sua biblioteca",
+              en: "Mute new chapters for a single media without removing it from your library",
+              fr: "Coupez les notifications de nouveaux chapitres d’une œuvre sans la retirer de votre bibliothèque",
+              "pt-BR": "Silencie os novos capítulos de uma obra sem tirá-la da sua biblioteca",
             },
           },
           {
             tag: "search",
             text: {
-              en: "Sort titles by how many readers follow them or how many chapters they have",
-              fr: "Triez les titres selon le nombre de lecteurs qui les suivent ou leur nombre de chapitres",
-              "pt-BR":
-                "Ordene títulos pela quantidade de leitores que os acompanham ou de capítulos",
+              en: "Sort media by how many readers follow them or how many chapters they have",
+              fr: "Triez les œuvres selon le nombre de lecteurs qui les suivent ou leur nombre de chapitres",
+              "pt-BR": "Ordene obras pela quantidade de leitores que os acompanham ou de capítulos",
             },
           },
           {
@@ -217,19 +215,19 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
           {
             tag: "search",
             text: {
-              en: "Open a random title from the sidebar, the command palette or advanced search",
-              fr: "Ouvrez un titre au hasard depuis la barre latérale, la palette de commandes ou la recherche avancée",
+              en: "Open a random media from the sidebar, the command palette or advanced search",
+              fr: "Ouvrez une œuvre au hasard depuis la barre latérale, la palette de commandes ou la recherche avancée",
               "pt-BR":
-                "Abra um título aleatório pela barra lateral, pela paleta de comandos ou pela pesquisa avançada",
+                "Abra uma obra aleatória pela barra lateral, pela paleta de comandos ou pela pesquisa avançada",
             },
           },
           {
             tag: "groups",
             text: {
-              en: "Follow a group to get its new chapters, and see its titles, members and stats",
-              fr: "Suivez un groupe pour recevoir ses nouveaux chapitres, et consultez ses titres, ses membres et ses statistiques",
+              en: "Follow a group to get its new chapters, and see its media, members and stats",
+              fr: "Suivez un groupe pour recevoir ses nouveaux chapitres, et consultez ses œuvres, ses membres et ses statistiques",
               "pt-BR":
-                "Siga um grupo para receber os novos capítulos, e veja os títulos, membros e estatísticas dele",
+                "Siga um grupo para receber os novos capítulos, e veja as obras, membros e estatísticas dele",
             },
           },
           {
@@ -262,10 +260,10 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
           {
             tag: "profiles",
             text: {
-              en: "Links to titles, chapters, profiles, groups and lists show a preview card when shared",
-              fr: "Les liens vers les titres, chapitres, profils, groupes et listes affichent un aperçu quand vous les partagez",
+              en: "Links to media, chapters, profiles, groups and lists show a preview card when shared",
+              fr: "Les liens vers les œuvres, chapitres, profils, groupes et listes affichent un aperçu quand vous les partagez",
               "pt-BR":
-                "Links de títulos, capítulos, perfis, grupos e listas mostram uma prévia quando compartilhados",
+                "Links de obras, capítulos, perfis, grupos e listas mostram uma prévia quando compartilhados",
             },
           },
           {
