@@ -3,6 +3,13 @@ import pg from "pg"
 import type { DB } from "./database"
 import { env } from "./env"
 
+// Timestamps are stored as UTC without a zone: read and write them as UTC whatever the process zone.
+pg.defaults.parseInputDatesAsUTC = true
+pg.types.setTypeParser(
+  pg.types.builtins.TIMESTAMP,
+  (value) => new Date(`${value.replace(" ", "T")}Z`),
+)
+
 export const getDb = (connectionString = env.DATABASE_URL) =>
   new Kysely<DB>({
     dialect: new PostgresDialect({
