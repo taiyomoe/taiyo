@@ -81,6 +81,7 @@ export const listMyOwnershipRequestsHandler = new Hono().get(
         "groups.logo as groupLogo",
       ])
       .where("groupOwnershipRequests.userId", "=", user.id)
+      .where("groups.deletedAt", "is", null)
 
     if (status) {
       query = query.where("groupOwnershipRequests.status", "=", status)
