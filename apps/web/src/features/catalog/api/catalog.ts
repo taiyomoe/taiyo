@@ -175,7 +175,10 @@ const useInvalidateCatalog = () => {
   return () =>
     Promise.all(
       ["medias", "chapters", "covers", "banners", "chapter-review"].map((key) =>
-        queryClient.invalidateQueries({ queryKey: [key] }),
+        queryClient.invalidateQueries({
+          queryKey: [key],
+          predicate: (query) => !query.queryKey.includes("deletion-impact"),
+        }),
       ),
     )
 }
