@@ -19,6 +19,7 @@ import {
   timestampSql,
   visibleThreadTargetSql,
 } from "./comments"
+import { escapeLike } from "./escape-like"
 import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
 import { storedLanguageSchema, userSummarySchema } from "./schemas"
 
@@ -29,7 +30,6 @@ const excerptOf = (content: string | null) =>
   Array.from(graphemes.segment(getCommentText(content ?? "")), ({ segment }) => segment)
     .slice(0, EXCERPT_LENGTH)
     .join("")
-const escapeLike = (value: string) => value.replace(/[\\%_]/g, (match) => `\\${match}`)
 const notificationBaseSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the notification." }),
   lastEventAt: z.iso.datetime().meta({

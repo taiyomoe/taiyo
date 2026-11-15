@@ -7,6 +7,7 @@ import { createPageReportHandler } from "../handlers/create-page-report-handler"
 import { deleteChapterHandler } from "../handlers/delete-chapter-handler"
 import { deletePageBookmarkHandler } from "../handlers/delete-page-bookmark-handler"
 import { finalizeChapterUploadHandler } from "../handlers/finalize-chapter-upload-handler"
+import { getChapterDeletionImpactHandler } from "../handlers/get-chapter-deletion-impact-handler"
 import { getChapterHandler } from "../handlers/get-chapter-handler"
 import { getChapterReaderHandler } from "../handlers/get-chapter-reader-handler"
 import { getChapterUploadStatusHandler } from "../handlers/get-chapter-upload-status-handler"
@@ -15,6 +16,7 @@ import { listChapterGroupsHandler } from "../handlers/list-chapter-groups-handle
 import { listChapterReviewQueueHandler } from "../handlers/list-chapter-review-queue-handler"
 import { listLatestChaptersHandler } from "../handlers/list-latest-chapters-handler"
 import { listLatestMediaUpdatesHandler } from "../handlers/list-latest-media-updates-handler"
+import { listManagedChaptersHandler } from "../handlers/list-managed-chapters-handler"
 import { listPageReportsHandler } from "../handlers/list-page-reports-handler"
 import { listUpcomingChaptersHandler } from "../handlers/list-upcoming-chapters-handler"
 import { markChapterReadHandler } from "../handlers/mark-chapter-read-handler"
@@ -30,6 +32,7 @@ import { updateChapterHistoryHandler } from "../handlers/update-chapter-history-
 import { withdrawChapterHandler } from "../handlers/withdraw-chapter-handler"
 
 export const chaptersRouter = new Hono()
+  .route("/", listManagedChaptersHandler)
   .route("/", listLatestChaptersHandler)
   .route("/", listLatestMediaUpdatesHandler)
   .route("/", listUpcomingChaptersHandler)
@@ -40,6 +43,7 @@ export const chaptersRouter = new Hono()
   .route("/", getChapterReaderHandler)
   .route("/", updateChapterHandler)
   .route("/", deleteChapterHandler)
+  .route("/", getChapterDeletionImpactHandler)
   .route("/", listChapterGroupsHandler)
   .route("/", linkChapterGroupHandler)
   .route("/", unlinkChapterGroupHandler)

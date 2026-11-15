@@ -30,6 +30,7 @@ import {
   fileSchema,
   mediaLanguageSchema,
   mediaLinksSchema,
+  mediaSynopsisSchema,
   mediaTagsSchema,
 } from "../utils/schemas"
 
@@ -151,6 +152,21 @@ const createMediaSchema = z.object({
         { file: "banner-2.jpg", contentRating: "SUGGESTIVE" },
       ],
     }),
+  synopsis: mediaSynopsisSchema.default({}),
+  startDate: z.iso
+    .datetime()
+    .optional()
+    .meta({
+      description: "When the media started releasing, if known.",
+      example: "2009-06-03T00:00:00.000Z",
+    }),
+  endDate: z.iso
+    .datetime()
+    .optional()
+    .meta({
+      description: "When the media finished releasing, if it did.",
+      example: "2023-11-27T00:00:00.000Z",
+    }),
   contentRating: contentRatingSchema("The content rating of the media."),
   type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media.", example: "MANGA" }),
   status: z.enum(MEDIA_STATUSES).meta({
@@ -193,7 +209,7 @@ export const createMediaHandler = new Hono().post(
   describeRoute({
     summary: "Create a media",
     description:
-      "Creates a media with its titles, covers, banners, tags, links and staff credits.\n\n**Required roles:** uploader intern, uploader, admin.",
+      "Creates a media with its titles, synopsis, release dates, covers, banners, tags, links and staff credits.\n\n**Required roles:** uploader intern, uploader, admin.",
     tags: ["Medias"],
     responses: {
       201: {
@@ -279,6 +295,11 @@ export const createMediaHandler = new Hono().post(
         id: mediaId,
         creatorId: c.var.user.id,
         links: Object.fromEntries(links),
+        synopsis: Object.fromEntries(
+          Object.entries(body.synopsis).filter(([, text]) => text.trim() !== ""),
+        ),
+        startDate: body.startDate === undefined ? null : new Date(body.startDate),
+        endDate: body.endDate === undefined ? null : new Date(body.endDate),
         ...pick(body, [
           "type",
           "status",

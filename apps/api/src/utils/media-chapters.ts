@@ -1,4 +1,5 @@
 import { type ContentRating, type DB, type Kysely, type Language, sql } from "@taiyomoe/db"
+import { escapeLike } from "./escape-like"
 import { selectVisibleChapters } from "./latest-chapters"
 
 export const NO_VOLUME = "none"
@@ -9,8 +10,6 @@ export type MediaChapterFilters = {
   volume?: string | undefined
   search?: string | undefined
 }
-
-const escapeLike = (value: string) => value.replace(/[\\%_]/g, (match) => `\\${match}`)
 
 export const selectMediaChapters = (
   db: Kysely<DB>,

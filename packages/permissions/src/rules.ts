@@ -83,6 +83,7 @@ export const buildRules = (actor: Actor | null) => {
       submit: active !== null,
       review: reviewsChapters,
       flag: managesChapters,
+      list: managesChapters,
       view: (chapter) => {
         if (chapter.status === "PUBLISHED") {
           return true

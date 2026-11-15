@@ -6,6 +6,7 @@ import { createMediaHandler } from "../handlers/create-media-handler"
 import { createMediaSuggestionHandler } from "../handlers/create-media-suggestion-handler"
 import { deleteMediaHandler } from "../handlers/delete-media-handler"
 import { flagMediaHandler } from "../handlers/flag-media-handler"
+import { getMediaDeletionImpactHandler } from "../handlers/get-media-deletion-impact-handler"
 import { getMediaEditHandler } from "../handlers/get-media-edit-handler"
 import { getMediaHandler } from "../handlers/get-media-handler"
 import { linkMediaStaffHandler } from "../handlers/link-media-staff-handler"
@@ -15,6 +16,7 @@ import { listChapterNumbersHandler } from "../handlers/list-chapter-numbers-hand
 import { listChaptersHandler } from "../handlers/list-chapters-handler"
 import { listCoversHandler } from "../handlers/list-covers-handler"
 import { listFeaturedMediasHandler } from "../handlers/list-featured-medias-handler"
+import { listManagedMediasHandler } from "../handlers/list-managed-medias-handler"
 import { listMediaStaffsHandler } from "../handlers/list-media-staffs-handler"
 import { listShowcaseMediasHandler } from "../handlers/list-showcase-medias-handler"
 import { markMediaReadHandler } from "../handlers/mark-media-read-handler"
@@ -26,6 +28,7 @@ import { updateMediaHandler } from "../handlers/update-media-handler"
 
 export const mediasRouter = new Hono()
   .route("/", createMediaHandler)
+  .route("/", listManagedMediasHandler)
   .route("/", listFeaturedMediasHandler)
   .route("/", listShowcaseMediasHandler)
   .route("/", getMediaHandler)
@@ -34,6 +37,7 @@ export const mediasRouter = new Hono()
   .route("/", getMediaEditHandler)
   .route("/", createMediaSuggestionHandler)
   .route("/", deleteMediaHandler)
+  .route("/", getMediaDeletionImpactHandler)
   .route("/", restoreMediaHandler)
   .route("/", flagMediaHandler)
   .route("/", reindexMediaHandler)
