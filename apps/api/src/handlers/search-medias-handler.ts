@@ -155,7 +155,7 @@ export const searchMediasHandler = new Hono().post(
   describeRoute({
     summary: "Search medias",
     description:
-      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, date, or count fields. Use `sort` to order by recency, title, chapter count, or how many readers have it in their library. Each result carries core metadata, the main title, the main cover id and URL, and both popularity counts — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
+      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, date, or count fields, or by external IDs with `links` (a media matches when any of the given IDs does). Use `sort` to order by recency, title, chapter count, or how many readers have it in their library. Each result carries core metadata, the main title, the main cover id and URL, and both popularity counts — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
     tags: ["Medias"],
     requestBody: {
       content: {
@@ -295,6 +295,15 @@ export const searchMediasHandler = new Hono().post(
           break
         }
       }
+    }
+
+    const links = Object.entries(input.filter.links ?? {})
+
+    // Matches when any of the given links does, so a caller can try every id it knows at once.
+    if (links.length > 0) {
+      clauses.push(
+        `linkValues IN [${links.map(([provider, value]) => quote(`${provider}:${value}`)).join(", ")}]`,
+      )
     }
 
     const result = await c.var.meili.index<MediaDocument>(c.var.mediasIndex).search(input.q, {

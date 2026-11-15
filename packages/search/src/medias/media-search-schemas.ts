@@ -32,6 +32,14 @@ export const mediaFilterSchema = z
     tags: stringArrayFilter.optional(),
     spoilerTags: stringArrayFilter.optional(),
     linkProviders: stringArrayFilter.optional(),
+    links: z
+      .object({
+        mangaDex: z.uuid().optional(),
+        anilist: z.number().int().positive().optional(),
+        myAnimeList: z.number().int().positive().optional(),
+      })
+      .strict()
+      .optional(),
     titleLanguages: enumArrayFilter(MEDIA_LANGUAGES).optional(),
     chapterLanguages: enumArrayFilter(SUPPORTED_LANGUAGES).optional(),
     coverLanguages: enumArrayFilter(MEDIA_LANGUAGES).optional(),
