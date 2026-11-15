@@ -40,3 +40,7 @@ jobs:
       - name: Knip
         if: ${{ !cancelled() }}
         run: pnpm knip
+
+      - name: Unused messages
+        if: ${{ !cancelled() }}
+        run: pnpm lint:messages

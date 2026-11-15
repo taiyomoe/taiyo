@@ -12,6 +12,7 @@
     "format": "oxfmt --check",
     "format:fix": "oxfmt",
     "lint:ws": "sherif",
+    "lint:messages": "node packages/scripts/src/check-messages.ts",
     "postinstall": "pnpm -F @taiyomoe/web -F @taiyomoe/maintenance compile:messages; lefthook install",
     "knip": "knip",
     "test:unit": "vitest run --config vitest.config.unit.ts",

@@ -184,6 +184,7 @@ pnpm lint               # oxlint (type-aware; doubles as the typecheck gate)
 pnpm lint:fix           # oxlint --fix
 pnpm lint:ws            # sherif — workspace dependency validation
 pnpm knip               # unused exports + dead deps
+pnpm lint:messages      # i18n messages no code calls
 pnpm test:unit          # vitest (vitest.config.unit.ts)
 pnpm test:integration   # vitest (vitest.config.integration.ts) — requires pnpm bootstrap
 ```
@@ -246,7 +247,7 @@ all running in parallel:
 
 | Workflow                               | Runs                                           |
 | -------------------------------------- | ---------------------------------------------- |
-| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`            |
+| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`, `lint:messages` |
 | `.github/workflows/ci-unit.yml`        | `test:unit`                                    |
 | `.github/workflows/ci-integration.yml` | `test:integration`, against service containers |
 
