@@ -28,6 +28,7 @@ export type MediaDocument = {
   tagKeys: string[]
   spoilerTagKeys: string[]
   linkProviders: string[]
+  linkValues: string[]
   titleLanguages: Language[]
   chapterLanguages: Language[]
   coverLanguages: Language[]
@@ -124,6 +125,7 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     tagKeys: tags.map((t) => t.key),
     spoilerTagKeys: tags.filter((t) => t.isSpoiler).map((t) => t.key),
     linkProviders: Object.keys(media.links),
+    linkValues: Object.entries(media.links).map(([provider, value]) => `${provider}:${value}`),
     titleLanguages: Array.from(new Set(titles.map((t) => t.language))),
     chapterLanguages: Array.from(new Set(chapterRows.map((r) => r.language))),
     coverLanguages: Array.from(new Set(covers.map((c) => c.language))),

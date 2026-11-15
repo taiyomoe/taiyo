@@ -19,6 +19,7 @@ const filterableAttributes = [
   "tagKeys",
   "spoilerTagKeys",
   "linkProviders",
+  "linkValues",
   "titleLanguages",
   "chapterLanguages",
   "coverLanguages",
