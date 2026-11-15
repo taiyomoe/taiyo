@@ -100,8 +100,12 @@ export const getChapterReaderHandler = new Hono().get(
   async (c) => {
     const { db, chapter, viewer } = c.var
     const { contentRating } = c.var.query
+    const visibleChapters = selectVisibleChapters(db, {
+      contentRatings: contentRating,
+      mediaId: chapter.mediaId,
+    })
     const [visible, credits, history] = await Promise.all([
-      selectVisibleChapters(db, { contentRatings: contentRating, mediaId: chapter.mediaId })
+      visibleChapters
         .select(readerColumns)
         .orderBy("chapters.number", "asc")
         .orderBy("chapters.createdAt", "asc")
@@ -109,9 +113,13 @@ export const getChapterReaderHandler = new Hono().get(
       db
         .selectFrom("chapterGroups")
         .innerJoin("groups", "groups.id", "chapterGroups.groupId")
-        .innerJoin("chapters", "chapters.id", "chapterGroups.chapterId")
-        .where("chapters.mediaId", "=", chapter.mediaId)
         .where("groups.deletedAt", "is", null)
+        .where((eb) =>
+          eb.or([
+            eb("chapterGroups.chapterId", "=", chapter.id),
+            eb("chapterGroups.chapterId", "in", visibleChapters.select("chapters.id")),
+          ]),
+        )
         .select(["chapterGroups.chapterId", "groups.id", "groups.name"])
         .orderBy("groups.name", "asc")
         .execute(),

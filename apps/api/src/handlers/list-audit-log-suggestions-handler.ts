@@ -15,7 +15,17 @@ const auditCategories = [...new Set(auditActions.map((action) => action.split(".
 const querySchema = z.object({
   field: z
     .string()
-    .refine((value) => getAuditLogField(value) !== undefined, "Unknown field.")
+    .transform((value, ctx) => {
+      const field = getAuditLogField(value)
+
+      if (field === undefined) {
+        ctx.addIssue({ code: "custom", message: "Unknown field." })
+
+        return z.NEVER
+      }
+
+      return field
+    })
     .meta({ description: "The KQL field to suggest values for.", example: "actor" }),
   query: z.string().max(200).default("").meta({
     description: "What has been typed so far, up to 200 characters. Defaults to an empty string.",
@@ -53,11 +63,13 @@ const columns: Record<string, RawBuilder<unknown>> = {
   id: sql`${sql.ref("auditLogs.id")}::text`,
   changed: sql`jsonb_object_keys(${event}->'audit'->'changes'->'after')`,
 }
-const matches = (query: string) => (value: string) =>
+const contains = (query: string) => (value: string) =>
   value.toLowerCase().includes(query.toLowerCase())
-const plain = (values: readonly string[], query: string) =>
+const startsWith = (query: string) => (value: string) =>
+  value.toLowerCase().startsWith(query.toLowerCase())
+const plain = (values: readonly string[], match: (value: string) => boolean) =>
   values
-    .filter(matches(query))
+    .filter(match)
     .slice(0, 50)
     .map((value) => ({ value, label: null, image: null, nameEffect: null, avatarBorder: null }))
 
@@ -87,15 +99,10 @@ export const listAuditLogSuggestionsHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { query } = c.var.query
-    const field = getAuditLogField(c.var.query.field)
-
-    if (field === undefined) {
-      return c.fail("VALIDATION_ERROR")
-    }
+    const { field, query } = c.var.query
 
     if (field.values !== undefined) {
-      return c.ok(plain(field.values, query))
+      return c.ok(plain(field.values, contains(query)))
     }
 
     if (field.type === "number" || field.type === "date") {
@@ -103,15 +110,15 @@ export const listAuditLogSuggestionsHandler = new Hono().get(
     }
 
     if (field.name === "action") {
-      return c.ok(plain(auditActions, query))
+      return c.ok(plain(auditActions, contains(query)))
     }
 
     if (field.name === "category") {
-      return c.ok(plain(auditCategories, query))
+      return c.ok(plain(auditCategories, contains(query)))
     }
 
     if (field.name === "target.type") {
-      return c.ok(plain([...auditTargetTypes, "auditLog"], query))
+      return c.ok(plain([...auditTargetTypes, "auditLog"], contains(query)))
     }
 
     if (field.name === "actor" || field.name === "actor.id") {
@@ -145,7 +152,7 @@ export const listAuditLogSuggestionsHandler = new Hono().get(
           nameEffect: user.nameEffect,
           avatarBorder: user.avatarBorder,
         })),
-        ...plain(["anonymous", ...others.map(({ actorId }) => actorId)], query),
+        ...plain(["anonymous", ...others.map(({ actorId }) => actorId)], startsWith(query)),
       ])
     }
 

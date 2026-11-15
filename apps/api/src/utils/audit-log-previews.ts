@@ -5,7 +5,7 @@ import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
 
 type Reference = { kind: "media" | "group" | "staff" | "user" | "chapter"; id: string }
 
-export type AuditLogPreview = {
+type AuditLogPreview = {
   kind: "media" | "group" | "staff" | "user"
   id: string
   label: string | null
@@ -49,28 +49,31 @@ const idsOf = (references: ReadonlyArray<Reference | null>, kind: Reference["kin
   ...new Set(references.flatMap((reference) => (reference?.kind === kind ? [reference.id] : []))),
 ]
 
-export const withPreviews = async <T extends { target: AuditTarget | null }>(
-  db: Kysely<DB>,
-  logs: readonly T[],
-) => {
+type Previewable = { target: AuditTarget | null }
+
+const getPreviewer = async (db: Kysely<DB>, logs: readonly Previewable[]) => {
   const references = logs.map((log) => getReference(log.target))
   const chapterIds = idsOf(references, "chapter")
   const groupIds = idsOf(references, "group")
   const staffIds = idsOf(references, "staff")
   const userIds = idsOf(references, "user")
-  const chapters =
+  // Titles and covers wait for the chapters' medias; groups, staffs and users do not.
+  const medias = (
     chapterIds.length === 0
-      ? []
-      : await db
-          .selectFrom("chapters")
-          .select(["id", "mediaId"])
-          .where("id", "in", chapterIds)
-          .execute()
-  const chapterMedias = new Map(chapters.map((chapter) => [chapter.id, chapter.mediaId]))
-  const mediaIds = [...new Set([...idsOf(references, "media"), ...chapterMedias.values()])]
-  const [titles, covers, groups, staffs, users] = await Promise.all([
-    getMainTitles(db, mediaIds),
-    getMainCoverUrls(db, mediaIds),
+      ? Promise.resolve([])
+      : db.selectFrom("chapters").select(["id", "mediaId"]).where("id", "in", chapterIds).execute()
+  ).then(async (chapters) => {
+    const chapterMedias = new Map(chapters.map((chapter) => [chapter.id, chapter.mediaId]))
+    const mediaIds = [...new Set([...idsOf(references, "media"), ...chapterMedias.values()])]
+    const [titles, covers] = await Promise.all([
+      getMainTitles(db, mediaIds),
+      getMainCoverUrls(db, mediaIds),
+    ])
+
+    return { chapterMedias, titles, covers }
+  })
+  const [{ chapterMedias, titles, covers }, groups, staffs, users] = await Promise.all([
+    medias,
     groupIds.length === 0
       ? []
       : db
@@ -161,5 +164,14 @@ export const withPreviews = async <T extends { target: AuditTarget | null }>(
     return previews.get(`${reference.kind}:${reference.id}`) ?? null
   }
 
-  return logs.map((log, index) => ({ ...log, preview: previewOf(references[index] ?? null) }))
+  return <T extends Previewable>(log: T) => ({
+    ...log,
+    preview: previewOf(getReference(log.target)),
+  })
 }
+
+export const withPreviews = async <T extends Previewable>(db: Kysely<DB>, logs: readonly T[]) =>
+  logs.map(await getPreviewer(db, logs))
+
+export const withPreview = async <T extends Previewable>(db: Kysely<DB>, log: T) =>
+  (await getPreviewer(db, [log]))(log)

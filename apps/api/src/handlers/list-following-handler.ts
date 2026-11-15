@@ -40,12 +40,13 @@ export const listFollowingHandler = new Hono().get(
       return c.ok([], { page, perPage, total: 0 })
     }
 
+    const base = db
+      .selectFrom("userFollows")
+      .innerJoin("users", "users.id", "userFollows.followingId")
+      .where("userFollows.followerId", "=", targetUser.id)
+      .where((eb) => eb.or([eb("users.banned", "is", null), eb("users.banned", "=", false)]))
     const [items, totalRow] = await Promise.all([
-      db
-        .selectFrom("userFollows")
-        .innerJoin("users", "users.id", "userFollows.followingId")
-        .where("userFollows.followerId", "=", targetUser.id)
-        .where((eb) => eb.or([eb("users.banned", "is", null), eb("users.banned", "=", false)]))
+      base
         .select([
           "users.id",
           "users.username",
@@ -58,13 +59,7 @@ export const listFollowingHandler = new Hono().get(
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
-      db
-        .selectFrom("userFollows")
-        .innerJoin("users", "users.id", "userFollows.followingId")
-        .where("userFollows.followerId", "=", targetUser.id)
-        .where((eb) => eb.or([eb("users.banned", "is", null), eb("users.banned", "=", false)]))
-        .select(db.fn.countAll().as("count"))
-        .executeTakeFirstOrThrow(),
+      base.select(db.fn.countAll().as("count")).executeTakeFirstOrThrow(),
     ])
 
     return c.ok(items, { page, perPage, total: Number(totalRow.count) })

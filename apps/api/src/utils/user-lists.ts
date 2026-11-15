@@ -37,9 +37,6 @@ export const listSummarySchema = z.object({
     }),
 })
 
-export const utcTimestampSql = (column: string) =>
-  sql<string>`to_char(${sql.ref(column)}, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`
-
 export const liveListMediaSql = sql<boolean>`exists (select 1 from "medias" where "medias"."id" = "userListItems"."mediaId" and "medias"."deletedAt" is null)`
 
 export const countListItems = (db: Kysely<DB>, listId: string) =>
@@ -69,8 +66,8 @@ export const selectListSummaries = (db: Kysely<DB>, viewerId: string | null) =>
       "userLists.description",
       "userLists.visibility",
       "userLists.upvoteCount",
-      utcTimestampSql("userLists.createdAt").as("createdAt"),
-      utcTimestampSql("userLists.updatedAt").as("updatedAt"),
+      "userLists.createdAt",
+      "userLists.updatedAt",
       "users.id as ownerId",
       "users.username as ownerUsername",
       "users.displayUsername as ownerDisplayUsername",
@@ -108,9 +105,9 @@ type ListSummaryRow = {
   ownerAvatarBorder: string | null
 }
 
-export const toListSummaries = async <T extends ListSummaryRow>(
+const getSummarizer = async (
   db: Kysely<DB>,
-  rows: T[],
+  rows: readonly ListSummaryRow[],
   contentRatings: readonly ContentRating[],
 ) => {
   const previews =
@@ -144,37 +141,47 @@ export const toListSummaries = async <T extends ListSummaryRow>(
   const coverUrls = await getMainCoverUrls(db, [...new Set(previews.map((row) => row.mediaId))])
   const previewsByList = group(previews, (row) => row.listId)
 
-  return rows.map(
-    ({
-      ownerId,
-      ownerUsername,
-      ownerDisplayUsername,
-      ownerImage,
-      ownerNameEffect,
-      ownerAvatarBorder,
-      itemCount,
-      viewerVoted,
-      ...row
-    }) => ({
-      ...row,
-      itemCount: Number(itemCount ?? 0),
-      viewerVoted: viewerVoted === true || viewerVoted === 1,
-      owner: {
-        id: ownerId,
-        username: ownerUsername,
-        displayUsername: ownerDisplayUsername,
-        image: ownerImage,
-        nameEffect: ownerNameEffect,
-        avatarBorder: ownerAvatarBorder,
-      },
-      coverUrls: (previewsByList[row.id] ?? []).flatMap((preview) => {
-        const url = coverUrls.get(preview.mediaId)
+  return <T extends ListSummaryRow>({
+    ownerId,
+    ownerUsername,
+    ownerDisplayUsername,
+    ownerImage,
+    ownerNameEffect,
+    ownerAvatarBorder,
+    itemCount,
+    viewerVoted,
+    ...row
+  }: T) => ({
+    ...row,
+    itemCount: Number(itemCount ?? 0),
+    viewerVoted: viewerVoted === true || viewerVoted === 1,
+    owner: {
+      id: ownerId,
+      username: ownerUsername,
+      displayUsername: ownerDisplayUsername,
+      image: ownerImage,
+      nameEffect: ownerNameEffect,
+      avatarBorder: ownerAvatarBorder,
+    },
+    coverUrls: (previewsByList[row.id] ?? []).flatMap((preview) => {
+      const url = coverUrls.get(preview.mediaId)
 
-        return url === undefined ? [] : [url]
-      }),
+      return url === undefined ? [] : [url]
     }),
-  )
+  })
 }
+
+export const toListSummaries = async <T extends ListSummaryRow>(
+  db: Kysely<DB>,
+  rows: readonly T[],
+  contentRatings: readonly ContentRating[],
+) => rows.map(await getSummarizer(db, rows, contentRatings))
+
+export const toListSummary = async <T extends ListSummaryRow>(
+  db: Kysely<DB>,
+  row: T,
+  contentRatings: readonly ContentRating[],
+) => (await getSummarizer(db, [row], contentRatings))(row)
 
 export const findMissingMediaIds = async (db: Kysely<DB>, mediaIds: readonly string[]) => {
   if (mediaIds.length === 0) {

@@ -12,12 +12,7 @@ import {
   contentRatingSchema,
   contentRatingsQuerySchema,
 } from "../utils/schemas"
-import {
-  listSummarySchema,
-  selectListSummaries,
-  toListSummaries,
-  utcTimestampSql,
-} from "../utils/user-lists"
+import { listSummarySchema, selectListSummaries, toListSummary } from "../utils/user-lists"
 import { isBannedSql } from "../utils/user-moderation"
 
 const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
@@ -101,7 +96,7 @@ export const getListHandler = new Hono().get(
       .select([
         "userListItems.mediaId",
         "userListItems.position",
-        utcTimestampSql("userListItems.addedAt").as("addedAt"),
+        "userListItems.addedAt",
         "medias.type",
         "medias.status",
         "medias.contentRating",
@@ -110,15 +105,11 @@ export const getListHandler = new Hono().get(
       .orderBy("userListItems.addedAt", "asc")
       .execute()
     const mediaIds = items.map((item) => item.mediaId)
-    const [titles, coverUrls, [summary]] = await Promise.all([
+    const [titles, coverUrls, summary] = await Promise.all([
       getMainTitles(db, mediaIds),
       getMainCoverUrls(db, mediaIds),
-      toListSummaries(db, [summaryRow], contentRating),
+      toListSummary(db, summaryRow, contentRating),
     ])
-
-    if (summary === undefined) {
-      return c.fail("LIST_NOT_FOUND")
-    }
 
     return c.ok({
       ...summary,

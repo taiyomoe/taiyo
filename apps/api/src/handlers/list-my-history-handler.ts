@@ -50,16 +50,17 @@ export const listMyHistoryHandler = new Hono().get(
   async (c) => {
     const { db, user } = c.var
     const { page, perPage } = c.var.query
+    const base = db
+      .selectFrom("userHistories")
+      .innerJoin("chapters", "chapters.id", "userHistories.chapterId")
+      .innerJoin("medias", "medias.id", "chapters.mediaId")
+      .where("userHistories.userId", "=", user.id)
+      .where("chapters.deletedAt", "is", null)
+      .where("chapters.status", "=", "PUBLISHED")
+      .where("medias.deletedAt", "is", null)
+      .where(isOpenedHistory)
     const [items, totalRow] = await Promise.all([
-      db
-        .selectFrom("userHistories")
-        .innerJoin("chapters", "chapters.id", "userHistories.chapterId")
-        .innerJoin("medias", "medias.id", "chapters.mediaId")
-        .where("userHistories.userId", "=", user.id)
-        .where("chapters.deletedAt", "is", null)
-        .where("chapters.status", "=", "PUBLISHED")
-        .where("medias.deletedAt", "is", null)
-        .where(isOpenedHistory)
+      base
         .select([
           "userHistories.chapterId",
           "chapters.number as chapterNumber",
@@ -75,17 +76,7 @@ export const listMyHistoryHandler = new Hono().get(
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
-      db
-        .selectFrom("userHistories")
-        .innerJoin("chapters", "chapters.id", "userHistories.chapterId")
-        .innerJoin("medias", "medias.id", "chapters.mediaId")
-        .where("userHistories.userId", "=", user.id)
-        .where("chapters.deletedAt", "is", null)
-        .where("chapters.status", "=", "PUBLISHED")
-        .where("medias.deletedAt", "is", null)
-        .where(isOpenedHistory)
-        .select(db.fn.countAll().as("count"))
-        .executeTakeFirstOrThrow(),
+      base.select(db.fn.countAll().as("count")).executeTakeFirstOrThrow(),
     ])
 
     return c.ok(items, { page, perPage, total: Number(totalRow.count) })

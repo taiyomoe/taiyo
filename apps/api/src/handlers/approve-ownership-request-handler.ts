@@ -54,6 +54,10 @@ export const approveOwnershipRequestHandler = new Hono().post(
       target: { groupId: ownershipRequest.groupId, userId: ownershipRequest.userId },
     })
 
+    if (ownershipRequest.status !== "PENDING") {
+      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
+    }
+
     const result = await claimGroup(db, {
       groupId: ownershipRequest.groupId,
       userId: ownershipRequest.userId,
