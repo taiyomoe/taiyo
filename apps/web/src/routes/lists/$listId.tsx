@@ -6,10 +6,17 @@ import { isListNotFoundError } from "@/features/lists/components/list-page/list-
 import { ListNotFoundPage } from "@/features/lists/components/list-page/list-not-found-page"
 import { ListPage } from "@/features/lists/components/list-page/list-page"
 import { pageOgMeta } from "@/features/og/lib/og-meta"
+import { serveLinkPreview } from "@/features/og/lib/og-preview"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
 export const Route = createFileRoute("/lists/$listId")({
+  server: {
+    handlers: {
+      GET: ({ request, params, next }) =>
+        serveLinkPreview({ request, next, kind: "lists", id: params.listId }),
+    },
+  },
   loader: async ({ context, params: { listId } }) => {
     const list = context.queryClient.query(
       listQueryOptions(listId, getContentRatings(context.session)),
