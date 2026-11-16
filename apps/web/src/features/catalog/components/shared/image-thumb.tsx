@@ -11,11 +11,11 @@ const styles = stylex.create({
   },
   cover: {
     aspectRatio: "2 / 3",
-    width: "2.75rem",
+    width: "2.25rem",
   },
   banner: {
     aspectRatio: "16 / 5",
-    width: "8rem",
+    width: "6.5rem",
   },
   image: {
     display: "block",

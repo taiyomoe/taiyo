@@ -34,7 +34,9 @@ const styles = stylex.create({
   actions: {
     gap: "0.5rem",
     display: "flex",
+    flexDirection: { default: "row", [breakpoints.maxSm]: "column-reverse" },
     marginInlineStart: "auto",
+    width: { default: null, [breakpoints.maxSm]: "100%" },
   },
 })
 

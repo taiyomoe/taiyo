@@ -1,6 +1,9 @@
-import type { ReactNode } from "react"
+import type { IconProps } from "@taiyomoe/ui/components/icons"
+import type { BadgeVariant } from "@taiyomoe/ui/components/ui/badge"
+import type { ReactElement, ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { Search } from "@taiyomoe/ui/components/icons"
+import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   InputGroup,
   InputGroupAddon,
@@ -13,23 +16,62 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@taiyomoe/ui/components/ui/select"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
+import { catalogContainers } from "@/features/catalog/lib/catalog.stylex"
 
 const ALL = "ALL"
 const styles = stylex.create({
   toolbar: {
-    gap: "0.75rem",
+    padding: "0.25rem",
+    gap: "0.5rem",
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
+    paddingBottom: "0.5rem",
   },
   search: {
+    flexBasis: { default: "14rem", [catalogContainers.narrow]: "100%" },
     flexGrow: 1,
-    maxWidth: "24rem",
-    minWidth: "14rem",
+    flexShrink: 1,
+    maxWidth: { default: "22rem", [catalogContainers.narrow]: "none" },
   },
   select: {
-    width: "12rem",
+    flexBasis: {
+      default: "auto",
+      [catalogContainers.narrow]: "100%",
+      [catalogContainers.medium]: "calc(50% - 0.25rem)",
+    },
+    flexGrow: { default: 0, [catalogContainers.narrow]: 1, [catalogContainers.medium]: 1 },
+    flexShrink: 1,
+    minWidth: 0,
+  },
+  control: {
+    height: {
+      default: "2.75rem",
+      [breakpoints.sm]: "2.5rem",
+    },
+  },
+  toggle: {
+    flexBasis: { default: "auto", [catalogContainers.narrow]: "100%" },
+    flexGrow: { default: 0, [catalogContainers.narrow]: 1, [catalogContainers.medium]: 1 },
+  },
+  option: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+    minWidth: 0,
+  },
+  icon: {
+    color: colors.mutedForeground,
+    flexShrink: 0,
+    height: "1rem",
+    width: "1rem",
+  },
+  label: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   },
 })
 
@@ -74,34 +116,49 @@ export function CatalogSearch({
 export function CatalogSelect<TValue extends string>({
   label,
   allLabel,
+  icon: Icon,
   options,
   value,
   getLabel,
+  renderIcon,
   onChange,
 }: {
   label: string
   allLabel: string
+  icon: (props: IconProps) => ReactElement
   options: readonly TValue[]
   value: TValue | undefined
   getLabel: (value: TValue) => string
+  renderIcon?: (value: TValue) => ReactNode
   onChange: (value: TValue | undefined) => void
 }) {
+  const option = (choice: TValue | undefined) => (
+    <span sx={styles.option}>
+      {choice === undefined || renderIcon === undefined ? (
+        <Icon {...stylex.props(styles.icon)} />
+      ) : (
+        renderIcon(choice)
+      )}
+      <span sx={styles.label}>{choice === undefined ? allLabel : getLabel(choice)}</span>
+    </span>
+  )
+
   return (
     <div sx={styles.select}>
       <Select
         onValueChange={(next) => {
-          onChange(options.find((option) => option === next))
+          onChange(options.find((candidate) => candidate === next))
         }}
         value={value ?? ALL}
       >
         <SelectTrigger aria-label={label}>
-          <SelectValue>{() => (value === undefined ? allLabel : getLabel(value))}</SelectValue>
+          <SelectValue>{() => option(value)}</SelectValue>
         </SelectTrigger>
         <SelectPopup>
-          <SelectItem value={ALL}>{allLabel}</SelectItem>
-          {options.map((option) => (
-            <SelectItem key={option} value={option}>
-              {getLabel(option)}
+          <SelectItem value={ALL}>{option(undefined)}</SelectItem>
+          {options.map((candidate) => (
+            <SelectItem key={candidate} value={candidate}>
+              {option(candidate)}
             </SelectItem>
           ))}
         </SelectPopup>
@@ -109,3 +166,61 @@ export function CatalogSelect<TValue extends string>({
     </div>
   )
 }
+
+export function CatalogToggle({
+  icon: Icon,
+  label,
+  pressed,
+  onChange,
+}: {
+  icon: (props: IconProps) => ReactElement
+  label: string
+  pressed: boolean
+  onChange: (pressed: boolean) => void
+}) {
+  return (
+    <Button
+      aria-pressed={pressed}
+      onClick={() => {
+        onChange(!pressed)
+      }}
+      sx={[styles.control, styles.toggle]}
+      variant={pressed ? "secondary" : "outline"}
+    >
+      <Icon />
+      {label}
+    </Button>
+  )
+}
+
+/** The page's main action, as tall as the filters under it. */
+export function CatalogAction({ render, children }: { render: ReactElement; children: ReactNode }) {
+  return (
+    <Button render={render} sx={styles.control}>
+      {children}
+    </Button>
+  )
+}
+
+/** A small colored dot that stands for a status in a select. */
+export function StatusDot({ variant }: { variant: BadgeVariant }) {
+  return <span aria-hidden sx={[dot.base, dot[variant]]} />
+}
+
+const dot = stylex.create({
+  base: {
+    borderRadius: "50%",
+    marginInline: "0.25rem",
+    flexShrink: 0,
+    height: "0.5rem",
+    width: "0.5rem",
+  },
+  default: { backgroundColor: colors.primary },
+  destructive: { backgroundColor: colors.destructive },
+  error: { backgroundColor: colors.destructive },
+  info: { backgroundColor: colors.info },
+  outline: { backgroundColor: colors.mutedForeground },
+  secondary: { backgroundColor: colors.mutedForeground },
+  success: { backgroundColor: colors.success },
+  warning: { backgroundColor: colors.warning },
+})

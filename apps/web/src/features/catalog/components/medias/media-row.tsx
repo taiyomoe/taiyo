@@ -1,12 +1,23 @@
 import type { Permissions } from "@taiyomoe/permissions"
-import { Banner, Trash, Edit, ExternalLink, Image, Refresh } from "@taiyomoe/ui/components/icons"
+import * as stylex from "@stylexjs/stylex"
+import {
+  Banner,
+  Edit,
+  ExternalLink,
+  Image,
+  ListNumbered,
+  Refresh,
+  Trash,
+} from "@taiyomoe/ui/components/icons"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
-import { TableCell, TableRow } from "@taiyomoe/ui/components/ui/table"
+import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { ManagedMedia } from "@/features/catalog/api/catalog"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
 import { TimeAgo } from "@/components/time/time-ago"
+import { CatalogCell } from "@/features/catalog/components/shared/catalog-table"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
+import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
@@ -80,33 +91,51 @@ export function MediaRow({
         },
       ]
     : []
+  const status = (
+    <Badge variant={MEDIA_STATUS_BADGES[media.status]}>{MEDIA_STATUS_LABELS[media.status]()}</Badge>
+  )
 
   return (
     <TableRow>
-      <TableCell>
+      <CatalogCell column="media">
         <MediaCell
           coverUrl={media.coverUrl}
           detail={MEDIA_TYPE_LABELS[media.type]()}
           mediaId={media.id}
+          narrow={{
+            from: "3xl",
+            content: (
+              <>
+                {status}
+                <span {...stylex.props(catalogStyles.inline, catalogStyles.muted)}>
+                  <ListNumbered size={14} />
+                  {formatNumber(media.chapterCount)}
+                </span>
+              </>
+            ),
+          }}
           title={media.title}
         />
-      </TableCell>
-      <TableCell>
-        <Badge variant={MEDIA_STATUS_BADGES[media.status]}>
-          {MEDIA_STATUS_LABELS[media.status]()}
-        </Badge>
-      </TableCell>
-      <TableCell sx={catalogStyles.numeric}>{formatNumber(media.chapterCount)}</TableCell>
-      <TableCell>{CONTENT_RATING_LABELS[media.contentRating]()}</TableCell>
-      <TableCell sx={catalogStyles.muted}>
-        <TimeAgo date={media.deletedAt ?? media.createdAt} />
-      </TableCell>
-      <TableCell>
+      </CatalogCell>
+      <CatalogCell column="status">{status}</CatalogCell>
+      <CatalogCell column="chapters" sx={catalogStyles.numeric}>
+        {formatNumber(media.chapterCount)}
+      </CatalogCell>
+      <CatalogCell column="rating">
+        <span {...stylex.props(catalogStyles.inline)}>
+          <RatingIcon rating={media.contentRating} />
+          {CONTENT_RATING_LABELS[media.contentRating]()}
+        </span>
+      </CatalogCell>
+      <CatalogCell column="date" sx={catalogStyles.muted}>
+        <TimeAgo length="long" date={media.deletedAt ?? media.createdAt} />
+      </CatalogCell>
+      <CatalogCell column="actions">
         <RowActions
           actions={deleted ? removed : live}
           label={m.catalog_actions({ name: media.title ?? m.media_untitled() })}
         />
-      </TableCell>
+      </CatalogCell>
     </TableRow>
   )
 }

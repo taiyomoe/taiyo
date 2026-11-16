@@ -1,6 +1,5 @@
 import { CONTENT_RATINGS } from "@taiyomoe/db/constants"
-import { Banner, Plus } from "@taiyomoe/ui/components/icons"
-import { Button } from "@taiyomoe/ui/components/ui/button"
+import { Banner, Plus, Shield } from "@taiyomoe/ui/components/icons"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
@@ -15,13 +14,20 @@ import {
 } from "@/features/catalog/api/catalog"
 import { BannerRow } from "@/features/catalog/components/banners/banner-row"
 import { DeleteBannerDialog } from "@/features/catalog/components/banners/delete-banner-dialog"
-import { CatalogTable, VisuallyHidden } from "@/features/catalog/components/shared/catalog-table"
 import {
+  CatalogFooter,
+  CatalogTable,
+  VisuallyHidden,
+} from "@/features/catalog/components/shared/catalog-table"
+import {
+  CatalogAction,
   CatalogSearch,
   CatalogSelect,
   CatalogToolbar,
 } from "@/features/catalog/components/shared/catalog-toolbar"
+import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
+import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditBannerDialog } from "@/features/media-images/components/banners/edit-banner-dialog"
 import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
 import { m } from "@/paraglide/messages"
@@ -55,48 +61,45 @@ export function BannersPage() {
   return (
     <DashboardPage
       actions={
-        <Button render={<Link search={{}} to="/dashboard/banners/upload" />}>
+        <CatalogAction render={<Link search={{}} to="/dashboard/banners/upload" />}>
           <Plus />
           {m.catalog_banner_add()}
-        </Button>
+        </CatalogAction>
       }
       subtitle={m.catalog_banner_subtitle()}
       title={m.dashboard_nav_banners()}
     >
-      <CatalogToolbar>
-        <CatalogSearch
-          label={m.catalog_image_search()}
-          onChange={(search) => {
-            update({ search })
-          }}
-          value={filter.search}
-        />
-        <CatalogSelect
-          allLabel={m.catalog_all_ratings()}
-          getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
-          label={m.media_images_content_rating()}
-          onChange={(contentRating) => {
-            update({ contentRating })
-          }}
-          options={CONTENT_RATINGS}
-          value={filter.contentRating}
-        />
-      </CatalogToolbar>
       <CatalogTable
         columns={[
           {
             key: "image",
             label: <VisuallyHidden>{m.catalog_column_image()}</VisuallyHidden>,
-            sx: catalogStyles.colWide,
+            width: catalogStyles.colBanner,
+            from: "2xl",
           },
-          { key: "media", label: m.catalog_column_media(), sx: catalogStyles.colMedia },
-          { key: "rating", label: m.media_images_content_rating(), sx: catalogStyles.colMedium },
-          { key: "uploader", label: m.catalog_column_uploader(), sx: catalogStyles.colMedium },
-          { key: "date", label: m.catalog_column_added(), sx: catalogStyles.colMedium },
+          { key: "media", label: m.catalog_column_media() },
+          {
+            key: "rating",
+            label: m.catalog_column_rating(),
+            width: catalogStyles.colMedium,
+            from: "3xl",
+          },
+          {
+            key: "uploader",
+            label: m.catalog_column_uploader(),
+            width: catalogStyles.colMedium,
+            from: "4xl",
+          },
+          {
+            key: "date",
+            label: m.catalog_column_added(),
+            width: catalogStyles.colMedium,
+            from: "4xl",
+          },
           {
             key: "actions",
             label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
-            sx: catalogStyles.colActions,
+            width: catalogStyles.colActions,
           },
         ]}
         empty={
@@ -108,7 +111,53 @@ export function BannersPage() {
               }
             : null
         }
+        footer={
+          data === undefined ? null : (
+            <CatalogFooter total={m.catalog_results({ count: formatNumber(data.meta.total) })}>
+              <PagePagination
+                onJump={(page) => {
+                  update({ page })
+                }}
+                page={filter.page}
+                pageCount={Math.ceil(data.meta.total / CATALOG_PER_PAGE)}
+                renderLink={(page) => (
+                  <Link
+                    search={{
+                      q: filter.search,
+                      contentRating: filter.contentRating,
+                      page: page === 1 ? undefined : page,
+                    }}
+                    to="/dashboard/banners"
+                  />
+                )}
+              />
+            </CatalogFooter>
+          )
+        }
         loading={data === undefined}
+        toolbar={
+          <CatalogToolbar>
+            <CatalogSearch
+              label={m.catalog_image_search()}
+              onChange={(search) => {
+                update({ search })
+              }}
+              value={filter.search}
+            />
+            <CatalogSelect
+              allLabel={m.catalog_all_ratings()}
+              renderIcon={(rating) => <RatingIcon rating={rating} />}
+              getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
+              icon={Shield}
+              label={m.media_images_content_rating()}
+              onChange={(contentRating) => {
+                update({ contentRating })
+              }}
+              options={CONTENT_RATINGS}
+              value={filter.contentRating}
+            />
+          </CatalogToolbar>
+        }
       >
         {data?.data.map((banner) => (
           <BannerRow
@@ -128,25 +177,6 @@ export function BannersPage() {
           />
         ))}
       </CatalogTable>
-      {data === undefined ? null : (
-        <PagePagination
-          onJump={(page) => {
-            update({ page })
-          }}
-          page={filter.page}
-          pageCount={Math.ceil(data.meta.total / CATALOG_PER_PAGE)}
-          renderLink={(page) => (
-            <Link
-              search={{
-                q: filter.search,
-                contentRating: filter.contentRating,
-                page: page === 1 ? undefined : page,
-              }}
-              to="/dashboard/banners"
-            />
-          )}
-        />
-      )}
       <EditBannerDialog
         banner={editing}
         mediaId={editing?.media.id ?? ""}

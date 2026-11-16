@@ -1,14 +1,16 @@
 import * as stylex from "@stylexjs/stylex"
 import { Edit, Image, Star, Trash } from "@taiyomoe/ui/components/icons"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
-import { TableCell, TableRow } from "@taiyomoe/ui/components/ui/table"
+import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { Link } from "@tanstack/react-router"
 import type { ManagedCover } from "@/features/catalog/api/catalog"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
+import { CatalogCell } from "@/features/catalog/components/shared/catalog-table"
 import { ImageThumb } from "@/features/catalog/components/shared/image-thumb"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
+import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { Uploader } from "@/features/chapters/components/uploader"
@@ -28,35 +30,50 @@ export function CoverRow({
 }) {
   const setMain = useSetMainCover(cover.media.id)
   const title = cover.media.title ?? m.media_untitled()
+  const rating = (
+    <span {...stylex.props(catalogStyles.inline)}>
+      <RatingIcon rating={cover.contentRating} />
+      {CONTENT_RATING_LABELS[cover.contentRating]()}
+    </span>
+  )
+  const main = cover.isMainCover ? <Badge variant="info">{m.media_covers_main()}</Badge> : null
 
   return (
     <TableRow>
-      <TableCell>
-        <ImageThumb kind="cover" label={m.catalog_open_image()} src={cover.url} />
-      </TableCell>
-      <TableCell>
+      <CatalogCell column="media">
         <MediaCell
           detail={cover.volume === null ? undefined : m.catalog_volume({ volume: cover.volume })}
           mediaId={cover.media.id}
+          narrow={{
+            from: "3xl",
+            content: (
+              <>
+                <LanguageChip language={cover.language} />
+                <RatingIcon rating={cover.contentRating} />
+                {main}
+              </>
+            ),
+          }}
+          thumb={<ImageThumb kind="cover" label={m.catalog_open_image()} src={cover.url} />}
           title={cover.media.title}
         />
-      </TableCell>
-      <TableCell>
+      </CatalogCell>
+      <CatalogCell column="language">
         <LanguageChip language={cover.language} />
-      </TableCell>
-      <TableCell>
-        <div {...stylex.props(catalogStyles.inline)}>
-          {CONTENT_RATING_LABELS[cover.contentRating]()}
-          {cover.isMainCover ? <Badge variant="info">{m.media_covers_main()}</Badge> : null}
+      </CatalogCell>
+      <CatalogCell column="rating">
+        <div {...stylex.props(catalogStyles.stack)}>
+          {rating}
+          {main}
         </div>
-      </TableCell>
-      <TableCell>
+      </CatalogCell>
+      <CatalogCell column="uploader">
         <Uploader uploader={cover.uploader} />
-      </TableCell>
-      <TableCell sx={catalogStyles.muted}>
-        <TimeAgo date={cover.createdAt} />
-      </TableCell>
-      <TableCell>
+      </CatalogCell>
+      <CatalogCell column="date" sx={catalogStyles.muted}>
+        <TimeAgo length="long" date={cover.createdAt} />
+      </CatalogCell>
+      <CatalogCell column="actions">
         <RowActions
           actions={[
             { key: "edit", label: m.catalog_edit(), icon: Edit, onClick: onEdit },
@@ -99,7 +116,7 @@ export function CoverRow({
           ]}
           label={m.catalog_actions({ name: title })}
         />
-      </TableCell>
+      </CatalogCell>
     </TableRow>
   )
 }

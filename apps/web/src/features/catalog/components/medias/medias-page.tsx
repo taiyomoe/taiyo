@@ -1,6 +1,5 @@
 import { MEDIA_STATUSES, MEDIA_TYPES } from "@taiyomoe/db/constants"
-import { Library, Plus } from "@taiyomoe/ui/components/icons"
-import { Button } from "@taiyomoe/ui/components/ui/button"
+import { Activity, Book, Library, Plus, Trash } from "@taiyomoe/ui/components/icons"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
@@ -16,14 +15,26 @@ import {
 } from "@/features/catalog/api/catalog"
 import { DeleteMediaDialog } from "@/features/catalog/components/medias/delete-media-dialog"
 import { MediaRow } from "@/features/catalog/components/medias/media-row"
-import { CatalogTable, VisuallyHidden } from "@/features/catalog/components/shared/catalog-table"
 import {
+  CatalogFooter,
+  CatalogTable,
+  VisuallyHidden,
+} from "@/features/catalog/components/shared/catalog-table"
+import {
+  CatalogAction,
   CatalogSearch,
   CatalogSelect,
+  CatalogToggle,
   CatalogToolbar,
+  StatusDot,
 } from "@/features/catalog/components/shared/catalog-toolbar"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
-import { MEDIA_STATUS_LABELS, MEDIA_TYPE_LABELS } from "@/features/media/lib/media-labels"
+import { formatNumber } from "@/features/dashboard/lib/format"
+import {
+  MEDIA_STATUS_BADGES,
+  MEDIA_STATUS_LABELS,
+  MEDIA_TYPE_LABELS,
+} from "@/features/media/lib/media-labels"
 import { getErrorMessage } from "@/lib/errors"
 import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
@@ -64,70 +75,46 @@ export function MediasPage() {
     <DashboardPage
       actions={
         can("media.create") ? (
-          <Button render={<Link to="/dashboard/medias/new" />}>
+          <CatalogAction render={<Link to="/dashboard/medias/new" />}>
             <Plus />
             {m.catalog_media_add()}
-          </Button>
+          </CatalogAction>
         ) : undefined
       }
       subtitle={m.catalog_media_subtitle()}
       title={m.dashboard_nav_media()}
     >
-      <CatalogToolbar>
-        <CatalogSearch
-          label={m.catalog_media_search()}
-          onChange={(search) => {
-            update({ search })
-          }}
-          value={filter.search}
-        />
-        <CatalogSelect
-          allLabel={m.catalog_all_types()}
-          getLabel={(type) => MEDIA_TYPE_LABELS[type]()}
-          label={m.media_info_type()}
-          onChange={(type) => {
-            update({ type })
-          }}
-          options={MEDIA_TYPES}
-          value={filter.type}
-        />
-        <CatalogSelect
-          allLabel={m.catalog_all_statuses()}
-          getLabel={(status) => MEDIA_STATUS_LABELS[status]()}
-          label={m.media_info_status()}
-          onChange={(status) => {
-            update({ status })
-          }}
-          options={MEDIA_STATUSES}
-          value={filter.status}
-        />
-        {can("media.restore") ? (
-          <Button
-            aria-pressed={filter.deleted === true}
-            onClick={() => {
-              update({ deleted: filter.deleted !== true })
-            }}
-            variant={filter.deleted === true ? "secondary" : "outline"}
-          >
-            {m.catalog_media_only_deleted()}
-          </Button>
-        ) : null}
-      </CatalogToolbar>
       <CatalogTable
         columns={[
-          { key: "media", label: m.catalog_column_media(), sx: catalogStyles.colMedia },
-          { key: "status", label: m.media_info_status(), sx: catalogStyles.colMedium },
-          { key: "chapters", label: m.catalog_column_chapters(), sx: catalogStyles.colNarrow },
-          { key: "rating", label: m.media_info_content_rating(), sx: catalogStyles.colMedium },
+          { key: "media", label: m.catalog_column_media() },
+          {
+            key: "status",
+            label: m.media_info_status(),
+            width: catalogStyles.colMedium,
+            from: "3xl",
+          },
+          {
+            key: "chapters",
+            label: m.catalog_column_chapters(),
+            width: catalogStyles.colNarrow,
+            from: "3xl",
+          },
+          {
+            key: "rating",
+            label: m.catalog_column_rating(),
+            width: catalogStyles.colMedium,
+            from: "4xl",
+          },
           {
             key: "date",
             label: filter.deleted === true ? m.catalog_column_deleted() : m.catalog_column_added(),
-            sx: catalogStyles.colMedium,
+            width: catalogStyles.colMedium,
+            from: "4xl",
           },
           {
             key: "actions",
             label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
-            sx: catalogStyles.colActions,
+            width: catalogStyles.colActions,
           },
         ]}
         empty={
@@ -139,7 +126,76 @@ export function MediasPage() {
               }
             : null
         }
+        footer={
+          data === undefined ? null : (
+            <CatalogFooter total={m.catalog_results({ count: formatNumber(data.meta.total) })}>
+              <PagePagination
+                onJump={(page) => {
+                  update({ page })
+                }}
+                page={filter.page}
+                pageCount={Math.ceil(data.meta.total / CATALOG_PER_PAGE)}
+                renderLink={(page) => (
+                  <Link
+                    search={{
+                      q: filter.search,
+                      type: filter.type,
+                      status: filter.status,
+                      deleted: filter.deleted,
+                      page: page === 1 ? undefined : page,
+                    }}
+                    to="/dashboard/medias"
+                  />
+                )}
+              />
+            </CatalogFooter>
+          )
+        }
         loading={data === undefined}
+        toolbar={
+          <CatalogToolbar>
+            <CatalogSearch
+              label={m.catalog_media_search()}
+              onChange={(search) => {
+                update({ search })
+              }}
+              value={filter.search}
+            />
+            <CatalogSelect
+              allLabel={m.catalog_all_types()}
+              getLabel={(type) => MEDIA_TYPE_LABELS[type]()}
+              icon={Book}
+              label={m.media_info_type()}
+              onChange={(type) => {
+                update({ type })
+              }}
+              options={MEDIA_TYPES}
+              value={filter.type}
+            />
+            <CatalogSelect
+              allLabel={m.catalog_all_statuses()}
+              renderIcon={(status) => <StatusDot variant={MEDIA_STATUS_BADGES[status]} />}
+              getLabel={(status) => MEDIA_STATUS_LABELS[status]()}
+              icon={Activity}
+              label={m.media_info_status()}
+              onChange={(status) => {
+                update({ status })
+              }}
+              options={MEDIA_STATUSES}
+              value={filter.status}
+            />
+            {can("media.restore") ? (
+              <CatalogToggle
+                icon={Trash}
+                label={m.catalog_media_only_deleted()}
+                onChange={(deleted) => {
+                  update({ deleted })
+                }}
+                pressed={filter.deleted === true}
+              />
+            ) : null}
+          </CatalogToolbar>
+        }
       >
         {data?.data.map((media) => (
           <MediaRow
@@ -166,27 +222,6 @@ export function MediasPage() {
           />
         ))}
       </CatalogTable>
-      {data === undefined ? null : (
-        <PagePagination
-          onJump={(page) => {
-            update({ page })
-          }}
-          page={filter.page}
-          pageCount={Math.ceil(data.meta.total / CATALOG_PER_PAGE)}
-          renderLink={(page) => (
-            <Link
-              search={{
-                q: filter.search,
-                type: filter.type,
-                status: filter.status,
-                deleted: filter.deleted,
-                page: page === 1 ? undefined : page,
-              }}
-              to="/dashboard/medias"
-            />
-          )}
-        />
-      )}
       <DeleteMediaDialog
         media={deleting}
         onClose={() => {

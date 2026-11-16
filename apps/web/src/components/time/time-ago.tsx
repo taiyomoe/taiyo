@@ -34,11 +34,14 @@ export function TimeAgo({
   date,
   future = false,
   compact = false,
+  length = "narrow",
   sx,
 }: {
   date: string
   future?: boolean
   compact?: boolean
+  /** How much the unit is abbreviated; French reads "-3 m." when narrow. */
+  length?: Intl.RelativeTimeFormatStyle
   sx?: Sx
 }) {
   const parsed = new Date(date)
@@ -56,7 +59,7 @@ export function TimeAgo({
       >
         {compact && !future
           ? formatElapsed(parsed, now)
-          : formatTimeAgo(parsed, now, "narrow", future)}
+          : formatTimeAgo(parsed, now, length, future)}
       </PopoverTrigger>
       <PopoverPopup {...hover.popupProps} arrow side="top">
         <TimeDetails date={parsed} future={future} now={now} />

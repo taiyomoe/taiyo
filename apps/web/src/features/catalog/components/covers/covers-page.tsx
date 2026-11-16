@@ -1,11 +1,11 @@
 import { CONTENT_RATINGS, MEDIA_LANGUAGES } from "@taiyomoe/db/constants"
-import { Image, Plus } from "@taiyomoe/ui/components/icons"
-import { Button } from "@taiyomoe/ui/components/ui/button"
+import { Image, Languages, Plus, Shield } from "@taiyomoe/ui/components/icons"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
 import type { ManagedCover } from "@/features/catalog/api/catalog"
 import type { DeletableCover } from "@/features/catalog/components/covers/delete-cover-dialog"
+import { LanguageFlag } from "@/components/flags/flags"
 import { getLanguageName } from "@/components/flags/language-flags"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
@@ -16,13 +16,20 @@ import {
 } from "@/features/catalog/api/catalog"
 import { CoverRow } from "@/features/catalog/components/covers/cover-row"
 import { DeleteCoverDialog } from "@/features/catalog/components/covers/delete-cover-dialog"
-import { CatalogTable, VisuallyHidden } from "@/features/catalog/components/shared/catalog-table"
 import {
+  CatalogFooter,
+  CatalogTable,
+  VisuallyHidden,
+} from "@/features/catalog/components/shared/catalog-table"
+import {
+  CatalogAction,
   CatalogSearch,
   CatalogSelect,
   CatalogToolbar,
 } from "@/features/catalog/components/shared/catalog-toolbar"
+import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
+import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditCoverDialog } from "@/features/media-images/components/covers/edit-cover-dialog"
 import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
 import { m } from "@/paraglide/messages"
@@ -58,59 +65,45 @@ export function CoversPage() {
   return (
     <DashboardPage
       actions={
-        <Button render={<Link search={{}} to="/dashboard/covers/upload" />}>
+        <CatalogAction render={<Link search={{}} to="/dashboard/covers/upload" />}>
           <Plus />
           {m.catalog_cover_add()}
-        </Button>
+        </CatalogAction>
       }
       subtitle={m.catalog_cover_subtitle()}
       title={m.dashboard_nav_covers()}
     >
-      <CatalogToolbar>
-        <CatalogSearch
-          label={m.catalog_image_search()}
-          onChange={(search) => {
-            update({ search })
-          }}
-          value={filter.search}
-        />
-        <CatalogSelect
-          allLabel={m.catalog_all_languages()}
-          getLabel={getLanguageName}
-          label={m.upload_language()}
-          onChange={(language) => {
-            update({ language })
-          }}
-          options={MEDIA_LANGUAGES}
-          value={filter.language}
-        />
-        <CatalogSelect
-          allLabel={m.catalog_all_ratings()}
-          getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
-          label={m.media_images_content_rating()}
-          onChange={(contentRating) => {
-            update({ contentRating })
-          }}
-          options={CONTENT_RATINGS}
-          value={filter.contentRating}
-        />
-      </CatalogToolbar>
       <CatalogTable
         columns={[
+          { key: "media", label: m.catalog_column_cover() },
           {
-            key: "image",
-            label: <VisuallyHidden>{m.catalog_column_image()}</VisuallyHidden>,
-            sx: catalogStyles.colNarrow,
+            key: "language",
+            label: m.catalog_column_language(),
+            width: catalogStyles.colNarrow,
+            from: "3xl",
           },
-          { key: "media", label: m.catalog_column_media(), sx: catalogStyles.colMedia },
-          { key: "language", label: m.upload_language(), sx: catalogStyles.colNarrow },
-          { key: "rating", label: m.media_images_content_rating(), sx: catalogStyles.colWide },
-          { key: "uploader", label: m.catalog_column_uploader(), sx: catalogStyles.colMedium },
-          { key: "date", label: m.catalog_column_added(), sx: catalogStyles.colMedium },
+          {
+            key: "rating",
+            label: m.catalog_column_rating(),
+            width: catalogStyles.colMedium,
+            from: "3xl",
+          },
+          {
+            key: "uploader",
+            label: m.catalog_column_uploader(),
+            width: catalogStyles.colMedium,
+            from: "4xl",
+          },
+          {
+            key: "date",
+            label: m.catalog_column_added(),
+            width: catalogStyles.colMedium,
+            from: "4xl",
+          },
           {
             key: "actions",
             label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
-            sx: catalogStyles.colActions,
+            width: catalogStyles.colActions,
           },
         ]}
         empty={
@@ -122,7 +115,66 @@ export function CoversPage() {
               }
             : null
         }
+        footer={
+          data === undefined ? null : (
+            <CatalogFooter total={m.catalog_results({ count: formatNumber(data.meta.total) })}>
+              <PagePagination
+                onJump={(page) => {
+                  update({ page })
+                }}
+                page={filter.page}
+                pageCount={Math.ceil(data.meta.total / CATALOG_PER_PAGE)}
+                renderLink={(page) => (
+                  <Link
+                    search={{
+                      q: filter.search,
+                      language: filter.language,
+                      contentRating: filter.contentRating,
+                      page: page === 1 ? undefined : page,
+                    }}
+                    to="/dashboard/covers"
+                  />
+                )}
+              />
+            </CatalogFooter>
+          )
+        }
         loading={data === undefined}
+        toolbar={
+          <CatalogToolbar>
+            <CatalogSearch
+              label={m.catalog_image_search()}
+              onChange={(search) => {
+                update({ search })
+              }}
+              value={filter.search}
+            />
+            <CatalogSelect
+              allLabel={m.catalog_all_languages()}
+              renderIcon={(language) => <LanguageFlag language={language} />}
+              getLabel={getLanguageName}
+              icon={Languages}
+              label={m.upload_language()}
+              onChange={(language) => {
+                update({ language })
+              }}
+              options={MEDIA_LANGUAGES}
+              value={filter.language}
+            />
+            <CatalogSelect
+              allLabel={m.catalog_all_ratings()}
+              renderIcon={(rating) => <RatingIcon rating={rating} />}
+              getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
+              icon={Shield}
+              label={m.media_images_content_rating()}
+              onChange={(contentRating) => {
+                update({ contentRating })
+              }}
+              options={CONTENT_RATINGS}
+              value={filter.contentRating}
+            />
+          </CatalogToolbar>
+        }
       >
         {data?.data.map((cover) => (
           <CoverRow
@@ -143,26 +195,6 @@ export function CoversPage() {
           />
         ))}
       </CatalogTable>
-      {data === undefined ? null : (
-        <PagePagination
-          onJump={(page) => {
-            update({ page })
-          }}
-          page={filter.page}
-          pageCount={Math.ceil(data.meta.total / CATALOG_PER_PAGE)}
-          renderLink={(page) => (
-            <Link
-              search={{
-                q: filter.search,
-                language: filter.language,
-                contentRating: filter.contentRating,
-                page: page === 1 ? undefined : page,
-              }}
-              to="/dashboard/covers"
-            />
-          )}
-        />
-      )}
       <EditCoverDialog
         cover={editing}
         mediaId={editing?.media.id ?? ""}

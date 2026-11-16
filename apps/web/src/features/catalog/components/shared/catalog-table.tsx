@@ -9,6 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
+import { Frame, FrameFooter } from "@taiyomoe/ui/components/ui/frame"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import {
   Table,
@@ -19,26 +20,67 @@ import {
   TableRow,
 } from "@taiyomoe/ui/components/ui/table"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { createContext, use } from "react"
 import { range } from "remeda"
+import { type CatalogBreakpoint, catalogShownFrom } from "@/features/catalog/lib/catalog-styles"
+import { catalogContainers } from "@/features/catalog/lib/catalog.stylex"
 
-type CatalogColumn = { key: string; label: ReactNode; sx?: Sx }
+export type CatalogColumn = {
+  key: string
+  label: ReactNode
+  width?: Sx
+  /** Hides the column while the table is narrower than this breakpoint. */
+  from?: CatalogBreakpoint
+}
 
+const ColumnsContext = createContext<ReadonlyMap<string, CatalogColumn>>(new Map())
 const styles = stylex.create({
   frame: {
-    borderColor: colors.border,
-    borderRadius: radius.xxl,
-    borderStyle: "solid",
-    borderWidth: 1,
-    backgroundColor: colors.card,
+    containerType: "inline-size",
     minWidth: 0,
-    overflowX: "auto",
   },
   table: {
-    minWidth: "52rem",
+    tableLayout: "fixed",
+  },
+  head: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+  cell: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   skeleton: {
     height: "1rem",
     width: "70%",
+  },
+  empty: {
+    borderColor: colors.border,
+    borderRadius: `calc(${radius.xxl} - 0.25rem)`,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundColor: colors.card,
+  },
+  footer: {
+    gap: "0.75rem",
+    paddingBlock: "0.75rem",
+    paddingInline: "0.75rem",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: {
+      default: "row",
+      [catalogContainers.narrow]: "column",
+      [catalogContainers.medium]: "column",
+    },
+    justifyContent: "space-between",
+  },
+  pages: {
+    flexShrink: 0,
+  },
+  count: {
+    color: colors.mutedForeground,
+    fontSize: "0.8125rem",
+    fontVariantNumeric: "tabular-nums",
   },
   srOnly: {
     margin: -1,
@@ -54,11 +96,14 @@ const styles = stylex.create({
 })
 
 export function CatalogTable({
+  toolbar,
   columns,
   loading,
   empty,
+  footer,
   children,
 }: {
+  toolbar: ReactNode
   columns: readonly CatalogColumn[]
   loading: boolean
   empty: {
@@ -66,51 +111,89 @@ export function CatalogTable({
     title: string
     description: string
   } | null
+  footer: ReactNode
   children: ReactNode
 }) {
-  if (empty !== null && !loading) {
-    const Icon = empty.icon
-
-    return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <Icon />
-          </EmptyMedia>
-          <EmptyTitle>{empty.title}</EmptyTitle>
-          <EmptyDescription>{empty.description}</EmptyDescription>
-        </EmptyHeader>
-      </Empty>
-    )
-  }
+  const Icon = empty?.icon
 
   return (
-    <div sx={styles.frame}>
-      <Table sx={styles.table}>
-        <TableHeader>
-          <TableRow>
-            {columns.map((column) => (
-              <TableHead key={column.key} sx={column.sx}>
-                {column.label}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {loading
-            ? range(0, 8).map((row) => (
-                <TableRow key={row}>
-                  {columns.map((column) => (
-                    <TableCell key={column.key}>
-                      <Skeleton sx={styles.skeleton} />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            : children}
-        </TableBody>
-      </Table>
-    </div>
+    <Frame sx={styles.frame}>
+      {toolbar}
+      {empty !== null && Icon !== undefined && !loading ? (
+        <Empty sx={styles.empty}>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Icon />
+            </EmptyMedia>
+            <EmptyTitle>{empty.title}</EmptyTitle>
+            <EmptyDescription>{empty.description}</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <ColumnsContext value={new Map(columns.map((column) => [column.key, column]))}>
+          <Table sx={styles.table} variant="card">
+            <TableHeader>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableHead
+                    key={column.key}
+                    sx={[
+                      styles.head,
+                      column.width,
+                      column.from === undefined ? null : catalogShownFrom[column.from],
+                    ]}
+                  >
+                    {column.label}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading
+                ? range(0, 8).map((row) => (
+                    <TableRow key={row}>
+                      {columns.map((column) => (
+                        <CatalogCell column={column.key} key={column.key}>
+                          <Skeleton sx={styles.skeleton} />
+                        </CatalogCell>
+                      ))}
+                    </TableRow>
+                  ))
+                : children}
+            </TableBody>
+          </Table>
+        </ColumnsContext>
+      )}
+      {footer}
+    </Frame>
+  )
+}
+
+/** A body cell that follows the visibility of its column. */
+export function CatalogCell({
+  column,
+  sx,
+  children,
+}: {
+  column: string
+  sx?: Sx
+  children?: ReactNode
+}) {
+  const from = use(ColumnsContext).get(column)?.from
+
+  return (
+    <TableCell sx={[styles.cell, from === undefined ? null : catalogShownFrom[from], sx]}>
+      {children}
+    </TableCell>
+  )
+}
+
+export function CatalogFooter({ total, children }: { total: string; children: ReactNode }) {
+  return (
+    <FrameFooter sx={styles.footer}>
+      <span sx={styles.count}>{total}</span>
+      <div sx={styles.pages}>{children}</div>
+    </FrameFooter>
   )
 }
 
