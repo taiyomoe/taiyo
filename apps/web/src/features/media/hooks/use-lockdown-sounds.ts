@@ -1,40 +1,59 @@
-import { useEffect } from "react"
-import { scheduleLockdownSounds } from "@/features/media/lib/lockdown-audio"
+import { useEffect, useState } from "react"
+import {
+  type LockdownSounds,
+  loadLockdownSounds,
+  playLockdownSounds,
+} from "@/features/media/lib/lockdown-audio"
 
-// Past this, a context that only started after a late user gesture would play
-// the sounds out of step with the tape, so it stays silent instead.
-const MAX_START_DELAY = 250
+// How long the tape waits for its sounds before it starts without them.
+const MAX_LOAD_WAIT = 700
+const isSilent = () =>
+  typeof window.OfflineAudioContext === "undefined" ||
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
+/**
+ * Loads the lockdown sounds once the page is interactive. `ready` turns true
+ * once they are decoded, or right away when they will not play, so the
+ * animation never waits long on sounds. `play` starts them; call it in the
+ * same commit that mounts the tape.
+ */
 export function useLockdownSounds(enabled: boolean) {
+  const [state, setState] = useState<{ ready: boolean; sounds: LockdownSounds | null }>({
+    ready: false,
+    sounds: null,
+  })
+
   useEffect(() => {
-    if (
-      !enabled ||
-      typeof window.AudioContext === "undefined" ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    if (!enabled || isSilent()) {
       return undefined
     }
 
-    const context = new window.AudioContext()
-    const requestedAt = performance.now()
-    let cancelled = false
+    const timeout = setTimeout(() => {
+      setState((current) => (current.ready ? current : { ...current, ready: true }))
+    }, MAX_LOAD_WAIT)
 
-    context
-      .resume()
-      .then(() => {
-        if (
-          !cancelled &&
-          context.state === "running" &&
-          performance.now() - requestedAt < MAX_START_DELAY
-        ) {
-          scheduleLockdownSounds(context, context.currentTime + 0.01)
-        }
+    loadLockdownSounds()
+      .then((sounds) => {
+        setState((current) => (current.ready ? current : { ready: true, sounds }))
       })
-      .catch(() => undefined)
+      .catch(() => {
+        setState((current) => ({ ...current, ready: true }))
+      })
+      .finally(() => {
+        clearTimeout(timeout)
+      })
 
     return () => {
-      cancelled = true
-      void context.close()
+      clearTimeout(timeout)
     }
   }, [enabled])
+
+  return {
+    ready: enabled && (state.ready || isSilent()),
+    play: () => {
+      if (state.sounds !== null) {
+        playLockdownSounds(state.sounds)
+      }
+    },
+  }
 }

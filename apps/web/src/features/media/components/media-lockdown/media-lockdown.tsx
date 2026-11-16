@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { consts } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useHydrated } from "@tanstack/react-router"
+import { useEffect } from "react"
 import { CautionTape } from "@/features/media/components/media-lockdown/caution-tape"
 import { DmcaPlacard } from "@/features/media/components/media-lockdown/dmca-placard"
 import { useLockdownSounds } from "@/features/media/hooks/use-lockdown-sounds"
@@ -56,10 +57,17 @@ const styles = stylex.create({
   }),
 })
 
+function Cue({ onMount }: { onMount: () => void }) {
+  // oxlint-disable-next-line react-hooks/exhaustive-deps -- plays once, as the tape mounts
+  useEffect(onMount, [])
+
+  return null
+}
+
 /**
  * Tapes the page off like a crime scene and slams a DMCA placard onto it. The
- * strips and the placard only mount once the page is interactive, so the sounds
- * start in step with them.
+ * strips and the placard only mount once the page is interactive and the
+ * sounds are loaded, so the sounds start in step with them.
  */
 export function MediaLockdown({
   mediaId,
@@ -71,14 +79,14 @@ export function MediaLockdown({
   canEdit: boolean
 }) {
   const hydrated = useHydrated()
-
-  useLockdownSounds(hydrated)
+  const soundtrack = useLockdownSounds(hydrated)
 
   return (
     <div sx={styles.root}>
       <div sx={styles.dim} />
-      {hydrated ? (
+      {soundtrack.ready ? (
         <div sx={[styles.stage, styles.impact(`${LOCKDOWN_IMPACT}ms`)]}>
+          <Cue onMount={soundtrack.play} />
           <div aria-hidden>
             {LOCKDOWN_TAPES.map((tape) => (
               <CautionTape key={tape.placement} {...tape} />
