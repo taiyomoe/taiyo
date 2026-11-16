@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type Verification = {
@@ -9,5 +8,3 @@ export type Verification = {
   value: string
   expiresAt: Timestamp
 }
-
-export type NewVerification = Insertable<Verification>

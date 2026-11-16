@@ -30,14 +30,22 @@ const styles = stylex.create({
     backgroundClip: "padding-box",
     backgroundColor: colors.card,
     boxShadow: shadows.raised,
+    columnGap: { [breakpoints.lg]: "0.875rem", default: null },
+    display: { [breakpoints.lg]: "grid", default: null },
+    gridTemplateColumns: {
+      [breakpoints.lg]: "calc(1rem + 1.125rem) minmax(0, 1fr) minmax(0, 16rem) auto",
+      default: null,
+    },
   },
   compactRow: {
     paddingInline: "1rem",
     alignItems: "center",
     columnGap: "0.875rem",
     display: "grid",
+    gridColumnEnd: { [breakpoints.lg]: -1, default: null },
+    gridColumnStart: { [breakpoints.lg]: 1, default: null },
     gridTemplateColumns: {
-      [breakpoints.lg]: "1.125rem minmax(0, 1fr) minmax(0, 16rem) 4rem",
+      [breakpoints.lg]: "subgrid",
       default: "1.125rem minmax(0, 1fr) auto",
     },
     borderTopColor: { default: colors.border, ":first-child": "transparent" },

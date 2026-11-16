@@ -10,6 +10,27 @@ const FORWARDED_REQUEST_HEADERS = ["content-type", "user-agent", "x-umami-cache"
 // location from it, and would otherwise see the web server's address.
 const CLIENT_IP_HEADER = "cf-connecting-ip"
 const notFound = () => new Response(null, { status: 404 })
+// The tracker strips the query string before it sends a page (`data-exclude-search`): a URL that
+// still carries one comes from a tab opened before that setting, which tracked every rewrite of
+// the reader's `?page=` as a view. Umami's tracker stops for good on `disabled`.
+const isStaleTracker = (body: ArrayBuffer) => {
+  try {
+    const event: unknown = JSON.parse(new TextDecoder().decode(body))
+    const url =
+      typeof event === "object" &&
+      event !== null &&
+      "payload" in event &&
+      typeof event.payload === "object" &&
+      event.payload !== null &&
+      "url" in event.payload
+        ? event.payload.url
+        : undefined
+
+    return typeof url === "string" && url.includes("?")
+  } catch {
+    return false
+  }
+}
 
 export const proxyToUmami = async (request: Request, path: string) => {
   const upstreamBase = process.env.UMAMI_INTERNAL_URL
@@ -42,10 +63,16 @@ export const proxyToUmami = async (request: Request, path: string) => {
     return new Response(null, { status: 413 })
   }
 
+  const body = route.method === "POST" ? await request.arrayBuffer() : null
+
+  if (body !== null && isStaleTracker(body)) {
+    return Response.json({ disabled: true }, { headers: { "cache-control": "no-store" } })
+  }
+
   const upstream = await fetch(new URL(route.upstream, upstreamBase), {
     method: route.method,
     headers,
-    body: route.method === "POST" ? await request.arrayBuffer() : null,
+    body,
   }).catch(() => null)
 
   if (upstream === null) {

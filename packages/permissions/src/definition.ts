@@ -20,7 +20,7 @@ export type Actor = {
   memberships: readonly ActorMembership[]
 }
 
-export type GroupTarget = { id: string }
+type GroupTarget = { id: string }
 
 export type ChapterTarget = {
   uploaderId: string
@@ -28,7 +28,7 @@ export type ChapterTarget = {
   groupIds: readonly string[]
 }
 
-export type ChapterCreditTarget = { chapter: ChapterTarget; groupId: string }
+type ChapterCreditTarget = { chapter: ChapterTarget; groupId: string }
 
 export type MemberTarget = {
   groupId: string
@@ -37,9 +37,9 @@ export type MemberTarget = {
   permissions: readonly GroupPermission[]
 }
 
-export type GrantTarget = { groupId: string; permissions: readonly GroupPermission[] }
+type GrantTarget = { groupId: string; permissions: readonly GroupPermission[] }
 
-export type MemberPermissionsTarget = {
+type MemberPermissionsTarget = {
   member: MemberTarget
   permissions: readonly GroupPermission[]
 }

@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type Account = {
@@ -16,5 +15,3 @@ export type Account = {
   scope: string | null
   idToken: string | null
 }
-
-export type NewAccount = Insertable<Account>

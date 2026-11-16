@@ -62,7 +62,7 @@ export function GroupTabs({
   const tabs: Array<{ value: GroupTab; label: string; count?: number | undefined }> = [
     { value: "info", label: m.group_tab_info() },
     { value: "chapters", label: m.group_tab_chapters(), count: group.chapterCount },
-    { value: "titles", label: m.group_tab_titles(), count: group.mediaCount },
+    { value: "media", label: m.group_tab_titles(), count: group.mediaCount },
     { value: "members", label: m.group_tab_members(), count: group.memberCount },
     { value: "comments", label: m.group_tab_comments(), count: commentCount },
     { value: "stats", label: m.group_tab_stats() },
@@ -94,7 +94,7 @@ export function GroupTabs({
       <TabsPanel value="chapters">
         <GroupChapters groupId={group.id} />
       </TabsPanel>
-      <TabsPanel value="titles">
+      <TabsPanel value="media">
         <GroupTitles groupId={group.id} />
       </TabsPanel>
       <TabsPanel value="members">

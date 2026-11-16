@@ -94,7 +94,7 @@ test.describe("command palette", () => {
     await option(page, "Latest updates").hover()
 
     await expect(page.locator('[data-slot="palette-preview"]')).toContainText(
-      "Highlight a title, group or user to preview it",
+      "Highlight a media, group or user to preview it",
     )
   })
 
@@ -141,10 +141,7 @@ test.describe("command palette", () => {
 
     await palette(page).getByRole("button", { name: TITLE }).click()
 
-    await expect(palette(page).getByRole("combobox")).toHaveAttribute(
-      "placeholder",
-      /Search titles/,
-    )
+    await expect(palette(page).getByRole("combobox")).toHaveAttribute("placeholder", /Search media/)
   })
 
   test("runs a command", async ({ page }) => {

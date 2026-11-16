@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { navbarBleed } from "@/components/shell/navbar-bleed"
 import { profileStyles } from "@/features/users/components/profile/profile-styles"
 
 const styles = stylex.create({
@@ -47,7 +48,7 @@ const styles = stylex.create({
 export function ProfileSkeleton() {
   return (
     <div aria-hidden sx={profileStyles.root}>
-      <Skeleton sx={styles.banner} />
+      <Skeleton sx={[styles.banner, navbarBleed.banner]} />
       <div sx={profileStyles.container}>
         <div sx={styles.header}>
           <span sx={styles.avatarFrame}>

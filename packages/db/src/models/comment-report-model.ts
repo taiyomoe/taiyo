@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { CommentReportReason, CommentReportStatus } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -13,5 +12,3 @@ export type CommentReport = {
   resolvedAt: Timestamp | null
   createdAt: Generated<Timestamp>
 }
-
-export type NewCommentReport = Insertable<CommentReport>

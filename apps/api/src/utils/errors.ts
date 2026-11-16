@@ -37,10 +37,6 @@ const genericErrors = {
   },
 } as const
 const mediaErrors = {
-  MEDIA_TITLE_CONFLICT: {
-    message: "A media with this title already exists.",
-    code: 409,
-  },
   MEDIA_LINK_CONFLICT: {
     message: "One or more of the provided links already belong to an existing media.",
     code: 409,
@@ -48,15 +44,6 @@ const mediaErrors = {
   MEDIA_NOT_FOUND: {
     message: "The requested media was not found.",
     code: 404,
-  },
-  MEDIA_INVALID_TITLES: {
-    message: "Invalid titles configuration. Exactly one main title is required.",
-    code: 422,
-  },
-  MEDIA_INVALID_COVERS: {
-    message:
-      "Invalid covers configuration. At least one cover with exactly one main cover is required.",
-    code: 422,
   },
   MEDIA_ALREADY_DELETED: {
     message: "The media has already been deleted.",
@@ -343,14 +330,6 @@ const commentErrors = {
     message:
       "One of the images is not available to you. Upload it or add it to your favorites first.",
     code: 422,
-  },
-  COMMENT_PARENT_NOT_FOUND: {
-    message: "The comment you are replying to no longer exists.",
-    code: 404,
-  },
-  COMMENT_DELETED: {
-    message: "This comment was deleted.",
-    code: 409,
   },
   COMMENT_SELF_VOTE: {
     message: "You cannot upvote your own comment.",

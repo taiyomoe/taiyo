@@ -12,7 +12,7 @@ export function ProfilePage() {
   const user = session?.user ?? null
 
   return (
-    <AppShell user={user}>
+    <AppShell overlayNavbar user={user}>
       <Suspense fallback={<ProfileSkeleton />}>
         <ProfileContent key={username.toLowerCase()} username={username} viewer={user} />
       </Suspense>

@@ -104,7 +104,7 @@ export const LandingNav = () => {
           <TaiyoLogoLockup sx={styles.lockup} />
         </Link>
         <nav sx={styles.links}>
-          <a href="#titles" sx={styles.link}>
+          <a href="#media" sx={styles.link}>
             {m.landing_nav_browse()}
           </a>
           <a href="#reviews" sx={styles.link}>

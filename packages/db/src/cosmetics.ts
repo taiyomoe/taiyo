@@ -15,7 +15,7 @@ export const ACHIEVEMENT_METRICS = [
   "commentsWritten",
 ] as const
 
-export type AchievementMetric = (typeof ACHIEVEMENT_METRICS)[number]
+type AchievementMetric = (typeof ACHIEVEMENT_METRICS)[number]
 
 export type CosmeticUnlock =
   | { type: "free" }

@@ -13,7 +13,7 @@ export function MediaPage() {
   const user = session?.user ?? null
 
   return (
-    <AppShell user={user}>
+    <AppShell overlayNavbar user={user}>
       <Suspense fallback={<MediaPageSkeleton />}>
         <MediaPageContent
           canEdit={user !== null && getPermissions(user)("media.update")}

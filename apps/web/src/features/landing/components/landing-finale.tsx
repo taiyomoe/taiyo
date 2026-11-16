@@ -81,7 +81,7 @@ const styles = stylex.create({
 })
 
 export const LandingFinale = () => (
-  <section id="titles" sx={styles.band}>
+  <section id="media" sx={styles.band}>
     <div sx={styles.wallDim}>
       <CoverWall />
     </div>

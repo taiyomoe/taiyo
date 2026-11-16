@@ -15,6 +15,7 @@ import { checkUser } from "../middlewares/check-user-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { getMainCoverUrls, getMainTitles } from "../utils/latest-chapters"
+import { countLibraryEntries } from "../utils/library"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
   apiSuccessEnvelope,
@@ -246,31 +247,6 @@ const getReading = async (db: Kysely<DB>, userId: string, contentRatings: Conten
     })),
   } satisfies Stats["reading"]
 }
-const getLibrary = async (db: Kysely<DB>, userId: string) => {
-  const rows = await db
-    .selectFrom("userLibraryEntries")
-    .innerJoin("medias", "medias.id", "userLibraryEntries.mediaId")
-    .where("userLibraryEntries.userId", "=", userId)
-    .where("medias.deletedAt", "is", null)
-    .select((eb) => ["userLibraryEntries.status", eb.fn.countAll<string>().as("count")])
-    .groupBy("userLibraryEntries.status")
-    .execute()
-  const countOf = (status: (typeof USER_LIBRARY_STATUSES)[number]) =>
-    Number(rows.find((row) => row.status === status)?.count ?? 0)
-  const byStatus = {
-    READING: countOf("READING"),
-    REREADING: countOf("REREADING"),
-    PLAN_TO_READ: countOf("PLAN_TO_READ"),
-    COMPLETED: countOf("COMPLETED"),
-    ON_HOLD: countOf("ON_HOLD"),
-    DROPPED: countOf("DROPPED"),
-  }
-
-  return {
-    total: Object.values(byStatus).reduce((sum, count) => sum + count, 0),
-    byStatus,
-  } satisfies Stats["library"]
-}
 const getUploads = async (db: Kysely<DB>, userId: string) => {
   const published = db
     .selectFrom("chapters")
@@ -361,7 +337,7 @@ export const getUserStatsHandler = new Hono().get(
 
     const [reading, library, uploads] = await Promise.all([
       visible ? getReading(db, targetUser.id, contentRating) : null,
-      visible ? getLibrary(db, targetUser.id) : null,
+      visible ? countLibraryEntries(db, targetUser.id) : null,
       getUploads(db, targetUser.id),
     ])
     const stats = { reading, library, uploads } satisfies Stats

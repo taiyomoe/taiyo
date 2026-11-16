@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type TwoFactor = {
@@ -10,5 +9,3 @@ export type TwoFactor = {
   failedVerificationCount: Generated<number>
   lockedUntil: Timestamp | null
 }
-
-export type NewTwoFactor = Insertable<TwoFactor>

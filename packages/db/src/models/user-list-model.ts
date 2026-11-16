@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { UserListVisibility } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -13,5 +12,3 @@ export type UserList = {
   updatedAt: Generated<Timestamp>
   deletedAt: Timestamp | null
 }
-
-export type NewUserList = Insertable<UserList>

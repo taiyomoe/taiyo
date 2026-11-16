@@ -184,6 +184,7 @@ pnpm lint               # oxlint (type-aware; doubles as the typecheck gate)
 pnpm lint:fix           # oxlint --fix
 pnpm lint:ws            # sherif — workspace dependency validation
 pnpm knip               # unused exports + dead deps
+pnpm lint:messages      # unused i18n messages + keys missing from a locale
 pnpm test:unit          # vitest (vitest.config.unit.ts)
 pnpm test:integration   # vitest (vitest.config.integration.ts) — requires pnpm bootstrap
 ```
@@ -244,11 +245,11 @@ applied, frozen history.
 Three independent workflows, one job each, all triggered on the same events and
 all running in parallel:
 
-| Workflow                               | Runs                                           |
-| -------------------------------------- | ---------------------------------------------- |
-| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`            |
-| `.github/workflows/ci-unit.yml`        | `test:unit`                                    |
-| `.github/workflows/ci-integration.yml` | `test:integration`, against service containers |
+| Workflow                               | Runs                                                 |
+| -------------------------------------- | ---------------------------------------------------- |
+| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`, `lint:messages` |
+| `.github/workflows/ci-unit.yml`        | `test:unit`                                          |
+| `.github/workflows/ci-integration.yml` | `test:integration`, against service containers       |
 
 All three run on pull requests and on direct pushes to `main` and `develop`,
 and install via the shared `.github/actions/setup` composite action. The two

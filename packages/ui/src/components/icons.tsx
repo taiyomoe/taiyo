@@ -1,7 +1,6 @@
 import type * as React from "react"
 import {
   Share08Icon,
-  FavouriteIcon,
   AtIcon,
   SentIcon,
   Alert02Icon,
@@ -98,10 +97,7 @@ import {
   BookmarkAdd02Icon,
   BookmarkRemove02Icon,
   Download04Icon,
-  ZoomInIcon,
-  ZoomOutIcon,
   Delete02Icon,
-  WifiOffIcon,
   TickDouble02Icon,
   Mortarboard01Icon,
   TextBoldIcon,
@@ -134,6 +130,11 @@ import {
   MailValidation01Icon,
   PasswordValidationIcon,
   Unlink04Icon,
+  BookOpen01Icon,
+  HourglassIcon,
+  RepeatIcon,
+  PauseCircleIcon,
+  CancelCircleIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -399,13 +400,7 @@ export const BookmarkRemove: (props: IconProps) => React.ReactElement = icon(Boo
 
 export const Download: (props: IconProps) => React.ReactElement = icon(Download04Icon)
 
-export const ZoomIn: (props: IconProps) => React.ReactElement = icon(ZoomInIcon)
-
-export const ZoomOut: (props: IconProps) => React.ReactElement = icon(ZoomOutIcon)
-
 export const Trash: (props: IconProps) => React.ReactElement = icon(Delete02Icon)
-
-export const Offline: (props: IconProps) => React.ReactElement = icon(WifiOffIcon)
 
 export const CheckAll: (props: IconProps) => React.ReactElement = icon(TickDouble02Icon)
 
@@ -464,8 +459,6 @@ export const ImageMissing: (props: IconProps) => React.ReactElement = icon(Image
 
 export const Share: (props: IconProps) => React.ReactElement = icon(Share08Icon)
 
-export const Heart: (props: IconProps) => React.ReactElement = icon(FavouriteIcon)
-
 export const At: (props: IconProps) => React.ReactElement = icon(AtIcon)
 
 export const Send: (props: IconProps) => React.ReactElement = icon(SentIcon)
@@ -480,3 +473,13 @@ export const PasswordValidation: (props: IconProps) => React.ReactElement =
   icon(PasswordValidationIcon)
 
 export const Unlink: (props: IconProps) => React.ReactElement = icon(Unlink04Icon)
+
+export const BookOpen: (props: IconProps) => React.ReactElement = icon(BookOpen01Icon)
+
+export const Hourglass: (props: IconProps) => React.ReactElement = icon(HourglassIcon)
+
+export const Repeat: (props: IconProps) => React.ReactElement = icon(RepeatIcon)
+
+export const PauseCircle: (props: IconProps) => React.ReactElement = icon(PauseCircleIcon)
+
+export const CancelCircle: (props: IconProps) => React.ReactElement = icon(CancelCircleIcon)

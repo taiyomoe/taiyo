@@ -122,7 +122,8 @@ test.describe("reader", () => {
       }
 
       await page.mouse.wheel(0, 1500)
-      await page.waitForTimeout(200)
+      // The reader writes the page in the URL once it has settled for half a second.
+      await page.waitForTimeout(700)
     }
 
     await expect(page).toHaveURL(new RegExp(`/chapters/${MANHWA.chapters[1]}`))
@@ -337,7 +338,7 @@ test.describe("reader, signed in", () => {
     await openSheet(page)
     await sheet(page).getByRole("button", { name: "Remove bookmark" }).click()
 
-    await expect(sheet(page).getByText("No bookmarks in this title yet.")).toBeVisible()
+    await expect(sheet(page).getByText("No bookmarks in this media yet.")).toBeVisible()
   })
 
   test("reports a page, and a reviewer resolves it from the dashboard", async ({ page }) => {

@@ -1,16 +1,24 @@
-import { useState } from "react"
-import type { AuthResult, SocialProvider } from "@/lib/auth"
+import { useSearch } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
 import { useAuthRedirect } from "@/features/auth/hooks/use-auth-redirect"
 import { useAuthActions } from "@/hooks/use-auth-actions"
+import { type AuthResult, getSocialErrorMessage, type SocialProvider } from "@/lib/auth"
+import { m } from "@/paraglide/messages"
 
 export const useAuthForm = () => {
   const actions = useAuthActions(useAuthRedirect())
-  const [error, setError] = useState<string | null>(null)
+  const search = useSearch({ from: "/auth" })
+  const [error, setError] = useState(() =>
+    search.error === undefined ? null : getSocialErrorMessage(search.error, search.provider),
+  )
   const [socialPending, setSocialPending] = useState<SocialProvider | null>(null)
   const run = async (action: () => Promise<AuthResult>) => {
     setError(null)
 
-    const result = await action()
+    const result = await action().catch((): AuthResult => ({
+      ok: false,
+      message: m.auth_error_generic(),
+    }))
 
     if (!result.ok) {
       setError(result.message)
@@ -18,6 +26,30 @@ export const useAuthForm = () => {
 
     return result
   }
+
+  // Back from the provider, or from the app Android handed the provider link to, the page
+  // is still the one that started the sign-in: without this its buttons stay disabled.
+  useEffect(() => {
+    const reset = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        setSocialPending(null)
+      }
+    }
+    const resetWhenVisible = () => {
+      if (document.visibilityState === "visible") {
+        setSocialPending(null)
+      }
+    }
+
+    window.addEventListener("pageshow", reset)
+    document.addEventListener("visibilitychange", resetWhenVisible)
+
+    return () => {
+      window.removeEventListener("pageshow", reset)
+      document.removeEventListener("visibilitychange", resetWhenVisible)
+    }
+  }, [])
+
   const onSocial = (provider: SocialProvider) => {
     setSocialPending(provider)
     void run(() => actions.signInSocial(provider)).then((result) => {

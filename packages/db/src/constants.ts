@@ -66,12 +66,7 @@ export const COMMENT_DELETIONS = ["AUTHOR", "PAGE_OWNER", "MODERATOR"] as const
 
 export type CommentDeletion = (typeof COMMENT_DELETIONS)[number]
 
-export const NOTIFICATION_TYPES = [
-  "CHAPTER_PUBLISHED",
-  "COMMENT_REPLY",
-  "COMMENT_LIKE",
-  "FOLLOW",
-] as const
+const NOTIFICATION_TYPES = ["CHAPTER_PUBLISHED", "COMMENT_REPLY", "COMMENT_LIKE", "FOLLOW"] as const
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number]
 
@@ -153,7 +148,7 @@ export const GROUP_REPORT_STATUSES = ["PENDING", "RESOLVED", "DISMISSED"] as con
 
 export type GroupReportStatus = (typeof GROUP_REPORT_STATUSES)[number]
 
-export const GROUP_INVITATION_STATUSES = [
+const GROUP_INVITATION_STATUSES = [
   "PENDING",
   "ACCEPTED",
   "DECLINED",
@@ -217,7 +212,7 @@ export const MEDIA_COUNTRIES_OF_ORIGIN = [
 
 export type MediaCountryOfOrigin = (typeof MEDIA_COUNTRIES_OF_ORIGIN)[number]
 
-export const TASK_TYPES = [
+const TASK_TYPES = [
   "IMPORT_COVER",
   "IMPORT_CHAPTER",
   "CREATE_MEDIA",

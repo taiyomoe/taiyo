@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type NotificationActor = {
@@ -6,5 +5,3 @@ export type NotificationActor = {
   actorId: string
   createdAt: Generated<Timestamp>
 }
-
-export type NewNotificationActor = Insertable<NotificationActor>

@@ -6,8 +6,11 @@ import { breakpoints, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useDeferredValue } from "react"
+import {
+  libraryEntryQueryOptions,
+  readingProgressQueryOptions,
+} from "@/features/library/api/library"
 import { AddToListButton } from "@/features/lists/components/add-to-list/add-to-list-button"
-import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/features/media/api/library"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { LibraryButton } from "@/features/media/components/media-sidebar/library-button"
 import { mediaSidebarStyles } from "@/features/media/components/media-sidebar/media-sidebar-styles"

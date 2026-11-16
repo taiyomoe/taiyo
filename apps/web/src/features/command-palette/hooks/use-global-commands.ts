@@ -106,7 +106,7 @@ export function useGlobalCommands() {
       section: "navigate",
       icon: Book,
       keywords: ["manga", "manhwa", "catalog", "all", "browse"],
-      run: { type: "navigate", to: { to: "/titles" } },
+      run: { type: "navigate", to: { to: "/media" } },
     },
     {
       id: "nav.groups",

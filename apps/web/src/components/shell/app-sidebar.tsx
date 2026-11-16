@@ -5,6 +5,7 @@ import {
   Feed,
   History,
   Home,
+  Library,
   List,
   Shuffle,
   Sliders,
@@ -52,6 +53,12 @@ const styles = stylex.create({
   container: {
     height: "calc(100svh - var(--navbar-height))",
     top: "var(--navbar-height)",
+  },
+  containerFullHeight: {
+    backgroundColor: colors.sidebar,
+    height: "100svh",
+    paddingTop: "var(--navbar-height)",
+    top: 0,
   },
   content: {
     gap: "0.5rem",
@@ -110,7 +117,13 @@ const styles = stylex.create({
   },
 })
 
-export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection[] | undefined }) {
+export function AppSidebar({
+  sections,
+  fullHeight,
+}: {
+  sections?: readonly AppSidebarSection[] | undefined
+  fullHeight: boolean
+}) {
   const matchRoute = useMatchRoute()
   const { setOpenMobile } = useSidebar()
   const randomTitle = useRandomTitle()
@@ -120,7 +133,7 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
       label: m.shell_nav_browse,
       items: [
         { label: m.shell_nav_home, icon: Home, to: "/" },
-        { label: m.shell_nav_advanced_search, icon: Sliders, to: "/titles" },
+        { label: m.shell_nav_advanced_search, icon: Sliders, to: "/media" },
         { label: m.shell_nav_recently_added, icon: Sparkles, to: "/recently-added" },
         {
           label: m.shell_nav_random_title,
@@ -135,6 +148,7 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
     {
       label: m.shell_nav_my_library,
       items: [
+        { label: m.shell_nav_library, icon: Library, to: "/library" },
         ...(typeof session?.user.username === "string"
           ? [
               {
@@ -160,7 +174,7 @@ export function AppSidebar({ sections }: { sections?: readonly AppSidebarSection
   ]
 
   return (
-    <Sidebar sx={styles.container}>
+    <Sidebar sx={[styles.container, fullHeight && styles.containerFullHeight]}>
       <SidebarContent sx={styles.content}>
         {(sections ?? defaultSections).map((section, index) => (
           <SidebarGroup key={section.label?.() ?? index} sx={styles.group}>

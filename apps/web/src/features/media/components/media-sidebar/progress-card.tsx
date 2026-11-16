@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { Progress } from "@taiyomoe/ui/components/ui/progress"
 import { colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
-import type { ReadingProgress } from "@/features/media/api/library"
+import type { ReadingProgress } from "@/features/library/api/library"
 import { TimeAgo } from "@/components/time/time-ago"
 import { m } from "@/paraglide/messages"
 
