@@ -53,24 +53,28 @@ export function MediaRow({
       icon: ExternalLink,
       render: <Link params={{ mediaId: media.id }} to="/media/$mediaId" />,
     },
-    {
-      key: "edit",
-      label: m.catalog_edit(),
-      icon: Edit,
-      render: <Link params={{ mediaId: media.id }} to="/media/$mediaId/edit" />,
-    },
-    {
-      key: "covers",
-      label: m.catalog_media_manage_covers(),
-      icon: Image,
-      render: <Link search={{ mediaId: media.id }} to="/dashboard/covers/upload" />,
-    },
-    {
-      key: "banners",
-      label: m.catalog_media_manage_banners(),
-      icon: Banner,
-      render: <Link search={{ mediaId: media.id }} to="/dashboard/banners/upload" />,
-    },
+    ...(can("media.update")
+      ? [
+          {
+            key: "edit",
+            label: m.catalog_edit(),
+            icon: Edit,
+            render: <Link params={{ mediaId: media.id }} to="/media/$mediaId/edit" />,
+          },
+          {
+            key: "covers",
+            label: m.catalog_media_manage_covers(),
+            icon: Image,
+            render: <Link search={{ mediaId: media.id }} to="/dashboard/covers/upload" />,
+          },
+          {
+            key: "banners",
+            label: m.catalog_media_manage_banners(),
+            icon: Banner,
+            render: <Link search={{ mediaId: media.id }} to="/dashboard/banners/upload" />,
+          },
+        ]
+      : []),
     ...(can("media.delete")
       ? [
           {

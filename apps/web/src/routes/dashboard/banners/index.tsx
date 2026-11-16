@@ -2,6 +2,7 @@ import { CONTENT_RATINGS } from "@taiyomoe/db/constants"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
 import { BannersPage } from "@/features/catalog/components/banners/banners-page"
+import { canOpenImages } from "@/features/catalog/lib/catalog-access"
 import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/dashboard/banners/")({
   head: () => ({ meta: [{ title: m.media_banners_dashboard_meta_title() }] }),
   validateSearch: searchSchema,
   beforeLoad: ({ context }) => {
-    if (!getPermissions(context.session.user)("media.update")) {
+    if (!canOpenImages(getPermissions(context.session.user))) {
       throw redirect({ to: "/dashboard" })
     }
   },

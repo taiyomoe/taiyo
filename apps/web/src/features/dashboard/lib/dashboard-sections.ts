@@ -22,6 +22,11 @@ import {
   Users,
 } from "@taiyomoe/ui/components/icons"
 import type { AppSidebarSection } from "@/components/shell/app-sidebar"
+import {
+  canOpenChapters,
+  canOpenImages,
+  canOpenMedias,
+} from "@/features/catalog/lib/catalog-access"
 import { m } from "@/paraglide/messages"
 
 type DashboardItem = AppSidebarSection["items"][number] & {
@@ -115,25 +120,25 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         label: m.dashboard_nav_media,
         icon: Library,
         to: "/dashboard/medias",
-        visible: (can) => can("media.update"),
+        visible: canOpenMedias,
       },
       {
         label: m.dashboard_nav_chapters,
         icon: ListNumbered,
         to: "/dashboard/chapters",
-        visible: (can) => can("chapter.list"),
+        visible: canOpenChapters,
       },
       {
         label: m.dashboard_nav_covers,
         icon: Image,
         to: "/dashboard/covers",
-        visible: (can) => can("media.update"),
+        visible: canOpenImages,
       },
       {
         label: m.dashboard_nav_banners,
         icon: Banner,
         to: "/dashboard/banners",
-        visible: (can) => can("media.update"),
+        visible: canOpenImages,
       },
       { label: m.dashboard_nav_tags, icon: Tag, visible: (can) => can("media.update") },
     ],

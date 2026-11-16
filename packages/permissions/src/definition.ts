@@ -64,6 +64,7 @@ export type PermissionsDefinition = ValidateDefinition<{
     "review",
     "flag",
     "list",
+    "listInGroups",
     { name: "view"; type: ChapterTarget; required: true },
     { name: "update"; type: ChapterTarget; required: true },
     { name: "withdraw"; type: ChapterTarget; required: true },

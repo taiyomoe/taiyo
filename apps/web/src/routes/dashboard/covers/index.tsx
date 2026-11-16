@@ -2,6 +2,7 @@ import { CONTENT_RATINGS, MEDIA_LANGUAGES } from "@taiyomoe/db/constants"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
 import { CoversPage } from "@/features/catalog/components/covers/covers-page"
+import { canOpenImages } from "@/features/catalog/lib/catalog-access"
 import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/dashboard/covers/")({
   head: () => ({ meta: [{ title: m.media_covers_dashboard_meta_title() }] }),
   validateSearch: searchSchema,
   beforeLoad: ({ context }) => {
-    if (!getPermissions(context.session.user)("media.update")) {
+    if (!canOpenImages(getPermissions(context.session.user))) {
       throw redirect({ to: "/dashboard" })
     }
   },

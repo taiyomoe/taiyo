@@ -19,7 +19,9 @@ const toActor = (user: User, groups: readonly MyGroup[]) =>
         })),
       }
 
-export const getPermissions = (user: User) => createPermissions(toActor(user, []))
+/** Group permissions only count when the caller passes the user's groups. */
+export const getPermissions = (user: User, groups: readonly MyGroup[] = []) =>
+  createPermissions(toActor(user, groups))
 
 export function usePermissions(user: User) {
   const { data = [] } = useQuery({

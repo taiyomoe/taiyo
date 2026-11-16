@@ -1,4 +1,5 @@
 import { CHAPTER_STATUSES, LANGUAGES, sql } from "@taiyomoe/db"
+import { getChapterGroupIds } from "@taiyomoe/permissions"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -39,7 +40,7 @@ export const listManagedChaptersHandler = new Hono().get(
   describeRoute({
     summary: "List chapters",
     description:
-      "Lists the chapters of every media for management, whatever their status, newest first, with their media, uploader and credited groups.\n\n**Required roles:** uploader, moderator, admin.",
+      "Lists chapters for management, whatever their status, newest first, with their media, uploader and credited groups. Uploaders, moderators and admins see every chapter; group members see the chapters credited to the groups where they can upload, edit or delete chapters, and the chapters they uploaded.\n\n**Required access:** uploader, moderator or admin, or the owner of a group or a member with the `UPLOAD_CHAPTERS`, `EDIT_CHAPTERS` or `DELETE_CHAPTERS` permission.",
     tags: ["Chapters"],
     responses: {
       200: {
@@ -59,12 +60,32 @@ export const listManagedChaptersHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("chapter.list"),
+  withAuth(),
   validateQuery(querySchema),
   async (c) => {
-    const { db } = c.var
+    const { actor, can, db } = c.var
     const { page, perPage, search, mediaId, language, status } = c.var.query
+
+    if (!can("chapter.list") && !can("chapter.listInGroups")) {
+      return c.fail("FORBIDDEN")
+    }
+
+    const groupIds = getChapterGroupIds(actor)
     const base = selectSubmissions(db)
+      .where((eb) =>
+        can("chapter.list")
+          ? eb.and([])
+          : eb.or([
+              eb("chapters.uploaderId", "=", actor.id),
+              eb.exists(
+                eb
+                  .selectFrom("chapterGroups")
+                  .select("chapterGroups.chapterId")
+                  .whereRef("chapterGroups.chapterId", "=", "chapters.id")
+                  .where("chapterGroups.groupId", "in", groupIds),
+              ),
+            ]),
+      )
       .where((eb) => matchChapterSearch(eb, search))
       .where((eb) => (mediaId === undefined ? eb.and([]) : eb("chapters.mediaId", "=", mediaId)))
       .where((eb) => (language === undefined ? eb.and([]) : eb("chapters.language", "=", language)))

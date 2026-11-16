@@ -86,22 +86,23 @@ export const managedMediasQueryOptions = (filter: MediasFilter) =>
 export const managedChaptersQueryOptions = (filter: ChaptersFilter) =>
   queryOptions({
     queryKey: ["chapters", "manage", filter],
-    queryFn: async ({ signal }) =>
-      unwrapEnvelope(
-        await api.chapters.$get(
-          {
-            query: {
-              ...pageQuery(filter.page),
-              ...defined({
-                search: filter.search,
-                status: filter.status,
-                language: filter.language,
-              }),
-            },
+    queryFn: async ({ signal }) => {
+      const response = await api.chapters.$get(
+        {
+          query: {
+            ...pageQuery(filter.page),
+            ...defined({
+              search: filter.search,
+              status: filter.status,
+              language: filter.language,
+            }),
           },
-          { init: { signal } },
-        ),
-      ),
+        },
+        { init: { signal } },
+      )
+
+      return unwrapEnvelope<Awaited<ReturnType<typeof response.json>>>(response)
+    },
     placeholderData: keepPreviousData,
   })
 

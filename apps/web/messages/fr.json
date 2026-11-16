@@ -2505,6 +2505,7 @@
   "catalog_media_new_submit": "Créer l’œuvre",
   "catalog_chapter_meta_title": "Chapitres · Dashboard",
   "catalog_chapter_subtitle": "Tous les chapitres, quel que soit leur statut. Modifiez leurs informations ou supprimez-les.",
+  "catalog_chapter_subtitle_groups": "Les chapitres de vos groupes et ceux que vous avez envoyés, quel que soit leur statut. Modifiez leurs informations ou supprimez-les.",
   "catalog_chapter_search": "Rechercher par titre ou numéro",
   "catalog_chapter_add": "Envoyer des chapitres",
   "catalog_chapter_empty_title": "Aucun chapitre ne correspond",

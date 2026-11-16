@@ -2,6 +2,8 @@ import { CHAPTER_STATUSES, SUPPORTED_LANGUAGES } from "@taiyomoe/db/constants"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
 import { ChaptersPage } from "@/features/catalog/components/chapters/chapters-page"
+import { canOpenChapters } from "@/features/catalog/lib/catalog-access"
+import { myGroupsQueryOptions } from "@/features/groups/api/groups"
 import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
@@ -15,8 +17,10 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/dashboard/chapters")({
   head: () => ({ meta: [{ title: m.catalog_chapter_meta_title() }] }),
   validateSearch: searchSchema,
-  beforeLoad: ({ context }) => {
-    if (!getPermissions(context.session.user)("chapter.list")) {
+  beforeLoad: async ({ context }) => {
+    const groups = await context.queryClient.query(myGroupsQueryOptions)
+
+    if (!canOpenChapters(getPermissions(context.session.user, groups))) {
       throw redirect({ to: "/dashboard" })
     }
   },

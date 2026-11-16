@@ -2505,6 +2505,7 @@
   "catalog_media_new_submit": "Criar a obra",
   "catalog_chapter_meta_title": "Capítulos · Dashboard",
   "catalog_chapter_subtitle": "Todos os capítulos, seja qual for o status. Edite os dados ou exclua.",
+  "catalog_chapter_subtitle_groups": "Os capítulos dos seus grupos e os que você enviou, seja qual for o status. Edite os dados ou exclua.",
   "catalog_chapter_search": "Buscar por título ou número",
   "catalog_chapter_add": "Enviar capítulos",
   "catalog_chapter_empty_title": "Nenhum capítulo corresponde",

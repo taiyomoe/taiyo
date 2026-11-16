@@ -13,6 +13,27 @@ const ALL_PERMISSIONS: ReadonlySet<GroupPermission> = new Set(GROUP_PERMISSIONS)
 
 export const toRole = (value: unknown) => ROLES.find((role) => role === value) ?? "USER"
 
+/** The group permissions that give a hand on the group's chapters. */
+const CHAPTER_GROUP_PERMISSIONS: readonly GroupPermission[] = [
+  "UPLOAD_CHAPTERS",
+  "EDIT_CHAPTERS",
+  "DELETE_CHAPTERS",
+]
+
+/** The groups whose chapters the actor uploads, edits or deletes: owned ones, or ones granting a chapter permission. */
+export const getChapterGroupIds = (actor: Actor | null) =>
+  actor === null || actor.banned
+    ? []
+    : actor.memberships
+        .filter(
+          (membership) =>
+            membership.role === "OWNER" ||
+            membership.permissions.some((permission) =>
+              CHAPTER_GROUP_PERMISSIONS.includes(permission),
+            ),
+        )
+        .map((membership) => membership.groupId)
+
 export const buildRules = (actor: Actor | null) => {
   const active = actor?.banned === false ? actor : null
   const is = (...roles: Role[]) => active !== null && roles.includes(active.role)
@@ -84,6 +105,7 @@ export const buildRules = (actor: Actor | null) => {
       review: reviewsChapters,
       flag: managesChapters,
       list: managesChapters,
+      listInGroups: getChapterGroupIds(active).length > 0,
       view: (chapter) => {
         if (chapter.status === "PUBLISHED") {
           return true

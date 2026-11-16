@@ -37,7 +37,7 @@ import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditChapterDialog } from "@/features/groups/components/manage-group/chapters/edit-chapter-dialog"
 import { CHAPTER_STATUS_OPTIONS } from "@/features/uploads/lib/submission-status-options"
-import { getPermissions } from "@/lib/permissions"
+import { usePermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
 const routeApi = getRouteApi("/dashboard/chapters")
@@ -46,7 +46,7 @@ export function ChaptersPage() {
   const { session } = routeApi.useRouteContext()
   const params = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
-  const can = getPermissions(session.user)
+  const can = usePermissions(session.user)
   const filter: ChaptersFilter = {
     search: params.q,
     status: params.status,
@@ -82,7 +82,9 @@ export function ChaptersPage() {
           </PageAction>
         ) : undefined
       }
-      subtitle={m.catalog_chapter_subtitle()}
+      subtitle={
+        can("chapter.list") ? m.catalog_chapter_subtitle() : m.catalog_chapter_subtitle_groups()
+      }
       title={m.dashboard_nav_chapters()}
     >
       <CatalogTable

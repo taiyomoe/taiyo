@@ -2,6 +2,7 @@ import { MEDIA_STATUSES, MEDIA_TYPES } from "@taiyomoe/db/constants"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
 import { MediasPage } from "@/features/catalog/components/medias/medias-page"
+import { canOpenMedias } from "@/features/catalog/lib/catalog-access"
 import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/dashboard/medias/")({
   head: () => ({ meta: [{ title: m.catalog_media_meta_title() }] }),
   validateSearch: searchSchema,
   beforeLoad: ({ context }) => {
-    if (!getPermissions(context.session.user)("media.update")) {
+    if (!canOpenMedias(getPermissions(context.session.user))) {
       throw redirect({ to: "/dashboard" })
     }
   },

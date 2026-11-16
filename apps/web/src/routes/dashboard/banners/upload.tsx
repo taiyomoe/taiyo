@@ -1,5 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
+import { canOpenImages } from "@/features/catalog/lib/catalog-access"
 import { BannerUploadPage } from "@/features/media-images/components/banners/banner-upload-page"
 import { loadMediaOption } from "@/features/media-images/lib/media-option"
 import { getPermissions } from "@/lib/permissions"
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/dashboard/banners/upload")({
   head: () => ({ meta: [{ title: m.catalog_banner_upload_meta_title() }] }),
   validateSearch: searchSchema,
   beforeLoad: ({ context }) => {
-    if (!getPermissions(context.session.user)("media.update")) {
+    if (!canOpenImages(getPermissions(context.session.user))) {
       throw redirect({ to: "/dashboard" })
     }
   },

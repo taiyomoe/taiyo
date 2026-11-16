@@ -2,7 +2,7 @@ import { describe, expect } from "vitest"
 import type { ApiResult } from "../helpers/request"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
-import { seedChapter, seedMedia, seedTitle } from "../helpers/seed"
+import { seedChapter, seedGroup, seedMedia, seedMembership, seedTitle } from "../helpers/seed"
 import { test } from "../setup"
 
 type ManagedChapter = { id: string; status: string; mediaTitle: string | null; number: number }
@@ -50,6 +50,49 @@ describe("GET /chapters", () => {
     expect(onlyPending.body.meta).toEqual({ page: 1, perPage: 20, total: 1 })
   })
 
+  test("lists only the chapters of a member's groups and their own uploads", async ({
+    app,
+    services,
+  }) => {
+    const owner = await signInAs(services, { role: "ADMIN" })
+    const { headers, userId } = await signInAs(services)
+    const mediaId = await seedMedia(services, owner.userId)
+    const mine = await seedGroup(services, owner.userId, "Mine Scans")
+    const theirs = await seedGroup(services, owner.userId, "Other Scans")
+
+    await seedMembership(services, { groupId: mine, userId, permissions: ["EDIT_CHAPTERS"] })
+
+    const credited = await seedChapter(services, {
+      mediaId,
+      uploaderId: owner.userId,
+      number: 1,
+      groupIds: [mine],
+    })
+    const uploaded = await seedChapter(services, {
+      mediaId,
+      uploaderId: userId,
+      number: 2,
+      status: "PENDING",
+    })
+
+    await seedChapter(services, {
+      mediaId,
+      uploaderId: owner.userId,
+      number: 3,
+      groupIds: [theirs],
+    })
+
+    const res = await api<ManagedChapter[]>(app, `/chapters?mediaId=${mediaId}`, { headers })
+
+    expect(res.status).toBe(200)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.map((chapter) => chapter.id).sort()).toEqual([credited, uploaded].sort())
+  })
+
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     expectFailure(await api(app, "/chapters"), 401, "UNAUTHORIZED")
   })
@@ -60,7 +103,10 @@ describe("GET /chapters", () => {
     expectFailure(await api(app, "/chapters", { headers }), 403, "FORBIDDEN")
   })
 
-  test("rejects users without the required role with FORBIDDEN", async ({ app, services }) => {
+  test("rejects users without a role or a group chapter permission with FORBIDDEN", async ({
+    app,
+    services,
+  }) => {
     const { headers } = await signInAs(services, { role: "UPLOADER_INTERN" })
 
     expectFailure(await api(app, "/chapters", { headers }), 403, "FORBIDDEN")
