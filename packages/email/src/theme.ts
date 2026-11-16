@@ -1,34 +1,43 @@
 import type { CSSProperties } from "react"
 
+// The light theme of @taiyomoe/ui, in hex: email clients do not read oklch().
 export const emailColors = {
-  page: "#f3f4f6",
-  surface: "#ffffff",
-  border: "#e5e7eb",
-  primary: "#FF4F4F",
+  page: "#ececec",
+  surface: "#fdfdfd",
+  border: "#e2e2e2",
+  text: "#171717",
+  muted: "#5d5d5d",
+  primary: "#f2452d",
   onPrimary: "#ffffff",
-  heading: "#000000",
 } as const
 
+// Inter where the client loads web fonts (Apple Mail, iOS), the system font everywhere else.
+export const emailFont =
+  "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+
 export const emailStyles = {
-  body: {
-    padding: "16px 32px",
-  },
   title: {
-    fontSize: "24px",
+    color: emailColors.text,
+    fontSize: "22px",
     fontWeight: 700,
-    lineHeight: "32px",
+    letterSpacing: "-0.01em",
+    lineHeight: "30px",
+    margin: "0 0 12px",
   },
-  button: {
-    backgroundColor: emailColors.primary,
-    borderRadius: "6px",
-    color: emailColors.onPrimary,
-    display: "inline-block",
-    fontSize: "14px",
+  text: {
+    color: emailColors.text,
+    fontSize: "15px",
+    lineHeight: "24px",
+    margin: "0 0 16px",
+  },
+  small: {
+    color: emailColors.muted,
+    fontSize: "13px",
     lineHeight: "20px",
-    padding: "6px 12px",
+    margin: 0,
   },
-  footer: {
-    borderTop: `1px solid ${emailColors.border}`,
-    padding: "0 32px",
+  link: {
+    color: emailColors.primary,
+    wordBreak: "break-all",
   },
 } satisfies Record<string, CSSProperties>

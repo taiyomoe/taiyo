@@ -63,7 +63,7 @@ CMD ["node_modules/.bin/srvx", "serve", "--prod", "--port", "3000", "--entry", "
 FROM server AS server-smoke
 ARG APP
 RUN if [ "$APP" = "api" ]; then \
-      TEST=1 RESEND_API_KEY=re_smoke S3_PUBLIC_URL=https://cdn.example.invalid \
+      TEST=1 S3_PUBLIC_URL=https://cdn.example.invalid \
       node --import tsx -e "await import('./src/index.ts'); process.exit(0)"; \
     fi
 

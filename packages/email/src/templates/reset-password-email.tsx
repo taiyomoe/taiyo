@@ -1,4 +1,5 @@
-import { Button, Container, Section, Text } from "react-email"
+import { Text } from "react-email"
+import EmailAction from "../components/email-action"
 import EmailBase from "../components/email-base"
 import { emailStyles } from "../theme"
 
@@ -8,25 +9,16 @@ type Props = {
 }
 
 const ResetPasswordEmail = ({ name, url }: Props) => (
-  <EmailBase preview="Reset your password on Taiyō">
-    <Container style={emailStyles.body}>
-      <Text style={emailStyles.title}>Reset your password</Text>
-      <Text>
-        Hi {name}, we received a request to reset your password. Please click the button below to
-        reset it. This link will be valid for 1 hour.
-      </Text>
-      <Section>
-        <Button href={url} style={emailStyles.button}>
-          Click here
-        </Button>
-      </Section>
-      <Text>
-        If the button does not work, copy and paste the link below into your browser: {url}
-      </Text>
-    </Container>
-    <Container style={emailStyles.footer}>
-      <Text>If you did not request this email, please ignore it as nothing will be changed.</Text>
-    </Container>
+  <EmailBase
+    preview="Reset your password on Taiyō"
+    footer="If you did not request this email, you can ignore it: your password will stay the same."
+  >
+    <Text style={emailStyles.title}>Reset your password</Text>
+    <Text style={emailStyles.text}>
+      Hi {name}, we received a request to reset the password of your Taiyō account. The link is
+      valid for 1 hour.
+    </Text>
+    <EmailAction href={url} label="Reset my password" />
   </EmailBase>
 )
 

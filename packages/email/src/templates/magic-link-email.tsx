@@ -1,4 +1,5 @@
-import { Button, Container, Section, Text } from "react-email"
+import { Text } from "react-email"
+import EmailAction from "../components/email-action"
 import EmailBase from "../components/email-base"
 import { emailStyles } from "../theme"
 
@@ -8,25 +9,15 @@ type Props = {
 }
 
 const MagicLinkEmail = ({ name, url }: Props) => (
-  <EmailBase preview="Your magic link for Taiyō">
-    <Container style={emailStyles.body}>
-      <Text style={emailStyles.title}>Your magic link</Text>
-      <Text>
-        Hi {name}, your will find the magic link your requested below. This link will be valid for 1
-        hour.
-      </Text>
-      <Section>
-        <Button href={url} style={emailStyles.button}>
-          Click here
-        </Button>
-      </Section>
-      <Text>
-        If the button does not work, copy and paste the link below into your browser: {url}
-      </Text>
-    </Container>
-    <Container style={emailStyles.footer}>
-      <Text>If you did not request this email, please ignore it.</Text>
-    </Container>
+  <EmailBase
+    preview="Your magic link for Taiyō"
+    footer="If you did not request this link, you can ignore this email."
+  >
+    <Text style={emailStyles.title}>Your magic link</Text>
+    <Text style={emailStyles.text}>
+      Hi {name}, here is the sign-in link you requested. It is valid for 1 hour.
+    </Text>
+    <EmailAction href={url} label="Sign in to Taiyō" />
   </EmailBase>
 )
 
