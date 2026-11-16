@@ -14,29 +14,18 @@ allowBuilds:
 
 minimumReleaseAge: 10080 # 7 days
 
-# Toolchain packages tracked at latest, exempt from the delay above. These ship
-# the lint/compile capabilities we want as soon as they land -- oxlint's React
-# Compiler rule set, matching oxfmt releases, React Compiler support in the
-# Vite React plugin, and the type checker behind oxlint's type-aware rules. They
-# are dev-time only: none ship code to production.
-# The @oxlint/* and @oxfmt/* entries cover the per-platform binary packages and
-# @oxlint/plugins, which are versioned in lockstep with their parent and are
-# gated separately.
+# Dev-time toolchain tracked at latest: none of it ships to production.
 minimumReleaseAgeExclude:
   - oxlint
   - "@oxlint/*"
   - oxfmt
   - "@oxfmt/*"
   - "@vitejs/plugin-react"
-  # Rust React Compiler backing @vitejs/plugin-react's `compiler` option.
   - oxc-transform-react
   - "@oxc-transform-react/*"
-  # Rust port of the TypeScript checker that oxlint's type-aware rules run on.
   - tsrs
   - "@tsrs/*"
 
-# @better-auth/kysely-adapter pins its own kysely, which resolved to a different
-# copy than packages/db. Two copies means Kysely<DB> is not assignable to the
-# adapter's Kysely<any>. Force a single copy.
+# A second kysely copy makes Kysely<DB> unassignable to @better-auth/kysely-adapter's Kysely<any>.
 overrides:
   kysely: ^0.29.5

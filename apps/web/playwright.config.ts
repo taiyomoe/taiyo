@@ -34,8 +34,7 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
     },
   ],
-  // CI tests the production build, which the workflow builds first: the dev server compiles
-  // every module on its first request, which made each test wait on Vite.
+  // CI tests the production build, which the workflow builds first.
   webServer:
     process.env.CI === undefined
       ? {

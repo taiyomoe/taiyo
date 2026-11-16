@@ -35,9 +35,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      # The env files come first: the web app builds from the public values they hold while
-      # bootstrap starts and seeds the stack, and Chromium installs alongside. Headless runs
-      # only need the headless shell, a smaller download than full Chromium.
       - name: Bootstrap, build the web app and install Chromium
         run: |
           pnpm bootstrap --env-only

@@ -2,8 +2,7 @@ services:
   postgres:
     image: "postgres:18-alpine"
     restart: unless-stopped
-    # Local data only: skipping fsync keeps the integration tests' database clones from stalling
-    # the Docker VM disk, at the cost of a corrupt database if the VM crashes.
+    # Local data only: fsync=off speeds up the test database clones, at the risk of corruption on a VM crash.
     command: ["postgres", "-c", "max_connections=500", "-c", "fsync=off"]
     environment:
       - POSTGRES_USER=$DATABASE_USERNAME
