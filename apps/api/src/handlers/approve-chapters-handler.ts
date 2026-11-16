@@ -23,7 +23,7 @@ export const approveChaptersHandler = new Hono().post(
   "/approve",
   describeRoute({
     summary: "Approve submitted chapters in bulk",
-    description: `Approves up to ${config.input.maxReviewBatch} chapters waiting for review at once, as they are. Each one is released right away, or at its \`publishAt\` time if that is still ahead. Chapters that do not exist, are not waiting for review or have no processed pages yet are skipped and reported.\n\n**Required roles:** uploader, admin.`,
+    description: `Approves up to ${config.input.maxReviewBatch} chapters waiting for review at once, as they are. Each one is released right away, or at its \`publishAt\` time if that is still ahead. Chapters that do not exist, are not waiting for review, have no processed pages yet or belong to a locked media are skipped and reported.\n\n**Required roles:** uploader, admin.`,
     tags: ["Chapter review"],
     responses: {
       201: {
@@ -70,6 +70,8 @@ export const approveChaptersHandler = new Hono().post(
         skipped.push({ id, reason: "NOT_PENDING" })
       } else if (!row.isExternal && (row.pages === null || row.pages.length === 0)) {
         skipped.push({ id, reason: "PAGES_MISSING" })
+      } else if (row.mediaFlag === "LOCKED") {
+        skipped.push({ id, reason: "MEDIA_LOCKED" })
       } else {
         approved.push(id)
       }

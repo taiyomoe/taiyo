@@ -70,6 +70,7 @@ export const approveChapterHandler = new Hono().post(
         401: true,
         403: true,
         404: "No chapter with the given ID exists, or one of the groups does not exist.",
+        451: "The chapter's media is locked, so the chapter cannot be published.",
         409: "The chapter is not waiting for review, or it has no processed pages yet.",
         422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
@@ -78,7 +79,7 @@ export const approveChapterHandler = new Hono().post(
   audited(chapterReviewAudit.APPROVE),
   withAuth("chapter.review"),
   validateJson(approveSchema),
-  checkChapter({ unpublished: true }),
+  checkChapter({ unpublished: true, refuseLocked: true }),
   withTransaction,
   async (c) => {
     const { chapter, db, user } = c.var

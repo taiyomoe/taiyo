@@ -40,13 +40,14 @@ export const markMediaReadHandler = new Hono().put(
         401: true,
         403: true,
         404: "No media with the given ID exists.",
+        451: "The media is locked, so its chapters are unavailable.",
         422: "The provided ID is not a valid UUID.",
       }),
     },
   }),
   audited(historyAudit.MEDIA_MARK_READ),
   withAuth(),
-  checkMedia(),
+  checkMedia({ refuseLocked: true }),
   withTransaction,
   async (c) => {
     const { db, user, media } = c.var

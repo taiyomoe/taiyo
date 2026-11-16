@@ -49,6 +49,7 @@ export const selectVisibleChapters = (
     .where("chapters.deletedAt", "is", null)
     .where("chapters.status", "=", status)
     .where("medias.deletedAt", "is", null)
+    .where("medias.flag", "!=", "LOCKED")
     .where(effectiveContentRating, "in", contentRatings)
     .where((eb) => (mediaId === undefined ? eb.and([]) : eb("chapters.mediaId", "=", mediaId)))
     .where((eb) =>

@@ -53,6 +53,10 @@ const mediaErrors = {
     message: "The media is not in a deleted state.",
     code: 409,
   },
+  MEDIA_LOCKED: {
+    message: "This media is locked following a copyright notice.",
+    code: 451,
+  },
 } as const
 const coverErrors = {
   COVER_NOT_FOUND: {

@@ -84,12 +84,13 @@ export const getChapterHandler = new Hono().get(
       },
       ...getOpenApiResponses({
         404: "No chapter with the given ID exists.",
+        451: "The chapter's media is locked, so the chapter is unavailable.",
         422: "The provided ID is not a valid UUID.",
       }),
     },
   }),
   withOptionalAuth,
-  checkChapter({ unpublished: true }),
+  checkChapter({ unpublished: true, refuseLocked: true }),
   authorizeChapterView,
   async (c) => {
     const { chapter, db } = c.var
