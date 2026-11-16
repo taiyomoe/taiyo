@@ -1,42 +1,42 @@
 import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
-import { ROLES } from "@taiyomoe/permissions"
 import {
+  Coins,
   Comment,
   ExternalLink,
   Eye,
   Key,
   Monitor,
+  Sparkles,
   UserCheck,
-  Users,
   UserRemove,
+  Users,
 } from "@taiyomoe/ui/components/icons"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
+import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
 import type { ManagedUser } from "@/features/users/api/users"
 import type { UserDialog } from "@/features/users/components/users/user-dialogs"
 import { OptionLabel } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
-import { CatalogCell } from "@/features/catalog/components/shared/catalog-table"
+import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
-import { useSetUserRole } from "@/features/users/api/users"
-import { UserRoleSelect } from "@/features/users/components/users/user-role-select"
+import { PointsAmount } from "@/features/shop/components/points-amount"
+import { useSetUsersRole } from "@/features/users/api/users"
 import { ROLE_OPTIONS } from "@/features/users/lib/role-labels"
+import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
 const styles = stylex.create({
-  role: {
-    maxWidth: "100%",
-    width: "13rem",
-  },
   note: {
     color: colors.mutedForeground,
     fontSize: "0.8125rem",
@@ -54,12 +54,16 @@ const styles = stylex.create({
     overflowWrap: "anywhere",
     whiteSpace: "normal",
   },
+  points: {
+    fontSize: "0.8125rem",
+  },
 })
 
 export function UserRow({
   user,
   can,
   self,
+  selection,
   unbanning,
   onDialog,
   onUnban,
@@ -67,13 +71,18 @@ export function UserRow({
   user: ManagedUser
   can: Permissions
   self: boolean
+  selection: Selection | undefined
   unbanning: boolean
   onDialog: (kind: UserDialog["kind"]) => void
   onUnban: () => void
 }) {
   const target = { id: user.id, role: user.role }
-  const setRole = useSetUserRole()
-  const roleEditable = !self && can("user.setRole", { id: user.id })
+  const setRole = useSetUsersRole()
+  const role = (
+    <Badge variant="outline">
+      <OptionLabel options={ROLE_OPTIONS} value={user.role} />
+    </Badge>
+  )
   const status = user.banned ? (
     <Badge variant="error">{m.users_banned()}</Badge>
   ) : (
@@ -89,17 +98,16 @@ export function UserRow({
         })}
       </span>
     ) : null
-  const roleSelect = (
-    <div sx={styles.role}>
-      <UserRoleSelect editable={roleEditable} user={user} />
-    </div>
-  )
   const reason =
     user.banned && user.banReason !== null ? (
       <span sx={styles.reason} title={user.banReason}>
         {m.users_ban_reason_shown({ reason: user.banReason })}
       </span>
     ) : null
+  const points = <PointsAmount points={user.points} size={13} sx={styles.points} />
+  const open = (kind: UserDialog["kind"]) => () => {
+    onDialog(kind)
+  }
   const actions: RowAction[] = [
     {
       key: "profile",
@@ -107,31 +115,6 @@ export function UserRow({
       icon: ExternalLink,
       render: <Link params={{ username: user.username }} to="/users/$username" />,
     },
-    ...(roleEditable
-      ? [
-          {
-            key: "role",
-            label: m.users_change_role(),
-            icon: Users,
-            disabled: setRole.isPending,
-            choices: {
-              value: user.role,
-              items: ROLES.map((role) => ({
-                value: role,
-                label: ROLE_OPTIONS.label(role),
-                icon: ROLE_OPTIONS.icon(role),
-              })),
-              onChange: (value: string) => {
-                const role = ROLES.find((item) => item === value)
-
-                if (role !== undefined && role !== user.role) {
-                  setRole.mutate({ userId: user.id, role })
-                }
-              },
-            },
-          },
-        ]
-      : []),
     ...(can("comment.delete")
       ? [
           {
@@ -142,15 +125,62 @@ export function UserRow({
           },
         ]
       : []),
+    ...(!self && can("user.setRole", { id: user.id })
+      ? [
+          {
+            key: "role",
+            label: m.users_change_role(),
+            icon: Users,
+            disabled: setRole.isPending,
+            choices: {
+              value: user.role,
+              items: ROLE_OPTIONS.values.map((value) => ({
+                value,
+                label: ROLE_OPTIONS.label(value),
+                icon: ROLE_OPTIONS.icon(value),
+              })),
+              onChange: (value: string) => {
+                const next = ROLE_OPTIONS.values.find((item) => item === value)
+
+                if (next !== undefined && next !== user.role) {
+                  setRole.mutate(
+                    { userIds: [user.id], role: next },
+                    {
+                      onSuccess: () => {
+                        toastManager.add({
+                          title: m.users_role_changed({ name: user.displayUsername }),
+                          type: "success",
+                        })
+                      },
+                      onError: (error) => {
+                        toastManager.add({ title: getErrorMessage(error), type: "error" })
+                      },
+                    },
+                  )
+                }
+              },
+            },
+          },
+        ]
+      : []),
+    ...(can("user.grant")
+      ? [
+          { key: "points", label: m.users_give_points(), icon: Coins, onClick: open("points") },
+          {
+            key: "cosmetic",
+            label: m.users_give_cosmetic(),
+            icon: Sparkles,
+            onClick: open("cosmetic"),
+          },
+        ]
+      : []),
     ...(can("user.impersonate", target) && !user.banned
       ? [
           {
             key: "impersonate",
             label: m.user_admin_impersonate(),
             icon: Eye,
-            onClick: () => {
-              onDialog("impersonate")
-            },
+            onClick: open("impersonate"),
           },
         ]
       : []),
@@ -160,9 +190,7 @@ export function UserRow({
             key: "sessions",
             label: m.user_admin_sessions(),
             icon: Monitor,
-            onClick: () => {
-              onDialog("sessions")
-            },
+            onClick: open("sessions"),
           },
         ]
       : []),
@@ -172,9 +200,7 @@ export function UserRow({
             key: "password",
             label: m.user_admin_set_password(),
             icon: Key,
-            onClick: () => {
-              onDialog("password")
-            },
+            onClick: open("password"),
           },
         ]
       : []),
@@ -196,9 +222,7 @@ export function UserRow({
             label: m.users_ban(),
             icon: UserRemove,
             destructive: true,
-            onClick: () => {
-              onDialog("ban")
-            },
+            onClick: open("ban"),
           },
         ]
       : []),
@@ -206,6 +230,9 @@ export function UserRow({
 
   return (
     <TableRow>
+      {selection === undefined ? null : (
+        <CatalogSelectCell id={user.id} label={user.displayUsername} selection={selection} />
+      )}
       <CatalogCell column="user">
         <TitleCell
           detail={user.email === null ? `@${user.username}` : `@${user.username} · ${user.email}`}
@@ -213,10 +240,9 @@ export function UserRow({
             from: "3xl",
             content: (
               <>
-                <Badge variant="outline">
-                  <OptionLabel options={ROLE_OPTIONS} value={user.role} />
-                </Badge>
+                {role}
                 {user.banned ? status : null}
+                {points}
                 {until}
                 {reason}
               </>
@@ -226,7 +252,7 @@ export function UserRow({
           title={<UserLink sx={mediaCellStyles.title} user={user} />}
         />
       </CatalogCell>
-      <CatalogCell column="role">{roleSelect}</CatalogCell>
+      <CatalogCell column="role">{role}</CatalogCell>
       <CatalogCell column="status">
         <div {...stylex.props(catalogStyles.stack)}>
           {status}
@@ -234,6 +260,7 @@ export function UserRow({
           {reason}
         </div>
       </CatalogCell>
+      <CatalogCell column="points">{points}</CatalogCell>
       <CatalogCell column="joined" sx={catalogStyles.muted}>
         <TimeAgo date={user.createdAt} length="long" />
       </CatalogCell>

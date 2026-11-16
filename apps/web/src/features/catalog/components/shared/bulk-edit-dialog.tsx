@@ -31,6 +31,7 @@ const styles = stylex.create({
 export function BulkEditDialog({
   open,
   title,
+  description = m.catalog_bulk_edit_description(),
   changed,
   pending,
   error,
@@ -40,6 +41,7 @@ export function BulkEditDialog({
 }: {
   open: boolean
   title: string
+  description?: string
   changed: boolean
   pending: boolean
   error: string | null
@@ -70,7 +72,7 @@ export function BulkEditDialog({
         >
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
-            <DialogDescription>{m.catalog_bulk_edit_description()}</DialogDescription>
+            <DialogDescription>{description}</DialogDescription>
           </DialogHeader>
           <DialogPanel>
             <div sx={styles.fields}>

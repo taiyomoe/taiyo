@@ -8,7 +8,6 @@ export const catalogStyles = stylex.create({
   colNarrow: { width: "6.5rem" },
   colMedium: { width: "8.5rem" },
   colWide: { width: "11rem" },
-  colRole: { width: "14.5rem" },
   colTarget: { width: "13rem" },
   colActions: { width: "3.25rem" },
   numeric: {

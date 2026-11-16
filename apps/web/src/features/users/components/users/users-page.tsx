@@ -1,4 +1,5 @@
-import { User, UserRemove } from "@taiyomoe/ui/components/icons"
+import { Coins, Sparkles, User, UserRemove, Users } from "@taiyomoe/ui/components/icons"
+import { Button } from "@taiyomoe/ui/components/ui/button"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
@@ -12,6 +13,7 @@ import {
 } from "@/components/filters/filter-toolbar"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
+import { BulkBar } from "@/features/catalog/components/shared/bulk-bar"
 import {
   SkeletonActions,
   SkeletonMediaCell,
@@ -23,6 +25,7 @@ import {
   CatalogTable,
   VisuallyHidden,
 } from "@/features/catalog/components/shared/catalog-table"
+import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import {
@@ -55,6 +58,14 @@ export function UsersPage() {
   const unban = useUnbanUser()
   const [dialog, setDialog] = useState<UserDialog | null>(null)
   const isAdmin = can("user.setRole", { id: "" })
+  const selection = useSelection(data?.data.map((user) => user.id) ?? [])
+  const bulk = (kind: UserDialog["kind"]) => () => {
+    setDialog({
+      kind,
+      users: data?.data.filter((user) => selection.has(user.id)) ?? [],
+      bulk: true,
+    })
+  }
   const update = (patch: Partial<UsersFilter>) => {
     const next = { ...filter, ...patch, page: patch.page ?? 1 }
 
@@ -86,16 +97,23 @@ export function UsersPage() {
           {
             key: "role",
             label: m.users_role(),
-            width: catalogStyles.colRole,
+            width: catalogStyles.colWide,
             from: "3xl",
-            skeleton: <SkeletonPill width="9rem" />,
+            skeleton: <SkeletonPill width="6.5rem" />,
           },
           {
             key: "status",
             label: m.users_column_status(),
-            width: catalogStyles.colWide,
+            width: catalogStyles.colMedium,
             from: "4xl",
             skeleton: <SkeletonPill />,
+          },
+          {
+            key: "points",
+            label: m.users_column_points(),
+            width: catalogStyles.colNarrow,
+            from: "4xl",
+            skeleton: <SkeletonText width="3rem" />,
           },
           {
             key: "joined",
@@ -119,6 +137,28 @@ export function UsersPage() {
                 description: m.users_empty_description(),
               }
             : null
+        }
+        bulkBar={
+          <BulkBar count={selection.ids.length} onClear={selection.clear}>
+            {isAdmin ? (
+              <Button onClick={bulk("role")} variant="outline">
+                <Users />
+                {m.users_role()}
+              </Button>
+            ) : null}
+            {can("user.grant") ? (
+              <>
+                <Button onClick={bulk("points")} variant="outline">
+                  <Coins />
+                  {m.users_column_points()}
+                </Button>
+                <Button onClick={bulk("cosmetic")} variant="outline">
+                  <Sparkles />
+                  {m.users_cosmetic()}
+                </Button>
+              </>
+            ) : null}
+          </BulkBar>
         }
         fetching={isPlaceholderData}
         footer={
@@ -147,6 +187,7 @@ export function UsersPage() {
           )
         }
         loading={data === undefined}
+        selection={isAdmin || can("user.grant") ? selection : undefined}
         toolbar={
           <FilterToolbar>
             <FilterSearch
@@ -181,7 +222,7 @@ export function UsersPage() {
             can={can}
             key={user.id}
             onDialog={(kind) => {
-              setDialog({ kind, user })
+              setDialog({ kind, users: [user], bulk: false })
             }}
             onUnban={() => {
               unban.mutate(user.id, {
@@ -196,6 +237,7 @@ export function UsersPage() {
                 },
               })
             }}
+            selection={isAdmin || can("user.grant") ? selection : undefined}
             self={user.id === session.user.id}
             unbanning={unban.isPending && unban.variables === user.id}
             user={user}
@@ -204,9 +246,11 @@ export function UsersPage() {
       </CatalogTable>
       <UserDialogs
         dialog={dialog}
+        onBulkDone={selection.clear}
         onClose={() => {
           setDialog(null)
         }}
+        selfId={session.user.id}
       />
     </DashboardPage>
   )
