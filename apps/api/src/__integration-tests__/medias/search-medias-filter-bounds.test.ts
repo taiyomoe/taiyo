@@ -11,6 +11,8 @@ const search = (app: Parameters<typeof api>[0], filter: unknown) =>
     json: { filter },
   })
 
+test.override({ search: true })
+
 describe("POST /medias/search filter bounds", () => {
   test("rejects an oversized filter array with a single issue", async ({ app }) => {
     const res = await search(app, { titleLanguages: { hasAll: Array(1000).fill("xx") } })

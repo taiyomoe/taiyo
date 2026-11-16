@@ -107,6 +107,8 @@ const addToLibrary = async (app: Hono, services: Services, mediaId: string) => {
   expect(res.status).toBe(200)
 }
 
+test.override({ search: true })
+
 describe("POST /medias/search popularity sorts", () => {
   test(
     "orders results by libraryCount descending",

@@ -3,6 +3,8 @@ import { describe, expect } from "vitest"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
+test.override({ search: true })
+
 describe("POST /medias/search rate limit", () => {
   test("returns 429 after the per-IP budget is exhausted", async ({ app }) => {
     const headers = { "cf-connecting-ip": `203.0.113.${randomUUID()}` }
