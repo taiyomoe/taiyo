@@ -18,7 +18,7 @@ export const mediaPageStyles = stylex.create({
       default: "7rem minmax(0, 1fr)",
     },
     rowGap: "1.5rem",
-    maxWidth: "88rem",
+    maxWidth: layout.pageWidth,
     paddingBottom: "3rem",
     paddingTop: { [breakpoints.lg]: "5rem", default: "2rem" },
   },

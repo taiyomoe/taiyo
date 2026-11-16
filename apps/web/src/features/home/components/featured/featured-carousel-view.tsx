@@ -4,6 +4,7 @@ import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-reac
 import { type FocusEvent, type PointerEvent, useEffect, useState } from "react"
 import type { FeaturedMedia } from "@/features/media/api/medias"
 import { CarouselDots } from "@/components/carousel-dots/carousel-dots"
+import { layout } from "@/components/layout/layout.stylex"
 import { FeaturedSlide } from "@/features/home/components/featured/featured-slide"
 import { featuredStyles } from "@/features/home/components/featured/featured-styles"
 import { useDocumentHidden } from "@/features/home/hooks/use-document-hidden"
@@ -23,7 +24,10 @@ const styles = stylex.create({
   dots: {
     position: "absolute",
     bottom: { default: "0.375rem", [breakpoints.md]: "0.5rem" },
-    right: { default: "calc(1.25rem - 0.1875rem)", [breakpoints.md]: "calc(2rem - 0.25rem)" },
+    right: {
+      default: `calc(max(0px, (100% - ${layout.pageWidth}) / 2) + 1.25rem - 0.1875rem)`,
+      [breakpoints.md]: `calc(max(0px, (100% - ${layout.pageWidth}) / 2) + 2rem - 0.25rem)`,
+    },
   },
 })
 

@@ -5,7 +5,7 @@ import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import {
   MyListsSection,
@@ -21,13 +21,9 @@ const routeApi = getRouteApi("/lists/")
 const styles = stylex.create({
   page: {
     gap: "2.5rem",
-    marginInline: "auto",
     paddingBlock: "2rem",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
-    maxWidth: "72rem",
-    width: "100%",
   },
   header: {
     gap: "1.25rem",
@@ -61,7 +57,7 @@ export function ListsPage() {
 
   return (
     <AppShell user={user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <div sx={styles.header}>
           <div sx={styles.intro}>
             <h1 sx={styles.heading}>{m.lists_title()}</h1>

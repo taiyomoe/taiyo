@@ -5,7 +5,7 @@ import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useState } from "react"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { SearchFilters } from "@/features/advanced-search/components/filters/search-filters"
 import { SearchResults } from "@/features/advanced-search/components/results/search-results"
@@ -20,7 +20,6 @@ const styles = stylex.create({
   page: {
     gap: "1.25rem",
     paddingBlock: "2rem",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
     minWidth: 0,
@@ -56,7 +55,7 @@ export function AdvancedSearchPage() {
 
   return (
     <AppShell user={session?.user ?? null}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <div sx={styles.header}>
           <Button
             aria-label={m.search_back()}

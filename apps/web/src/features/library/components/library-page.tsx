@@ -3,7 +3,7 @@ import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { libraryCountsQueryOptions } from "@/features/library/api/library"
 import { LibraryShelf } from "@/features/library/components/library-shelf"
@@ -13,14 +13,10 @@ const routeApi = getRouteApi("/library")
 const styles = stylex.create({
   page: {
     gap: { default: "1.25rem", [breakpoints.md]: "1.75rem" },
-    marginInline: "auto",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
-    maxWidth: "80rem",
     paddingBottom: "4rem",
     paddingTop: { default: "1.5rem", [breakpoints.md]: "2.5rem" },
-    width: "100%",
   },
   heading: {
     gap: "0.375rem",
@@ -54,7 +50,7 @@ export function LibraryPage() {
 
   return (
     <AppShell user={session.user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <header sx={styles.heading}>
           <h1 sx={styles.title}>{m.library_title()}</h1>
           <p sx={styles.summary}>{counts === undefined ? " " : formatTotal(counts.total)}</p>

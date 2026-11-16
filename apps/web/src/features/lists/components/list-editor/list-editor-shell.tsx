@@ -3,20 +3,16 @@ import * as stylex from "@stylexjs/stylex"
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Session } from "@/lib/session"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 
 const styles = stylex.create({
   page: {
     gap: "1.5rem",
-    marginInline: "auto",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
-    maxWidth: "72rem",
     paddingBottom: "2.5rem",
     paddingTop: "2rem",
-    width: "100%",
   },
   heading: {
     margin: 0,
@@ -38,7 +34,7 @@ export function ListEditorShell({
 }) {
   return (
     <AppShell user={user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <h1 sx={styles.heading}>{title}</h1>
         {children}
       </div>

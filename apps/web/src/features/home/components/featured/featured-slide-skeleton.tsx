@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { featuredStyles } from "@/features/home/components/featured/featured-styles"
 import { CoverSkeleton } from "@/features/media/components/cover"
 
@@ -36,7 +37,7 @@ export function FeaturedSlideSkeleton() {
       <div sx={featuredStyles.backdrop}>
         <div sx={featuredStyles.shade} />
       </div>
-      <div sx={featuredStyles.content}>
+      <div sx={[pageFrame.frame, featuredStyles.content]}>
         <CoverSkeleton sx={featuredStyles.cover} />
         <div sx={styles.skeletonLines}>
           <Skeleton sx={styles.skeletonTitle} />

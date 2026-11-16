@@ -3,7 +3,7 @@ import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { GroupsGrid } from "@/features/groups/components/groups/groups-grid"
 import { GroupsGridSkeleton } from "@/features/groups/components/groups/groups-grid-skeleton"
@@ -15,7 +15,6 @@ const styles = stylex.create({
   page: {
     gap: "1.75rem",
     paddingBlock: "2rem",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
   },
@@ -63,7 +62,7 @@ export function GroupsPage() {
 
   return (
     <AppShell user={user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <div sx={styles.header}>
           <div sx={styles.intro}>
             <h1 sx={styles.heading}>{m.groups_title()}</h1>

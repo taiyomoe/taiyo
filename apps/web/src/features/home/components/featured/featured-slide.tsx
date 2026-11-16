@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { FeaturedMedia } from "@/features/media/api/medias"
+import { pageFrame } from "@/components/layout/page-frame"
 import { FeaturedSlideDetails } from "@/features/home/components/featured/featured-slide-details"
 import { featuredStyles } from "@/features/home/components/featured/featured-styles"
 import { Cover } from "@/features/media/components/cover"
@@ -54,7 +55,7 @@ export function FeaturedSlide({
         {backdropUrl === null ? null : <Backdrop eager={eager} src={backdropUrl} />}
         <div sx={featuredStyles.shade} />
       </div>
-      <div sx={featuredStyles.content}>
+      <div sx={[pageFrame.frame, featuredStyles.content]}>
         <Link
           aria-label={media.title ?? undefined}
           draggable={false}
