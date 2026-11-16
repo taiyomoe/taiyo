@@ -77,6 +77,7 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "comment.review": ["MODERATOR", "ADMIN"],
   "comment.removeImage": ["MODERATOR", "ADMIN"],
   "user.list": ["MODERATOR", "ADMIN"],
+  "user.grant": ["ADMIN"],
   "auditLog.read": ["ADMIN"],
 }
 const leaves = (node: object, prefix = ""): Array<[string, unknown]> =>

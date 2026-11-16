@@ -43,6 +43,9 @@ export const adminAudit = defineAuditCatalog("admin", {
   USER_LIST: { severity: "medium" },
   USER_GET: { target: "user", severity: "medium" },
   USER_SESSIONS_LIST: { target: "user", severity: "medium" },
+  ROLE_SET_MANY: { severity: "critical", requiresChanges: true },
+  POINTS_GRANT_MANY: { severity: "high", requiresChanges: true },
+  COSMETIC_GRANT_MANY: { severity: "medium", requiresChanges: true },
 })
 
 export const userAudit = defineAuditCatalog("user", {

@@ -215,6 +215,7 @@ export const buildRules = (actor: Actor | null) => {
     },
     user: {
       list: is("MODERATOR", "ADMIN"),
+      grant: is("ADMIN"),
       ban: (target) =>
         !isSelf(target.id) && (is("ADMIN") || (is("MODERATOR") && target.role === "USER")),
       setRole: (target) => is("ADMIN") && !isSelf(target.id),
