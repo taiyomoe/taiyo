@@ -52,6 +52,7 @@ const styles = stylex.create({
     fontSize: "0.8125rem",
     lineHeight: 1.35,
     overflowWrap: "anywhere",
+    whiteSpace: "normal",
   },
 })
 
