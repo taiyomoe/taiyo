@@ -11,5 +11,3 @@ export const librarySearchSchema = z.object({
   q: z.string().trim().max(100).optional().catch(undefined),
   page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),
 })
-
-export type LibrarySearch = z.infer<typeof librarySearchSchema>

@@ -22,8 +22,7 @@ import {
   storedLanguageSchema,
 } from "../utils/schemas"
 
-export const LIBRARY_SORTS = ["read", "updated", "added", "released", "title"] as const
-
+const LIBRARY_SORTS = ["read", "updated", "added", "released", "title"] as const
 const ORDER_BY = {
   read: sql`"lastReadAt" desc nulls last, "updatedAt" desc`,
   updated: sql`"updatedAt" desc`,

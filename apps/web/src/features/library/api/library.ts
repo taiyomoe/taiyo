@@ -31,7 +31,7 @@ export type LibraryFilters = {
   contentRatings: readonly ContentRating[]
 }
 
-export const libraryKeys = {
+const libraryKeys = {
   all: ["library"] as const,
   entry: (mediaId: string) => ["library", "entry", mediaId] as const,
   list: ["library", "list"] as const,
