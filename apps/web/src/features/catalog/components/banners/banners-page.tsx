@@ -13,7 +13,14 @@ import {
   managedBannersQueryOptions,
 } from "@/features/catalog/api/catalog"
 import { BannerRow } from "@/features/catalog/components/banners/banner-row"
+import { BulkDeleteBannersDialog } from "@/features/catalog/components/banners/bulk-delete-banners-dialog"
+import { BulkEditBannersDialog } from "@/features/catalog/components/banners/bulk-edit-banners-dialog"
 import { DeleteBannerDialog } from "@/features/catalog/components/banners/delete-banner-dialog"
+import {
+  BulkBar,
+  BulkDeleteButton,
+  BulkEditButton,
+} from "@/features/catalog/components/shared/bulk-bar"
 import {
   CatalogFooter,
   CatalogTable,
@@ -26,6 +33,7 @@ import {
   CatalogToolbar,
 } from "@/features/catalog/components/shared/catalog-toolbar"
 import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
+import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditBannerDialog } from "@/features/media-images/components/banners/edit-banner-dialog"
@@ -45,6 +53,8 @@ export function BannersPage() {
   const { data } = useQuery(managedBannersQueryOptions(useDeferredValue(filter)))
   const [editing, setEditing] = useState<ManagedBanner | null>(null)
   const [deleting, setDeleting] = useState<DeletableBanner | null>(null)
+  const selection = useSelection(data?.data.map((item) => item.id) ?? [])
+  const [bulk, setBulk] = useState<"edit" | "delete" | null>(null)
   const update = (patch: Partial<ImagesFilter>) => {
     const next = { ...filter, ...patch, page: patch.page ?? 1 }
 
@@ -134,7 +144,22 @@ export function BannersPage() {
             </CatalogFooter>
           )
         }
+        bulkBar={
+          <BulkBar count={selection.ids.length} onClear={selection.clear}>
+            <BulkEditButton
+              onClick={() => {
+                setBulk("edit")
+              }}
+            />
+            <BulkDeleteButton
+              onClick={() => {
+                setBulk("delete")
+              }}
+            />
+          </BulkBar>
+        }
         loading={data === undefined}
+        selection={selection}
         toolbar={
           <CatalogToolbar>
             <CatalogSearch
@@ -161,6 +186,7 @@ export function BannersPage() {
       >
         {data?.data.map((banner) => (
           <BannerRow
+            selection={selection}
             banner={banner}
             key={banner.id}
             onDelete={() => {
@@ -177,6 +203,22 @@ export function BannersPage() {
           />
         ))}
       </CatalogTable>
+      <BulkEditBannersDialog
+        bannerIds={bulk === "edit" ? selection.ids : null}
+        onClose={() => {
+          setBulk(null)
+        }}
+        onDone={selection.clear}
+      />
+      <BulkDeleteBannersDialog
+        banners={
+          bulk === "delete" ? (data?.data ?? []).filter((banner) => selection.has(banner.id)) : null
+        }
+        onClose={() => {
+          setBulk(null)
+        }}
+        onDone={selection.clear}
+      />
       <EditBannerDialog
         banner={editing}
         mediaId={editing?.media.id ?? ""}

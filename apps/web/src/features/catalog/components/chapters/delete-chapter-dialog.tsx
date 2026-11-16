@@ -22,7 +22,8 @@ import { m } from "@/paraglide/messages"
 
 export type DeletableChapter = { id: string; label: string }
 
-const getConsequences = (impact: ChapterDeletionImpact) => {
+/** What deleting chapters takes off the site; the first line depends on how many. */
+export const getChapterConsequences = (impact: ChapterDeletionImpact, hidden: string) => {
   const counted = (
     count: number,
     icon: DeleteConsequence["icon"],
@@ -30,7 +31,7 @@ const getConsequences = (impact: ChapterDeletionImpact) => {
   ) => (count === 0 ? [] : [{ icon, text: text(formatNumber(count)) }])
 
   return [
-    { icon: EyeOff, text: m.catalog_chapter_impact_hidden() },
+    { icon: EyeOff, text: hidden },
     ...counted(impact.pages, Image, (count) => m.catalog_chapter_impact_pages({ count })),
     ...counted(impact.readers, History, (count) => m.catalog_chapter_impact_readers({ count })),
     ...counted(impact.bookmarks, Bookmark, (count) =>
@@ -85,7 +86,10 @@ export function DeleteChapterDialog({
           : {
               title: m.catalog_chapter_delete_title({ chapter: chapter.label }),
               description: m.catalog_chapter_delete_description(),
-              consequences: impact.data === undefined ? undefined : getConsequences(impact.data),
+              consequences:
+                impact.data === undefined
+                  ? undefined
+                  : getChapterConsequences(impact.data, m.catalog_chapter_impact_hidden()),
               loadError: impact.isError ? getErrorMessage(impact.error) : null,
               restorable: false,
               confirmLabel: m.catalog_chapter_delete_confirm(),

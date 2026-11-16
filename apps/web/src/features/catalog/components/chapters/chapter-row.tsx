@@ -6,9 +6,10 @@ import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { ManagedChapter } from "@/features/catalog/api/catalog"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
-import { CatalogCell } from "@/features/catalog/components/shared/catalog-table"
+import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
@@ -26,11 +27,13 @@ const styles = stylex.create({
 
 export function ChapterRow({
   chapter,
+  selection,
   can,
   onEdit,
   onDelete,
 }: {
   chapter: ManagedChapter
+  selection: Selection | undefined
   can: Permissions
   onEdit: () => void
   onDelete: () => void
@@ -76,6 +79,13 @@ export function ChapterRow({
 
   return (
     <TableRow>
+      {selection === undefined ? null : (
+        <CatalogSelectCell
+          id={chapter.id}
+          label={`${chapter.mediaTitle ?? m.media_untitled()} — ${m.chapter_number({ number: chapter.number })}`}
+          selection={selection}
+        />
+      )}
       <CatalogCell column="chapter">
         <MediaCell
           coverUrl={chapter.mediaCoverUrl}

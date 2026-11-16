@@ -26,7 +26,11 @@ import { m } from "@/paraglide/messages"
 
 export type DeletableMedia = { id: string; title: string | null }
 
-const getConsequences = (impact: MediaDeletionImpact) => {
+/** What deleting media takes off the site; the wording of the first and last lines depends on how many. */
+export const getMediaConsequences = (
+  impact: Omit<MediaDeletionImpact, "featured">,
+  { hidden, featured }: { hidden: string; featured: string | null },
+) => {
   const counted = (
     count: number,
     icon: DeleteConsequence["icon"],
@@ -34,7 +38,7 @@ const getConsequences = (impact: MediaDeletionImpact) => {
   ) => (count === 0 ? [] : [{ icon, text: text(formatNumber(count)) }])
 
   return [
-    { icon: EyeOff, text: m.catalog_media_impact_hidden() },
+    { icon: EyeOff, text: hidden },
     ...counted(impact.publishedChapters, Book, (count) =>
       m.catalog_media_impact_chapters({ count }),
     ),
@@ -54,7 +58,7 @@ const getConsequences = (impact: MediaDeletionImpact) => {
       m.catalog_media_impact_suggestions({ count }),
     ),
     ...counted(impact.openPageReports, Flag, (count) => m.catalog_media_impact_reports({ count })),
-    ...(impact.featured ? [{ icon: Sparkles, text: m.catalog_media_impact_featured() }] : []),
+    ...(featured === null ? [] : [{ icon: Sparkles, text: featured }]),
   ] satisfies DeleteConsequence[]
 }
 
@@ -97,7 +101,13 @@ export function DeleteMediaDialog({
           : {
               title: m.catalog_media_delete_title({ title }),
               description: m.catalog_media_delete_description(),
-              consequences: impact.data === undefined ? undefined : getConsequences(impact.data),
+              consequences:
+                impact.data === undefined
+                  ? undefined
+                  : getMediaConsequences(impact.data, {
+                      hidden: m.catalog_media_impact_hidden(),
+                      featured: impact.data.featured ? m.catalog_media_impact_featured() : null,
+                    }),
               loadError: impact.isError ? getErrorMessage(impact.error) : null,
               restorable: true,
               confirmLabel: m.catalog_media_delete_confirm(),

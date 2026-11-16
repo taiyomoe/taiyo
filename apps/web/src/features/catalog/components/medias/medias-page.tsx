@@ -1,5 +1,6 @@
 import { MEDIA_STATUSES, MEDIA_TYPES } from "@taiyomoe/db/constants"
-import { Activity, Book, Library, Plus, Trash } from "@taiyomoe/ui/components/icons"
+import { Activity, Book, Library, Plus, Refresh, Trash } from "@taiyomoe/ui/components/icons"
+import { Button } from "@taiyomoe/ui/components/ui/button"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
@@ -11,10 +12,18 @@ import {
   CATALOG_PER_PAGE,
   type MediasFilter,
   managedMediasQueryOptions,
+  useBulkRestoreMedias,
   useRestoreMedia,
 } from "@/features/catalog/api/catalog"
+import { BulkDeleteMediasDialog } from "@/features/catalog/components/medias/bulk-delete-medias-dialog"
+import { BulkEditMediasDialog } from "@/features/catalog/components/medias/bulk-edit-medias-dialog"
 import { DeleteMediaDialog } from "@/features/catalog/components/medias/delete-media-dialog"
 import { MediaRow } from "@/features/catalog/components/medias/media-row"
+import {
+  BulkBar,
+  BulkDeleteButton,
+  BulkEditButton,
+} from "@/features/catalog/components/shared/bulk-bar"
 import {
   CatalogFooter,
   CatalogTable,
@@ -28,6 +37,8 @@ import {
   CatalogToolbar,
   StatusDot,
 } from "@/features/catalog/components/shared/catalog-toolbar"
+import { useSelection } from "@/features/catalog/hooks/use-selection"
+import { toastBulkResult } from "@/features/catalog/lib/bulk-toast"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import {
@@ -56,6 +67,11 @@ export function MediasPage() {
   const { data } = useQuery(managedMediasQueryOptions(useDeferredValue(filter)))
   const restore = useRestoreMedia()
   const [deleting, setDeleting] = useState<DeletableMedia | null>(null)
+  const selection = useSelection(data?.data.map((media) => media.id) ?? [])
+  const [bulk, setBulk] = useState<"edit" | "delete" | null>(null)
+  const bulkRestore = useBulkRestoreMedias()
+  const bulkActions =
+    filter.deleted === true ? can("media.restore") : can("media.update") || can("media.delete")
   const update = (patch: Partial<MediasFilter>) => {
     const next = { ...filter, ...patch, page: patch.page ?? 1 }
 
@@ -151,7 +167,49 @@ export function MediasPage() {
             </CatalogFooter>
           )
         }
+        bulkBar={
+          <BulkBar count={selection.ids.length} onClear={selection.clear}>
+            {filter.deleted === true ? (
+              <Button
+                loading={bulkRestore.isPending}
+                onClick={() => {
+                  bulkRestore.mutate(selection.ids, {
+                    onSuccess: (result) => {
+                      toastBulkResult(result, m.catalog_bulk_restored)
+                      selection.clear()
+                    },
+                    onError: (error) => {
+                      toastManager.add({ title: getErrorMessage(error), type: "error" })
+                    },
+                  })
+                }}
+                variant="outline"
+              >
+                <Refresh />
+                {m.catalog_media_restore()}
+              </Button>
+            ) : (
+              <>
+                {can("media.update") ? (
+                  <BulkEditButton
+                    onClick={() => {
+                      setBulk("edit")
+                    }}
+                  />
+                ) : null}
+                {can("media.delete") ? (
+                  <BulkDeleteButton
+                    onClick={() => {
+                      setBulk("delete")
+                    }}
+                  />
+                ) : null}
+              </>
+            )}
+          </BulkBar>
+        }
         loading={data === undefined}
+        selection={bulkActions ? selection : undefined}
         toolbar={
           <CatalogToolbar>
             <CatalogSearch
@@ -200,6 +258,7 @@ export function MediasPage() {
         {data?.data.map((media) => (
           <MediaRow
             can={can}
+            selection={bulkActions ? selection : undefined}
             key={media.id}
             media={media}
             onDelete={() => {
@@ -222,6 +281,20 @@ export function MediasPage() {
           />
         ))}
       </CatalogTable>
+      <BulkEditMediasDialog
+        mediaIds={bulk === "edit" ? selection.ids : null}
+        onClose={() => {
+          setBulk(null)
+        }}
+        onDone={selection.clear}
+      />
+      <BulkDeleteMediasDialog
+        mediaIds={bulk === "delete" ? selection.ids : null}
+        onClose={() => {
+          setBulk(null)
+        }}
+        onDone={selection.clear}
+      />
       <DeleteMediaDialog
         media={deleting}
         onClose={() => {

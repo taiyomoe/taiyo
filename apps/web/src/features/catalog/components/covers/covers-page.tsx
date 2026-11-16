@@ -14,8 +14,15 @@ import {
   type ImagesFilter,
   managedCoversQueryOptions,
 } from "@/features/catalog/api/catalog"
+import { BulkDeleteCoversDialog } from "@/features/catalog/components/covers/bulk-delete-covers-dialog"
+import { BulkEditCoversDialog } from "@/features/catalog/components/covers/bulk-edit-covers-dialog"
 import { CoverRow } from "@/features/catalog/components/covers/cover-row"
 import { DeleteCoverDialog } from "@/features/catalog/components/covers/delete-cover-dialog"
+import {
+  BulkBar,
+  BulkDeleteButton,
+  BulkEditButton,
+} from "@/features/catalog/components/shared/bulk-bar"
 import {
   CatalogFooter,
   CatalogTable,
@@ -28,6 +35,7 @@ import {
   CatalogToolbar,
 } from "@/features/catalog/components/shared/catalog-toolbar"
 import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
+import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditCoverDialog } from "@/features/media-images/components/covers/edit-cover-dialog"
@@ -48,6 +56,8 @@ export function CoversPage() {
   const { data } = useQuery(managedCoversQueryOptions(useDeferredValue(filter)))
   const [editing, setEditing] = useState<ManagedCover | null>(null)
   const [deleting, setDeleting] = useState<DeletableCover | null>(null)
+  const selection = useSelection(data?.data.map((item) => item.id) ?? [])
+  const [bulk, setBulk] = useState<"edit" | "delete" | null>(null)
   const update = (patch: Partial<ImagesFilter>) => {
     const next = { ...filter, ...patch, page: patch.page ?? 1 }
 
@@ -139,7 +149,22 @@ export function CoversPage() {
             </CatalogFooter>
           )
         }
+        bulkBar={
+          <BulkBar count={selection.ids.length} onClear={selection.clear}>
+            <BulkEditButton
+              onClick={() => {
+                setBulk("edit")
+              }}
+            />
+            <BulkDeleteButton
+              onClick={() => {
+                setBulk("delete")
+              }}
+            />
+          </BulkBar>
+        }
         loading={data === undefined}
+        selection={selection}
         toolbar={
           <CatalogToolbar>
             <CatalogSearch
@@ -178,6 +203,7 @@ export function CoversPage() {
       >
         {data?.data.map((cover) => (
           <CoverRow
+            selection={selection}
             cover={cover}
             key={cover.id}
             onDelete={() => {
@@ -195,6 +221,22 @@ export function CoversPage() {
           />
         ))}
       </CatalogTable>
+      <BulkEditCoversDialog
+        coverIds={bulk === "edit" ? selection.ids : null}
+        onClose={() => {
+          setBulk(null)
+        }}
+        onDone={selection.clear}
+      />
+      <BulkDeleteCoversDialog
+        covers={
+          bulk === "delete" ? (data?.data ?? []).filter((cover) => selection.has(cover.id)) : null
+        }
+        onClose={() => {
+          setBulk(null)
+        }}
+        onDone={selection.clear}
+      />
       <EditCoverDialog
         cover={editing}
         mediaId={editing?.media.id ?? ""}

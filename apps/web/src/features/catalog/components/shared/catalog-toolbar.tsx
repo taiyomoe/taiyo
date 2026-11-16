@@ -111,7 +111,28 @@ export function CatalogSearch({
   )
 }
 
-export function CatalogSelect<TValue extends string>({
+type CatalogSelectProps<TValue extends string> = {
+  label: string
+  /** The option that stands for no value: every value in a filter, no change in a bulk edit. */
+  allLabel: string
+  icon: (props: IconProps) => ReactElement
+  options: readonly TValue[]
+  value: TValue | undefined
+  getLabel: (value: TValue) => string
+  renderIcon?: (value: TValue) => ReactNode
+  onChange: (value: TValue | undefined) => void
+}
+
+export function CatalogSelect<TValue extends string>(props: CatalogSelectProps<TValue>) {
+  return (
+    <div sx={styles.select}>
+      <CatalogSelectControl {...props} />
+    </div>
+  )
+}
+
+/** The select alone, for forms that lay it out themselves. */
+export function CatalogSelectControl<TValue extends string>({
   label,
   allLabel,
   icon: Icon,
@@ -120,16 +141,7 @@ export function CatalogSelect<TValue extends string>({
   getLabel,
   renderIcon,
   onChange,
-}: {
-  label: string
-  allLabel: string
-  icon: (props: IconProps) => ReactElement
-  options: readonly TValue[]
-  value: TValue | undefined
-  getLabel: (value: TValue) => string
-  renderIcon?: (value: TValue) => ReactNode
-  onChange: (value: TValue | undefined) => void
-}) {
+}: CatalogSelectProps<TValue>) {
   const option = (choice: TValue | undefined) => (
     <span sx={styles.option}>
       {choice === undefined || renderIcon === undefined ? (
@@ -142,26 +154,24 @@ export function CatalogSelect<TValue extends string>({
   )
 
   return (
-    <div sx={styles.select}>
-      <Select
-        onValueChange={(next) => {
-          onChange(options.find((candidate) => candidate === next))
-        }}
-        value={value ?? ALL}
-      >
-        <SelectTrigger aria-label={label}>
-          <SelectValue>{() => option(value)}</SelectValue>
-        </SelectTrigger>
-        <SelectPopup>
-          <SelectItem value={ALL}>{option(undefined)}</SelectItem>
-          {options.map((candidate) => (
-            <SelectItem key={candidate} value={candidate}>
-              {option(candidate)}
-            </SelectItem>
-          ))}
-        </SelectPopup>
-      </Select>
-    </div>
+    <Select
+      onValueChange={(next) => {
+        onChange(options.find((candidate) => candidate === next))
+      }}
+      value={value ?? ALL}
+    >
+      <SelectTrigger aria-label={label}>
+        <SelectValue>{() => option(value)}</SelectValue>
+      </SelectTrigger>
+      <SelectPopup>
+        <SelectItem value={ALL}>{option(undefined)}</SelectItem>
+        {options.map((candidate) => (
+          <SelectItem key={candidate} value={candidate}>
+            {option(candidate)}
+          </SelectItem>
+        ))}
+      </SelectPopup>
+    </Select>
   )
 }
 

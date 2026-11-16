@@ -48,6 +48,8 @@ export type MediaDeletionImpact = InferResponseType<
   200
 >["data"]
 
+export type BulkResult = { done: string[]; skipped: Array<{ id: string; reason: string }> }
+
 export type ChapterDeletionImpact = InferResponseType<
   (typeof api.chapters)[":id"]["deletion-impact"]["$get"],
   200
@@ -169,6 +171,32 @@ export const chapterDeletionImpactQueryOptions = (chapterId: string) =>
     staleTime: 0,
   })
 
+export const mediasDeletionImpactQueryOptions = (mediaIds: readonly string[]) =>
+  queryOptions({
+    queryKey: ["medias", [...mediaIds].sort(), "deletion-impact"],
+    queryFn: async ({ signal }) =>
+      unwrap(
+        await api.medias["deletion-impact"].$get(
+          { query: { ids: mediaIds.join(",") } },
+          { init: { signal } },
+        ),
+      ),
+    staleTime: 0,
+  })
+
+export const chaptersDeletionImpactQueryOptions = (chapterIds: readonly string[]) =>
+  queryOptions({
+    queryKey: ["chapters", [...chapterIds].sort(), "deletion-impact"],
+    queryFn: async ({ signal }) =>
+      unwrap(
+        await api.chapters["deletion-impact"].$get(
+          { query: { ids: chapterIds.join(",") } },
+          { init: { signal } },
+        ),
+      ),
+    staleTime: 0,
+  })
+
 const useInvalidateCatalog = () => {
   const queryClient = useQueryClient()
 
@@ -239,3 +267,56 @@ export function useCreateMedia() {
     onSuccess: invalidate,
   })
 }
+
+const useBulkMutation = <TInput>(run: (input: TInput) => Promise<BulkResult>) => {
+  const invalidate = useInvalidateCatalog()
+
+  return useMutation({ mutationFn: run, onSuccess: invalidate })
+}
+
+export const useBulkUpdateMedias = () =>
+  useBulkMutation(async (json: Parameters<typeof api.medias.$patch>[0]["json"]) =>
+    unwrap(await api.medias.$patch({ json })),
+  )
+
+export const useBulkDeleteMedias = () =>
+  useBulkMutation(async (mediaIds: string[]) =>
+    unwrap(await api.medias.$delete({ json: { mediaIds } })),
+  )
+
+export const useBulkRestoreMedias = () =>
+  useBulkMutation(async (mediaIds: string[]) =>
+    unwrap(await api.medias.restore.$post({ json: { mediaIds } })),
+  )
+
+export const useBulkUpdateChapters = () =>
+  useBulkMutation(async (json: Parameters<typeof api.chapters.$patch>[0]["json"]) => {
+    const response = await api.chapters.$patch({ json })
+
+    return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+  })
+
+export const useBulkDeleteChapters = () =>
+  useBulkMutation(async (chapterIds: string[]) =>
+    unwrap(await api.chapters.$delete({ json: { chapterIds } })),
+  )
+
+export const useBulkUpdateCovers = () =>
+  useBulkMutation(async (json: Parameters<typeof api.covers.$patch>[0]["json"]) =>
+    unwrap(await api.covers.$patch({ json })),
+  )
+
+export const useBulkDeleteCovers = () =>
+  useBulkMutation(async (coverIds: string[]) =>
+    unwrap(await api.covers.$delete({ json: { coverIds } })),
+  )
+
+export const useBulkUpdateBanners = () =>
+  useBulkMutation(async (json: Parameters<typeof api.banners.$patch>[0]["json"]) =>
+    unwrap(await api.banners.$patch({ json })),
+  )
+
+export const useBulkDeleteBanners = () =>
+  useBulkMutation(async (bannerIds: string[]) =>
+    unwrap(await api.banners.$delete({ json: { bannerIds } })),
+  )

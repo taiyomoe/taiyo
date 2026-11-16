@@ -5,9 +5,10 @@ import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { Link } from "@tanstack/react-router"
 import type { ManagedCover } from "@/features/catalog/api/catalog"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
-import { CatalogCell } from "@/features/catalog/components/shared/catalog-table"
+import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { ImageThumb } from "@/features/catalog/components/shared/image-thumb"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
 import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
@@ -21,10 +22,12 @@ import { m } from "@/paraglide/messages"
 
 export function CoverRow({
   cover,
+  selection,
   onEdit,
   onDelete,
 }: {
   cover: ManagedCover
+  selection: Selection | undefined
   onEdit: () => void
   onDelete: () => void
 }) {
@@ -40,6 +43,9 @@ export function CoverRow({
 
   return (
     <TableRow>
+      {selection === undefined ? null : (
+        <CatalogSelectCell id={cover.id} label={title} selection={selection} />
+      )}
       <CatalogCell column="media">
         <MediaCell
           detail={cover.volume === null ? undefined : m.catalog_volume({ volume: cover.volume })}

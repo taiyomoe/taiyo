@@ -14,8 +14,9 @@ import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { ManagedMedia } from "@/features/catalog/api/catalog"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
 import { TimeAgo } from "@/components/time/time-ago"
-import { CatalogCell } from "@/features/catalog/components/shared/catalog-table"
+import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
 import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
@@ -32,12 +33,14 @@ import { m } from "@/paraglide/messages"
 export function MediaRow({
   media,
   can,
+  selection,
   restoring,
   onDelete,
   onRestore,
 }: {
   media: ManagedMedia
   can: Permissions
+  selection: Selection | undefined
   restoring: boolean
   onDelete: () => void
   onRestore: () => void
@@ -97,6 +100,13 @@ export function MediaRow({
 
   return (
     <TableRow>
+      {selection === undefined ? null : (
+        <CatalogSelectCell
+          id={media.id}
+          label={media.title ?? m.media_untitled()}
+          selection={selection}
+        />
+      )}
       <CatalogCell column="media">
         <MediaCell
           coverUrl={media.coverUrl}

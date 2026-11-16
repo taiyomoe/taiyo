@@ -3,8 +3,9 @@ import { Banner, Edit, Trash } from "@taiyomoe/ui/components/icons"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { ManagedBanner } from "@/features/catalog/api/catalog"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
 import { TimeAgo } from "@/components/time/time-ago"
-import { CatalogCell } from "@/features/catalog/components/shared/catalog-table"
+import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { ImageThumb } from "@/features/catalog/components/shared/image-thumb"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
 import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
@@ -16,10 +17,12 @@ import { m } from "@/paraglide/messages"
 
 export function BannerRow({
   banner,
+  selection,
   onEdit,
   onDelete,
 }: {
   banner: ManagedBanner
+  selection: Selection | undefined
   onEdit: () => void
   onDelete: () => void
 }) {
@@ -27,6 +30,13 @@ export function BannerRow({
 
   return (
     <TableRow>
+      {selection === undefined ? null : (
+        <CatalogSelectCell
+          id={banner.id}
+          label={banner.media.title ?? m.media_untitled()}
+          selection={selection}
+        />
+      )}
       <CatalogCell column="image">{thumb}</CatalogCell>
       <CatalogCell column="media">
         <MediaCell

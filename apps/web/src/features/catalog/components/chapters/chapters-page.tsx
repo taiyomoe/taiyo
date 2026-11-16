@@ -14,8 +14,15 @@ import {
   type ChaptersFilter,
   managedChaptersQueryOptions,
 } from "@/features/catalog/api/catalog"
+import { BulkDeleteChaptersDialog } from "@/features/catalog/components/chapters/bulk-delete-chapters-dialog"
+import { BulkEditChaptersDialog } from "@/features/catalog/components/chapters/bulk-edit-chapters-dialog"
 import { ChapterRow } from "@/features/catalog/components/chapters/chapter-row"
 import { DeleteChapterDialog } from "@/features/catalog/components/chapters/delete-chapter-dialog"
+import {
+  BulkBar,
+  BulkDeleteButton,
+  BulkEditButton,
+} from "@/features/catalog/components/shared/bulk-bar"
 import {
   CatalogFooter,
   CatalogTable,
@@ -28,6 +35,7 @@ import {
   CatalogToolbar,
   StatusDot,
 } from "@/features/catalog/components/shared/catalog-toolbar"
+import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditChapterDialog } from "@/features/groups/components/manage-group/chapters/edit-chapter-dialog"
@@ -51,6 +59,8 @@ export function ChaptersPage() {
   const { data } = useQuery(managedChaptersQueryOptions(useDeferredValue(filter)))
   const [editing, setEditing] = useState<EditableChapter | null>(null)
   const [deleting, setDeleting] = useState<DeletableChapter | null>(null)
+  const selection = useSelection(data?.data.map((item) => item.id) ?? [])
+  const [bulk, setBulk] = useState<"edit" | "delete" | null>(null)
   const update = (patch: Partial<ChaptersFilter>) => {
     const next = { ...filter, ...patch, page: patch.page ?? 1 }
 
@@ -144,7 +154,22 @@ export function ChaptersPage() {
             </CatalogFooter>
           )
         }
+        bulkBar={
+          <BulkBar count={selection.ids.length} onClear={selection.clear}>
+            <BulkEditButton
+              onClick={() => {
+                setBulk("edit")
+              }}
+            />
+            <BulkDeleteButton
+              onClick={() => {
+                setBulk("delete")
+              }}
+            />
+          </BulkBar>
+        }
         loading={data === undefined}
+        selection={selection}
         toolbar={
           <CatalogToolbar>
             <CatalogSearch
@@ -183,6 +208,7 @@ export function ChaptersPage() {
       >
         {data?.data.map((chapter) => (
           <ChapterRow
+            selection={selection}
             can={can}
             chapter={chapter}
             key={chapter.id}
@@ -198,6 +224,20 @@ export function ChaptersPage() {
           />
         ))}
       </CatalogTable>
+      <BulkEditChaptersDialog
+        chapterIds={bulk === "edit" ? selection.ids : null}
+        onClose={() => {
+          setBulk(null)
+        }}
+        onDone={selection.clear}
+      />
+      <BulkDeleteChaptersDialog
+        chapterIds={bulk === "delete" ? selection.ids : null}
+        onClose={() => {
+          setBulk(null)
+        }}
+        onDone={selection.clear}
+      />
       <EditChapterDialog
         chapter={editing}
         onClose={() => {

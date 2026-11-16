@@ -2,6 +2,7 @@ import type { IconProps } from "@taiyomoe/ui/components/icons"
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import type { ReactElement, ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import {
   Empty,
   EmptyDescription,
@@ -22,8 +23,10 @@ import {
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { createContext, use } from "react"
 import { range } from "remeda"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
 import { type CatalogBreakpoint, catalogShownFrom } from "@/features/catalog/lib/catalog-styles"
 import { catalogContainers } from "@/features/catalog/lib/catalog.stylex"
+import { m } from "@/paraglide/messages"
 
 export type CatalogColumn = {
   key: string
@@ -33,6 +36,7 @@ export type CatalogColumn = {
   from?: CatalogBreakpoint
 }
 
+const SELECT_COLUMN = "select"
 const ColumnsContext = createContext<ReadonlyMap<string, CatalogColumn>>(new Map())
 const styles = stylex.create({
   section: {
@@ -48,6 +52,9 @@ const styles = stylex.create({
   },
   table: {
     tableLayout: "fixed",
+  },
+  colSelect: {
+    width: "2.75rem",
   },
   head: {
     overflow: "hidden",
@@ -104,13 +111,17 @@ const styles = stylex.create({
 
 export function CatalogTable({
   toolbar,
-  columns,
+  selection,
+  columns: ownColumns,
   loading,
   empty,
   footer,
+  bulkBar,
   children,
 }: {
   toolbar: ReactNode
+  /** Adds a leading checkbox column. */
+  selection?: Selection | undefined
   columns: readonly CatalogColumn[]
   loading: boolean
   empty: {
@@ -119,9 +130,28 @@ export function CatalogTable({
     description: string
   } | null
   footer: ReactNode
+  bulkBar?: ReactNode
   children: ReactNode
 }) {
   const Icon = empty?.icon
+  const columns: readonly CatalogColumn[] =
+    selection === undefined
+      ? ownColumns
+      : [
+          {
+            key: SELECT_COLUMN,
+            label: (
+              <Checkbox
+                aria-label={m.catalog_select_all()}
+                checked={selection.header.checked}
+                indeterminate={selection.header.indeterminate}
+                onCheckedChange={selection.header.onToggle}
+              />
+            ),
+            width: styles.colSelect,
+          },
+          ...ownColumns,
+        ]
 
   return (
     <section sx={styles.section}>
@@ -174,6 +204,7 @@ export function CatalogTable({
         )}
         {footer}
       </Frame>
+      {bulkBar}
     </section>
   )
 }
@@ -194,6 +225,29 @@ export function CatalogCell({
     <TableCell sx={[styles.cell, from === undefined ? null : catalogShownFrom[from], sx]}>
       {children}
     </TableCell>
+  )
+}
+
+/** The checkbox that adds a row to the selection. */
+export function CatalogSelectCell({
+  selection,
+  id,
+  label,
+}: {
+  selection: Selection
+  id: string
+  label: string
+}) {
+  return (
+    <CatalogCell column={SELECT_COLUMN}>
+      <Checkbox
+        aria-label={m.catalog_select_row({ name: label })}
+        checked={selection.has(id)}
+        onCheckedChange={() => {
+          selection.toggle(id)
+        }}
+      />
+    </CatalogCell>
   )
 }
 
