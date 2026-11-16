@@ -6,7 +6,8 @@ import { Radio as RadioPrimitive } from "@base-ui/react/radio"
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
-import { createContext, useContext, useMemo } from "react"
+import { HotkeysProvider } from "@tanstack/react-hotkeys"
+import { createContext, useContext, useId, useMemo } from "react"
 import type { Sx } from "../../styles/sx"
 import { drawerSwitchItemMarker } from "../../styles/markers.stylex"
 import { transitions } from "../../styles/recipes"
@@ -704,6 +705,7 @@ export function DrawerPopup({
 }): React.ReactElement {
   const { position: contextPosition } = useContext(DrawerContext)
   const position = positionProp ?? contextPosition
+  const scope = `drawer-${useId()}`
   const styleProps = stylex.props(
     styles.popup,
     POPUP_POSITION_STYLE[position],
@@ -727,7 +729,9 @@ export function DrawerPopup({
           style={styleProps.style}
           {...props}
         >
-          {children}
+          <HotkeysProvider exclusive scope={scope}>
+            {children}
+          </HotkeysProvider>
           {showCloseButton && (
             <DrawerPrimitive.Close
               aria-label="Close"

@@ -20,6 +20,7 @@
     "@hugeicons/core-free-icons": "^4.4.0",
     "@hugeicons/react": "^1.1.10",
     "@stylexjs/stylex": "^0.19.1",
+    "@tanstack/react-hotkeys": "^0.22.3",
     "clsx": "^2.1.1",
     "react": "^19.3.1",
     "react-day-picker": "^10.0.2",

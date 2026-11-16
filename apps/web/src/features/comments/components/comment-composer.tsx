@@ -10,6 +10,7 @@ import {
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useHotkeys } from "@tanstack/react-hotkeys"
 import { useRef, useState } from "react"
 import type { CommentImage } from "@/features/comments/api/comments"
 import { ErrorAlert } from "@/components/feedback/error-alert"
@@ -163,6 +164,20 @@ export function CommentComposer({
     uploads.start(files, config.comments.maxImages - imageIds.length - uploads.pending)
   }
 
+  useHotkeys(
+    [
+      { hotkey: "Mod+Enter", callback: submit, options: { meta: { name: submitLabel } } },
+      {
+        hotkey: "Escape",
+        callback: () => {
+          onCancel?.()
+        },
+        options: { enabled: onCancel !== undefined, meta: { name: "Cancel" } },
+      },
+    ],
+    { target: textarea, capture: true },
+  )
+
   return (
     <div sx={styles.root}>
       <ErrorAlert message={error} />
@@ -176,15 +191,6 @@ export function CommentComposer({
           setContent(event.target.value)
         }}
         onFiles={addFiles}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
-            event.preventDefault()
-            submit()
-          } else if (event.key === "Escape" && onCancel !== undefined) {
-            event.preventDefault()
-            onCancel()
-          }
-        }}
         placeholder={placeholder}
         rows={rows}
         toolbarEnd={

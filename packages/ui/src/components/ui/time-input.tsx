@@ -1,5 +1,6 @@
 import type * as React from "react"
 import * as stylex from "@stylexjs/stylex"
+import { matchesKeyboardEvent } from "@tanstack/react-hotkeys"
 import { useEffect, useRef, useState } from "react"
 import type { Sx } from "../../styles/sx"
 import { breakpoints, colors, radius } from "../../styles/tokens.stylex"
@@ -230,7 +231,7 @@ export function TimeInput({
             } else if (event.key === "Escape" && text !== null) {
               event.stopPropagation()
               setText(null)
-            } else if (event.key === "ArrowDown" && event.altKey) {
+            } else if (matchesKeyboardEvent(event.nativeEvent, "Alt+ArrowDown")) {
               event.preventDefault()
               commit()
               setOpen(true)

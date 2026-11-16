@@ -1361,6 +1361,8 @@
   "reader_swipe": "Balayer pour tourner les pages",
   "reader_cursor_hints": "Afficher des flèches sur le curseur",
   "reader_auto_hide": "Masquer les contrôles en cas d’inactivité",
+  "reader_keyboard_shortcuts": "Raccourcis à une touche",
+  "reader_keyboard_shortcuts_hint": "Les touches de lettre, de chiffre et de symbole comme M ou +. Les flèches et Espace fonctionnent toujours.",
   "reader_confirm_chapter": "Demander avant de changer de chapitre",
   "reader_warn_gap": "Prévenir des chapitres manquants",
   "reader_resume": "Reprendre là où je me suis arrêté",

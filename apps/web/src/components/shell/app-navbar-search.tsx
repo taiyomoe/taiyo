@@ -2,10 +2,10 @@ import * as stylex from "@stylexjs/stylex"
 import { Search } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { InputGroup, InputGroupAddon } from "@taiyomoe/ui/components/ui/input-group"
-import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
+import { KbdHotkey } from "@taiyomoe/ui/components/ui/kbd"
 import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useAppHotkeys } from "@tanstack/react-hotkeys"
 import { usePalette } from "@/features/command-palette/lib/palette-context"
-import { useClientValue } from "@/hooks/use-client-value"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -58,7 +58,7 @@ const styles = stylex.create({
 
 export function AppNavbarSearch() {
   const { openPalette } = usePalette()
-  const mac = useClientValue(() => /Mac|iPhone|iPad/.test(navigator.platform))
+  const { hotkey } = useAppHotkeys()["palette.toggle"]
 
   return (
     <>
@@ -90,12 +90,9 @@ export function AppNavbarSearch() {
           >
             <span sx={styles.label}>{m.shell_search_placeholder()}</span>
           </button>
-          {mac === null ? null : (
+          {hotkey === null ? null : (
             <InputGroupAddon align="inline-end" sx={styles.shortcutAddon}>
-              <KbdGroup sx={styles.shortcut}>
-                <Kbd>{mac ? "⌘" : "Ctrl"}</Kbd>
-                <Kbd>K</Kbd>
-              </KbdGroup>
+              <KbdHotkey hotkey={hotkey} sx={styles.shortcut} />
             </InputGroupAddon>
           )}
         </InputGroup>

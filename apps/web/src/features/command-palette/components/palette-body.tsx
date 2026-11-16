@@ -13,6 +13,7 @@ import {
   CommandSeparator,
 } from "@taiyomoe/ui/components/ui/command"
 import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { matchesKeyboardEvent, useHotkey } from "@tanstack/react-hotkeys"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Fragment, useEffect, useState, useSyncExternalStore } from "react"
 import { quickSearchQueryOptions } from "@/features/command-palette/api/quick-search"
@@ -34,6 +35,7 @@ import {
 import { usePalette } from "@/features/command-palette/lib/palette-context"
 import { rememberEntity, useRecentEntities } from "@/features/command-palette/lib/recent-entities"
 import { useDebouncedValue } from "@/hooks/use-debounced-value"
+import { appHotkeys } from "@/lib/app-hotkeys"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -194,6 +196,8 @@ export function PaletteBody({
     setQuery("")
   }
 
+  useHotkey(appHotkeys["palette.toggle"], onClose)
+
   useEffect(() => {
     escapeRef.current = () => {
       if (stack.length === 0) {
@@ -283,8 +287,7 @@ export function PaletteBody({
                   event.preventDefault()
                 }
               } else if (
-                event.key === "Enter" &&
-                (event.metaKey || event.ctrlKey) &&
+                matchesKeyboardEvent(event.nativeEvent, "Mod+Enter") &&
                 highlighted !== undefined
               ) {
                 event.preventDefault()

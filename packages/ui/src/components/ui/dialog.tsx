@@ -3,6 +3,8 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
+import { HotkeysProvider } from "@tanstack/react-hotkeys"
+import { useId } from "react"
 import type { Sx } from "../../styles/sx"
 import { surface } from "../../styles/recipes"
 import {
@@ -283,6 +285,7 @@ export function DialogPopup({
   portalProps?: DialogPrimitive.Portal.Props
   sx?: Sx
 }): React.ReactElement {
+  const scope = `dialog-${useId()}`
   const styleProps = stylex.props(
     surface.raisedEdge,
     styles.popup,
@@ -300,7 +303,9 @@ export function DialogPopup({
           style={styleProps.style}
           {...props}
         >
-          {children}
+          <HotkeysProvider exclusive scope={scope}>
+            {children}
+          </HotkeysProvider>
           {showCloseButton && (
             <DialogPrimitive.Close
               aria-label="Close"

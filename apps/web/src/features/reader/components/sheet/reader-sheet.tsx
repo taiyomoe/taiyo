@@ -11,6 +11,7 @@ import {
   SheetPopup,
   SheetTitle,
 } from "@taiyomoe/ui/components/ui/sheet"
+import { useHotkey } from "@tanstack/react-hotkeys"
 import { type ComponentProps, useRef } from "react"
 import type { ReaderSettingsControls } from "@/features/reader/hooks/use-reader-settings"
 import { OfflineSection } from "@/features/offline/components/offline-section"
@@ -21,6 +22,7 @@ import { ImageSection } from "@/features/reader/components/sheet/image-section"
 import { LayoutSection } from "@/features/reader/components/sheet/layout-section"
 import { ProgressSection } from "@/features/reader/components/sheet/progress-section"
 import { ShortcutsSection } from "@/features/reader/components/sheet/shortcuts-section"
+import { appHotkeys } from "@/lib/app-hotkeys"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -37,6 +39,12 @@ const styles = stylex.create({
     flexDirection: "column",
   },
 })
+
+function MenuHotkey({ enabled, onClose }: { enabled: boolean; onClose: () => void }) {
+  useHotkey(appHotkeys["reader.menu"], onClose, { enabled })
+
+  return null
+}
 
 export function ReaderSheet({
   open,
@@ -66,6 +74,12 @@ export function ReaderSheet({
         side="left"
         sx={styles.popup}
       >
+        <MenuHotkey
+          enabled={controls.settings.keyboardShortcuts}
+          onClose={() => {
+            onOpenChange(false)
+          }}
+        />
         <SheetHeader sx={styles.header}>
           <SheetTitle>{m.reader_sheet_title()}</SheetTitle>
           <SheetDescription>

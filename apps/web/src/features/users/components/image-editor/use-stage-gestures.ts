@@ -4,8 +4,6 @@ import type { ImageEditor } from "@/features/users/components/image-editor/use-i
 
 /** Pixels per wheel `deltaMode` unit: pixels, lines, pages. */
 const WHEEL_UNITS = [1, 16, 400]
-const KEY_PAN = 10
-const KEY_PAN_FAST = 50
 const measurePair = (pointers: Map<number, Point>) => {
   const [first, second] = [...pointers.values()]
 
@@ -119,71 +117,4 @@ export const useStageGestures = (editor: ImageEditor, stage: RefObject<HTMLDivEl
       element.removeEventListener("dblclick", onDoubleClick)
     }
   }, [editor, stage])
-}
-
-const KEY_ACTIONS: Record<string, ((editor: ImageEditor, step: number) => void) | undefined> = {
-  ArrowLeft: (editor, step) => {
-    editor.panBy(-step, 0)
-  },
-  ArrowRight: (editor, step) => {
-    editor.panBy(step, 0)
-  },
-  ArrowUp: (editor, step) => {
-    editor.panBy(0, -step)
-  },
-  ArrowDown: (editor, step) => {
-    editor.panBy(0, step)
-  },
-  "+": (editor) => {
-    editor.stepZoom(1)
-  },
-  "=": (editor) => {
-    editor.stepZoom(1)
-  },
-  "-": (editor) => {
-    editor.stepZoom(-1)
-  },
-  _: (editor) => {
-    editor.stepZoom(-1)
-  },
-  r: (editor) => {
-    editor.rotate(1)
-  },
-  R: (editor) => {
-    editor.rotate(-1)
-  },
-  h: (editor) => {
-    editor.flip("x")
-  },
-  H: (editor) => {
-    editor.flip("x")
-  },
-  v: (editor) => {
-    editor.flip("y")
-  },
-  V: (editor) => {
-    editor.flip("y")
-  },
-  g: (editor) => {
-    editor.toggleGrid()
-  },
-  G: (editor) => {
-    editor.toggleGrid()
-  },
-  "0": (editor) => {
-    editor.reset()
-  },
-}
-
-/** Keyboard shortcuts on the focused stage. Returns whether the key was handled. */
-export const handleStageKey = (editor: ImageEditor, event: KeyboardEvent) => {
-  const action = event.ctrlKey || event.metaKey || event.altKey ? undefined : KEY_ACTIONS[event.key]
-
-  if (action === undefined) {
-    return false
-  }
-
-  action(editor, event.shiftKey ? KEY_PAN_FAST : KEY_PAN)
-
-  return true
 }

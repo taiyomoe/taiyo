@@ -1361,6 +1361,8 @@
   "reader_swipe": "Swipe to turn pages",
   "reader_cursor_hints": "Show arrows on the cursor",
   "reader_auto_hide": "Hide controls when idle",
+  "reader_keyboard_shortcuts": "Single-key shortcuts",
+  "reader_keyboard_shortcuts_hint": "Letter, number and symbol keys such as M or +. Arrow keys and Space always work.",
   "reader_confirm_chapter": "Ask before changing chapter",
   "reader_warn_gap": "Warn about missing chapters",
   "reader_resume": "Resume where I left off",

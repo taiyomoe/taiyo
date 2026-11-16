@@ -8,7 +8,8 @@ import {
   DialogPrimitive,
 } from "@taiyomoe/ui/components/ui/dialog"
 import { breakpoints, motion } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useEffect, useRef, useState } from "react"
+import { HotkeysProvider, useHotkeys } from "@tanstack/react-hotkeys"
+import { useEffect, useId, useRef, useState } from "react"
 import { LightboxBar } from "@/features/media/components/image-lightbox/lightbox-bar"
 import { LightboxImage } from "@/features/media/components/image-lightbox/lightbox-image"
 import { OverlayButton } from "@/features/media/components/image-lightbox/overlay-button"
@@ -101,11 +102,47 @@ export function ImageLightbox({
   const swipeStart = useRef<number | null>(null)
   const swiped = useRef(false)
   const popup = useRef<HTMLDivElement>(null)
+  const [popupElement, setPopupElement] = useState<HTMLDivElement | null>(null)
+  const scope = `lightbox-${useId()}`
   const step = (delta: number) => {
     if (index !== null && count > 1) {
       onIndexChange((index + delta + count) % count)
     }
   }
+
+  useHotkeys(
+    [
+      {
+        hotkey: "ArrowRight",
+        callback: () => {
+          step(1)
+        },
+        options: { meta: { name: "Next image" } },
+      },
+      {
+        hotkey: "ArrowLeft",
+        callback: () => {
+          step(-1)
+        },
+        options: { meta: { name: "Previous image" } },
+      },
+      {
+        hotkey: "Home",
+        callback: () => {
+          onIndexChange(0)
+        },
+        options: { meta: { name: "First image" } },
+      },
+      {
+        hotkey: "End",
+        callback: () => {
+          onIndexChange(count - 1)
+        },
+        options: { meta: { name: "Last image" } },
+      },
+    ],
+    { scope, target: popupElement, capture: true },
+  )
 
   useEffect(() => {
     if (index === null || count < 2) {
@@ -131,7 +168,10 @@ export function ImageLightbox({
       <DialogPortal>
         <DialogBackdrop sx={styles.backdrop} />
         <DialogPrimitive.Popup
-          ref={popup}
+          ref={(element) => {
+            popup.current = element
+            setPopupElement(element)
+          }}
           {...stylex.props(styles.popup)}
           initialFocus={popup}
           // The popup covers the backdrop, so a click on the empty space around the image
@@ -150,74 +190,61 @@ export function ImageLightbox({
               onClose()
             }
           }}
-          onKeyDown={(event) => {
-            if (event.key === "ArrowRight") {
-              event.preventDefault()
-              step(1)
-            } else if (event.key === "ArrowLeft") {
-              event.preventDefault()
-              step(-1)
-            } else if (event.key === "Home" && index !== null) {
-              event.preventDefault()
-              onIndexChange(0)
-            } else if (event.key === "End" && index !== null) {
-              event.preventDefault()
-              onIndexChange(count - 1)
-            }
-          }}
         >
-          <DialogPrimitive.Title {...stylex.props(styles.title)}>
-            {item?.title ?? m.media_lightbox_title()}
-          </DialogPrimitive.Title>
-          {item === undefined || shownIndex === null ? null : (
-            <>
-              <LightboxBar count={count} index={shownIndex} item={item} onClose={onClose} />
-              <div
-                onPointerDown={(event) => {
-                  swipeStart.current = event.pointerType === "mouse" ? null : event.clientX
-                }}
-                onPointerUp={(event) => {
-                  const start = swipeStart.current
+          <HotkeysProvider exclusive scope={scope}>
+            <DialogPrimitive.Title {...stylex.props(styles.title)}>
+              {item?.title ?? m.media_lightbox_title()}
+            </DialogPrimitive.Title>
+            {item === undefined || shownIndex === null ? null : (
+              <>
+                <LightboxBar count={count} index={shownIndex} item={item} onClose={onClose} />
+                <div
+                  onPointerDown={(event) => {
+                    swipeStart.current = event.pointerType === "mouse" ? null : event.clientX
+                  }}
+                  onPointerUp={(event) => {
+                    const start = swipeStart.current
 
-                  swipeStart.current = null
+                    swipeStart.current = null
 
-                  if (start !== null && Math.abs(event.clientX - start) > SWIPE_DISTANCE) {
-                    swiped.current = true
-                    step(event.clientX < start ? 1 : -1)
-                  }
-                }}
-                sx={styles.stage}
-              >
-                <LightboxImage key={item.id} alt={item.title} src={item.url} />
-              </div>
-              {count > 1 ? (
-                <>
-                  <OverlayButton
-                    iconOnly
-                    label={m.media_lightbox_previous()}
-                    large
-                    onClick={() => {
-                      step(-1)
-                    }}
-                    sx={[styles.nav, styles.prev]}
-                  >
-                    <ChevronLeft size={22} />
-                  </OverlayButton>
-                  <OverlayButton
-                    iconOnly
-                    label={m.media_lightbox_next()}
-                    large
-                    onClick={() => {
-                      step(1)
-                    }}
-                    sx={[styles.nav, styles.next]}
-                  >
-                    <ChevronRight size={22} />
-                  </OverlayButton>
-                </>
-              ) : null}
-            </>
-          )}
+                    if (start !== null && Math.abs(event.clientX - start) > SWIPE_DISTANCE) {
+                      swiped.current = true
+                      step(event.clientX < start ? 1 : -1)
+                    }
+                  }}
+                  sx={styles.stage}
+                >
+                  <LightboxImage key={item.id} alt={item.title} src={item.url} />
+                </div>
+                {count > 1 ? (
+                  <>
+                    <OverlayButton
+                      iconOnly
+                      label={m.media_lightbox_previous()}
+                      large
+                      onClick={() => {
+                        step(-1)
+                      }}
+                      sx={[styles.nav, styles.prev]}
+                    >
+                      <ChevronLeft size={22} />
+                    </OverlayButton>
+                    <OverlayButton
+                      iconOnly
+                      label={m.media_lightbox_next()}
+                      large
+                      onClick={() => {
+                        step(1)
+                      }}
+                      sx={[styles.nav, styles.next]}
+                    >
+                      <ChevronRight size={22} />
+                    </OverlayButton>
+                  </>
+                ) : null}
+              </>
+            )}
+          </HotkeysProvider>
         </DialogPrimitive.Popup>
       </DialogPortal>
     </Dialog>

@@ -50,6 +50,14 @@ export function ControlsSection({
         }}
       />
       <SettingSwitch
+        checked={settings.keyboardShortcuts}
+        hint={m.reader_keyboard_shortcuts_hint()}
+        label={m.reader_keyboard_shortcuts()}
+        onChange={(keyboardShortcuts) => {
+          update({ keyboardShortcuts })
+        }}
+      />
+      <SettingSwitch
         checked={settings.autoHideControls}
         label={m.reader_auto_hide()}
         onChange={(autoHideControls) => {
