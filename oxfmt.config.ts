@@ -18,6 +18,7 @@ export default defineConfig({
   ignorePatterns: [
     ".agents/**",
     ".claude/**",
+    "CHANGELOG.md",
     "apps/web/src/routeTree.gen.ts",
     "apps/maintenance/src/routeTree.gen.ts",
   ],

@@ -19,7 +19,7 @@ import type {
   SuccessEnvelope,
 } from "./middlewares/context-middleware"
 import type { Services } from "./services"
-import packageJson from "../package.json"
+import packageJson from "../../../package.json"
 import { corsAllowedOrigins, env } from "./env"
 import { ImageTooComplexError } from "./image-store"
 import { auditAuthRequest } from "./middlewares/audit-auth-middleware"

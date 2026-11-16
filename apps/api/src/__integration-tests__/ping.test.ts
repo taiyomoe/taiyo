@@ -1,5 +1,5 @@
 import { describe, expect } from "vitest"
-import packageJson from "../../package.json"
+import packageJson from "../../../../package.json"
 import { test } from "./setup"
 
 describe("GET /ping", () => {
