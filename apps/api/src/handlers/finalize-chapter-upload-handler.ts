@@ -49,6 +49,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
         401: true,
         403: true,
         404: "No chapter with the given ID exists, or it has no pending upload session with the given task ID.",
+        451: "The chapter's media is locked, so no page can be uploaded.",
         409: "The chapter already has pages.",
         422: "The provided ID is not a valid UUID, or the request body failed validation.",
         429: "Too many requests, try again later.",
@@ -59,7 +60,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
   withAuth(),
   rateLimit({ prefix: "chapter-upload-finalize", windowMs: 60_000, limit: 60 }),
   validateJson(finalizeChapterUploadSchema),
-  checkChapter({ unpublished: true }),
+  checkChapter({ unpublished: true, refuseLocked: true }),
   authorizeChapter("update"),
   withTransaction,
   async (c) => {

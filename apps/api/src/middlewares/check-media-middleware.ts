@@ -7,7 +7,7 @@ const paramSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the media." }),
 })
 
-export const checkMedia = (opts: { includeDeleted?: boolean } = {}) =>
+export const checkMedia = (opts: { includeDeleted?: boolean; refuseLocked?: boolean } = {}) =>
   withRequestSpec(
     createMiddleware<{
       Variables: { media: Selectable<Media> }
@@ -29,6 +29,10 @@ export const checkMedia = (opts: { includeDeleted?: boolean } = {}) =>
 
       if (!media) {
         return c.fail("MEDIA_NOT_FOUND")
+      }
+
+      if (opts.refuseLocked === true && media.flag === "LOCKED") {
+        return c.fail("MEDIA_LOCKED")
       }
 
       log.set({ media })

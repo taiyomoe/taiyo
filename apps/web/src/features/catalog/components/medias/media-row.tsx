@@ -6,6 +6,7 @@ import {
   ExternalLink,
   Image,
   ListNumbered,
+  Lock,
   Refresh,
   Trash,
 } from "@taiyomoe/ui/components/icons"
@@ -99,7 +100,17 @@ export function MediaRow({
       ]
     : []
   const status = (
-    <Badge variant={MEDIA_STATUS_BADGES[media.status]}>{MEDIA_STATUS_LABELS[media.status]()}</Badge>
+    <>
+      <Badge variant={MEDIA_STATUS_BADGES[media.status]}>
+        {MEDIA_STATUS_LABELS[media.status]()}
+      </Badge>
+      {media.flag === "LOCKED" ? (
+        <Badge variant="warning">
+          <Lock />
+          {m.catalog_media_locked()}
+        </Badge>
+      ) : null}
+    </>
   )
 
   return (
@@ -131,7 +142,9 @@ export function MediaRow({
           title={media.title}
         />
       </CatalogCell>
-      <CatalogCell column="status">{status}</CatalogCell>
+      <CatalogCell column="status">
+        <span {...stylex.props(catalogStyles.stack)}>{status}</span>
+      </CatalogCell>
       <CatalogCell column="chapters" sx={catalogStyles.numeric}>
         {formatNumber(media.chapterCount)}
       </CatalogCell>

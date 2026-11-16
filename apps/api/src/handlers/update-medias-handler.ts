@@ -1,6 +1,8 @@
 import { mediaAudit } from "@taiyomoe/audit"
+import { FLAGS } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -20,6 +22,11 @@ const fields = mediaEditSchema.pick({
 })
 const updateMediasSchema = fields
   .extend({
+    flag: z.enum(FLAGS).optional().meta({
+      description:
+        "The moderation flag to set. `LOCKED` takes the medias down after a copyright notice: their chapters can no longer be read and nothing new can be uploaded to them. Setting it requires the moderator or admin role.",
+      example: "LOCKED",
+    }),
     mediaIds: bulkIdsSchema("medias", [
       "4e26b80f-6661-4f5f-93b4-6dfed052bbed",
       "ed6d5cba-fbf9-40b3-8190-3c5d034e8413",
@@ -39,7 +46,7 @@ export const updateMediasHandler = new Hono().patch(
   describeRoute({
     summary: "Update medias in bulk",
     description:
-      "Sets the same `type`, `status`, `source`, `demography`, `countryOfOrigin` or `contentRating` on several medias at once. At least one field is required, and omitted fields are left unchanged. Medias that do not exist or are deleted are skipped and reported.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Sets the same `type`, `status`, `source`, `demography`, `countryOfOrigin`, `contentRating` or `flag` on several medias at once. At least one field is required, and omitted fields are left unchanged. Medias that do not exist or are deleted are skipped and reported.\n\n**Required roles:** uploader intern, uploader, moderator, admin. Changing `flag` requires the moderator or admin role.",
     tags: ["Medias"],
     responses: {
       200: {
@@ -54,7 +61,7 @@ export const updateMediasHandler = new Hono().patch(
       },
       ...getOpenApiResponses({
         401: true,
-        403: true,
+        403: "You do not have permission to perform this action, or you set `flag` without the moderator or admin role.",
         422: "The request body failed validation.",
       }),
     },
@@ -64,8 +71,13 @@ export const updateMediasHandler = new Hono().patch(
   validateJson(updateMediasSchema),
   withTransaction,
   async (c) => {
-    const { db } = c.var
+    const { can, db } = c.var
     const { mediaIds, ...updates } = c.var.json
+
+    if (updates.flag !== undefined && !can("media.flag")) {
+      return c.fail("FORBIDDEN")
+    }
+
     const rows = await db
       .selectFrom("medias")
       .select("id")

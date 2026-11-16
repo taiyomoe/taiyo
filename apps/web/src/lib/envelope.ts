@@ -68,3 +68,23 @@ export const getApiErrorCode = (error: unknown): string | undefined => {
     ? candidate.code
     : undefined
 }
+
+export const getLockedMediaId = (error: unknown) => {
+  if (
+    getApiErrorCode(error) !== "MEDIA_LOCKED" ||
+    typeof error !== "object" ||
+    error === null ||
+    !("details" in error)
+  ) {
+    return null
+  }
+
+  const { details } = error
+
+  return typeof details === "object" &&
+    details !== null &&
+    "mediaId" in details &&
+    typeof details.mediaId === "string"
+    ? details.mediaId
+    : null
+}

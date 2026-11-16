@@ -2,6 +2,8 @@ import * as stylex from "@stylexjs/stylex"
 import {
   CONTENT_RATINGS,
   type ContentRating,
+  FLAGS,
+  type Flag,
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
   MEDIA_SOURCES,
@@ -20,11 +22,13 @@ import {
   ArrowUpDown,
   Book,
   BookOpenText,
+  Crown,
   Flame,
   Globe,
   Image,
   Kissing,
   Library,
+  Lock,
   Monitor,
   MoreCircle,
   PenTool,
@@ -44,6 +48,7 @@ import { STAFF_ROLE_LABELS } from "@/features/media-suggestions/lib/media-edit-l
 import {
   CONTENT_RATING_LABELS,
   MEDIA_COUNTRY_LABELS,
+  MEDIA_FLAG_LABELS,
   MEDIA_DEMOGRAPHY_LABELS,
   MEDIA_SOURCE_LABELS,
   MEDIA_STATUS_BADGES,
@@ -56,6 +61,10 @@ const styles = stylex.create({
   SUGGESTIVE: { color: colors.contentSuggestive },
   NSFW: { color: colors.contentNsfw },
   NSFL: { color: colors.contentNsfl },
+  OK: { color: colors.mutedForeground },
+  STAFF_ONLY: { color: colors.mutedForeground },
+  VIP_ONLY: { color: colors.mutedForeground },
+  LOCKED: { color: colors.warning },
 })
 const flagIcon = (country: MediaCountryOfOrigin): OptionIcon =>
   function Flag() {
@@ -83,6 +92,12 @@ const RATING_ICONS: Record<ContentRating, OptionIcon> = {
   SUGGESTIVE: Kissing,
   NSFW: Flame,
   NSFL: Skull,
+}
+const FLAG_ICONS: Record<Flag, OptionIcon> = {
+  OK: Globe,
+  STAFF_ONLY: Shield,
+  VIP_ONLY: Crown,
+  LOCKED: Lock,
 }
 const STATUS_ICONS: Record<MediaStatus, OptionIcon> = {
   RELEASING: statusDotIcon(MEDIA_STATUS_BADGES.RELEASING),
@@ -133,6 +148,14 @@ export const CONTENT_RATING_OPTIONS: OptionSet<ContentRating> = {
   icon: (rating) => RATING_ICONS[rating],
   tone: (rating) => styles[rating],
   fieldIcon: Shield,
+}
+
+export const MEDIA_FLAG_OPTIONS: OptionSet<Flag> = {
+  values: FLAGS,
+  label: (flag) => MEDIA_FLAG_LABELS[flag](),
+  icon: (flag) => FLAG_ICONS[flag],
+  tone: (flag) => styles[flag],
+  fieldIcon: Lock,
 }
 
 export const STAFF_ROLE_OPTIONS: OptionSet<StaffRole> = {

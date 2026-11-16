@@ -2545,5 +2545,17 @@
   "catalog_banner_delete_description": "La bannière disparaît de {title} immédiatement.",
   "catalog_banner_delete_confirm": "Supprimer la bannière",
   "catalog_banner_impact_hidden": "Elle disparaît de l’en-tête de la page de {title}.",
-  "catalog_banner_impact_last": "C’est la dernière bannière de {title} : sa page affichera un en-tête neutre."
+  "catalog_banner_impact_last": "C’est la dernière bannière de {title} : sa page affichera un en-tête neutre.",
+  "media_info_flag": "Accès",
+  "media_flag_ok": "Public",
+  "media_flag_staff_only": "Réservé à l'équipe",
+  "media_flag_vip_only": "Réservé aux VIP",
+  "media_flag_locked": "Verrouillé (DMCA)",
+  "catalog_media_locked": "Verrouillé",
+  "catalog_media_bulk_locked_hint": "Les titres verrouillés ne peuvent plus être lus, et aucun chapitre, couverture ni bannière ne peut y être ajouté. Leurs informations et leurs chapitres existants restent modifiables.",
+  "media_locked_eyebrow": "Retrait pour droits d'auteur",
+  "media_locked_description": "Ce titre a été retiré à la suite d'une notification pour atteinte aux droits d'auteur. Ses chapitres ne peuvent plus être lus sur Taiyō.",
+  "media_locked_policy": "Notre politique DMCA",
+  "media_locked_edit": "Modifier le titre",
+  "media_locked_label": "{title} est indisponible à la suite d'une notification pour atteinte aux droits d'auteur"
 }

@@ -22,6 +22,13 @@ export const MEDIA_STATUS_LABELS: Record<Media["status"], Label> = {
   HIATUS: m.media_status_hiatus,
 }
 
+export const MEDIA_FLAG_LABELS: Record<Media["flag"], Label> = {
+  OK: m.media_flag_ok,
+  STAFF_ONLY: m.media_flag_staff_only,
+  VIP_ONLY: m.media_flag_vip_only,
+  LOCKED: m.media_flag_locked,
+}
+
 export const MEDIA_STATUS_BADGES: Record<Media["status"], BadgeVariant> = {
   RELEASING: "success",
   FINISHED: "info",

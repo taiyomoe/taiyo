@@ -1,12 +1,13 @@
 import type {
   ContentRating,
+  Flag,
   MediaCountryOfOrigin,
   MediaDemography,
   MediaSource,
   MediaStatus,
   MediaType,
 } from "@taiyomoe/db/constants"
-import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
+import { Field, FieldDescription, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { useState } from "react"
 import { OptionalOptionSelect } from "@/components/fields/option-select"
 import { useBulkUpdateMedias } from "@/features/catalog/api/catalog"
@@ -16,6 +17,7 @@ import {
   CONTENT_RATING_OPTIONS,
   MEDIA_COUNTRY_OPTIONS,
   MEDIA_DEMOGRAPHY_OPTIONS,
+  MEDIA_FLAG_OPTIONS,
   MEDIA_SOURCE_OPTIONS,
   MEDIA_STATUS_OPTIONS,
   MEDIA_TYPE_OPTIONS,
@@ -30,13 +32,16 @@ type MediaChanges = {
   demography?: MediaDemography | undefined
   countryOfOrigin?: MediaCountryOfOrigin | undefined
   contentRating?: ContentRating | undefined
+  flag?: Flag | undefined
 }
 
 export function BulkEditMediasDialog({
+  canFlag,
   mediaIds,
   onClose,
   onDone,
 }: {
+  canFlag: boolean
   mediaIds: readonly string[] | null
   onClose: () => void
   onDone: () => void
@@ -151,6 +156,23 @@ export function BulkEditMediasDialog({
           value={changes.contentRating}
         />
       </Field>
+      {canFlag ? (
+        <Field>
+          <FieldLabel>{m.media_info_flag()}</FieldLabel>
+          <OptionalOptionSelect
+            empty={keep}
+            label={m.media_info_flag()}
+            onChange={(flag) => {
+              set({ flag })
+            }}
+            options={MEDIA_FLAG_OPTIONS}
+            value={changes.flag}
+          />
+          {changes.flag === "LOCKED" ? (
+            <FieldDescription>{m.catalog_media_bulk_locked_hint()}</FieldDescription>
+          ) : null}
+        </Field>
+      ) : null}
     </BulkEditDialog>
   )
 }

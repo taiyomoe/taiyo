@@ -66,12 +66,13 @@ export const listChapterFacetsHandler = new Hono().get(
       },
       ...getOpenApiResponses({
         404: "No media with the given ID exists.",
+        451: "The media is locked, so its chapters are unavailable.",
         422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),
   validateQuery(querySchema),
-  checkMedia(),
+  checkMedia({ refuseLocked: true }),
   async (c) => {
     const { db, media } = c.var
     const { contentRating, language } = c.var.query
