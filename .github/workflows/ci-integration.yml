@@ -26,9 +26,14 @@ env:
 
 jobs:
   integration-tests:
-    name: Vitest (integration)
+    name: Vitest (integration ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Each shard runs a quarter of the test files on its own runner and its own services.
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     services:
       postgres:
         image: postgres:18-alpine
@@ -37,7 +42,10 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: taiyo
+        # Every test creates a database from a template and every file drops its own: on
+        # tmpfs, the copies and the checkpoints behind each drop never touch the disk.
         options: >-
+          --tmpfs /var/lib/postgresql
           --health-cmd "pg_isready -U postgres" --health-interval 5s
           --health-timeout 3s --health-retries 10
 
@@ -92,5 +100,14 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      # The data is thrown away with the runner, so Postgres has nothing to make durable.
+      - name: Turn off Postgres durability
+        run: >-
+          docker exec ${{ job.services.postgres.id }} psql -U postgres
+          -c "ALTER SYSTEM SET fsync = off"
+          -c "ALTER SYSTEM SET synchronous_commit = off"
+          -c "ALTER SYSTEM SET full_page_writes = off"
+          -c "SELECT pg_reload_conf()"
+
       - name: Integration tests
-        run: pnpm test:integration
+        run: pnpm test:integration --shard=${{ matrix.shard }}/4

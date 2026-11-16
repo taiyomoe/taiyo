@@ -10,5 +10,13 @@ runs:
         node-version-file: "package.json"
         cache: "pnpm"
 
+    # Before installing, pnpm checks every lockfile entry against the supply-chain policies,
+    # which takes about 13s, unless it holds a verdict for this exact lockfile and policy.
+    # Keeping the verdicts between runs makes every install after the first one skip it.
+    - uses: actions/cache@v6
+      with:
+        path: ~/.cache/pnpm/lockfile-verified.jsonl
+        key: pnpm-lockfile-verified-${{ hashFiles('pnpm-lock.yaml', 'pnpm-workspace.yaml') }}
+
     - shell: bash
       run: pnpm install --frozen-lockfile

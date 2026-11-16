@@ -6,7 +6,8 @@ concurrency:
 
 # Pull requests only build, to catch a broken Dockerfile before merge. Images are
 # pushed from main alone, so no workflow triggered by a fork ever gets write access
-# to the registry.
+# to the registry. Pushes to develop build too: they fill the layer cache that pull
+# requests, which cannot write a cache other runs see, start from.
 on:
   pull_request:
     paths-ignore:
@@ -15,7 +16,7 @@ on:
       - ".github/ISSUE_TEMPLATE/**"
       - "LICENSE"
   push:
-    branches: ["main"]
+    branches: ["main", "develop"]
     paths-ignore:
       - "**.md"
       - "docs/**"
@@ -72,7 +73,10 @@ jobs:
             smoke: >-
               docker run --rm taiyo-web:ci node -e "await import('./dist/server/server.js'); process.exit(0)"
     env:
-      PUSH: ${{ github.event_name != 'pull_request' }}
+      PUSH: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+      # A pull request's cache is only visible to that pull request, and its layers evicted
+      # the develop cache every pull request reads from.
+      CACHE_TO: ${{ github.event_name != 'pull_request' && format('type=gha,scope={0},mode=max', matrix.app) || '' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -94,7 +98,10 @@ jobs:
           done
           exit $missing
 
+      # The runner is thrown away after the job: removing the builder only adds a step.
       - uses: docker/setup-buildx-action@v4
+        with:
+          cleanup: false
 
       - if: ${{ env.PUSH == 'true' }}
         uses: docker/login-action@v4
@@ -140,7 +147,7 @@ jobs:
           tags: taiyo-${{ matrix.app }}:ci
           build-args: ${{ steps.build-args.outputs.value }}
           cache-from: type=gha,scope=${{ matrix.app }}
-          cache-to: type=gha,scope=${{ matrix.app }},mode=max
+          cache-to: ${{ env.CACHE_TO }}
 
       - name: Smoke test
         if: ${{ matrix.smoke }}
