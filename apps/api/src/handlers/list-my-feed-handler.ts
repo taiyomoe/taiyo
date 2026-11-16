@@ -44,6 +44,7 @@ export const listMyFeedHandler = new Hono().get(
       .where("chapters.deletedAt", "is", null)
       .where("chapters.status", "=", "PUBLISHED")
       .where("medias.deletedAt", "is", null)
+      .where("medias.flag", "!=", "LOCKED")
     const [items, totalRow] = await Promise.all([
       base
         .select((eb) => [

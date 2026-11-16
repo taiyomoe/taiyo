@@ -291,6 +291,7 @@ export function MediasPage() {
         ))}
       </CatalogTable>
       <BulkEditMediasDialog
+        canFlag={can("media.flag")}
         mediaIds={bulk === "edit" ? selection.ids : null}
         onClose={() => {
           setBulk(null)

@@ -14,9 +14,9 @@ export const chapterIdsSchema = z
 
 export const skippedChapterSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the chapter." }),
-  reason: z.enum(["NOT_FOUND", "NOT_PENDING", "PAGES_MISSING"]).meta({
+  reason: z.enum(["NOT_FOUND", "NOT_PENDING", "PAGES_MISSING", "MEDIA_LOCKED"]).meta({
     description:
-      "Why the chapter was left alone: it does not exist, it is not waiting for review, or its pages are not processed yet.",
+      "Why the chapter was left alone: it does not exist, it is not waiting for review, its pages are not processed yet, or its media is locked.",
     example: "NOT_PENDING",
   }),
 })
@@ -31,6 +31,7 @@ export const lockReviewableChapters = async (db: Kysely<DB>, ids: readonly strin
       "chapters.status",
       "chapters.pages",
       "chapters.isExternal",
+      "medias.flag as mediaFlag",
     ])
     .where("chapters.id", "in", ids)
     .where("chapters.deletedAt", "is", null)

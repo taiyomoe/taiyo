@@ -2645,5 +2645,17 @@
   "comments_delete_impact_hidden": "Their text and images leave the pages they were posted on.",
   "comments_delete_impact_replies": "Replies kept under a placeholder: {count}",
   "comments_delete_impact_reports": "Their open reports are marked as resolved.",
-  "comments_delete_confirm": "Remove"
+  "comments_delete_confirm": "Remove",
+  "media_info_flag": "Access",
+  "media_flag_ok": "Public",
+  "media_flag_staff_only": "Staff only",
+  "media_flag_vip_only": "VIP only",
+  "media_flag_locked": "Locked (DMCA)",
+  "catalog_media_locked": "Locked",
+  "catalog_media_bulk_locked_hint": "Locked titles can't be read anymore, and no chapter, cover or banner can be uploaded to them. Their details and existing chapters can still be edited.",
+  "media_locked_eyebrow": "Copyright takedown",
+  "media_locked_description": "This title was taken down following a copyright notice. Its chapters can no longer be read on Taiyō.",
+  "media_locked_policy": "Our DMCA policy",
+  "media_locked_edit": "Edit the title",
+  "media_locked_label": "{title} is unavailable following a copyright notice"
 }

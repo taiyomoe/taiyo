@@ -70,6 +70,7 @@ export const updateChapterHistoryHandler = new Hono().patch(
         401: true,
         403: true,
         404: "No chapter with the given ID exists, or you have not opened it yet.",
+        451: "The chapter's media is locked, so the chapter is unavailable.",
         422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
     },
@@ -77,7 +78,7 @@ export const updateChapterHistoryHandler = new Hono().patch(
   audited(historyAudit.PROGRESS_UPDATE),
   withAuth(),
   validateJson(updateHistorySchema),
-  checkChapter(),
+  checkChapter({ refuseLocked: true }),
   withTransaction,
   async (c) => {
     const { db, user, chapter } = c.var

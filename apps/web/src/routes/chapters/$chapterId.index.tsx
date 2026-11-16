@@ -1,5 +1,5 @@
 import { noop } from "@tanstack/react-query"
-import { createFileRoute, notFound } from "@tanstack/react-router"
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router"
 import { z } from "zod"
 import { isNotFoundError } from "@/components/boundaries/not-found-page"
 import { ChapterNotFoundPage } from "@/features/chapters/components/chapter-not-found-page"
@@ -11,6 +11,7 @@ import { serveLinkPreview } from "@/features/og/lib/og-preview"
 import { chapterReaderQueryOptions } from "@/features/reader/api/reader"
 import { ReaderPage } from "@/features/reader/components/reader-page"
 import { chapterQueryOptions } from "@/features/uploads/api/submissions"
+import { getLockedMediaId } from "@/lib/envelope"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -43,6 +44,12 @@ export const Route = createFileRoute("/chapters/$chapterId/")({
     const chapterData = await chapter.catch((error: unknown) => {
       if (isNotFoundError(error, "CHAPTER_NOT_FOUND")) {
         throw notFound()
+      }
+
+      const lockedMediaId = getLockedMediaId(error)
+
+      if (lockedMediaId !== null) {
+        throw redirect({ to: "/media/$mediaId", params: { mediaId: lockedMediaId } })
       }
 
       return null

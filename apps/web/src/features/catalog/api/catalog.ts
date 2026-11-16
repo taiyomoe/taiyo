@@ -276,9 +276,11 @@ const useBulkMutation = <TInput>(run: (input: TInput) => Promise<BulkResult>) =>
 }
 
 export const useBulkUpdateMedias = () =>
-  useBulkMutation(async (json: Parameters<typeof api.medias.$patch>[0]["json"]) =>
-    unwrap(await api.medias.$patch({ json })),
-  )
+  useBulkMutation(async (json: Parameters<typeof api.medias.$patch>[0]["json"]) => {
+    const response = await api.medias.$patch({ json })
+
+    return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+  })
 
 export const useBulkDeleteMedias = () =>
   useBulkMutation(async (mediaIds: string[]) =>
