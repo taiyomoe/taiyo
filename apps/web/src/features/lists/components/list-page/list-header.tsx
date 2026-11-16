@@ -1,12 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
 import { Edit, Lock } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { ListDetail } from "@/features/lists/api/lists"
+import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { ListCoverStack } from "@/features/lists/components/list-cover-stack"
 import { ListOwner } from "@/features/lists/components/list-owner"
@@ -96,10 +96,11 @@ export function ListHeader({
       <ListCoverStack coverUrls={list.coverUrls} size="lg" sx={styles.covers} />
       <div sx={styles.info}>
         {list.visibility === "PRIVATE" ? (
-          <Badge sx={styles.badge} variant="secondary">
-            <Lock />
-            {m.lists_private()}
-          </Badge>
+          <span sx={styles.badge}>
+            <Pill icon={Lock} variant="secondary">
+              {m.lists_private()}
+            </Pill>
+          </span>
         ) : null}
         <h1 sx={styles.name}>{list.name}</h1>
         {list.description === null || list.description === "" ? null : (

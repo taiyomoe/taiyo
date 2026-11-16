@@ -2456,6 +2456,7 @@
   "catalog_column_rating": "Classificação",
   "catalog_column_language": "Idioma",
   "catalog_column_cover": "Capa",
+  "catalog_cover_main": "Principal",
   "catalog_results": "Resultados: {count}",
   "catalog_select_all": "Selecionar todas as linhas desta página",
   "catalog_select_row": "Selecionar {name}",

@@ -1,17 +1,17 @@
 import * as stylex from "@stylexjs/stylex"
 import { Calendar, Globe } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { Session } from "@/lib/session"
+import { Pill } from "@/components/badges/pill"
 import { UserCountryFlag } from "@/components/flags/flags"
 import { UserName } from "@/components/user-name/user-name"
 import { ProfileActions } from "@/features/users/components/profile/profile-actions"
 import { ProfileAvatar } from "@/features/users/components/profile/profile-avatar"
 import { ProfileStats } from "@/features/users/components/profile/profile-stats"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
-import { ROLE_LABELS } from "@/features/users/lib/role-labels"
+import { UserRoleBadge } from "@/features/users/components/users/user-role-badge"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
@@ -128,11 +128,9 @@ export function ProfileHeader({
           </h1>
           <div sx={styles.badges}>
             <TitleBadge title={profile.title} />
-            {profile.role === "USER" ? null : (
-              <Badge variant="outline">{ROLE_LABELS[profile.role]()}</Badge>
-            )}
+            {profile.role === "USER" ? null : <UserRoleBadge role={profile.role} />}
             {profile.followsViewer === true ? (
-              <Badge variant="secondary">{m.profile_follows_you()}</Badge>
+              <Pill variant="secondary">{m.profile_follows_you()}</Pill>
             ) : null}
           </div>
         </div>

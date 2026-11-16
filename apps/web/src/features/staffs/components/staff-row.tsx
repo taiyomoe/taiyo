@@ -1,13 +1,12 @@
 import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { Edit, ExternalLink, Library, Trash } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
 import type { ManagedStaff } from "@/features/staffs/api/staffs"
-import { OptionLabel } from "@/components/fields/option-select"
+import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
@@ -36,9 +35,9 @@ export function StaffRow({
       <span {...stylex.props(catalogStyles.muted)}>{m.staffs_no_role()}</span>
     ) : (
       staff.roles.map((role) => (
-        <Badge key={role} variant="outline">
-          <OptionLabel options={STAFF_ROLE_OPTIONS} value={role} />
-        </Badge>
+        <Pill icon={STAFF_ROLE_OPTIONS.icon(role)} key={role}>
+          {STAFF_ROLE_OPTIONS.label(role)}
+        </Pill>
       ))
     )
   const actions: RowAction[] = [

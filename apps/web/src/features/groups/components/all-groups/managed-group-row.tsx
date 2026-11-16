@@ -1,12 +1,12 @@
 import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { ExternalLink, ListNumbered, Settings, Trash, Users } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
 import type { ManagedGroup } from "@/features/groups/api/groups"
+import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
@@ -30,7 +30,7 @@ export function ManagedGroupRow({
 }) {
   const owner =
     group.owner === null ? (
-      <Badge variant="warning">{m.all_groups_unowned()}</Badge>
+      <Pill variant="warning">{m.all_groups_unowned()}</Pill>
     ) : (
       <Uploader uploader={group.owner} />
     )

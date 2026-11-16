@@ -1,12 +1,12 @@
 import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { Edit, ExternalLink, Trash } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { ManagedChapter } from "@/features/catalog/api/catalog"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
+import { Pill } from "@/components/badges/pill"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
@@ -72,9 +72,9 @@ export function ChapterRow({
   const subtitle =
     chapter.title ?? (chapter.volume === null ? null : m.catalog_volume({ volume: chapter.volume }))
   const status = (
-    <Badge variant={SUBMISSION_STATUS[chapter.status].variant}>
+    <Pill variant={SUBMISSION_STATUS[chapter.status].variant}>
       {SUBMISSION_STATUS[chapter.status].label()}
-    </Badge>
+    </Pill>
   )
 
   return (

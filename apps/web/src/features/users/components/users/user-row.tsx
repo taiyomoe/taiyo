@@ -12,7 +12,6 @@ import {
   UserRemove,
   Users,
 } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
@@ -21,6 +20,7 @@ import type { RowAction } from "@/features/catalog/components/shared/row-actions
 import type { Selection } from "@/features/catalog/hooks/use-selection"
 import type { ManagedUser } from "@/features/users/api/users"
 import type { UserDialog } from "@/features/users/components/users/user-dialogs"
+import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
@@ -80,13 +80,9 @@ export function UserRow({
   const setRole = useSetUsersRole()
   const role = <UserRoleBadge role={user.role} />
   const status = user.banned ? (
-    <Badge size="lg" variant="error">
-      {m.users_banned()}
-    </Badge>
+    <Pill variant="error">{m.users_banned()}</Pill>
   ) : (
-    <Badge size="lg" variant="success">
-      {m.users_active()}
-    </Badge>
+    <Pill variant="success">{m.users_active()}</Pill>
   )
   const until =
     user.banned && user.banExpires !== null ? (

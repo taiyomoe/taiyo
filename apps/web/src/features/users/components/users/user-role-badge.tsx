@@ -1,37 +1,9 @@
 import type { Role } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { createElement } from "react"
+import { Pill } from "@/components/badges/pill"
 import { ROLE_OPTIONS } from "@/features/users/lib/role-labels"
 
-const styles = stylex.create({
-  badge: {
-    borderRadius: "999px",
-    borderStyle: "solid",
-    borderWidth: 1,
-    gap: "0.375rem",
-    alignItems: "center",
-    display: "inline-flex",
-    flexShrink: 0,
-    fontSize: "0.75rem",
-    fontWeight: 600,
-    lineHeight: 1,
-    paddingInlineEnd: "0.625rem",
-    paddingInlineStart: "0.5rem",
-    whiteSpace: "nowrap",
-    height: "1.375rem",
-    maxWidth: "100%",
-  },
-  icon: {
-    flexShrink: 0,
-    height: "0.875rem",
-    width: "0.875rem",
-  },
-  label: {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  },
-})
 // Each staff role gets a tint of its own, so they stand apart in a long list; readers stay neutral.
 const tones = stylex.create({
   USER: {
@@ -61,14 +33,10 @@ const tones = stylex.create({
   },
 })
 
-export function UserRoleBadge({ role }: { role: Role }) {
+export function UserRoleBadge({ role, size }: { role: Role; size?: "default" | "sm" }) {
   return (
-    <span sx={[styles.badge, tones[role]]}>
-      {createElement(ROLE_OPTIONS.icon(role), {
-        "aria-hidden": true,
-        ...stylex.props(styles.icon),
-      })}
-      <span sx={styles.label}>{ROLE_OPTIONS.label(role)}</span>
-    </span>
+    <Pill icon={ROLE_OPTIONS.icon(role)} size={size} tone={tones[role]}>
+      {ROLE_OPTIONS.label(role)}
+    </Pill>
   )
 }

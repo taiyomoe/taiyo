@@ -2456,6 +2456,7 @@
   "catalog_column_rating": "Rating",
   "catalog_column_language": "Language",
   "catalog_column_cover": "Cover",
+  "catalog_cover_main": "Main",
   "catalog_results": "Results: {count}",
   "catalog_select_all": "Select every row on this page",
   "catalog_select_row": "Select {name}",

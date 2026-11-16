@@ -10,12 +10,12 @@ import {
   Refresh,
   Trash,
 } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { ManagedMedia } from "@/features/catalog/api/catalog"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
+import { Pill } from "@/components/badges/pill"
 import { OptionLabel } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
@@ -101,14 +101,11 @@ export function MediaRow({
     : []
   const status = (
     <>
-      <Badge variant={MEDIA_STATUS_BADGES[media.status]}>
-        {MEDIA_STATUS_LABELS[media.status]()}
-      </Badge>
+      <Pill variant={MEDIA_STATUS_BADGES[media.status]}>{MEDIA_STATUS_LABELS[media.status]()}</Pill>
       {media.flag === "LOCKED" ? (
-        <Badge variant="warning">
-          <Lock />
+        <Pill icon={Lock} variant="warning">
           {m.catalog_media_locked()}
-        </Badge>
+        </Pill>
       ) : null}
     </>
   )
