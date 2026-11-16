@@ -21,7 +21,6 @@ import type { RowAction } from "@/features/catalog/components/shared/row-actions
 import type { Selection } from "@/features/catalog/hooks/use-selection"
 import type { ManagedUser } from "@/features/users/api/users"
 import type { UserDialog } from "@/features/users/components/users/user-dialogs"
-import { OptionLabel } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
@@ -31,6 +30,7 @@ import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { PointsAmount } from "@/features/shop/components/points-amount"
 import { useSetUsersRole } from "@/features/users/api/users"
+import { UserRoleBadge } from "@/features/users/components/users/user-role-badge"
 import { ROLE_OPTIONS } from "@/features/users/lib/role-labels"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
@@ -78,15 +78,15 @@ export function UserRow({
 }) {
   const target = { id: user.id, role: user.role }
   const setRole = useSetUsersRole()
-  const role = (
-    <Badge variant="outline">
-      <OptionLabel options={ROLE_OPTIONS} value={user.role} />
-    </Badge>
-  )
+  const role = <UserRoleBadge role={user.role} />
   const status = user.banned ? (
-    <Badge variant="error">{m.users_banned()}</Badge>
+    <Badge size="lg" variant="error">
+      {m.users_banned()}
+    </Badge>
   ) : (
-    <Badge variant="success">{m.users_active()}</Badge>
+    <Badge size="lg" variant="success">
+      {m.users_active()}
+    </Badge>
   )
   const until =
     user.banned && user.banExpires !== null ? (
