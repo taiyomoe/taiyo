@@ -5,6 +5,7 @@ import {
   Feed,
   History,
   Home,
+  Library,
   List,
   Shuffle,
   Sliders,
@@ -147,6 +148,7 @@ export function AppSidebar({
     {
       label: m.shell_nav_my_library,
       items: [
+        { label: m.shell_nav_library, icon: Library, to: "/library" },
         ...(typeof session?.user.username === "string"
           ? [
               {

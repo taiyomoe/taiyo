@@ -6,7 +6,7 @@ import { useEntityActions } from "@/features/command-palette/hooks/use-entity-ac
 import { useRegisterCommands } from "@/features/command-palette/hooks/use-register-commands"
 import { useRememberEntity } from "@/features/command-palette/hooks/use-remember-entity"
 import { toTitleEntity } from "@/features/command-palette/lib/to-entities"
-import { libraryEntryQueryOptions } from "@/features/media/api/library"
+import { libraryEntryQueryOptions } from "@/features/library/api/library"
 import { getMainTitle } from "@/features/media/lib/media-labels"
 import { m } from "@/paraglide/messages"
 

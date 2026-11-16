@@ -9,6 +9,7 @@ import { deletePushSubscriptionHandler } from "../handlers/delete-push-subscript
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
+import { getMyLibraryCountsHandler } from "../handlers/get-my-library-counts-handler"
 import { getMyNotificationCountsHandler } from "../handlers/get-my-notification-counts-handler"
 import { getMyOverviewHandler } from "../handlers/get-my-overview-handler"
 import { getMyReaderSettingsHandler } from "../handlers/get-my-reader-settings-handler"
@@ -66,6 +67,7 @@ export const usersRouter = new Hono()
   .route("/", listMyHistoryHandler)
   .route("/", getReadingProgressHandler)
   .route("/", deleteChapterHistoryHandler)
+  .route("/", getMyLibraryCountsHandler)
   .route("/", getLibraryEntryHandler)
   .route("/", upsertLibraryEntryHandler)
   .route("/", removeLibraryEntryHandler)

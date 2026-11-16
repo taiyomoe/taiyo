@@ -1,6 +1,5 @@
 import type { BadgeVariant } from "@taiyomoe/ui/components/ui/badge"
 import { config } from "@taiyomoe/config"
-import type { LibraryStatus } from "@/features/media/api/library"
 import type { Media } from "@/features/media/api/medias"
 import { localizeTagName, pickLocalized } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
@@ -60,24 +59,6 @@ export const CONTENT_RATING_LABELS: Record<Media["contentRating"], Label> = {
   SUGGESTIVE: m.content_rating_suggestive,
   NSFW: m.content_rating_nsfw,
   NSFL: m.content_rating_nsfl,
-}
-
-export const LIBRARY_STATUSES = [
-  "READING",
-  "PLAN_TO_READ",
-  "REREADING",
-  "ON_HOLD",
-  "COMPLETED",
-  "DROPPED",
-] as const satisfies LibraryStatus[]
-
-export const LIBRARY_STATUS_LABELS: Record<LibraryStatus, Label> = {
-  READING: m.library_status_reading,
-  REREADING: m.library_status_rereading,
-  PLAN_TO_READ: m.library_status_plan_to_read,
-  COMPLETED: m.library_status_completed,
-  ON_HOLD: m.library_status_on_hold,
-  DROPPED: m.library_status_dropped,
 }
 
 export const MEDIA_LINKS: Record<string, { label: string; href: (value: string) => string }> = {
