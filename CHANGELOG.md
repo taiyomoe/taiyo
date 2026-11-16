@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.1.0](https://github.com/taiyomoe/taiyo/compare/v2.0.0...v2.1.0) (2026-11-16)
+
+
+### Features
+
+* add comment, group and staff tables and rebuild the user list ([#3528](https://github.com/taiyomoe/taiyo/issues/3528)) ([3a11d9b](https://github.com/taiyomoe/taiyo/commit/3a11d9b866cbbad0b662155310b87960ca25ea6a))
+* add dashboard tables for medias, chapters, covers and banners ([#3510](https://github.com/taiyomoe/taiyo/issues/3510)) ([9048994](https://github.com/taiyomoe/taiyo/commit/90489948cda499fc7d2e4263ee0578cfb93cf7cc))
+* lock medias after a DMCA notice and tape their page off ([#3527](https://github.com/taiyomoe/taiyo/issues/3527)) ([63be084](https://github.com/taiyomoe/taiyo/commit/63be084e6f8acd7905f76e87a52627d397cac0a8))
+* sync a media's missing covers, chapters and details from MangaDex ([#3523](https://github.com/taiyomoe/taiyo/issues/3523)) ([9f42ea1](https://github.com/taiyomoe/taiyo/commit/9f42ea18397097d2bc7d85073d084a775b1e471b))
+* **web:** add a library page to browse and manage saved titles ([#3521](https://github.com/taiyomoe/taiyo/issues/3521)) ([a036a97](https://github.com/taiyomoe/taiyo/commit/a036a97188c98689439654832a8ae2b7fc40a50a))
+* **web:** handle keyboard shortcuts with TanStack Hotkeys ([#3531](https://github.com/taiyomoe/taiyo/issues/3531)) ([8541df5](https://github.com/taiyomoe/taiyo/commit/8541df53e8a2a7fc70b41c2c89ac3111223858a2))
+
+
+### Bug Fixes
+
+* stop the integration tests from hanging locally ([#3517](https://github.com/taiyomoe/taiyo/issues/3517)) ([1ef29bc](https://github.com/taiyomoe/taiyo/commit/1ef29bc08fac4204e7bc025d3c999ce21eaa8ece))
+* **web:** call a work media, œuvre and obra everywhere ([#3518](https://github.com/taiyomoe/taiyo/issues/3518)) ([84cd1ba](https://github.com/taiyomoe/taiyo/commit/84cd1ba7556918efb159fe842874b19a2bc2ced8))
+* **web:** explain failed social sign-ins and keep the agree label on one line ([#3520](https://github.com/taiyomoe/taiyo/issues/3520)) ([3939003](https://github.com/taiyomoe/taiyo/commit/39390037bc3e1dd69ce2fa0253a5ea0522f3489c))
+* **web:** keep long sidebar labels inside the sidebar ([#3522](https://github.com/taiyomoe/taiyo/issues/3522)) ([616dec8](https://github.com/taiyomoe/taiyo/commit/616dec8c5f12774fe95242fc5cf2d92ebad372c9))
+* **web:** mark locked cosmetics and give every signed-in page the same width ([#3529](https://github.com/taiyomoe/taiyo/issues/3529)) ([8c1a877](https://github.com/taiyomoe/taiyo/commit/8c1a877f289edc34ec4d278fc413880932c7d697))
+
 ## [2.0.0](https://github.com/taiyomoe/taiyo/compare/v1.14.1...v2.0.0) (2026-11-15)
 
 
