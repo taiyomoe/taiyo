@@ -30,6 +30,8 @@ const config: KnipConfig = {
     },
   },
   ignore: ["apps/web/public/**"],
+  // oxlint finds tsrs-lint in node_modules to run its type-aware rules: nothing imports it.
+  ignoreDependencies: ["tsrs"],
   ignoreBinaries: ["cloudflared"],
   compilers: {
     css: (text: string) =>
