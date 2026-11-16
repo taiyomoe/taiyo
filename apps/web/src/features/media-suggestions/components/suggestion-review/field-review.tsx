@@ -1,11 +1,11 @@
 import type { MediaEditField } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Switch } from "@taiyomoe/ui/components/ui/switch"
 import { Toggle } from "@taiyomoe/ui/components/ui/toggle"
 import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
 import type { MediaSuggestionDetail } from "@/features/media-suggestions/api/media-suggestions"
+import { Pill } from "@/components/badges/pill"
 import { FieldEditor } from "@/features/media-suggestions/components/field-editors/field-editor"
 import { FieldReviewColumn } from "@/features/media-suggestions/components/suggestion-review/field-review-column"
 import {
@@ -93,8 +93,8 @@ export function FieldReview({
     <section sx={[styles.card, accepted === false && styles.cardRejected]}>
       <div sx={styles.cardHeader}>
         <h2 sx={styles.cardTitle}>{FIELD_LABELS[field]()}</h2>
-        {conflict ? <Badge variant="warning">{m.suggestion_changed_since()}</Badge> : null}
-        {adjusted ? <Badge variant="info">{m.suggestion_adjusted()}</Badge> : null}
+        {conflict ? <Pill variant="warning">{m.suggestion_changed_since()}</Pill> : null}
+        {adjusted ? <Pill variant="info">{m.suggestion_adjusted()}</Pill> : null}
         {accepted === null ? null : (
           <>
             <Toggle

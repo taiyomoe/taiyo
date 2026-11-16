@@ -2153,7 +2153,7 @@
   "comment_reports_resolve": "Résoudre",
   "comment_reports_delete": "Supprimer le commentaire",
   "comment_reports_removed_author": "Supprimé par l’auteur",
-  "comment_reports_removed_owner": "Supprimé par le propriétaire du profil",
+  "comment_reports_removed_owner": "Retiré par le propriétaire",
   "comment_reports_removed_moderator": "Supprimé par un modérateur",
   "comment_reports_removed_account": "Compte supprimé",
   "comment_reports_removed_hidden": "Auteur banni",

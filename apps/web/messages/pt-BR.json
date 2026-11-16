@@ -2153,7 +2153,7 @@
   "comment_reports_resolve": "Resolver",
   "comment_reports_delete": "Excluir comentário",
   "comment_reports_removed_author": "Excluído pelo autor",
-  "comment_reports_removed_owner": "Removido pelo dono do perfil",
+  "comment_reports_removed_owner": "Removido pelo dono",
   "comment_reports_removed_moderator": "Excluído por um moderador",
   "comment_reports_removed_account": "Conta excluída",
   "comment_reports_removed_hidden": "Autor banido",

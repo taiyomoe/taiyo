@@ -34,7 +34,7 @@ export function SuggestionFields({ suggestion }: { suggestion: MediaSuggestion }
 
         return (
           <Pill key={field} title={title} variant={variant}>
-            {FIELD_LABELS[field]()}
+            {field === "contentRating" ? m.catalog_column_rating() : FIELD_LABELS[field]()}
           </Pill>
         )
       })}

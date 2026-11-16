@@ -1,10 +1,10 @@
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { Shield } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useState } from "react"
+import { Pill } from "@/components/badges/pill"
 import { useDisableTwoFactor, useGenerateBackupCodes } from "@/features/settings/api/two-factor"
 import { BackupCodes } from "@/features/settings/components/security/backup-codes"
 import { PasswordConfirmDialog } from "@/features/settings/components/security/password-confirm-dialog"
@@ -35,9 +35,9 @@ export function TwoFactorSection({
     <SettingsSection
       action={
         enabled ? (
-          <Badge variant="success">{m.user_settings_2fa_on()}</Badge>
+          <Pill variant="success">{m.user_settings_2fa_on()}</Pill>
         ) : (
-          <Badge variant="secondary">{m.user_settings_2fa_off()}</Badge>
+          <Pill variant="secondary">{m.user_settings_2fa_off()}</Pill>
         )
       }
       description={m.user_settings_2fa_description()}

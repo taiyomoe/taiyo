@@ -57,7 +57,7 @@ type ReportsDialog =
 const routeApi = getRouteApi("/dashboard/comment-reports")
 // Wide enough for the longest reason, "Sexual or shocking content", in every language.
 const styles = stylex.create({
-  colReports: { width: "15rem" },
+  colReports: { width: "16rem" },
 })
 const CLOSED_LABELS: Record<CloseStatus, (inputs: { count: number }) => string> = {
   RESOLVED: m.comment_reports_resolved,

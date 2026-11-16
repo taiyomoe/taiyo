@@ -28,9 +28,11 @@ import { m } from "@/paraglide/messages"
 
 export const reportedCommentStyles = stylex.create({
   author: {
-    gap: "0.5rem",
     alignItems: "center",
+    columnGap: "0.5rem",
     display: "flex",
+    flexWrap: "wrap",
+    rowGap: "0.25rem",
     minWidth: 0,
   },
   deletedAccount: {
@@ -74,7 +76,9 @@ const styles = stylex.create({
     minWidth: 0,
   },
   removal: {
-    flexShrink: 0,
+    display: "flex",
+    maxWidth: "100%",
+    minWidth: 0,
   },
 })
 

@@ -23,7 +23,7 @@ const styles = stylex.create({
   },
   pill: {
     borderRadius: "999px",
-    height: "1.375rem",
+    height: "1.5rem",
   },
   icon: {
     borderRadius: "999px",
