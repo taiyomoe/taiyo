@@ -1,12 +1,16 @@
-import { CHAPTER_STATUSES, SUPPORTED_LANGUAGES } from "@taiyomoe/db/constants"
-import { Activity, Languages, ListNumbered, Upload } from "@taiyomoe/ui/components/icons"
+import { ListNumbered, Upload } from "@taiyomoe/ui/components/icons"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
 import type { DeletableChapter } from "@/features/catalog/components/chapters/delete-chapter-dialog"
 import type { EditableChapter } from "@/features/groups/components/manage-group/chapters/edit-chapter-form"
-import { LanguageFlag } from "@/components/flags/flags"
-import { getLanguageName } from "@/components/flags/language-flags"
+import { SUPPORTED_LANGUAGE_OPTIONS } from "@/components/fields/language-options"
+import {
+  PageAction,
+  FilterSearch,
+  FilterSelect,
+  FilterToolbar,
+} from "@/components/filters/filter-toolbar"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import {
@@ -28,18 +32,11 @@ import {
   CatalogTable,
   VisuallyHidden,
 } from "@/features/catalog/components/shared/catalog-table"
-import {
-  CatalogAction,
-  CatalogSearch,
-  CatalogSelect,
-  CatalogToolbar,
-  StatusDot,
-} from "@/features/catalog/components/shared/catalog-toolbar"
 import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditChapterDialog } from "@/features/groups/components/manage-group/chapters/edit-chapter-dialog"
-import { SUBMISSION_STATUS } from "@/features/uploads/lib/submission-status"
+import { CHAPTER_STATUS_OPTIONS } from "@/features/uploads/lib/submission-status-options"
 import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
@@ -79,10 +76,10 @@ export function ChaptersPage() {
     <DashboardPage
       actions={
         can("chapter.submit") ? (
-          <CatalogAction render={<Link to="/dashboard/upload" />}>
+          <PageAction render={<Link to="/dashboard/upload" />}>
             <Upload />
             {m.catalog_chapter_add()}
-          </CatalogAction>
+          </PageAction>
         ) : undefined
       }
       subtitle={m.catalog_chapter_subtitle()}
@@ -171,39 +168,33 @@ export function ChaptersPage() {
         loading={data === undefined}
         selection={selection}
         toolbar={
-          <CatalogToolbar>
-            <CatalogSearch
+          <FilterToolbar>
+            <FilterSearch
               label={m.catalog_chapter_search()}
               onChange={(search) => {
                 update({ search })
               }}
               value={filter.search}
             />
-            <CatalogSelect
+            <FilterSelect
               allLabel={m.catalog_all_statuses()}
-              renderIcon={(status) => <StatusDot variant={SUBMISSION_STATUS[status].variant} />}
-              getLabel={(status) => SUBMISSION_STATUS[status].label()}
-              icon={Activity}
               label={m.media_info_status()}
               onChange={(status) => {
                 update({ status })
               }}
-              options={CHAPTER_STATUSES}
+              options={CHAPTER_STATUS_OPTIONS}
               value={filter.status}
             />
-            <CatalogSelect
+            <FilterSelect
               allLabel={m.catalog_all_languages()}
-              renderIcon={(language) => <LanguageFlag language={language} />}
-              getLabel={getLanguageName}
-              icon={Languages}
               label={m.upload_language()}
               onChange={(language) => {
                 update({ language })
               }}
-              options={SUPPORTED_LANGUAGES}
+              options={SUPPORTED_LANGUAGE_OPTIONS}
               value={filter.language}
             />
-          </CatalogToolbar>
+          </FilterToolbar>
         }
       >
         {data?.data.map((chapter) => (

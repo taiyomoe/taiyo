@@ -1,10 +1,15 @@
-import { CONTENT_RATINGS } from "@taiyomoe/db/constants"
-import { Banner, Plus, Shield } from "@taiyomoe/ui/components/icons"
+import { Banner, Plus } from "@taiyomoe/ui/components/icons"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
 import type { ManagedBanner } from "@/features/catalog/api/catalog"
 import type { DeletableBanner } from "@/features/catalog/components/banners/delete-banner-dialog"
+import {
+  PageAction,
+  FilterSearch,
+  FilterSelect,
+  FilterToolbar,
+} from "@/components/filters/filter-toolbar"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import {
@@ -26,18 +31,11 @@ import {
   CatalogTable,
   VisuallyHidden,
 } from "@/features/catalog/components/shared/catalog-table"
-import {
-  CatalogAction,
-  CatalogSearch,
-  CatalogSelect,
-  CatalogToolbar,
-} from "@/features/catalog/components/shared/catalog-toolbar"
-import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditBannerDialog } from "@/features/media-images/components/banners/edit-banner-dialog"
-import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
+import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { m } from "@/paraglide/messages"
 
 const routeApi = getRouteApi("/dashboard/banners/")
@@ -71,10 +69,10 @@ export function BannersPage() {
   return (
     <DashboardPage
       actions={
-        <CatalogAction render={<Link search={{}} to="/dashboard/banners/upload" />}>
+        <PageAction render={<Link search={{}} to="/dashboard/banners/upload" />}>
           <Plus />
           {m.catalog_banner_add()}
-        </CatalogAction>
+        </PageAction>
       }
       subtitle={m.catalog_banner_subtitle()}
       title={m.dashboard_nav_banners()}
@@ -161,27 +159,24 @@ export function BannersPage() {
         loading={data === undefined}
         selection={selection}
         toolbar={
-          <CatalogToolbar>
-            <CatalogSearch
+          <FilterToolbar>
+            <FilterSearch
               label={m.catalog_image_search()}
               onChange={(search) => {
                 update({ search })
               }}
               value={filter.search}
             />
-            <CatalogSelect
+            <FilterSelect
               allLabel={m.catalog_all_ratings()}
-              renderIcon={(rating) => <RatingIcon rating={rating} />}
-              getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
-              icon={Shield}
               label={m.media_images_content_rating()}
               onChange={(contentRating) => {
                 update({ contentRating })
               }}
-              options={CONTENT_RATINGS}
+              options={CONTENT_RATING_OPTIONS}
               value={filter.contentRating}
             />
-          </CatalogToolbar>
+          </FilterToolbar>
         }
       >
         {data?.data.map((banner) => (

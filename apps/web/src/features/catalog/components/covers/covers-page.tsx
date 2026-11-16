@@ -1,12 +1,16 @@
-import { CONTENT_RATINGS, MEDIA_LANGUAGES } from "@taiyomoe/db/constants"
-import { Image, Languages, Plus, Shield } from "@taiyomoe/ui/components/icons"
+import { Image, Plus } from "@taiyomoe/ui/components/icons"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
 import type { ManagedCover } from "@/features/catalog/api/catalog"
 import type { DeletableCover } from "@/features/catalog/components/covers/delete-cover-dialog"
-import { LanguageFlag } from "@/components/flags/flags"
-import { getLanguageName } from "@/components/flags/language-flags"
+import { MEDIA_LANGUAGE_OPTIONS } from "@/components/fields/language-options"
+import {
+  PageAction,
+  FilterSearch,
+  FilterSelect,
+  FilterToolbar,
+} from "@/components/filters/filter-toolbar"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import {
@@ -28,18 +32,11 @@ import {
   CatalogTable,
   VisuallyHidden,
 } from "@/features/catalog/components/shared/catalog-table"
-import {
-  CatalogAction,
-  CatalogSearch,
-  CatalogSelect,
-  CatalogToolbar,
-} from "@/features/catalog/components/shared/catalog-toolbar"
-import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { EditCoverDialog } from "@/features/media-images/components/covers/edit-cover-dialog"
-import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
+import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { m } from "@/paraglide/messages"
 
 const routeApi = getRouteApi("/dashboard/covers/")
@@ -75,10 +72,10 @@ export function CoversPage() {
   return (
     <DashboardPage
       actions={
-        <CatalogAction render={<Link search={{}} to="/dashboard/covers/upload" />}>
+        <PageAction render={<Link search={{}} to="/dashboard/covers/upload" />}>
           <Plus />
           {m.catalog_cover_add()}
-        </CatalogAction>
+        </PageAction>
       }
       subtitle={m.catalog_cover_subtitle()}
       title={m.dashboard_nav_covers()}
@@ -166,39 +163,33 @@ export function CoversPage() {
         loading={data === undefined}
         selection={selection}
         toolbar={
-          <CatalogToolbar>
-            <CatalogSearch
+          <FilterToolbar>
+            <FilterSearch
               label={m.catalog_image_search()}
               onChange={(search) => {
                 update({ search })
               }}
               value={filter.search}
             />
-            <CatalogSelect
+            <FilterSelect
               allLabel={m.catalog_all_languages()}
-              renderIcon={(language) => <LanguageFlag language={language} />}
-              getLabel={getLanguageName}
-              icon={Languages}
               label={m.upload_language()}
               onChange={(language) => {
                 update({ language })
               }}
-              options={MEDIA_LANGUAGES}
+              options={MEDIA_LANGUAGE_OPTIONS}
               value={filter.language}
             />
-            <CatalogSelect
+            <FilterSelect
               allLabel={m.catalog_all_ratings()}
-              renderIcon={(rating) => <RatingIcon rating={rating} />}
-              getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
-              icon={Shield}
               label={m.media_images_content_rating()}
               onChange={(contentRating) => {
                 update({ contentRating })
               }}
-              options={CONTENT_RATINGS}
+              options={CONTENT_RATING_OPTIONS}
               value={filter.contentRating}
             />
-          </CatalogToolbar>
+          </FilterToolbar>
         }
       >
         {data?.data.map((cover) => (

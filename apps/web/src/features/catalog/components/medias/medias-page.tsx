@@ -1,11 +1,17 @@
-import { MEDIA_STATUSES, MEDIA_TYPES } from "@taiyomoe/db/constants"
-import { Activity, Book, Library, Plus, Refresh, Trash } from "@taiyomoe/ui/components/icons"
+import { Library, Plus, Refresh, Trash } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
 import type { DeletableMedia } from "@/features/catalog/components/medias/delete-media-dialog"
+import {
+  PageAction,
+  FilterSearch,
+  FilterSelect,
+  FilterToggle,
+  FilterToolbar,
+} from "@/components/filters/filter-toolbar"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import {
@@ -29,23 +35,11 @@ import {
   CatalogTable,
   VisuallyHidden,
 } from "@/features/catalog/components/shared/catalog-table"
-import {
-  CatalogAction,
-  CatalogSearch,
-  CatalogSelect,
-  CatalogToggle,
-  CatalogToolbar,
-  StatusDot,
-} from "@/features/catalog/components/shared/catalog-toolbar"
 import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { toastBulkResult } from "@/features/catalog/lib/bulk-toast"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
-import {
-  MEDIA_STATUS_BADGES,
-  MEDIA_STATUS_LABELS,
-  MEDIA_TYPE_LABELS,
-} from "@/features/media/lib/media-labels"
+import { MEDIA_STATUS_OPTIONS, MEDIA_TYPE_OPTIONS } from "@/features/media/lib/media-options"
 import { getErrorMessage } from "@/lib/errors"
 import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
@@ -91,10 +85,10 @@ export function MediasPage() {
     <DashboardPage
       actions={
         can("media.create") ? (
-          <CatalogAction render={<Link to="/dashboard/medias/new" />}>
+          <PageAction render={<Link to="/dashboard/medias/new" />}>
             <Plus />
             {m.catalog_media_add()}
-          </CatalogAction>
+          </PageAction>
         ) : undefined
       }
       subtitle={m.catalog_media_subtitle()}
@@ -211,39 +205,34 @@ export function MediasPage() {
         loading={data === undefined}
         selection={bulkActions ? selection : undefined}
         toolbar={
-          <CatalogToolbar>
-            <CatalogSearch
+          <FilterToolbar>
+            <FilterSearch
               label={m.catalog_media_search()}
               onChange={(search) => {
                 update({ search })
               }}
               value={filter.search}
             />
-            <CatalogSelect
+            <FilterSelect
               allLabel={m.catalog_all_types()}
-              getLabel={(type) => MEDIA_TYPE_LABELS[type]()}
-              icon={Book}
               label={m.media_info_type()}
               onChange={(type) => {
                 update({ type })
               }}
-              options={MEDIA_TYPES}
+              options={MEDIA_TYPE_OPTIONS}
               value={filter.type}
             />
-            <CatalogSelect
+            <FilterSelect
               allLabel={m.catalog_all_statuses()}
-              renderIcon={(status) => <StatusDot variant={MEDIA_STATUS_BADGES[status]} />}
-              getLabel={(status) => MEDIA_STATUS_LABELS[status]()}
-              icon={Activity}
               label={m.media_info_status()}
               onChange={(status) => {
                 update({ status })
               }}
-              options={MEDIA_STATUSES}
+              options={MEDIA_STATUS_OPTIONS}
               value={filter.status}
             />
             {can("media.restore") ? (
-              <CatalogToggle
+              <FilterToggle
                 icon={Trash}
                 label={m.catalog_media_only_deleted()}
                 onChange={(deleted) => {
@@ -252,7 +241,7 @@ export function MediasPage() {
                 pressed={filter.deleted === true}
               />
             ) : null}
-          </CatalogToolbar>
+          </FilterToolbar>
         }
       >
         {data?.data.map((media) => (

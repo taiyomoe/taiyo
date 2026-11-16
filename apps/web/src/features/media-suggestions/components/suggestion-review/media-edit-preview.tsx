@@ -9,6 +9,7 @@ import { getLanguageName } from "@/components/flags/language-flags"
 import { RichText } from "@/components/rich-text/rich-text"
 import { parseRichText } from "@/components/rich-text/rich-text-document"
 import { getTagName, STAFF_ROLE_LABELS } from "@/features/media-suggestions/lib/media-edit-labels"
+import { SiteName } from "@/features/media/components/site-logo"
 import {
   CONTENT_RATING_LABELS,
   MEDIA_COUNTRY_LABELS,
@@ -157,7 +158,9 @@ export const FIELD_PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => R
       <ul sx={styles.list}>
         {links.map(([key, value]) => (
           <li key={key} sx={styles.row}>
-            <span sx={styles.linkKey}>{MEDIA_LINKS[key]?.label ?? key}</span>
+            <span sx={styles.linkKey}>
+              <SiteName label={MEDIA_LINKS[key]?.label ?? key} site={key} />
+            </span>
             <span sx={styles.text}>{String(value)}</span>
           </li>
         ))}

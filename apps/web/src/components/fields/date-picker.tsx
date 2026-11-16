@@ -28,7 +28,7 @@ const styles = stylex.create({
     color: colors.mutedForeground,
   },
   popup: {
-    width: "var(--anchor-width, 20rem)",
+    width: "max(var(--anchor-width, 0px), 19rem)",
   },
   content: {
     gap: "0.75rem",

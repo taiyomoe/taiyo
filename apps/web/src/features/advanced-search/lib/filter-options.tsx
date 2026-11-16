@@ -1,24 +1,11 @@
 import type { ReactElement } from "react"
 import {
-  CONTENT_RATINGS,
-  MEDIA_COUNTRIES_OF_ORIGIN,
-  MEDIA_DEMOGRAPHIES,
-  MEDIA_STATUSES,
-  MEDIA_TYPES,
-} from "@taiyomoe/db/constants"
-import {
-  BookOpenText,
   CalendarArrowDown,
   CalendarArrowUp,
   ClockArrowDown,
   ClockArrowUp,
-  Flame,
   type IconProps,
-  Kissing,
-  MoreCircle,
   Refresh,
-  ShieldCheck,
-  Skull,
   SortAscending,
   SortAZ,
   SortDescending,
@@ -29,14 +16,14 @@ import {
 } from "@taiyomoe/ui/components/icons"
 import type { SearchSort } from "@/features/advanced-search/lib/advanced-search"
 import type { TagSectionId } from "@/features/advanced-search/lib/search-tags"
-import { CountryFlag } from "@/components/flags/flags"
+import { type OptionSet, tonedIcon } from "@/components/fields/option-select"
 import {
-  CONTENT_RATING_LABELS,
-  MEDIA_COUNTRY_LABELS,
-  MEDIA_DEMOGRAPHY_LABELS,
-  MEDIA_STATUS_LABELS,
-  MEDIA_TYPE_LABELS,
-} from "@/features/media/lib/media-labels"
+  CONTENT_RATING_OPTIONS,
+  MEDIA_COUNTRY_OPTIONS,
+  MEDIA_DEMOGRAPHY_OPTIONS,
+  MEDIA_STATUS_OPTIONS,
+  MEDIA_TYPE_OPTIONS,
+} from "@/features/media/lib/media-options"
 import { m } from "@/paraglide/messages"
 
 export type FilterOptionIcon = (props: IconProps) => ReactElement
@@ -47,44 +34,23 @@ export type FilterOption<T extends string> = {
   icon?: FilterOptionIcon | undefined
 }
 
-type Country = (typeof MEDIA_COUNTRIES_OF_ORIGIN)[number]
+/** The filter chips read the same option sets as every select of the app. */
+const toOptions = <T extends string>(options: OptionSet<T>): Array<FilterOption<T>> =>
+  options.values.map((value) => ({
+    value,
+    label: () => options.label(value),
+    icon: tonedIcon(options, value),
+  }))
 
-const toOptions = <T extends string>(
-  values: readonly T[],
-  labels: Record<T, () => string>,
-  iconOf: (value: T) => FilterOptionIcon | undefined = () => undefined,
-) => values.map((value) => ({ value, label: labels[value], icon: iconOf(value) }))
-const flagIcon = (country: Country): FilterOptionIcon =>
-  function Flag() {
-    return <CountryFlag country={country} />
-  }
-const TYPE_ICONS: Record<(typeof MEDIA_TYPES)[number], FilterOptionIcon> = {
-  MANGA: flagIcon("JAPAN"),
-  MANHWA: flagIcon("KOREA"),
-  MANHUA: flagIcon("CHINA"),
-  LIGHT_NOVEL: BookOpenText,
-  OTHER: MoreCircle,
-}
-const RATING_ICONS: Record<(typeof CONTENT_RATINGS)[number], FilterOptionIcon> = {
-  NORMAL: ShieldCheck,
-  SUGGESTIVE: Kissing,
-  NSFW: Flame,
-  NSFL: Skull,
-}
+export const TYPE_OPTIONS = toOptions(MEDIA_TYPE_OPTIONS)
 
-export const TYPE_OPTIONS = toOptions(MEDIA_TYPES, MEDIA_TYPE_LABELS, (type) => TYPE_ICONS[type])
+export const STATUS_OPTIONS = toOptions(MEDIA_STATUS_OPTIONS)
 
-export const STATUS_OPTIONS = toOptions(MEDIA_STATUSES, MEDIA_STATUS_LABELS)
+export const RATING_OPTIONS = toOptions(CONTENT_RATING_OPTIONS)
 
-export const RATING_OPTIONS = toOptions(
-  CONTENT_RATINGS,
-  CONTENT_RATING_LABELS,
-  (rating) => RATING_ICONS[rating],
-)
+export const DEMOGRAPHIC_OPTIONS = toOptions(MEDIA_DEMOGRAPHY_OPTIONS)
 
-export const DEMOGRAPHIC_OPTIONS = toOptions(MEDIA_DEMOGRAPHIES, MEDIA_DEMOGRAPHY_LABELS)
-
-export const ORIGIN_OPTIONS = toOptions(MEDIA_COUNTRIES_OF_ORIGIN, MEDIA_COUNTRY_LABELS, flagIcon)
+export const ORIGIN_OPTIONS = toOptions(MEDIA_COUNTRY_OPTIONS)
 
 export const SORT_OPTIONS = [
   { value: "relevance", label: m.search_sort_relevance, icon: Sparkles },

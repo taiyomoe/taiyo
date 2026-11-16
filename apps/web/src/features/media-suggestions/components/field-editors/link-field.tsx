@@ -5,6 +5,7 @@ import {
   type MediaEditDraft,
   getLinkError,
 } from "@/features/media-suggestions/lib/media-edit-model"
+import { SiteName } from "@/features/media/components/site-logo"
 import { MEDIA_LINKS } from "@/features/media/lib/media-labels"
 
 const isNumberKey = (key: string) => (MEDIA_LINK_NUMBER_KEYS as readonly string[]).includes(key)
@@ -28,7 +29,9 @@ export function LinkField({
 
   return (
     <Field invalid={error !== null}>
-      <FieldLabel>{MEDIA_LINKS[key]?.label ?? key}</FieldLabel>
+      <FieldLabel>
+        <SiteName label={MEDIA_LINKS[key]?.label ?? key} site={key} />
+      </FieldLabel>
       <Input
         inputMode={isNumberKey(key) ? "numeric" : "url"}
         onChange={(event) => {

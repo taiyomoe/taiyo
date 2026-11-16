@@ -1,20 +1,12 @@
-import {
-  CONTENT_RATINGS,
-  type ContentRating,
-  MEDIA_LANGUAGES,
-  type MediaLanguage,
-} from "@taiyomoe/db/constants"
-import { Languages, Shield } from "@taiyomoe/ui/components/icons"
+import type { ContentRating, MediaLanguage } from "@taiyomoe/db/constants"
 import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { useState } from "react"
-import { LanguageFlag } from "@/components/flags/flags"
-import { getLanguageName } from "@/components/flags/language-flags"
+import { MEDIA_LANGUAGE_OPTIONS } from "@/components/fields/language-options"
+import { OptionalOptionSelect } from "@/components/fields/option-select"
 import { useBulkUpdateCovers } from "@/features/catalog/api/catalog"
 import { BulkEditDialog } from "@/features/catalog/components/shared/bulk-edit-dialog"
-import { CatalogSelectControl } from "@/features/catalog/components/shared/catalog-toolbar"
-import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { toastBulkResult } from "@/features/catalog/lib/bulk-toast"
-import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
+import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -66,27 +58,21 @@ export function BulkEditCoversDialog({
     >
       <Field>
         <FieldLabel>{m.upload_language()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={m.catalog_bulk_unchanged()}
-          getLabel={getLanguageName}
-          icon={Languages}
+        <OptionalOptionSelect
+          empty={m.catalog_bulk_unchanged()}
           label={m.upload_language()}
           onChange={setLanguage}
-          options={MEDIA_LANGUAGES}
-          renderIcon={(option) => <LanguageFlag language={option} />}
+          options={MEDIA_LANGUAGE_OPTIONS}
           value={language}
         />
       </Field>
       <Field>
         <FieldLabel>{m.media_images_content_rating()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={m.catalog_bulk_unchanged()}
-          getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
-          icon={Shield}
+        <OptionalOptionSelect
+          empty={m.catalog_bulk_unchanged()}
           label={m.media_images_content_rating()}
           onChange={setContentRating}
-          options={CONTENT_RATINGS}
-          renderIcon={(rating) => <RatingIcon rating={rating} />}
+          options={CONTENT_RATING_OPTIONS}
           value={contentRating}
         />
       </Field>

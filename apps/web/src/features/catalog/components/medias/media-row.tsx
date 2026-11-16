@@ -15,19 +15,19 @@ import { Link } from "@tanstack/react-router"
 import type { ManagedMedia } from "@/features/catalog/api/catalog"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
+import { OptionLabel } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
-import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import {
-  CONTENT_RATING_LABELS,
   MEDIA_STATUS_BADGES,
   MEDIA_STATUS_LABELS,
   MEDIA_TYPE_LABELS,
 } from "@/features/media/lib/media-labels"
+import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { m } from "@/paraglide/messages"
 
 export function MediaRow({
@@ -132,10 +132,7 @@ export function MediaRow({
         {formatNumber(media.chapterCount)}
       </CatalogCell>
       <CatalogCell column="rating">
-        <span {...stylex.props(catalogStyles.inline)}>
-          <RatingIcon rating={media.contentRating} />
-          {CONTENT_RATING_LABELS[media.contentRating]()}
-        </span>
+        <OptionLabel options={CONTENT_RATING_OPTIONS} value={media.contentRating} />
       </CatalogCell>
       <CatalogCell column="date" sx={catalogStyles.muted}>
         <TimeAgo length="long" date={media.deletedAt ?? media.createdAt} />

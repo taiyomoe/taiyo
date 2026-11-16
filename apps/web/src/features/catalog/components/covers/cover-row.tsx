@@ -6,17 +6,17 @@ import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { Link } from "@tanstack/react-router"
 import type { ManagedCover } from "@/features/catalog/api/catalog"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
+import { OptionLabel, OptionValueIcon } from "@/components/fields/option-select"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { ImageThumb } from "@/features/catalog/components/shared/image-thumb"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
-import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { Uploader } from "@/features/chapters/components/uploader"
 import { useSetMainCover } from "@/features/media-images/api/media-images"
-import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
+import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -33,12 +33,7 @@ export function CoverRow({
 }) {
   const setMain = useSetMainCover(cover.media.id)
   const title = cover.media.title ?? m.media_untitled()
-  const rating = (
-    <span {...stylex.props(catalogStyles.inline)}>
-      <RatingIcon rating={cover.contentRating} />
-      {CONTENT_RATING_LABELS[cover.contentRating]()}
-    </span>
-  )
+  const rating = <OptionLabel options={CONTENT_RATING_OPTIONS} value={cover.contentRating} />
   const main = cover.isMainCover ? <Badge variant="info">{m.media_covers_main()}</Badge> : null
 
   return (
@@ -55,7 +50,7 @@ export function CoverRow({
             content: (
               <>
                 <LanguageChip language={cover.language} />
-                <RatingIcon rating={cover.contentRating} />
+                <OptionValueIcon options={CONTENT_RATING_OPTIONS} value={cover.contentRating} />
                 {main}
               </>
             ),

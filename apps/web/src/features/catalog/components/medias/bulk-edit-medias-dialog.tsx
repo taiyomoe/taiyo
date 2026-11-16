@@ -1,38 +1,25 @@
-import {
-  CONTENT_RATINGS,
-  type ContentRating,
-  MEDIA_COUNTRIES_OF_ORIGIN,
-  MEDIA_DEMOGRAPHIES,
-  MEDIA_SOURCES,
-  MEDIA_STATUSES,
-  MEDIA_TYPES,
-  type MediaCountryOfOrigin,
-  type MediaDemography,
-  type MediaSource,
-  type MediaStatus,
-  type MediaType,
+import type {
+  ContentRating,
+  MediaCountryOfOrigin,
+  MediaDemography,
+  MediaSource,
+  MediaStatus,
+  MediaType,
 } from "@taiyomoe/db/constants"
-import { Activity, Book, Globe, Shield, Sparkles, Users } from "@taiyomoe/ui/components/icons"
 import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { useState } from "react"
-import { CountryFlag } from "@/components/flags/flags"
+import { OptionalOptionSelect } from "@/components/fields/option-select"
 import { useBulkUpdateMedias } from "@/features/catalog/api/catalog"
 import { BulkEditDialog } from "@/features/catalog/components/shared/bulk-edit-dialog"
-import {
-  CatalogSelectControl,
-  StatusDot,
-} from "@/features/catalog/components/shared/catalog-toolbar"
-import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { toastBulkResult } from "@/features/catalog/lib/bulk-toast"
 import {
-  CONTENT_RATING_LABELS,
-  MEDIA_COUNTRY_LABELS,
-  MEDIA_DEMOGRAPHY_LABELS,
-  MEDIA_SOURCE_LABELS,
-  MEDIA_STATUS_BADGES,
-  MEDIA_STATUS_LABELS,
-  MEDIA_TYPE_LABELS,
-} from "@/features/media/lib/media-labels"
+  CONTENT_RATING_OPTIONS,
+  MEDIA_COUNTRY_OPTIONS,
+  MEDIA_DEMOGRAPHY_OPTIONS,
+  MEDIA_SOURCE_OPTIONS,
+  MEDIA_STATUS_OPTIONS,
+  MEDIA_TYPE_OPTIONS,
+} from "@/features/media/lib/media-options"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -94,88 +81,73 @@ export function BulkEditMediasDialog({
     >
       <Field>
         <FieldLabel>{m.media_info_type()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={(type) => MEDIA_TYPE_LABELS[type]()}
-          icon={Book}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.media_info_type()}
           onChange={(type) => {
             set({ type })
           }}
-          options={MEDIA_TYPES}
+          options={MEDIA_TYPE_OPTIONS}
           value={changes.type}
         />
       </Field>
       <Field>
         <FieldLabel>{m.media_info_status()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={(status) => MEDIA_STATUS_LABELS[status]()}
-          icon={Activity}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.media_info_status()}
           onChange={(status) => {
             set({ status })
           }}
-          options={MEDIA_STATUSES}
-          renderIcon={(status) => <StatusDot variant={MEDIA_STATUS_BADGES[status]} />}
+          options={MEDIA_STATUS_OPTIONS}
           value={changes.status}
         />
       </Field>
       <Field>
         <FieldLabel>{m.media_info_source()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={(source) => MEDIA_SOURCE_LABELS[source]()}
-          icon={Sparkles}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.media_info_source()}
           onChange={(source) => {
             set({ source })
           }}
-          options={MEDIA_SOURCES}
+          options={MEDIA_SOURCE_OPTIONS}
           value={changes.source}
         />
       </Field>
       <Field>
         <FieldLabel>{m.media_info_demography()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={(demography) => MEDIA_DEMOGRAPHY_LABELS[demography]()}
-          icon={Users}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.media_info_demography()}
           onChange={(demography) => {
             set({ demography })
           }}
-          options={MEDIA_DEMOGRAPHIES}
+          options={MEDIA_DEMOGRAPHY_OPTIONS}
           value={changes.demography}
         />
       </Field>
       <Field>
         <FieldLabel>{m.media_info_country()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={(country) => MEDIA_COUNTRY_LABELS[country]()}
-          icon={Globe}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.media_info_country()}
           onChange={(countryOfOrigin) => {
             set({ countryOfOrigin })
           }}
-          options={MEDIA_COUNTRIES_OF_ORIGIN}
-          renderIcon={(country) => <CountryFlag country={country} />}
+          options={MEDIA_COUNTRY_OPTIONS}
           value={changes.countryOfOrigin}
         />
       </Field>
       <Field>
         <FieldLabel>{m.media_info_content_rating()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
-          icon={Shield}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.media_info_content_rating()}
           onChange={(contentRating) => {
             set({ contentRating })
           }}
-          options={CONTENT_RATINGS}
-          renderIcon={(rating) => <RatingIcon rating={rating} />}
+          options={CONTENT_RATING_OPTIONS}
           value={changes.contentRating}
         />
       </Field>

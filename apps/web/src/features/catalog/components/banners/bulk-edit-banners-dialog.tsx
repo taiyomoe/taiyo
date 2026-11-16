@@ -1,13 +1,11 @@
-import { CONTENT_RATINGS, type ContentRating } from "@taiyomoe/db/constants"
-import { Shield } from "@taiyomoe/ui/components/icons"
+import type { ContentRating } from "@taiyomoe/db/constants"
 import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { useState } from "react"
+import { OptionalOptionSelect } from "@/components/fields/option-select"
 import { useBulkUpdateBanners } from "@/features/catalog/api/catalog"
 import { BulkEditDialog } from "@/features/catalog/components/shared/bulk-edit-dialog"
-import { CatalogSelectControl } from "@/features/catalog/components/shared/catalog-toolbar"
-import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { toastBulkResult } from "@/features/catalog/lib/bulk-toast"
-import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
+import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -53,14 +51,11 @@ export function BulkEditBannersDialog({
     >
       <Field>
         <FieldLabel>{m.media_images_content_rating()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={m.catalog_bulk_unchanged()}
-          getLabel={(rating) => CONTENT_RATING_LABELS[rating]()}
-          icon={Shield}
+        <OptionalOptionSelect
+          empty={m.catalog_bulk_unchanged()}
           label={m.media_images_content_rating()}
           onChange={setContentRating}
-          options={CONTENT_RATINGS}
-          renderIcon={(rating) => <RatingIcon rating={rating} />}
+          options={CONTENT_RATING_OPTIONS}
           value={contentRating}
         />
       </Field>

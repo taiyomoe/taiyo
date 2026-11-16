@@ -1,18 +1,17 @@
-import * as stylex from "@stylexjs/stylex"
 import { Banner, Edit, Trash } from "@taiyomoe/ui/components/icons"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { ManagedBanner } from "@/features/catalog/api/catalog"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
+import { OptionLabel, OptionValueIcon } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { ImageThumb } from "@/features/catalog/components/shared/image-thumb"
 import { MediaCell } from "@/features/catalog/components/shared/media-cell"
-import { RatingIcon } from "@/features/catalog/components/shared/rating-icon"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { Uploader } from "@/features/chapters/components/uploader"
-import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
+import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { m } from "@/paraglide/messages"
 
 export function BannerRow({
@@ -47,7 +46,7 @@ export function BannerRow({
             content: (
               <>
                 {thumb}
-                <RatingIcon rating={banner.contentRating} />
+                <OptionValueIcon options={CONTENT_RATING_OPTIONS} value={banner.contentRating} />
               </>
             ),
           }}
@@ -55,10 +54,7 @@ export function BannerRow({
         />
       </CatalogCell>
       <CatalogCell column="rating">
-        <span {...stylex.props(catalogStyles.inline)}>
-          <RatingIcon rating={banner.contentRating} />
-          {CONTENT_RATING_LABELS[banner.contentRating]()}
-        </span>
+        <OptionLabel options={CONTENT_RATING_OPTIONS} value={banner.contentRating} />
       </CatalogCell>
       <CatalogCell column="uploader">
         <Uploader uploader={banner.uploader} />

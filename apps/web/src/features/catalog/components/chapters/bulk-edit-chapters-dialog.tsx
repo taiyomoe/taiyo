@@ -1,14 +1,13 @@
-import { SUPPORTED_LANGUAGES, type SupportedLanguage } from "@taiyomoe/db/constants"
-import { Book, Languages, Users } from "@taiyomoe/ui/components/icons"
+import type { SupportedLanguage } from "@taiyomoe/db/constants"
+import { Book, Close, Edit, Users } from "@taiyomoe/ui/components/icons"
 import { Field, FieldDescription, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import { useState } from "react"
 import type { GroupOption } from "@/features/groups/components/group-picker"
-import { LanguageFlag } from "@/components/flags/flags"
-import { getLanguageName } from "@/components/flags/language-flags"
+import { SUPPORTED_LANGUAGE_OPTIONS } from "@/components/fields/language-options"
+import { type OptionSet, OptionalOptionSelect } from "@/components/fields/option-select"
 import { useBulkUpdateChapters } from "@/features/catalog/api/catalog"
 import { BulkEditDialog } from "@/features/catalog/components/shared/bulk-edit-dialog"
-import { CatalogSelectControl } from "@/features/catalog/components/shared/catalog-toolbar"
 import { toastBulkResult } from "@/features/catalog/lib/bulk-toast"
 import { GroupPicker } from "@/features/groups/components/group-picker"
 import { getErrorMessage } from "@/lib/errors"
@@ -16,6 +15,18 @@ import { m } from "@/paraglide/messages"
 
 const VOLUME_MODES = ["SET", "CLEAR"] as const
 const GROUP_MODES = ["REPLACE"] as const
+const VOLUME_MODE_OPTIONS: OptionSet<(typeof VOLUME_MODES)[number]> = {
+  values: VOLUME_MODES,
+  label: (mode) => (mode === "SET" ? m.catalog_bulk_volume_set() : m.catalog_bulk_volume_clear()),
+  icon: (mode) => (mode === "SET" ? Edit : Close),
+  fieldIcon: Book,
+}
+const GROUP_MODE_OPTIONS: OptionSet<(typeof GROUP_MODES)[number]> = {
+  values: GROUP_MODES,
+  label: () => m.catalog_bulk_groups_replace(),
+  icon: () => Users,
+  fieldIcon: Users,
+}
 
 export function BulkEditChaptersDialog({
   chapterIds,
@@ -80,15 +91,11 @@ export function BulkEditChaptersDialog({
     >
       <Field>
         <FieldLabel>{m.catalog_bulk_volume()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={(mode) =>
-            mode === "SET" ? m.catalog_bulk_volume_set() : m.catalog_bulk_volume_clear()
-          }
-          icon={Book}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.catalog_bulk_volume()}
           onChange={setVolumeMode}
-          options={VOLUME_MODES}
+          options={VOLUME_MODE_OPTIONS}
           value={volumeMode}
         />
         {volumeMode === "SET" ? (
@@ -104,26 +111,21 @@ export function BulkEditChaptersDialog({
       </Field>
       <Field>
         <FieldLabel>{m.upload_language()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={getLanguageName}
-          icon={Languages}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.upload_language()}
           onChange={setLanguage}
-          options={SUPPORTED_LANGUAGES}
-          renderIcon={(option) => <LanguageFlag language={option} />}
+          options={SUPPORTED_LANGUAGE_OPTIONS}
           value={language}
         />
       </Field>
       <Field>
         <FieldLabel>{m.upload_groups()}</FieldLabel>
-        <CatalogSelectControl
-          allLabel={keep}
-          getLabel={() => m.catalog_bulk_groups_replace()}
-          icon={Users}
+        <OptionalOptionSelect
+          empty={keep}
           label={m.upload_groups()}
           onChange={setGroupMode}
-          options={GROUP_MODES}
+          options={GROUP_MODE_OPTIONS}
           value={groupMode}
         />
         {groupMode === undefined ? null : (
