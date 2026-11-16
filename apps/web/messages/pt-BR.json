@@ -1361,6 +1361,8 @@
   "reader_swipe": "Deslizar para virar a página",
   "reader_cursor_hints": "Mostrar setas no cursor",
   "reader_auto_hide": "Ocultar controles quando parado",
+  "reader_keyboard_shortcuts": "Atalhos de uma tecla",
+  "reader_keyboard_shortcuts_hint": "Teclas de letra, número e símbolo, como M ou +. As setas e o Espaço sempre funcionam.",
   "reader_confirm_chapter": "Perguntar antes de mudar de capítulo",
   "reader_warn_gap": "Avisar sobre capítulos faltando",
   "reader_resume": "Continuar de onde parei",

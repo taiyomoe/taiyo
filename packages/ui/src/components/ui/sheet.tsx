@@ -3,6 +3,8 @@ import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
+import { HotkeysProvider } from "@tanstack/react-hotkeys"
+import { useId } from "react"
 import type { Sx } from "../../styles/sx"
 import {
   breakpoints,
@@ -321,6 +323,7 @@ export function SheetPopup({
   portalProps?: SheetPrimitive.Portal.Props
   sx?: Sx
 }): React.ReactElement {
+  const scope = `sheet-${useId()}`
   const styleProps = stylex.props(
     styles.popup,
     popupSideStyles[side],
@@ -339,7 +342,9 @@ export function SheetPopup({
           style={styleProps.style}
           {...props}
         >
-          {children}
+          <HotkeysProvider exclusive scope={scope}>
+            {children}
+          </HotkeysProvider>
           {showCloseButton && (
             <SheetPrimitive.Close
               aria-label="Close"

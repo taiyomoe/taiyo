@@ -119,6 +119,10 @@ export const readerSettingsSchema = z.object({
     .default(true)
     .catch(true)
     .meta({ description: "Whether the cursor shows arrows over the click zones." }),
+  keyboardShortcuts: z.boolean().default(true).catch(true).meta({
+    description:
+      "Whether shortcuts on a single letter, number or symbol key work, such as M for the menu. Arrow keys, Space, Home and End always work.",
+  }),
   autoHideControls: z
     .boolean()
     .default(true)

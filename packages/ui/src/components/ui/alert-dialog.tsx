@@ -1,6 +1,8 @@
 import type React from "react"
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog"
 import * as stylex from "@stylexjs/stylex"
+import { HotkeysProvider } from "@tanstack/react-hotkeys"
+import { useId } from "react"
 import type { Sx } from "../../styles/sx"
 import { surface } from "../../styles/recipes"
 import {
@@ -255,6 +257,7 @@ export function AlertDialogViewport({
 
 export function AlertDialogPopup({
   className,
+  children,
   bottomStickOnMobile = true,
   portalProps,
   sx,
@@ -264,6 +267,7 @@ export function AlertDialogPopup({
   portalProps?: AlertDialogPrimitive.Portal.Props
   sx?: Sx
 }): React.ReactElement {
+  const scope = `alert-dialog-${useId()}`
   const styleProps = stylex.props(
     surface.raisedEdge,
     styles.popup,
@@ -280,7 +284,11 @@ export function AlertDialogPopup({
           data-slot="alert-dialog-popup"
           style={styleProps.style}
           {...props}
-        />
+        >
+          <HotkeysProvider exclusive scope={scope}>
+            {children}
+          </HotkeysProvider>
+        </AlertDialogPrimitive.Popup>
       </AlertDialogViewport>
     </AlertDialogPortal>
   )

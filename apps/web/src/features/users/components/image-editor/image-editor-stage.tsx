@@ -3,6 +3,7 @@ import { Image as ImageIcon } from "@taiyomoe/ui/components/icons"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
 import { breakpoints, colors, consts, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useHotkeys } from "@tanstack/react-hotkeys"
 import { useCallback, useEffect, useRef } from "react"
 import {
   AVATAR_OVER_BANNER,
@@ -12,12 +13,17 @@ import {
   type ImageEditor,
   useEditorValue,
 } from "@/features/users/components/image-editor/use-image-editor"
-import {
-  handleStageKey,
-  useStageGestures,
-} from "@/features/users/components/image-editor/use-stage-gestures"
+import { useStageGestures } from "@/features/users/components/image-editor/use-stage-gestures"
 import { m } from "@/paraglide/messages"
 
+const KEY_PAN = 10
+const KEY_PAN_FAST = 50
+const PAN_KEYS = [
+  ["ArrowLeft", -1, 0],
+  ["ArrowRight", 1, 0],
+  ["ArrowUp", 0, -1],
+  ["ArrowDown", 0, 1],
+] as const
 const DIM = "rgb(9 9 11 / 64%)"
 const DIM_ACTIVE = "rgb(9 9 11 / 38%)"
 const RING = "0 0 0 1.5px rgb(255 255 255 / 92%), 0 0 0 4px rgb(0 0 0 / 18%)"
@@ -194,6 +200,83 @@ export function ImageEditorStage({
   )
 
   useStageGestures(editor, stageRef)
+  useHotkeys(
+    [
+      ...PAN_KEYS.flatMap(([key, x, y]) => [
+        {
+          hotkey: key,
+          callback: () => {
+            editor.panBy(x * KEY_PAN, y * KEY_PAN)
+          },
+          options: { meta: { name: "Move the image" } },
+        },
+        {
+          hotkey: `Shift+${key}` as const,
+          callback: () => {
+            editor.panBy(x * KEY_PAN_FAST, y * KEY_PAN_FAST)
+          },
+          options: { meta: { name: "Move the image faster" } },
+        },
+      ]),
+      ...(["+", "="] as const).map((hotkey) => ({
+        hotkey,
+        callback: () => {
+          editor.stepZoom(1)
+        },
+        options: { meta: { name: "Zoom in" } },
+      })),
+      ...(["-", "_"] as const).map((hotkey) => ({
+        hotkey,
+        callback: () => {
+          editor.stepZoom(-1)
+        },
+        options: { meta: { name: "Zoom out" } },
+      })),
+      {
+        hotkey: "R",
+        callback: () => {
+          editor.rotate(1)
+        },
+        options: { meta: { name: "Rotate clockwise" } },
+      },
+      {
+        hotkey: "Shift+R",
+        callback: () => {
+          editor.rotate(-1)
+        },
+        options: { meta: { name: "Rotate counterclockwise" } },
+      },
+      {
+        hotkey: "H",
+        callback: () => {
+          editor.flip("x")
+        },
+        options: { requireReset: true, meta: { name: "Flip horizontally" } },
+      },
+      {
+        hotkey: "V",
+        callback: () => {
+          editor.flip("y")
+        },
+        options: { requireReset: true, meta: { name: "Flip vertically" } },
+      },
+      {
+        hotkey: "G",
+        callback: () => {
+          editor.toggleGrid()
+        },
+        options: { requireReset: true, meta: { name: "Toggle the grid" } },
+      },
+      {
+        hotkey: "0",
+        callback: () => {
+          editor.reset()
+        },
+        options: { meta: { name: "Reset" } },
+      },
+    ],
+    { target: stageRef, capture: true },
+  )
 
   useEffect(() => {
     const element = stageRef.current
@@ -219,11 +302,6 @@ export function ImageEditorStage({
     <div
       aria-label={m.image_editor_stage_label()}
       data-dragging={dragging ? "" : undefined}
-      onKeyDown={(event) => {
-        if (handleStageKey(editor, event.nativeEvent)) {
-          event.preventDefault()
-        }
-      }}
       ref={stageRef}
       role="application"
       sx={[styles.stage, kind === "avatar" ? styles.avatar : styles.banner]}

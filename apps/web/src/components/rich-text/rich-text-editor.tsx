@@ -2,16 +2,16 @@ import type { IconProps } from "@taiyomoe/ui/components/icons"
 import * as stylex from "@stylexjs/stylex"
 import { Bold, EyeOff, Italic, Link, Strikethrough, Underline } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
+import { KbdHotkey } from "@taiyomoe/ui/components/ui/kbd"
 import { FieldPrimitive, mergeProps } from "@taiyomoe/ui/components/ui/textarea"
 import { Tooltip, TooltipPopup, TooltipTrigger } from "@taiyomoe/ui/components/ui/tooltip"
 import { breakpoints, colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { type HotkeyChord, useHotkeys } from "@tanstack/react-hotkeys"
 import {
   type ChangeEvent,
   type ClipboardEvent,
   type ComponentProps,
   type DragEvent,
-  type KeyboardEvent,
   type ReactElement,
   type ReactNode,
   type Ref,
@@ -25,28 +25,28 @@ const FORMATS = [
   {
     mark: "bold",
     token: "**",
-    shortcut: { key: "b", shift: false },
+    shortcut: "Mod+B",
     icon: Bold,
     label: m.rich_text_bold,
   },
   {
     mark: "italic",
     token: "*",
-    shortcut: { key: "i", shift: false },
+    shortcut: "Mod+I",
     icon: Italic,
     label: m.rich_text_italic,
   },
   {
     mark: "underline",
     token: "__",
-    shortcut: { key: "u", shift: false },
+    shortcut: "Mod+U",
     icon: Underline,
     label: m.rich_text_underline,
   },
   {
     mark: "strike",
     token: "~~",
-    shortcut: { key: "x", shift: true },
+    shortcut: "Mod+Shift+X",
     icon: Strikethrough,
     label: m.rich_text_strikethrough,
   },
@@ -54,7 +54,7 @@ const FORMATS = [
 ] satisfies Array<{
   mark: RichTextMark
   token: string
-  shortcut: { key: string; shift: boolean } | null
+  shortcut: HotkeyChord | null
   icon: (props: IconProps) => ReactElement
   label: () => string
 }>
@@ -233,24 +233,11 @@ export const insertAtCursor = (
 const imageFiles = (list: FileList | null) =>
   Array.from(list ?? []).filter((file) => file.type.startsWith("image/"))
 
-function ShortcutHint({ shortcut, shift }: { shortcut: string; shift: boolean }) {
-  const mac = /Mac|iPhone|iPad/.test(navigator.platform)
-
-  return (
-    <KbdGroup>
-      <Kbd>{mac ? "⌘" : "Ctrl"}</Kbd>
-      {shift ? <Kbd>{mac ? "⇧" : "Shift"}</Kbd> : null}
-      <Kbd>{shortcut.toUpperCase()}</Kbd>
-    </KbdGroup>
-  )
-}
-
 export function RichTextEditor({
   ref,
   value,
   defaultValue,
   onChange,
-  onKeyDown,
   rows = 6,
   images = false,
   toolbarEnd,
@@ -323,6 +310,24 @@ export function RichTextEditor({
       replaceRange(textarea, start, end, `[${selected}](https://)`, [urlStart, urlStart + 8])
     }
   }
+
+  useHotkeys(
+    FORMATS.flatMap((format) =>
+      format.shortcut === null
+        ? []
+        : [
+            {
+              hotkey: format.shortcut,
+              callback: () => {
+                toggle(format.token)
+              },
+              options: { meta: { name: format.label() } },
+            },
+          ],
+    ),
+    { target: textareaRef, capture: true },
+  )
+
   const markStyle = (marks: RichTextMark[]) => {
     const underline = marks.includes("underline") || marks.includes("link")
     const strike = marks.includes("strike")
@@ -389,9 +394,7 @@ export function RichTextEditor({
             </TooltipTrigger>
             <TooltipPopup>
               {format.label()}{" "}
-              {format.shortcut === null ? null : (
-                <ShortcutHint shift={format.shortcut.shift} shortcut={format.shortcut.key} />
-              )}
+              {format.shortcut === null ? null : <KbdHotkey hotkey={format.shortcut} />}
             </TooltipPopup>
           </Tooltip>
         ))}
@@ -447,23 +450,6 @@ export function RichTextEditor({
                 onChange: (event: ChangeEvent<HTMLTextAreaElement>) => {
                   setUncontrolled(event.target.value)
                   onChange?.(event)
-                },
-                onKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => {
-                  onKeyDown?.(event)
-
-                  const format = FORMATS.find(
-                    (candidate) =>
-                      candidate.shortcut !== null &&
-                      (event.metaKey || event.ctrlKey) &&
-                      !event.altKey &&
-                      event.shiftKey === candidate.shortcut.shift &&
-                      event.key.toLowerCase() === candidate.shortcut.key,
-                  )
-
-                  if (format !== undefined && !event.defaultPrevented) {
-                    event.preventDefault()
-                    toggle(format.token)
-                  }
                 },
                 onPaste: (event: ClipboardEvent<HTMLTextAreaElement>) => {
                   const files = imageFiles(event.clipboardData.files)

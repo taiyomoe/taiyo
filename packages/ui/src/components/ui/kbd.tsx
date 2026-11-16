@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { type Hotkey, isHotkeySequence, useFormatForDisplay } from "@tanstack/react-hotkeys"
 import * as React from "react"
 import type { Sx } from "../../styles/sx"
 import { colors, font, radius } from "../../styles/tokens.stylex"
@@ -73,5 +74,25 @@ export function KbdGroup({ className, children, sx, ...props }: KbdProps): React
     >
       <KbdSurface>{children}</KbdSurface>
     </kbd>
+  )
+}
+
+export function KbdHotkey({ hotkey, sx }: { hotkey: Hotkey; sx?: Sx }): React.ReactElement {
+  const format = useFormatForDisplay()
+  const steps = isHotkeySequence(hotkey)
+    ? hotkey.map((step) => format(step, { parts: true }))
+    : [format(hotkey, { parts: true })]
+
+  return (
+    <>
+      {steps.map((parts, step) => (
+        // oxlint-disable-next-line react/no-array-index-key -- a sequence can repeat a step
+        <KbdGroup key={step} sx={sx}>
+          {parts.map((part) => (
+            <Kbd key={part}>{part}</Kbd>
+          ))}
+        </KbdGroup>
+      ))}
+    </>
   )
 }

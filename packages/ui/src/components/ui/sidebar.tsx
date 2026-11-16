@@ -1,6 +1,7 @@
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
+import { useHotkey } from "@tanstack/react-hotkeys"
 import * as React from "react"
 import { clamp } from "remeda"
 import type { CSSVariables, Sx } from "../../styles/sx"
@@ -23,7 +24,6 @@ const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 const SIDEBAR_WIDTH = 256
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
-const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 export type SidebarSide = "left" | "right"
 
@@ -729,20 +729,11 @@ export function SidebarProvider({
     }
   }, [isMobile, setOpen])
 
-  React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault()
-        toggleSidebar()
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown)
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [toggleSidebar])
+  useHotkey("Mod+B", toggleSidebar, {
+    requireReset: true,
+    preventDefault: "always",
+    meta: { name: "Toggle the sidebar" },
+  })
 
   const state = open ? "expanded" : "collapsed"
   const contextValue = React.useMemo<SidebarContextProps>(
