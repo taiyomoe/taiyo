@@ -338,7 +338,7 @@ test.describe("reader, signed in", () => {
     await openSheet(page)
     await sheet(page).getByRole("button", { name: "Remove bookmark" }).click()
 
-    await expect(sheet(page).getByText("No bookmarks in this title yet.")).toBeVisible()
+    await expect(sheet(page).getByText("No bookmarks in this media yet.")).toBeVisible()
   })
 
   test("reports a page, and a reviewer resolves it from the dashboard", async ({ page }) => {

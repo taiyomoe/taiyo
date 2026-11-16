@@ -5,7 +5,7 @@ import { m } from "@/paraglide/messages"
 export function MediaNotFoundPage() {
   return (
     <NotFoundPage
-      back={{ label: m.media_back(), to: "/titles" }}
+      back={{ label: m.media_back(), to: "/media" }}
       description={m.media_not_found_description()}
       icon={<Book />}
       title={m.media_not_found_title()}

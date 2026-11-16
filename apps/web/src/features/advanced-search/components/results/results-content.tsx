@@ -31,7 +31,7 @@ export function ResultsContent() {
   const toPage = (target: number) => toUrlSearch({ ...search, page: target })
 
   if (!isStale && page > Math.max(pageCount, 1)) {
-    return <Navigate replace search={toPage(Math.max(pageCount, 1))} to="/titles" />
+    return <Navigate replace search={toPage(Math.max(pageCount, 1))} to="/media" />
   }
 
   if (hits.length === 0) {
@@ -43,11 +43,11 @@ export function ResultsContent() {
       <ResultList hits={hits} view={search.view} />
       <PagePagination
         onJump={(target) => {
-          void navigate({ search: toPage(target), to: "/titles" })
+          void navigate({ search: toPage(target), to: "/media" })
         }}
         page={page}
         pageCount={pageCount}
-        renderLink={(target) => <Link search={toPage(target)} to="/titles" />}
+        renderLink={(target) => <Link search={toPage(target)} to="/media" />}
       />
     </div>
   )

@@ -72,7 +72,7 @@ const styles = stylex.create({
 })
 
 export function GroupChapters({ groupId }: { groupId: string }) {
-  const { q, title, order = "latest" } = routeApi.useSearch()
+  const { q, media, order = "latest" } = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const titles = useQuery(
@@ -83,7 +83,7 @@ export function GroupChapters({ groupId }: { groupId: string }) {
     }),
   )
   const options = titles.data?.data ?? []
-  const selected = options.find((option) => option.id === title)
+  const selected = options.find((option) => option.id === media)
 
   return (
     <div sx={groupStyles.panel}>
@@ -105,12 +105,12 @@ export function GroupChapters({ groupId }: { groupId: string }) {
               resetScroll: false,
               search: (previous) => ({
                 ...previous,
-                title: next === null || next === ALL_TITLES ? undefined : next,
+                media: next === null || next === ALL_TITLES ? undefined : next,
                 page: undefined,
               }),
             })
           }}
-          value={title ?? ALL_TITLES}
+          value={media ?? ALL_TITLES}
         >
           <SelectTrigger aria-label={m.group_chapters_title_filter()} sx={styles.trigger}>
             <SelectValue>
@@ -166,7 +166,7 @@ export function GroupChapters({ groupId }: { groupId: string }) {
 
 function GroupChapterList({ groupId }: { groupId: string }) {
   const search = routeApi.useSearch()
-  const { q, title, order = "latest", page = 1 } = search
+  const { q, media: mediaId, order = "latest", page = 1 } = search
   const navigate = routeApi.useNavigate()
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const { data } = useSuspenseQuery(
@@ -175,14 +175,14 @@ function GroupChapterList({ groupId }: { groupId: string }) {
       perPage: GROUP_MEDIAS_PER_PAGE,
       order,
       search: q,
-      mediaId: title,
+      mediaId,
     }),
   )
 
   if (data.data.length === 0) {
     return (
       <p sx={groupStyles.muted}>
-        {q === undefined && title === undefined
+        {q === undefined && mediaId === undefined
           ? m.group_chapters_empty()
           : m.group_chapters_no_match()}
       </p>

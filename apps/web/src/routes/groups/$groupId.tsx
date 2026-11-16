@@ -32,7 +32,7 @@ const searchSchema = z.object({
   page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),
   comment: z.uuid().optional().catch(undefined),
   q: z.string().trim().min(1).max(100).optional().catch(undefined),
-  title: z.uuid().optional().catch(undefined),
+  media: z.uuid().optional().catch(undefined),
   order: z.enum(GROUP_CHAPTER_ORDERS).optional().catch(undefined),
   sort: z.enum(GROUP_MEDIA_SORTS).optional().catch(undefined),
 })
@@ -65,11 +65,11 @@ export const Route = createFileRoute("/groups/$groupId")({
             perPage: GROUP_MEDIAS_PER_PAGE,
             order: deps.order ?? "latest",
             search: deps.q,
-            mediaId: deps.title,
+            mediaId: deps.media,
           }),
         ),
       ],
-      titles: () => [
+      media: () => [
         context.queryClient.query(
           groupMediasQueryOptions(groupId, contentRatings, {
             page,
