@@ -10,5 +10,11 @@ runs:
         node-version-file: "package.json"
         cache: "pnpm"
 
+    # Lets pnpm skip re-verifying an unchanged lockfile against its supply-chain policies (~13s).
+    - uses: actions/cache@v6
+      with:
+        path: ~/.cache/pnpm/lockfile-verified.jsonl
+        key: pnpm-lockfile-verified-${{ hashFiles('pnpm-lock.yaml', 'pnpm-workspace.yaml') }}
+
     - shell: bash
       run: pnpm install --frozen-lockfile

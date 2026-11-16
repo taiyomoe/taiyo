@@ -8,12 +8,15 @@ if (existsSync(rootEnv)) {
   process.loadEnvFile(rootEnv)
 }
 
-const baseURL = `http://localhost:${process.env.WEB_PORT ?? "3000"}`
+const root = resolve(import.meta.dirname, "../..")
+const webPort = process.env.WEB_PORT ?? "3000"
+const baseURL = `http://localhost:${webPort}`
+const apiURL = `http://localhost:${process.env.API_PORT ?? "3002"}`
 
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
-  workers: process.env.CI === undefined ? 4 : 2,
+  workers: 4,
   forbidOnly: process.env.CI !== undefined,
   retries: process.env.CI === undefined ? 0 : 1,
   reporter: process.env.CI === undefined ? "list" : [["github"], ["html", { open: "never" }]],
@@ -31,11 +34,28 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
     },
   ],
-  webServer: {
-    command: "pnpm dev",
-    cwd: resolve(import.meta.dirname, "../.."),
-    url: baseURL,
-    reuseExistingServer: process.env.CI === undefined,
-    timeout: 300_000,
-  },
+  // CI tests the production build, which the workflow builds first.
+  webServer:
+    process.env.CI === undefined
+      ? {
+          command: "pnpm dev",
+          cwd: root,
+          url: baseURL,
+          reuseExistingServer: true,
+          timeout: 300_000,
+        }
+      : [
+          {
+            command: "pnpm -F @taiyomoe/api -F @taiyomoe/worker --parallel start",
+            cwd: root,
+            url: `${apiURL}/health`,
+            timeout: 120_000,
+          },
+          {
+            command: `pnpm -F @taiyomoe/web exec vite preview --port ${webPort} --strictPort`,
+            cwd: root,
+            url: baseURL,
+            timeout: 120_000,
+          },
+        ],
 })

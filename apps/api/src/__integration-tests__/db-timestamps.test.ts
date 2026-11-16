@@ -1,16 +1,14 @@
 import { sql } from "@taiyomoe/db"
-import { afterEach, beforeEach, describe, expect } from "vitest"
+import { afterEach, beforeEach, describe, expect, vi } from "vitest"
 import { test } from "./setup"
 
 describe("timestamp columns", () => {
-  const processZone = process.env.TZ
-
   beforeEach(() => {
-    process.env.TZ = "Europe/Paris"
+    vi.stubEnv("TZ", "Europe/Paris")
   })
 
   afterEach(() => {
-    process.env.TZ = processZone
+    vi.unstubAllEnvs()
   })
 
   test("are read and written as UTC whatever the process zone", async ({ services }) => {

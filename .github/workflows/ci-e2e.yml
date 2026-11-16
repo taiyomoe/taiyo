@@ -35,11 +35,23 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Bootstrap the local stack
-        run: pnpm bootstrap
-
-      - name: Install Chromium
-        run: pnpm -F @taiyomoe/web exec playwright install --with-deps chromium
+      - name: Bootstrap, build the web app and install Chromium
+        run: |
+          pnpm bootstrap --env-only
+          pnpm -F @taiyomoe/web build > "$RUNNER_TEMP/build.log" 2>&1 &
+          build=$!
+          pnpm -F @taiyomoe/web exec playwright install --with-deps --only-shell chromium > "$RUNNER_TEMP/chromium.log" 2>&1 &
+          chromium=$!
+          pnpm bootstrap
+          status=0
+          wait "$build" || status=$?
+          wait "$chromium" || status=$?
+          for log in build chromium; do
+            echo "::group::$log"
+            cat "$RUNNER_TEMP/$log.log"
+            echo "::endgroup::"
+          done
+          exit "$status"
 
       - name: End-to-end tests
         run: pnpm test:e2e

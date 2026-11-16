@@ -30,6 +30,8 @@ const config: KnipConfig = {
     },
   },
   ignore: ["apps/web/public/**"],
+  // Loaded by oxlint for its type-aware rules.
+  ignoreDependencies: ["tsrs"],
   ignoreBinaries: ["cloudflared"],
   compilers: {
     css: (text: string) =>

@@ -25,9 +25,9 @@ const meta = preview.meta({
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
-  args: { onValueChange: fn() },
+  args: { defaultValue: "comfortable", onValueChange: fn() },
   render: (args) => (
-    <RadioGroup {...args} defaultValue={args.defaultValue ?? "comfortable"}>
+    <RadioGroup {...args}>
       <Label sx={styles.row}>
         <RadioGroupItem value="default" />
         Default

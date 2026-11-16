@@ -1,7 +1,5 @@
 name: Discord draft
 
-# Adding the discord-draft label to the release PR writes the pt-BR announcement as a
-# comment, once. Build images posts that comment, as edited, after the release deploys.
 on:
   pull_request:
     types: [labeled]

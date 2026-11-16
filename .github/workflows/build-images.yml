@@ -4,9 +4,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# Pull requests only build, to catch a broken Dockerfile before merge. Images are
-# pushed from main alone, so no workflow triggered by a fork ever gets write access
-# to the registry.
+# Images are pushed from main only, so a fork's pull request never gets write access to the registry.
 on:
   pull_request:
     paths-ignore:
@@ -15,7 +13,7 @@ on:
       - ".github/ISSUE_TEMPLATE/**"
       - "LICENSE"
   push:
-    branches: ["main"]
+    branches: ["main", "develop"]
     paths-ignore:
       - "**.md"
       - "docs/**"
@@ -27,7 +25,6 @@ permissions:
   contents: read
 
 jobs:
-  # The Release workflow merges each release into main as "chore: release vX.Y.Z".
   version:
     name: Version
     runs-on: ubuntu-latest
@@ -55,29 +52,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # smoke imports the app's entry point inside the built image, with production
-          # dependencies only: a runtime import of a dev dependency fails here instead of
-          # crashing the pods. It exits right after the import: Redis clients open on import
-          # and would fail later without a server. The worker starts its queues on import,
-          # so it has none.
           - app: api
             target: server
-            smoke: >-
-              docker run --rm -e TEST=1 -e RESEND_API_KEY=re_smoke -e S3_PUBLIC_URL=https://cdn.example.invalid
-              taiyo-api:ci node --import tsx -e "await import('./src/index.ts'); process.exit(0)"
           - app: worker
             target: server
           - app: web
             target: web
-            smoke: >-
-              docker run --rm taiyo-web:ci node -e "await import('./dist/server/server.js'); process.exit(0)"
     env:
-      PUSH: ${{ github.event_name != 'pull_request' }}
+      PUSH: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+      CACHE_TO: ${{ github.event_name != 'pull_request' && format('type=gha,scope={0},mode=max', matrix.app) || '' }}
     steps:
       - uses: actions/checkout@v7
 
-      # The web bundle inlines these public values, so a pushed image built without
-      # them would ship a broken client.
       - name: Check the web build variables
         if: ${{ matrix.app == 'web' && env.PUSH == 'true' }}
         env:
@@ -95,6 +81,8 @@ jobs:
           exit $missing
 
       - uses: docker/setup-buildx-action@v4
+        with:
+          cleanup: false
 
       - if: ${{ env.PUSH == 'true' }}
         uses: docker/login-action@v4
@@ -130,23 +118,16 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Build
+      - name: Build and smoke test
         uses: docker/build-push-action@v7
         with:
           context: .
-          target: ${{ matrix.target }}
+          target: ${{ matrix.target }}-smoke
           platforms: linux/amd64
-          load: true
-          tags: taiyo-${{ matrix.app }}:ci
           build-args: ${{ steps.build-args.outputs.value }}
           cache-from: type=gha,scope=${{ matrix.app }}
-          cache-to: type=gha,scope=${{ matrix.app }},mode=max
+          cache-to: ${{ env.CACHE_TO }}
 
-      - name: Smoke test
-        if: ${{ matrix.smoke }}
-        run: ${{ matrix.smoke }}
-
-      # Same inputs as Build, so every layer comes from its cache.
       - name: Push
         if: ${{ env.PUSH == 'true' }}
         uses: docker/build-push-action@v7
@@ -160,17 +141,12 @@ jobs:
           build-args: ${{ steps.build-args.outputs.value }}
           cache-from: type=gha,scope=${{ matrix.app }}
 
-  # Points taiyo-deploy at the images just pushed. Argo CD then runs the migrations and
-  # starts the new api and web next to the live ones; the Rollouts switch traffic over
-  # as soon as the new pods are ready.
   release:
     name: Release to the cluster
     needs: [version, build]
     if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Holds TAIYO_DEPLOY_KEY (write access to taiyomoe/taiyo-deploy) and only accepts
-    # main: no pull request can read it.
     environment: release
     concurrency:
       group: release
@@ -187,8 +163,7 @@ jobs:
         env:
           VERSION: ${{ needs.version.outputs.tag }}
         run: |
-          # Runs of successive pushes can finish out of order: only the head of main
-          # releases, so an older run never overwrites a newer tag.
+          # Only the head of main releases, so an older run never overwrites a newer tag.
           head=$(git ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" refs/heads/main | cut -f1)
           if [ "$head" != "$GITHUB_SHA" ]; then
             echo "main moved on to $head: its own run releases it."

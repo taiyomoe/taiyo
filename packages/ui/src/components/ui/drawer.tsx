@@ -1163,7 +1163,7 @@ export function DrawerMenuRadioItem({
   render,
   sx,
   ...props
-}: RadioPrimitive.Root.Props & {
+}: Omit<RadioPrimitive.Root.Props, "value"> & {
   value: string
   render?: React.ReactElement
   sx?: Sx

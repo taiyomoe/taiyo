@@ -1,9 +1,5 @@
 name: Release
 
-# Keeps the release PR open on develop. Merging it tags the version, publishes the GitHub
-# release and merges the tag into main, which Build images deploys. The app token is what
-# lets the release PR run CI and the push to main start Build images: events made with
-# GITHUB_TOKEN never start other workflows.
 on:
   push:
     branches: ["develop"]
