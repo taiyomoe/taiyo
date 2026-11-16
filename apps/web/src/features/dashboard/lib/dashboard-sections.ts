@@ -7,6 +7,7 @@ import {
   Dashboard,
   FileEdit,
   Flag,
+  Grid,
   History,
   Image,
   Library,
@@ -88,6 +89,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         visible: () => true,
       },
       {
+        label: m.dashboard_nav_all_groups,
+        icon: Grid,
+        to: "/dashboard/all-groups",
+        visible: (can) => can("group.list"),
+      },
+      {
         label: m.dashboard_nav_invitations,
         icon: Mail,
         to: "/dashboard/invitations",
@@ -145,7 +152,14 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
   },
   {
     label: m.dashboard_nav_people,
-    items: [{ label: m.dashboard_nav_staff, icon: PenTool, visible: (can) => can("staff.update") }],
+    items: [
+      {
+        label: m.dashboard_nav_staff,
+        icon: PenTool,
+        to: "/dashboard/staffs",
+        visible: (can) => can("staff.update"),
+      },
+    ],
   },
   {
     label: m.dashboard_nav_community,
@@ -156,7 +170,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/users",
         visible: (can) => can("user.list"),
       },
-      { label: m.dashboard_nav_comments, icon: Comment, visible: (can) => can("comment.delete") },
+      {
+        label: m.dashboard_nav_comments,
+        icon: Comment,
+        to: "/dashboard/comments",
+        visible: (can) => can("comment.delete"),
+      },
       {
         label: m.dashboard_nav_reports,
         icon: Flag,

@@ -15,12 +15,6 @@ const styles = stylex.create({
     borderRadius: "999px",
     height: "0.7em",
   },
-  cover: {
-    borderRadius: "0.375rem",
-    aspectRatio: "2 / 3",
-    flexShrink: 0,
-    width: "2.25rem",
-  },
   banner: {
     borderRadius: "0.375rem",
     aspectRatio: "16 / 5",
@@ -68,6 +62,26 @@ const styles = stylex.create({
     width: "1rem",
   },
 })
+const thumbStyles = stylex.create({
+  cover: {
+    borderRadius: "0.375rem",
+    aspectRatio: "2 / 3",
+    flexShrink: 0,
+    width: "2.25rem",
+  },
+  avatar: {
+    borderRadius: "999px",
+    flexShrink: 0,
+    height: "2.25rem",
+    width: "2.25rem",
+  },
+  logo: {
+    borderRadius: "0.5rem",
+    flexShrink: 0,
+    height: "2.25rem",
+    width: "2.25rem",
+  },
+})
 const Bar = ({ width }: { width: string }) => <Skeleton style={{ width }} sx={styles.bar} />
 
 /** A text line of the given width, as tall as the line it stands for. */
@@ -84,12 +98,12 @@ export function SkeletonMediaCell({
   thumb,
   narrow,
 }: {
-  thumb: "cover" | "none"
+  thumb: "cover" | "avatar" | "logo" | "none"
   narrow?: { from: CatalogBreakpoint; content: "pills" | "banner" } | undefined
 }) {
   return (
     <div sx={mediaCellStyles.cell}>
-      {thumb === "cover" ? <Skeleton sx={styles.cover} /> : null}
+      {thumb === "none" ? null : <Skeleton sx={thumbStyles[thumb]} />}
       <div sx={[mediaCellStyles.text, styles.grow]}>
         <span sx={[mediaCellStyles.title, styles.line]}>
           <Bar width="min(12rem, 80%)" />
