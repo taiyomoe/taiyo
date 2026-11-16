@@ -14,6 +14,7 @@ const styles = stylex.create({
     minWidth: 0,
   },
   cover: {
+    borderRadius: "0.375rem",
     flexShrink: 0,
     width: "2.25rem",
   },

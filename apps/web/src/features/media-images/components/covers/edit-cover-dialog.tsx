@@ -31,6 +31,11 @@ import { m } from "@/paraglide/messages"
 type EditableCover = Pick<MediaCover, "id" | "volume" | "language" | "contentRating">
 
 const styles = stylex.create({
+  // The popup lays out its header, panel and footer as direct children; the
+  // form must not add a box between them.
+  form: {
+    display: "contents",
+  },
   fields: {
     gap: "1.25rem",
     display: "flex",
@@ -85,6 +90,7 @@ function EditCoverForm({
   return (
     <form
       noValidate
+      sx={styles.form}
       onSubmit={(event) => {
         event.preventDefault()
 

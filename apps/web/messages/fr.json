@@ -1096,6 +1096,7 @@
   "leave_missing_title": "Ce chapitre n’a pas de lien externe",
   "leave_missing_description": "Il ne peut être lu que sur Taiyō.",
   "date_picker_placeholder": "Choisir une date",
+  "date_picker_clear": "Effacer",
   "date_picker_time": "Heure",
   "date_picker_hour": "Heure",
   "date_picker_minute": "Minute",

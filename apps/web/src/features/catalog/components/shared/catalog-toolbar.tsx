@@ -23,12 +23,10 @@ import { catalogContainers } from "@/features/catalog/lib/catalog.stylex"
 const ALL = "ALL"
 const styles = stylex.create({
   toolbar: {
-    padding: "0.25rem",
     gap: "0.5rem",
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
-    paddingBottom: "0.5rem",
   },
   search: {
     flexBasis: { default: "14rem", [catalogContainers.narrow]: "100%" },

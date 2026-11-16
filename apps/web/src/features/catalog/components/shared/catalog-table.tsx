@@ -35,6 +35,13 @@ export type CatalogColumn = {
 
 const ColumnsContext = createContext<ReadonlyMap<string, CatalogColumn>>(new Map())
 const styles = stylex.create({
+  section: {
+    gap: "1rem",
+    containerType: "inline-size",
+    display: "flex",
+    flexDirection: "column",
+    minWidth: 0,
+  },
   frame: {
     containerType: "inline-size",
     minWidth: 0,
@@ -117,55 +124,57 @@ export function CatalogTable({
   const Icon = empty?.icon
 
   return (
-    <Frame sx={styles.frame}>
+    <section sx={styles.section}>
       {toolbar}
-      {empty !== null && Icon !== undefined && !loading ? (
-        <Empty sx={styles.empty}>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Icon />
-            </EmptyMedia>
-            <EmptyTitle>{empty.title}</EmptyTitle>
-            <EmptyDescription>{empty.description}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      ) : (
-        <ColumnsContext value={new Map(columns.map((column) => [column.key, column]))}>
-          <Table sx={styles.table} variant="card">
-            <TableHeader>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableHead
-                    key={column.key}
-                    sx={[
-                      styles.head,
-                      column.width,
-                      column.from === undefined ? null : catalogShownFrom[column.from],
-                    ]}
-                  >
-                    {column.label}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading
-                ? range(0, 8).map((row) => (
-                    <TableRow key={row}>
-                      {columns.map((column) => (
-                        <CatalogCell column={column.key} key={column.key}>
-                          <Skeleton sx={styles.skeleton} />
-                        </CatalogCell>
-                      ))}
-                    </TableRow>
-                  ))
-                : children}
-            </TableBody>
-          </Table>
-        </ColumnsContext>
-      )}
-      {footer}
-    </Frame>
+      <Frame sx={styles.frame}>
+        {empty !== null && Icon !== undefined && !loading ? (
+          <Empty sx={styles.empty}>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Icon />
+              </EmptyMedia>
+              <EmptyTitle>{empty.title}</EmptyTitle>
+              <EmptyDescription>{empty.description}</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : (
+          <ColumnsContext value={new Map(columns.map((column) => [column.key, column]))}>
+            <Table sx={styles.table} variant="card">
+              <TableHeader>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableHead
+                      key={column.key}
+                      sx={[
+                        styles.head,
+                        column.width,
+                        column.from === undefined ? null : catalogShownFrom[column.from],
+                      ]}
+                    >
+                      {column.label}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {loading
+                  ? range(0, 8).map((row) => (
+                      <TableRow key={row}>
+                        {columns.map((column) => (
+                          <CatalogCell column={column.key} key={column.key}>
+                            <Skeleton sx={styles.skeleton} />
+                          </CatalogCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  : children}
+              </TableBody>
+            </Table>
+          </ColumnsContext>
+        )}
+        {footer}
+      </Frame>
+    </section>
   )
 }
 

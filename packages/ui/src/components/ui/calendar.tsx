@@ -1,6 +1,7 @@
 import type * as React from "react"
 import * as stylex from "@stylexjs/stylex"
 import { DayPicker, type DayPickerProps } from "react-day-picker"
+import { enUS, fr, ptBR } from "react-day-picker/locale"
 import { calendarDayMarker } from "../../styles/markers.stylex"
 import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
@@ -284,14 +285,19 @@ function CalendarChevron({
   )
 }
 
-const calendarFormatters: NonNullable<DayPickerProps["formatters"]> = {
-  formatMonthDropdown: (date: Date) => date.toLocaleString("default", { month: "short" }),
-}
+const CALENDAR_LOCALES = { en: enUS, fr, "pt-BR": ptBR } as const
+
+export type CalendarLanguage = keyof typeof CALENDAR_LOCALES
 
 export function Calendar({
   fullWidth = false,
+  lang = "en",
   ...props
-}: DayPickerProps & { fullWidth?: boolean }): React.ReactElement {
+}: DayPickerProps & {
+  fullWidth?: boolean
+  /** Names the months and weekdays in this language. */
+  lang?: CalendarLanguage
+}): React.ReactElement {
   const { className, classNames, showOutsideDays = true, components: userComponents } = props
   const rootProps = stylex.props(styles.root, fullWidth && styles.rootFull)
   const navButtonClassName = stylex.props(styles.navButton).className ?? ""
@@ -327,7 +333,10 @@ export function Calendar({
   return (
     <DayPicker
       data-slot="calendar"
-      formatters={calendarFormatters}
+      formatters={{
+        formatMonthDropdown: (date: Date) => date.toLocaleString(lang, { month: "short" }),
+      }}
+      locale={CALENDAR_LOCALES[lang]}
       style={rootProps.style ?? {}}
       {...withDefaultMode(props)}
       className={cn(rootProps.className, className)}

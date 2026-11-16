@@ -1,4 +1,5 @@
 import type { ContentRating } from "@taiyomoe/db/constants"
+import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Dialog,
@@ -20,6 +21,14 @@ import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
 type EditableBanner = Pick<MediaBanner, "id" | "contentRating">
+
+const styles = stylex.create({
+  // The popup lays out its header, panel and footer as direct children; the
+  // form must not add a box between them.
+  form: {
+    display: "contents",
+  },
+})
 
 export function EditBannerDialog({
   mediaId,
@@ -63,6 +72,7 @@ function EditBannerForm({
   return (
     <form
       noValidate
+      sx={styles.form}
       onSubmit={(event) => {
         event.preventDefault()
         update.mutate({ id: banner.id, contentRating }, { onSuccess: onDone })

@@ -106,6 +106,7 @@ export function DateTimePicker({
         <div sx={styles.content}>
           <Calendar
             fullWidth
+            lang={getLocale()}
             {...(value === null ? {} : { defaultMonth: value, selected: value })}
             disabled={{ before: new Date(new Date(now).setHours(0, 0, 0, 0)) }}
             mode="single"

@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
 const styles = stylex.create({
   link: {
-    borderRadius: radius.md,
+    borderRadius: "0.375rem",
     overflow: "hidden",
     backgroundColor: colors.muted,
     display: "block",
