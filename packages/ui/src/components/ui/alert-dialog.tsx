@@ -188,11 +188,14 @@ const styles = stylex.create({
     fontSize: text.xl,
     fontWeight: 600,
     lineHeight: 1,
+    // A name without spaces wraps instead of running out of the dialog.
+    overflowWrap: "anywhere",
   },
   description: {
     color: colors.mutedForeground,
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
+    overflowWrap: "anywhere",
   },
 })
 
