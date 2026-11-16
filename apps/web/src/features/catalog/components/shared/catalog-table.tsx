@@ -11,7 +11,6 @@ import {
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
 import { Frame, FrameFooter } from "@taiyomoe/ui/components/ui/frame"
-import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import {
   Table,
   TableBody,
@@ -24,6 +23,10 @@ import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { createContext, use } from "react"
 import { range } from "remeda"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
+import {
+  SkeletonCheckbox,
+  SkeletonText,
+} from "@/features/catalog/components/shared/catalog-skeletons"
 import { type CatalogBreakpoint, catalogShownFrom } from "@/features/catalog/lib/catalog-styles"
 import { catalogContainers } from "@/features/catalog/lib/catalog.stylex"
 import { m } from "@/paraglide/messages"
@@ -34,9 +37,12 @@ export type CatalogColumn = {
   width?: Sx
   /** Hides the column while the table is narrower than this breakpoint. */
   from?: CatalogBreakpoint
+  /** What the column shows while the rows load, sized like its real content. */
+  skeleton?: ReactNode
 }
 
 const SELECT_COLUMN = "select"
+const SKELETON_ROWS = 10
 const ColumnsContext = createContext<ReadonlyMap<string, CatalogColumn>>(new Map())
 const styles = stylex.create({
   section: {
@@ -64,9 +70,10 @@ const styles = stylex.create({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
-  skeleton: {
-    height: "1rem",
-    width: "70%",
+  body: {
+    opacity: { default: 1, ":is([data-stale])": 0.55 },
+    transitionDuration: "150ms",
+    transitionProperty: "opacity",
   },
   empty: {
     borderColor: colors.border,
@@ -114,6 +121,7 @@ export function CatalogTable({
   selection,
   columns: ownColumns,
   loading,
+  fetching = false,
   empty,
   footer,
   bulkBar,
@@ -124,6 +132,8 @@ export function CatalogTable({
   selection?: Selection | undefined
   columns: readonly CatalogColumn[]
   loading: boolean
+  /** Placeholder rows are on screen while the next page or filter loads. */
+  fetching?: boolean
   empty: {
     icon: (props: IconProps) => ReactElement
     title: string
@@ -149,6 +159,7 @@ export function CatalogTable({
               />
             ),
             width: styles.colSelect,
+            skeleton: <SkeletonCheckbox />,
           },
           ...ownColumns,
         ]
@@ -186,13 +197,17 @@ export function CatalogTable({
                   ))}
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody
+                aria-busy={loading || fetching}
+                data-stale={fetching && !loading ? "" : undefined}
+                sx={styles.body}
+              >
                 {loading
-                  ? range(0, 8).map((row) => (
+                  ? range(0, SKELETON_ROWS).map((row) => (
                       <TableRow key={row}>
                         {columns.map((column) => (
                           <CatalogCell column={column.key} key={column.key}>
-                            <Skeleton sx={styles.skeleton} />
+                            {column.skeleton ?? <SkeletonText />}
                           </CatalogCell>
                         ))}
                       </TableRow>
@@ -202,7 +217,15 @@ export function CatalogTable({
             </Table>
           </ColumnsContext>
         )}
-        {footer}
+        {loading ? (
+          <FrameFooter sx={styles.footer}>
+            <span sx={styles.count}>
+              <SkeletonText width="6rem" />
+            </span>
+          </FrameFooter>
+        ) : (
+          footer
+        )}
       </Frame>
       {bulkBar}
     </section>

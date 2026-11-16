@@ -16,6 +16,7 @@ import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { Uploader } from "@/features/chapters/components/uploader"
 import { useSetMainCover } from "@/features/media-images/api/media-images"
+import { getCoverFileName, getCoverLabel } from "@/features/media/lib/media-images"
 import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
@@ -55,7 +56,18 @@ export function CoverRow({
               </>
             ),
           }}
-          thumb={<ImageThumb kind="cover" label={m.catalog_open_image()} src={cover.url} />}
+          thumb={
+            <ImageThumb
+              item={{
+                id: cover.id,
+                url: cover.url,
+                title: `${title} — ${getCoverLabel(cover)}`,
+                fileName: getCoverFileName(title, cover),
+              }}
+              kind="cover"
+              label={m.catalog_open_image()}
+            />
+          }
           title={cover.media.title}
         />
       </CatalogCell>

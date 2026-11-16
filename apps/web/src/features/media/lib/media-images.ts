@@ -56,7 +56,7 @@ export const getCoverLanguages = (covers: readonly MediaCover[]) => {
     .sort((a, b) => b.count - a.count || a.language.localeCompare(b.language))
 }
 
-export const getCoverLabel = (cover: MediaCover) =>
+export const getCoverLabel = (cover: Pick<MediaCover, "volume">) =>
   cover.volume === null ? m.media_covers_untitled() : getVolumeName(cover.volume)
 
 const sanitizeFileName = (name: string) =>
@@ -66,10 +66,21 @@ const sanitizeFileName = (name: string) =>
     .trim()
 const getExtension = (url: string) => /\.(\w+)(?:\?.*)?$/.exec(url)?.[1] ?? "jpg"
 
-export const getCoverFileName = (title: string, cover: MediaCover) =>
+export const getCoverFileName = (
+  title: string,
+  cover: Pick<MediaCover, "volume" | "language" | "url">,
+) =>
   `${sanitizeFileName(
     `${title} - ${getCoverLabel(cover)} (${getLanguageName(cover.language)})`,
   )}.${getExtension(cover.url)}`
 
-export const getBannerFileName = (title: string, banner: MediaBanner, index: number) =>
-  `${sanitizeFileName(m.media_banners_file_name({ title, number: index + 1 }))}.${getExtension(banner.url)}`
+export const getBannerFileName = (
+  title: string,
+  banner: Pick<MediaBanner, "url">,
+  index?: number,
+) =>
+  `${sanitizeFileName(
+    index === undefined
+      ? m.media_banners_file_name_single({ title })
+      : m.media_banners_file_name({ title, number: index + 1 }),
+  )}.${getExtension(banner.url)}`

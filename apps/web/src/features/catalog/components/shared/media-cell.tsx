@@ -6,7 +6,7 @@ import { type CatalogBreakpoint, catalogHiddenFrom } from "@/features/catalog/li
 import { Cover } from "@/features/media/components/cover"
 import { m } from "@/paraglide/messages"
 
-const styles = stylex.create({
+export const mediaCellStyles = stylex.create({
   cell: {
     gap: "0.75rem",
     alignItems: "center",
@@ -66,15 +66,16 @@ export function MediaCell({
   narrow?: { from: CatalogBreakpoint; content: ReactNode }
 }) {
   return (
-    <div sx={styles.cell}>
-      {thumb ?? (coverUrl === undefined ? null : <Cover src={coverUrl} sx={styles.cover} />)}
-      <div sx={styles.text}>
-        <Link params={{ mediaId }} to="/media/$mediaId" {...stylex.props(styles.title)}>
+    <div sx={mediaCellStyles.cell}>
+      {thumb ??
+        (coverUrl === undefined ? null : <Cover src={coverUrl} sx={mediaCellStyles.cover} />)}
+      <div sx={mediaCellStyles.text}>
+        <Link params={{ mediaId }} to="/media/$mediaId" {...stylex.props(mediaCellStyles.title)}>
           {title ?? m.media_untitled()}
         </Link>
-        {detail === undefined ? null : <span sx={styles.detail}>{detail}</span>}
+        {detail === undefined ? null : <span sx={mediaCellStyles.detail}>{detail}</span>}
         {narrow === undefined ? null : (
-          <div sx={[styles.narrow, catalogHiddenFrom[narrow.from]]}>{narrow.content}</div>
+          <div sx={[mediaCellStyles.narrow, catalogHiddenFrom[narrow.from]]}>{narrow.content}</div>
         )}
       </div>
     </div>

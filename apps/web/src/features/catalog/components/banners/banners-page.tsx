@@ -27,6 +27,14 @@ import {
   BulkEditButton,
 } from "@/features/catalog/components/shared/bulk-bar"
 import {
+  SkeletonActions,
+  SkeletonBanner,
+  SkeletonIconText,
+  SkeletonMediaCell,
+  SkeletonText,
+  SkeletonUsers,
+} from "@/features/catalog/components/shared/catalog-skeletons"
+import {
   CatalogFooter,
   CatalogTable,
   VisuallyHidden,
@@ -48,7 +56,7 @@ export function BannersPage() {
     contentRating: params.contentRating,
     page: params.page ?? 1,
   }
-  const { data } = useQuery(managedBannersQueryOptions(useDeferredValue(filter)))
+  const { data, isPlaceholderData } = useQuery(managedBannersQueryOptions(useDeferredValue(filter)))
   const [editing, setEditing] = useState<ManagedBanner | null>(null)
   const [deleting, setDeleting] = useState<DeletableBanner | null>(null)
   const selection = useSelection(data?.data.map((item) => item.id) ?? [])
@@ -84,30 +92,41 @@ export function BannersPage() {
             label: <VisuallyHidden>{m.catalog_column_image()}</VisuallyHidden>,
             width: catalogStyles.colBanner,
             from: "2xl",
+            skeleton: <SkeletonBanner />,
           },
-          { key: "media", label: m.catalog_column_media() },
+          {
+            key: "media",
+            label: m.catalog_column_media(),
+            skeleton: (
+              <SkeletonMediaCell narrow={{ from: "2xl", content: "banner" }} thumb="none" />
+            ),
+          },
           {
             key: "rating",
             label: m.catalog_column_rating(),
             width: catalogStyles.colMedium,
             from: "3xl",
+            skeleton: <SkeletonIconText />,
           },
           {
             key: "uploader",
             label: m.catalog_column_uploader(),
             width: catalogStyles.colMedium,
             from: "4xl",
+            skeleton: <SkeletonUsers />,
           },
           {
             key: "date",
             label: m.catalog_column_added(),
             width: catalogStyles.colMedium,
             from: "4xl",
+            skeleton: <SkeletonText width="5.5rem" />,
           },
           {
             key: "actions",
             label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
             width: catalogStyles.colActions,
+            skeleton: <SkeletonActions />,
           },
         ]}
         empty={
@@ -156,6 +175,7 @@ export function BannersPage() {
             />
           </BulkBar>
         }
+        fetching={isPlaceholderData}
         loading={data === undefined}
         selection={selection}
         toolbar={

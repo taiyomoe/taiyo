@@ -28,6 +28,14 @@ import {
   BulkEditButton,
 } from "@/features/catalog/components/shared/bulk-bar"
 import {
+  SkeletonActions,
+  SkeletonIconText,
+  SkeletonMediaCell,
+  SkeletonPill,
+  SkeletonText,
+  SkeletonUsers,
+} from "@/features/catalog/components/shared/catalog-skeletons"
+import {
   CatalogFooter,
   CatalogTable,
   VisuallyHidden,
@@ -50,7 +58,7 @@ export function CoversPage() {
     contentRating: params.contentRating,
     page: params.page ?? 1,
   }
-  const { data } = useQuery(managedCoversQueryOptions(useDeferredValue(filter)))
+  const { data, isPlaceholderData } = useQuery(managedCoversQueryOptions(useDeferredValue(filter)))
   const [editing, setEditing] = useState<ManagedCover | null>(null)
   const [deleting, setDeleting] = useState<DeletableCover | null>(null)
   const selection = useSelection(data?.data.map((item) => item.id) ?? [])
@@ -82,35 +90,46 @@ export function CoversPage() {
     >
       <CatalogTable
         columns={[
-          { key: "media", label: m.catalog_column_cover() },
+          {
+            key: "media",
+            label: m.catalog_column_cover(),
+            skeleton: (
+              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="cover" />
+            ),
+          },
           {
             key: "language",
             label: m.catalog_column_language(),
             width: catalogStyles.colNarrow,
             from: "3xl",
+            skeleton: <SkeletonPill width="3.25rem" />,
           },
           {
             key: "rating",
             label: m.catalog_column_rating(),
             width: catalogStyles.colMedium,
             from: "3xl",
+            skeleton: <SkeletonIconText />,
           },
           {
             key: "uploader",
             label: m.catalog_column_uploader(),
             width: catalogStyles.colMedium,
             from: "4xl",
+            skeleton: <SkeletonUsers />,
           },
           {
             key: "date",
             label: m.catalog_column_added(),
             width: catalogStyles.colMedium,
             from: "4xl",
+            skeleton: <SkeletonText width="5.5rem" />,
           },
           {
             key: "actions",
             label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
             width: catalogStyles.colActions,
+            skeleton: <SkeletonActions />,
           },
         ]}
         empty={
@@ -160,6 +179,7 @@ export function CoversPage() {
             />
           </BulkBar>
         }
+        fetching={isPlaceholderData}
         loading={data === undefined}
         selection={selection}
         toolbar={

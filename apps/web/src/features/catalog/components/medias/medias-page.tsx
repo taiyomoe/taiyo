@@ -31,6 +31,13 @@ import {
   BulkEditButton,
 } from "@/features/catalog/components/shared/bulk-bar"
 import {
+  SkeletonActions,
+  SkeletonIconText,
+  SkeletonMediaCell,
+  SkeletonPill,
+  SkeletonText,
+} from "@/features/catalog/components/shared/catalog-skeletons"
+import {
   CatalogFooter,
   CatalogTable,
   VisuallyHidden,
@@ -58,7 +65,7 @@ export function MediasPage() {
     deleted: params.deleted,
     page: params.page ?? 1,
   }
-  const { data } = useQuery(managedMediasQueryOptions(useDeferredValue(filter)))
+  const { data, isPlaceholderData } = useQuery(managedMediasQueryOptions(useDeferredValue(filter)))
   const restore = useRestoreMedia()
   const [deleting, setDeleting] = useState<DeletableMedia | null>(null)
   const selection = useSelection(data?.data.map((media) => media.id) ?? [])
@@ -96,35 +103,46 @@ export function MediasPage() {
     >
       <CatalogTable
         columns={[
-          { key: "media", label: m.catalog_column_media() },
+          {
+            key: "media",
+            label: m.catalog_column_media(),
+            skeleton: (
+              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="cover" />
+            ),
+          },
           {
             key: "status",
             label: m.media_info_status(),
             width: catalogStyles.colMedium,
             from: "3xl",
+            skeleton: <SkeletonPill />,
           },
           {
             key: "chapters",
             label: m.catalog_column_chapters(),
             width: catalogStyles.colNarrow,
             from: "3xl",
+            skeleton: <SkeletonText width="1.5rem" />,
           },
           {
             key: "rating",
             label: m.catalog_column_rating(),
             width: catalogStyles.colMedium,
             from: "4xl",
+            skeleton: <SkeletonIconText />,
           },
           {
             key: "date",
             label: filter.deleted === true ? m.catalog_column_deleted() : m.catalog_column_added(),
             width: catalogStyles.colMedium,
             from: "4xl",
+            skeleton: <SkeletonText width="5.5rem" />,
           },
           {
             key: "actions",
             label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
             width: catalogStyles.colActions,
+            skeleton: <SkeletonActions />,
           },
         ]}
         empty={
@@ -202,6 +220,7 @@ export function MediasPage() {
             )}
           </BulkBar>
         }
+        fetching={isPlaceholderData}
         loading={data === undefined}
         selection={bulkActions ? selection : undefined}
         toolbar={

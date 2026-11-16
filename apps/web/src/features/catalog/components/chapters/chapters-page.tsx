@@ -28,6 +28,13 @@ import {
   BulkEditButton,
 } from "@/features/catalog/components/shared/bulk-bar"
 import {
+  SkeletonActions,
+  SkeletonMediaCell,
+  SkeletonPill,
+  SkeletonText,
+  SkeletonUsers,
+} from "@/features/catalog/components/shared/catalog-skeletons"
+import {
   CatalogFooter,
   CatalogTable,
   VisuallyHidden,
@@ -53,7 +60,9 @@ export function ChaptersPage() {
     language: params.language,
     page: params.page ?? 1,
   }
-  const { data } = useQuery(managedChaptersQueryOptions(useDeferredValue(filter)))
+  const { data, isPlaceholderData } = useQuery(
+    managedChaptersQueryOptions(useDeferredValue(filter)),
+  )
   const [editing, setEditing] = useState<EditableChapter | null>(null)
   const [deleting, setDeleting] = useState<DeletableChapter | null>(null)
   const selection = useSelection(data?.data.map((item) => item.id) ?? [])
@@ -89,35 +98,46 @@ export function ChaptersPage() {
     >
       <CatalogTable
         columns={[
-          { key: "chapter", label: m.catalog_column_chapter() },
+          {
+            key: "chapter",
+            label: m.catalog_column_chapter(),
+            skeleton: (
+              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="cover" />
+            ),
+          },
           {
             key: "language",
             label: m.catalog_column_language(),
             width: catalogStyles.colNarrow,
             from: "3xl",
+            skeleton: <SkeletonPill width="3.75rem" />,
           },
           {
             key: "status",
             label: m.media_info_status(),
             width: catalogStyles.colMedium,
             from: "3xl",
+            skeleton: <SkeletonPill />,
           },
           {
             key: "credits",
             label: m.catalog_column_credits(),
             width: catalogStyles.colWide,
             from: "4xl",
+            skeleton: <SkeletonUsers count={2} />,
           },
           {
             key: "date",
             label: m.catalog_column_added(),
             width: catalogStyles.colMedium,
             from: "4xl",
+            skeleton: <SkeletonText width="5.5rem" />,
           },
           {
             key: "actions",
             label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
             width: catalogStyles.colActions,
+            skeleton: <SkeletonActions />,
           },
         ]}
         empty={
@@ -167,6 +187,7 @@ export function ChaptersPage() {
             />
           </BulkBar>
         }
+        fetching={isPlaceholderData}
         loading={data === undefined}
         selection={selection}
         toolbar={

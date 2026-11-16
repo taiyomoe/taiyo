@@ -11,6 +11,7 @@ import { MediaCell } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { Uploader } from "@/features/chapters/components/uploader"
+import { getBannerFileName } from "@/features/media/lib/media-images"
 import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
 import { m } from "@/paraglide/messages"
 
@@ -25,16 +26,24 @@ export function BannerRow({
   onEdit: () => void
   onDelete: () => void
 }) {
-  const thumb = <ImageThumb kind="banner" label={m.catalog_open_image()} src={banner.url} />
+  const title = banner.media.title ?? m.media_untitled()
+  const thumb = (
+    <ImageThumb
+      item={{
+        id: banner.id,
+        url: banner.url,
+        title,
+        fileName: getBannerFileName(title, banner),
+      }}
+      kind="banner"
+      label={m.catalog_open_image()}
+    />
+  )
 
   return (
     <TableRow>
       {selection === undefined ? null : (
-        <CatalogSelectCell
-          id={banner.id}
-          label={banner.media.title ?? m.media_untitled()}
-          selection={selection}
-        />
+        <CatalogSelectCell id={banner.id} label={title} selection={selection} />
       )}
       <CatalogCell column="image">{thumb}</CatalogCell>
       <CatalogCell column="media">
@@ -80,7 +89,7 @@ export function BannerRow({
               onClick: onDelete,
             },
           ]}
-          label={m.catalog_actions({ name: banner.media.title ?? m.media_untitled() })}
+          label={m.catalog_actions({ name: title })}
         />
       </CatalogCell>
     </TableRow>
