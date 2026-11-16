@@ -35,16 +35,19 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Bootstrap the local stack
-        run: pnpm bootstrap
-
-      # Headless runs only need the headless shell, a smaller download than full Chromium.
-      - name: Install Chromium
-        run: pnpm -F @taiyomoe/web exec playwright install --with-deps --only-shell chromium
-
-      # Reads the public values bootstrap wrote to apps/web/.env.
-      - name: Build the web app
-        run: pnpm -F @taiyomoe/web build
+      # Chromium installs in the background while bootstrap starts the stack and the web app
+      # builds from the public values bootstrap wrote to apps/web/.env. Headless runs only
+      # need the headless shell, a smaller download than full Chromium.
+      - name: Bootstrap, build the web app and install Chromium
+        run: |
+          pnpm -F @taiyomoe/web exec playwright install --with-deps --only-shell chromium > "$RUNNER_TEMP/chromium.log" 2>&1 &
+          chromium=$!
+          pnpm bootstrap
+          pnpm -F @taiyomoe/web build
+          status=0
+          wait "$chromium" || status=$?
+          cat "$RUNNER_TEMP/chromium.log"
+          exit "$status"
 
       - name: End-to-end tests
         run: pnpm test:e2e
