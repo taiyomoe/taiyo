@@ -105,7 +105,8 @@ export const buildRules = (actor: Actor | null) => {
       review: reviewsChapters,
       flag: managesChapters,
       list: managesChapters,
-      listInGroups: getChapterGroupIds(active).length > 0,
+      // Seeing every chapter includes seeing the ones of one's groups.
+      listInGroups: managesChapters || getChapterGroupIds(active).length > 0,
       view: (chapter) => {
         if (chapter.status === "PUBLISHED") {
           return true
