@@ -18,13 +18,3 @@ export function GroupPage() {
     </AppShell>
   )
 }
-
-export function GroupPageSkeleton() {
-  const { session } = routeApi.useRouteContext()
-
-  return (
-    <AppShell overlayNavbar user={session?.user ?? null}>
-      <ProfileSkeleton />
-    </AppShell>
-  )
-}

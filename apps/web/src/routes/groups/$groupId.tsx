@@ -13,7 +13,8 @@ import {
   groupStatsQueryOptions,
 } from "@/features/groups/api/groups"
 import { GroupNotFoundPage } from "@/features/groups/components/group/group-not-found-page"
-import { GroupPage, GroupPageSkeleton } from "@/features/groups/components/group/group-page"
+import { GroupPage } from "@/features/groups/components/group/group-page"
+import { GroupPageSkeleton } from "@/features/groups/components/group/group-page-skeleton"
 import {
   GROUP_CHAPTER_ORDERS,
   GROUP_LATEST_RELEASES,
