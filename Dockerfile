@@ -69,3 +69,18 @@ WORKDIR /repo/apps/web
 USER node
 EXPOSE 3000
 CMD ["node_modules/.bin/srvx", "serve", "--prod", "--port", "3000", "--entry", "./dist/server/server.js", "--static", "../client"]
+
+# Smoke tests: each imports the app's entry point inside the built image, with production
+# dependencies only, so a runtime import of a dev dependency fails the build instead of
+# crashing the pods. They exit right after the import: Redis clients open on import and
+# would fail later without a server. The worker starts its queues on import, so it has none.
+#   docker build --build-arg APP=api --target server-smoke .
+FROM server AS server-smoke
+ARG APP
+RUN if [ "$APP" = "api" ]; then \
+      TEST=1 RESEND_API_KEY=re_smoke S3_PUBLIC_URL=https://cdn.example.invalid \
+      node --import tsx -e "await import('./src/index.ts'); process.exit(0)"; \
+    fi
+
+FROM web AS web-smoke
+RUN node -e "await import('./dist/server/server.js'); process.exit(0)"

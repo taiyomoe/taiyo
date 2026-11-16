@@ -56,22 +56,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # smoke imports the app's entry point inside the built image, with production
-          # dependencies only: a runtime import of a dev dependency fails here instead of
-          # crashing the pods. It exits right after the import: Redis clients open on import
-          # and would fail later without a server. The worker starts its queues on import,
-          # so it has none.
           - app: api
             target: server
-            smoke: >-
-              docker run --rm -e TEST=1 -e RESEND_API_KEY=re_smoke -e S3_PUBLIC_URL=https://cdn.example.invalid
-              taiyo-api:ci node --import tsx -e "await import('./src/index.ts'); process.exit(0)"
           - app: worker
             target: server
           - app: web
             target: web
-            smoke: >-
-              docker run --rm taiyo-web:ci node -e "await import('./dist/server/server.js'); process.exit(0)"
     env:
       PUSH: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
       # A pull request's cache is only visible to that pull request, and its layers evicted
@@ -137,23 +127,19 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Build
+      # Builds the image and runs its smoke test on top, inside the builder: loading the image
+      # into Docker to run it took up to 45s.
+      - name: Build and smoke test
         uses: docker/build-push-action@v7
         with:
           context: .
-          target: ${{ matrix.target }}
+          target: ${{ matrix.target }}-smoke
           platforms: linux/amd64
-          load: true
-          tags: taiyo-${{ matrix.app }}:ci
           build-args: ${{ steps.build-args.outputs.value }}
           cache-from: type=gha,scope=${{ matrix.app }}
           cache-to: ${{ env.CACHE_TO }}
 
-      - name: Smoke test
-        if: ${{ matrix.smoke }}
-        run: ${{ matrix.smoke }}
-
-      # Same inputs as Build, so every layer comes from its cache.
+      # Same inputs as the build above, so every layer comes from the builder's cache.
       - name: Push
         if: ${{ env.PUSH == 'true' }}
         uses: docker/build-push-action@v7
