@@ -8,8 +8,6 @@ import { m } from "@/paraglide/messages"
 const styles = stylex.create({
   crown: {
     color: colors.warning,
-    height: "0.875rem",
-    width: "0.875rem",
   },
 })
 

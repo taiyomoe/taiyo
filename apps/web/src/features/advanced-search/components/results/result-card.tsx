@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { breakpoints, colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { SearchHit } from "@/features/advanced-search/hooks/use-search-results"
+import { Pill } from "@/components/badges/pill"
 import { ResultStats } from "@/features/advanced-search/components/results/result-stats"
 import { ResultSynopsis } from "@/features/advanced-search/components/results/result-synopsis"
 import { ResultTags } from "@/features/advanced-search/components/results/result-tags"
@@ -92,9 +92,9 @@ export function ResultCard({ hit }: { hit: SearchHit }) {
         <ResultTitle hit={hit} sx={styles.title} />
         <div sx={styles.meta}>
           <ResultStats hit={hit} />
-          <Badge size="sm" variant={MEDIA_STATUS_BADGES[hit.status]}>
+          <Pill size="sm" variant={MEDIA_STATUS_BADGES[hit.status]}>
             {MEDIA_STATUS_LABELS[hit.status]()}
-          </Badge>
+          </Pill>
         </div>
         <ResultTags hit={hit} />
         <ResultSynopsis hit={hit} lines={6} />

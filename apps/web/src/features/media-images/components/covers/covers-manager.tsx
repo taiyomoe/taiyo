@@ -4,11 +4,11 @@ import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import type { StagedCoverFields } from "@/features/media-images/lib/staged-cover"
-import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import { useUploadCovers } from "@/features/media-images/api/media-images"
 import { CurrentCovers } from "@/features/media-images/components/covers/current-covers"
 import { StagedCoverRow } from "@/features/media-images/components/covers/staged-cover-row"
 import { ImageDropZone } from "@/features/media-images/components/shared/image-drop-zone"
+import { ManagedGridSkeleton } from "@/features/media-images/components/shared/managed-grid"
 import { StagedUploadPanel } from "@/features/media-images/components/shared/staged-upload-panel"
 import { useStagedImages } from "@/features/media-images/hooks/use-staged-images"
 import { parseCoverVolume } from "@/features/media-images/lib/parse-cover-volume"
@@ -115,7 +115,7 @@ export function CoversManager({
         </StagedUploadPanel>
       )}
       {media.data === undefined ? (
-        <ListCardSkeleton />
+        <ManagedGridSkeleton kind="cover" />
       ) : (
         <CurrentCovers covers={media.data.covers} mediaId={mediaId} title={title} />
       )}

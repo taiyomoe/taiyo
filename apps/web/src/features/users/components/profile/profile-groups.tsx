@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { UserProfile } from "@/features/users/api/profile"
 import { GroupAvatar } from "@/features/groups/components/group-avatar"
+import { RoleBadge } from "@/features/groups/components/role-badge"
 import { profileStyles } from "@/features/users/components/profile/profile-styles"
 import { m } from "@/paraglide/messages"
 
@@ -82,9 +82,7 @@ export function ProfileGroups({ groups }: { groups: UserProfile["groups"] }) {
               <span sx={styles.name} title={group.name}>
                 {group.name}
               </span>
-              {group.role === "OWNER" ? (
-                <Badge variant="success">{m.group_role_owner()}</Badge>
-              ) : null}
+              {group.role === "OWNER" ? <RoleBadge role="OWNER" /> : null}
             </Link>
           </li>
         ))}

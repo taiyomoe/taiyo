@@ -106,7 +106,38 @@ const styles = stylex.create({
     flexShrink: 0,
     marginInlineEnd: "-0.25rem",
   },
+  skeletonTitle: {
+    height: "1lh",
+    width: "60%",
+  },
+  skeletonTitleRow: {
+    height: "2rem",
+  },
+  skeletonPill: {
+    borderRadius: "999px",
+    height: "1.5rem",
+    width: "4.5rem",
+  },
 })
+
+/** A card's placeholder: the same frame, image ratio and lines, so a loaded grid keeps its layout. */
+export function ManagedImageCardSkeleton({ kind }: { kind: "cover" | "banner" }) {
+  return (
+    <div sx={styles.card}>
+      <Skeleton sx={[styles.thumb, kind === "cover" ? styles.cover : styles.banner]} />
+      <div sx={styles.info}>
+        <div sx={[styles.titleRow, styles.skeletonTitleRow]}>
+          <span sx={styles.title}>
+            <Skeleton sx={styles.skeletonTitle} />
+          </span>
+        </div>
+        <div sx={styles.meta}>
+          <Skeleton sx={styles.skeletonPill} />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export function ManagedImageCard({
   kind,
