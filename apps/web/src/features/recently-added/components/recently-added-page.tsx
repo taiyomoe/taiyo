@@ -5,7 +5,7 @@ import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { ResultListSkeleton } from "@/features/advanced-search/components/results/result-list"
 import { RecentlyAddedPageContent } from "@/features/recently-added/components/recently-added-page-content"
@@ -16,7 +16,6 @@ const styles = stylex.create({
   page: {
     gap: "1.5rem",
     paddingBlock: "2rem",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
     minWidth: 0,
@@ -46,7 +45,7 @@ export function RecentlyAddedPage() {
 
   return (
     <AppShell user={session?.user ?? null}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <div sx={styles.header}>
           <Button
             aria-label={m.recently_added_back()}

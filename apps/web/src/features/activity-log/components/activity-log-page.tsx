@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi } from "@tanstack/react-router"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { activityLogContainers } from "@/features/activity-log/components/activity-log.stylex"
 import { FieldBreakdown } from "@/features/activity-log/components/field-breakdown"
 import { ActivityLogToolbar } from "@/features/activity-log/components/page/activity-log-toolbar"
@@ -17,7 +17,6 @@ const routeApi = getRouteApi("/dashboard/activity-log")
 const styles = stylex.create({
   page: {
     gap: "1.5rem",
-    paddingInline: layout.gutter,
     containerType: "inline-size",
     display: "flex",
     flexDirection: "column",
@@ -81,7 +80,7 @@ export function ActivityLogPage() {
   const blocked = serverIssue !== null
 
   return (
-    <div sx={styles.page}>
+    <div sx={[pageFrame.frame, styles.page]}>
       <div sx={styles.intro}>
         <h1 sx={styles.title}>{m.activity_title()}</h1>
         <p sx={styles.subtitle}>{m.activity_subtitle()}</p>

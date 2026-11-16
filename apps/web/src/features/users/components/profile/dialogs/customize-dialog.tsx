@@ -1,6 +1,6 @@
 import type { AvatarBorder, CosmeticUnlock, NameEffect, UserTitle } from "@taiyomoe/db/cosmetics"
 import * as stylex from "@stylexjs/stylex"
-import { CheckCircle, Key } from "@taiyomoe/ui/components/icons"
+import { CheckCircle, Lock } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Dialog,
@@ -15,7 +15,14 @@ import {
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
-import { breakpoints, colors, font, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import {
+  breakpoints,
+  colors,
+  font,
+  motion,
+  radius,
+  shadows,
+} from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { type ReactNode, useState } from "react"
@@ -99,6 +106,7 @@ const styles = stylex.create({
     gap: "0.5rem",
     alignItems: "stretch",
     backgroundColor: { default: colors.card, ":hover:not(:disabled)": colors.chipHover },
+    boxShadow: { default: shadows.raised, ":disabled": "none" },
     color: "inherit",
     cursor: { default: "pointer", ":disabled": "not-allowed" },
     display: "flex",
@@ -120,7 +128,7 @@ const styles = stylex.create({
   },
   locked: {
     borderStyle: "dashed",
-    backgroundColor: `color-mix(in srgb, ${colors.card} 70%, transparent)`,
+    backgroundColor: "transparent",
   },
   optionName: {
     overflow: "hidden",
@@ -160,15 +168,35 @@ const styles = stylex.create({
     fontSize: "0.75rem",
     lineHeight: 1.35,
   },
+  requirement: {
+    gap: "0.5rem",
+    marginInline: "-0.75rem",
+    paddingBlock: "0.625rem",
+    paddingInline: "0.75rem",
+    alignSelf: "stretch",
+    backgroundColor: colors.well,
+    boxShadow: shadows.sunken,
+    display: "flex",
+    flexDirection: "column",
+    borderBottomLeftRadius: `calc(${radius.lg} - 1px)`,
+    borderBottomRightRadius: `calc(${radius.lg} - 1px)`,
+    borderTopColor: colors.border,
+    borderTopStyle: "dashed",
+    borderTopWidth: 1,
+    marginBottom: "-0.75rem",
+    marginTop: "auto",
+  },
   progress: {
     borderRadius: 4,
     overflow: "hidden",
     backgroundColor: `color-mix(in srgb, ${colors.foreground} 8%, transparent)`,
+    display: "block",
     height: "0.3125rem",
   },
   progressFill: {
     borderRadius: 4,
     backgroundColor: colors.primary,
+    display: "block",
     height: "100%",
   },
   progressText: {
@@ -233,36 +261,41 @@ type Item =
   | MyCosmetics["titles"][number]
   | MyCosmetics["avatarBorders"][number]
 
-function Unlock({ item, progress }: { item: Item; progress: MyCosmetics["progress"] }) {
-  const unlock: CosmeticUnlock = item.unlock
-
-  if (item.unlocked || unlock.type !== "achievement") {
-    return (
-      <span sx={styles.unlock}>
-        {item.unlocked ? null : <Key size={12} />}
-        {describeUnlock(unlock)}
-      </span>
-    )
-  }
-
-  const current = Math.min(progress[unlock.metric], unlock.threshold)
+function UnlockProgress({ value, threshold }: { value: number; threshold: number }) {
+  const current = Math.min(value, threshold)
 
   return (
     <>
-      <span sx={styles.unlock}>
-        <Key size={12} />
-        {describeUnlock(unlock)}
+      <span aria-hidden sx={styles.progress}>
+        <span style={{ width: `${(current / threshold) * 100}%` }} sx={styles.progressFill} />
       </span>
-      <div aria-hidden sx={styles.progress}>
-        <div style={{ width: `${(current / unlock.threshold) * 100}%` }} sx={styles.progressFill} />
-      </div>
       <span sx={styles.progressText}>
         {m.profile_unlock_progress({
           current: current.toLocaleString(getLocale()),
-          threshold: unlock.threshold.toLocaleString(getLocale()),
+          threshold: threshold.toLocaleString(getLocale()),
         })}
       </span>
     </>
+  )
+}
+
+function Unlock({ item, progress }: { item: Item; progress: MyCosmetics["progress"] }) {
+  const unlock: CosmeticUnlock = item.unlock
+
+  if (item.unlocked) {
+    return <span sx={styles.unlock}>{describeUnlock(unlock)}</span>
+  }
+
+  return (
+    <span sx={styles.requirement}>
+      <span sx={styles.unlock}>
+        <Lock size={12} />
+        {describeUnlock(unlock)}
+      </span>
+      {unlock.type === "achievement" ? (
+        <UnlockProgress threshold={unlock.threshold} value={progress[unlock.metric]} />
+      ) : null}
+    </span>
   )
 }
 

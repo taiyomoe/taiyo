@@ -3,7 +3,7 @@ import { ArrowLeft } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { CatchBoundary, getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { ListContent } from "@/features/lists/components/list-page/list-content"
 import { ListError } from "@/features/lists/components/list-page/list-error"
@@ -15,14 +15,10 @@ const routeApi = getRouteApi("/lists/$listId")
 const styles = stylex.create({
   page: {
     gap: "2rem",
-    marginInline: "auto",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
-    maxWidth: "72rem",
     paddingBottom: "2.5rem",
     paddingTop: "1.5rem",
-    width: "100%",
   },
   back: {
     alignSelf: "flex-start",
@@ -37,7 +33,7 @@ export function ListPage() {
 
   return (
     <AppShell user={user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <Button render={<Link to="/lists" />} size="sm" sx={styles.back} variant="ghost">
           <ArrowLeft />
           {m.list_back()}

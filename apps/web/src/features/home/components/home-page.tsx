@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { CatchBoundary } from "@tanstack/react-router"
 import { Suspense } from "react"
 import type { Session } from "@/lib/session"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import {
   FeaturedCarousel,
@@ -15,7 +15,6 @@ const styles = stylex.create({
   page: {
     gap: "3rem",
     paddingBlock: "2rem",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
   },
@@ -29,7 +28,7 @@ export function HomePage({ user }: { user: Session["user"] }) {
           <FeaturedCarousel />
         </Suspense>
       </CatchBoundary>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <LatestUpdates />
         <RecentlyAdded />
       </div>

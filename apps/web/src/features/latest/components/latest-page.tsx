@@ -5,7 +5,7 @@ import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import {
   LatestPageContent,
@@ -18,7 +18,6 @@ const styles = stylex.create({
   page: {
     gap: "1.5rem",
     paddingBlock: "2rem",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
   },
@@ -47,7 +46,7 @@ export function LatestPage() {
 
   return (
     <AppShell user={session.user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <div sx={styles.header}>
           <Button
             aria-label={m.latest_back()}

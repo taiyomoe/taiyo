@@ -18,7 +18,7 @@ import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { lazy, Suspense } from "react"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { AccountSettings } from "@/features/settings/components/account/account-settings"
 import { NotificationSettings } from "@/features/settings/components/notifications/notification-settings"
@@ -48,14 +48,10 @@ const routeApi = getRouteApi("/settings")
 const styles = stylex.create({
   page: {
     gap: "1.75rem",
-    marginInline: "auto",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
-    maxWidth: "60rem",
     paddingBottom: "4rem",
     paddingTop: { default: "1.5rem", [breakpoints.md]: "2.5rem" },
-    width: "100%",
   },
   header: {
     gap: "1rem",
@@ -113,7 +109,7 @@ export function SettingsPage() {
 
   return (
     <AppShell user={session.user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <header sx={styles.header}>
           <div sx={styles.heading}>
             <h1 sx={styles.title}>{m.user_settings_title()}</h1>

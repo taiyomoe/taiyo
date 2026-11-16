@@ -14,7 +14,7 @@ export const groupProfileStyles = stylex.create({
     paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
-    maxWidth: "72rem",
+    maxWidth: layout.pageWidth,
     width: "100%",
   },
   section: {
