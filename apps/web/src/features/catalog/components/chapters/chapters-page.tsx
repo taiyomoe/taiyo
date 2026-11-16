@@ -102,7 +102,7 @@ export function ChaptersPage() {
             key: "chapter",
             label: m.catalog_column_chapter(),
             skeleton: (
-              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="cover" />
+              <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="cover" />
             ),
           },
           {

@@ -1,86 +1,121 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge, type BadgeVariant } from "@taiyomoe/ui/components/ui/badge"
-import { Button } from "@taiyomoe/ui/components/ui/button"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { ExternalLink, FileEdit, Undo } from "@taiyomoe/ui/components/icons"
+import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
-import type { MyOwnershipRequest } from "@/features/groups/api/groups"
-import { ListRow } from "@/components/layout/dashboard-page"
+import type { RowAction } from "@/features/catalog/components/shared/row-actions"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
+import type { GroupRequestItem } from "@/features/groups/lib/group-requests"
 import { TimeAgo } from "@/components/time/time-ago"
+import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
+import { mediaCellStyles, TitleCell, Folded } from "@/features/catalog/components/shared/media-cell"
+import { RowActions } from "@/features/catalog/components/shared/row-actions"
+import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { GroupAvatar } from "@/features/groups/components/group-avatar"
-import { manageGroupsStyles } from "@/features/groups/components/manage-groups/manage-groups-styles"
+import {
+  RequestExcerpt,
+  RequestTitle,
+} from "@/features/groups/components/group-requests/group-request-row"
+import {
+  RequestStatusPill,
+  RequestTypePill,
+} from "@/features/groups/components/group-requests/request-parts"
+import { groupTableStyles } from "@/features/groups/lib/group-table-styles"
 import { m } from "@/paraglide/messages"
 
-const REQUEST_STATUS: Record<
-  MyOwnershipRequest["status"],
-  { label: () => string; variant: BadgeVariant }
-> = {
-  PENDING: { label: m.request_status_pending, variant: "warning" },
-  APPROVED: { label: m.request_status_approved, variant: "success" },
-  REJECTED: { label: m.request_status_rejected, variant: "error" },
-  CANCELLED: { label: m.request_status_cancelled, variant: "outline" },
-}
-const styles = stylex.create({
-  note: {
-    color: colors.mutedForeground,
-    fontSize: "0.875rem",
-    fontStyle: "italic",
-    overflowWrap: "anywhere",
-  },
-})
-
 export function MyRequestRow({
-  row,
-  cancelling,
+  request,
+  selection,
+  onDetails,
   onCancel,
 }: {
-  row: {
-    kind: "claim" | "creation"
-    id: string
-    name: string
-    groupId: string | null
-    status: MyOwnershipRequest["status"]
-    note: string | null
-    createdAt: string
-  }
-  cancelling: boolean
+  request: GroupRequestItem
+  selection: Selection
+  onDetails: () => void
   onCancel: () => void
 }) {
+  const pending = request.status === "PENDING"
+  const note =
+    request.reviewerNote === null ? null : (
+      <span sx={groupTableStyles.note} title={request.reviewerNote}>
+        {m.request_review_note({ note: request.reviewerNote })}
+      </span>
+    )
+  const actions: RowAction[] = [
+    { key: "details", label: m.group_requests_view_details(), icon: FileEdit, onClick: onDetails },
+    ...(request.groupId === null
+      ? []
+      : [
+          {
+            key: "group",
+            label: m.all_groups_view_page(),
+            icon: ExternalLink,
+            render: <Link params={{ groupId: request.groupId }} to="/groups/$groupId" />,
+          },
+        ]),
+    ...(pending
+      ? [
+          {
+            key: "cancel",
+            label: m.request_cancel(),
+            icon: Undo,
+            destructive: true,
+            onClick: onCancel,
+          },
+        ]
+      : []),
+  ]
+
   return (
-    <ListRow>
-      <GroupAvatar id={row.groupId ?? row.id} name={row.name} />
-      <div sx={manageGroupsStyles.main}>
-        <div sx={manageGroupsStyles.titleLine}>
-          {row.groupId === null ? (
-            <span sx={manageGroupsStyles.name}>{row.name}</span>
-          ) : (
-            <Link
-              params={{ groupId: row.groupId }}
-              {...stylex.props(manageGroupsStyles.name)}
-              to="/groups/$groupId"
-            >
-              {row.name}
-            </Link>
-          )}
-          <Badge variant={REQUEST_STATUS[row.status].variant}>
-            {REQUEST_STATUS[row.status].label()}
-          </Badge>
+    <TableRow>
+      <CatalogSelectCell
+        disabled={!pending}
+        id={request.id}
+        label={request.name}
+        selection={selection}
+      />
+      <CatalogCell column="request">
+        <TitleCell
+          detail={<RequestExcerpt onOpen={onDetails} request={request} />}
+          narrow={{
+            from: "4xl",
+            content: (
+              <>
+                <Folded until="3xl">
+                  <RequestTypePill type={request.type} />
+                  <RequestStatusPill status={request.status} />
+                </Folded>
+                <span {...stylex.props(catalogStyles.muted)}>
+                  <TimeAgo date={request.createdAt} length="long" />
+                </span>
+                <Folded until="3xl">{note}</Folded>
+              </>
+            ),
+          }}
+          thumb={
+            <GroupAvatar
+              id={request.groupId ?? request.id}
+              name={request.name}
+              sx={mediaCellStyles.avatar}
+            />
+          }
+          title={<RequestTitle request={request} />}
+        />
+      </CatalogCell>
+      <CatalogCell column="type">
+        <RequestTypePill type={request.type} />
+      </CatalogCell>
+      <CatalogCell column="status">
+        <div {...stylex.props(catalogStyles.stack)}>
+          <RequestStatusPill status={request.status} />
+          {note}
         </div>
-        <div sx={manageGroupsStyles.meta}>
-          <span>{row.kind === "claim" ? m.my_requests_claim() : m.my_requests_new_group()}</span>
-          <span aria-hidden>·</span>
-          <TimeAgo date={row.createdAt} />
-        </div>
-        {row.note === null ? null : (
-          <span sx={styles.note}>{m.request_review_note({ note: row.note })}</span>
-        )}
-      </div>
-      {row.status === "PENDING" ? (
-        <div sx={manageGroupsStyles.actions}>
-          <Button disabled={cancelling} onClick={onCancel} size="sm" variant="ghost">
-            {m.request_cancel()}
-          </Button>
-        </div>
-      ) : null}
-    </ListRow>
+      </CatalogCell>
+      <CatalogCell column="date" sx={catalogStyles.muted}>
+        <TimeAgo date={request.createdAt} length="long" />
+      </CatalogCell>
+      <CatalogCell column="actions">
+        <RowActions actions={actions} label={m.catalog_actions({ name: request.name })} />
+      </CatalogCell>
+    </TableRow>
   )
 }

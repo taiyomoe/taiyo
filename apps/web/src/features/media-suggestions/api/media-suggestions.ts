@@ -1,5 +1,7 @@
+import type { MediaSuggestionStatus } from "@taiyomoe/db/constants"
 import type { InferRequestType, InferResponseType } from "hono/client"
-import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
+import { keepPreviousData, queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
+import type { BulkResult } from "@/features/catalog/api/catalog"
 import { api } from "@/lib/api"
 import { ensureSuccess, unwrap, unwrapEnvelope } from "@/lib/envelope"
 
@@ -19,16 +21,28 @@ export type MediaEditView = InferResponseType<
 
 export type MediaEditChanges = InferRequestType<(typeof api.medias)[":id"]["$patch"]>["json"]
 
-export const suggestionQueueQueryOptions = (page: number) =>
+export type SuggestionQueueFilter = {
+  search?: string | undefined
+  page: number
+}
+
+export const suggestionQueueQueryOptions = (filter: SuggestionQueueFilter) =>
   queryOptions({
-    queryKey: ["media-suggestions", "queue", { page }],
+    queryKey: ["media-suggestions", "queue", filter],
     queryFn: async ({ signal }) =>
       unwrapEnvelope(
         await api["media-suggestions"].$get(
-          { query: { page: String(page), perPage: String(SUGGESTIONS_PER_PAGE) } },
+          {
+            query: {
+              page: String(filter.page),
+              perPage: String(SUGGESTIONS_PER_PAGE),
+              ...(filter.search === undefined ? {} : { search: filter.search }),
+            },
+          },
           { init: { signal } },
         ),
       ),
+    placeholderData: keepPreviousData,
   })
 
 export type MediaSuggestion = InferResponseType<
@@ -36,16 +50,28 @@ export type MediaSuggestion = InferResponseType<
   200
 >["data"][number]
 
-export const mySuggestionsQueryOptions = (page: number) =>
+export type MySuggestionsFilter = SuggestionQueueFilter & {
+  status?: MediaSuggestionStatus | undefined
+}
+
+export const mySuggestionsQueryOptions = (filter: MySuggestionsFilter) =>
   queryOptions({
-    queryKey: ["media-suggestions", "mine", { page }],
+    queryKey: ["media-suggestions", "mine", filter],
     queryFn: async ({ signal }) =>
       unwrapEnvelope(
         await api.users.me["media-suggestions"].$get(
-          { query: { page: String(page), perPage: String(SUGGESTIONS_PER_PAGE) } },
+          {
+            query: {
+              page: String(filter.page),
+              perPage: String(SUGGESTIONS_PER_PAGE),
+              ...(filter.search === undefined ? {} : { search: filter.search }),
+              ...(filter.status === undefined ? {} : { status: filter.status }),
+            },
+          },
           { init: { signal } },
         ),
       ),
+    placeholderData: keepPreviousData,
   })
 
 export const suggestionQueryOptions = (suggestionId: string) =>
@@ -135,3 +161,24 @@ export const useReviewSuggestion = (suggestionId: string) => {
     onSuccess: invalidate,
   })
 }
+
+const useSuggestionsBulkMutation = <TInput>(run: (input: TInput) => Promise<BulkResult>) => {
+  const invalidate = useInvalidateMedia()
+
+  return useMutation({ mutationFn: run, onSuccess: invalidate })
+}
+
+export const useWithdrawSuggestions = () =>
+  useSuggestionsBulkMutation(async (suggestionIds: string[]) =>
+    unwrap(await api["media-suggestions"].withdraw.$post({ json: { suggestionIds } })),
+  )
+
+export const useAcceptSuggestions = () =>
+  useSuggestionsBulkMutation(async (json: { suggestionIds: string[]; note: string }) =>
+    unwrap(await api["media-suggestions"].accept.$post({ json })),
+  )
+
+export const useRejectSuggestions = () =>
+  useSuggestionsBulkMutation(async (json: { suggestionIds: string[]; note: string }) =>
+    unwrap(await api["media-suggestions"].reject.$post({ json })),
+  )

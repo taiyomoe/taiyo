@@ -9,7 +9,7 @@ import type { ManagedGroup } from "@/features/groups/api/groups"
 import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
-import { mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
+import { mediaCellStyles, TitleCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { Uploader } from "@/features/chapters/components/uploader"
@@ -34,24 +34,6 @@ export function ManagedGroupRow({
     ) : (
       <Uploader uploader={group.owner} />
     )
-  const counts = (
-    <>
-      <span
-        {...stylex.props(catalogStyles.inline, catalogStyles.muted)}
-        title={m.all_groups_column_members()}
-      >
-        <Users size={14} />
-        {formatNumber(group.memberCount)}
-      </span>
-      <span
-        {...stylex.props(catalogStyles.inline, catalogStyles.muted)}
-        title={m.catalog_column_chapters()}
-      >
-        <ListNumbered size={14} />
-        {formatNumber(group.chapterCount)}
-      </span>
-    </>
-  )
   const actions: RowAction[] = [
     {
       key: "view",
@@ -91,11 +73,29 @@ export function ManagedGroupRow({
         <TitleCell
           detail={m.all_groups_followers({ count: formatNumber(group.followerCount) })}
           narrow={{
-            from: "3xl",
+            from: "4xl",
             content: (
               <>
-                {group.owner === null ? owner : null}
-                {counts}
+                <Folded until="3xl">
+                  {owner}
+                  <span
+                    {...stylex.props(catalogStyles.inline, catalogStyles.muted)}
+                    title={m.all_groups_column_members()}
+                  >
+                    <Users size={14} />
+                    {formatNumber(group.memberCount)}
+                  </span>
+                </Folded>
+                <span
+                  {...stylex.props(catalogStyles.inline, catalogStyles.muted)}
+                  title={m.catalog_column_chapters()}
+                >
+                  <ListNumbered size={14} />
+                  {formatNumber(group.chapterCount)}
+                </span>
+                <span {...stylex.props(catalogStyles.muted)}>
+                  <TimeAgo date={group.createdAt} length="long" />
+                </span>
               </>
             ),
           }}

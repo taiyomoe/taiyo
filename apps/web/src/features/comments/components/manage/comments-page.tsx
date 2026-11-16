@@ -91,7 +91,7 @@ export function CommentsPage() {
             key: "comment",
             label: m.comments_column_comment(),
             skeleton: (
-              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="avatar" />
+              <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="avatar" />
             ),
           },
           {

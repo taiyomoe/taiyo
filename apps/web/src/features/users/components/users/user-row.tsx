@@ -24,7 +24,7 @@ import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
-import { mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
+import { mediaCellStyles, TitleCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
@@ -233,14 +233,17 @@ export function UserRow({
         <TitleCell
           detail={user.email === null ? `@${user.username}` : `@${user.username} · ${user.email}`}
           narrow={{
-            from: "3xl",
+            from: "4xl",
             content: (
               <>
-                {role}
+                <Folded until="3xl">{role}</Folded>
                 {user.banned ? status : null}
                 {points}
                 {until}
                 {reason}
+                <span {...stylex.props(catalogStyles.muted)}>
+                  <TimeAgo date={user.createdAt} length="long" />
+                </span>
               </>
             ),
           }}

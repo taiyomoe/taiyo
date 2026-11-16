@@ -9,7 +9,7 @@ import type { ManagedStaff } from "@/features/staffs/api/staffs"
 import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
-import { mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
+import { mediaCellStyles, TitleCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
@@ -85,13 +85,18 @@ export function StaffRow({
       <CatalogCell column="staff">
         <TitleCell
           narrow={{
-            from: "3xl",
+            from: "4xl",
             content: (
               <>
-                {roles}
-                <span {...stylex.props(catalogStyles.inline, catalogStyles.muted)}>
-                  <Library size={14} />
-                  {formatNumber(staff.mediaCount)}
+                <Folded until="3xl">
+                  {roles}
+                  <span {...stylex.props(catalogStyles.inline, catalogStyles.muted)}>
+                    <Library size={14} />
+                    {formatNumber(staff.mediaCount)}
+                  </span>
+                </Folded>
+                <span {...stylex.props(catalogStyles.muted)}>
+                  <TimeAgo date={staff.createdAt} length="long" />
                 </span>
               </>
             ),

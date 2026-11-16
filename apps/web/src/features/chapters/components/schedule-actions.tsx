@@ -12,7 +12,7 @@ import {
 } from "@taiyomoe/ui/components/ui/dialog"
 import { Field, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { useState } from "react"
-import { type Confirmation, ConfirmDialog } from "@/components/dialogs/confirm-dialog"
+import { ConfirmDialog } from "@/components/dialogs/confirm-dialog"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { DateTimePicker } from "@/components/fields/date-time-picker"
 import { useScheduleChapter } from "@/features/uploads/api/submissions"
@@ -80,21 +80,73 @@ function RescheduleForm({ chapter, onDone }: { chapter: ScheduledChapter; onDone
   )
 }
 
-export function ScheduleActions({ chapter }: { chapter: ScheduledChapter }) {
+/** Asks before releasing a scheduled chapter right away. */
+export function ReleaseNowDialog({
+  chapter,
+  onClose,
+}: {
+  chapter: ScheduledChapter | null
+  onClose: () => void
+}) {
   const release = useScheduleChapter()
-  const [confirmation, setConfirmation] = useState<Confirmation | null>(null)
-  const [rescheduling, setRescheduling] = useState(false)
+
+  return (
+    <ConfirmDialog
+      confirmation={
+        chapter === null
+          ? null
+          : {
+              title: m.upcoming_release_now_title({ number: chapter.number }),
+              description: m.upcoming_release_now_description(),
+              confirmLabel: m.upcoming_release_now(),
+              run: () => release.mutateAsync({ id: chapter.id, publishAt: null }),
+            }
+      }
+      error={release.isError ? getErrorMessage(release.error) : null}
+      onClose={() => {
+        onClose()
+        release.reset()
+      }}
+      pending={release.isPending}
+    />
+  )
+}
+
+/** Picks a new release time for a scheduled chapter. */
+export function RescheduleDialog({
+  chapter,
+  onClose,
+}: {
+  chapter: ScheduledChapter | null
+  onClose: () => void
+}) {
+  return (
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) {
+          onClose()
+        }
+      }}
+      open={chapter !== null}
+    >
+      <DialogPopup>
+        {chapter === null ? null : <RescheduleForm chapter={chapter} onDone={onClose} />}
+      </DialogPopup>
+    </Dialog>
+  )
+}
+
+export function ScheduleActions({ chapter }: { chapter: ScheduledChapter }) {
+  const [dialog, setDialog] = useState<"release" | "reschedule" | null>(null)
+  const close = () => {
+    setDialog(null)
+  }
 
   return (
     <>
       <Button
         onClick={() => {
-          setConfirmation({
-            title: m.upcoming_release_now_title({ number: chapter.number }),
-            description: m.upcoming_release_now_description(),
-            confirmLabel: m.upcoming_release_now(),
-            run: () => release.mutateAsync({ id: chapter.id, publishAt: null }),
-          })
+          setDialog("release")
         }}
         size="sm"
         variant="ghost"
@@ -103,34 +155,15 @@ export function ScheduleActions({ chapter }: { chapter: ScheduledChapter }) {
       </Button>
       <Button
         onClick={() => {
-          setRescheduling(true)
+          setDialog("reschedule")
         }}
         size="sm"
         variant="ghost"
       >
         {m.upcoming_reschedule()}
       </Button>
-      <ConfirmDialog
-        confirmation={confirmation}
-        error={release.isError ? getErrorMessage(release.error) : null}
-        onClose={() => {
-          setConfirmation(null)
-          release.reset()
-        }}
-        pending={release.isPending}
-      />
-      <Dialog onOpenChange={setRescheduling} open={rescheduling}>
-        <DialogPopup>
-          {rescheduling ? (
-            <RescheduleForm
-              chapter={chapter}
-              onDone={() => {
-                setRescheduling(false)
-              }}
-            />
-          ) : null}
-        </DialogPopup>
-      </Dialog>
+      <ReleaseNowDialog chapter={dialog === "release" ? chapter : null} onClose={close} />
+      <RescheduleDialog chapter={dialog === "reschedule" ? chapter : null} onClose={close} />
     </>
   )
 }

@@ -251,16 +251,20 @@ export function CatalogSelectCell({
   selection,
   id,
   label,
+  disabled = false,
 }: {
   selection: Selection
   id: string
   label: string
+  /** The row is listed but no bulk action applies to it. */
+  disabled?: boolean
 }) {
   return (
     <CatalogCell column={SELECT_COLUMN}>
       <Checkbox
         aria-label={m.catalog_select_row({ name: label })}
-        checked={selection.has(id)}
+        checked={!disabled && selection.has(id)}
+        disabled={disabled}
         onCheckedChange={() => {
           selection.toggle(id)
         }}

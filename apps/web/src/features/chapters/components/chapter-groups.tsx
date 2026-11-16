@@ -21,6 +21,10 @@ const styles = stylex.create({
     color: colors.mutedForeground,
     flexShrink: 0,
   },
+  // As wide as the uploader's avatar.
+  groupsIconWide: {
+    width: "1.375rem",
+  },
   groupsTop: {
     alignItems: "flex-start",
   },
@@ -117,18 +121,25 @@ export function ChapterGroups({
   groups,
   max = 1,
   wrap = false,
+  underUploader = false,
   sx,
 }: {
   groups: LatestChapter["groups"]
   max?: number
   wrap?: boolean
+  /** Sits under an `Uploader`: the names start where the uploader's name does. */
+  underUploader?: boolean
   sx?: Sx
 }) {
   const hidden = groups.slice(max)
 
   return (
     <span sx={[styles.groups, wrap && styles.groupsTop, sx]}>
-      <Users aria-label={m.chapter_groups()} size={16} {...stylex.props(styles.groupsIcon)} />
+      <Users
+        aria-label={m.chapter_groups()}
+        size={16}
+        {...stylex.props(styles.groupsIcon, underUploader && styles.groupsIconWide)}
+      />
       <span sx={[styles.groupNames, wrap && styles.groupsWrap]}>
         {groups.length === 0 ? (
           <span sx={[styles.group, styles.noGroup]}>{m.chapter_no_group()}</span>

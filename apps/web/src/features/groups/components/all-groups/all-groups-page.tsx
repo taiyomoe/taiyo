@@ -76,7 +76,7 @@ export function AllGroupsPage() {
           {
             key: "group",
             label: m.all_groups_column_group(),
-            skeleton: <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="logo" />,
+            skeleton: <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="logo" />,
           },
           {
             key: "owner",

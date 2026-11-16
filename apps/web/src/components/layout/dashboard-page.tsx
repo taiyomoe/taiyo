@@ -57,9 +57,25 @@ const styles = stylex.create({
   },
   sectionHeader: {
     gap: "1rem",
-    alignItems: "center",
+    alignItems: "flex-end",
     display: "flex",
+    flexWrap: "wrap",
     justifyContent: "space-between",
+  },
+  sectionHeading: {
+    gap: "0.25rem",
+    display: "flex",
+    flexBasis: "20rem",
+    flexDirection: "column",
+    flexGrow: 1,
+    minWidth: 0,
+  },
+  sectionDescription: {
+    margin: 0,
+    color: colors.mutedForeground,
+    fontSize: "0.875rem",
+    lineHeight: 1.45,
+    maxWidth: "40rem",
   },
   sectionTitle: {
     margin: 0,
@@ -121,17 +137,22 @@ export function DashboardPage({
 
 export function DashboardSection({
   title,
+  description,
   action,
   children,
 }: {
   title: ReactNode
+  description?: ReactNode
   action?: ReactNode
   children: ReactNode
 }) {
   return (
     <section sx={styles.section}>
       <div sx={styles.sectionHeader}>
-        <h2 sx={styles.sectionTitle}>{title}</h2>
+        <div sx={styles.sectionHeading}>
+          <h2 sx={styles.sectionTitle}>{title}</h2>
+          {description === undefined ? null : <p sx={styles.sectionDescription}>{description}</p>}
+        </div>
         {action}
       </div>
       {children}

@@ -16,10 +16,10 @@ import type { ManagedMedia } from "@/features/catalog/api/catalog"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
 import { Pill } from "@/components/badges/pill"
-import { OptionLabel } from "@/components/fields/option-select"
+import { OptionLabel, OptionValueIcon } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
-import { MediaCell } from "@/features/catalog/components/shared/media-cell"
+import { MediaCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
@@ -125,13 +125,19 @@ export function MediaRow({
           detail={MEDIA_TYPE_LABELS[media.type]()}
           mediaId={media.id}
           narrow={{
-            from: "3xl",
+            from: "4xl",
             content: (
               <>
-                {status}
-                <span {...stylex.props(catalogStyles.inline, catalogStyles.muted)}>
-                  <ListNumbered size={14} />
-                  {formatNumber(media.chapterCount)}
+                <Folded until="3xl">
+                  {status}
+                  <span {...stylex.props(catalogStyles.inline, catalogStyles.muted)}>
+                    <ListNumbered size={14} />
+                    {formatNumber(media.chapterCount)}
+                  </span>
+                </Folded>
+                <OptionValueIcon options={CONTENT_RATING_OPTIONS} value={media.contentRating} />
+                <span sx={catalogStyles.muted}>
+                  <TimeAgo length="long" date={media.deletedAt ?? media.createdAt} />
                 </span>
               </>
             ),

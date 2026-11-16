@@ -6,7 +6,7 @@ import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
 const searchSchema = z.object({
-  q: z.string().trim().min(1).max(100).optional().catch(undefined),
+  q: z.coerce.string().trim().min(1).max(100).optional().catch(undefined),
   target: z.enum(COMMENT_TARGET_TYPES).optional().catch(undefined),
   author: z.uuid().optional().catch(undefined),
   deleted: z.boolean().optional().catch(undefined),

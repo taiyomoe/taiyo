@@ -6,7 +6,7 @@ import { GroupsPage } from "@/features/groups/components/groups/groups-page"
 import { m } from "@/paraglide/messages"
 
 const searchSchema = z.object({
-  q: z.string().trim().min(1).max(100).optional().catch(undefined),
+  q: z.coerce.string().trim().min(1).max(100).optional().catch(undefined),
   page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),
 })
 
