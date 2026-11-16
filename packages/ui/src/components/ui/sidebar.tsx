@@ -1201,7 +1201,7 @@ export function SidebarContent({
   const styleProps = stylex.props(styles.content, iconCollapsed && styles.contentIcon, sx)
 
   return (
-    <ScrollArea fill scrollFade sx={styles.scrollArea}>
+    <ScrollArea fill horizontal={false} scrollFade sx={styles.scrollArea}>
       <div
         className={cn(styleProps.className, className)}
         data-sidebar="content"

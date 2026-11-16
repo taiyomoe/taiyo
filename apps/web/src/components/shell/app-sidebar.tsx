@@ -109,6 +109,12 @@ const styles = stylex.create({
   iconActive: {
     color: "inherit",
   },
+  label: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    minWidth: 0,
+  },
   soonBadge: {
     paddingInline: 0,
     transform: "translateY(-50%)",
@@ -211,7 +217,7 @@ export function AppSidebar({
                             {...stylex.props(styles.icon, isActive && styles.iconActive)}
                             size={20}
                           />
-                          <span>{label()}</span>
+                          <span sx={styles.label}>{label()}</span>
                         </SidebarMenuButton>
                         {soon === true ? (
                           <SidebarMenuBadge sx={styles.soonBadge}>
