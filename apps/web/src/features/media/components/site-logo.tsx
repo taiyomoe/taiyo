@@ -8,6 +8,7 @@ const SITE_LOGOS: Partial<Record<string, string>> = {
   mangaDex: "/sites/mangadex.png",
   anilist: "/sites/anilist.png",
   myAnimeList: "/sites/myanimelist.png",
+  kuroMangas: "/sites/kuromangas.png",
   animePlanet: "/sites/animeplanet.png",
   bookWalker: "/sites/bookwalker.png",
   mangaUpdates: "/sites/mangaupdates.png",

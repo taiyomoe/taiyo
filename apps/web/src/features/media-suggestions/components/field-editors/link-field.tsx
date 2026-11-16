@@ -13,6 +13,7 @@ const LINK_PLACEHOLDERS: Partial<Record<string, string>> = {
   mangaDex: "0ca1627e-95dd-4118-892a-f144adf02256",
   anilist: "31224",
   myAnimeList: "1224",
+  kuroMangas: "2433",
 }
 
 export function LinkField({
