@@ -1,5 +1,5 @@
 import { Button, Link, Section, Text } from "react-email"
-import { emailColors, emailStyles } from "../theme"
+import { emailColors, emailFonts, emailStyles } from "../theme"
 
 type Props = {
   href: string
@@ -12,10 +12,11 @@ const EmailAction = ({ href, label }: Props) => (
       <Button
         href={href}
         style={{
-          backgroundColor: emailColors.primary,
+          backgroundColor: emailColors.brand,
           borderRadius: "11px",
-          color: emailColors.onPrimary,
+          color: emailColors.onBrand,
           display: "inline-block",
+          fontFamily: emailFonts.sans,
           fontSize: "15px",
           fontWeight: 600,
           lineHeight: "20px",
