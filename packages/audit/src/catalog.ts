@@ -120,6 +120,12 @@ export const bannerAudit = defineAuditCatalog("media.banner", {
   DELETE_MANY: { severity: "high" },
 })
 
+export const mangaDexSyncAudit = defineAuditCatalog("media.mangadex", {
+  START: { target: "media", severity: "medium" },
+  CANCEL: { target: "mangaDexSync", severity: "low" },
+  PROCESS: { target: "mangaDexSync", severity: "medium" },
+})
+
 export const mediaSuggestionAudit = defineAuditCatalog("media.suggestion", {
   CREATE: { target: "mediaSuggestion", severity: "low" },
   UPDATE: { target: "mediaSuggestion", severity: "low" },
@@ -277,6 +283,7 @@ export const auditCatalogs = [
   mediaSuggestionAudit,
   coverAudit,
   bannerAudit,
+  mangaDexSyncAudit,
   mediaStaffAudit,
   staffAudit,
   chapterAudit,
@@ -312,6 +319,7 @@ declare module "evlog" {
     mediaSuggestion: typeof mediaSuggestionAudit
     cover: typeof coverAudit
     banner: typeof bannerAudit
+    mangaDexSync: typeof mangaDexSyncAudit
     mediaStaff: typeof mediaStaffAudit
     staff: typeof staffAudit
     chapter: typeof chapterAudit

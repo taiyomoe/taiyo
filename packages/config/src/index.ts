@@ -106,6 +106,21 @@ export const config = {
     previewCovers: 4,
   },
   tags,
+  mangaDex: {
+    apiUrl: "https://api.mangadex.org",
+    uploadsUrl: "https://uploads.mangadex.org",
+    networkReportUrl: "https://api.mangadex.network/report",
+    // MangaDex rejects requests without a User-Agent naming the client.
+    userAgent: "Taiyo (+https://taiyo.moe)",
+    // MangaDex allows about 5 requests a second per IP, and 40 a minute to /at-home/server.
+    requestIntervalMs: 300,
+    atHomeIntervalMs: 1600,
+    maxAttempts: 5,
+    pageSize: 100,
+    feedPageSize: 500,
+    maxSelectedItems: 5000,
+    recentSyncs: 10,
+  },
   pagination: {
     defaultPage: 1,
     defaultPerPage: 20,

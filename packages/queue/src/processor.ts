@@ -64,6 +64,25 @@ const deleteProcessedPages = (
     }),
   )
 
+export const transcodeChapterPage = async (pageId: string, buffer: Buffer) => {
+  if (buffer.byteLength > config.images.maxChapterPageSizeBytes) {
+    throw new Error(`page ${pageId} exceeds max size`)
+  }
+
+  const isImage = filetypeinfo(Array.from(buffer.subarray(0, 100))).some(
+    (ft) => ft.mime !== undefined && ft.mime in IMAGE_MIME_TYPES,
+  )
+
+  if (!isImage) {
+    throw new Error(`page ${pageId} is not a valid image`)
+  }
+
+  return sharp(buffer, { limitInputPixels: config.images.maxChapterPageDecodedPixels })
+    .rotate()
+    .jpeg({ quality: config.images.chapterPageQuality, progressive: true })
+    .toBuffer()
+}
+
 export const processChapterUpload = async (
   deps: ProcessorDeps,
   { taskId }: ChapterUploadJobData,
@@ -108,26 +127,10 @@ export const processChapterUpload = async (
         throw new Error(`page ${pageId} has no body`)
       }
 
-      const buffer = Buffer.from(await obj.Body.transformToByteArray())
-
-      if (buffer.byteLength > config.images.maxChapterPageSizeBytes) {
-        throw new Error(`page ${pageId} exceeds max size`)
-      }
-
-      const isImage = filetypeinfo(Array.from(buffer.subarray(0, 100))).some(
-        (ft) => ft.mime !== undefined && ft.mime in IMAGE_MIME_TYPES,
+      const processed = await transcodeChapterPage(
+        pageId,
+        Buffer.from(await obj.Body.transformToByteArray()),
       )
-
-      if (!isImage) {
-        throw new Error(`page ${pageId} is not a valid image`)
-      }
-
-      const processed = await sharp(buffer, {
-        limitInputPixels: config.images.maxChapterPageDecodedPixels,
-      })
-        .rotate()
-        .jpeg({ quality: config.images.chapterPageQuality, progressive: true })
-        .toBuffer()
 
       await s3.send(
         new PutObjectCommand({

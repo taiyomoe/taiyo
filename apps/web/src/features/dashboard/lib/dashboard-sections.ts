@@ -15,6 +15,7 @@ import {
   ListNumbered,
   NoteEdit,
   PenTool,
+  Refresh,
   Settings,
   Tag,
   Upload,
@@ -140,6 +141,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         icon: Image,
         to: "/dashboard/covers",
         visible: canOpenImages,
+      },
+      {
+        label: m.dashboard_nav_mangadex_sync,
+        icon: Refresh,
+        to: "/dashboard/mangadex-sync",
+        visible: (can) => can("media.syncMangaDex"),
       },
       {
         label: m.dashboard_nav_banners,

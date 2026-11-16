@@ -73,6 +73,10 @@ export * from "./models/group-ownership-request-model"
 
 export * from "./models/group-report-model"
 
+export * from "./models/mangadex-sync-item-model"
+
+export * from "./models/mangadex-sync-model"
+
 export * from "./models/media-model"
 
 export * from "./models/search-outbox-model"

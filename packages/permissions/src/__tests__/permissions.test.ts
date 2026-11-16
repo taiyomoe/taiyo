@@ -52,6 +52,7 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "media.restore": ["ADMIN"],
   "media.flag": ["MODERATOR", "ADMIN"],
   "media.reindex": ["ADMIN"],
+  "media.syncMangaDex": ["UPLOADER", "ADMIN"],
   "staff.create": ["UPLOADER_INTERN", "UPLOADER", "ADMIN"],
   "staff.update": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
   "staff.delete": ["UPLOADER", "ADMIN"],
