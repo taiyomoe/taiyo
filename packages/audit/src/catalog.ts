@@ -72,6 +72,7 @@ export const commentAudit = defineAuditCatalog("comment", {
   VOTE: { target: "comment", severity: "low" },
   UNVOTE: { target: "comment", severity: "low" },
   REVISIONS_LIST: { target: "comment", severity: "low" },
+  DELETE_MANY: { severity: "medium" },
 })
 
 export const commentReportAudit = defineAuditCatalog("comment.report", {
@@ -133,6 +134,7 @@ export const staffAudit = defineAuditCatalog("staff", {
   CREATE: { target: "staff", severity: "medium" },
   UPDATE: { target: "staff", severity: "medium", requiresChanges: true },
   DELETE: { target: "staff", severity: "high" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const chapterAudit = defineAuditCatalog("chapter", {
@@ -172,6 +174,7 @@ export const groupAudit = defineAuditCatalog("group", {
   DELETE: { target: "group", severity: "high" },
   FOLLOW: { target: "group", severity: "low" },
   UNFOLLOW: { target: "group", severity: "low" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const groupReportAudit = defineAuditCatalog("group.report", {

@@ -75,6 +75,7 @@ export type PermissionsDefinition = ValidateDefinition<{
   group: [
     "create",
     "delete",
+    "list",
     { name: "update"; type: GroupTarget; required: true },
     { name: "uploadChapters"; type: GroupTarget; required: true },
     { name: "manageMembers"; type: GroupTarget; required: true },

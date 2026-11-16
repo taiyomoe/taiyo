@@ -16,6 +16,7 @@ import {
   normalizeCommentContent,
 } from "@taiyomoe/schemas/comment-content"
 import z from "zod"
+import { getMainTitles } from "./latest-chapters"
 import { userSummarySchema } from "./schemas"
 
 export const THREAD_COLUMNS = {
@@ -46,6 +47,83 @@ export const commentThreadTargetSchema = z.object({
     .meta({ description: "The type of resource the comment is on.", example: "CHAPTER" }),
   id: z.uuid().meta({ description: "The ID of the media, chapter, group or user." }),
 })
+
+export const labelledCommentTargetSchema = commentThreadTargetSchema.extend({
+  label: z.string().nullable().meta({
+    description:
+      "A label for the resource: the title of the media, the title of the media and number of the chapter, the name of the group or the display name of the user, if any.",
+    example: "One Punch Man · #112",
+  }),
+  username: z.string().nullable().meta({
+    description: "The username of the user, if the comment is on a user profile.",
+    example: "kaito",
+  }),
+})
+
+/** The resource each comment is on, with a label to show for it. */
+export const getCommentTargets = async (db: Kysely<DB>, commentIds: readonly string[]) => {
+  if (commentIds.length === 0) {
+    return new Map<string, z.infer<typeof labelledCommentTargetSchema>>()
+  }
+
+  const threads = await db
+    .selectFrom("comments as c")
+    .innerJoin("commentThreads as t", "t.id", "c.threadId")
+    .leftJoin("chapters as ch", "ch.id", "t.chapterId")
+    .leftJoin("groups as g", "g.id", "t.groupId")
+    .leftJoin("users as pu", "pu.id", "t.profileId")
+    .select([
+      "c.id",
+      "t.mediaId",
+      "t.chapterId",
+      "t.groupId",
+      "t.profileId",
+      "ch.mediaId as chapterMediaId",
+      "ch.number as chapterNumber",
+      "g.name as groupName",
+      "pu.username as profileUsername",
+      "pu.displayUsername as profileDisplayUsername",
+    ])
+    .where("c.id", "in", commentIds)
+    .execute()
+  const titles = await getMainTitles(db, [
+    ...new Set(
+      threads
+        .flatMap((thread) => [thread.mediaId, thread.chapterMediaId])
+        .filter((id) => id !== null),
+    ),
+  ])
+
+  return new Map(
+    threads.map((thread) => {
+      const type =
+        COMMENT_TARGET_TYPES.find((key) => thread[THREAD_COLUMNS[key]] !== null) ?? "MEDIA"
+      let label: string | null = null
+
+      if (type === "MEDIA") {
+        label = titles.get(thread.mediaId ?? "") ?? null
+      } else if (type === "CHAPTER") {
+        const title = titles.get(thread.chapterMediaId ?? "") ?? null
+
+        label = `${title ?? "?"} · #${thread.chapterNumber ?? "?"}`
+      } else if (type === "GROUP") {
+        label = thread.groupName
+      } else {
+        label = thread.profileDisplayUsername
+      }
+
+      return [
+        thread.id,
+        {
+          type,
+          id: thread[THREAD_COLUMNS[type]] ?? "",
+          label,
+          username: thread.profileUsername,
+        } satisfies z.infer<typeof labelledCommentTargetSchema>,
+      ] as const
+    }),
+  )
+}
 
 export const resolveCommentTarget = async (db: Kysely<DB>, { type, id }: CommentTarget) => {
   if (type === "MEDIA") {
@@ -146,6 +224,9 @@ export const visibleThreadTargetSql = (thread: string) => sql<boolean>`(
 const liveRepliesOf = (root: string) =>
   sql`from "comments" as "r" left join "users" as "ru" on "ru"."id" = "r"."authorId" where "r"."parentId" = ${sql.ref(`${root}.id`)} and ${liveCommentSql("r", "ru")}`
 
+export const liveReplyCountSql = (root: string) =>
+  sql<string>`(select count(*) ${liveRepliesOf(root)})`
+
 export const timestampSql = (column: string) =>
   sql<string>`to_char(${sql.ref(column)}, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`
 
@@ -180,7 +261,7 @@ export const selectComments = (db: Kysely<DB>, viewerId: string | null) =>
       liveCommentSql("rt", "rtu").as("replyToLive"),
       "rtu.username as replyToUsername",
       "rtu.displayUsername as replyToDisplayUsername",
-      sql<string>`(select count(*) ${liveRepliesOf("c")})`.as("replyCount"),
+      liveReplyCountSql("c").as("replyCount"),
       (viewerId === null
         ? sql<boolean>`false`
         : sql<boolean>`exists (select 1 from "commentVotes" as "v" where "v"."commentId" = "c"."id" and "v"."userId" = ${viewerId})`

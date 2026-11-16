@@ -1,9 +1,4 @@
-import {
-  COMMENT_REPORT_REASONS,
-  COMMENT_REPORT_STATUSES,
-  COMMENT_TARGET_TYPES,
-  sql,
-} from "@taiyomoe/db"
+import { COMMENT_REPORT_REASONS, COMMENT_REPORT_STATUSES, sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -12,13 +7,12 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import {
   commentSchema,
-  commentThreadTargetSchema,
+  getCommentTargets,
+  labelledCommentTargetSchema,
   loadCommentImages,
   selectComments,
-  THREAD_COLUMNS,
   toComment,
 } from "../utils/comments"
-import { getMainTitles } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, userSummarySchema } from "../utils/schemas"
 
@@ -58,19 +52,7 @@ const reportedCommentSchema = z.object({
       }),
     })
     .meta({ description: "The reported comment." }),
-  target: commentThreadTargetSchema
-    .extend({
-      label: z.string().nullable().meta({
-        description:
-          "A label for the resource: the title of the media, the title of the media and number of the chapter, the name of the group or the display name of the user, if any.",
-        example: "One Punch Man · #112",
-      }),
-      username: z.string().nullable().meta({
-        description: "The username of the user, if the comment is on a user profile.",
-        example: "kaito",
-      }),
-    })
-    .meta({ description: "The resource the comment is on." }),
+  target: labelledCommentTargetSchema.meta({ description: "The resource the comment is on." }),
   reports: reportSchema.array().meta({
     description:
       "The latest reports on the comment with the requested status, up to 5, newest first.",
@@ -142,28 +124,9 @@ export const listCommentReportsHandler = new Hono().get(
       return c.ok([], { page, perPage, total: Number(totalRow.count) })
     }
 
-    const [comments, threads, reports, images] = await Promise.all([
+    const [comments, targets, reports, images] = await Promise.all([
       selectComments(db, user.id).where("c.id", "in", commentIds).execute(),
-      db
-        .selectFrom("comments as c")
-        .innerJoin("commentThreads as t", "t.id", "c.threadId")
-        .leftJoin("chapters as ch", "ch.id", "t.chapterId")
-        .leftJoin("groups as g", "g.id", "t.groupId")
-        .leftJoin("users as pu", "pu.id", "t.profileId")
-        .select([
-          "c.id",
-          "t.mediaId",
-          "t.chapterId",
-          "t.groupId",
-          "t.profileId",
-          "ch.mediaId as chapterMediaId",
-          "ch.number as chapterNumber",
-          "g.name as groupName",
-          "pu.username as profileUsername",
-          "pu.displayUsername as profileDisplayUsername",
-        ])
-        .where("c.id", "in", commentIds)
-        .execute(),
+      getCommentTargets(db, commentIds),
       db
         .selectFrom(
           db
@@ -194,56 +157,31 @@ export const listCommentReportsHandler = new Hono().get(
         .execute(),
       loadCommentImages(db, commentIds, user.id),
     ])
-    const titles = await getMainTitles(db, [
-      ...new Set(
-        threads
-          .flatMap((thread) => [thread.mediaId, thread.chapterMediaId])
-          .filter((id) => id !== null),
-      ),
-    ])
     const commentById = new Map(comments.map((row) => [row.id, row]))
-    const threadById = new Map(threads.map((row) => [row.id, row]))
     const viewer = { id: user.id, canModerate: can("comment.delete") }
 
     return c.ok(
       groups.flatMap((group) => {
         const row = commentById.get(group.commentId)
-        const thread = threadById.get(group.commentId)
+        const target = targets.get(group.commentId)
 
-        if (row === undefined || thread === undefined) {
+        if (row === undefined || target === undefined) {
           return []
-        }
-
-        const type =
-          COMMENT_TARGET_TYPES.find((key) => thread[THREAD_COLUMNS[key]] !== null) ?? "MEDIA"
-        let label: string | null = null
-
-        if (type === "MEDIA") {
-          label = titles.get(thread.mediaId ?? "") ?? null
-        } else if (type === "CHAPTER") {
-          const title = titles.get(thread.chapterMediaId ?? "") ?? null
-
-          label = `${title ?? "?"} · #${thread.chapterNumber ?? "?"}`
-        } else if (type === "GROUP") {
-          label = thread.groupName
-        } else {
-          label = thread.profileDisplayUsername
         }
 
         return [
           {
             reportId: group.reportId,
             comment: {
-              ...toComment(row, { viewer, ownerId: thread.profileId, images }),
+              ...toComment(row, {
+                viewer,
+                ownerId: target.type === "USER" ? target.id : null,
+                images,
+              }),
               originalContent: row.content,
               originalImages: images.get(row.id) ?? [],
             },
-            target: {
-              type,
-              id: thread[THREAD_COLUMNS[type]] ?? "",
-              label,
-              username: thread.profileUsername,
-            },
+            target,
             reports: reports
               .filter((report) => report.commentId === group.commentId)
               .map((report) => ({
