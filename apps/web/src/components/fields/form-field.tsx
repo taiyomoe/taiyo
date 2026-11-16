@@ -174,7 +174,7 @@ export const CheckboxField = <
             {...field}
             {...props}
           />
-          {label}
+          <span>{label}</span>
         </FieldLabel>
         {fieldState.error ? <FieldError match>{fieldState.error.message}</FieldError> : null}
       </Field>

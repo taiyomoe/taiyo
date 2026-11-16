@@ -75,7 +75,13 @@ describe("createAuthActions", () => {
     expect(await actions.signInSocial("google")).toEqual({ ok: true })
     expect(calls.map((call) => call.args[0])).toEqual([
       { ...credentials, callbackURL: absolute("/media/1?tab=chapters") },
-      { provider: "google", callbackURL: absolute("/media/1?tab=chapters") },
+      {
+        provider: "google",
+        callbackURL: absolute("/media/1?tab=chapters"),
+        errorCallbackURL: absolute(
+          "/auth/sign-in?provider=google&redirect=%2Fmedia%2F1%3Ftab%3Dchapters",
+        ),
+      },
     ])
     expect(navigation).toEqual(["invalidate", "navigate /media/1?tab=chapters"])
   })
@@ -215,7 +221,13 @@ describe("createAuthActions", () => {
     expect(calls).toEqual([
       {
         method: "signIn.social",
-        args: [{ provider: "discord", callbackURL: absolute("/") }],
+        args: [
+          {
+            provider: "discord",
+            callbackURL: absolute("/"),
+            errorCallbackURL: absolute("/auth/sign-in?provider=discord"),
+          },
+        ],
       },
     ])
   })

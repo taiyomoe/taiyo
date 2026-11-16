@@ -18,7 +18,11 @@ export type AuthClient = {
       rememberMe: boolean
       callbackURL: string
     }) => Promise<AuthResponse & { data?: unknown }>
-    social: (body: { provider: SocialProvider; callbackURL: string }) => Promise<AuthResponse>
+    social: (body: {
+      provider: SocialProvider
+      callbackURL: string
+      errorCallbackURL: string
+    }) => Promise<AuthResponse>
   }
   signUp: {
     email: (
@@ -68,6 +72,33 @@ export const getAuthErrorMessage = (error: AuthError) => {
   const message = error.code === undefined ? undefined : messagesByCode[error.code]
 
   return message === undefined ? m.auth_error_generic() : message()
+}
+
+const socialErrorMessages: Record<string, (inputs: { provider: string }) => string> = {
+  access_denied: m.auth_error_social_cancelled,
+  account_not_linked: m.auth_error_social_not_linked,
+  SOCIAL_EMAIL_NOT_VERIFIED: m.auth_error_social_email_unverified,
+  email_not_found: m.auth_error_social_no_email,
+  unable_to_create_user: m.auth_error_social_create_failed,
+  BANNED_USER: m.auth_error_social_banned,
+  state_not_found: m.auth_error_social_session,
+  state_mismatch: m.auth_error_social_session,
+  state_security_mismatch: m.auth_error_social_session,
+  state_invalid: m.auth_error_social_session,
+  invalid_code: m.auth_error_social_session,
+}
+const providerNames: Record<SocialProvider, () => string> = {
+  google: m.global_google,
+  discord: m.global_discord,
+}
+
+export const getSocialErrorMessage = (code: string, provider: SocialProvider | undefined) => {
+  const inputs = {
+    provider: provider === undefined ? "Google/Discord" : providerNames[provider](),
+  }
+  const message = socialErrorMessages[code]
+
+  return message === undefined ? m.auth_error_social_unknown({ ...inputs, code }) : message(inputs)
 }
 
 const toResult = ({ error }: AuthResponse): AuthResult =>
@@ -158,8 +189,23 @@ export const createAuthActions = ({
       ),
     resetPassword: async (values: { newPassword: string; token: string }) =>
       toResult(await client.resetPassword(values)),
-    signInSocial: async (provider: SocialProvider) =>
-      toResult(await client.signIn.social({ provider, callbackURL: authCallbackURL() })),
+    signInSocial: async (provider: SocialProvider) => {
+      const errorCallbackURL = new URL("/auth/sign-in", getOrigin())
+
+      errorCallbackURL.searchParams.set("provider", provider)
+
+      if (callbackURL !== "/") {
+        errorCallbackURL.searchParams.set("redirect", callbackURL)
+      }
+
+      return toResult(
+        await client.signIn.social({
+          provider,
+          callbackURL: authCallbackURL(),
+          errorCallbackURL: errorCallbackURL.href,
+        }),
+      )
+    },
     signOut: async () => {
       const result = toResult(await client.signOut())
 
