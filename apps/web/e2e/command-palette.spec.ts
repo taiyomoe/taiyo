@@ -141,10 +141,7 @@ test.describe("command palette", () => {
 
     await palette(page).getByRole("button", { name: TITLE }).click()
 
-    await expect(palette(page).getByRole("combobox")).toHaveAttribute(
-      "placeholder",
-      /Search media/,
-    )
+    await expect(palette(page).getByRole("combobox")).toHaveAttribute("placeholder", /Search media/)
   })
 
   test("runs a command", async ({ page }) => {
