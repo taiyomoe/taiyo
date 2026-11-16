@@ -63,6 +63,7 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "chapter.listInGroups": ["UPLOADER", "MODERATOR", "ADMIN"],
   "group.create": ["UPLOADER", "ADMIN"],
   "group.delete": ["ADMIN"],
+  "group.list": ["UPLOADER", "MODERATOR", "ADMIN"],
   "pageReport.create": ROLES,
   "pageReport.review": ["UPLOADER", "MODERATOR", "ADMIN"],
   "ownershipRequest.create": ROLES,
@@ -76,6 +77,7 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "comment.review": ["MODERATOR", "ADMIN"],
   "comment.removeImage": ["MODERATOR", "ADMIN"],
   "user.list": ["MODERATOR", "ADMIN"],
+  "user.grant": ["ADMIN"],
   "auditLog.read": ["ADMIN"],
 }
 const leaves = (node: object, prefix = ""): Array<[string, unknown]> =>
@@ -382,6 +384,13 @@ describe("groups", () => {
     const can = createPermissions(actor("USER", [owner(GROUP_A)]))
 
     expect(can("group.delete")).toBe(false)
+  })
+
+  it("does not let owners or members list every group", () => {
+    expect(createPermissions(actor("USER", [owner(GROUP_A)]))("group.list")).toBe(false)
+    expect(
+      createPermissions(actor("USER", [member(GROUP_A, [...GROUP_PERMISSIONS])]))("group.list"),
+    ).toBe(false)
   })
 
   it("lets owners upload, manage members and transfer ownership", () => {

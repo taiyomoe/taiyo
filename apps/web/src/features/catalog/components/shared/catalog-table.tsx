@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@taiyomoe/ui/components/ui/table"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, containers, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { createContext, use } from "react"
 import { range } from "remeda"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
@@ -28,7 +28,6 @@ import {
   SkeletonText,
 } from "@/features/catalog/components/shared/catalog-skeletons"
 import { type CatalogBreakpoint, catalogShownFrom } from "@/features/catalog/lib/catalog-styles"
-import { catalogContainers } from "@/features/catalog/lib/catalog.stylex"
 import { m } from "@/paraglide/messages"
 
 export type CatalogColumn = {
@@ -88,11 +87,7 @@ const styles = stylex.create({
     paddingInline: "0.75rem",
     alignItems: "center",
     display: "flex",
-    flexDirection: {
-      default: "row",
-      [catalogContainers.narrow]: "column",
-      [catalogContainers.medium]: "column",
-    },
+    flexDirection: { default: "column", [containers["3xl"]]: "row" },
     justifyContent: "space-between",
   },
   pages: {

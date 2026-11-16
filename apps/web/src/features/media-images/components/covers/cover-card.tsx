@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
 import { Crown, Download, Edit, Trash } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { MenuItem, MenuSeparator } from "@taiyomoe/ui/components/ui/menu"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaCover } from "@/features/media/lib/media-images"
+import { Pill } from "@/components/badges/pill"
 import { LanguageChip } from "@/components/flags/flags"
 import { ManagedImageCard } from "@/features/media-images/components/shared/managed-image-card"
 import { getCoverLabel } from "@/features/media/lib/media-images"
@@ -64,15 +64,12 @@ export function CoverCard({
         <>
           <LanguageChip language={cover.language} />
           {cover.contentRating === "NORMAL" ? null : (
-            <Badge size="sm" variant="warning">
-              {CONTENT_RATING_LABELS[cover.contentRating]()}
-            </Badge>
+            <Pill variant="warning">{CONTENT_RATING_LABELS[cover.contentRating]()}</Pill>
           )}
           {cover.isMainCover ? (
-            <Badge size="sm" variant="outline">
-              <Crown {...stylex.props(styles.main)} />
+            <Pill icon={Crown} iconSx={styles.main}>
               {m.media_covers_main()}
-            </Badge>
+            </Pill>
           ) : null}
         </>
       }

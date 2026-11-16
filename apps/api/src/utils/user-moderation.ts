@@ -18,6 +18,11 @@ export const managedUserSchema = userSummarySchema.extend({
     description: "The email address of the user. Only admins see it.",
     example: "kaito@example.com",
   }),
+  points: z.int().meta({ description: "The number of points the user has.", example: 1200 }),
+  title: z
+    .string()
+    .nullable()
+    .meta({ description: "The profile title the user has equipped, if any.", example: "bookworm" }),
   createdAt: z.iso.datetime().meta({ description: "When the user signed up." }),
 })
 

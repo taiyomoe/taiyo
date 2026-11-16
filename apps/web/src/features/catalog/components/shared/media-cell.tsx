@@ -18,6 +18,12 @@ export const mediaCellStyles = stylex.create({
     flexShrink: 0,
     width: "2.25rem",
   },
+  /** A round avatar or a square logo, as wide as a cover. */
+  avatar: {
+    flexShrink: 0,
+    height: "2.25rem",
+    width: "2.25rem",
+  },
   text: {
     gap: "0.25rem",
     display: "flex",
@@ -48,6 +54,33 @@ export const mediaCellStyles = stylex.create({
   },
 })
 
+/** The first cell of a row: a thumbnail, the row's title, a detail line, and the folded columns. */
+export function TitleCell({
+  thumb,
+  title,
+  detail,
+  narrow,
+}: {
+  thumb?: ReactNode
+  title: ReactNode
+  detail?: ReactNode
+  /** What the hidden columns hold, shown under the title while they are hidden. */
+  narrow?: { from: CatalogBreakpoint; content: ReactNode } | undefined
+}) {
+  return (
+    <div sx={mediaCellStyles.cell}>
+      {thumb}
+      <div sx={mediaCellStyles.text}>
+        {title}
+        {detail === undefined ? null : <span sx={mediaCellStyles.detail}>{detail}</span>}
+        {narrow === undefined ? null : (
+          <div sx={[mediaCellStyles.narrow, catalogHiddenFrom[narrow.from]]}>{narrow.content}</div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export function MediaCell({
   mediaId,
   title,
@@ -62,22 +95,21 @@ export function MediaCell({
   /** Replaces the cover, for rows that show another image. */
   thumb?: ReactNode
   detail?: ReactNode
-  /** What the hidden columns hold, shown under the title while they are hidden. */
   narrow?: { from: CatalogBreakpoint; content: ReactNode }
 }) {
   return (
-    <div sx={mediaCellStyles.cell}>
-      {thumb ??
-        (coverUrl === undefined ? null : <Cover src={coverUrl} sx={mediaCellStyles.cover} />)}
-      <div sx={mediaCellStyles.text}>
+    <TitleCell
+      detail={detail}
+      narrow={narrow}
+      thumb={
+        thumb ??
+        (coverUrl === undefined ? null : <Cover src={coverUrl} sx={mediaCellStyles.cover} />)
+      }
+      title={
         <Link params={{ mediaId }} to="/media/$mediaId" {...stylex.props(mediaCellStyles.title)}>
           {title ?? m.media_untitled()}
         </Link>
-        {detail === undefined ? null : <span sx={mediaCellStyles.detail}>{detail}</span>}
-        {narrow === undefined ? null : (
-          <div sx={[mediaCellStyles.narrow, catalogHiddenFrom[narrow.from]]}>{narrow.content}</div>
-        )}
-      </div>
-    </div>
+      }
+    />
   )
 }

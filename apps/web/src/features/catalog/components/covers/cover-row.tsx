@@ -1,11 +1,11 @@
 import * as stylex from "@stylexjs/stylex"
-import { Edit, Image, Star, Trash } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
+import { Crown, Edit, Image, Star, Trash } from "@taiyomoe/ui/components/icons"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { Link } from "@tanstack/react-router"
 import type { ManagedCover } from "@/features/catalog/api/catalog"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
+import { Pill } from "@/components/badges/pill"
 import { OptionLabel, OptionValueIcon } from "@/components/fields/option-select"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
@@ -35,7 +35,11 @@ export function CoverRow({
   const setMain = useSetMainCover(cover.media.id)
   const title = cover.media.title ?? m.media_untitled()
   const rating = <OptionLabel options={CONTENT_RATING_OPTIONS} value={cover.contentRating} />
-  const main = cover.isMainCover ? <Badge variant="info">{m.media_covers_main()}</Badge> : null
+  const main = cover.isMainCover ? (
+    <Pill icon={Crown} title={m.media_covers_main()} variant="info">
+      {m.catalog_cover_main()}
+    </Pill>
+  ) : null
 
   return (
     <TableRow>

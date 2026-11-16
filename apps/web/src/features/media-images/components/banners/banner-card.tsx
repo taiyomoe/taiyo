@@ -1,7 +1,7 @@
 import { Download, Edit, Trash } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { MenuItem, MenuSeparator } from "@taiyomoe/ui/components/ui/menu"
 import type { MediaBanner } from "@/features/media/lib/media-images"
+import { Pill } from "@/components/badges/pill"
 import { ManagedImageCard } from "@/features/media-images/components/shared/managed-image-card"
 import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
 import { m } from "@/paraglide/messages"
@@ -47,9 +47,9 @@ export function BannerCard({
         </>
       }
       meta={
-        <Badge size="sm" variant={banner.contentRating === "NORMAL" ? "outline" : "warning"}>
+        <Pill variant={banner.contentRating === "NORMAL" ? "outline" : "warning"}>
           {CONTENT_RATING_LABELS[banner.contentRating]()}
-        </Badge>
+        </Pill>
       }
       onOpen={onOpen}
       pending={pending}

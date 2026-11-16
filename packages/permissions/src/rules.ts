@@ -143,6 +143,7 @@ export const buildRules = (actor: Actor | null) => {
     group: {
       create: is("UPLOADER", "ADMIN"),
       delete: is("ADMIN"),
+      list: is("UPLOADER", "MODERATOR", "ADMIN"),
       update: (group) => is("UPLOADER", "MODERATOR", "ADMIN") || holds(group.id, "EDIT_GROUP"),
       uploadChapters: (group) => holds(group.id, "UPLOAD_CHAPTERS"),
       manageMembers: (group) => is("ADMIN") || holds(group.id, "MANAGE_MEMBERS"),
@@ -214,6 +215,7 @@ export const buildRules = (actor: Actor | null) => {
     },
     user: {
       list: is("MODERATOR", "ADMIN"),
+      grant: is("ADMIN"),
       ban: (target) =>
         !isSelf(target.id) && (is("ADMIN") || (is("MODERATOR") && target.role === "USER")),
       setRole: (target) => is("ADMIN") && !isSelf(target.id),

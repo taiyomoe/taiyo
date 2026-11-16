@@ -1,11 +1,4 @@
 import { adminAudit } from "@taiyomoe/audit"
-import {
-  AVATAR_BORDERS,
-  type CosmeticDefinition,
-  NAME_EFFECTS,
-  type Role,
-  USER_TITLES,
-} from "@taiyomoe/db"
 import { ROLES } from "@taiyomoe/permissions"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -19,12 +12,8 @@ import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope } from "../utils/schemas"
+import { setUsersRole } from "../utils/user-role"
 
-// Cosmetics granted by a role the user no longer holds, which equipping would now refuse.
-const lockedFor = (catalog: Record<string, CosmeticDefinition>, role: Role) =>
-  Object.entries(catalog)
-    .filter(([, { unlock }]) => unlock.type === "role" && !unlock.roles.includes(role))
-    .map(([key]) => key)
 const roleSchema = z.object({
   role: z.enum(ROLES).meta({ description: "The new role of the user.", example: "UPLOADER" }),
 })
@@ -73,39 +62,7 @@ export const setUserRoleHandler = new Hono().patch(
 
     c.var.audit.set({ changes: auditChanges(targetUser, { role }) })
 
-    await db.updateTable("users").set({ role }).where("id", "=", targetUser.id).execute()
-    await Promise.all([
-      db
-        .updateTable("users")
-        .set({ nameEffect: null })
-        .where("id", "=", targetUser.id)
-        .where((eb) => {
-          const locked = lockedFor(NAME_EFFECTS, role)
-
-          return locked.length === 0 ? eb.lit(false) : eb("nameEffect", "in", locked)
-        })
-        .execute(),
-      db
-        .updateTable("users")
-        .set({ avatarBorder: null })
-        .where("id", "=", targetUser.id)
-        .where((eb) => {
-          const locked = lockedFor(AVATAR_BORDERS, role)
-
-          return locked.length === 0 ? eb.lit(false) : eb("avatarBorder", "in", locked)
-        })
-        .execute(),
-      db
-        .updateTable("userProfiles")
-        .set({ title: null })
-        .where("userId", "=", targetUser.id)
-        .where((eb) => {
-          const locked = lockedFor(USER_TITLES, role)
-
-          return locked.length === 0 ? eb.lit(false) : eb("title", "in", locked)
-        })
-        .execute(),
-    ])
+    await setUsersRole(db, [targetUser.id], role)
     // Better Auth serves its own routes (admin plugin included) from the user cached in each session.
     await refreshUserSessions(auth, targetUser.id)
 

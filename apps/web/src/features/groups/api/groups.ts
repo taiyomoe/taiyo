@@ -1,8 +1,9 @@
 import type { InferRequestType, InferResponseType } from "hono/client"
-import { queryOptions } from "@tanstack/react-query"
+import { keepPreviousData, queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { isDefined, pickBy } from "remeda"
 import type { GroupChapterOrder, GroupMediaSort } from "@/features/groups/lib/group-page"
 import type { ContentRating } from "@/lib/settings"
+import { CATALOG_PER_PAGE } from "@/features/catalog/api/catalog"
 import { api } from "@/lib/api"
 import { unwrap, unwrapEnvelope } from "@/lib/envelope"
 
@@ -244,3 +245,41 @@ export type GroupReport = InferResponseType<
   (typeof api)["group-reports"]["$get"],
   200
 >["data"][number]
+
+export type ManagedGroupsFilter = {
+  search?: string | undefined
+  owned?: boolean | undefined
+  page: number
+}
+
+export type ManagedGroup = InferResponseType<typeof api.groups.managed.$get, 200>["data"][number]
+
+export const managedGroupsQueryOptions = (filter: ManagedGroupsFilter) =>
+  queryOptions({
+    queryKey: ["groups", "manage", filter],
+    queryFn: async ({ signal }) =>
+      unwrapEnvelope(
+        await api.groups.managed.$get(
+          {
+            query: {
+              page: String(filter.page),
+              perPage: String(CATALOG_PER_PAGE),
+              ...(filter.search === undefined ? {} : { search: filter.search }),
+              ...(filter.owned === undefined ? {} : { owned: filter.owned ? "true" : "false" }),
+            },
+          },
+          { init: { signal } },
+        ),
+      ),
+    placeholderData: keepPreviousData,
+  })
+
+export const useDeleteGroups = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (groupIds: string[]) =>
+      unwrap(await api.groups.$delete({ json: { groupIds } })),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["groups"] }),
+  })
+}

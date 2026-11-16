@@ -75,6 +75,7 @@ export type PermissionsDefinition = ValidateDefinition<{
   group: [
     "create",
     "delete",
+    "list",
     { name: "update"; type: GroupTarget; required: true },
     { name: "uploadChapters"; type: GroupTarget; required: true },
     { name: "manageMembers"; type: GroupTarget; required: true },
@@ -92,6 +93,7 @@ export type PermissionsDefinition = ValidateDefinition<{
   comment: ["create", "delete", "review", "removeImage"]
   user: [
     "list",
+    "grant",
     { name: "ban"; type: UserTarget; required: true },
     { name: "setRole"; type: { id: string }; required: true },
     { name: "impersonate"; type: UserTarget; required: true },

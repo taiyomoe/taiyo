@@ -145,6 +145,7 @@ export function CoversPage() {
           data === undefined ? null : (
             <CatalogFooter total={m.catalog_results({ count: formatNumber(data.meta.total) })}>
               <PagePagination
+                fit="container"
                 onJump={(page) => {
                   update({ page })
                 }}
