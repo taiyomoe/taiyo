@@ -1,49 +1,13 @@
-import * as stylex from "@stylexjs/stylex"
-import { ROLES } from "@taiyomoe/permissions"
-import { Search, Users } from "@taiyomoe/ui/components/icons"
-import { Button } from "@taiyomoe/ui/components/ui/button"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@taiyomoe/ui/components/ui/input-group"
-import {
-  Select,
-  SelectItem,
-  SelectPopup,
-  SelectTrigger,
-  SelectValue,
-} from "@taiyomoe/ui/components/ui/select"
-import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useState } from "react"
+import { UserRemove } from "@taiyomoe/ui/components/icons"
 import type { UsersFilter } from "@/features/users/api/users"
-import { RoleOption } from "@/features/users/components/users/role-option"
-import { ROLE_ICONS, ROLE_LABELS } from "@/features/users/lib/role-labels"
+import {
+  FilterSearch,
+  FilterSelect,
+  FilterToggle,
+  FilterToolbar,
+} from "@/components/filters/filter-toolbar"
+import { ROLE_OPTIONS } from "@/features/users/lib/role-labels"
 import { m } from "@/paraglide/messages"
-
-const ALL = "ALL"
-const styles = stylex.create({
-  filters: {
-    gap: "0.75rem",
-    alignItems: "center",
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  search: {
-    flexGrow: 1,
-    maxWidth: "24rem",
-    minWidth: "14rem",
-  },
-  filter: {
-    width: "13rem",
-  },
-  toggle: {
-    height: {
-      default: "2.75rem",
-      [breakpoints.sm]: "2.5rem",
-    },
-  },
-})
 
 export function UsersFilters({
   filter,
@@ -52,68 +16,32 @@ export function UsersFilters({
   filter: UsersFilter
   onChange: (patch: Partial<UsersFilter>) => void
 }) {
-  const [input, setInput] = useState(filter.search ?? "")
-
   return (
-    <div sx={styles.filters}>
-      <div sx={styles.search}>
-        <InputGroup>
-          <InputGroupAddon>
-            <Search />
-          </InputGroupAddon>
-          <InputGroupInput
-            aria-label={m.users_search()}
-            onChange={(event) => {
-              setInput(event.target.value)
-              onChange({
-                search: event.target.value.trim() === "" ? undefined : event.target.value.trim(),
-              })
-            }}
-            placeholder={m.users_search()}
-            value={input}
-          />
-        </InputGroup>
-      </div>
-      <div sx={styles.filter}>
-        <Select
-          onValueChange={(next) => {
-            onChange({ role: ROLES.find((role) => role === next) })
-          }}
-          value={filter.role ?? ALL}
-        >
-          <SelectTrigger aria-label={m.users_role()}>
-            <SelectValue>
-              {() =>
-                filter.role === undefined ? (
-                  <RoleOption icon={Users} label={m.users_all_roles()} />
-                ) : (
-                  <RoleOption icon={ROLE_ICONS[filter.role]} label={ROLE_LABELS[filter.role]()} />
-                )
-              }
-            </SelectValue>
-          </SelectTrigger>
-          <SelectPopup>
-            <SelectItem value={ALL}>
-              <RoleOption icon={Users} label={m.users_all_roles()} />
-            </SelectItem>
-            {ROLES.map((role) => (
-              <SelectItem key={role} value={role}>
-                <RoleOption icon={ROLE_ICONS[role]} label={ROLE_LABELS[role]()} />
-              </SelectItem>
-            ))}
-          </SelectPopup>
-        </Select>
-      </div>
-      <Button
-        aria-pressed={filter.banned === true}
-        onClick={() => {
-          onChange({ banned: filter.banned === true ? undefined : true })
+    <FilterToolbar>
+      <FilterSearch
+        label={m.users_search()}
+        onChange={(search) => {
+          onChange({ search })
         }}
-        sx={styles.toggle}
-        variant={filter.banned === true ? "secondary" : "outline"}
-      >
-        {m.users_only_banned()}
-      </Button>
-    </div>
+        value={filter.search}
+      />
+      <FilterSelect
+        allLabel={m.users_all_roles()}
+        label={m.users_role()}
+        onChange={(role) => {
+          onChange({ role })
+        }}
+        options={ROLE_OPTIONS}
+        value={filter.role}
+      />
+      <FilterToggle
+        icon={UserRemove}
+        label={m.users_only_banned()}
+        onChange={(banned) => {
+          onChange({ banned: banned ? true : undefined })
+        }}
+        pressed={filter.banned === true}
+      />
+    </FilterToolbar>
   )
 }

@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { ArrowRight } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import type { getMediaLinks } from "@/features/media/lib/media-labels"
+import { SiteLogo } from "@/features/media/components/site-logo"
 
 const styles = stylex.create({
   links: {
@@ -21,6 +22,7 @@ export function MediaLinks({ links }: { links: ReturnType<typeof getMediaLinks> 
           size="sm"
           variant="outline"
         >
+          <SiteLogo site={link.key} />
           {link.label}
           <ArrowRight />
         </Button>

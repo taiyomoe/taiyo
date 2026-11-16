@@ -1,6 +1,7 @@
-import { type ContentRating, type DB, type Kysely, sql } from "@taiyomoe/db"
+import { type ContentRating, type DB, type ExpressionBuilder, type Kysely, sql } from "@taiyomoe/db"
 import { getCoverUrl } from "@taiyomoe/s3"
 import { group } from "radashi"
+import { escapeLike } from "./escape-like"
 
 const effectiveContentRating = sql<ContentRating>`greatest(${sql.ref("medias.contentRating")}, ${sql.ref("chapters.contentRating")})`
 
@@ -11,6 +12,31 @@ type ChapterFilters = {
   uploaderId?: string | undefined
   search?: string | undefined
   status?: "PUBLISHED" | "SCHEDULED"
+}
+
+export const matchChapterSearch = (
+  eb: ExpressionBuilder<DB, "chapters">,
+  search: string | undefined,
+) => {
+  if (search === undefined) {
+    return eb.and([])
+  }
+
+  const pattern = `%${escapeLike(search)}%`
+  const number = /^(?:ch(?:apter)?\.?\s*)?(\d+(?:\.\d+)?)$/i.exec(search)?.[1]
+
+  return eb.or([
+    eb("chapters.title", "ilike", pattern),
+    ...(number === undefined ? [] : [eb("chapters.number", "=", Number(number))]),
+    eb.exists(
+      eb
+        .selectFrom("titles")
+        .select("titles.mediaId")
+        .whereRef("titles.mediaId", "=", "chapters.mediaId")
+        .where("titles.deletedAt", "is", null)
+        .where("titles.title", "ilike", pattern),
+    ),
+  ])
 }
 
 export const selectVisibleChapters = (
@@ -39,27 +65,7 @@ export const selectVisibleChapters = (
               .where("chapterGroups.groupId", "=", groupId),
           ),
     )
-    .where((eb) => {
-      if (search === undefined) {
-        return eb.and([])
-      }
-
-      const pattern = `%${search.replace(/[\\%_]/g, "\\$&")}%`
-      const number = /^(?:ch(?:apter)?\.?\s*)?(\d+(?:\.\d+)?)$/i.exec(search)?.[1]
-
-      return eb.or([
-        eb("chapters.title", "ilike", pattern),
-        ...(number === undefined ? [] : [eb("chapters.number", "=", Number(number))]),
-        eb.exists(
-          eb
-            .selectFrom("titles")
-            .select("titles.mediaId")
-            .whereRef("titles.mediaId", "=", "chapters.mediaId")
-            .where("titles.deletedAt", "is", null)
-            .where("titles.title", "ilike", pattern),
-        ),
-      ])
-    })
+    .where((eb) => matchChapterSearch(eb, search))
 
 export const selectLatestChapters = (db: Kysely<DB>, filters: ChapterFilters) =>
   selectVisibleChapters(db, filters)

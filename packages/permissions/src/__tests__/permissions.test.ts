@@ -7,6 +7,7 @@ import {
   type ChapterTarget,
   buildRules,
   createPermissions,
+  getChapterGroupIds,
   GROUP_PERMISSIONS,
   type GroupPermission,
   type MediaSuggestionTarget,
@@ -58,6 +59,8 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "chapter.submit": ROLES,
   "chapter.review": ["UPLOADER", "ADMIN"],
   "chapter.flag": ["UPLOADER", "MODERATOR", "ADMIN"],
+  "chapter.list": ["UPLOADER", "MODERATOR", "ADMIN"],
+  "chapter.listInGroups": ["UPLOADER", "MODERATOR", "ADMIN"],
   "group.create": ["UPLOADER", "ADMIN"],
   "group.delete": ["ADMIN"],
   "pageReport.create": ROLES,
@@ -182,6 +185,36 @@ describe("toRole", () => {
 })
 
 describe("chapters", () => {
+  it("lets group members with a chapter permission list their groups' chapters", () => {
+    for (const permission of ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS", "DELETE_CHAPTERS"] as const) {
+      expect(
+        createPermissions(actor("USER", [member(GROUP_A, [permission])]))("chapter.listInGroups"),
+      ).toBe(true)
+    }
+
+    expect(createPermissions(actor("USER", [owner(GROUP_A)]))("chapter.listInGroups")).toBe(true)
+    expect(
+      createPermissions(actor("USER", [member(GROUP_A, ["MANAGE_MEMBERS"])]))(
+        "chapter.listInGroups",
+      ),
+    ).toBe(false)
+    expect(createPermissions(actor("USER", [owner(GROUP_A)], true))("chapter.listInGroups")).toBe(
+      false,
+    )
+  })
+
+  it("gives the groups whose chapters a member handles", () => {
+    expect(
+      getChapterGroupIds(
+        actor("USER", [
+          owner(GROUP_A),
+          member(GROUP_B, ["EDIT_CHAPTERS"]),
+          member("c0000000-0000-4000-8000-000000000000", ["MANAGE_MEMBERS"]),
+        ]),
+      ),
+    ).toEqual([GROUP_A, GROUP_B])
+  })
+
   it("lets uploaders, moderators and admins edit and delete any chapter", () => {
     for (const role of ["UPLOADER", "MODERATOR", "ADMIN"] as const) {
       const can = createPermissions(actor(role))

@@ -1,18 +1,11 @@
+import type { Role } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
-import { ROLES, type Role } from "@taiyomoe/permissions"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
-import {
-  Select,
-  SelectItem,
-  SelectPopup,
-  SelectTrigger,
-  SelectValue,
-} from "@taiyomoe/ui/components/ui/select"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { ManagedUser } from "@/features/users/api/users"
-import { RoleOption } from "@/features/users/components/users/role-option"
-import { ROLE_ICONS, ROLE_LABELS } from "@/features/users/lib/role-labels"
+import { OptionLabel, OptionSelect } from "@/components/fields/option-select"
+import { ROLE_OPTIONS } from "@/features/users/lib/role-labels"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
 import { m } from "@/paraglide/messages"
@@ -36,30 +29,22 @@ export function UserRoleSelect({ user, editable }: { user: ManagedUser; editable
   return (
     <div sx={styles.role}>
       {editable ? (
-        <Select
+        <OptionSelect
           disabled={setRole.isPending}
-          onValueChange={(role) => {
-            if (role !== null && role !== user.role) {
+          label={m.users_role()}
+          onChange={(role) => {
+            if (role !== user.role) {
               setRole.mutate({ userId: user.id, role })
             }
           }}
+          options={ROLE_OPTIONS}
+          size="sm"
           value={user.role}
-        >
-          <SelectTrigger aria-label={m.users_role()} size="sm">
-            <SelectValue>
-              {() => <RoleOption icon={ROLE_ICONS[user.role]} label={ROLE_LABELS[user.role]()} />}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectPopup>
-            {ROLES.map((role) => (
-              <SelectItem key={role} value={role}>
-                <RoleOption icon={ROLE_ICONS[role]} label={ROLE_LABELS[role]()} />
-              </SelectItem>
-            ))}
-          </SelectPopup>
-        </Select>
+        />
       ) : (
-        <Badge variant="outline">{ROLE_LABELS[user.role]()}</Badge>
+        <Badge variant="outline">
+          <OptionLabel options={ROLE_OPTIONS} value={user.role} />
+        </Badge>
       )}
     </div>
   )

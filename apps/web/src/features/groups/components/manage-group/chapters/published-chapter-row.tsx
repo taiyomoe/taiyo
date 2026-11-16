@@ -17,7 +17,7 @@ export function PublishedChapterRow({
   chapter: LatestChapter
   can: Permissions
   onEdit: (chapter: EditableChapter) => void
-  onDelete: (chapterId: string) => void
+  onDelete: (chapter: EditableChapter) => void
 }) {
   return (
     <ChapterRow
@@ -37,7 +37,7 @@ export function PublishedChapterRow({
           {can("chapter.delete", targetOf(chapter, "PUBLISHED")) ? (
             <Button
               onClick={() => {
-                onDelete(chapter.id)
+                onDelete(chapter)
               }}
               size="sm"
               variant="ghost"

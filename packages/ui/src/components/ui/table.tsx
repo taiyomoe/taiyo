@@ -3,6 +3,7 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import type { Sx } from "../../styles/sx"
+import { tableRowMarker } from "../../styles/markers.stylex"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
@@ -96,11 +97,30 @@ const styles = stylex.create({
     // fill. In dark that turned a white/8% line into a 1-value difference —
     // the separators effectively disappeared.
     backgroundClip: "border-box",
+    // The row, not the cell, owns hover and selection: every cell of the row
+    // tints together.
     backgroundColor: {
       default: colors.card,
-      ":hover": `color-mix(in srgb, ${colors.card}, ${colors.foreground} 2%)`,
+      [stylex.when.ancestor(":hover", tableRowMarker)]:
+        `color-mix(in srgb, ${colors.card}, ${colors.foreground} 3%)`,
+      [stylex.when.ancestor('[data-state="selected"]', tableRowMarker)]:
+        `color-mix(in srgb, ${colors.card}, ${colors.foreground} 5%)`,
     },
     borderBottomColor: colors.border,
+    borderBottomLeftRadius: {
+      default: 0,
+      ":first-child": {
+        default: 0,
+        [stylex.when.ancestor(":last-child", tableRowMarker)]: radius.xl,
+      },
+    },
+    borderBottomRightRadius: {
+      default: 0,
+      ":last-child": {
+        default: 0,
+        [stylex.when.ancestor(":last-child", tableRowMarker)]: radius.xl,
+      },
+    },
     borderBottomStyle: "solid",
     borderBottomWidth: 1,
     borderLeftColor: colors.border,
@@ -116,7 +136,27 @@ const styles = stylex.create({
       ":last-child": 1,
     },
     borderTopColor: colors.border,
+    // The corner cells follow the body's radius, so their fill and borders
+    // never poke out of the rounded card.
+    borderTopLeftRadius: {
+      default: 0,
+      ":first-child": {
+        default: 0,
+        [stylex.when.ancestor(":first-child", tableRowMarker)]: radius.xl,
+      },
+    },
+    borderTopRightRadius: {
+      default: 0,
+      ":last-child": {
+        default: 0,
+        [stylex.when.ancestor(":first-child", tableRowMarker)]: radius.xl,
+      },
+    },
     borderTopStyle: "solid",
+    borderTopWidth: {
+      default: 0,
+      [stylex.when.ancestor(":first-child", tableRowMarker)]: 1,
+    },
     paddingLeft: {
       default: "0.625rem",
       ":first-child": "calc(0.625rem - 1px)",
@@ -236,6 +276,7 @@ export function TableRow({
   const styleProps = stylex.props(
     variant === "card" ? styles.rowCard : styles.row,
     variant !== "card" && styles.rowLast,
+    variant === "card" && tableRowMarker,
     sx,
   )
 

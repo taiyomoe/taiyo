@@ -1,4 +1,4 @@
-import type { Role } from "@taiyomoe/permissions"
+import { ROLES, type Role } from "@taiyomoe/permissions"
 import {
   CloudUpload,
   Crown,
@@ -6,7 +6,9 @@ import {
   type IconProps,
   Shield,
   User,
+  Users,
 } from "@taiyomoe/ui/components/icons"
+import type { OptionSet } from "@/components/fields/option-select"
 import { m } from "@/paraglide/messages"
 
 export const ROLE_LABELS: Record<Role, () => string> = {
@@ -17,10 +19,17 @@ export const ROLE_LABELS: Record<Role, () => string> = {
   ADMIN: m.role_admin,
 }
 
-export const ROLE_ICONS: Record<Role, (props: IconProps) => React.ReactElement> = {
+const ROLE_ICONS: Record<Role, (props: IconProps) => React.ReactElement> = {
   USER: User,
   MODERATOR: Shield,
   UPLOADER_INTERN: GraduationCap,
   UPLOADER: CloudUpload,
   ADMIN: Crown,
+}
+
+export const ROLE_OPTIONS: OptionSet<Role> = {
+  values: ROLES,
+  label: (role) => ROLE_LABELS[role](),
+  icon: (role) => ROLE_ICONS[role],
+  fieldIcon: Users,
 }

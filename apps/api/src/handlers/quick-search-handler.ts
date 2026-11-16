@@ -6,6 +6,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
+import { escapeLike } from "../utils/escape-like"
 import { getMainCoverUrls } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
@@ -103,8 +104,8 @@ export const quickSearchHandler = new Hono().get(
   async (c) => {
     const { db, meili, mediasIndex } = c.var
     const { q, limit, contentRating } = c.var.query
-    const pattern = `%${q.replace(/[\\%_]/g, "\\$&")}%`
-    const prefix = `${q.replace(/[\\%_]/g, "\\$&")}%`
+    const pattern = `%${escapeLike(q)}%`
+    const prefix = `${escapeLike(q)}%`
     const [[titleHits, covers], groups, users] = await Promise.all([
       meili
         .index<MediaDocument>(mediasIndex)

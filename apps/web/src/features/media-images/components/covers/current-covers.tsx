@@ -1,10 +1,11 @@
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useState } from "react"
+import type { DeletableCover } from "@/features/catalog/components/covers/delete-cover-dialog"
 import type { MediaCover } from "@/features/media/lib/media-images"
-import { type Confirmation, ConfirmDialog } from "@/components/dialogs/confirm-dialog"
 import { LanguageFlag } from "@/components/flags/flags"
 import { getLanguageName } from "@/components/flags/language-flags"
-import { useDeleteCover, useSetMainCover } from "@/features/media-images/api/media-images"
+import { DeleteCoverDialog } from "@/features/catalog/components/covers/delete-cover-dialog"
+import { useSetMainCover } from "@/features/media-images/api/media-images"
 import { CoverCard } from "@/features/media-images/components/covers/cover-card"
 import { EditCoverDialog } from "@/features/media-images/components/covers/edit-cover-dialog"
 import { ManagedGrid } from "@/features/media-images/components/shared/managed-grid"
@@ -32,9 +33,8 @@ export function CurrentCovers({
   const [language, setLanguage] = useState<string | undefined>()
   const [openId, setOpenId] = useState<string | null>(null)
   const [editing, setEditing] = useState<MediaCover | null>(null)
-  const [confirmation, setConfirmation] = useState<Confirmation | null>(null)
+  const [deleting, setDeleting] = useState<DeletableCover | null>(null)
   const setMain = useSetMainCover(mediaId)
-  const remove = useDeleteCover(mediaId)
   const { download } = useImageDownload()
   const languages = getCoverLanguages(covers)
   const shown = sortCovers(
@@ -60,12 +60,12 @@ export function CurrentCovers({
               alt={title}
               cover={cover}
               onDelete={() => {
-                setConfirmation({
-                  title: m.media_covers_delete_title(),
-                  description: m.media_covers_delete_description(),
-                  confirmLabel: m.media_images_delete(),
-                  destructive: true,
-                  run: () => remove.mutateAsync(cover.id),
+                setDeleting({
+                  id: cover.id,
+                  mediaId,
+                  mediaTitle: title,
+                  volume: cover.volume,
+                  isMainCover: cover.isMainCover,
                 })
               }}
               onDownload={() => {
@@ -87,10 +87,7 @@ export function CurrentCovers({
                   },
                 })
               }}
-              pending={
-                (setMain.isPending && setMain.variables === cover.id) ||
-                (remove.isPending && remove.variables === cover.id)
-              }
+              pending={setMain.isPending && setMain.variables === cover.id}
             />
           </li>
         ))}
@@ -123,14 +120,11 @@ export function CurrentCovers({
           setEditing(null)
         }}
       />
-      <ConfirmDialog
-        confirmation={confirmation}
-        error={remove.isError ? getErrorMessage(remove.error) : null}
+      <DeleteCoverDialog
+        cover={deleting}
         onClose={() => {
-          setConfirmation(null)
-          remove.reset()
+          setDeleting(null)
         }}
-        pending={remove.isPending}
       />
     </>
   )

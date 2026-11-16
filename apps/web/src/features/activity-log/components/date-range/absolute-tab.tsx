@@ -4,6 +4,7 @@ import { Input } from "@taiyomoe/ui/components/ui/input"
 import { dateRangeStyles } from "@/features/activity-log/components/date-range/date-range-styles"
 import { formatDateTime } from "@/features/activity-log/lib/format"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const pad = (value: number) => String(value).padStart(2, "0")
 const styles = stylex.create({
@@ -37,6 +38,7 @@ export function AbsoluteTab({
     <div sx={dateRangeStyles.panel}>
       <Calendar
         defaultMonth={resolved}
+        lang={getLocale()}
         mode="single"
         onSelect={(day) => {
           if (day !== undefined) {

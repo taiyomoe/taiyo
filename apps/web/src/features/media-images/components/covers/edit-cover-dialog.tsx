@@ -28,7 +28,14 @@ import { parseVolumeInput } from "@/features/media-images/lib/staged-cover"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
+type EditableCover = Pick<MediaCover, "id" | "volume" | "language" | "contentRating">
+
 const styles = stylex.create({
+  // The popup lays out its header, panel and footer as direct children; the
+  // form must not add a box between them.
+  form: {
+    display: "contents",
+  },
   fields: {
     gap: "1.25rem",
     display: "flex",
@@ -42,7 +49,7 @@ export function EditCoverDialog({
   onClose,
 }: {
   mediaId: string
-  cover: MediaCover | null
+  cover: EditableCover | null
   onClose: () => void
 }) {
   return (
@@ -69,7 +76,7 @@ function EditCoverForm({
   onDone,
 }: {
   mediaId: string
-  cover: MediaCover
+  cover: EditableCover
   onDone: () => void
 }) {
   const update = useUpdateCover(mediaId)
@@ -83,6 +90,7 @@ function EditCoverForm({
   return (
     <form
       noValidate
+      sx={styles.form}
       onSubmit={(event) => {
         event.preventDefault()
 

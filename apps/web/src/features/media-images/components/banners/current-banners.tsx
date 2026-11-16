@@ -1,14 +1,13 @@
 import { useState } from "react"
+import type { DeletableBanner } from "@/features/catalog/components/banners/delete-banner-dialog"
 import type { MediaBanner } from "@/features/media/lib/media-images"
-import { type Confirmation, ConfirmDialog } from "@/components/dialogs/confirm-dialog"
-import { useDeleteBanner } from "@/features/media-images/api/media-images"
+import { DeleteBannerDialog } from "@/features/catalog/components/banners/delete-banner-dialog"
 import { BannerCard } from "@/features/media-images/components/banners/banner-card"
 import { EditBannerDialog } from "@/features/media-images/components/banners/edit-banner-dialog"
 import { ManagedGrid } from "@/features/media-images/components/shared/managed-grid"
 import { ImageLightbox } from "@/features/media/components/image-lightbox/image-lightbox"
 import { useImageDownload } from "@/features/media/hooks/use-image-download"
 import { getBannerFileName } from "@/features/media/lib/media-images"
-import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
 export function CurrentBanners({
@@ -22,8 +21,7 @@ export function CurrentBanners({
 }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [editing, setEditing] = useState<MediaBanner | null>(null)
-  const [confirmation, setConfirmation] = useState<Confirmation | null>(null)
-  const remove = useDeleteBanner(mediaId)
+  const [deleting, setDeleting] = useState<DeletableBanner | null>(null)
   const { download } = useImageDownload()
 
   return (
@@ -36,12 +34,11 @@ export function CurrentBanners({
               banner={banner}
               label={m.media_banners_label({ number: index + 1 })}
               onDelete={() => {
-                setConfirmation({
-                  title: m.media_banners_delete_title(),
-                  description: m.media_banners_delete_description(),
-                  confirmLabel: m.media_images_delete(),
-                  destructive: true,
-                  run: () => remove.mutateAsync(banner.id),
+                setDeleting({
+                  id: banner.id,
+                  mediaId,
+                  mediaTitle: title,
+                  last: banners.length === 1,
                 })
               }}
               onDownload={() => {
@@ -53,7 +50,7 @@ export function CurrentBanners({
               onOpen={() => {
                 setOpenIndex(index)
               }}
-              pending={remove.isPending && remove.variables === banner.id}
+              pending={false}
             />
           </li>
         ))}
@@ -78,14 +75,11 @@ export function CurrentBanners({
           setEditing(null)
         }}
       />
-      <ConfirmDialog
-        confirmation={confirmation}
-        error={remove.isError ? getErrorMessage(remove.error) : null}
+      <DeleteBannerDialog
+        banner={deleting}
         onClose={() => {
-          setConfirmation(null)
-          remove.reset()
+          setDeleting(null)
         }}
-        pending={remove.isPending}
       />
     </>
   )

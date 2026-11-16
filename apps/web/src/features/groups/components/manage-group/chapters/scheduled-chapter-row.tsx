@@ -28,7 +28,7 @@ export function ScheduledChapterRow({
   chapter: UpcomingChapter
   can: Permissions
   onEdit: (chapter: EditableChapter) => void
-  onDelete: (chapterId: string) => void
+  onDelete: (chapter: EditableChapter) => void
 }) {
   return (
     <ChapterRow
@@ -51,7 +51,7 @@ export function ScheduledChapterRow({
           {can("chapter.delete", targetOf(chapter, "SCHEDULED")) ? (
             <Button
               onClick={() => {
-                onDelete(chapter.id)
+                onDelete(chapter)
               }}
               size="sm"
               variant="ghost"

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { CalendarClock, Globe, Link as LinkIcon } from "@taiyomoe/ui/components/icons"
-import { Badge, type BadgeVariant } from "@taiyomoe/ui/components/ui/badge"
+import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { ChapterSubmission } from "@/features/uploads/api/submissions"
@@ -14,18 +14,9 @@ import { ChapterNumber } from "@/features/chapters/components/chapter-number"
 import { Uploader } from "@/features/chapters/components/uploader"
 import { Cover } from "@/features/media/components/cover"
 import { hostOf } from "@/features/uploads/lib/chapter-batch/links"
+import { SUBMISSION_STATUS } from "@/features/uploads/lib/submission-status"
 import { m } from "@/paraglide/messages"
 
-const SUBMISSION_STATUS: Record<
-  ChapterSubmission["status"],
-  { label: () => string; variant: BadgeVariant }
-> = {
-  UPLOADING: { label: m.submission_status_uploading, variant: "info" },
-  PENDING: { label: m.submission_status_pending, variant: "warning" },
-  SCHEDULED: { label: m.submission_status_scheduled, variant: "info" },
-  PUBLISHED: { label: m.submission_status_published, variant: "success" },
-  REJECTED: { label: m.submission_status_rejected, variant: "error" },
-}
 const styles = stylex.create({
   cover: {
     flexShrink: 0,

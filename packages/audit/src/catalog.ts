@@ -94,6 +94,9 @@ export const mediaAudit = defineAuditCatalog("media", {
   RESTORE: { target: "media", severity: "high" },
   FLAG: { target: "media", severity: "high", requiresChanges: true, requiresReason: true },
   REINDEX: { target: "media", severity: "low" },
+  UPDATE_MANY: { severity: "medium" },
+  DELETE_MANY: { severity: "high" },
+  RESTORE_MANY: { severity: "high" },
 })
 
 export const coverAudit = defineAuditCatalog("media.cover", {
@@ -101,12 +104,16 @@ export const coverAudit = defineAuditCatalog("media.cover", {
   UPDATE: { target: "cover", severity: "medium", requiresChanges: true },
   DELETE: { target: "cover", severity: "high" },
   SET_MAIN: { target: "cover", severity: "medium" },
+  UPDATE_MANY: { severity: "medium" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const bannerAudit = defineAuditCatalog("media.banner", {
   CREATE: { target: "media", severity: "medium" },
   UPDATE: { target: "banner", severity: "medium", requiresChanges: true },
   DELETE: { target: "banner", severity: "high" },
+  UPDATE_MANY: { severity: "medium" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const mediaSuggestionAudit = defineAuditCatalog("media.suggestion", {
@@ -135,6 +142,8 @@ export const chapterAudit = defineAuditCatalog("chapter", {
   WITHDRAW: { target: "chapter", severity: "low" },
   PAGES_REORDER: { target: "chapter", severity: "low" },
   PUBLISH: { target: "chapter", severity: "medium" },
+  UPDATE_MANY: { severity: "medium" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const chapterReviewAudit = defineAuditCatalog("chapter.review", {

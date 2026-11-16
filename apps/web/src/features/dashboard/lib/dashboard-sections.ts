@@ -22,6 +22,11 @@ import {
   Users,
 } from "@taiyomoe/ui/components/icons"
 import type { AppSidebarSection } from "@/components/shell/app-sidebar"
+import {
+  canOpenChapters,
+  canOpenImages,
+  canOpenMedias,
+} from "@/features/catalog/lib/catalog-access"
 import { m } from "@/paraglide/messages"
 
 type DashboardItem = AppSidebarSection["items"][number] & {
@@ -30,7 +35,6 @@ type DashboardItem = AppSidebarSection["items"][number] & {
 
 type DashboardSection = Omit<AppSidebarSection, "items"> & { items: DashboardItem[] }
 
-const ANY_CHAPTER = { uploaderId: "", status: "PUBLISHED", groupIds: [] } as const
 const ANOTHER_USER = { id: "", role: "USER" } as const
 
 export const DASHBOARD_SECTIONS: DashboardSection[] = [
@@ -112,23 +116,29 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/suggestions",
         visible: (can) => can("mediaSuggestion.review"),
       },
-      { label: m.dashboard_nav_media, icon: Library, visible: (can) => can("media.update") },
+      {
+        label: m.dashboard_nav_media,
+        icon: Library,
+        to: "/dashboard/medias",
+        visible: canOpenMedias,
+      },
       {
         label: m.dashboard_nav_chapters,
         icon: ListNumbered,
-        visible: (can) => can("chapter.update", ANY_CHAPTER),
+        to: "/dashboard/chapters",
+        visible: canOpenChapters,
       },
       {
         label: m.dashboard_nav_covers,
         icon: Image,
         to: "/dashboard/covers",
-        visible: (can) => can("media.update"),
+        visible: canOpenImages,
       },
       {
         label: m.dashboard_nav_banners,
         icon: Banner,
         to: "/dashboard/banners",
-        visible: (can) => can("media.update"),
+        visible: canOpenImages,
       },
       { label: m.dashboard_nav_tags, icon: Tag, visible: (can) => can("media.update") },
     ],

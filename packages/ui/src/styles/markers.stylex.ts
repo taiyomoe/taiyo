@@ -17,3 +17,5 @@ export const menuSwitchItemMarker: Marker = stylex.defineMarker()
 export const drawerSwitchItemMarker: Marker = stylex.defineMarker()
 
 export const switchRootMarker: Marker = stylex.defineMarker()
+
+export const tableRowMarker: Marker = stylex.defineMarker()

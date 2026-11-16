@@ -16,7 +16,7 @@ export function ManageImagesLink({
       render={
         <Link
           search={{ mediaId }}
-          to={kind === "covers" ? "/dashboard/covers" : "/dashboard/banners"}
+          to={kind === "covers" ? "/dashboard/covers/upload" : "/dashboard/banners/upload"}
         />
       }
       size="sm"

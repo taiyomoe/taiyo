@@ -6,6 +6,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { escapeLike } from "../utils/escape-like"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 import { isBannedSql, managedUserSchema } from "../utils/user-moderation"
@@ -57,7 +58,7 @@ export const listUsersHandler = new Hono().get(
   async (c) => {
     const { actor, db } = c.var
     const { page, perPage, search, role, banned } = c.var.query
-    const pattern = search === undefined ? null : `%${search.replace(/[\\%_]/g, "\\$&")}%`
+    const pattern = search === undefined ? null : `%${escapeLike(search)}%`
     const base = db
       .selectFrom("users")
       .select([
