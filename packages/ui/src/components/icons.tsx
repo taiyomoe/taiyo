@@ -130,6 +130,11 @@ import {
   MailValidation01Icon,
   PasswordValidationIcon,
   Unlink04Icon,
+  BookOpen01Icon,
+  HourglassIcon,
+  RepeatIcon,
+  PauseCircleIcon,
+  CancelCircleIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -468,3 +473,13 @@ export const PasswordValidation: (props: IconProps) => React.ReactElement =
   icon(PasswordValidationIcon)
 
 export const Unlink: (props: IconProps) => React.ReactElement = icon(Unlink04Icon)
+
+export const BookOpen: (props: IconProps) => React.ReactElement = icon(BookOpen01Icon)
+
+export const Hourglass: (props: IconProps) => React.ReactElement = icon(HourglassIcon)
+
+export const Repeat: (props: IconProps) => React.ReactElement = icon(RepeatIcon)
+
+export const PauseCircle: (props: IconProps) => React.ReactElement = icon(PauseCircleIcon)
+
+export const CancelCircle: (props: IconProps) => React.ReactElement = icon(CancelCircleIcon)

@@ -49,6 +49,8 @@ export function PagePagination({
       <PaginationContent sx={styles.content}>
         <PaginationItem {...stylex.props(page <= 1 && styles.disabled)}>
           <PaginationPrevious
+            aria-label={m.pagination_previous_page()}
+            label={m.pagination_previous()}
             aria-disabled={page <= 1 || undefined}
             render={page <= 1 ? <span /> : renderLink(page - 1)}
             sx={styles.edge}
@@ -74,6 +76,8 @@ export function PagePagination({
         )}
         <PaginationItem {...stylex.props(page >= pageCount && styles.disabled)}>
           <PaginationNext
+            aria-label={m.pagination_next_page()}
+            label={m.pagination_next()}
             aria-disabled={page >= pageCount || undefined}
             render={page >= pageCount ? <span /> : renderLink(page + 1)}
             sx={styles.edge}

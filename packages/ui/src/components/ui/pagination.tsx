@@ -160,8 +160,9 @@ export function PaginationLink({
 export function PaginationPrevious({
   className,
   sx,
+  label = "Previous",
   ...props
-}: React.ComponentProps<typeof PaginationLink>): React.ReactElement {
+}: React.ComponentProps<typeof PaginationLink> & { label?: string }): React.ReactElement {
   const iconProps = stylex.props(styles.edgeIcon, styles.previousIcon)
   const labelProps = stylex.props(styles.edgeLabel)
 
@@ -175,7 +176,7 @@ export function PaginationPrevious({
     >
       <ChevronLeft className={iconProps.className} style={iconProps.style} />
       <span className={labelProps.className} style={labelProps.style}>
-        Previous
+        {label}
       </span>
     </PaginationLink>
   )
@@ -184,8 +185,9 @@ export function PaginationPrevious({
 export function PaginationNext({
   className,
   sx,
+  label = "Next",
   ...props
-}: React.ComponentProps<typeof PaginationLink>): React.ReactElement {
+}: React.ComponentProps<typeof PaginationLink> & { label?: string }): React.ReactElement {
   const iconProps = stylex.props(styles.edgeIcon, styles.nextIcon)
   const labelProps = stylex.props(styles.edgeLabel)
 
@@ -198,7 +200,7 @@ export function PaginationNext({
       {...props}
     >
       <span className={labelProps.className} style={labelProps.style}>
-        Next
+        {label}
       </span>
       <ChevronRight className={iconProps.className} style={iconProps.style} />
     </PaginationLink>

@@ -1,20 +1,15 @@
 import * as stylex from "@stylexjs/stylex"
-import { Bookmark, Check } from "@taiyomoe/ui/components/icons"
+import { Bookmark } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import {
-  Menu,
-  MenuCheckboxItem,
-  MenuItem,
-  MenuPopup,
-  MenuRadioGroup,
-  MenuRadioItem,
-  MenuSeparator,
-  MenuTrigger,
-} from "@taiyomoe/ui/components/ui/menu"
+import { Menu, MenuPopup, MenuTrigger } from "@taiyomoe/ui/components/ui/menu"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { type LibraryStatus, useSetLibraryStatus } from "@/features/media/api/library"
+import type { LibraryStatus } from "@/features/library/api/library"
+import { LibraryStatusMenuItems } from "@/features/library/components/library-status-menu-items"
+import {
+  LIBRARY_STATUS_ICONS,
+  LIBRARY_STATUS_LABELS,
+} from "@/features/library/lib/library-statuses"
 import { mediaSidebarStyles } from "@/features/media/components/media-sidebar/media-sidebar-styles"
-import { LIBRARY_STATUSES, LIBRARY_STATUS_LABELS } from "@/features/media/lib/media-labels"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -26,7 +21,6 @@ const styles = stylex.create({
     minWidth: "14rem",
   },
 })
-const SILENT_STATUSES: ReadonlySet<LibraryStatus> = new Set(["DROPPED", "COMPLETED"])
 
 export function LibraryButton({
   mediaId,
@@ -37,7 +31,7 @@ export function LibraryButton({
   notify: boolean
   status: LibraryStatus | null
 }) {
-  const setStatus = useSetLibraryStatus()
+  const Icon = status === null ? Bookmark : LIBRARY_STATUS_ICONS[status]
 
   return (
     <Menu>
@@ -50,47 +44,11 @@ export function LibraryButton({
           />
         }
       >
-        {status === null ? <Bookmark /> : <Check />}
+        <Icon />
         {status === null ? m.media_library_add() : LIBRARY_STATUS_LABELS[status]()}
       </MenuTrigger>
       <MenuPopup align="center" sx={styles.menu}>
-        <MenuRadioGroup
-          onValueChange={(value: LibraryStatus) => {
-            setStatus.mutate({ mediaId, status: value })
-          }}
-          value={status}
-        >
-          {LIBRARY_STATUSES.map((value) => (
-            <MenuRadioItem key={value} value={value}>
-              {LIBRARY_STATUS_LABELS[value]()}
-            </MenuRadioItem>
-          ))}
-        </MenuRadioGroup>
-        {status === null ? null : (
-          <>
-            <MenuSeparator />
-            <MenuCheckboxItem
-              checked={notify && !SILENT_STATUSES.has(status)}
-              closeOnClick={false}
-              disabled={SILENT_STATUSES.has(status)}
-              onCheckedChange={(checked) => {
-                setStatus.mutate({ mediaId, status, notify: checked })
-              }}
-              variant="switch"
-            >
-              {m.media_library_notify()}
-            </MenuCheckboxItem>
-            <MenuSeparator />
-            <MenuItem
-              onClick={() => {
-                setStatus.mutate({ mediaId, status: null })
-              }}
-              variant="destructive"
-            >
-              {m.media_library_remove()}
-            </MenuItem>
-          </>
-        )}
+        <LibraryStatusMenuItems mediaId={mediaId} notify={notify} status={status} />
       </MenuPopup>
     </Menu>
   )
