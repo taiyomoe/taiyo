@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type {
   ContentRating,
   Flag,
@@ -31,5 +30,3 @@ export type Media = {
   creatorId: string
   deleterId: string | null
 }
-
-export type NewMedia = Insertable<Media>

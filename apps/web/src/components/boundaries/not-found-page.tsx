@@ -35,7 +35,7 @@ type NotFoundProps = {
   description: string
   back: {
     label: string
-    to: "/" | "/groups" | "/lists" | "/titles" | "/dashboard/groups" | "/dashboard/suggestions"
+    to: "/" | "/groups" | "/lists" | "/media" | "/dashboard/groups" | "/dashboard/suggestions"
   }
 }
 

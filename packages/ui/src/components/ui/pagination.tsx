@@ -162,16 +162,13 @@ export function PaginationPrevious({
   sx,
   label = "Previous",
   ...props
-}: React.ComponentProps<typeof PaginationLink> & {
-  /** The visible text, translated by the caller. */
-  label?: string
-}): React.ReactElement {
+}: React.ComponentProps<typeof PaginationLink> & { label?: string }): React.ReactElement {
   const iconProps = stylex.props(styles.edgeIcon, styles.previousIcon)
   const labelProps = stylex.props(styles.edgeLabel)
 
   return (
     <PaginationLink
-      aria-label={label}
+      aria-label="Go to previous page"
       className={className}
       size="default"
       sx={[styles.edgeLink, sx]}
@@ -190,16 +187,13 @@ export function PaginationNext({
   sx,
   label = "Next",
   ...props
-}: React.ComponentProps<typeof PaginationLink> & {
-  /** The visible text, translated by the caller. */
-  label?: string
-}): React.ReactElement {
+}: React.ComponentProps<typeof PaginationLink> & { label?: string }): React.ReactElement {
   const iconProps = stylex.props(styles.edgeIcon, styles.nextIcon)
   const labelProps = stylex.props(styles.edgeLabel)
 
   return (
     <PaginationLink
-      aria-label={label}
+      aria-label="Go to next page"
       className={className}
       size="default"
       sx={[styles.edgeLink, sx]}

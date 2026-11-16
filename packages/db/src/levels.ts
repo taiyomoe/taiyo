@@ -1,4 +1,4 @@
-export const READER_RANKS = [
+const READER_RANKS = [
   { level: 1, key: "newcomer" },
   { level: 5, key: "pageTurner" },
   { level: 10, key: "apprentice" },

@@ -5,7 +5,7 @@ import { layout } from "@/components/layout/layout.stylex"
 export const featuredStyles = stylex.create({
   root: {
     position: "relative",
-    marginTop: { default: "calc(-1 * var(--navbar-height))", [breakpoints.md]: 0 },
+    marginTop: "calc(-1 * var(--navbar-height))",
   },
   slide: {
     overflow: "hidden",
@@ -35,7 +35,7 @@ export const featuredStyles = stylex.create({
     paddingBottom: { default: "2.25rem", [breakpoints.md]: "2.5rem" },
     paddingTop: {
       default: "calc(var(--navbar-height) + 1.25rem)",
-      [breakpoints.md]: "2.5rem",
+      [breakpoints.md]: "calc(var(--navbar-height) + 2.5rem)",
     },
   },
   cover: {

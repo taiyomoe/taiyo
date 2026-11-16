@@ -80,13 +80,6 @@ export const radius = stylex.defineVars({
   full: "9999px",
 })
 
-export const spacing = stylex.defineVars({
-  sm: "0.5rem",
-  md: "1rem",
-  lg: "1.5rem",
-  xl: "2rem",
-})
-
 export const text = stylex.defineVars({
   base: "1rem",
   lg: "1.125rem",

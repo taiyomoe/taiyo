@@ -15,6 +15,7 @@ import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DmcaRouteImport } from './routes/dmca'
 import { Route as LatestRouteImport } from './routes/latest'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RecentlyAddedRouteImport } from './routes/recently-added'
@@ -44,6 +45,7 @@ import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
 import { Route as ListsIndexRouteImport } from './routes/lists/index'
 import { Route as ListsListIdRouteImport } from './routes/lists/$listId'
 import { Route as ListsNewRouteImport } from './routes/lists/new'
+import { Route as MediaIndexRouteImport } from './routes/media/index'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
 import { Route as NotificationsOpenRouteImport } from './routes/notifications_.open'
 import { Route as USplatRouteImport } from './routes/u/$'
@@ -92,6 +94,11 @@ const DmcaRoute = DmcaRouteImport.update({
 const LatestRoute = LatestRouteImport.update({
   id: '/latest',
   path: '/latest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -239,6 +246,11 @@ const ListsNewRoute = ListsNewRouteImport.update({
   path: '/lists/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaIndexRoute = MediaIndexRouteImport.update({
+  id: '/media/',
+  path: '/media/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MediaMediaIdRoute = MediaMediaIdRouteImport.update({
   id: '/media/$mediaId',
   path: '/media/$mediaId',
@@ -344,6 +356,7 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
@@ -377,6 +390,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
   '/lists/': typeof ListsIndexRoute
+  '/media/': typeof MediaIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
   '/dashboard/banners/upload': typeof DashboardBannersUploadRoute
   '/dashboard/covers/upload': typeof DashboardCoversUploadRoute
@@ -399,6 +413,7 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
@@ -432,6 +447,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/groups': typeof GroupsIndexRoute
   '/lists': typeof ListsIndexRoute
+  '/media': typeof MediaIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
   '/dashboard/banners/upload': typeof DashboardBannersUploadRoute
   '/dashboard/covers/upload': typeof DashboardCoversUploadRoute
@@ -456,6 +472,7 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
@@ -489,6 +506,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
   '/lists/': typeof ListsIndexRoute
+  '/media/': typeof MediaIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
   '/dashboard/banners/upload': typeof DashboardBannersUploadRoute
   '/dashboard/covers/upload': typeof DashboardCoversUploadRoute
@@ -514,6 +532,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dmca'
     | '/latest'
+    | '/library'
     | '/notifications'
     | '/privacy'
     | '/recently-added'
@@ -547,6 +566,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/groups/'
     | '/lists/'
+    | '/media/'
     | '/chapters/$chapterId/source'
     | '/dashboard/banners/upload'
     | '/dashboard/covers/upload'
@@ -569,6 +589,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dmca'
     | '/latest'
+    | '/library'
     | '/notifications'
     | '/privacy'
     | '/recently-added'
@@ -602,6 +623,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/groups'
     | '/lists'
+    | '/media'
     | '/chapters/$chapterId/source'
     | '/dashboard/banners/upload'
     | '/dashboard/covers/upload'
@@ -625,6 +647,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dmca'
     | '/latest'
+    | '/library'
     | '/notifications'
     | '/privacy'
     | '/recently-added'
@@ -658,6 +681,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/groups/'
     | '/lists/'
+    | '/media/'
     | '/chapters/$chapterId/source'
     | '/dashboard/banners/upload'
     | '/dashboard/covers/upload'
@@ -682,6 +706,7 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   DmcaRoute: typeof DmcaRoute
   LatestRoute: typeof LatestRoute
+  LibraryRoute: typeof LibraryRoute
   NotificationsRoute: typeof NotificationsRoute
   PrivacyRoute: typeof PrivacyRoute
   RecentlyAddedRoute: typeof RecentlyAddedRoute
@@ -698,6 +723,7 @@ export interface RootRouteChildren {
   UsersUsernameRoute: typeof UsersUsernameRoute
   GroupsIndexRoute: typeof GroupsIndexRoute
   ListsIndexRoute: typeof ListsIndexRoute
+  MediaIndexRoute: typeof MediaIndexRoute
   ChaptersChapterIdSourceRoute: typeof ChaptersChapterIdSourceRoute
   ListsListIdEditRoute: typeof ListsListIdEditRoute
   MediaMediaIdEditRoute: typeof MediaMediaIdEditRoute
@@ -747,6 +773,13 @@ declare module '@tanstack/react-router' {
       path: '/latest'
       fullPath: '/latest'
       preLoaderRoute: typeof LatestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -950,6 +983,13 @@ declare module '@tanstack/react-router' {
       path: '/lists/new'
       fullPath: '/lists/new'
       preLoaderRoute: typeof ListsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media/': {
+      id: '/media/'
+      path: '/media'
+      fullPath: '/media/'
+      preLoaderRoute: typeof MediaIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/media/$mediaId': {
@@ -1169,6 +1209,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   DmcaRoute: DmcaRoute,
   LatestRoute: LatestRoute,
+  LibraryRoute: LibraryRoute,
   NotificationsRoute: NotificationsRoute,
   PrivacyRoute: PrivacyRoute,
   RecentlyAddedRoute: RecentlyAddedRoute,
@@ -1185,6 +1226,7 @@ const rootRouteChildren: RootRouteChildren = {
   UsersUsernameRoute: UsersUsernameRoute,
   GroupsIndexRoute: GroupsIndexRoute,
   ListsIndexRoute: ListsIndexRoute,
+  MediaIndexRoute: MediaIndexRoute,
   ChaptersChapterIdSourceRoute: ChaptersChapterIdSourceRoute,
   ListsListIdEditRoute: ListsListIdEditRoute,
   MediaMediaIdEditRoute: MediaMediaIdEditRoute,

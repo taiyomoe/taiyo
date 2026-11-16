@@ -351,10 +351,16 @@ export const createAuth = ({
     databaseHooks: {
       user: {
         create: {
-          before: async (user, ctx) =>
-            isUnverifiedSocialSignUp(user, ctx?.path)
-              ? false
-              : createBeforeUserCreatedHook({ db })(user),
+          before: async (user, ctx) => {
+            if (isUnverifiedSocialSignUp(user, ctx?.path)) {
+              throw new APIError("FORBIDDEN", {
+                code: "SOCIAL_EMAIL_NOT_VERIFIED",
+                message: "The provider hasn't verified this email",
+              })
+            }
+
+            return createBeforeUserCreatedHook({ db })(user)
+          },
           after: async ({ id }) => {
             await db.insertInto("userProfiles").values({ userId: id }).execute()
           },

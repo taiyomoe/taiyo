@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type PageBookmark = {
@@ -8,5 +7,3 @@ export type PageBookmark = {
   pageId: string
   createdAt: Generated<Timestamp>
 }
-
-export type NewPageBookmark = Insertable<PageBookmark>

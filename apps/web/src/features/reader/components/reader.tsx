@@ -43,6 +43,9 @@ import { chapterQueryOptions } from "@/features/uploads/api/submissions"
 
 const IDLE_TIMEOUT = 2500
 const KEPT_PREVIOUS_CHAPTERS = 1
+// The visible page can flicker between two neighbours while a strip settles: only a page that
+// stays put lands in the address bar, so the history and the analytics see one change.
+const PAGE_URL_DELAY = 500
 const ZOOM_STEP = 1.5
 
 type ReaderSegment = ReaderChapterDetail & { pages: NonNullable<ReaderChapterDetail["pages"]> }
@@ -386,13 +389,19 @@ export function Reader({
   }, [])
 
   useEffect(() => {
-    void navigate({
-      to: "/chapters/$chapterId",
-      params: { chapterId: chapter.id },
-      search: { page: navigation.page === 0 ? undefined : navigation.page + 1 },
-      replace: true,
-      resetScroll: false,
-    })
+    const timeout = setTimeout(() => {
+      void navigate({
+        to: "/chapters/$chapterId",
+        params: { chapterId: chapter.id },
+        search: { page: navigation.page === 0 ? undefined : navigation.page + 1 },
+        replace: true,
+        resetScroll: false,
+      })
+    }, PAGE_URL_DELAY)
+
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [chapter.id, navigate, navigation.page])
 
   useLayoutEffect(() => {

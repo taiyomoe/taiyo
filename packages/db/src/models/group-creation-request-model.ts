@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { GroupOwnershipRequestStatus } from "../constants"
 import type { Generated, Timestamp } from "../types"
 
@@ -16,5 +15,3 @@ export type GroupCreationRequest = {
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
 }
-
-export type NewGroupCreationRequest = Insertable<GroupCreationRequest>

@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { TaskStatus, TaskType } from "../constants"
 import type { Generated, Json, Timestamp } from "../types"
 
@@ -11,5 +10,3 @@ export type Task = {
   payload: Json
   sessionId: string
 }
-
-export type NewTask = Insertable<Task>

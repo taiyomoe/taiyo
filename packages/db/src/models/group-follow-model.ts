@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type GroupFollow = {
@@ -6,5 +5,3 @@ export type GroupFollow = {
   groupId: string
   createdAt: Generated<Timestamp>
 }
-
-export type NewGroupFollow = Insertable<GroupFollow>

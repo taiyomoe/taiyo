@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type BlockedCommentImage = {
@@ -11,5 +10,3 @@ export type BlockedCommentImage = {
   blockerId: string | null
   createdAt: Generated<Timestamp>
 }
-
-export type NewBlockedCommentImage = Insertable<BlockedCommentImage>

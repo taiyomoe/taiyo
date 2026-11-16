@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type UserListItem = {
@@ -7,5 +6,3 @@ export type UserListItem = {
   position: number
   addedAt: Generated<Timestamp>
 }
-
-export type NewUserListItem = Insertable<UserListItem>

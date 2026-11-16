@@ -15,7 +15,7 @@ import { useAdvancedSearch } from "@/features/advanced-search/hooks/use-advanced
 import { countActiveFilters } from "@/features/advanced-search/lib/advanced-search"
 import { m } from "@/paraglide/messages"
 
-const routeApi = getRouteApi("/titles")
+const routeApi = getRouteApi("/media/")
 const styles = stylex.create({
   page: {
     gap: "1.25rem",

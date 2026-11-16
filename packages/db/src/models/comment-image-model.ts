@@ -1,4 +1,4 @@
-import type { ColumnType, Insertable } from "kysely"
+import type { ColumnType } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type CommentImage = {
@@ -15,5 +15,3 @@ export type CommentImage = {
   removedAt: Timestamp | null
   removerId: string | null
 }
-
-export type NewCommentImage = Insertable<CommentImage>

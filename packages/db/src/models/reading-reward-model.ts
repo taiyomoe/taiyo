@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type ReadingReward = {
@@ -11,5 +10,3 @@ export type ReadingReward = {
   points: number
   createdAt: Generated<Timestamp>
 }
-
-export type NewReadingReward = Insertable<ReadingReward>

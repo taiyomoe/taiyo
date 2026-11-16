@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type FeaturedMedia = {
@@ -7,5 +6,3 @@ export type FeaturedMedia = {
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
 }
-
-export type NewFeaturedMedia = Insertable<FeaturedMedia>

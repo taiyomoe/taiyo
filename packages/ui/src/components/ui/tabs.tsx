@@ -26,7 +26,7 @@ const styles = stylex.create({
       '[data-orientation="vertical"]': "column",
       default: null,
     },
-    justifyContent: "center",
+    justifyContent: "safe center",
     position: "relative",
     zIndex: 0,
     width: "fit-content",

@@ -1,6 +1,5 @@
 import {
   Bookmark,
-  Check,
   Copy,
   Edit,
   ExternalLink,
@@ -20,11 +19,15 @@ import type {
   TitleEntity,
   UserEntity,
 } from "@/features/command-palette/lib/palette-command"
-import type { LibraryStatus } from "@/features/media/api/library"
+import type { LibraryStatus } from "@/features/library/api/library"
 import { entityRoute } from "@/features/command-palette/lib/entity-routes"
 import { entityLabel } from "@/features/command-palette/lib/palette-command"
-import { useSetLibraryStatus } from "@/features/media/api/library"
-import { LIBRARY_STATUSES, LIBRARY_STATUS_LABELS } from "@/features/media/lib/media-labels"
+import { useSetLibraryStatus } from "@/features/library/api/library"
+import {
+  LIBRARY_STATUS_ICONS,
+  LIBRARY_STATUS_LABELS,
+  LIBRARY_STATUSES,
+} from "@/features/library/lib/library-statuses"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
 import { usePermissions } from "@/lib/permissions"
@@ -79,7 +82,7 @@ export function useEntityActions() {
       id: `title.library.${value}`,
       label: LIBRARY_STATUS_LABELS[value](),
       section: "context",
-      icon: Bookmark,
+      icon: LIBRARY_STATUS_ICONS[value],
       checked: status === value,
       run: {
         type: "perform",
@@ -158,7 +161,10 @@ export function useEntityActions() {
             ? addLabel
             : m.palette_action_library_change(),
         section: "context",
-        icon: libraryStatus === undefined || libraryStatus === null ? Bookmark : Check,
+        icon:
+          libraryStatus === undefined || libraryStatus === null
+            ? Bookmark
+            : LIBRARY_STATUS_ICONS[libraryStatus],
         keywords: ["library", "follow", "bookmark", "reading", "plan", "status", "save"],
         ...(libraryStatus === undefined || libraryStatus === null
           ? {}

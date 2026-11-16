@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { StaffRole } from "../constants"
 
 export type MediaStaff = {
@@ -6,5 +5,3 @@ export type MediaStaff = {
   staffId: string
   role: StaffRole
 }
-
-export type NewMediaStaff = Insertable<MediaStaff>

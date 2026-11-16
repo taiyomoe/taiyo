@@ -1,4 +1,3 @@
-import type { Insertable } from "kysely"
 import type { Generated, Timestamp } from "../types"
 
 export type CommentRevision = {
@@ -7,5 +6,3 @@ export type CommentRevision = {
   content: string
   createdAt: Timestamp
 }
-
-export type NewCommentRevision = Insertable<CommentRevision>

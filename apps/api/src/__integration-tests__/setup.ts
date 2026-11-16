@@ -29,17 +29,53 @@ const getDbUrl = (name: string) => {
   return url.toString()
 }
 const sanitize = (raw: string) => raw.replace(/[^a-z0-9]/gi, "_").toLowerCase()
-const adminClient = new pg.Client({ connectionString: getDbUrl("postgres") })
-const adminClientReady = adminClient.connect()
+const adminPool = new pg.Pool({ connectionString: getDbUrl("postgres"), max: 8 })
 const sharedS3 = getS3Client()
 const sharedMeili = getMeiliClient()
+const fileDatabases: string[] = []
 
+// Each DROP DATABASE waits for a checkpoint: dropping the file's databases together shares one.
 afterAll(async () => {
-  await adminClientReady
-  await adminClient.end()
+  await Promise.all(
+    fileDatabases.map((name) => adminPool.query(`DROP DATABASE IF EXISTS "${name}" WITH (FORCE)`)),
+  )
+  await adminPool.end()
 })
 
+// Most tests never reach S3: the bucket is created right before the first command that needs it.
+const getTestS3 = (bucket: string) => {
+  const s3 = getS3Client()
+  let created: Promise<unknown> | undefined
+
+  s3.middlewareStack.add(
+    (next) => async (args) => {
+      created ??= sharedS3.send(new CreateBucketCommand({ Bucket: bucket }))
+      await created
+
+      return next(args)
+    },
+    { step: "initialize" },
+  )
+
+  return { s3, getCreated: () => created }
+}
+const emptyBucket = async (bucket: string) => {
+  const listed = await sharedS3.send(new ListObjectsV2Command({ Bucket: bucket }))
+
+  if (listed.Contents !== undefined && listed.Contents.length > 0) {
+    await sharedS3.send(
+      new DeleteObjectsCommand({
+        Bucket: bucket,
+        Delete: { Objects: listed.Contents.map(({ Key }) => ({ Key: defined(Key) })) },
+      }),
+    )
+  }
+
+  await sharedS3.send(new DeleteBucketCommand({ Bucket: bucket }))
+}
+
 type Fixtures = {
+  search: boolean
   services: Services
   app: Hono
   mails: GroupInvitationMail[]
@@ -48,25 +84,28 @@ type Fixtures = {
 const sentMails = new WeakMap<Services, GroupInvitationMail[]>()
 
 export const test = baseTest.extend<Fixtures>({
-  services: async ({ task }, use) => {
-    await adminClientReady
-
+  // Meilisearch runs its tasks one at a time: only the files that read the index opt in.
+  search: false,
+  services: async ({ task, search }, use) => {
     const dbName = `integration_${sanitize(task.id)}`
     const bucketName = `taiyo-test-${sanitize(task.id).replace(/_/g, "-")}`
     const mediasIndex = `medias_${sanitize(task.id)}`
 
-    await adminClient.query(`DROP DATABASE IF EXISTS "${dbName}"`)
-    await adminClient.query(`CREATE DATABASE "${dbName}" WITH TEMPLATE "${TEMPLATE_DB}"`)
+    await adminPool.query(`DROP DATABASE IF EXISTS "${dbName}"`)
+    await adminPool.query(`CREATE DATABASE "${dbName}" WITH TEMPLATE "${TEMPLATE_DB}"`)
+    fileDatabases.push(dbName)
 
     const db = getDb(getDbUrl(dbName))
+    const { s3, getCreated } = getTestS3(bucketName)
 
-    await sharedS3.send(new CreateBucketCommand({ Bucket: bucketName }))
-    await initMediasIndex({ db, meili: sharedMeili, mediasIndex })
+    if (search) {
+      await initMediasIndex({ db, meili: sharedMeili, mediasIndex })
+    }
 
     const mails: GroupInvitationMail[] = []
     const services: Services = {
       db,
-      s3: sharedS3,
+      s3,
       s3Bucket: bucketName,
       meili: sharedMeili,
       mediasIndex,
@@ -90,21 +129,17 @@ export const test = baseTest.extend<Fixtures>({
     await use(services)
 
     await db.destroy()
-    await adminClient.query(`DROP DATABASE IF EXISTS "${dbName}"`)
+    s3.destroy()
 
-    const listed = await sharedS3.send(new ListObjectsV2Command({ Bucket: bucketName }))
-
-    if (listed.Contents !== undefined && listed.Contents.length > 0) {
-      await sharedS3.send(
-        new DeleteObjectsCommand({
-          Bucket: bucketName,
-          Delete: { Objects: listed.Contents.map(({ Key }) => ({ Key: defined(Key) })) },
-        }),
-      )
+    if (getCreated() !== undefined) {
+      await getCreated()
+      await emptyBucket(bucketName)
     }
 
-    await sharedS3.send(new DeleteBucketCommand({ Bucket: bucketName }))
-    await sharedMeili.deleteIndex(mediasIndex).catch(() => {})
+    // Elsewhere the index never exists: without a primary key, Meilisearch refuses to create it.
+    if (search) {
+      await sharedMeili.deleteIndex(mediasIndex)
+    }
   },
   app: async ({ services }, use) => {
     await use(createApp(services))

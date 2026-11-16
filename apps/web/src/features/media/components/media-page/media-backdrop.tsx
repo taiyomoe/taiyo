@@ -7,10 +7,13 @@ const styles = stylex.create({
     pointerEvents: "none",
     position: "absolute",
     zIndex: -1,
-    height: { [breakpoints.lg]: "26rem", default: "18rem" },
+    height: {
+      [breakpoints.lg]: "calc(26rem + var(--navbar-height))",
+      default: "calc(18rem + var(--navbar-height))",
+    },
     left: 0,
     right: 0,
-    top: 0,
+    top: "calc(-1 * var(--navbar-height))",
   },
   backdropImage: {
     filter: "blur(6px) saturate(120%)",
