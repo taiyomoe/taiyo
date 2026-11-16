@@ -27,8 +27,25 @@ permissions:
   contents: read
 
 jobs:
+  # The Release workflow merges each release into main as "chore: release vX.Y.Z".
+  version:
+    name: Version
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.tag.outputs.value }}
+    steps:
+      - id: tag
+        env:
+          MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          if [[ "$MESSAGE" =~ ^chore:\ release\ (v[0-9]+\.[0-9]+\.[0-9]+[^[:space:]]*) ]]; then
+            echo "value=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
     name: ${{ matrix.app }}
+    needs: version
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -93,6 +110,7 @@ jobs:
           tags: |
             type=sha,prefix=sha-,format=short
             type=ref,event=branch
+            type=raw,value=${{ needs.version.outputs.tag }},enable=${{ needs.version.outputs.tag != '' }}
 
       - id: build-args
         name: Build arguments
@@ -147,7 +165,7 @@ jobs:
   # as soon as the new pods are ready.
   release:
     name: Release to the cluster
-    needs: build
+    needs: [version, build]
     if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -166,6 +184,8 @@ jobs:
           ssh-key: ${{ secrets.TAIYO_DEPLOY_KEY }}
 
       - name: Point the release at this commit
+        env:
+          VERSION: ${{ needs.version.outputs.tag }}
         run: |
           # Runs of successive pushes can finish out of order: only the head of main
           # releases, so an older run never overwrites a newer tag.
@@ -184,9 +204,31 @@ jobs:
 
           git config user.name "taiyo-release"
           git config user.email "taiyo-release@users.noreply.github.com"
-          git commit -am "chore: release taiyo ${tag}" -m "From ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+          git commit -am "chore: release taiyo ${VERSION:-$tag}" -m "From ${GITHUB_REPOSITORY}@${GITHUB_SHA} (${tag})"
           for _ in 1 2 3; do
             git push origin HEAD:main && exit 0
             git pull --rebase origin main
           done
           exit 1
+
+  announce:
+    name: Announce on Discord
+    needs: [version, release]
+    if: ${{ needs.version.outputs.tag != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup
+
+      - run: node packages/scripts/src/release/post-discord-announcement.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ needs.version.outputs.tag }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_ROLE_ID: "1189014041813852170"
