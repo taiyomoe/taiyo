@@ -88,6 +88,7 @@ export const buildRules = (actor: Actor | null) => {
       flag: is("MODERATOR", "ADMIN"),
       reindex: is("ADMIN"),
       syncMangaDex: is("UPLOADER", "ADMIN"),
+      feature: is("ADMIN"),
     },
     mediaSuggestion: {
       review: reviewsSuggestions,

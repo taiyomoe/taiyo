@@ -6,6 +6,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { checkGroupCreationRequest } from "../middlewares/check-group-creation-request-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { cancelGroupCreationRequest } from "../utils/group-creation-requests"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -51,16 +52,10 @@ export const cancelGroupCreationRequestHandler = new Hono().delete(
       return c.fail("GROUP_CREATION_REQUEST_NOT_FOUND")
     }
 
-    const transitioned = await db
-      .updateTable("groupCreationRequests")
-      .set({ status: "CANCELLED" })
-      .where("id", "=", groupCreationRequest.id)
-      .where("status", "=", "PENDING")
-      .returning("id")
-      .executeTakeFirst()
+    const result = await cancelGroupCreationRequest(db, groupCreationRequest.id)
 
-    if (transitioned === undefined) {
-      return c.fail("GROUP_CREATION_REQUEST_NOT_PENDING")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
 
     return c.ok({ id: groupCreationRequest.id })

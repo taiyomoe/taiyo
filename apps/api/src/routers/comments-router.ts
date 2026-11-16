@@ -7,6 +7,7 @@ import { deleteCommentHandler } from "../handlers/delete-comment-handler"
 import { deleteCommentsHandler } from "../handlers/delete-comments-handler"
 import { getCommentContextHandler } from "../handlers/get-comment-context-handler"
 import { listCommentRepliesHandler } from "../handlers/list-comment-replies-handler"
+import { listCommentReportsOfCommentHandler } from "../handlers/list-comment-reports-of-comment-handler"
 import { listCommentRevisionsHandler } from "../handlers/list-comment-revisions-handler"
 import { listCommentsHandler } from "../handlers/list-comments-handler"
 import { listManagedCommentsHandler } from "../handlers/list-managed-comments-handler"
@@ -27,3 +28,4 @@ export const commentsRouter = new Hono()
   .route("/", voteCommentHandler)
   .route("/", listCommentRevisionsHandler)
   .route("/", createCommentReportHandler)
+  .route("/", listCommentReportsOfCommentHandler)

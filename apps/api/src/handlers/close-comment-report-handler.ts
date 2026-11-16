@@ -1,5 +1,4 @@
 import { commentReportAudit } from "@taiyomoe/audit"
-import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -8,17 +7,12 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { closeCommentReports, closeStatusSchema } from "../utils/comment-reports"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the report." }) })
-const bodySchema = z.object({
-  status: z.enum(["RESOLVED", "DISMISSED"]).meta({
-    description:
-      "How to close the report: `RESOLVED` once you acted on it, `DISMISSED` when the comment is fine.",
-    example: "DISMISSED",
-  }),
-})
+const bodySchema = z.object({ status: closeStatusSchema })
 
 export const closeCommentReportHandler = new Hono().patch(
   "/:id",
@@ -77,15 +71,13 @@ export const closeCommentReportHandler = new Hono().patch(
       return c.fail("COMMENT_REPORT_CLOSED")
     }
 
-    const result = await db
-      .updateTable("commentReports")
-      .set({ status, resolverId: user.id, resolvedAt: sql<Date>`CURRENT_TIMESTAMP` })
-      .where("commentId", "=", report.commentId)
-      .where("status", "=", "OPEN")
-      .executeTakeFirst()
+    const closed = await closeCommentReports(db, [report.commentId], {
+      status,
+      resolverId: user.id,
+    })
 
     c.var.audit.set({ target: { commentId: report.commentId, status } })
 
-    return c.ok({ closed: Number(result.numUpdatedRows) })
+    return c.ok({ closed })
   },
 )

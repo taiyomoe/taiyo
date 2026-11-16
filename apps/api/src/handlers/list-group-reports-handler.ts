@@ -13,6 +13,10 @@ const querySchema = paginationQuerySchema.extend({
     description: "Only list reports with this status. Defaults to `PENDING`.",
     example: "PENDING",
   }),
+  reason: z.enum(GROUP_REPORT_REASONS).optional().meta({
+    description: "Only list reports given this reason. Lists every reason when omitted.",
+    example: "STOLEN_WORK",
+  }),
 })
 const itemSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the report." }),
@@ -41,7 +45,7 @@ export const listGroupReportsHandler = new Hono().get(
   describeRoute({
     summary: "List group reports",
     description:
-      "Lists the reports on groups with the given status. Pending reports come oldest first so the queue is worked in order, others newest first. Reports on deleted groups are left out.\n\n**Required roles:** moderator, admin.",
+      "Lists the reports on groups with the given status, and reason when given. Pending reports come oldest first so the queue is worked in order, others newest first. Reports on deleted groups are left out.\n\n**Required roles:** moderator, admin.",
     tags: ["Group reports"],
     responses: {
       200: {
@@ -63,13 +67,14 @@ export const listGroupReportsHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage, status } = c.var.query
+    const { page, perPage, status, reason } = c.var.query
     const base = db
       .selectFrom("groupReports")
       .innerJoin("groups", "groups.id", "groupReports.groupId")
       .innerJoin("users", "users.id", "groupReports.reporterId")
       .where("groupReports.status", "=", status)
       .where("groups.deletedAt", "is", null)
+      .where((eb) => eb.and(reason === undefined ? [] : [eb("groupReports.reason", "=", reason)]))
     const [rows, totalRow] = await Promise.all([
       base
         .select([

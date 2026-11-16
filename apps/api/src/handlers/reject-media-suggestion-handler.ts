@@ -1,5 +1,4 @@
 import { mediaSuggestionAudit } from "@taiyomoe/audit"
-import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -8,6 +7,7 @@ import { checkMediaSuggestion } from "../middlewares/check-media-suggestion-midd
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { rejectSuggestions } from "../utils/media-suggestions"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 
@@ -68,16 +68,10 @@ export const rejectMediaSuggestionHandler = new Hono().post(
       return c.fail("MEDIA_SUGGESTION_NOT_PENDING")
     }
 
-    await db
-      .updateTable("mediaSuggestions")
-      .set({
-        status: "REJECTED",
-        reviewerId: user.id,
-        reviewerNote: c.var.json.note,
-        reviewedAt: sql<Date>`CURRENT_TIMESTAMP`,
-      })
-      .where("id", "=", mediaSuggestion.id)
-      .execute()
+    await rejectSuggestions(db, [mediaSuggestion.id], {
+      reviewerId: user.id,
+      note: c.var.json.note,
+    })
 
     return c.ok({ id: mediaSuggestion.id })
   },

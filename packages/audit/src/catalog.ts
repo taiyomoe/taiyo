@@ -81,6 +81,7 @@ export const commentAudit = defineAuditCatalog("comment", {
 export const commentReportAudit = defineAuditCatalog("comment.report", {
   CREATE: { target: "comment", severity: "low" },
   CLOSE: { target: "commentReport", severity: "medium" },
+  CLOSE_MANY: { severity: "medium" },
 })
 
 export const commentImageAudit = defineAuditCatalog("comment.image", {
@@ -96,6 +97,7 @@ export const mediaAudit = defineAuditCatalog("media", {
   UPDATE: { target: "media", severity: "medium", requiresChanges: true },
   DELETE: { target: "media", severity: "high" },
   RESTORE: { target: "media", severity: "high" },
+  FEATURED_SET: { severity: "medium", requiresChanges: true },
   FLAG: { target: "media", severity: "high", requiresChanges: true, requiresReason: true },
   REINDEX: { target: "media", severity: "low" },
   UPDATE_MANY: { severity: "medium" },
@@ -132,6 +134,9 @@ export const mediaSuggestionAudit = defineAuditCatalog("media.suggestion", {
   WITHDRAW: { target: "mediaSuggestion", severity: "low" },
   ACCEPT: { target: "mediaSuggestion", severity: "medium", requiresChanges: true },
   REJECT: { target: "mediaSuggestion", severity: "low" },
+  WITHDRAW_MANY: { severity: "low" },
+  ACCEPT_MANY: { severity: "medium" },
+  REJECT_MANY: { severity: "low" },
 })
 
 export const mediaStaffAudit = defineAuditCatalog("media.staff", {
@@ -151,6 +156,7 @@ export const chapterAudit = defineAuditCatalog("chapter", {
   UPDATE: { target: "chapter", severity: "medium", requiresChanges: true },
   DELETE: { target: "chapter", severity: "high" },
   WITHDRAW: { target: "chapter", severity: "low" },
+  WITHDRAW_MANY: { severity: "low" },
   PAGES_REORDER: { target: "chapter", severity: "low" },
   PUBLISH: { target: "chapter", severity: "medium" },
   UPDATE_MANY: { severity: "medium" },
@@ -189,6 +195,7 @@ export const groupAudit = defineAuditCatalog("group", {
 export const groupReportAudit = defineAuditCatalog("group.report", {
   CREATE: { target: "group", severity: "low" },
   REVIEW: { target: "groupReport", severity: "medium" },
+  REVIEW_MANY: { severity: "medium" },
 })
 
 export const groupMemberAudit = defineAuditCatalog("group.member", {
@@ -205,6 +212,9 @@ export const groupOwnershipAudit = defineAuditCatalog("group.ownership", {
   REQUEST_REJECT: { target: "ownershipRequest", severity: "medium" },
   REQUEST_CANCEL: { target: "ownershipRequest", severity: "low" },
   TRANSFER: { target: "group", severity: "high" },
+  REQUEST_APPROVE_MANY: { severity: "high" },
+  REQUEST_REJECT_MANY: { severity: "medium" },
+  REQUEST_CANCEL_MANY: { severity: "low" },
 })
 
 export const groupInvitationAudit = defineAuditCatalog("group.invitation", {
@@ -212,6 +222,8 @@ export const groupInvitationAudit = defineAuditCatalog("group.invitation", {
   CANCEL: { target: "groupInvitation", severity: "low" },
   ACCEPT: { target: "groupInvitation", severity: "medium" },
   DECLINE: { target: "groupInvitation", severity: "low" },
+  ACCEPT_MANY: { severity: "medium" },
+  DECLINE_MANY: { severity: "low" },
 })
 
 export const groupCreationAudit = defineAuditCatalog("group.creation", {
@@ -219,6 +231,9 @@ export const groupCreationAudit = defineAuditCatalog("group.creation", {
   REQUEST_APPROVE: { target: "groupCreationRequest", severity: "high" },
   REQUEST_REJECT: { target: "groupCreationRequest", severity: "medium" },
   REQUEST_CANCEL: { target: "groupCreationRequest", severity: "low" },
+  REQUEST_APPROVE_MANY: { severity: "high" },
+  REQUEST_REJECT_MANY: { severity: "medium" },
+  REQUEST_CANCEL_MANY: { severity: "low" },
 })
 
 export const listAudit = defineAuditCatalog("list", {
@@ -264,6 +279,7 @@ export const bookmarkAudit = defineAuditCatalog("bookmark", {
 export const chapterReportAudit = defineAuditCatalog("chapter.report", {
   CREATE: { target: "chapter", severity: "low" },
   CLOSE: { target: "pageReport", severity: "medium" },
+  CLOSE_MANY: { severity: "medium" },
 })
 
 export const auditLogAudit = defineAuditCatalog("audit.log", {

@@ -2,16 +2,26 @@ import { sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import {
   mediaSuggestionSchema,
+  searchSuggestions,
   selectSuggestionColumns,
   selectSuggestions,
   toSuggestionSummaries,
 } from "../utils/media-suggestions"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
+
+const querySchema = paginationQuerySchema.extend({
+  search: z.string().trim().min(1).max(100).optional().meta({
+    description:
+      "Only list the suggestions on a media with a title containing this text, or by an author whose name contains it.",
+    example: "one punch",
+  }),
+})
 
 export const listMediaSuggestionsHandler = new Hono().get(
   "/",
@@ -39,11 +49,15 @@ export const listMediaSuggestionsHandler = new Hono().get(
     },
   }),
   withAuth("mediaSuggestion.review"),
-  validateQuery(paginationQuerySchema),
+  validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage } = c.var.query
-    const base = selectSuggestions(db).where("mediaSuggestions.status", "=", "PENDING")
+    const { page, perPage, search } = c.var.query
+    const base = searchSuggestions(
+      selectSuggestions(db).where("mediaSuggestions.status", "=", "PENDING"),
+      search,
+      { byAuthor: true },
+    )
     const [rows, totalRow] = await Promise.all([
       selectSuggestionColumns(base)
         .orderBy("mediaSuggestions.createdAt", "asc")

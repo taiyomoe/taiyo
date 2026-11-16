@@ -6,7 +6,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { checkGroupCreationRequest } from "../middlewares/check-group-creation-request-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
-import { isGroupNameTaken } from "../utils/group-names"
+import { approveGroupCreationRequest } from "../utils/group-creation-requests"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -48,44 +48,19 @@ export const approveGroupCreationRequestHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, groupCreationRequest, log, user } = c.var
-    const request = await db
-      .selectFrom("groupCreationRequests")
-      .select(["status", "userId", "name", "description"])
-      .where("id", "=", groupCreationRequest.id)
-      .forUpdate()
-      .executeTakeFirstOrThrow()
+    const result = await approveGroupCreationRequest(db, {
+      requestId: groupCreationRequest.id,
+      reviewerId: user.id,
+    })
 
-    if (request.status !== "PENDING") {
-      return c.fail("GROUP_CREATION_REQUEST_NOT_PENDING")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
 
-    if (await isGroupNameTaken(db, request.name)) {
-      return c.fail("GROUP_NAME_TAKEN")
-    }
-
-    const groupId = crypto.randomUUID()
+    const { groupId } = result
 
     log.set({ group: { id: groupId } })
-    c.var.audit.set({ target: { groupId, userId: request.userId, name: request.name } })
-
-    await db
-      .insertInto("groups")
-      .values({
-        id: groupId,
-        name: request.name,
-        description: request.description,
-        creatorId: user.id,
-      })
-      .execute()
-    await db
-      .insertInto("groupMemberships")
-      .values({ groupId, userId: request.userId, role: "OWNER", addedBy: user.id })
-      .execute()
-    await db
-      .updateTable("groupCreationRequests")
-      .set({ status: "APPROVED", reviewerId: user.id, groupId })
-      .where("id", "=", groupCreationRequest.id)
-      .execute()
+    c.var.audit.set({ target: { groupId, userId: result.userId, name: result.name } })
 
     return c.ok({ id: groupCreationRequest.id, groupId })
   },

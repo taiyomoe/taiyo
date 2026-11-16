@@ -1,4 +1,9 @@
-import { COMMENT_REPORT_REASONS, COMMENT_REPORT_STATUSES, sql } from "@taiyomoe/db"
+import {
+  COMMENT_REPORT_REASONS,
+  COMMENT_REPORT_STATUSES,
+  COMMENT_TARGET_TYPES,
+  sql,
+} from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -6,11 +11,17 @@ import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import {
+  commentReportSchema,
+  selectCommentReports,
+  toCommentReport,
+} from "../utils/comment-reports"
+import {
   commentSchema,
   getCommentTargets,
   labelledCommentTargetSchema,
   loadCommentImages,
   selectComments,
+  THREAD_COLUMNS,
   toComment,
 } from "../utils/comments"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -21,20 +32,14 @@ const querySchema = paginationQuerySchema.extend({
     .enum(COMMENT_REPORT_STATUSES)
     .default("OPEN")
     .meta({ description: "The status of the reports to list.", example: "OPEN" }),
-})
-const reportSchema = z.object({
-  id: z.uuid().meta({ description: "The ID of the report." }),
-  reason: z
-    .enum(COMMENT_REPORT_REASONS)
-    .meta({ description: "Why the comment was reported.", example: "SPAM" }),
-  details: z.string().nullable().meta({
-    description: "What the reporter told the moderators, if anything.",
-    example: "Reveals the ending of the series without a spoiler tag.",
+  reason: z.enum(COMMENT_REPORT_REASONS).optional().meta({
+    description: "Only list the comments with at least one report for this reason.",
+    example: "SPOILER",
   }),
-  createdAt: z.iso.datetime().meta({ description: "When the report was made." }),
-  reporter: userSummarySchema
-    .pick({ id: true, username: true, displayUsername: true, nameEffect: true })
-    .meta({ description: "The user who made the report." }),
+  target: z.enum(COMMENT_TARGET_TYPES).optional().meta({
+    description: "Only list the comments on this type of resource.",
+    example: "CHAPTER",
+  }),
 })
 const reportedCommentSchema = z.object({
   reportId: z.uuid().meta({
@@ -50,10 +55,14 @@ const reportedCommentSchema = z.object({
       originalImages: commentSchema.shape.images.meta({
         description: "The images in the comment, kept even after it was removed.",
       }),
+      originalAuthor: userSummarySchema.nullable().meta({
+        description:
+          "The author of the comment, kept even after it was removed, or `null` once they deleted their account.",
+      }),
     })
     .meta({ description: "The reported comment." }),
   target: labelledCommentTargetSchema.meta({ description: "The resource the comment is on." }),
-  reports: reportSchema.array().meta({
+  reports: commentReportSchema.array().meta({
     description:
       "The latest reports on the comment with the requested status, up to 5, newest first.",
   }),
@@ -92,18 +101,30 @@ export const listCommentReportsHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db, user, can } = c.var
-    const { page, perPage, status } = c.var.query
+    const { page, perPage, status, reason, target: targetType } = c.var.query
     const grouped = db
-      .selectFrom("commentReports")
+      .selectFrom("commentReports as r")
+      .innerJoin("comments as c", "c.id", "r.commentId")
+      .innerJoin("commentThreads as t", "t.id", "c.threadId")
       .select([
-        "commentId",
+        "r.commentId",
         sql<string>`count(*)`.as("reportCount"),
-        sql<Date>`min("createdAt")`.as("firstAt"),
-        sql<Date>`max(coalesce("resolvedAt", "createdAt"))`.as("lastAt"),
-        sql<string>`(array_agg("id" order by "createdAt" desc))[1]`.as("reportId"),
+        sql<Date>`min("r"."createdAt")`.as("firstAt"),
+        sql<Date>`max(coalesce("r"."resolvedAt", "r"."createdAt"))`.as("lastAt"),
+        sql<string>`(array_agg("r"."id" order by "r"."createdAt" desc))[1]`.as("reportId"),
       ])
-      .where("status", "=", status)
-      .groupBy("commentId")
+      .where("r.status", "=", status)
+      .where((eb) =>
+        targetType === undefined
+          ? eb.and([])
+          : eb(`t.${THREAD_COLUMNS[targetType]}`, "is not", null),
+      )
+      .groupBy("r.commentId")
+      .having((eb) =>
+        reason === undefined
+          ? eb.and([])
+          : sql<boolean>`bool_or(${eb.ref("r.reason")} = ${reason})`,
+      )
     const [groups, totalRow] = await Promise.all([
       db
         .selectFrom(grouped.as("g"))
@@ -129,31 +150,19 @@ export const listCommentReportsHandler = new Hono().get(
       getCommentTargets(db, commentIds),
       db
         .selectFrom(
-          db
-            .selectFrom("commentReports as r")
-            .innerJoin("users as ru", "ru.id", "r.reporterId")
-            .select([
-              "r.id",
-              "r.commentId",
-              "r.reason",
-              "r.details",
-              sql<string>`to_char("r"."createdAt", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`.as(
-                "createdAt",
-              ),
-              "ru.id as reporterId",
-              "ru.username",
-              "ru.displayUsername",
-              "ru.nameEffect",
+          selectCommentReports(db)
+            .select(
               sql<string>`row_number() over (partition by "r"."commentId" order by "r"."createdAt" desc)`.as(
                 "rank",
               ),
-            ])
+            )
             .where("r.commentId", "in", commentIds)
             .where("r.status", "=", status)
             .as("ranked"),
         )
         .selectAll()
         .where("ranked.rank", "<=", "5")
+        .orderBy("ranked.createdAt", "desc")
         .execute(),
       loadCommentImages(db, commentIds, user.id),
     ])
@@ -180,22 +189,22 @@ export const listCommentReportsHandler = new Hono().get(
               }),
               originalContent: row.content,
               originalImages: images.get(row.id) ?? [],
+              originalAuthor:
+                row.authorId === null
+                  ? null
+                  : {
+                      id: row.authorId,
+                      username: row.authorUsername ?? "",
+                      displayUsername: row.authorDisplayUsername ?? "",
+                      image: row.authorImage ?? null,
+                      nameEffect: row.authorNameEffect ?? null,
+                      avatarBorder: row.authorAvatarBorder ?? null,
+                    },
             },
             target,
             reports: reports
               .filter((report) => report.commentId === group.commentId)
-              .map((report) => ({
-                id: report.id,
-                reason: report.reason,
-                details: report.details,
-                createdAt: report.createdAt,
-                reporter: {
-                  id: report.reporterId,
-                  username: report.username,
-                  displayUsername: report.displayUsername,
-                  nameEffect: report.nameEffect,
-                },
-              })),
+              .map(toCommentReport),
             reportCount: Number(group.reportCount),
           },
         ]

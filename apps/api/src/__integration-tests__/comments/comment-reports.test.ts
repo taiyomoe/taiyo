@@ -8,7 +8,13 @@ import { expectSuccess, postComment } from "./helpers"
 type ReportedComment = {
   reportId: string
   reportCount: number
-  comment: { id: string; removal: string | null; originalContent: string }
+  comment: {
+    id: string
+    removal: string | null
+    originalContent: string
+    author: { id: string } | null
+    originalAuthor: { id: string } | null
+  }
   target: { type: string; id: string; label: string | null }
 }
 
@@ -108,6 +114,55 @@ describe("comment reports", () => {
       id: spam.id,
       removal: "MODERATOR",
       originalContent: "spam",
+    })
+  })
+
+  test("filters by reason and resource type, and keeps the author of removed comments", async ({
+    app,
+    services,
+  }) => {
+    const author = await signInAs(services)
+    const reporters = await Promise.all([signInAs(services), signInAs(services)])
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const onMedia = await postComment(
+      app,
+      author.headers,
+      { type: "MEDIA", id: await seedMedia(services, author.userId) },
+      "spoiler",
+    )
+    const onProfile = await postComment(
+      app,
+      author.headers,
+      { type: "USER", id: reporters[1].userId },
+      "rude",
+    )
+    const report = (commentId: string, headers: Record<string, string>, reason: string) =>
+      api(app, `/comments/${commentId}/reports`, { method: "POST", headers, json: { reason } })
+
+    await report(onMedia.id, reporters[0].headers, "SPOILER")
+    await report(onMedia.id, reporters[1].headers, "SPAM")
+    await report(onProfile.id, reporters[0].headers, "HARASSMENT")
+
+    const list = async (query: string) =>
+      expectSuccess(
+        await api<ReportedComment[]>(app, `/comment-reports?${query}`, {
+          headers: moderator.headers,
+        }),
+      )
+
+    expect(
+      (await list("reason=SPAM")).map((entry) => [entry.comment.id, entry.reportCount]),
+    ).toEqual([[onMedia.id, 2]])
+    expect((await list("target=USER")).map((entry) => entry.comment.id)).toEqual([onProfile.id])
+
+    await api(app, `/comments/${onMedia.id}`, { method: "DELETE", headers: moderator.headers })
+
+    const [removed] = await list("status=RESOLVED")
+
+    expect(removed?.comment).toMatchObject({
+      id: onMedia.id,
+      author: null,
+      originalAuthor: { id: author.userId },
     })
   })
 })
