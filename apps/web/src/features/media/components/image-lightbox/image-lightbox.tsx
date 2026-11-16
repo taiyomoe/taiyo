@@ -24,9 +24,10 @@ export type LightboxItem = {
 
 const SWIPE_DISTANCE = 48
 const styles = stylex.create({
+  // Translucent, so the page stays faintly visible behind the image.
   backdrop: {
-    backdropFilter: "blur(14px) saturate(120%)",
-    backgroundColor: "rgb(6 6 6 / 86%)",
+    backdropFilter: "blur(4px)",
+    backgroundColor: "rgb(0 0 0 / 62%)",
   },
   popup: {
     inset: 0,
@@ -98,6 +99,7 @@ export function ImageLightbox({
   const item = shownIndex === null ? undefined : items[shownIndex]
   const count = items.length
   const swipeStart = useRef<number | null>(null)
+  const swiped = useRef(false)
   const popup = useRef<HTMLDivElement>(null)
   const step = (delta: number) => {
     if (index !== null && count > 1) {
@@ -132,6 +134,22 @@ export function ImageLightbox({
           ref={popup}
           {...stylex.props(styles.popup)}
           initialFocus={popup}
+          // The popup covers the backdrop, so a click on the empty space around the image
+          // lands here; anything but the image, the buttons and the title closes it.
+          onClick={(event) => {
+            if (swiped.current) {
+              swiped.current = false
+
+              return
+            }
+
+            if (
+              event.target instanceof Element &&
+              event.target.closest("img, button, a, p") === null
+            ) {
+              onClose()
+            }
+          }}
           onKeyDown={(event) => {
             if (event.key === "ArrowRight") {
               event.preventDefault()
@@ -164,6 +182,7 @@ export function ImageLightbox({
                   swipeStart.current = null
 
                   if (start !== null && Math.abs(event.clientX - start) > SWIPE_DISTANCE) {
+                    swiped.current = true
                     step(event.clientX < start ? 1 : -1)
                   }
                 }}
