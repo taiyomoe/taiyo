@@ -1,9 +1,14 @@
 import { createEnv } from "@t3-oss/env-core"
 import { z } from "zod"
 
-// Production must be able to send mail. Elsewhere, unset credentials skip sending.
+// Production must be able to send mail. Elsewhere, empty credentials skip sending.
 const credential =
-  process.env.NODE_ENV === "production" ? z.string().min(1) : z.string().min(1).optional()
+  process.env.NODE_ENV === "production"
+    ? z.string().min(1)
+    : z
+        .string()
+        .optional()
+        .transform((value) => (value === "" ? undefined : value))
 
 export const env = createEnv({
   shared: {},
@@ -18,6 +23,5 @@ export const env = createEnv({
   client: {},
 
   runtimeEnv: process.env,
-  emptyStringAsUndefined: true,
   skipValidation: Boolean(process.env.TEST),
 })
