@@ -1,5 +1,5 @@
-import "./setup-env"
 import type { GroupInvitationMail } from "@taiyomoe/email"
+import "./setup-env"
 import type { Hono } from "hono"
 import {
   CreateBucketCommand,
@@ -12,6 +12,7 @@ import { getDb } from "@taiyomoe/db"
 import { env as dbEnv } from "@taiyomoe/db/env"
 import { getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, initMediasIndex } from "@taiyomoe/search"
+import { setTimeout as sleep } from "node:timers/promises"
 import pg from "pg"
 import { afterAll, test as baseTest } from "vitest"
 import type { Services } from "../services"
@@ -33,9 +34,27 @@ const adminPool = new pg.Pool({ connectionString: getDbUrl("postgres"), max: 8 }
 const sharedS3 = getS3Client()
 const sharedMeili = getMeiliClient()
 const fileDatabases: string[] = []
+// pg-pool resolves `end()` once its clients leave the pool, before their sockets close: a
+// forced drop right then kills a connection that is still saying goodbye, and the client
+// reports it as an unhandled error. Wait until Postgres no longer sees them.
+const waitForDisconnects = async (names: readonly string[]) => {
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const { rows } = await adminPool.query<{ count: number }>(
+      "SELECT count(*)::int AS count FROM pg_stat_activity WHERE datname = ANY($1)",
+      [names],
+    )
+
+    if (rows[0]?.count === 0) {
+      return
+    }
+
+    await sleep(100)
+  }
+}
 
 // Each DROP DATABASE waits for a checkpoint: dropping the file's databases together shares one.
 afterAll(async () => {
+  await waitForDisconnects(fileDatabases)
   await Promise.all(
     fileDatabases.map((name) => adminPool.query(`DROP DATABASE IF EXISTS "${name}" WITH (FORCE)`)),
   )
