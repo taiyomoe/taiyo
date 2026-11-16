@@ -11,7 +11,7 @@ import {
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
 import { Link, useRouteContext } from "@tanstack/react-router"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { getApiErrorCode } from "@/lib/envelope"
 import { m } from "@/paraglide/messages"
@@ -19,7 +19,6 @@ import { m } from "@/paraglide/messages"
 const styles = stylex.create({
   page: {
     paddingBlock: "2rem",
-    paddingInline: layout.gutter,
   },
 })
 
@@ -35,13 +34,13 @@ type NotFoundProps = {
   description: string
   back: {
     label: string
-    to: "/" | "/groups" | "/lists" | "/titles" | "/dashboard/groups" | "/dashboard/suggestions"
+    to: "/" | "/groups" | "/lists" | "/media" | "/dashboard/groups" | "/dashboard/suggestions"
   }
 }
 
 export function NotFoundContent({ icon, title, description, back }: NotFoundProps) {
   return (
-    <div sx={styles.page}>
+    <div sx={[pageFrame.frame, styles.page]}>
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">{icon}</EmptyMedia>

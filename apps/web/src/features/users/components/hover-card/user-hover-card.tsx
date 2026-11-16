@@ -1,10 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
 import { getLevelProgress } from "@taiyomoe/db/levels"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { useRouteContext } from "@tanstack/react-router"
 import { AvatarBorder } from "@/components/avatar-border/avatar-border"
+import { Pill } from "@/components/badges/pill"
 import { UserName } from "@/components/user-name/user-name"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { userProfileQueryOptions } from "@/features/users/api/profile"
@@ -12,8 +12,8 @@ import { UserHoverCardSkeleton } from "@/features/users/components/hover-card/us
 import { hoverCardStyles } from "@/features/users/components/hover-card/user-hover-card-styles"
 import { FollowButton } from "@/features/users/components/profile/follow-button"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
+import { UserRoleBadge } from "@/features/users/components/users/user-role-badge"
 import { READER_RANK_LABELS } from "@/features/users/lib/level-labels"
-import { ROLE_LABELS } from "@/features/users/lib/role-labels"
 import { pickLocalized } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
@@ -164,22 +164,18 @@ export function UserHoverCard({ username }: { username: string }) {
           <span sx={styles.handle}>@{profile.username}</span>
         </div>
         <div sx={styles.badges}>
-          <Badge size="sm" variant="secondary">
+          <Pill size="sm" variant="secondary">
             {m.user_card_level({
               level: String(level.level),
               rank: READER_RANK_LABELS[level.rank](),
             })}
-          </Badge>
+          </Pill>
           <TitleBadge size="sm" title={profile.title} />
-          {profile.role === "USER" ? null : (
-            <Badge size="sm" variant="outline">
-              {ROLE_LABELS[profile.role]()}
-            </Badge>
-          )}
+          {profile.role === "USER" ? null : <UserRoleBadge role={profile.role} size="sm" />}
           {profile.followsViewer === true ? (
-            <Badge size="sm" variant="secondary">
+            <Pill size="sm" variant="secondary">
               {m.profile_follows_you()}
-            </Badge>
+            </Pill>
           ) : null}
         </div>
         {about === undefined || about === "" ? null : <p sx={styles.about}>{about}</p>}

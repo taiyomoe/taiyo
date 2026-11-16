@@ -7,6 +7,7 @@ import {
   Dashboard,
   FileEdit,
   Flag,
+  Grid,
   History,
   Image,
   Library,
@@ -14,6 +15,7 @@ import {
   ListNumbered,
   NoteEdit,
   PenTool,
+  Refresh,
   Settings,
   Tag,
   Upload,
@@ -22,6 +24,11 @@ import {
   Users,
 } from "@taiyomoe/ui/components/icons"
 import type { AppSidebarSection } from "@/components/shell/app-sidebar"
+import {
+  canOpenChapters,
+  canOpenImages,
+  canOpenMedias,
+} from "@/features/catalog/lib/catalog-access"
 import { m } from "@/paraglide/messages"
 
 type DashboardItem = AppSidebarSection["items"][number] & {
@@ -30,7 +37,6 @@ type DashboardItem = AppSidebarSection["items"][number] & {
 
 type DashboardSection = Omit<AppSidebarSection, "items"> & { items: DashboardItem[] }
 
-const ANY_CHAPTER = { uploaderId: "", status: "PUBLISHED", groupIds: [] } as const
 const ANOTHER_USER = { id: "", role: "USER" } as const
 
 export const DASHBOARD_SECTIONS: DashboardSection[] = [
@@ -84,6 +90,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         visible: () => true,
       },
       {
+        label: m.dashboard_nav_all_groups,
+        icon: Grid,
+        to: "/dashboard/all-groups",
+        visible: (can) => can("group.list"),
+      },
+      {
         label: m.dashboard_nav_invitations,
         icon: Mail,
         to: "/dashboard/invitations",
@@ -112,30 +124,49 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/suggestions",
         visible: (can) => can("mediaSuggestion.review"),
       },
-      { label: m.dashboard_nav_media, icon: Library, visible: (can) => can("media.update") },
+      {
+        label: m.dashboard_nav_media,
+        icon: Library,
+        to: "/dashboard/medias",
+        visible: canOpenMedias,
+      },
       {
         label: m.dashboard_nav_chapters,
         icon: ListNumbered,
-        visible: (can) => can("chapter.update", ANY_CHAPTER),
+        to: "/dashboard/chapters",
+        visible: canOpenChapters,
       },
       {
         label: m.dashboard_nav_covers,
         icon: Image,
         to: "/dashboard/covers",
-        visible: (can) => can("media.update"),
+        visible: canOpenImages,
+      },
+      {
+        label: m.dashboard_nav_mangadex_sync,
+        icon: Refresh,
+        to: "/dashboard/mangadex-sync",
+        visible: (can) => can("media.syncMangaDex"),
       },
       {
         label: m.dashboard_nav_banners,
         icon: Banner,
         to: "/dashboard/banners",
-        visible: (can) => can("media.update"),
+        visible: canOpenImages,
       },
       { label: m.dashboard_nav_tags, icon: Tag, visible: (can) => can("media.update") },
     ],
   },
   {
     label: m.dashboard_nav_people,
-    items: [{ label: m.dashboard_nav_staff, icon: PenTool, visible: (can) => can("staff.update") }],
+    items: [
+      {
+        label: m.dashboard_nav_staff,
+        icon: PenTool,
+        to: "/dashboard/staffs",
+        visible: (can) => can("staff.update"),
+      },
+    ],
   },
   {
     label: m.dashboard_nav_community,
@@ -146,7 +177,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/users",
         visible: (can) => can("user.list"),
       },
-      { label: m.dashboard_nav_comments, icon: Comment, visible: (can) => can("comment.delete") },
+      {
+        label: m.dashboard_nav_comments,
+        icon: Comment,
+        to: "/dashboard/comments",
+        visible: (can) => can("comment.delete"),
+      },
       {
         label: m.dashboard_nav_reports,
         icon: Flag,

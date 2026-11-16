@@ -172,42 +172,6 @@ describe("unpublished chapters", () => {
     expect(facets.body.data.volumes.map((row) => row.volume)).toEqual([null])
   })
 
-  test("are left out of the search index until published", async ({ services }) => {
-    const { userId } = await signInAs(services)
-    const chapterIds = await Promise.all(
-      (
-        [
-          { number: 9999, language: "zu", status: "PENDING" },
-          { number: 9998, language: "xh", status: "UPLOADING" },
-        ] as const
-      ).map((chapter) =>
-        seedChapter(services, { mediaId: SEEDED_MEDIA_ID, uploaderId: userId, ...chapter }),
-      ),
-    )
-
-    await drainSearchOutbox(services)
-
-    const hidden = await waitForMediaDoc(services, SEEDED_MEDIA_ID, (doc) => doc !== null)
-
-    expect(hidden?.chapterLanguages).not.toContain("zu")
-    expect(hidden?.chapterLanguages).not.toContain("xh")
-
-    await services.db
-      .updateTable("chapters")
-      .set({ status: "PUBLISHED" })
-      .where("id", "in", chapterIds)
-      .execute()
-    await drainSearchOutbox(services)
-
-    const shown = await waitForMediaDoc(
-      services,
-      SEEDED_MEDIA_ID,
-      (doc) => doc?.chapterLanguages.includes("zu") === true,
-    )
-
-    expect(shown?.chapterLanguages).toEqual(expect.arrayContaining(["zu", "xh"]))
-  }, 30_000)
-
   test("are left out of the feed and reading progress", async ({ app, services }) => {
     const { submitter, mediaId, pending, rejected, uploading, scheduled } = await setup(services)
 
@@ -309,4 +273,44 @@ describe("unpublished chapters", () => {
     expect(total).toBe(await countSince(["PUBLISHED"]))
     expect(await countSince(["PUBLISHED", "PENDING", "REJECTED"])).toBe(total + 2)
   })
+})
+
+describe("unpublished chapters in search", () => {
+  test.override({ search: true })
+
+  test("are left out of the search index until published", async ({ services }) => {
+    const { userId } = await signInAs(services)
+    const chapterIds = await Promise.all(
+      (
+        [
+          { number: 9999, language: "zu", status: "PENDING" },
+          { number: 9998, language: "xh", status: "UPLOADING" },
+        ] as const
+      ).map((chapter) =>
+        seedChapter(services, { mediaId: SEEDED_MEDIA_ID, uploaderId: userId, ...chapter }),
+      ),
+    )
+
+    await drainSearchOutbox(services)
+
+    const hidden = await waitForMediaDoc(services, SEEDED_MEDIA_ID, (doc) => doc !== null)
+
+    expect(hidden?.chapterLanguages).not.toContain("zu")
+    expect(hidden?.chapterLanguages).not.toContain("xh")
+
+    await services.db
+      .updateTable("chapters")
+      .set({ status: "PUBLISHED" })
+      .where("id", "in", chapterIds)
+      .execute()
+    await drainSearchOutbox(services)
+
+    const shown = await waitForMediaDoc(
+      services,
+      SEEDED_MEDIA_ID,
+      (doc) => doc?.chapterLanguages.includes("zu") === true,
+    )
+
+    expect(shown?.chapterLanguages).toEqual(expect.arrayContaining(["zu", "xh"]))
+  }, 30_000)
 })

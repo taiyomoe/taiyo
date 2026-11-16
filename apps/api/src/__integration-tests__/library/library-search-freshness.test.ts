@@ -62,6 +62,8 @@ const getSearchedLibraryCount = async (app: Hono, mediaId: string) => {
   return hit.libraryCount
 }
 
+test.override({ search: true })
+
 describe("library writes keep libraryCount fresh in search", () => {
   test(
     "adding an entry raises the count and removing it lowers it again",

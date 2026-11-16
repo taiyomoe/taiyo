@@ -1,6 +1,6 @@
 {
   "name": "@taiyomoe/api",
-  "version": "5.0.0",
+  "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "type": "module",
@@ -26,6 +26,7 @@
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/email": "workspace:^",
+    "@taiyomoe/mangadex": "workspace:^",
     "@taiyomoe/permissions": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
     "@taiyomoe/s3": "workspace:^",

@@ -53,6 +53,10 @@ const mediaErrors = {
     message: "The media is not in a deleted state.",
     code: 409,
   },
+  MEDIA_LOCKED: {
+    message: "This media is locked following a copyright notice.",
+    code: 451,
+  },
 } as const
 const coverErrors = {
   COVER_NOT_FOUND: {
@@ -470,6 +474,36 @@ const chapterUploadErrors = {
     code: 404,
   },
 } as const
+const mangaDexErrors = {
+  MANGADEX_NOT_LINKED: {
+    message: "The media has no MangaDex link: pass the ID of its MangaDex entry.",
+    code: 422,
+  },
+  MANGADEX_LINK_MISMATCH: {
+    message: "The media is already linked to another MangaDex entry.",
+    code: 409,
+  },
+  MANGADEX_NOT_FOUND: {
+    message: "MangaDex has no manga with this ID.",
+    code: 404,
+  },
+  MANGADEX_UNAVAILABLE: {
+    message: "MangaDex could not be reached. Try again in a few minutes.",
+    code: 502,
+  },
+  MANGADEX_SYNC_IN_PROGRESS: {
+    message: "A MangaDex sync is already queued or running for this media.",
+    code: 409,
+  },
+  MANGADEX_SYNC_NOT_FOUND: {
+    message: "The requested MangaDex sync was not found.",
+    code: 404,
+  },
+  MANGADEX_SYNC_ALREADY_SETTLED: {
+    message: "The MangaDex sync has already finished.",
+    code: 409,
+  },
+} as const
 const auditLogErrors = {
   AUDIT_LOG_NOT_FOUND: {
     message: "The requested audit log entry was not found.",
@@ -501,6 +535,7 @@ export const errors = {
   ...imageErrors,
   ...chapterUploadErrors,
   ...auditLogErrors,
+  ...mangaDexErrors,
 } as const
 
 export type ErrorCode = keyof typeof errors

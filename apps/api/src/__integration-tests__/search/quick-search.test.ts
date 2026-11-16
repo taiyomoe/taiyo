@@ -69,6 +69,8 @@ const indexedNormalMedia = async (services: Services) => {
   return media
 }
 
+test.override({ search: true })
+
 describe("GET /search", () => {
   test("finds a title by its main title, with its cover and synopsis", async ({
     app,

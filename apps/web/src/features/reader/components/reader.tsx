@@ -1,4 +1,5 @@
 import { READER_MODES } from "@taiyomoe/schemas/reader-settings"
+import { useHotkeys } from "@tanstack/react-hotkeys"
 import { noop, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate, useRouter } from "@tanstack/react-router"
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
@@ -29,7 +30,6 @@ import { useFullscreen } from "@/features/reader/hooks/use-fullscreen"
 import { useIdle } from "@/features/reader/hooks/use-idle"
 import { usePagePreloader } from "@/features/reader/hooks/use-page-preloader"
 import { usePageZoom } from "@/features/reader/hooks/use-page-zoom"
-import { useReaderKeyboard } from "@/features/reader/hooks/use-reader-keyboard"
 import { useReaderNavigation } from "@/features/reader/hooks/use-reader-navigation"
 import { useReaderSettings } from "@/features/reader/hooks/use-reader-settings"
 import { getSideStep, type ReaderStep } from "@/features/reader/lib/reader-input"
@@ -40,6 +40,7 @@ import {
   hasChapterGap,
 } from "@/features/reader/lib/reader-navigation"
 import { chapterQueryOptions } from "@/features/uploads/api/submissions"
+import { appHotkeys } from "@/lib/app-hotkeys"
 
 const IDLE_TIMEOUT = 2500
 const KEPT_PREVIOUS_CHAPTERS = 1
@@ -275,114 +276,173 @@ export function Reader({
       setAutoScrolling(false)
     },
   })
-  useReaderKeyboard({
-    enabled: !sheetOpen && !boundaryOpen && reporting === null,
-    onAction: (action, event) => {
-      const element = stage.current
+  const turnSide = (side: "left" | "right") => {
+    navigation.step(getSideStep(side, settings.direction))
+  }
+  const turnPage = (step: ReaderStep, event: KeyboardEvent) => {
+    const element = stage.current
+    const canScroll =
+      element !== null &&
+      (step === "next"
+        ? element.scrollTop + element.clientHeight < element.scrollHeight - 2
+        : element.scrollTop > 0)
 
-      switch (action) {
-        case "left":
+    if (strip || !canScroll) {
+      event.preventDefault()
+      navigation.step(step)
+    }
+  }
+  const characterKeys = { enabled: settings.keyboardShortcuts }
 
-        case "right": {
-          event.preventDefault()
-          navigation.step(getSideStep(action, settings.direction))
-
-          break
-        }
-
-        case "next":
-
-        case "prev": {
-          const canScroll =
-            element !== null &&
-            (action === "next"
-              ? element.scrollTop + element.clientHeight < element.scrollHeight - 2
-              : element.scrollTop > 0)
-
-          if (!strip && canScroll) {
-            return
-          }
-
-          event.preventDefault()
-          navigation.step(action)
-
-          break
-        }
-
-        case "first":
-
-        case "last": {
-          event.preventDefault()
-          navigation.goTo(action === "first" ? 0 : pageCount - 1)
-
-          break
-        }
-
-        case "prevChapter":
-
-        case "nextChapter": {
-          const target = action === "prevChapter" ? prev : next
-
-          if (target !== null) {
-            openChapter(target)
-          }
-
-          break
-        }
-
-        case "menu": {
-          onSheetOpenChange(true)
-
-          break
-        }
-
-        case "fullscreen": {
-          fullscreen.toggle()
-
-          break
-        }
-
-        case "cycleMode": {
-          update({
-            mode:
-              READER_MODES[(READER_MODES.indexOf(settings.mode) + 1) % READER_MODES.length] ??
-              "single",
-          })
-
-          break
-        }
-
-        case "autoScroll": {
-          if (strip) {
-            setAutoScrolling((value) => !value)
-          }
-
-          break
-        }
-
-        case "zoomIn":
-
-        case "zoomOut": {
-          event.preventDefault()
-          zoom.zoomBy(action === "zoomIn" ? ZOOM_STEP : 1 / ZOOM_STEP)
-
-          break
-        }
-
-        case "zoomReset": {
-          zoom.reset()
-
-          break
-        }
-
-        case "bookmark": {
-          bookmarks.toggle()
-
-          break
-        }
-      }
+  useHotkeys([
+    {
+      hotkey: appHotkeys["reader.left"],
+      callback: () => {
+        turnSide("left")
+      },
     },
-  })
+    {
+      hotkey: appHotkeys["reader.right"],
+      callback: () => {
+        turnSide("right")
+      },
+    },
+    {
+      hotkey: appHotkeys["reader.leftKey"],
+      callback: () => {
+        turnSide("left")
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.rightKey"],
+      callback: () => {
+        turnSide("right")
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.next"],
+      callback: (event) => {
+        turnPage("next", event)
+      },
+    },
+    {
+      hotkey: appHotkeys["reader.nextPageDown"],
+      callback: (event) => {
+        turnPage("next", event)
+      },
+    },
+    {
+      hotkey: appHotkeys["reader.previous"],
+      callback: (event) => {
+        turnPage("prev", event)
+      },
+    },
+    {
+      hotkey: appHotkeys["reader.previousPageUp"],
+      callback: (event) => {
+        turnPage("prev", event)
+      },
+    },
+    {
+      hotkey: appHotkeys["reader.first"],
+      callback: () => {
+        navigation.goTo(0)
+      },
+    },
+    {
+      hotkey: appHotkeys["reader.last"],
+      callback: () => {
+        navigation.goTo(pageCount - 1)
+      },
+    },
+    {
+      hotkey: appHotkeys["reader.previousChapter"],
+      callback: () => {
+        if (prev !== null) {
+          openChapter(prev)
+        }
+      },
+      options: { enabled: settings.keyboardShortcuts && prev !== null },
+    },
+    {
+      hotkey: appHotkeys["reader.nextChapter"],
+      callback: () => {
+        if (next !== null) {
+          openChapter(next)
+        }
+      },
+      options: { enabled: settings.keyboardShortcuts && next !== null },
+    },
+    {
+      hotkey: appHotkeys["reader.menu"],
+      callback: () => {
+        onSheetOpenChange(true)
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.fullscreen"],
+      callback: () => {
+        fullscreen.toggle()
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.layout"],
+      callback: () => {
+        update({
+          mode:
+            READER_MODES[(READER_MODES.indexOf(settings.mode) + 1) % READER_MODES.length] ??
+            "single",
+        })
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.autoScroll"],
+      callback: () => {
+        setAutoScrolling((value) => !value)
+      },
+      options: { enabled: settings.keyboardShortcuts && strip },
+    },
+    {
+      hotkey: appHotkeys["reader.zoomIn"],
+      callback: () => {
+        zoom.zoomBy(ZOOM_STEP)
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.zoomInEqual"],
+      callback: () => {
+        zoom.zoomBy(ZOOM_STEP)
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.zoomOut"],
+      callback: () => {
+        zoom.zoomBy(1 / ZOOM_STEP)
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.zoomReset"],
+      callback: () => {
+        zoom.reset()
+      },
+      options: characterKeys,
+    },
+    {
+      hotkey: appHotkeys["reader.bookmark"],
+      callback: () => {
+        bookmarks.toggle()
+      },
+      options: characterKeys,
+    },
+  ])
 
   useEffect(() => {
     stage.current?.focus({ preventScroll: true })

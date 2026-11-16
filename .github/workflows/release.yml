@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  push:
+    branches: ["develop"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    name: Release PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      released: ${{ steps.release.outputs.release_created }}
+      tag: ${{ steps.release.outputs.tag_name }}
+      sha: ${{ steps.release.outputs.sha }}
+    steps:
+      - id: token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      - id: release
+        uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ steps.token.outputs.token }}
+          target-branch: develop
+
+  ship:
+    name: Merge into main
+    needs: release-please
+    if: ${{ needs.release-please.outputs.released == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - id: token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.token.outputs.token }}
+
+      - name: Merge the release into main
+        env:
+          TAG: ${{ needs.release-please.outputs.tag }}
+          SHA: ${{ needs.release-please.outputs.sha }}
+        run: |
+          git config user.name "taiyo-release"
+          git config user.email "taiyo-release@users.noreply.github.com"
+          git merge --no-ff "$SHA" -m "chore: release $TAG"
+          git push origin HEAD:main

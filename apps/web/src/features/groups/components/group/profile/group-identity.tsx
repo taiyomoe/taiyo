@@ -1,11 +1,11 @@
 import * as stylex from "@stylexjs/stylex"
 import { Calendar, CheckCircle, Clock, Globe } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { Group } from "@/features/groups/api/groups"
 import type { GroupTab } from "@/features/groups/lib/group-page"
+import { Pill } from "@/components/badges/pill"
 import { getLanguageCode } from "@/components/flags/language-flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { formatCompact } from "@/features/dashboard/lib/format"
@@ -117,17 +117,16 @@ export function GroupIdentity({ group }: { group: Group }) {
         <h1 sx={styles.name}>{group.name}</h1>
         <div sx={styles.badges}>
           {group.owned ? (
-            <Badge variant="warning">
-              <CheckCircle />
+            <Pill icon={CheckCircle} variant="warning">
               {m.group_verified()}
-            </Badge>
+            </Pill>
           ) : (
-            <Badge variant="outline">{m.groups_unclaimed()}</Badge>
+            <Pill>{m.groups_unclaimed()}</Pill>
           )}
           {group.languages.map((language) => (
-            <Badge key={language} sx={styles.mono} variant="secondary">
+            <Pill key={language} tone={styles.mono} variant="secondary">
               {getLanguageCode(language)}
-            </Badge>
+            </Pill>
           ))}
         </div>
       </div>
@@ -183,7 +182,7 @@ function GroupInlineStats({ group }: { group: Group }) {
     {
       value: group.mediaCount,
       label: group.mediaCount === 1 ? m.group_inline_title() : m.group_inline_titles(),
-      tab: "titles",
+      tab: "media",
     },
   ]
 

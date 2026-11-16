@@ -12,18 +12,51 @@ import { m } from "@/paraglide/messages"
 const styles = stylex.create({
   titleRow: {
     gap: "0.5rem",
+    gridTemplateAreas: {
+      default: '"main title title" "language language language" "acronym acronym actions"',
+      [breakpoints.md]: '"main title language acronym actions"',
+    },
     alignItems: "center",
     display: "grid",
     gridTemplateColumns: {
       default: "auto minmax(0, 1fr) auto",
       [breakpoints.md]: "auto minmax(0, 1fr) 13rem auto auto",
     },
+    borderBottomColor: colors.border,
+    borderBottomStyle: { default: "dashed", [breakpoints.md]: "none" },
+    borderBottomWidth: 1,
+    paddingBottom: { default: "1rem", [breakpoints.md]: 0 },
+  },
+  main: {
+    gridColumnEnd: "main",
+    gridColumnStart: "main",
+    gridRowEnd: "main",
+    gridRowStart: "main",
+  },
+  title: {
+    gridColumnEnd: "title",
+    gridColumnStart: "title",
+    gridRowEnd: "title",
+    gridRowStart: "title",
   },
   titleLanguage: {
-    gridColumn: { default: "2 / -1", [breakpoints.md]: "auto" },
+    gridColumnEnd: "language",
+    gridColumnStart: "language",
+    gridRowEnd: "language",
+    gridRowStart: "language",
+    minWidth: 0,
+  },
+  acronymArea: {
+    gridColumnEnd: "acronym",
+    gridColumnStart: "acronym",
+    gridRowEnd: "acronym",
+    gridRowStart: "acronym",
+    justifySelf: "start",
   },
   rowActions: {
     gap: "0.125rem",
+    gridColumn: "actions",
+    gridRow: "actions",
     display: "flex",
   },
   acronym: {
@@ -63,6 +96,7 @@ export function TitleRow({
         aria-pressed={title.isMainTitle}
         onClick={onMakeMain}
         size="icon-xl"
+        sx={styles.main}
         title={m.media_edit_title_main()}
         variant="ghost"
       >
@@ -73,6 +107,7 @@ export function TitleRow({
         onChange={(event) => {
           onUpdate({ title: event.target.value })
         }}
+        sx={styles.title}
         value={title.title}
       />
       <div sx={styles.titleLanguage}>
@@ -89,7 +124,7 @@ export function TitleRow({
           onUpdate({ isAcronym })
         }}
         pressed={title.isAcronym}
-        sx={styles.acronym}
+        sx={[styles.acronym, styles.acronymArea]}
         variant="outline"
       >
         {m.media_edit_title_acronym()}

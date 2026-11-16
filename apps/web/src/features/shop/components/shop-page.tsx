@@ -1,18 +1,14 @@
 import * as stylex from "@stylexjs/stylex"
 import { getRouteApi } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { ShopContent, ShopContentSkeleton } from "@/features/shop/components/shop-content"
 
 const routeApi = getRouteApi("/shop")
 const styles = stylex.create({
   page: {
-    marginInline: "auto",
     paddingBlock: "2rem",
-    paddingInline: layout.gutter,
-    maxWidth: "88rem",
-    width: "100%",
   },
 })
 
@@ -28,7 +24,7 @@ export function ShopPage() {
 
   return (
     <AppShell user={user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <Suspense fallback={<ShopContentSkeleton />}>
           <ShopContent username={username} viewer={viewer} />
         </Suspense>

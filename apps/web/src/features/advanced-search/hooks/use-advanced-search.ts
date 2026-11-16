@@ -7,7 +7,7 @@ import {
   toUrlSearch,
 } from "@/features/advanced-search/lib/advanced-search"
 
-const routeApi = getRouteApi("/titles")
+const routeApi = getRouteApi("/media/")
 
 export function useAdvancedSearch() {
   const url = routeApi.useSearch()

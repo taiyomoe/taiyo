@@ -13,6 +13,27 @@ const ALL_PERMISSIONS: ReadonlySet<GroupPermission> = new Set(GROUP_PERMISSIONS)
 
 export const toRole = (value: unknown) => ROLES.find((role) => role === value) ?? "USER"
 
+/** The group permissions that give a hand on the group's chapters. */
+const CHAPTER_GROUP_PERMISSIONS: readonly GroupPermission[] = [
+  "UPLOAD_CHAPTERS",
+  "EDIT_CHAPTERS",
+  "DELETE_CHAPTERS",
+]
+
+/** The groups whose chapters the actor uploads, edits or deletes: owned ones, or ones granting a chapter permission. */
+export const getChapterGroupIds = (actor: Actor | null) =>
+  actor === null || actor.banned
+    ? []
+    : actor.memberships
+        .filter(
+          (membership) =>
+            membership.role === "OWNER" ||
+            membership.permissions.some((permission) =>
+              CHAPTER_GROUP_PERMISSIONS.includes(permission),
+            ),
+        )
+        .map((membership) => membership.groupId)
+
 export const buildRules = (actor: Actor | null) => {
   const active = actor?.banned === false ? actor : null
   const is = (...roles: Role[]) => active !== null && roles.includes(active.role)
@@ -66,6 +87,7 @@ export const buildRules = (actor: Actor | null) => {
       restore: is("ADMIN"),
       flag: is("MODERATOR", "ADMIN"),
       reindex: is("ADMIN"),
+      syncMangaDex: is("UPLOADER", "ADMIN"),
     },
     mediaSuggestion: {
       review: reviewsSuggestions,
@@ -83,6 +105,9 @@ export const buildRules = (actor: Actor | null) => {
       submit: active !== null,
       review: reviewsChapters,
       flag: managesChapters,
+      list: managesChapters,
+      // Seeing every chapter includes seeing the ones of one's groups.
+      listInGroups: managesChapters || getChapterGroupIds(active).length > 0,
       view: (chapter) => {
         if (chapter.status === "PUBLISHED") {
           return true
@@ -119,6 +144,7 @@ export const buildRules = (actor: Actor | null) => {
     group: {
       create: is("UPLOADER", "ADMIN"),
       delete: is("ADMIN"),
+      list: is("UPLOADER", "MODERATOR", "ADMIN"),
       update: (group) => is("UPLOADER", "MODERATOR", "ADMIN") || holds(group.id, "EDIT_GROUP"),
       uploadChapters: (group) => holds(group.id, "UPLOAD_CHAPTERS"),
       manageMembers: (group) => is("ADMIN") || holds(group.id, "MANAGE_MEMBERS"),
@@ -190,6 +216,7 @@ export const buildRules = (actor: Actor | null) => {
     },
     user: {
       list: is("MODERATOR", "ADMIN"),
+      grant: is("ADMIN"),
       ban: (target) =>
         !isSelf(target.id) && (is("ADMIN") || (is("MODERATOR") && target.role === "USER")),
       setRole: (target) => is("ADMIN") && !isSelf(target.id),

@@ -228,6 +228,24 @@ export const TASK_STATUSES = ["PENDING", "DOWNLOADING", "UPLOADING", "FINISHED",
 
 export type TaskStatus = (typeof TASK_STATUSES)[number]
 
+export const MANGADEX_SYNC_STATUSES = [
+  "PENDING",
+  "RUNNING",
+  "FINISHED",
+  "FAILED",
+  "CANCELLED",
+] as const
+
+export type MangaDexSyncStatus = (typeof MANGADEX_SYNC_STATUSES)[number]
+
+export const MANGADEX_SYNC_ITEM_KINDS = ["COVER", "CHAPTER"] as const
+
+export type MangaDexSyncItemKind = (typeof MANGADEX_SYNC_ITEM_KINDS)[number]
+
+export const MANGADEX_SYNC_ITEM_STATUSES = ["PENDING", "DONE", "SKIPPED", "FAILED"] as const
+
+export type MangaDexSyncItemStatus = (typeof MANGADEX_SYNC_ITEM_STATUSES)[number]
+
 export const LANGUAGES = [
   "aa",
   "ab",

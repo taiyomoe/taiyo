@@ -1,5 +1,12 @@
 import { reapOrphanCommentImages } from "./comment-image-reaper"
 import { createBullConnection } from "./connection"
+import {
+  getMangaDexSyncProducer,
+  MANGADEX_SYNC_QUEUE,
+  type MangaDexSyncJobData,
+  type MangaDexSyncProducer,
+  runMangaDexSync,
+} from "./mangadex-sync"
 import { drainNotificationOutbox, purgeNotifications } from "./notifier"
 import { processChapterUpload } from "./processor"
 import { publishScheduledChapters } from "./publisher"
@@ -22,14 +29,24 @@ export {
   createWebPushSender,
   drainNotificationOutbox,
   getChapterUploadProducer,
+  getMangaDexSyncProducer,
   getVapidPublicKey,
   isExpiredPushStatus,
+  MANGADEX_SYNC_QUEUE,
   processChapterUpload,
   publishScheduledChapters,
   purgeNotifications,
   reapOrphanCommentImages,
   reapStaleChapterUploads,
+  runMangaDexSync,
   sendPendingPushes,
 }
 
-export type { ChapterUploadJobData, ChapterUploadProducer, PushMessage, PushSender }
+export type {
+  ChapterUploadJobData,
+  ChapterUploadProducer,
+  MangaDexSyncJobData,
+  MangaDexSyncProducer,
+  PushMessage,
+  PushSender,
+}

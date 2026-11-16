@@ -242,6 +242,7 @@ describe("GET /audit-logs/suggestions", () => {
 
     expect(actions.body.success && actions.body.data.map(({ value }) => value)).toEqual([
       "admin.ROLE_SET",
+      "admin.ROLE_SET_MANY",
     ])
     expect(actors.body.success && actors.body.data.map(({ value }) => value)).toContain(username)
   })

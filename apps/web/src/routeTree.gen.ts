@@ -15,6 +15,7 @@ import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DmcaRouteImport } from './routes/dmca'
 import { Route as LatestRouteImport } from './routes/latest'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RecentlyAddedRouteImport } from './routes/recently-added'
@@ -28,15 +29,18 @@ import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardActivityLogRouteImport } from './routes/dashboard/activity-log'
-import { Route as DashboardBannersRouteImport } from './routes/dashboard/banners'
+import { Route as DashboardAllGroupsRouteImport } from './routes/dashboard/all-groups'
 import { Route as DashboardChapterReviewsRouteImport } from './routes/dashboard/chapter-reviews'
+import { Route as DashboardChaptersRouteImport } from './routes/dashboard/chapters'
 import { Route as DashboardCommentReportsRouteImport } from './routes/dashboard/comment-reports'
-import { Route as DashboardCoversRouteImport } from './routes/dashboard/covers'
+import { Route as DashboardCommentsRouteImport } from './routes/dashboard/comments'
 import { Route as DashboardGroupReportsRouteImport } from './routes/dashboard/group-reports'
 import { Route as DashboardGroupRequestsRouteImport } from './routes/dashboard/group-requests'
 import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/invitations'
+import { Route as DashboardMangadexSyncRouteImport } from './routes/dashboard/mangadex-sync'
 import { Route as DashboardMySuggestionsRouteImport } from './routes/dashboard/my-suggestions'
 import { Route as DashboardPageReportsRouteImport } from './routes/dashboard/page-reports'
+import { Route as DashboardStaffsRouteImport } from './routes/dashboard/staffs'
 import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard/submissions'
 import { Route as DashboardUploadRouteImport } from './routes/dashboard/upload'
 import { Route as DashboardUsersRouteImport } from './routes/dashboard/users'
@@ -45,14 +49,21 @@ import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
 import { Route as ListsIndexRouteImport } from './routes/lists/index'
 import { Route as ListsListIdRouteImport } from './routes/lists/$listId'
 import { Route as ListsNewRouteImport } from './routes/lists/new'
+import { Route as MediaIndexRouteImport } from './routes/media/index'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
 import { Route as NotificationsOpenRouteImport } from './routes/notifications_.open'
 import { Route as USplatRouteImport } from './routes/u/$'
 import { Route as UsersUsernameRouteImport } from './routes/users/$username'
 import { Route as ChaptersChapterIdIndexRouteImport } from './routes/chapters/$chapterId.index'
 import { Route as ChaptersChapterIdSourceRouteImport } from './routes/chapters/$chapterId.source'
+import { Route as DashboardBannersIndexRouteImport } from './routes/dashboard/banners/index'
+import { Route as DashboardBannersUploadRouteImport } from './routes/dashboard/banners/upload'
+import { Route as DashboardCoversIndexRouteImport } from './routes/dashboard/covers/index'
+import { Route as DashboardCoversUploadRouteImport } from './routes/dashboard/covers/upload'
 import { Route as DashboardGroupsIndexRouteImport } from './routes/dashboard/groups/index'
 import { Route as DashboardGroupsGroupIdRouteImport } from './routes/dashboard/groups/$groupId'
+import { Route as DashboardMediasIndexRouteImport } from './routes/dashboard/medias/index'
+import { Route as DashboardMediasNewRouteImport } from './routes/dashboard/medias/new'
 import { Route as DashboardSuggestionsIndexRouteImport } from './routes/dashboard/suggestions/index'
 import { Route as DashboardSuggestionsSuggestionIdRouteImport } from './routes/dashboard/suggestions/$suggestionId'
 import { Route as ListsListIdEditRouteImport } from './routes/lists/$listId_.edit'
@@ -87,6 +98,11 @@ const DmcaRoute = DmcaRouteImport.update({
 const LatestRoute = LatestRouteImport.update({
   id: '/latest',
   path: '/latest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -154,9 +170,9 @@ const DashboardActivityLogRoute = DashboardActivityLogRouteImport.update({
   path: '/activity-log',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardBannersRoute = DashboardBannersRouteImport.update({
-  id: '/banners',
-  path: '/banners',
+const DashboardAllGroupsRoute = DashboardAllGroupsRouteImport.update({
+  id: '/all-groups',
+  path: '/all-groups',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardChapterReviewsRoute = DashboardChapterReviewsRouteImport.update({
@@ -164,14 +180,19 @@ const DashboardChapterReviewsRoute = DashboardChapterReviewsRouteImport.update({
   path: '/chapter-reviews',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardChaptersRoute = DashboardChaptersRouteImport.update({
+  id: '/chapters',
+  path: '/chapters',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardCommentReportsRoute = DashboardCommentReportsRouteImport.update({
   id: '/comment-reports',
   path: '/comment-reports',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardCoversRoute = DashboardCoversRouteImport.update({
-  id: '/covers',
-  path: '/covers',
+const DashboardCommentsRoute = DashboardCommentsRouteImport.update({
+  id: '/comments',
+  path: '/comments',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardGroupReportsRoute = DashboardGroupReportsRouteImport.update({
@@ -189,6 +210,11 @@ const DashboardInvitationsRoute = DashboardInvitationsRouteImport.update({
   path: '/invitations',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardMangadexSyncRoute = DashboardMangadexSyncRouteImport.update({
+  id: '/mangadex-sync',
+  path: '/mangadex-sync',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardMySuggestionsRoute = DashboardMySuggestionsRouteImport.update({
   id: '/my-suggestions',
   path: '/my-suggestions',
@@ -197,6 +223,11 @@ const DashboardMySuggestionsRoute = DashboardMySuggestionsRouteImport.update({
 const DashboardPageReportsRoute = DashboardPageReportsRouteImport.update({
   id: '/page-reports',
   path: '/page-reports',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardStaffsRoute = DashboardStaffsRouteImport.update({
+  id: '/staffs',
+  path: '/staffs',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardSubmissionsRoute = DashboardSubmissionsRouteImport.update({
@@ -239,6 +270,11 @@ const ListsNewRoute = ListsNewRouteImport.update({
   path: '/lists/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaIndexRoute = MediaIndexRouteImport.update({
+  id: '/media/',
+  path: '/media/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MediaMediaIdRoute = MediaMediaIdRouteImport.update({
   id: '/media/$mediaId',
   path: '/media/$mediaId',
@@ -269,6 +305,26 @@ const ChaptersChapterIdSourceRoute = ChaptersChapterIdSourceRouteImport.update({
   path: '/chapters/$chapterId/source',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardBannersIndexRoute = DashboardBannersIndexRouteImport.update({
+  id: '/banners/',
+  path: '/banners/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardBannersUploadRoute = DashboardBannersUploadRouteImport.update({
+  id: '/banners/upload',
+  path: '/banners/upload',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCoversIndexRoute = DashboardCoversIndexRouteImport.update({
+  id: '/covers/',
+  path: '/covers/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCoversUploadRoute = DashboardCoversUploadRouteImport.update({
+  id: '/covers/upload',
+  path: '/covers/upload',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardGroupsIndexRoute = DashboardGroupsIndexRouteImport.update({
   id: '/groups/',
   path: '/groups/',
@@ -277,6 +333,16 @@ const DashboardGroupsIndexRoute = DashboardGroupsIndexRouteImport.update({
 const DashboardGroupsGroupIdRoute = DashboardGroupsGroupIdRouteImport.update({
   id: '/groups/$groupId',
   path: '/groups/$groupId',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardMediasIndexRoute = DashboardMediasIndexRouteImport.update({
+  id: '/medias/',
+  path: '/medias/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardMediasNewRoute = DashboardMediasNewRouteImport.update({
+  id: '/medias/new',
+  path: '/medias/new',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardSuggestionsIndexRoute =
@@ -314,6 +380,7 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
@@ -326,15 +393,18 @@ export interface FileRoutesByFullPath {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/activity-log': typeof DashboardActivityLogRoute
-  '/dashboard/banners': typeof DashboardBannersRoute
+  '/dashboard/all-groups': typeof DashboardAllGroupsRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
+  '/dashboard/chapters': typeof DashboardChaptersRoute
   '/dashboard/comment-reports': typeof DashboardCommentReportsRoute
-  '/dashboard/covers': typeof DashboardCoversRoute
+  '/dashboard/comments': typeof DashboardCommentsRoute
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
+  '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
@@ -348,14 +418,21 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
   '/lists/': typeof ListsIndexRoute
+  '/media/': typeof MediaIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
+  '/dashboard/banners/upload': typeof DashboardBannersUploadRoute
+  '/dashboard/covers/upload': typeof DashboardCoversUploadRoute
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
+  '/dashboard/medias/new': typeof DashboardMediasNewRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/lists/$listId/edit': typeof ListsListIdEditRoute
   '/media/$mediaId/edit': typeof MediaMediaIdEditRoute
   '/og/$kind/$id': typeof OgKindIdRoute
   '/chapters/$chapterId/': typeof ChaptersChapterIdIndexRoute
+  '/dashboard/banners/': typeof DashboardBannersIndexRoute
+  '/dashboard/covers/': typeof DashboardCoversIndexRoute
   '/dashboard/groups/': typeof DashboardGroupsIndexRoute
+  '/dashboard/medias/': typeof DashboardMediasIndexRoute
   '/dashboard/suggestions/': typeof DashboardSuggestionsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -364,6 +441,7 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
@@ -376,15 +454,18 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/activity-log': typeof DashboardActivityLogRoute
-  '/dashboard/banners': typeof DashboardBannersRoute
+  '/dashboard/all-groups': typeof DashboardAllGroupsRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
+  '/dashboard/chapters': typeof DashboardChaptersRoute
   '/dashboard/comment-reports': typeof DashboardCommentReportsRoute
-  '/dashboard/covers': typeof DashboardCoversRoute
+  '/dashboard/comments': typeof DashboardCommentsRoute
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
+  '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
@@ -398,14 +479,21 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/groups': typeof GroupsIndexRoute
   '/lists': typeof ListsIndexRoute
+  '/media': typeof MediaIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
+  '/dashboard/banners/upload': typeof DashboardBannersUploadRoute
+  '/dashboard/covers/upload': typeof DashboardCoversUploadRoute
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
+  '/dashboard/medias/new': typeof DashboardMediasNewRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/lists/$listId/edit': typeof ListsListIdEditRoute
   '/media/$mediaId/edit': typeof MediaMediaIdEditRoute
   '/og/$kind/$id': typeof OgKindIdRoute
   '/chapters/$chapterId': typeof ChaptersChapterIdIndexRoute
+  '/dashboard/banners': typeof DashboardBannersIndexRoute
+  '/dashboard/covers': typeof DashboardCoversIndexRoute
   '/dashboard/groups': typeof DashboardGroupsIndexRoute
+  '/dashboard/medias': typeof DashboardMediasIndexRoute
   '/dashboard/suggestions': typeof DashboardSuggestionsIndexRoute
 }
 export interface FileRoutesById {
@@ -416,6 +504,7 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
   '/latest': typeof LatestRoute
+  '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/recently-added': typeof RecentlyAddedRoute
@@ -428,15 +517,18 @@ export interface FileRoutesById {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/activity-log': typeof DashboardActivityLogRoute
-  '/dashboard/banners': typeof DashboardBannersRoute
+  '/dashboard/all-groups': typeof DashboardAllGroupsRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
+  '/dashboard/chapters': typeof DashboardChaptersRoute
   '/dashboard/comment-reports': typeof DashboardCommentReportsRoute
-  '/dashboard/covers': typeof DashboardCoversRoute
+  '/dashboard/comments': typeof DashboardCommentsRoute
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
+  '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
   '/dashboard/users': typeof DashboardUsersRoute
@@ -450,14 +542,21 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/groups/': typeof GroupsIndexRoute
   '/lists/': typeof ListsIndexRoute
+  '/media/': typeof MediaIndexRoute
   '/chapters/$chapterId/source': typeof ChaptersChapterIdSourceRoute
+  '/dashboard/banners/upload': typeof DashboardBannersUploadRoute
+  '/dashboard/covers/upload': typeof DashboardCoversUploadRoute
   '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
+  '/dashboard/medias/new': typeof DashboardMediasNewRoute
   '/dashboard/suggestions/$suggestionId': typeof DashboardSuggestionsSuggestionIdRoute
   '/lists/$listId_/edit': typeof ListsListIdEditRoute
   '/media/$mediaId_/edit': typeof MediaMediaIdEditRoute
   '/og/$kind/$id': typeof OgKindIdRoute
   '/chapters/$chapterId/': typeof ChaptersChapterIdIndexRoute
+  '/dashboard/banners/': typeof DashboardBannersIndexRoute
+  '/dashboard/covers/': typeof DashboardCoversIndexRoute
   '/dashboard/groups/': typeof DashboardGroupsIndexRoute
+  '/dashboard/medias/': typeof DashboardMediasIndexRoute
   '/dashboard/suggestions/': typeof DashboardSuggestionsIndexRoute
 }
 export interface FileRouteTypes {
@@ -469,6 +568,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dmca'
     | '/latest'
+    | '/library'
     | '/notifications'
     | '/privacy'
     | '/recently-added'
@@ -481,15 +581,18 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/dashboard/activity-log'
-    | '/dashboard/banners'
+    | '/dashboard/all-groups'
     | '/dashboard/chapter-reviews'
+    | '/dashboard/chapters'
     | '/dashboard/comment-reports'
-    | '/dashboard/covers'
+    | '/dashboard/comments'
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
+    | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
     | '/dashboard/users'
@@ -503,14 +606,21 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/groups/'
     | '/lists/'
+    | '/media/'
     | '/chapters/$chapterId/source'
+    | '/dashboard/banners/upload'
+    | '/dashboard/covers/upload'
     | '/dashboard/groups/$groupId'
+    | '/dashboard/medias/new'
     | '/dashboard/suggestions/$suggestionId'
     | '/lists/$listId/edit'
     | '/media/$mediaId/edit'
     | '/og/$kind/$id'
     | '/chapters/$chapterId/'
+    | '/dashboard/banners/'
+    | '/dashboard/covers/'
     | '/dashboard/groups/'
+    | '/dashboard/medias/'
     | '/dashboard/suggestions/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -519,6 +629,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dmca'
     | '/latest'
+    | '/library'
     | '/notifications'
     | '/privacy'
     | '/recently-added'
@@ -531,15 +642,18 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/dashboard/activity-log'
-    | '/dashboard/banners'
+    | '/dashboard/all-groups'
     | '/dashboard/chapter-reviews'
+    | '/dashboard/chapters'
     | '/dashboard/comment-reports'
-    | '/dashboard/covers'
+    | '/dashboard/comments'
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
+    | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
     | '/dashboard/users'
@@ -553,14 +667,21 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/groups'
     | '/lists'
+    | '/media'
     | '/chapters/$chapterId/source'
+    | '/dashboard/banners/upload'
+    | '/dashboard/covers/upload'
     | '/dashboard/groups/$groupId'
+    | '/dashboard/medias/new'
     | '/dashboard/suggestions/$suggestionId'
     | '/lists/$listId/edit'
     | '/media/$mediaId/edit'
     | '/og/$kind/$id'
     | '/chapters/$chapterId'
+    | '/dashboard/banners'
+    | '/dashboard/covers'
     | '/dashboard/groups'
+    | '/dashboard/medias'
     | '/dashboard/suggestions'
   id:
     | '__root__'
@@ -570,6 +691,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/dmca'
     | '/latest'
+    | '/library'
     | '/notifications'
     | '/privacy'
     | '/recently-added'
@@ -582,15 +704,18 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/dashboard/activity-log'
-    | '/dashboard/banners'
+    | '/dashboard/all-groups'
     | '/dashboard/chapter-reviews'
+    | '/dashboard/chapters'
     | '/dashboard/comment-reports'
-    | '/dashboard/covers'
+    | '/dashboard/comments'
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
+    | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
     | '/dashboard/users'
@@ -604,14 +729,21 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/groups/'
     | '/lists/'
+    | '/media/'
     | '/chapters/$chapterId/source'
+    | '/dashboard/banners/upload'
+    | '/dashboard/covers/upload'
     | '/dashboard/groups/$groupId'
+    | '/dashboard/medias/new'
     | '/dashboard/suggestions/$suggestionId'
     | '/lists/$listId_/edit'
     | '/media/$mediaId_/edit'
     | '/og/$kind/$id'
     | '/chapters/$chapterId/'
+    | '/dashboard/banners/'
+    | '/dashboard/covers/'
     | '/dashboard/groups/'
+    | '/dashboard/medias/'
     | '/dashboard/suggestions/'
   fileRoutesById: FileRoutesById
 }
@@ -622,6 +754,7 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   DmcaRoute: typeof DmcaRoute
   LatestRoute: typeof LatestRoute
+  LibraryRoute: typeof LibraryRoute
   NotificationsRoute: typeof NotificationsRoute
   PrivacyRoute: typeof PrivacyRoute
   RecentlyAddedRoute: typeof RecentlyAddedRoute
@@ -638,6 +771,7 @@ export interface RootRouteChildren {
   UsersUsernameRoute: typeof UsersUsernameRoute
   GroupsIndexRoute: typeof GroupsIndexRoute
   ListsIndexRoute: typeof ListsIndexRoute
+  MediaIndexRoute: typeof MediaIndexRoute
   ChaptersChapterIdSourceRoute: typeof ChaptersChapterIdSourceRoute
   ListsListIdEditRoute: typeof ListsListIdEditRoute
   MediaMediaIdEditRoute: typeof MediaMediaIdEditRoute
@@ -687,6 +821,13 @@ declare module '@tanstack/react-router' {
       path: '/latest'
       fullPath: '/latest'
       preLoaderRoute: typeof LatestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -780,11 +921,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardActivityLogRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/banners': {
-      id: '/dashboard/banners'
-      path: '/banners'
-      fullPath: '/dashboard/banners'
-      preLoaderRoute: typeof DashboardBannersRouteImport
+    '/dashboard/all-groups': {
+      id: '/dashboard/all-groups'
+      path: '/all-groups'
+      fullPath: '/dashboard/all-groups'
+      preLoaderRoute: typeof DashboardAllGroupsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/chapter-reviews': {
@@ -794,6 +935,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardChapterReviewsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/chapters': {
+      id: '/dashboard/chapters'
+      path: '/chapters'
+      fullPath: '/dashboard/chapters'
+      preLoaderRoute: typeof DashboardChaptersRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/comment-reports': {
       id: '/dashboard/comment-reports'
       path: '/comment-reports'
@@ -801,11 +949,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCommentReportsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/covers': {
-      id: '/dashboard/covers'
-      path: '/covers'
-      fullPath: '/dashboard/covers'
-      preLoaderRoute: typeof DashboardCoversRouteImport
+    '/dashboard/comments': {
+      id: '/dashboard/comments'
+      path: '/comments'
+      fullPath: '/dashboard/comments'
+      preLoaderRoute: typeof DashboardCommentsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/group-reports': {
@@ -829,6 +977,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardInvitationsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/mangadex-sync': {
+      id: '/dashboard/mangadex-sync'
+      path: '/mangadex-sync'
+      fullPath: '/dashboard/mangadex-sync'
+      preLoaderRoute: typeof DashboardMangadexSyncRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/my-suggestions': {
       id: '/dashboard/my-suggestions'
       path: '/my-suggestions'
@@ -841,6 +996,13 @@ declare module '@tanstack/react-router' {
       path: '/page-reports'
       fullPath: '/dashboard/page-reports'
       preLoaderRoute: typeof DashboardPageReportsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/staffs': {
+      id: '/dashboard/staffs'
+      path: '/staffs'
+      fullPath: '/dashboard/staffs'
+      preLoaderRoute: typeof DashboardStaffsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/submissions': {
@@ -899,6 +1061,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/media/': {
+      id: '/media/'
+      path: '/media'
+      fullPath: '/media/'
+      preLoaderRoute: typeof MediaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/media/$mediaId': {
       id: '/media/$mediaId'
       path: '/media/$mediaId'
@@ -941,6 +1110,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChaptersChapterIdSourceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/banners/': {
+      id: '/dashboard/banners/'
+      path: '/banners'
+      fullPath: '/dashboard/banners/'
+      preLoaderRoute: typeof DashboardBannersIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/banners/upload': {
+      id: '/dashboard/banners/upload'
+      path: '/banners/upload'
+      fullPath: '/dashboard/banners/upload'
+      preLoaderRoute: typeof DashboardBannersUploadRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/covers/': {
+      id: '/dashboard/covers/'
+      path: '/covers'
+      fullPath: '/dashboard/covers/'
+      preLoaderRoute: typeof DashboardCoversIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/covers/upload': {
+      id: '/dashboard/covers/upload'
+      path: '/covers/upload'
+      fullPath: '/dashboard/covers/upload'
+      preLoaderRoute: typeof DashboardCoversUploadRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/groups/': {
       id: '/dashboard/groups/'
       path: '/groups'
@@ -953,6 +1150,20 @@ declare module '@tanstack/react-router' {
       path: '/groups/$groupId'
       fullPath: '/dashboard/groups/$groupId'
       preLoaderRoute: typeof DashboardGroupsGroupIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/medias/': {
+      id: '/dashboard/medias/'
+      path: '/medias'
+      fullPath: '/dashboard/medias/'
+      preLoaderRoute: typeof DashboardMediasIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/medias/new': {
+      id: '/dashboard/medias/new'
+      path: '/medias/new'
+      fullPath: '/dashboard/medias/new'
+      preLoaderRoute: typeof DashboardMediasNewRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/suggestions/': {
@@ -1013,43 +1224,61 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface DashboardRouteRouteChildren {
   DashboardActivityLogRoute: typeof DashboardActivityLogRoute
-  DashboardBannersRoute: typeof DashboardBannersRoute
+  DashboardAllGroupsRoute: typeof DashboardAllGroupsRoute
   DashboardChapterReviewsRoute: typeof DashboardChapterReviewsRoute
+  DashboardChaptersRoute: typeof DashboardChaptersRoute
   DashboardCommentReportsRoute: typeof DashboardCommentReportsRoute
-  DashboardCoversRoute: typeof DashboardCoversRoute
+  DashboardCommentsRoute: typeof DashboardCommentsRoute
   DashboardGroupReportsRoute: typeof DashboardGroupReportsRoute
   DashboardGroupRequestsRoute: typeof DashboardGroupRequestsRoute
   DashboardInvitationsRoute: typeof DashboardInvitationsRoute
+  DashboardMangadexSyncRoute: typeof DashboardMangadexSyncRoute
   DashboardMySuggestionsRoute: typeof DashboardMySuggestionsRoute
   DashboardPageReportsRoute: typeof DashboardPageReportsRoute
+  DashboardStaffsRoute: typeof DashboardStaffsRoute
   DashboardSubmissionsRoute: typeof DashboardSubmissionsRoute
   DashboardUploadRoute: typeof DashboardUploadRoute
   DashboardUsersRoute: typeof DashboardUsersRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardBannersUploadRoute: typeof DashboardBannersUploadRoute
+  DashboardCoversUploadRoute: typeof DashboardCoversUploadRoute
   DashboardGroupsGroupIdRoute: typeof DashboardGroupsGroupIdRoute
+  DashboardMediasNewRoute: typeof DashboardMediasNewRoute
   DashboardSuggestionsSuggestionIdRoute: typeof DashboardSuggestionsSuggestionIdRoute
+  DashboardBannersIndexRoute: typeof DashboardBannersIndexRoute
+  DashboardCoversIndexRoute: typeof DashboardCoversIndexRoute
   DashboardGroupsIndexRoute: typeof DashboardGroupsIndexRoute
+  DashboardMediasIndexRoute: typeof DashboardMediasIndexRoute
   DashboardSuggestionsIndexRoute: typeof DashboardSuggestionsIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardActivityLogRoute: DashboardActivityLogRoute,
-  DashboardBannersRoute: DashboardBannersRoute,
+  DashboardAllGroupsRoute: DashboardAllGroupsRoute,
   DashboardChapterReviewsRoute: DashboardChapterReviewsRoute,
+  DashboardChaptersRoute: DashboardChaptersRoute,
   DashboardCommentReportsRoute: DashboardCommentReportsRoute,
-  DashboardCoversRoute: DashboardCoversRoute,
+  DashboardCommentsRoute: DashboardCommentsRoute,
   DashboardGroupReportsRoute: DashboardGroupReportsRoute,
   DashboardGroupRequestsRoute: DashboardGroupRequestsRoute,
   DashboardInvitationsRoute: DashboardInvitationsRoute,
+  DashboardMangadexSyncRoute: DashboardMangadexSyncRoute,
   DashboardMySuggestionsRoute: DashboardMySuggestionsRoute,
   DashboardPageReportsRoute: DashboardPageReportsRoute,
+  DashboardStaffsRoute: DashboardStaffsRoute,
   DashboardSubmissionsRoute: DashboardSubmissionsRoute,
   DashboardUploadRoute: DashboardUploadRoute,
   DashboardUsersRoute: DashboardUsersRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardBannersUploadRoute: DashboardBannersUploadRoute,
+  DashboardCoversUploadRoute: DashboardCoversUploadRoute,
   DashboardGroupsGroupIdRoute: DashboardGroupsGroupIdRoute,
+  DashboardMediasNewRoute: DashboardMediasNewRoute,
   DashboardSuggestionsSuggestionIdRoute: DashboardSuggestionsSuggestionIdRoute,
+  DashboardBannersIndexRoute: DashboardBannersIndexRoute,
+  DashboardCoversIndexRoute: DashboardCoversIndexRoute,
   DashboardGroupsIndexRoute: DashboardGroupsIndexRoute,
+  DashboardMediasIndexRoute: DashboardMediasIndexRoute,
   DashboardSuggestionsIndexRoute: DashboardSuggestionsIndexRoute,
 }
 
@@ -1064,6 +1293,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   DmcaRoute: DmcaRoute,
   LatestRoute: LatestRoute,
+  LibraryRoute: LibraryRoute,
   NotificationsRoute: NotificationsRoute,
   PrivacyRoute: PrivacyRoute,
   RecentlyAddedRoute: RecentlyAddedRoute,
@@ -1080,6 +1310,7 @@ const rootRouteChildren: RootRouteChildren = {
   UsersUsernameRoute: UsersUsernameRoute,
   GroupsIndexRoute: GroupsIndexRoute,
   ListsIndexRoute: ListsIndexRoute,
+  MediaIndexRoute: MediaIndexRoute,
   ChaptersChapterIdSourceRoute: ChaptersChapterIdSourceRoute,
   ListsListIdEditRoute: ListsListIdEditRoute,
   MediaMediaIdEditRoute: MediaMediaIdEditRoute,

@@ -61,6 +61,7 @@ export const createPageReportHandler = new Hono().post(
         401: true,
         403: true,
         404: "No chapter with the given ID exists, or it has no page with the given ID.",
+        451: "The chapter's media is locked, so the chapter is unavailable.",
         409: "You already have an open report on this page.",
         422: "One of the provided IDs is not a valid UUID, or the request body failed validation.",
         429: "Too many requests, try again later.",
@@ -75,7 +76,7 @@ export const createPageReportHandler = new Hono().post(
   rateLimit({ prefix: "page-report", windowMs: 60_000, limit: 10 }),
   validateParam(paramSchema),
   validateJson(bodySchema),
-  checkChapter(),
+  checkChapter({ refuseLocked: true }),
   withTransaction,
   async (c) => {
     const { db, user, chapter } = c.var

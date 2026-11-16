@@ -1,6 +1,6 @@
 {
   "name": "@taiyomoe/ui",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "type": "module",
@@ -20,6 +20,7 @@
     "@hugeicons/core-free-icons": "^4.4.0",
     "@hugeicons/react": "^1.1.10",
     "@stylexjs/stylex": "^0.19.1",
+    "@tanstack/react-hotkeys": "^0.22.3",
     "clsx": "^2.1.1",
     "react": "^19.3.1",
     "react-day-picker": "^10.0.2",

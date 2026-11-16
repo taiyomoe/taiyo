@@ -5,6 +5,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
+import { escapeLike } from "../utils/escape-like"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -47,9 +48,7 @@ export const listStaffsHandler = new Hono().get(
       .selectFrom("staffs")
       .where("deletedAt", "is", null)
       .where((eb) =>
-        search === undefined
-          ? eb.and([])
-          : eb("name", "ilike", `%${search.replace(/[\\%_]/g, "\\$&")}%`),
+        search === undefined ? eb.and([]) : eb("name", "ilike", `%${escapeLike(search)}%`),
       )
     const [items, totalRow] = await Promise.all([
       base

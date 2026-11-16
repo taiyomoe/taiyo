@@ -75,12 +75,13 @@ export const listChaptersHandler = new Hono().get(
       ...getOpenApiResponses({
         401: "`unread` is set and you are not signed in.",
         404: "No media with the given ID exists.",
+        451: "The media is locked, so its chapters are unavailable.",
         422: "The provided ID is not a valid UUID, or the query parameters failed validation.",
       }),
     },
   }),
   validateQuery(querySchema),
-  checkMedia(),
+  checkMedia({ refuseLocked: true }),
   async (c) => {
     const { db, media } = c.var
     const { page, perPage, contentRating, sort, order, unread, ...filters } = c.var.query

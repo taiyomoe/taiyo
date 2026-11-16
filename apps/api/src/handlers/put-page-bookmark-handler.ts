@@ -43,6 +43,7 @@ export const putPageBookmarkHandler = new Hono().put(
         401: true,
         403: true,
         404: "No chapter with the given ID exists, or it has no page with the given ID.",
+        451: "The chapter's media is locked, so the chapter is unavailable.",
         422: "One of the provided IDs is not a valid UUID.",
       }),
     },
@@ -50,7 +51,7 @@ export const putPageBookmarkHandler = new Hono().put(
   audited(bookmarkAudit.ADD, (c) => ({ id: c.req.param("id"), pageId: c.req.param("pageId") })),
   withAuth(),
   validateParam(paramSchema),
-  checkChapter(),
+  checkChapter({ refuseLocked: true }),
   async (c) => {
     const { db, user, chapter } = c.var
     const { pageId } = c.var.param

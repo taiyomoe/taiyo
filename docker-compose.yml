@@ -2,7 +2,8 @@ services:
   postgres:
     image: "postgres:18-alpine"
     restart: unless-stopped
-    command: ["postgres", "-c", "max_connections=500"]
+    # Local data only: fsync=off speeds up the test database clones, at the risk of corruption on a VM crash.
+    command: ["postgres", "-c", "max_connections=500", "-c", "fsync=off"]
     environment:
       - POSTGRES_USER=$DATABASE_USERNAME
       - POSTGRES_PASSWORD=$DATABASE_PASSWORD

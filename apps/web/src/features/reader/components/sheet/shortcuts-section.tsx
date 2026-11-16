@@ -1,11 +1,12 @@
+import type { Hotkey } from "@tanstack/react-hotkeys"
 import * as stylex from "@stylexjs/stylex"
-import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
+import { KbdHotkey } from "@taiyomoe/ui/components/ui/kbd"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useAppHotkeyList } from "@tanstack/react-hotkeys"
 import { SettingSection } from "@/features/reader/components/sheet/setting-controls"
-import { READER_SHORTCUTS } from "@/features/reader/hooks/use-reader-keyboard"
 import { m } from "@/paraglide/messages"
 
-const LABELS = {
+const LABELS: Record<string, (() => string) | undefined> = {
   turn: m.reader_shortcut_turn,
   next: m.reader_shortcut_next,
   prev: m.reader_shortcut_prev,
@@ -18,7 +19,7 @@ const LABELS = {
   zoom: m.reader_shortcut_zoom,
   zoomReset: m.reader_shortcut_zoom_reset,
   bookmark: m.reader_shortcut_bookmark,
-} satisfies Record<(typeof READER_SHORTCUTS)[number]["action"], () => string>
+}
 const styles = stylex.create({
   list: {
     margin: 0,
@@ -33,6 +34,9 @@ const styles = stylex.create({
   },
   keys: {
     margin: 0,
+    gap: "0.25rem",
+    display: "flex",
+    flexWrap: "wrap",
     justifySelf: "start",
   },
   action: {
@@ -43,19 +47,37 @@ const styles = stylex.create({
 })
 
 export function ShortcutsSection() {
+  const items = useAppHotkeyList()
+  const groups = new Map<string, { label: () => string; hotkeys: Hotkey[] }>()
+
+  for (const { appHotkey } of items) {
+    const group = appHotkey.meta?.group
+    const label = group === undefined ? undefined : LABELS[group]
+
+    if (!appHotkey.id.startsWith("reader.") || group === undefined || label === undefined) {
+      continue
+    }
+
+    const entry = groups.get(group) ?? { label, hotkeys: [] }
+
+    if (appHotkey.hotkey !== null) {
+      entry.hotkeys.push(appHotkey.hotkey)
+    }
+
+    groups.set(group, entry)
+  }
+
   return (
     <SettingSection title={m.reader_section_shortcuts()}>
       <dl sx={styles.list}>
-        {READER_SHORTCUTS.map((shortcut) => (
-          <div key={shortcut.keys.join("+")} sx={styles.row}>
+        {[...groups].map(([group, { label, hotkeys }]) => (
+          <div key={group} sx={styles.row}>
             <dt sx={styles.keys}>
-              <KbdGroup>
-                {shortcut.keys.map((key) => (
-                  <Kbd key={key}>{key}</Kbd>
-                ))}
-              </KbdGroup>
+              {hotkeys.map((hotkey) => (
+                <KbdHotkey key={String(hotkey)} hotkey={hotkey} />
+              ))}
             </dt>
-            <dd sx={styles.action}>{LABELS[shortcut.action]()}</dd>
+            <dd sx={styles.action}>{label()}</dd>
           </div>
         ))}
       </dl>

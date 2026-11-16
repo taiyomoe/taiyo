@@ -1,13 +1,13 @@
 import { Outlet, getRouteApi } from "@tanstack/react-router"
 import { AppShell } from "@/components/shell/app-shell"
 import { DASHBOARD_SECTIONS } from "@/features/dashboard/lib/dashboard-sections"
-import { getPermissions } from "@/lib/permissions"
+import { usePermissions } from "@/lib/permissions"
 
 const routeApi = getRouteApi("/dashboard")
 
 export function DashboardLayout() {
   const { session } = routeApi.useRouteContext()
-  const can = getPermissions(session.user)
+  const can = usePermissions(session.user)
 
   return (
     <AppShell

@@ -5,12 +5,9 @@ import { Link } from "@tanstack/react-router"
 import { useDeferredValue } from "react"
 import { LanguageFlag } from "@/components/flags/flags"
 import { getLanguageName } from "@/components/flags/language-flags"
+import { LIBRARY_STATUS_LABELS, LIBRARY_STATUSES } from "@/features/library/lib/library-statuses"
 import { Cover } from "@/features/media/components/cover"
-import {
-  LIBRARY_STATUS_LABELS,
-  LIBRARY_STATUSES,
-  MEDIA_TYPE_LABELS,
-} from "@/features/media/lib/media-labels"
+import { MEDIA_TYPE_LABELS } from "@/features/media/lib/media-labels"
 import {
   type UserProfile,
   type UserStats,

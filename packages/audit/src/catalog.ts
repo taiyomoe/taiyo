@@ -43,6 +43,9 @@ export const adminAudit = defineAuditCatalog("admin", {
   USER_LIST: { severity: "medium" },
   USER_GET: { target: "user", severity: "medium" },
   USER_SESSIONS_LIST: { target: "user", severity: "medium" },
+  ROLE_SET_MANY: { severity: "critical", requiresChanges: true },
+  POINTS_GRANT_MANY: { severity: "high", requiresChanges: true },
+  COSMETIC_GRANT_MANY: { severity: "medium", requiresChanges: true },
 })
 
 export const userAudit = defineAuditCatalog("user", {
@@ -72,6 +75,7 @@ export const commentAudit = defineAuditCatalog("comment", {
   VOTE: { target: "comment", severity: "low" },
   UNVOTE: { target: "comment", severity: "low" },
   REVISIONS_LIST: { target: "comment", severity: "low" },
+  DELETE_MANY: { severity: "medium" },
 })
 
 export const commentReportAudit = defineAuditCatalog("comment.report", {
@@ -94,6 +98,9 @@ export const mediaAudit = defineAuditCatalog("media", {
   RESTORE: { target: "media", severity: "high" },
   FLAG: { target: "media", severity: "high", requiresChanges: true, requiresReason: true },
   REINDEX: { target: "media", severity: "low" },
+  UPDATE_MANY: { severity: "medium" },
+  DELETE_MANY: { severity: "high" },
+  RESTORE_MANY: { severity: "high" },
 })
 
 export const coverAudit = defineAuditCatalog("media.cover", {
@@ -101,12 +108,22 @@ export const coverAudit = defineAuditCatalog("media.cover", {
   UPDATE: { target: "cover", severity: "medium", requiresChanges: true },
   DELETE: { target: "cover", severity: "high" },
   SET_MAIN: { target: "cover", severity: "medium" },
+  UPDATE_MANY: { severity: "medium" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const bannerAudit = defineAuditCatalog("media.banner", {
   CREATE: { target: "media", severity: "medium" },
   UPDATE: { target: "banner", severity: "medium", requiresChanges: true },
   DELETE: { target: "banner", severity: "high" },
+  UPDATE_MANY: { severity: "medium" },
+  DELETE_MANY: { severity: "high" },
+})
+
+export const mangaDexSyncAudit = defineAuditCatalog("media.mangadex", {
+  START: { target: "media", severity: "medium" },
+  CANCEL: { target: "mangaDexSync", severity: "low" },
+  PROCESS: { target: "mangaDexSync", severity: "medium" },
 })
 
 export const mediaSuggestionAudit = defineAuditCatalog("media.suggestion", {
@@ -126,6 +143,7 @@ export const staffAudit = defineAuditCatalog("staff", {
   CREATE: { target: "staff", severity: "medium" },
   UPDATE: { target: "staff", severity: "medium", requiresChanges: true },
   DELETE: { target: "staff", severity: "high" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const chapterAudit = defineAuditCatalog("chapter", {
@@ -135,6 +153,8 @@ export const chapterAudit = defineAuditCatalog("chapter", {
   WITHDRAW: { target: "chapter", severity: "low" },
   PAGES_REORDER: { target: "chapter", severity: "low" },
   PUBLISH: { target: "chapter", severity: "medium" },
+  UPDATE_MANY: { severity: "medium" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const chapterReviewAudit = defineAuditCatalog("chapter.review", {
@@ -163,6 +183,7 @@ export const groupAudit = defineAuditCatalog("group", {
   DELETE: { target: "group", severity: "high" },
   FOLLOW: { target: "group", severity: "low" },
   UNFOLLOW: { target: "group", severity: "low" },
+  DELETE_MANY: { severity: "high" },
 })
 
 export const groupReportAudit = defineAuditCatalog("group.report", {
@@ -262,6 +283,7 @@ export const auditCatalogs = [
   mediaSuggestionAudit,
   coverAudit,
   bannerAudit,
+  mangaDexSyncAudit,
   mediaStaffAudit,
   staffAudit,
   chapterAudit,
@@ -297,6 +319,7 @@ declare module "evlog" {
     mediaSuggestion: typeof mediaSuggestionAudit
     cover: typeof coverAudit
     banner: typeof bannerAudit
+    mangaDexSync: typeof mangaDexSyncAudit
     mediaStaff: typeof mediaStaffAudit
     staff: typeof staffAudit
     chapter: typeof chapterAudit

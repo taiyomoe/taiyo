@@ -2,18 +2,15 @@ import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 
 const styles = stylex.create({
   page: {
     gap: "2rem",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
-    maxWidth: "68rem",
     paddingBottom: "3rem",
     paddingTop: "2rem",
-    width: "100%",
   },
   header: {
     gap: "1.25rem",
@@ -108,7 +105,7 @@ export function DashboardPage({
   children: ReactNode
 }) {
   return (
-    <div sx={styles.page}>
+    <div sx={[pageFrame.frame, styles.page]}>
       <div sx={styles.header}>
         <div sx={styles.intro}>
           {eyebrow === undefined ? null : <div sx={styles.eyebrow}>{eyebrow}</div>}

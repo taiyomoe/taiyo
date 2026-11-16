@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
@@ -8,7 +7,7 @@ import { UserName } from "@/components/user-name/user-name"
 import { previewStyles } from "@/features/command-palette/components/preview/preview-styles"
 import { GroupAvatar, PersonAvatar } from "@/features/groups/components/group-avatar"
 import { userProfileQueryOptions } from "@/features/users/api/profile"
-import { ROLE_LABELS } from "@/features/users/lib/role-labels"
+import { UserRoleBadge } from "@/features/users/components/users/user-role-badge"
 import { pickLocalized } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
@@ -96,9 +95,9 @@ export function UserPreview({ user }: { user: UserEntity }) {
           </span>
           <span sx={previewStyles.subtle}>@{user.username}</span>
           {profile === undefined || profile.role === "USER" ? null : (
-            <Badge size="sm" sx={styles.role} variant="outline">
-              {ROLE_LABELS[profile.role]()}
-            </Badge>
+            <span sx={styles.role}>
+              <UserRoleBadge role={profile.role} size="sm" />
+            </span>
           )}
         </div>
       </div>

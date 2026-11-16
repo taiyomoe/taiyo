@@ -84,6 +84,7 @@ export const createCoversHandler = new Hono().post(
         401: true,
         403: true,
         404: "No media with the given ID exists.",
+        451: "The media is locked, so no cover can be added.",
         422: `The provided ID is not a valid UUID, or the request body failed validation, or one of the images is invalid, larger than ${config.images.maxSizeBytes / 1024 / 1024} MB or has too many pixels or frames.`,
         429: "Too many requests, try again later.",
       }),
@@ -94,7 +95,7 @@ export const createCoversHandler = new Hono().post(
   rateLimit({ prefix: "create-covers", windowMs: 60_000, limit: 10 }),
   validateFormData(createCoversSchema),
   checkImages(),
-  checkMedia(),
+  checkMedia({ refuseLocked: true }),
   transcodeSlot,
   withTransaction,
   async (c) => {

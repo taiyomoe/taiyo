@@ -8,6 +8,8 @@ const searchSchema = z.object({
     .max(2048)
     .optional()
     .catch(undefined),
+  error: z.string().max(100).optional().catch(undefined),
+  provider: z.enum(["google", "discord"]).optional().catch(undefined),
 })
 
 export const Route = createFileRoute("/auth")({

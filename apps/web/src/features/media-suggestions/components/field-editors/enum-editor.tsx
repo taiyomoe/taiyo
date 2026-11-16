@@ -1,18 +1,17 @@
+import type { OptionSet } from "@/components/fields/option-select"
 import type { EditorProps } from "@/features/media-suggestions/components/field-editors/editor-props"
 import type { MediaEditDraft } from "@/features/media-suggestions/lib/media-edit-model"
-import { EnumSelect } from "@/features/media-suggestions/components/field-editors/enum-select"
+import { OptionSelect } from "@/components/fields/option-select"
 
 export const enumEditor =
   <K extends "type" | "status" | "source" | "demography" | "countryOfOrigin" | "contentRating">(
     key: K,
-    options: ReadonlyArray<MediaEditDraft[K]>,
-    labels: Record<MediaEditDraft[K], () => string>,
+    options: OptionSet<MediaEditDraft[K]>,
     label: () => string,
   ) =>
   ({ draft, onChange }: EditorProps) => (
-    <EnumSelect
+    <OptionSelect
       label={label()}
-      labels={labels}
       onChange={(next) => {
         onChange({ ...draft, [key]: next })
       }}

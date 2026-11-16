@@ -99,6 +99,7 @@ export const createChapterHandler = new Hono().post(
         401: true,
         403: "You do not have permission to perform this action, or you set `flag` without the uploader, moderator or admin role.",
         404: "No media with the given ID exists, or one of the groups does not exist.",
+        451: "The media is locked, so no chapter can be uploaded.",
         409: "You already have too many chapters waiting for review.",
         422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
@@ -107,7 +108,7 @@ export const createChapterHandler = new Hono().post(
   audited(chapterAudit.CREATE, (c) => ({ mediaId: c.req.param("id") })),
   withAuth(),
   validateJson(createChapterSchema),
-  checkMedia(),
+  checkMedia({ refuseLocked: true }),
   withTransaction,
   async (c) => {
     const { can, db, log, media, user } = c.var

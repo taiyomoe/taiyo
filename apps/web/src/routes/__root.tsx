@@ -5,6 +5,8 @@ import ptSerifLatinExtBold from "@fontsource/pt-serif/files/pt-serif-latin-ext-7
 import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
 import { ToastProvider } from "@taiyomoe/ui/components/ui/toast"
 import { TanStackDevtools } from "@tanstack/react-devtools"
+import { HotkeysProvider, detectPlatform } from "@tanstack/react-hotkeys"
+import { hotkeysDevtoolsPlugin } from "@tanstack/react-hotkeys-devtools"
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import {
   HeadContent,
@@ -15,7 +17,7 @@ import {
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { createIsomorphicFn } from "@tanstack/react-start"
-import { getCookies } from "@tanstack/react-start/server"
+import { getCookies, getRequestHeader } from "@tanstack/react-start/server"
 import { fromEntries, map, pipe } from "remeda"
 import type { FileRoutesById } from "@/routeTree.gen"
 import { env } from "@/env/client"
@@ -23,6 +25,7 @@ import { UMAMI_PROXY_PATH } from "@/features/analytics/lib/umami"
 import { CommandPaletteProvider } from "@/features/command-palette/components/command-palette-provider"
 import { NotificationStream } from "@/features/notifications/components/notification-stream"
 import { siteOgMeta } from "@/features/og/lib/og-meta"
+import { appHotkeys } from "@/lib/app-hotkeys"
 import { sessionQueryOptions } from "@/lib/session"
 import {
   THEME_COOKIE,
@@ -49,6 +52,9 @@ const readCookies = createIsomorphicFn()
       fromEntries(),
     ),
   )
+const getPlatform = createIsomorphicFn()
+  .server(() => detectPlatform(getRequestHeader("user-agent")))
+  .client(() => detectPlatform())
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   beforeLoad: async ({ context, location, matches }) => {
@@ -157,12 +163,15 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ThemeContext value={theme}>{children}</ThemeContext>
+        <HotkeysProvider appHotkeys={appHotkeys} defaultOptions={{ platform: getPlatform() }}>
+          <ThemeContext value={theme}>{children}</ThemeContext>
+        </HotkeysProvider>
         <TanStackDevtools
           config={{ position: "bottom-right" }}
           plugins={[
             { name: "Tanstack Router", render: <TanStackRouterDevtoolsPanel /> },
             { name: "Tanstack Query", render: <ReactQueryDevtoolsPanel /> },
+            hotkeysDevtoolsPlugin(),
           ]}
         />
         <Scripts />

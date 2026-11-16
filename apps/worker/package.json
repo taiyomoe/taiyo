@@ -1,6 +1,6 @@
 {
   "name": "@taiyomoe/worker",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "type": "module",
@@ -15,6 +15,7 @@
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/mangadex": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",

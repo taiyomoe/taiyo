@@ -50,7 +50,7 @@ export type UserTarget = { id: string; role: Role }
 
 export type PermissionsDefinition = ValidateDefinition<{
   dashboard: ["open", "viewStats"]
-  media: ["create", "update", "suggest", "delete", "restore", "flag", "reindex"]
+  media: ["create", "update", "suggest", "delete", "restore", "flag", "reindex", "syncMangaDex"]
   mediaSuggestion: [
     "review",
     { name: "view"; type: MediaSuggestionTarget; required: true },
@@ -63,6 +63,8 @@ export type PermissionsDefinition = ValidateDefinition<{
     "submit",
     "review",
     "flag",
+    "list",
+    "listInGroups",
     { name: "view"; type: ChapterTarget; required: true },
     { name: "update"; type: ChapterTarget; required: true },
     { name: "withdraw"; type: ChapterTarget; required: true },
@@ -73,6 +75,7 @@ export type PermissionsDefinition = ValidateDefinition<{
   group: [
     "create",
     "delete",
+    "list",
     { name: "update"; type: GroupTarget; required: true },
     { name: "uploadChapters"; type: GroupTarget; required: true },
     { name: "manageMembers"; type: GroupTarget; required: true },
@@ -90,6 +93,7 @@ export type PermissionsDefinition = ValidateDefinition<{
   comment: ["create", "delete", "review", "removeImage"]
   user: [
     "list",
+    "grant",
     { name: "ban"; type: UserTarget; required: true },
     { name: "setRole"; type: { id: string }; required: true },
     { name: "impersonate"; type: UserTarget; required: true },

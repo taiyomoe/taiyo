@@ -32,6 +32,7 @@ import { useEffect, useState } from "react"
 import { range } from "remeda"
 import type { Session } from "@/lib/session"
 import { layout } from "@/components/layout/layout.stylex"
+import { pageFrame } from "@/components/layout/page-frame"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { AppShell } from "@/components/shell/app-shell"
 import {
@@ -79,14 +80,10 @@ const ACCENT = `color-mix(in srgb, ${colors.primary} 78%, ${colors.foreground})`
 const styles = stylex.create({
   page: {
     gap: { default: "1.25rem", [breakpoints.md]: "1.75rem" },
-    marginInline: "auto",
-    paddingInline: layout.gutter,
     display: "flex",
     flexDirection: "column",
-    maxWidth: "76rem",
     paddingBottom: "4rem",
     paddingTop: { default: "1.5rem", [breakpoints.md]: "2.5rem" },
-    width: "100%",
   },
   layout: {
     gap: { default: "1rem", [breakpoints.lg]: "2rem" },
@@ -418,7 +415,7 @@ export function NotificationsPage() {
 
   return (
     <AppShell user={session.user}>
-      <div sx={styles.page}>
+      <div sx={[pageFrame.frame, styles.page]}>
         <div sx={styles.layout}>
           <header sx={styles.header}>
             <div sx={styles.heading}>

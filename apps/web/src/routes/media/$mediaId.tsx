@@ -9,7 +9,10 @@ import {
   mediaChaptersQueryOptions,
 } from "@/features/chapters/api/chapters"
 import { commentsQueryOptions } from "@/features/comments/api/comments"
-import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/features/media/api/library"
+import {
+  libraryEntryQueryOptions,
+  readingProgressQueryOptions,
+} from "@/features/library/api/library"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { MediaNotFoundPage } from "@/features/media/components/media-page/media-not-found-page"
 import { MediaPage } from "@/features/media/components/media-page/media-page"

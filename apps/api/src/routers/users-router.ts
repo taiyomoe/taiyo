@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { addUsersPointsHandler } from "../handlers/add-users-points-handler"
 import { banUserHandler } from "../handlers/ban-user-handler"
 import { createListHandler } from "../handlers/create-list-handler"
 import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-handler"
@@ -9,6 +10,7 @@ import { deletePushSubscriptionHandler } from "../handlers/delete-push-subscript
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
+import { getMyLibraryCountsHandler } from "../handlers/get-my-library-counts-handler"
 import { getMyNotificationCountsHandler } from "../handlers/get-my-notification-counts-handler"
 import { getMyOverviewHandler } from "../handlers/get-my-overview-handler"
 import { getMyReaderSettingsHandler } from "../handlers/get-my-reader-settings-handler"
@@ -16,6 +18,7 @@ import { getPushPublicKeyHandler } from "../handlers/get-push-public-key-handler
 import { getReadingProgressHandler } from "../handlers/get-reading-progress-handler"
 import { getUserProfileHandler } from "../handlers/get-user-profile-handler"
 import { getUserStatsHandler } from "../handlers/get-user-stats-handler"
+import { grantUsersCosmeticHandler } from "../handlers/grant-users-cosmetic-handler"
 import { listFollowersHandler } from "../handlers/list-followers-handler"
 import { listFollowingHandler } from "../handlers/list-following-handler"
 import { listMyBookmarksHandler } from "../handlers/list-my-bookmarks-handler"
@@ -37,6 +40,7 @@ import { readMyNotificationHandler } from "../handlers/read-my-notification-hand
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
 import { setMyPasswordHandler } from "../handlers/set-my-password-handler"
 import { setUserRoleHandler } from "../handlers/set-user-role-handler"
+import { setUsersRoleHandler } from "../handlers/set-users-role-handler"
 import { streamMyNotificationsHandler } from "../handlers/stream-my-notifications-handler"
 import { testPushSubscriptionHandler } from "../handlers/test-push-subscription-handler"
 import { unbanUserHandler } from "../handlers/unban-user-handler"
@@ -54,6 +58,9 @@ import { upsertPushSubscriptionHandler } from "../handlers/upsert-push-subscript
 
 export const usersRouter = new Hono()
   .route("/", listUsersHandler)
+  .route("/", setUsersRoleHandler)
+  .route("/", addUsersPointsHandler)
+  .route("/", grantUsersCosmeticHandler)
   .route("/", getUserProfileHandler)
   .route("/", getMyOverviewHandler)
   .route("/", setUserRoleHandler)
@@ -66,6 +73,7 @@ export const usersRouter = new Hono()
   .route("/", listMyHistoryHandler)
   .route("/", getReadingProgressHandler)
   .route("/", deleteChapterHistoryHandler)
+  .route("/", getMyLibraryCountsHandler)
   .route("/", getLibraryEntryHandler)
   .route("/", upsertLibraryEntryHandler)
   .route("/", removeLibraryEntryHandler)
