@@ -18,6 +18,7 @@ import { afterAll, test as baseTest } from "vitest"
 import type { Services } from "../services"
 import { createApp } from "../app"
 import { defined } from "./helpers/assert"
+import { createFakeMangaDex, type FakeMangaDex } from "./helpers/mangadex"
 import { createMemoryNotificationEvents } from "./helpers/notification-events"
 import { createMemoryPushSender } from "./helpers/push-sender"
 
@@ -98,9 +99,11 @@ type Fixtures = {
   services: Services
   app: Hono
   mails: GroupInvitationMail[]
+  mangaDex: FakeMangaDex
 }
 
 const sentMails = new WeakMap<Services, GroupInvitationMail[]>()
+const fakeMangaDexes = new WeakMap<Services, FakeMangaDex>()
 
 export const test = baseTest.extend<Fixtures>({
   // Meilisearch runs its tasks one at a time: only the files that read the index opt in.
@@ -122,6 +125,7 @@ export const test = baseTest.extend<Fixtures>({
     }
 
     const mails: GroupInvitationMail[] = []
+    const mangaDex = createFakeMangaDex()
     const services: Services = {
       db,
       s3,
@@ -130,6 +134,8 @@ export const test = baseTest.extend<Fixtures>({
       mediasIndex,
       auth: createAuth({ db, trustedOrigins: ["http://localhost"] }),
       chapterUploadQueue: { enqueue: async () => {} },
+      mangaDex: mangaDex.client,
+      mangaDexSyncQueue: mangaDex.queue,
       mailer: {
         sendGroupInvitation: (mail) => {
           mails.push(mail)
@@ -144,6 +150,7 @@ export const test = baseTest.extend<Fixtures>({
     }
 
     sentMails.set(services, mails)
+    fakeMangaDexes.set(services, mangaDex)
 
     await use(services)
 
@@ -165,5 +172,8 @@ export const test = baseTest.extend<Fixtures>({
   },
   mails: async ({ services }, use) => {
     await use(sentMails.get(services) ?? [])
+  },
+  mangaDex: async ({ services }, use) => {
+    await use(defined(fakeMangaDexes.get(services)))
   },
 })

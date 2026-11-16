@@ -37,6 +37,7 @@ import { Route as DashboardCommentsRouteImport } from './routes/dashboard/commen
 import { Route as DashboardGroupReportsRouteImport } from './routes/dashboard/group-reports'
 import { Route as DashboardGroupRequestsRouteImport } from './routes/dashboard/group-requests'
 import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/invitations'
+import { Route as DashboardMangadexSyncRouteImport } from './routes/dashboard/mangadex-sync'
 import { Route as DashboardMySuggestionsRouteImport } from './routes/dashboard/my-suggestions'
 import { Route as DashboardPageReportsRouteImport } from './routes/dashboard/page-reports'
 import { Route as DashboardStaffsRouteImport } from './routes/dashboard/staffs'
@@ -207,6 +208,11 @@ const DashboardGroupRequestsRoute = DashboardGroupRequestsRouteImport.update({
 const DashboardInvitationsRoute = DashboardInvitationsRouteImport.update({
   id: '/invitations',
   path: '/invitations',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardMangadexSyncRoute = DashboardMangadexSyncRouteImport.update({
+  id: '/mangadex-sync',
+  path: '/mangadex-sync',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardMySuggestionsRoute = DashboardMySuggestionsRouteImport.update({
@@ -395,6 +401,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
   '/dashboard/staffs': typeof DashboardStaffsRoute
@@ -455,6 +462,7 @@ export interface FileRoutesByTo {
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
   '/dashboard/staffs': typeof DashboardStaffsRoute
@@ -517,6 +525,7 @@ export interface FileRoutesById {
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
   '/dashboard/staffs': typeof DashboardStaffsRoute
@@ -580,6 +589,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
     | '/dashboard/staffs'
@@ -640,6 +650,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
     | '/dashboard/staffs'
@@ -701,6 +712,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
     | '/dashboard/staffs'
@@ -965,6 +977,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardInvitationsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/mangadex-sync': {
+      id: '/dashboard/mangadex-sync'
+      path: '/mangadex-sync'
+      fullPath: '/dashboard/mangadex-sync'
+      preLoaderRoute: typeof DashboardMangadexSyncRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/my-suggestions': {
       id: '/dashboard/my-suggestions'
       path: '/my-suggestions'
@@ -1213,6 +1232,7 @@ interface DashboardRouteRouteChildren {
   DashboardGroupReportsRoute: typeof DashboardGroupReportsRoute
   DashboardGroupRequestsRoute: typeof DashboardGroupRequestsRoute
   DashboardInvitationsRoute: typeof DashboardInvitationsRoute
+  DashboardMangadexSyncRoute: typeof DashboardMangadexSyncRoute
   DashboardMySuggestionsRoute: typeof DashboardMySuggestionsRoute
   DashboardPageReportsRoute: typeof DashboardPageReportsRoute
   DashboardStaffsRoute: typeof DashboardStaffsRoute
@@ -1242,6 +1262,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardGroupReportsRoute: DashboardGroupReportsRoute,
   DashboardGroupRequestsRoute: DashboardGroupRequestsRoute,
   DashboardInvitationsRoute: DashboardInvitationsRoute,
+  DashboardMangadexSyncRoute: DashboardMangadexSyncRoute,
   DashboardMySuggestionsRoute: DashboardMySuggestionsRoute,
   DashboardPageReportsRoute: DashboardPageReportsRoute,
   DashboardStaffsRoute: DashboardStaffsRoute,

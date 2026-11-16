@@ -3,22 +3,27 @@ import {
   chapterUploadAudit,
   commentImageAudit,
   createAuditLogDrain,
+  mangaDexSyncAudit,
   systemActor,
 } from "@taiyomoe/audit"
 import { createNotificationEvents } from "@taiyomoe/cache/notification-events"
 import { config } from "@taiyomoe/config"
 import { getDb } from "@taiyomoe/db"
+import { createMangaDexClient } from "@taiyomoe/mangadex"
 import {
   CHAPTER_UPLOAD_QUEUE,
   type ChapterUploadJobData,
   createBullConnection,
   createWebPushSender,
   drainNotificationOutbox,
+  MANGADEX_SYNC_QUEUE,
+  type MangaDexSyncJobData,
   processChapterUpload,
   publishScheduledChapters,
   purgeNotifications,
   reapOrphanCommentImages,
   reapStaleChapterUploads,
+  runMangaDexSync,
   sendPendingPushes,
 } from "@taiyomoe/queue"
 import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from "@taiyomoe/s3"
@@ -42,7 +47,9 @@ const SEND_PUSHES_JOB = "send-pushes"
 const chapterUploadActor = systemActor("chapter-upload-worker")
 const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
+const mangaDexSyncActor = systemActor("mangadex-sync-worker")
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
+const mangaDexDeps = { ...deps, mangaDex: createMangaDexClient() }
 const notificationEvents = createNotificationEvents()
 const pushDeps = { db: deps.db, send: createWebPushSender() }
 const searchDeps = { db: deps.db, meili: getMeiliClient(), mediasIndex: SEARCH_INDEXES.MEDIAS }
@@ -115,6 +122,39 @@ const chapterWorker = new Worker<ChapterUploadJobData>(
     }
   },
   { connection: createBullConnection(), concurrency: env.CHAPTER_PROCESSING_CONCURRENCY },
+)
+// One sync at a time keeps the worker within MangaDex's rate limits.
+const mangaDexSyncWorker = new Worker<MangaDexSyncJobData>(
+  MANGADEX_SYNC_QUEUE,
+  async (job) => {
+    try {
+      const processed = await runMangaDexSync(mangaDexDeps, job.data, {
+        isFinalAttempt: job.attemptsMade + 1 >= (job.opts.attempts ?? 1),
+      })
+
+      if (processed !== undefined) {
+        audit(
+          mangaDexSyncAudit.PROCESS({
+            actor: mangaDexSyncActor,
+            target: { id: job.data.syncId, ...processed },
+            outcome: processed.status === "FAILED" ? "failure" : "success",
+          }),
+        )
+      }
+    } catch (err) {
+      audit(
+        mangaDexSyncAudit.PROCESS({
+          actor: mangaDexSyncActor,
+          target: { id: job.data.syncId },
+          outcome: "failure",
+          reason: err instanceof Error ? err.message : String(err),
+        }),
+      )
+
+      throw err
+    }
+  },
+  { connection: createBullConnection(), concurrency: 1 },
 )
 const maintenanceWorker = new Worker(
   CHAPTER_MAINTENANCE_QUEUE,
@@ -285,6 +325,7 @@ await notificationMaintenanceQueue
 const handleShutdownSignal = () => {
   Promise.all([
     chapterWorker.close(),
+    mangaDexSyncWorker.close(),
     maintenanceWorker.close(),
     searchWorker.close(),
     commentWorker.close(),

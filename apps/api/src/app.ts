@@ -37,6 +37,7 @@ import { groupInvitationsRouter } from "./routers/group-invitations-router"
 import { groupReportsRouter } from "./routers/group-reports-router"
 import { groupsRouter } from "./routers/groups-router"
 import { listsRouter } from "./routers/lists-router"
+import { mangaDexSyncsRouter } from "./routers/mangadex-syncs-router"
 import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
@@ -71,7 +72,16 @@ const scalarExtensions = {
   "x-tagGroups": [
     {
       name: "Catalog",
-      tags: ["Medias", "Covers", "Banners", "Staffs", "Media staff", "Media suggestions", "Search"],
+      tags: [
+        "Medias",
+        "Covers",
+        "Banners",
+        "Staffs",
+        "Media staff",
+        "Media suggestions",
+        "MangaDex sync",
+        "Search",
+      ],
     },
     {
       name: "Chapters",
@@ -117,7 +127,7 @@ export const createApp = (services: Services) => {
         plugins: [drainPlugin("audit-logs", createAuditLogDrain(services.db))],
       }),
     )
-    .use(secureHeaders())
+    .use(secureHeaders({ crossOriginResourcePolicy: "same-site" }))
     .use(
       cors({
         origin: corsAllowedOrigins.length > 0 ? corsAllowedOrigins : [],
@@ -143,6 +153,8 @@ export const createApp = (services: Services) => {
         c.set("mediasIndex", services.mediasIndex)
         c.set("auth", services.auth)
         c.set("chapterUploadQueue", services.chapterUploadQueue)
+        c.set("mangaDex", services.mangaDex)
+        c.set("mangaDexSyncQueue", services.mangaDexSyncQueue)
         c.set("mailer", services.mailer)
         c.set("notificationEvents", services.notificationEvents)
         c.set("pushSender", services.pushSender)
@@ -235,6 +247,7 @@ export const createApp = (services: Services) => {
     .route("/group-creation-requests", groupCreationRequestsRouter)
     .route("/group-reports", groupReportsRouter)
     .route("/media-suggestions", mediaSuggestionsRouter)
+    .route("/mangadex-syncs", mangaDexSyncsRouter)
     .route("/users", usersRouter)
     .route("/lists", listsRouter)
     .route("/comments", commentsRouter)
@@ -286,6 +299,11 @@ export const createApp = (services: Services) => {
               name: "Media suggestions",
               description:
                 "Edits to a media suggested by any signed-in user, reviewed field by field by uploaders, moderators and admins.",
+            },
+            {
+              name: "MangaDex sync",
+              description:
+                "Comparing a media with its MangaDex entry and importing what Taiyō is missing, from titles to chapters.",
             },
             {
               name: "Chapters",

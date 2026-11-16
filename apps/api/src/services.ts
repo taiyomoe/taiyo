@@ -3,7 +3,8 @@ import type { Auth } from "@taiyomoe/auth/server"
 import type { NotificationEvents } from "@taiyomoe/cache/notification-events"
 import type { DB } from "@taiyomoe/db"
 import type { GroupInvitationMail } from "@taiyomoe/email"
-import type { ChapterUploadProducer, PushSender } from "@taiyomoe/queue"
+import type { MangaDexClient } from "@taiyomoe/mangadex"
+import type { ChapterUploadProducer, MangaDexSyncProducer, PushSender } from "@taiyomoe/queue"
 import type { Meilisearch } from "@taiyomoe/search"
 import type { Kysely } from "kysely"
 
@@ -19,6 +20,8 @@ export type Services = {
   mediasIndex: string
   auth: Auth
   chapterUploadQueue: ChapterUploadProducer
+  mangaDex: MangaDexClient
+  mangaDexSyncQueue: MangaDexSyncProducer
   mailer: Mailer
   notificationEvents: NotificationEvents
   pushSender: PushSender | null

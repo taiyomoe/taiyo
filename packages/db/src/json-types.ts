@@ -58,6 +58,18 @@ export type MediaEdit = Partial<{
 
 export type StaffLinks = Partial<Record<StaffLink, string>>
 
+export type MangaDexSyncItemDetails = {
+  language: string
+  volume: string | null
+  number?: number
+  title?: string | null
+  groups?: string[]
+}
+
+export type MangaDexSyncSummary = Partial<
+  Record<"titles" | "synopses" | "staff" | "tags" | "links" | "fields", number>
+>
+
 export type UserSettings = {
   contentRating?: ContentRating[]
   preferredTitles?: Language

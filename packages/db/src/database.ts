@@ -21,6 +21,8 @@ import type { GroupMembership } from "./models/group-membership-model"
 import type { Group } from "./models/group-model"
 import type { GroupOwnershipRequest } from "./models/group-ownership-request-model"
 import type { GroupReport } from "./models/group-report-model"
+import type { MangaDexSyncItem } from "./models/mangadex-sync-item-model"
+import type { MangaDexSync } from "./models/mangadex-sync-model"
 import type { Media } from "./models/media-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
@@ -73,6 +75,8 @@ export type DB = {
   groupOwnershipRequests: GroupOwnershipRequest
   groupReports: GroupReport
   groups: Group
+  mangaDexSyncItems: MangaDexSyncItem
+  mangaDexSyncs: MangaDexSync
   mediaStaffs: MediaStaff
   mediaSuggestions: MediaSuggestion
   medias: Media
