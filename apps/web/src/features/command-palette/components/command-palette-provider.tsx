@@ -68,12 +68,12 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
     >
       {children}
       {warm || state.open ? (
-        // A download that failed offline is tried again when the palette opens.
+        // A download that failed offline is tried again on every request to open the palette.
         <CommandPalette
           initialQuery={state.initialQuery}
           onOpenChange={setOpen}
           open={state.open}
-          retry={state.open}
+          retry={state}
         />
       ) : null}
     </PaletteContext>

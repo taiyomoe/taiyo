@@ -3,21 +3,22 @@ import * as stylex from "@stylexjs/stylex"
 import { SidebarInset, SidebarProvider } from "@taiyomoe/ui/components/ui/sidebar"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouteContext } from "@tanstack/react-router"
-import { lazy, Suspense, useEffect, useSyncExternalStore } from "react"
+import { useEffect, useSyncExternalStore } from "react"
 import type { Session } from "@/lib/session"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
 import { ShellCommands } from "@/components/shell/shell-commands"
 import { uploadStore } from "@/features/uploads/lib/chapter-batch/upload-store"
+import { createLazyComponent } from "@/lib/lazy-component"
 import { sessionQueryOptions } from "@/lib/session"
 
 // Both only show in rare states, so they download when that state starts.
-const UploadTray = lazy(async () => ({
-  default: (await import("@/components/shell/upload-tray")).UploadTray,
-}))
-const ImpersonationBar = lazy(async () => ({
-  default: (await import("@/components/shell/impersonation-bar")).ImpersonationBar,
-}))
+const UploadTray = createLazyComponent(
+  async () => (await import("@/components/shell/upload-tray")).UploadTray,
+)
+const ImpersonationBar = createLazyComponent(
+  async () => (await import("@/components/shell/impersonation-bar")).ImpersonationBar,
+)
 const styles = stylex.create({
   provider: {
     "--navbar-height": "4.5rem",
@@ -78,19 +79,11 @@ function ActiveUploads() {
     uploadStore.connect(queryClient)
   }, [queryClient])
 
-  return uploading ? (
-    <Suspense>
-      <UploadTray />
-    </Suspense>
-  ) : null
+  return uploading ? <UploadTray /> : null
 }
 
 function Impersonation() {
   const { data } = useQuery(sessionQueryOptions)
 
-  return typeof data?.session.impersonatedBy === "string" ? (
-    <Suspense>
-      <ImpersonationBar />
-    </Suspense>
-  ) : null
+  return typeof data?.session.impersonatedBy === "string" ? <ImpersonationBar /> : null
 }
