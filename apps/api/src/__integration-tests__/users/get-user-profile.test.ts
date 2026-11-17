@@ -9,6 +9,7 @@ type Profile = {
   username: string
   followerCount: number
   followingCount: number
+  achievementCount: number
   viewerFollows: boolean | null
   groups: Array<{ id: string; name: string; role: string }>
 }
@@ -52,6 +53,25 @@ describe("GET /users/by-username/:username", () => {
       groups: [{ id: groupId, name: "Profile Scans", role: "OWNER" }],
     })
     expect(signedIn.body.data.viewerFollows).toBe(true)
+  })
+
+  test("counts the different achievements the user earned", async ({ app, services }) => {
+    const target = await signInAs(services)
+
+    await services.db
+      .insertInto("userAchievements")
+      .values([
+        { userId: target.userId, key: "weeklyPodium", count: 3 },
+        { userId: target.userId, key: "topTen" },
+      ])
+      .execute()
+
+    const res = await api<Profile>(
+      app,
+      `/users/by-username/${await usernameOf(services, target.userId)}`,
+    )
+
+    expect(res.body.success && res.body.data.achievementCount).toBe(2)
   })
 
   test("does not find banned users", async ({ app, services }) => {

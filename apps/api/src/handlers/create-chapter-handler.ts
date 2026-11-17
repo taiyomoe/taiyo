@@ -15,6 +15,7 @@ import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { awardAchievements } from "../utils/achievements"
 import { externalUrlSchema, isFuture, publishAtSchema, toPublishAt } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
@@ -201,6 +202,10 @@ export const createChapterHandler = new Hono().post(
         .insertInto("chapterGroups")
         .values(groupIds.map((groupId) => ({ chapterId: id, groupId })))
         .execute()
+    }
+
+    if (status === "PUBLISHED") {
+      await awardAchievements(c.var, user.id)
     }
 
     c.var.audit.set({ target: { id, number: body.number, language: body.language } })

@@ -154,7 +154,8 @@ describe("follow notifications", () => {
 
     expect(results.every(({ status }) => status < 300)).toBe(true)
 
-    const [notification, ...rest] = await list(app, star.headers)
+    // The 25th follower also earns an achievement, which is not activity.
+    const [notification, ...rest] = await list(app, star.headers, "?category=activity")
 
     expect(rest).toEqual([])
     expect(notification).toMatchObject({ type: "FOLLOW", actors: { count: 30 } })

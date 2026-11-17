@@ -11,6 +11,7 @@ import {
   Sliders,
   Sparkles,
   Store,
+  Trophy,
   Users,
 } from "@taiyomoe/ui/components/icons"
 import {
@@ -201,6 +202,7 @@ export function AppSidebar({
       label: m.shell_nav_community,
       items: [
         { label: m.shell_nav_groups, icon: Users, to: "/groups" },
+        { label: m.shell_nav_rankings, icon: Trophy, to: "/rankings" },
         { label: m.shell_nav_feed, icon: Feed, soon: true },
         { label: m.shell_nav_shop, icon: Store, to: "/shop" },
       ],

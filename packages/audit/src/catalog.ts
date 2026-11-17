@@ -295,6 +295,10 @@ export const chapterReportAudit = defineAuditCatalog("chapter.report", {
   CLOSE_MANY: { severity: "medium" },
 })
 
+export const rankingAudit = defineAuditCatalog("ranking", {
+  PERIOD_CLOSE: { target: "rankingPeriod", severity: "medium" },
+})
+
 export const auditLogAudit = defineAuditCatalog("audit.log", {
   LIST: { severity: "medium" },
   GET: { target: "auditLog", severity: "medium" },
@@ -332,6 +336,7 @@ export const auditCatalogs = [
   notificationAudit,
   bookmarkAudit,
   chapterReportAudit,
+  rankingAudit,
   auditLogAudit,
 ]
 
@@ -369,6 +374,7 @@ declare module "evlog" {
     notification: typeof notificationAudit
     bookmark: typeof bookmarkAudit
     chapterReport: typeof chapterReportAudit
+    ranking: typeof rankingAudit
     auditLog: typeof auditLogAudit
   }
 }

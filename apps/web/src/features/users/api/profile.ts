@@ -47,6 +47,20 @@ export const userStatsQueryOptions = (userId: string, contentRatings: readonly C
       ),
   })
 
+export const userAchievementsQueryOptions = (userId: string) =>
+  queryOptions({
+    queryKey: ["users", "achievements", userId],
+    queryFn: async ({ signal }) =>
+      unwrap(
+        await api.users[":id"].achievements.$get({ param: { id: userId } }, { init: { signal } }),
+      ),
+  })
+
+export type UserAchievement = InferResponseType<
+  (typeof api.users)[":id"]["achievements"]["$get"],
+  200
+>["data"][number]
+
 export type UserStats = InferResponseType<(typeof api.users)[":id"]["stats"]["$get"], 200>["data"]
 
 export const readingHistoryQueryOptions = (

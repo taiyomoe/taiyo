@@ -41,3 +41,25 @@
 **Actor**: the signed-in user who made the request, or `anonymous` for a signed-out one. An admin impersonating a user is the actor of what they do, with the impersonated user kept in `impersonating`. Worker jobs act as named `system` actors.
 
 **Activity log**: the admin dashboard page over the audit log. It searches with KQL, which `@taiyomoe/audit/query` parses and validates on both sides and the API compiles to SQL. It also has filter pills and Kibana-style date math (`now-24h`, `now/d`). Reading the audit log is itself recorded, so a default `NOT category: audit` pill hides those reads until it is removed.
+
+## Rankings
+
+**Credited chapter**: one `readingRewards` row: a chapter whose read earned page credit, which is time-gated, capped per day and given once per chapter number of a media. Rankings, the chapters-read metric and reader levels count credited chapters, never raw reading history.
+
+**Reader totals**: the `readerTotals` table: per reader, their credited chapters, pages and when they reached that total, for each day, week, month and all time. Postgres triggers on `readingRewards` keep it in step with every insert, update and delete, so the readers ranking and closures read an index instead of aggregating credits. Daily totals are dropped a week after their day closes.
+
+**Ranking period**: a calendar period in UTC: a day from midnight, a week from Monday 00:00, a month from the 1st 00:00. The live rankings show the current week, the current month or all time; the readers ranking also closes days, weeks and months.
+
+**Closure**: the worker writing a `rankingPeriods` row for an ended readers period and its final top 10 in `rankingResults`, with the ranking rewards, ranking achievements and notifications, in one transaction keyed by the unique (kind, startsAt) row, so a period pays once. It closes every ended period after the last closed one of its kind, oldest first; the migration seeded one closed period per kind as the watermark, so nothing before the deployment is paid. Closures are immutable history.
+
+**Ranking reward**: the points a closed week or month adds to the balance of its top 10 readers (`RANKING_REWARD_POINTS`). Days pay nothing: they only exist to find streaks.
+
+## Achievements
+
+**Achievement**: an entry of the catalog in `@taiyomoe/db/achievements`, with a category, a rarity, criteria and rewards (points, cosmetics). A user holds it once it has a `userAchievements` row; a repeatable one counts how many times it was earned. Cosmetics with an `achievement` unlock are unlocked by holding it.
+
+**Metric achievement**: an achievement earned by reaching a threshold on a metric (credited chapters, published chapters uploaded, non-banned followers, live comments). It is awarded in the transaction that moves the metric, by `awardMetricAchievements`, which evaluates all of them for one user in one statement.
+
+**Ranking achievement**: an achievement earned by a closure: a rank in a closed day, week or month of the readers ranking, or a streak.
+
+**Streak**: consecutive closed days of the readers ranking finished #1 by the same user. A streak of 3, 7 or 30 earns its achievement once.

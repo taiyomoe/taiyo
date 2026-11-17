@@ -6,9 +6,11 @@ import {
   Check,
   Comment,
   Mail,
+  Medal,
   Reply,
   ThumbsUp,
   Trash,
+  Trophy,
   UserAdd,
 } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
@@ -17,6 +19,7 @@ import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { Tooltip, TooltipPopup, TooltipTrigger } from "@taiyomoe/ui/components/ui/tooltip"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { LanguageFlag } from "@/components/flags/flags"
@@ -34,6 +37,7 @@ import {
 import { CommentLink } from "@/features/notifications/lib/notification-links"
 import { notificationText } from "@/features/notifications/lib/notification-text"
 import { getErrorMessage } from "@/lib/errors"
+import { sessionQueryOptions } from "@/lib/session"
 import { m } from "@/paraglide/messages"
 
 export type NotificationRowVariant = "popover" | "page"
@@ -45,6 +49,11 @@ const KIND_COLORS = {
   COMMENT_REPLY: { text: colors.infoForeground, tint: colors.info },
   COMMENT_LIKE: { text: colors.warningForeground, tint: colors.warning },
   FOLLOW: { text: colors.successForeground, tint: colors.success },
+  RANKING_REWARD: { text: colors.warningForeground, tint: colors.chart5 },
+  ACHIEVEMENT_EARNED: {
+    text: `color-mix(in srgb, ${colors.chart3} 72%, ${colors.foreground})`,
+    tint: colors.chart3,
+  },
 } as const
 const styles = stylex.create({
   row: {
@@ -423,6 +432,8 @@ function KindLabel({ notification }: { notification: Notification }) {
     COMMENT_REPLY: { icon: Comment, label: m.notifications_label_reply },
     COMMENT_LIKE: { icon: ThumbsUp, label: m.notifications_label_upvotes },
     FOLLOW: { icon: UserAdd, label: m.notifications_label_follow },
+    RANKING_REWARD: { icon: Trophy, label: m.notifications_label_ranking },
+    ACHIEVEMENT_EARNED: { icon: Medal, label: m.notifications_label_achievement },
   }[notification.type]
 
   return (
@@ -458,7 +469,12 @@ function Thumbnail({ notification, page }: { notification: Notification; page: b
     )
   }
 
-  const Icon = notification.type === "FOLLOW" ? UserAdd : ThumbsUp
+  const Icon = {
+    FOLLOW: UserAdd,
+    COMMENT_LIKE: ThumbsUp,
+    RANKING_REWARD: Trophy,
+    ACHIEVEMENT_EARNED: Medal,
+  }[notification.type]
 
   return (
     <span
@@ -488,6 +504,8 @@ function PrimaryLink({
   sx?: Sx
 }) {
   const props = { onClick: onOpen, ...stylex.props(styles.primary, sx) }
+  const { data: session } = useQuery({ ...sessionQueryOptions, staleTime: "static" })
+  const username = session?.user.username
 
   if (notification.type === "CHAPTER_PUBLISHED") {
     return (
@@ -526,6 +544,33 @@ function PrimaryLink({
         {...props}
         data-primary=""
         params={{ username: follower?.username ?? "" }}
+        to="/users/$username"
+      >
+        {children}
+      </Link>
+    )
+  }
+
+  if (notification.type === "RANKING_REWARD") {
+    return (
+      <Link
+        {...props}
+        data-primary=""
+        search={{ period: notification.ranking.period === "WEEK" ? "week" : "month" }}
+        to="/rankings"
+      >
+        {children}
+      </Link>
+    )
+  }
+
+  if (notification.type === "ACHIEVEMENT_EARNED") {
+    return (
+      <Link
+        {...props}
+        data-primary=""
+        params={{ username: username ?? "" }}
+        search={{ tab: "achievements" }}
         to="/users/$username"
       >
         {children}

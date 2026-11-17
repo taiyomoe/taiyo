@@ -1,5 +1,5 @@
 import { listAudit } from "@taiyomoe/audit"
-import { sql } from "@taiyomoe/db"
+import { isBannedSql, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -10,7 +10,6 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
-import { isBannedSql } from "../utils/user-moderation"
 
 const voteResultSchema = z.object({
   upvoteCount: z.int().meta({ description: "The number of upvotes on the list.", example: 34 }),

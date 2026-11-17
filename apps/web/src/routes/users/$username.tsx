@@ -8,7 +8,11 @@ import { commentsQueryOptions } from "@/features/comments/api/comments"
 import { userListsQueryOptions } from "@/features/lists/api/lists"
 import { pageOgMeta } from "@/features/og/lib/og-meta"
 import { serveLinkPreview } from "@/features/og/lib/og-preview"
-import { userProfileQueryOptions, userStatsQueryOptions } from "@/features/users/api/profile"
+import {
+  userAchievementsQueryOptions,
+  userProfileQueryOptions,
+  userStatsQueryOptions,
+} from "@/features/users/api/profile"
 import { ProfileNotFoundPage } from "@/features/users/components/profile/profile-not-found-page"
 import { ProfilePage } from "@/features/users/components/profile/profile-page"
 import { PROFILE_TABS, PROFILE_UPLOADS_PER_PAGE } from "@/features/users/lib/profile-page"
@@ -39,6 +43,8 @@ export const Route = createFileRoute("/users/$username")({
       .then(async ({ id }) => {
         if (deps.tab === "stats" || deps.tab === "profile") {
           await queryClient.query(userStatsQueryOptions(id, contentRatings))
+        } else if (deps.tab === "achievements") {
+          await queryClient.query(userAchievementsQueryOptions(id))
         } else if (deps.tab === "uploads") {
           await queryClient.query(
             latestMediaUpdatesQueryOptions(contentRatings, deps.page, PROFILE_UPLOADS_PER_PAGE, id),

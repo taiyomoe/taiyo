@@ -4,6 +4,7 @@ import {
   commentImageAudit,
   createAuditLogDrain,
   mangaDexSyncAudit,
+  rankingAudit,
   systemActor,
 } from "@taiyomoe/audit"
 import { createNotificationEvents } from "@taiyomoe/cache/notification-events"
@@ -13,6 +14,7 @@ import { createMangaDexClient } from "@taiyomoe/mangadex"
 import {
   CHAPTER_UPLOAD_QUEUE,
   type ChapterUploadJobData,
+  closeRankingPeriods,
   createBullConnection,
   createWebPushSender,
   drainNotificationOutbox,
@@ -44,10 +46,13 @@ const NOTIFICATION_MAINTENANCE_QUEUE = "notification-maintenance"
 const DRAIN_NOTIFICATIONS_JOB = "drain-notification-outbox"
 const PURGE_NOTIFICATIONS_JOB = "purge-notifications"
 const SEND_PUSHES_JOB = "send-pushes"
+const RANKING_MAINTENANCE_QUEUE = "ranking-maintenance"
+const CLOSE_RANKING_PERIODS_JOB = "close-ranking-periods"
 const chapterUploadActor = systemActor("chapter-upload-worker")
 const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
 const mangaDexSyncActor = systemActor("mangadex-sync-worker")
+const rankingActor = systemActor("ranking-worker")
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const mangaDexDeps = { ...deps, mangaDex: createMangaDexClient() }
 const notificationEvents = createNotificationEvents()
@@ -160,7 +165,9 @@ const maintenanceWorker = new Worker(
   CHAPTER_MAINTENANCE_QUEUE,
   async (job) => {
     if (job.name === PUBLISH_JOB) {
-      const { chapters } = await publishScheduledChapters(deps)
+      const { chapters, awardedUserIds } = await publishScheduledChapters(deps)
+
+      await notificationEvents.publish(awardedUserIds)
 
       for (const { id, mediaId } of chapters) {
         audit(
@@ -243,6 +250,25 @@ const notificationWorker = new Worker(
   },
   { connection: createBullConnection(), concurrency: 1 },
 )
+const rankingWorker = new Worker(
+  RANKING_MAINTENANCE_QUEUE,
+  async () => {
+    const closed = await closeRankingPeriods(deps)
+
+    for (const { id, kind, startsAt, endsAt, results, points, achievements } of closed) {
+      audit(
+        rankingAudit.PERIOD_CLOSE({
+          actor: rankingActor,
+          target: { id, kind, startsAt, endsAt, results, points, achievements },
+          outcome: "success",
+        }),
+      )
+    }
+
+    await notificationEvents.publish([...new Set(closed.flatMap(({ userIds }) => userIds))])
+  },
+  { connection: createBullConnection(), concurrency: 1 },
+)
 
 chapterWorker.on("ready", () => {
   // oxlint-disable-next-line no-console
@@ -322,6 +348,22 @@ await notificationMaintenanceQueue
     console.warn("notification maintenance schedule not applied (store may not support it):", err)
   })
 
+const rankingMaintenanceQueue = new Queue(RANKING_MAINTENANCE_QUEUE, {
+  connection: createBullConnection(),
+})
+
+// Periods end at UTC midnight: a short repeat closes them soon after, and catches up after downtime.
+await rankingMaintenanceQueue
+  .upsertJobScheduler(
+    CLOSE_RANKING_PERIODS_JOB,
+    { every: 10 * 60_000 },
+    { name: CLOSE_RANKING_PERIODS_JOB },
+  )
+  .then(() => rankingMaintenanceQueue.close())
+  .catch((err: unknown) => {
+    process.stderr.write(`ranking maintenance schedule not applied: ${String(err)}\n`)
+  })
+
 const handleShutdownSignal = () => {
   Promise.all([
     chapterWorker.close(),
@@ -330,6 +372,7 @@ const handleShutdownSignal = () => {
     searchWorker.close(),
     commentWorker.close(),
     notificationWorker.close(),
+    rankingWorker.close(),
   ])
     .then(() => {
       process.exit(0)

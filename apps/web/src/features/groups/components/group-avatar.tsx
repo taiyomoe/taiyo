@@ -59,17 +59,41 @@ const styles = stylex.create({
 export const toneFor = (id: string) =>
   TONES[Number.parseInt(id.replace(/-/g, "").slice(0, 8), 16) % TONES.length] ?? colors.primary
 
+/** Up to two initials: the first letters of the first two words, or the first two of one word. */
+export const initialsOf = (name: string) => {
+  const words = name
+    .split(/\s+/)
+    .map((word) => word.replace(/[^\p{L}\p{N}]/gu, ""))
+    .filter((word) => word !== "")
+  const letters =
+    words.length === 1
+      ? Array.from(words[0] ?? "").slice(0, 2)
+      : words.map((word) => word.charAt(0))
+
+  return letters.slice(0, 2).join("").toUpperCase()
+}
+
+/** The lit tile behind the initials of a person or group without an image, for showcase spots. */
+export const glowingFallback = (tone: string) => ({
+  backgroundImage: `radial-gradient(120% 120% at 30% 20%, color-mix(in oklch, ${tone} 55%, ${colors.card}), color-mix(in oklch, ${tone} 18%, ${colors.card}) 70%)`,
+  color: colors.foreground,
+  textShadow: "0 1px 8px rgb(0 0 0 / 35%)",
+})
+
 export function GroupAvatar({
   id,
   name,
   logoUrl = null,
   size = "sm",
+  glow = false,
   sx,
 }: {
   id: string
   name: string
   logoUrl?: string | null
   size?: "xs" | "sm" | "lg"
+  /** Lights the initials tile, for showcase spots such as the ranking podium. */
+  glow?: boolean
   sx?: Sx
 }) {
   const tone = toneFor(id)
@@ -78,19 +102,25 @@ export function GroupAvatar({
   return (
     <span
       aria-hidden
-      style={{
-        backgroundColor: `color-mix(in srgb, ${tone} 20%, ${colors.card})`,
-        color: `color-mix(in srgb, ${tone} 75%, ${colors.foreground})`,
-      }}
+      style={
+        glow
+          ? glowingFallback(tone)
+          : {
+              backgroundColor: `color-mix(in srgb, ${tone} 20%, ${colors.card})`,
+              color: `color-mix(in srgb, ${tone} 75%, ${colors.foreground})`,
+            }
+      }
       sx={[styles.tile, styles[size], sx]}
     >
-      {name
-        .split(/\s+/)
-        .map((word) => word.replace(/[^\p{L}\p{N}]/gu, ""))
-        .filter((word) => word !== "")
-        .slice(0, 2)
-        .map((word) => word.charAt(0).toUpperCase())
-        .join("")}
+      {glow
+        ? initialsOf(name)
+        : name
+            .split(/\s+/)
+            .map((word) => word.replace(/[^\p{L}\p{N}]/gu, ""))
+            .filter((word) => word !== "")
+            .slice(0, 2)
+            .map((word) => word.charAt(0).toUpperCase())
+            .join("")}
       {logoUrl === null || logoUrl === failedUrl ? null : (
         <img
           alt=""
@@ -112,6 +142,7 @@ export function GroupAvatar({
 
 export function PersonAvatar({
   person,
+  glow = false,
   sx,
   fallbackSx,
 }: {
@@ -121,6 +152,8 @@ export function PersonAvatar({
     image: string | null
     avatarBorder?: string | null | undefined
   }
+  /** Lights the initials fallback, for showcase spots such as the ranking podium. */
+  glow?: boolean
   sx?: Sx
   fallbackSx?: Sx
 }) {
@@ -131,10 +164,14 @@ export function PersonAvatar({
           <AvatarImage alt="" src={person.image} />
         )}
         <AvatarFallback
-          style={{ backgroundColor: toneFor(person.id) }}
+          style={
+            glow ? glowingFallback(toneFor(person.id)) : { backgroundColor: toneFor(person.id) }
+          }
           sx={[styles.personFallback, fallbackSx]}
         >
-          {person.displayUsername.charAt(0).toUpperCase()}
+          {glow
+            ? initialsOf(person.displayUsername)
+            : person.displayUsername.charAt(0).toUpperCase()}
         </AvatarFallback>
       </Avatar>
     </AvatarBorder>

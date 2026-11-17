@@ -33,7 +33,7 @@ const styles = stylex.create({
   root: {
     gap: "0.5rem",
     display: "flex",
-    flexShrink: 0,
+    flexWrap: "wrap",
     justifyContent: "flex-end",
   },
 })

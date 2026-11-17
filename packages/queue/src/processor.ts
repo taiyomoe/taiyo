@@ -11,6 +11,7 @@ import {
 import { sql, type Kysely } from "kysely"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
+import { awardMetricAchievements } from "./achievements"
 import {
   type ChapterUploadJobData,
   type ChapterUploadManifest,
@@ -142,29 +143,40 @@ export const processChapterUpload = async (
       )
     }
 
-    const attached = await db
-      .updateTable("chapters")
-      .set({
-        pages: manifest.pages.map(({ pageId }) => ({ id: pageId })),
-        status: sql<ChapterStatus>`case
+    const { chapterId, pages } = manifest
+    // Publishing moves the uploader's chapters uploaded: their achievements follow in the same
+    // transaction.
+    const attached = await db.transaction().execute(async (trx) => {
+      const row = await trx
+        .updateTable("chapters")
+        .set({
+          pages: pages.map(({ pageId }) => ({ id: pageId })),
+          status: sql<ChapterStatus>`case
           when "status" <> 'UPLOADING' then "status"
           when not ${uploaderMayPublish} then 'PENDING'::"ChapterStatus"
           when "publishAt" > (CURRENT_TIMESTAMP at time zone 'UTC') then 'SCHEDULED'::"ChapterStatus"
           else 'PUBLISHED'::"ChapterStatus"
         end`,
-        createdAt: sql<Date>`case
+          createdAt: sql<Date>`case
           when "status" <> 'UPLOADING' then "createdAt"
           when not ${uploaderMayPublish} then "createdAt"
           when "publishAt" > (CURRENT_TIMESTAMP at time zone 'UTC') then "createdAt"
           else CURRENT_TIMESTAMP
         end`,
-      })
-      .where("id", "=", manifest.chapterId)
-      .where("deletedAt", "is", null)
-      .where("status", "!=", "REJECTED")
-      .where(sql<boolean>`("pages" is null or cardinality("pages") = 0)`)
-      .returning("id")
-      .executeTakeFirst()
+        })
+        .where("id", "=", chapterId)
+        .where("deletedAt", "is", null)
+        .where("status", "!=", "REJECTED")
+        .where(sql<boolean>`("pages" is null or cardinality("pages") = 0)`)
+        .returning(["id", "uploaderId", "status"])
+        .executeTakeFirst()
+
+      if (row?.status === "PUBLISHED") {
+        await awardMetricAchievements(trx, row.uploaderId)
+      }
+
+      return row
+    })
 
     if (attached === undefined && !(await chapterReferencesManifest(db, manifest))) {
       const live = await db
