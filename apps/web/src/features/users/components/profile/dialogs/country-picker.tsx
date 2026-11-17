@@ -9,7 +9,7 @@ import {
   ComboboxPopup,
 } from "@taiyomoe/ui/components/ui/combobox"
 import { useMemo } from "react"
-import { UserCountryFlag } from "@/components/flags/flags"
+import { Flag } from "@/components/flags/flags"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
@@ -67,7 +67,7 @@ export function CountryPicker({
       <ComboboxInput
         placeholder={m.profile_edit_not_set()}
         showClear
-        startAddon={selected === null ? null : <UserCountryFlag country={selected.code} />}
+        startAddon={selected === null ? null : <Flag country={selected.code} />}
       />
       <ComboboxPopup>
         <ComboboxList>
