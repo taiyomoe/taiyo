@@ -7,6 +7,8 @@ import { deleteMyAvatarHandler } from "../handlers/delete-my-avatar-handler"
 import { deleteMyBannerHandler } from "../handlers/delete-my-banner-handler"
 import { deleteMyNotificationsHandler } from "../handlers/delete-my-notifications-handler"
 import { deletePushSubscriptionHandler } from "../handlers/delete-push-subscription-handler"
+import { deleteUserAvatarHandler } from "../handlers/delete-user-avatar-handler"
+import { deleteUserBannerHandler } from "../handlers/delete-user-banner-handler"
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
@@ -53,6 +55,7 @@ import { updateMyNotificationsHandler } from "../handlers/update-my-notification
 import { updateMyProfileHandler } from "../handlers/update-my-profile-handler"
 import { updateMyReaderSettingsHandler } from "../handlers/update-my-reader-settings-handler"
 import { updateMySettingsHandler } from "../handlers/update-my-settings-handler"
+import { updateUserProfileHandler } from "../handlers/update-user-profile-handler"
 import { upsertLibraryEntryHandler } from "../handlers/upsert-library-entry-handler"
 import { upsertPushSubscriptionHandler } from "../handlers/upsert-push-subscription-handler"
 
@@ -110,6 +113,10 @@ export const usersRouter = new Hono()
   .route("/", deleteMyAvatarHandler)
   .route("/", updateMyBannerHandler)
   .route("/", deleteMyBannerHandler)
+  // After the `/me/...` routes, which `/:id/...` would otherwise catch.
+  .route("/", updateUserProfileHandler)
+  .route("/", deleteUserAvatarHandler)
+  .route("/", deleteUserBannerHandler)
   .route("/", getUserStatsHandler)
   .route("/", listUserReadingHistoryHandler)
   .route("/", listUserListsHandler)

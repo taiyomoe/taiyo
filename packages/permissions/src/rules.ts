@@ -41,6 +41,8 @@ export const buildRules = (actor: Actor | null) => {
   const isSelf = (userId: string) => active?.id === userId
   const actsForUser = (target: UserTarget) =>
     is("ADMIN") && !isSelf(target.id) && target.role !== "ADMIN"
+  const moderatesUser = (target: UserTarget) =>
+    !isSelf(target.id) && (is("ADMIN") || (is("MODERATOR") && target.role === "USER"))
   const memberships = new Map(active?.memberships.map((m) => [m.groupId, m]))
   const permissionsIn = (groupId: string) => {
     const membership = memberships.get(groupId)
@@ -228,8 +230,8 @@ export const buildRules = (actor: Actor | null) => {
     user: {
       list: is("MODERATOR", "ADMIN"),
       grant: is("ADMIN"),
-      ban: (target) =>
-        !isSelf(target.id) && (is("ADMIN") || (is("MODERATOR") && target.role === "USER")),
+      ban: moderatesUser,
+      moderateProfile: moderatesUser,
       setRole: (target) => is("ADMIN") && !isSelf(target.id),
       impersonate: actsForUser,
       setPassword: actsForUser,

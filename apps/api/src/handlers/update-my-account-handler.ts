@@ -11,17 +11,14 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, displayNameSchema } from "../utils/schemas"
 
 const bodySchema = z.object({
   username: z.string().trim().regex(config.auth.username.regex).optional().meta({
     description: "The handle used in your profile URL. It is saved in lowercase.",
     example: "sunny_reader",
   }),
-  displayName: z
-    .string()
-    .trim()
-    .regex(config.auth.displayName.regex)
+  displayName: displayNameSchema
     .optional()
     .meta({ description: "The name shown next to your content.", example: "Sunny Reader" }),
 })

@@ -120,6 +120,9 @@ const ROUTES: Route[] = [
   { method: "DELETE", path: `/groups/${id}/invitations`, body: "json", allowed: ROLES },
   { method: "GET", path: "/lists/managed?page=0", allowed: ["MODERATOR", "ADMIN"] },
   { method: "DELETE", path: "/lists", body: "json", allowed: ROLES },
+  { method: "PATCH", path: `/users/${id}/profile`, body: "json", allowed: ["MODERATOR", "ADMIN"] },
+  { method: "DELETE", path: `/users/${id}/avatar`, allowed: ["MODERATOR", "ADMIN"] },
+  { method: "DELETE", path: `/users/${id}/banner`, allowed: ["MODERATOR", "ADMIN"] },
 ]
 const send = (app: Parameters<typeof api>[0], route: Route, headers?: Record<string, string>) =>
   api(app, route.path, {

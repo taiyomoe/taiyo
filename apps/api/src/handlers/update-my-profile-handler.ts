@@ -1,5 +1,5 @@
 import { userAudit } from "@taiyomoe/audit"
-import { COUNTRIES, GENDERS, LANGUAGES, SUPPORTED_LANGUAGES, sql } from "@taiyomoe/db"
+import { COUNTRIES, GENDERS, LANGUAGES, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -9,19 +9,16 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, profileAboutSchema, profileCitySchema } from "../utils/schemas"
 
 const MIN_AGE_YEARS = 13
 const bodySchema = z.object({
-  about: z
-    .partialRecord(z.enum(SUPPORTED_LANGUAGES), z.string().trim().max(2000))
-    .optional()
-    .meta({
-      description:
-        "The about text of your profile, keyed by language. Languages you omit stay unchanged, and an empty string removes a language.",
-      example: { en: "Reading isekai since 2015." },
-    }),
-  city: z.string().trim().max(64).nullable().optional().meta({
+  about: profileAboutSchema.optional().meta({
+    description:
+      "The about text of your profile, keyed by language. Languages you omit stay unchanged, and an empty string removes a language.",
+    example: { en: "Reading isekai since 2015." },
+  }),
+  city: profileCitySchema.nullable().optional().meta({
     description: "The city you live in, or null or an empty string to remove it.",
     example: "Lisbon",
   }),

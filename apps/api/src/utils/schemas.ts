@@ -344,6 +344,15 @@ export const reviewNoteSchema = z
   .max(2000)
   .meta({ description: "Explanation shown to the requester.", example: "No proof of ownership." })
 
+export const displayNameSchema = z.string().trim().regex(config.auth.displayName.regex)
+
+export const profileAboutSchema = z.partialRecord(
+  z.enum(SUPPORTED_LANGUAGES),
+  z.string().trim().max(2000),
+)
+
+export const profileCitySchema = z.string().trim().max(64)
+
 export const userSummarySchema = z.object({
   id: z.uuid().meta({ description: "The ID of the user." }),
   username: z.string().meta({ description: "The username of the user.", example: "kaito" }),

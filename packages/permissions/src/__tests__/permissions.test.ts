@@ -153,6 +153,7 @@ describe("signed-out and banned users", () => {
       can("list.update", { userId: ACTOR_ID, visibility: "PUBLIC" }),
       can("list.delete", { userId: ACTOR_ID, visibility: "PUBLIC" }),
       can("user.ban", { id: OTHER_ID, role: "USER" }),
+      can("user.moderateProfile", { id: OTHER_ID, role: "USER" }),
       can("user.setRole", { id: OTHER_ID }),
       can("user.impersonate", { id: OTHER_ID, role: "USER" }),
       can("user.setPassword", { id: OTHER_ID, role: "USER" }),
@@ -666,6 +667,30 @@ describe("users", () => {
     }
 
     expect(can("user.ban", { id: ACTOR_ID, role: "ADMIN" })).toBe(false)
+  })
+
+  it("lets moderators edit the profiles of regular users only, and admins anyone else's", () => {
+    const moderator = createPermissions(actor("MODERATOR"))
+    const admin = createPermissions(actor("ADMIN"))
+
+    expect(moderator("user.moderateProfile", { id: OTHER_ID, role: "USER" })).toBe(true)
+
+    for (const role of ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"] as const) {
+      expect(moderator("user.moderateProfile", { id: OTHER_ID, role })).toBe(false)
+    }
+
+    for (const role of ROLES) {
+      expect(admin("user.moderateProfile", { id: OTHER_ID, role })).toBe(true)
+    }
+
+    expect(moderator("user.moderateProfile", { id: ACTOR_ID, role: "USER" })).toBe(false)
+    expect(admin("user.moderateProfile", { id: ACTOR_ID, role: "ADMIN" })).toBe(false)
+
+    for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER"] as const) {
+      expect(
+        createPermissions(actor(role))("user.moderateProfile", { id: OTHER_ID, role: "USER" }),
+      ).toBe(false)
+    }
   })
 
   it("only lets admins change roles, never their own", () => {
