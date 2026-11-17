@@ -6,7 +6,7 @@ import {
   ChangeEmailEmail,
   MagicLinkEmail,
   ResetPasswordEmail,
-  resend,
+  sendEmail,
   SignUpEmail,
 } from "@taiyomoe/email"
 import { createPermissions, toRole } from "@taiyomoe/permissions"
@@ -93,8 +93,7 @@ export const createAuth = ({
       requireEmailVerification: true,
       revokeSessionsOnPasswordReset: true,
       sendResetPassword: async (data) => {
-        await resend.emails.send({
-          from: "Taiyō <no-reply@taiyo.moe>",
+        await sendEmail({
           to: data.user.email,
           subject: "Reset your password",
           react: <ResetPasswordEmail name={data.user.name} url={data.url} />,
@@ -105,8 +104,7 @@ export const createAuth = ({
       sendOnSignUp: true,
       autoSignInAfterVerification: true,
       sendVerificationEmail: async (data) => {
-        await resend.emails.send({
-          from: "Taiyō <no-reply@taiyo.moe>",
+        await sendEmail({
           to: data.user.email,
           subject: "Verify your email",
           react: <SignUpEmail name={data.user.name} url={data.url} />,
@@ -120,8 +118,7 @@ export const createAuth = ({
       changeEmail: {
         enabled: true,
         sendChangeEmailConfirmation: async (data) => {
-          await resend.emails.send({
-            from: "Taiyō <no-reply@taiyo.moe>",
+          await sendEmail({
             to: data.user.email,
             subject: "Confirm your email change",
             react: (
@@ -388,8 +385,7 @@ export const createAuth = ({
             return
           }
 
-          await resend.emails.send({
-            from: "Taiyō <no-reply@taiyo.moe>",
+          await sendEmail({
             to: user.email,
             subject: "Your magic link for Taiyō",
             react: <MagicLinkEmail name={user.name} url={data.url} />,

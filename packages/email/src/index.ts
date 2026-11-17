@@ -3,7 +3,7 @@ import MagicLinkEmail from "./templates/magic-link-email"
 import ResetPasswordEmail from "./templates/reset-password-email"
 import SignUpEmail from "./templates/sign-up-email"
 
-export { resend } from "./client"
+export { sendEmail } from "./client"
 
 export { ChangeEmailEmail, MagicLinkEmail, ResetPasswordEmail, SignUpEmail }
 

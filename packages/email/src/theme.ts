@@ -1,34 +1,50 @@
 import type { CSSProperties } from "react"
 
+// The landing page's scene palette (@taiyomoe/ui/styles/scene.stylex): a sunrise over the night.
 export const emailColors = {
-  page: "#f3f4f6",
-  surface: "#ffffff",
-  border: "#e5e7eb",
-  primary: "#FF4F4F",
-  onPrimary: "#ffffff",
-  heading: "#000000",
+  night: "#120a07",
+  paper: "#fffcf8",
+  ink: "#2a1208",
+  muted: "#75655c",
+  rule: "#efe5da",
+  dusk: "#a08f84",
+  brand: "#f2452d",
+  onBrand: "#ffffff",
+} as const
+
+// PT Serif and Inter where the client loads web fonts (Apple Mail, iOS), close system fonts
+// everywhere else.
+export const emailFonts = {
+  display: "'PT Serif', Georgia, 'Times New Roman', serif",
+  sans: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
 } as const
 
 export const emailStyles = {
-  body: {
-    padding: "16px 32px",
-  },
   title: {
-    fontSize: "24px",
+    color: emailColors.ink,
+    fontFamily: emailFonts.display,
+    fontSize: "28px",
     fontWeight: 700,
-    lineHeight: "32px",
+    letterSpacing: "-0.01em",
+    lineHeight: "34px",
+    margin: "0 0 16px",
   },
-  button: {
-    backgroundColor: emailColors.primary,
-    borderRadius: "6px",
-    color: emailColors.onPrimary,
-    display: "inline-block",
-    fontSize: "14px",
+  text: {
+    color: emailColors.ink,
+    fontFamily: emailFonts.sans,
+    fontSize: "15px",
+    lineHeight: "24px",
+    margin: "0 0 16px",
+  },
+  small: {
+    color: emailColors.muted,
+    fontFamily: emailFonts.sans,
+    fontSize: "13px",
     lineHeight: "20px",
-    padding: "6px 12px",
+    margin: 0,
   },
-  footer: {
-    borderTop: `1px solid ${emailColors.border}`,
-    padding: "0 32px",
+  link: {
+    color: emailColors.brand,
+    wordBreak: "break-all",
   },
 } satisfies Record<string, CSSProperties>
