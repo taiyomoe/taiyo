@@ -3,11 +3,11 @@ import * as stylex from "@stylexjs/stylex"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
-import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import { useUploadBanners } from "@/features/media-images/api/media-images"
 import { CurrentBanners } from "@/features/media-images/components/banners/current-banners"
 import { StagedBannerRow } from "@/features/media-images/components/banners/staged-banner-row"
 import { ImageDropZone } from "@/features/media-images/components/shared/image-drop-zone"
+import { ManagedGridSkeleton } from "@/features/media-images/components/shared/managed-grid"
 import { StagedUploadPanel } from "@/features/media-images/components/shared/staged-upload-panel"
 import { useStagedImages } from "@/features/media-images/hooks/use-staged-images"
 import { mediaQueryOptions } from "@/features/media/api/medias"
@@ -95,7 +95,7 @@ export function BannersManager({
         </StagedUploadPanel>
       )}
       {media.data === undefined ? (
-        <ListCardSkeleton />
+        <ManagedGridSkeleton kind="banner" />
       ) : (
         <CurrentBanners banners={media.data.banners} mediaId={mediaId} title={title} />
       )}

@@ -1,17 +1,28 @@
-import { sql } from "@taiyomoe/db"
+import { LANGUAGES, sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { hasContent } from "../utils/chapter-release"
 import {
   selectSubmissionColumns,
   selectSubmissions,
+  submissionSearchSchema,
   withSubmissionDetails,
 } from "../utils/chapter-submissions"
+import { matchChapterSearch } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, chapterSubmissionSchema } from "../utils/schemas"
+
+const querySchema = paginationQuerySchema.extend({
+  search: submissionSearchSchema,
+  language: z
+    .enum(LANGUAGES)
+    .optional()
+    .meta({ description: "Only list the chapters in this language.", example: "pt_br" }),
+})
 
 export const listChapterReviewQueueHandler = new Hono().get(
   "/review-queue",
@@ -39,11 +50,15 @@ export const listChapterReviewQueueHandler = new Hono().get(
     },
   }),
   withAuth("chapter.review"),
-  validateQuery(paginationQuerySchema),
+  validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage } = c.var.query
-    const base = selectSubmissions(db).where("chapters.status", "=", "PENDING").where(hasContent)
+    const { page, perPage, search, language } = c.var.query
+    const base = selectSubmissions(db)
+      .where("chapters.status", "=", "PENDING")
+      .where(hasContent)
+      .where((eb) => matchChapterSearch(eb, search))
+      .where((eb) => (language === undefined ? eb.and([]) : eb("chapters.language", "=", language)))
     const [rows, totalRow] = await Promise.all([
       selectSubmissionColumns(base)
         .orderBy("chapters.createdAt", "asc")

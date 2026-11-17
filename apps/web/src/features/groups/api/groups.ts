@@ -1,6 +1,8 @@
+import type { GroupPermission } from "@taiyomoe/permissions"
 import type { InferRequestType, InferResponseType } from "hono/client"
 import { keepPreviousData, queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { isDefined, pickBy } from "remeda"
+import type { BulkResult } from "@/features/catalog/api/catalog"
 import type { GroupChapterOrder, GroupMediaSort } from "@/features/groups/lib/group-page"
 import type { ContentRating } from "@/lib/settings"
 import { CATALOG_PER_PAGE } from "@/features/catalog/api/catalog"
@@ -53,6 +55,20 @@ export const groupMembersQueryOptions = (groupId: string) =>
 
 export type GroupMember = InferResponseType<
   (typeof api.groups)[":id"]["members"]["$get"],
+  200
+>["data"][number]
+
+export const groupInvitationsQueryOptions = (groupId: string) =>
+  queryOptions({
+    queryKey: ["groups", groupId, "invitations"],
+    queryFn: async ({ signal }) =>
+      unwrap(
+        await api.groups[":id"].invitations.$get({ param: { id: groupId } }, { init: { signal } }),
+      ),
+  })
+
+export type GroupInvitation = InferResponseType<
+  (typeof api.groups)[":id"]["invitations"]["$get"],
   200
 >["data"][number]
 
@@ -283,3 +299,194 @@ export const useDeleteGroups = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["groups"] }),
   })
 }
+
+export type GroupRequestType = "claims" | "creations"
+
+export type GroupRequestStatus = OwnershipRequest["status"]
+
+export type GroupRequestsFilter = {
+  type: GroupRequestType
+  status: GroupRequestStatus
+  page: number
+}
+
+export const ownershipRequestsQueryOptions = ({
+  status,
+  page,
+  perPage = CATALOG_PER_PAGE,
+}: {
+  status: GroupRequestStatus
+  page: number
+  perPage?: number
+}) =>
+  queryOptions({
+    queryKey: ["ownership-requests", { status, page, perPage }],
+    queryFn: async ({ signal }) =>
+      unwrapEnvelope(
+        await api["ownership-requests"].$get(
+          { query: { status, page: String(page), perPage: String(perPage) } },
+          { init: { signal } },
+        ),
+      ),
+    placeholderData: keepPreviousData,
+  })
+
+export const groupCreationRequestsQueryOptions = ({
+  status,
+  page,
+  perPage = CATALOG_PER_PAGE,
+}: {
+  status: GroupRequestStatus
+  page: number
+  perPage?: number
+}) =>
+  queryOptions({
+    queryKey: ["group-creation-requests", { status, page, perPage }],
+    queryFn: async ({ signal }) =>
+      unwrapEnvelope(
+        await api["group-creation-requests"].$get(
+          { query: { status, page: String(page), perPage: String(perPage) } },
+          { init: { signal } },
+        ),
+      ),
+    placeholderData: keepPreviousData,
+  })
+
+export type GroupReportsFilter = {
+  status: GroupReport["status"]
+  reason?: GroupReport["reason"] | undefined
+  page: number
+}
+
+export const groupReportsQueryOptions = ({ status, reason, page }: GroupReportsFilter) =>
+  queryOptions({
+    queryKey: ["group-reports", { status, reason, page }],
+    queryFn: async ({ signal }) =>
+      unwrapEnvelope(
+        await api["group-reports"].$get(
+          {
+            query: {
+              status,
+              page: String(page),
+              perPage: String(CATALOG_PER_PAGE),
+              ...(reason === undefined ? {} : { reason }),
+            },
+          },
+          { init: { signal } },
+        ),
+      ),
+    placeholderData: keepPreviousData,
+  })
+
+const useGroupsMutation = <TInput>(
+  run: (input: TInput) => Promise<BulkResult>,
+  queryKeys: ReadonlyArray<readonly string[]>,
+) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: run,
+    onSuccess: () =>
+      Promise.all(queryKeys.map((queryKey) => queryClient.invalidateQueries({ queryKey }))),
+  })
+}
+
+export const useAnswerInvitations = (answer: "accept" | "decline") =>
+  useGroupsMutation(
+    async (invitationIds: string[]) =>
+      answer === "accept"
+        ? unwrap(await api["group-invitations"].accept.$post({ json: { invitationIds } }))
+        : unwrap(await api["group-invitations"].decline.$post({ json: { invitationIds } })),
+    [["me"], ["groups"]],
+  )
+
+/** Withdraws the user's own claims and creation requests, whatever their mix. */
+export const useCancelMyRequests = () =>
+  useGroupsMutation(
+    async ({ claims, creations }: { claims: string[]; creations: string[] }) => {
+      const [claimed, created] = await Promise.all([
+        claims.length === 0
+          ? null
+          : api["ownership-requests"].$delete({ json: { requestIds: claims } }).then(unwrap),
+        creations.length === 0
+          ? null
+          : api["group-creation-requests"]
+              .$delete({ json: { requestIds: creations } })
+              .then(unwrap),
+      ])
+
+      return {
+        done: [...(claimed?.done ?? []), ...(created?.done ?? [])],
+        skipped: [...(claimed?.skipped ?? []), ...(created?.skipped ?? [])],
+      } satisfies BulkResult
+    },
+    [["me"]],
+  )
+
+export const useApproveGroupRequests = (type: GroupRequestType) =>
+  useGroupsMutation(
+    async (requestIds: string[]) =>
+      type === "claims"
+        ? unwrap(await api["ownership-requests"].approve.$post({ json: { requestIds } }))
+        : unwrap(await api["group-creation-requests"].approve.$post({ json: { requestIds } })),
+    [["ownership-requests"], ["group-creation-requests"], ["groups"]],
+  )
+
+export const useRejectGroupRequests = (type: GroupRequestType) =>
+  useGroupsMutation(
+    async ({ requestIds, note }: { requestIds: string[]; note: string }) =>
+      type === "claims"
+        ? unwrap(await api["ownership-requests"].reject.$post({ json: { requestIds, note } }))
+        : unwrap(await api["group-creation-requests"].reject.$post({ json: { requestIds, note } })),
+    [["ownership-requests"], ["group-creation-requests"]],
+  )
+
+export const useReviewGroupReports = () =>
+  useGroupsMutation(
+    async (json: { reportIds: string[]; status: "RESOLVED" | "DISMISSED"; note?: string }) =>
+      unwrap(await api["group-reports"].review.$post({ json })),
+    [["group-reports"]],
+  )
+
+/** Grants and revokes permissions on members of a group, one or many. */
+export const useUpdateGroupMembers = (groupId: string) =>
+  useGroupsMutation(
+    async (json: { userIds: string[]; grant: GroupPermission[]; revoke: GroupPermission[] }) => {
+      const response = await api.groups[":id"].members.$patch({ param: { id: groupId }, json })
+
+      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+    },
+    [
+      ["groups", groupId],
+      ["me", "groups"],
+    ],
+  )
+
+export const useRemoveGroupMembers = (groupId: string) =>
+  useGroupsMutation(
+    async (userIds: string[]) => {
+      const response = await api.groups[":id"].members.$delete({
+        param: { id: groupId },
+        json: { userIds },
+      })
+
+      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+    },
+    [
+      ["groups", groupId],
+      ["me", "groups"],
+    ],
+  )
+
+export const useCancelGroupInvitations = (groupId: string) =>
+  useGroupsMutation(
+    async (invitationIds: string[]) => {
+      const response = await api.groups[":id"].invitations.$delete({
+        param: { id: groupId },
+        json: { invitationIds },
+      })
+
+      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+    },
+    [["groups", groupId, "invitations"]],
+  )

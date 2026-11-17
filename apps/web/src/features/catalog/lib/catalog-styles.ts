@@ -6,8 +6,8 @@ export type CatalogBreakpoint = "2xl" | "3xl" | "4xl"
 export const catalogStyles = stylex.create({
   colBanner: { width: "9rem" },
   colNarrow: { width: "6.5rem" },
-  colMedium: { width: "8.5rem" },
-  colWide: { width: "11rem" },
+  colMedium: { width: "9rem" },
+  colWide: { width: "12rem" },
   colTarget: { width: "13rem" },
   colActions: { width: "3.25rem" },
   numeric: {

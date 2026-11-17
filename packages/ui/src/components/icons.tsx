@@ -1,5 +1,6 @@
 import type * as React from "react"
 import {
+  DragDropVerticalIcon,
   Share08Icon,
   AtIcon,
   SentIcon,
@@ -168,6 +169,8 @@ export const Plus: (props: IconProps) => React.ReactElement = icon(PlusSignIcon)
 export const Minus: (props: IconProps) => React.ReactElement = icon(MinusSignIcon)
 
 export const Ellipsis: (props: IconProps) => React.ReactElement = icon(MoreHorizontalIcon)
+
+export const GripVertical: (props: IconProps) => React.ReactElement = icon(DragDropVerticalIcon)
 
 export const PanelLeft: (props: IconProps) => React.ReactElement = icon(SidebarLeft01Icon)
 

@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { cancelGroupInvitationHandler } from "../handlers/cancel-group-invitation-handler"
+import { cancelGroupInvitationsHandler } from "../handlers/cancel-group-invitations-handler"
 import { createGroupHandler } from "../handlers/create-group-handler"
 import { createGroupInvitationHandler } from "../handlers/create-group-invitation-handler"
 import { createGroupReportHandler } from "../handlers/create-group-report-handler"
@@ -20,10 +21,12 @@ import { listGroupsHandler } from "../handlers/list-groups-handler"
 import { listManagedGroupsHandler } from "../handlers/list-managed-groups-handler"
 import { promoteGroupMemberHandler } from "../handlers/promote-group-member-handler"
 import { removeGroupMemberHandler } from "../handlers/remove-group-member-handler"
+import { removeGroupMembersHandler } from "../handlers/remove-group-members-handler"
 import { transferGroupOwnershipHandler } from "../handlers/transfer-group-ownership-handler"
 import { unfollowGroupHandler } from "../handlers/unfollow-group-handler"
 import { updateGroupHandler } from "../handlers/update-group-handler"
 import { updateGroupMemberHandler } from "../handlers/update-group-member-handler"
+import { updateGroupMembersHandler } from "../handlers/update-group-members-handler"
 
 export const groupsRouter = new Hono()
   .route("/", listGroupsHandler)
@@ -38,6 +41,8 @@ export const groupsRouter = new Hono()
   .route("/", listGroupMembersHandler)
   .route("/", updateGroupMemberHandler)
   .route("/", removeGroupMemberHandler)
+  .route("/", updateGroupMembersHandler)
+  .route("/", removeGroupMembersHandler)
   .route("/", promoteGroupMemberHandler)
   .route("/", demoteGroupMemberHandler)
   .route("/", leaveGroupHandler)
@@ -45,6 +50,7 @@ export const groupsRouter = new Hono()
   .route("/", createGroupInvitationHandler)
   .route("/", listGroupInvitationsHandler)
   .route("/", cancelGroupInvitationHandler)
+  .route("/", cancelGroupInvitationsHandler)
   .route("/", getGroupFollowHandler)
   .route("/", followGroupHandler)
   .route("/", unfollowGroupHandler)

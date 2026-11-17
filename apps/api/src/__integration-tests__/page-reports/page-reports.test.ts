@@ -116,6 +116,43 @@ describe("page reports", () => {
     })
   })
 
+  test("filters the reports by status and reason", async ({ app, services }) => {
+    const { chapterId, pages } = await seedPages(services)
+    const reporter = await signInAs(services)
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const ids: string[] = []
+
+    for (const [index, reason] of ["BROKEN", "LOW_QUALITY"].entries()) {
+      const res = await api<{ id: string }>(
+        app,
+        `/chapters/${chapterId}/pages/${pages[index]?.id ?? ""}/reports`,
+        { method: "POST", headers: reporter.headers, json: { reason } },
+      )
+
+      ids.push(dataOf(res).id)
+    }
+
+    await services.db
+      .updateTable("pageReports")
+      .set({ status: "DISMISSED" })
+      .where("id", "=", ids[0] ?? "")
+      .execute()
+
+    const list = async (query: string) =>
+      dataOf(
+        await api<Report[]>(app, `/chapters/page-reports?perPage=100${query}`, {
+          headers: moderator.headers,
+        }),
+      )
+        .filter((report) => report.chapter.id === chapterId)
+        .map((report) => report.id)
+
+    expect(await list("")).toEqual(expect.arrayContaining([ids[0], ids[1]]))
+    expect(await list("&status=OPEN")).toEqual([ids[1]])
+    expect(await list("&status=DISMISSED&reason=BROKEN")).toEqual([ids[0]])
+    expect(await list("&reason=WRONG_ORDER")).toEqual([])
+  })
+
   test("leaves out the reports on a deleted media", async ({ app, services }) => {
     const { chapterId, pages } = await seedPages(services)
     const reporter = await signInAs(services)

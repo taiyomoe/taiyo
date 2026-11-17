@@ -18,9 +18,6 @@ const styles = stylex.create({
   row: {
     cursor: "pointer",
   },
-  rowOpen: {
-    backgroundColor: colors.muted,
-  },
   toggle: {
     borderRadius: radius.md,
     borderWidth: 0,
@@ -50,12 +47,15 @@ const styles = stylex.create({
   chevronOpen: {
     rotate: "90deg",
   },
+  // Card table cells pad their outer edges: the detail spans the row edge to edge.
   detailCell: {
     padding: 0,
     backgroundColor: colors.muted,
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   groupCell: {
-    paddingInlineStart: "2.75rem",
+    paddingLeft: "2.75rem",
   },
 })
 
@@ -93,7 +93,8 @@ export function LogRow({
             onToggle()
           }
         }}
-        sx={[styles.row, isOpen && styles.rowOpen]}
+        data-state={isOpen ? "selected" : undefined}
+        sx={styles.row}
       >
         <TableCell>
           <button

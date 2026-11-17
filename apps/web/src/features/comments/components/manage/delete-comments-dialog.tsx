@@ -14,7 +14,7 @@ export function DeleteCommentsDialog({
   onClose,
   onDone,
 }: {
-  comments: readonly ManagedComment[] | null
+  comments: ReadonlyArray<Pick<ManagedComment, "id" | "replyCount">> | null
   onClose: () => void
   onDone?: (() => void) | undefined
 }) {

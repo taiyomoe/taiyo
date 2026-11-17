@@ -2,10 +2,10 @@ import type { ComponentProps, ReactElement } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { DiscordLogo } from "@taiyomoe/ui/components/logos/discord-logo"
 import { GoogleLogo } from "@taiyomoe/ui/components/logos/google-logo"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { useQuery } from "@tanstack/react-query"
+import { Pill } from "@/components/badges/pill"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { TimeAgo } from "@/components/time/time-ago"
 import {
@@ -67,7 +67,7 @@ export function ConnectedAccountsSection() {
                   <span sx={settingsStyles.itemTitle}>
                     {label()}
                     {account === undefined ? null : (
-                      <Badge variant="success">{m.user_settings_connected()}</Badge>
+                      <Pill variant="success">{m.user_settings_connected()}</Pill>
                     )}
                   </span>
                   <span sx={settingsStyles.itemMeta}>

@@ -1,9 +1,9 @@
 // StyleX only compiles the `sx` props of files that import it.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import type { MangaDexPlan } from "@/features/mangadex-sync/api/mangadex-sync"
 import type { PlanSelection } from "@/features/mangadex-sync/hooks/use-plan-selection"
+import { Pill } from "@/components/badges/pill"
 import { PlanOption } from "@/features/mangadex-sync/components/plan-option"
 import { PlanSection } from "@/features/mangadex-sync/components/plan-section"
 import { syncStyles } from "@/features/mangadex-sync/components/sync-styles"
@@ -36,7 +36,7 @@ export function StaffSection({
             title={
               <>
                 {member.name}
-                <Badge variant="secondary">{ROLE_LABELS[member.role]()}</Badge>
+                <Pill variant="secondary">{ROLE_LABELS[member.role]()}</Pill>
               </>
             }
           />

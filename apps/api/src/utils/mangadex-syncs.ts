@@ -21,7 +21,11 @@ export const readMangaDexSyncs = async (
       "mangaDexSyncs.error",
       "mangaDexSyncs.summary",
       "users.id as userId",
-      "users.name as userName",
+      "users.username",
+      "users.displayUsername",
+      "users.image",
+      "users.nameEffect",
+      "users.avatarBorder",
       iso("createdAt"),
       iso("finishedAt"),
     ])
@@ -47,20 +51,31 @@ export const readMangaDexSyncs = async (
           .groupBy(["syncId", "status"])
           .execute()
 
-  return syncs.map(({ userId, userName, createdAt, ...sync }) => {
-    const count = (status: string) =>
-      Number(rows.find((row) => row.syncId === sync.id && row.status === status)?.count ?? 0)
+  return syncs.map(
+    ({
+      userId,
+      username,
+      displayUsername,
+      image,
+      nameEffect,
+      avatarBorder,
+      createdAt,
+      ...sync
+    }) => {
+      const count = (status: string) =>
+        Number(rows.find((row) => row.syncId === sync.id && row.status === status)?.count ?? 0)
 
-    return {
-      ...sync,
-      createdAt: createdAt ?? "",
-      user: { id: userId, name: userName },
-      counts: {
-        pending: count("PENDING"),
-        done: count("DONE"),
-        skipped: count("SKIPPED"),
-        failed: count("FAILED"),
-      },
-    }
-  })
+      return {
+        ...sync,
+        createdAt: createdAt ?? "",
+        user: { id: userId, username, displayUsername, image, nameEffect, avatarBorder },
+        counts: {
+          pending: count("PENDING"),
+          done: count("DONE"),
+          skipped: count("SKIPPED"),
+          failed: count("FAILED"),
+        },
+      }
+    },
+  )
 }

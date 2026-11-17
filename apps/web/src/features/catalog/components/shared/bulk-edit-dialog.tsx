@@ -33,6 +33,8 @@ export function BulkEditDialog({
   title,
   description = m.catalog_bulk_edit_description(),
   changed,
+  submitLabel = m.catalog_bulk_apply(),
+  submitVariant = "default",
   pending,
   error,
   onSubmit,
@@ -43,6 +45,8 @@ export function BulkEditDialog({
   title: string
   description?: string
   changed: boolean
+  submitLabel?: string
+  submitVariant?: "default" | "destructive"
   pending: boolean
   error: string | null
   onSubmit: () => void
@@ -89,8 +93,9 @@ export function BulkEditDialog({
               loading={pending}
               title={changed ? undefined : m.catalog_bulk_nothing()}
               type="submit"
+              variant={submitVariant}
             >
-              {m.catalog_bulk_apply()}
+              {submitLabel}
             </Button>
           </DialogFooter>
         </form>

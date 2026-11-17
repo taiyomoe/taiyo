@@ -10,7 +10,7 @@ import { OptionValueIcon } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
-import { mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
+import { mediaCellStyles, TitleCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import {
@@ -188,16 +188,18 @@ export function ManagedCommentRow({
             </span>
           }
           narrow={{
-            from: "3xl",
+            from: "4xl",
             content: (
               <>
-                {target}
-                <span {...stylex.props(catalogStyles.muted)}>
-                  <TimeAgo date={comment.deletedAt ?? comment.createdAt} length="long" />
-                </span>
-                {comment.deletion === null ? null : (
-                  <span sx={styles.removal}>{REMOVAL_LABELS[comment.deletion]()}</span>
-                )}
+                <Folded until="3xl">
+                  {target}
+                  <span {...stylex.props(catalogStyles.muted)}>
+                    <TimeAgo date={comment.deletedAt ?? comment.createdAt} length="long" />
+                  </span>
+                  {comment.deletion === null ? null : (
+                    <span sx={styles.removal}>{REMOVAL_LABELS[comment.deletion]()}</span>
+                  )}
+                </Folded>
                 {stats}
               </>
             ),

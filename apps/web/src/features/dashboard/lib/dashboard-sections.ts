@@ -17,7 +17,6 @@ import {
   PenTool,
   Refresh,
   Settings,
-  Tag,
   Upload,
   User,
   UserCheck,
@@ -36,8 +35,6 @@ type DashboardItem = AppSidebarSection["items"][number] & {
 }
 
 type DashboardSection = Omit<AppSidebarSection, "items"> & { items: DashboardItem[] }
-
-const ANOTHER_USER = { id: "", role: "USER" } as const
 
 export const DASHBOARD_SECTIONS: DashboardSection[] = [
   {
@@ -154,7 +151,6 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/banners",
         visible: canOpenImages,
       },
-      { label: m.dashboard_nav_tags, icon: Tag, visible: (can) => can("media.update") },
     ],
   },
   {
@@ -203,7 +199,8 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
       {
         label: m.dashboard_nav_settings,
         icon: Settings,
-        visible: (can) => can("user.setRole", ANOTHER_USER),
+        to: "/dashboard/settings",
+        visible: (can) => can("media.feature"),
       },
     ],
   },

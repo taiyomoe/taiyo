@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import { Banner, Edit, Trash } from "@taiyomoe/ui/components/icons"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
@@ -7,7 +8,7 @@ import { OptionLabel, OptionValueIcon } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { ImageThumb } from "@/features/catalog/components/shared/image-thumb"
-import { MediaCell } from "@/features/catalog/components/shared/media-cell"
+import { MediaCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { Uploader } from "@/features/chapters/components/uploader"
@@ -51,11 +52,17 @@ export function BannerRow({
           detail={m.catalog_banner_count({ count: banner.media.imageCount })}
           mediaId={banner.media.id}
           narrow={{
-            from: "2xl",
+            from: "4xl",
             content: (
               <>
-                {thumb}
-                <OptionValueIcon options={CONTENT_RATING_OPTIONS} value={banner.contentRating} />
+                <Folded until="2xl">{thumb}</Folded>
+                <Folded until="3xl">
+                  <OptionValueIcon options={CONTENT_RATING_OPTIONS} value={banner.contentRating} />
+                </Folded>
+                <Uploader uploader={banner.uploader} />
+                <span {...stylex.props(catalogStyles.muted)}>
+                  <TimeAgo length="long" date={banner.createdAt} />
+                </span>
               </>
             ),
           }}

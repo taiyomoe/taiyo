@@ -1,105 +1,195 @@
-import { Edit } from "@taiyomoe/ui/components/icons"
+import { Edit, Undo } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@taiyomoe/ui/components/ui/empty"
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
-import { Suspense } from "react"
-import { DashboardPage, ListCard } from "@/components/layout/dashboard-page"
-import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
+import { useQuery } from "@tanstack/react-query"
+import { getRouteApi, Link } from "@tanstack/react-router"
+import { useDeferredValue, useState } from "react"
+import type {
+  MediaSuggestion,
+  MySuggestionsFilter,
+} from "@/features/media-suggestions/api/media-suggestions"
+import { FilterSearch, FilterSelect, FilterToolbar } from "@/components/filters/filter-toolbar"
+import { DashboardPage } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
+import { BulkBar } from "@/features/catalog/components/shared/bulk-bar"
+import {
+  SkeletonActions,
+  SkeletonMediaCell,
+  SkeletonPill,
+  SkeletonText,
+} from "@/features/catalog/components/shared/catalog-skeletons"
+import {
+  CatalogFooter,
+  CatalogTable,
+  VisuallyHidden,
+} from "@/features/catalog/components/shared/catalog-table"
+import { useSelection } from "@/features/catalog/hooks/use-selection"
+import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
+import { formatNumber } from "@/features/dashboard/lib/format"
 import {
   mySuggestionsQueryOptions,
   SUGGESTIONS_PER_PAGE,
 } from "@/features/media-suggestions/api/media-suggestions"
-import { SuggestionRow } from "@/features/media-suggestions/components/suggestion-row"
+import { MySuggestionRow } from "@/features/media-suggestions/components/my-suggestion-row"
+import { WithdrawSuggestionsDialog } from "@/features/media-suggestions/components/withdraw-suggestions-dialog"
+import { SUGGESTION_STATUS_OPTIONS } from "@/features/media-suggestions/lib/suggestion-status"
 import { m } from "@/paraglide/messages"
 
 const routeApi = getRouteApi("/dashboard/my-suggestions")
 
 export function MySuggestionsPage() {
+  const params = routeApi.useSearch()
+  const navigate = routeApi.useNavigate()
+  const filter: MySuggestionsFilter = {
+    search: params.q,
+    status: params.status,
+    page: params.page ?? 1,
+  }
+  const { data, isPlaceholderData } = useQuery(mySuggestionsQueryOptions(useDeferredValue(filter)))
+  const pending = data?.data.filter((suggestion) => suggestion.status === "PENDING") ?? []
+  const selection = useSelection(pending.map((suggestion) => suggestion.id))
+  const selectable = data === undefined || pending.length > 0 ? selection : undefined
+  const [withdrawing, setWithdrawing] = useState<{
+    suggestions: MediaSuggestion[]
+    bulk: boolean
+  } | null>(null)
+  const filtered = filter.search !== undefined || filter.status !== undefined
+  const search = (next: MySuggestionsFilter) => ({
+    q: next.search,
+    status: next.status,
+    page: next.page === 1 ? undefined : next.page,
+  })
+  const update = (patch: Partial<MySuggestionsFilter>) => {
+    void navigate({
+      replace: true,
+      search: search({ ...filter, ...patch, page: patch.page ?? 1 }),
+    })
+  }
+
   return (
     <DashboardPage subtitle={m.my_suggestions_subtitle()} title={m.dashboard_nav_my_suggestions()}>
-      <Suspense fallback={<ListCardSkeleton actions={["4.5rem"]} media="cover" />}>
-        <MySuggestionsContent />
-      </Suspense>
-    </DashboardPage>
-  )
-}
-
-function MySuggestionsContent() {
-  const { page } = routeApi.useLoaderDeps()
-  const { data } = useSuspenseQuery(mySuggestionsQueryOptions(page))
-  const navigate = useNavigate({ from: "/dashboard/my-suggestions" })
-
-  return (
-    <>
-      {data.data.length === 0 ? (
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Edit />
-            </EmptyMedia>
-            <EmptyTitle>{m.my_suggestions_empty_title()}</EmptyTitle>
-            <EmptyDescription>{m.my_suggestions_empty_description()}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      ) : (
-        <>
-          <ListCard>
-            {data.data.map((suggestion) => (
-              <SuggestionRow
-                actions={
-                  suggestion.status === "PENDING" ? (
-                    <Button
-                      render={
-                        <Link params={{ mediaId: suggestion.media.id }} to="/media/$mediaId/edit" />
-                      }
-                      size="sm"
-                      variant="ghost"
-                    >
-                      {m.my_suggestions_edit()}
-                    </Button>
-                  ) : (
-                    <Button
-                      render={
-                        <Link
-                          params={{ suggestionId: suggestion.id }}
-                          to="/dashboard/suggestions/$suggestionId"
-                        />
-                      }
-                      size="sm"
-                      variant="ghost"
-                    >
-                      {m.my_suggestions_details()}
-                    </Button>
-                  )
-                }
-                key={suggestion.id}
-                suggestion={suggestion}
+      <CatalogTable
+        bulkBar={
+          <BulkBar count={selection.ids.length} onClear={selection.clear}>
+            <Button
+              onClick={() => {
+                setWithdrawing({
+                  suggestions: pending.filter((suggestion) => selection.has(suggestion.id)),
+                  bulk: true,
+                })
+              }}
+              variant="destructive-outline"
+            >
+              <Undo />
+              {m.my_suggestions_withdraw()}
+            </Button>
+          </BulkBar>
+        }
+        columns={[
+          {
+            key: "media",
+            label: m.catalog_column_media(),
+            skeleton: (
+              <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="cover" />
+            ),
+          },
+          {
+            key: "status",
+            label: m.suggestions_column_status(),
+            width: catalogStyles.colMedium,
+            from: "3xl",
+            skeleton: <SkeletonPill width="5rem" />,
+          },
+          {
+            key: "fields",
+            label: m.suggestions_column_fields(),
+            width: catalogStyles.colTarget,
+            from: "4xl",
+            skeleton: <SkeletonPill width="6rem" />,
+          },
+          {
+            key: "date",
+            label: m.suggestion_suggested(),
+            width: catalogStyles.colMedium,
+            from: "4xl",
+            skeleton: <SkeletonText width="5.5rem" />,
+          },
+          {
+            key: "actions",
+            label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
+            width: catalogStyles.colActions,
+            skeleton: <SkeletonActions />,
+          },
+        ]}
+        empty={
+          data?.data.length === 0
+            ? {
+                icon: Edit,
+                title: filtered ? m.suggestions_empty_filtered() : m.my_suggestions_empty_title(),
+                description: filtered
+                  ? m.catalog_empty_description()
+                  : m.my_suggestions_empty_description(),
+              }
+            : null
+        }
+        fetching={isPlaceholderData}
+        footer={
+          data === undefined ? null : (
+            <CatalogFooter total={m.catalog_results({ count: formatNumber(data.meta.total) })}>
+              <PagePagination
+                fit="container"
+                onJump={(page) => {
+                  update({ page })
+                }}
+                page={filter.page}
+                pageCount={Math.ceil(data.meta.total / SUGGESTIONS_PER_PAGE)}
+                renderLink={(page) => (
+                  <Link search={search({ ...filter, page })} to="/dashboard/my-suggestions" />
+                )}
               />
-            ))}
-          </ListCard>
-          <PagePagination
-            onJump={(target) => {
-              void navigate({ search: { page: target === 1 ? undefined : target } })
+            </CatalogFooter>
+          )
+        }
+        loading={data === undefined}
+        selection={selectable}
+        toolbar={
+          <FilterToolbar>
+            <FilterSearch
+              label={m.catalog_media_search()}
+              onChange={(next) => {
+                update({ search: next })
+              }}
+              value={filter.search}
+            />
+            <FilterSelect
+              allLabel={m.catalog_all_statuses()}
+              label={m.suggestions_column_status()}
+              onChange={(status) => {
+                update({ status })
+              }}
+              options={SUGGESTION_STATUS_OPTIONS}
+              value={filter.status}
+            />
+          </FilterToolbar>
+        }
+      >
+        {data?.data.map((suggestion) => (
+          <MySuggestionRow
+            key={suggestion.id}
+            onWithdraw={() => {
+              setWithdrawing({ suggestions: [suggestion], bulk: false })
             }}
-            page={page}
-            pageCount={Math.ceil(data.meta.total / SUGGESTIONS_PER_PAGE)}
-            renderLink={(target) => (
-              <Link
-                search={{ page: target === 1 ? undefined : target }}
-                to="/dashboard/my-suggestions"
-              />
-            )}
+            selection={selectable}
+            suggestion={suggestion}
           />
-        </>
-      )}
-    </>
+        ))}
+      </CatalogTable>
+      <WithdrawSuggestionsDialog
+        onClose={() => {
+          setWithdrawing(null)
+        }}
+        onDone={withdrawing?.bulk === true ? selection.clear : undefined}
+        suggestions={withdrawing?.suggestions ?? null}
+      />
+    </DashboardPage>
   )
 }

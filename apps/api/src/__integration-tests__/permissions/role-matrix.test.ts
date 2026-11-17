@@ -6,7 +6,7 @@ import { api } from "../helpers/request"
 import { test } from "../setup"
 
 type Route = {
-  method: "GET" | "POST" | "PATCH" | "DELETE"
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
   path: string
   body?: "json" | "form"
   allowed: readonly Role[]
@@ -36,6 +36,8 @@ const ROUTES: Route[] = [
   { method: "POST", path: `/medias/${id}/flag`, body: "json", allowed: ["MODERATOR", "ADMIN"] },
   { method: "POST", path: `/medias/${id}/restore`, allowed: ["ADMIN"] },
   { method: "POST", path: `/medias/${id}/reindex`, allowed: ["ADMIN"] },
+  { method: "GET", path: "/medias/featured/managed", allowed: ["ADMIN"] },
+  { method: "PUT", path: "/medias/featured", body: "json", allowed: ["ADMIN"] },
   {
     method: "POST",
     path: "/staffs",
@@ -82,6 +84,40 @@ const ROUTES: Route[] = [
     body: "json",
     allowed: SUGGESTION_REVIEWERS,
   },
+  {
+    method: "POST",
+    path: "/media-suggestions/accept",
+    body: "json",
+    allowed: SUGGESTION_REVIEWERS,
+  },
+  {
+    method: "POST",
+    path: "/media-suggestions/reject",
+    body: "json",
+    allowed: SUGGESTION_REVIEWERS,
+  },
+  { method: "POST", path: "/media-suggestions/withdraw", body: "json", allowed: ROLES },
+  { method: "POST", path: "/chapters/withdraw", body: "json", allowed: ROLES },
+  {
+    method: "PATCH",
+    path: "/chapters/page-reports",
+    body: "json",
+    allowed: ["UPLOADER", "MODERATOR", "ADMIN"],
+  },
+  { method: "PATCH", path: "/comment-reports", body: "json", allowed: ["MODERATOR", "ADMIN"] },
+  { method: "GET", path: `/comments/${id}/reports`, allowed: ["MODERATOR", "ADMIN"] },
+  { method: "POST", path: "/ownership-requests/approve", body: "json", allowed: ["ADMIN"] },
+  { method: "POST", path: "/ownership-requests/reject", body: "json", allowed: ["ADMIN"] },
+  { method: "DELETE", path: "/ownership-requests", body: "json", allowed: ROLES },
+  { method: "POST", path: "/group-creation-requests/approve", body: "json", allowed: ["ADMIN"] },
+  { method: "POST", path: "/group-creation-requests/reject", body: "json", allowed: ["ADMIN"] },
+  { method: "DELETE", path: "/group-creation-requests", body: "json", allowed: ROLES },
+  { method: "POST", path: "/group-invitations/accept", body: "json", allowed: ROLES },
+  { method: "POST", path: "/group-invitations/decline", body: "json", allowed: ROLES },
+  { method: "POST", path: "/group-reports/review", body: "json", allowed: ["MODERATOR", "ADMIN"] },
+  { method: "PATCH", path: `/groups/${id}/members`, body: "json", allowed: ROLES },
+  { method: "DELETE", path: `/groups/${id}/members`, body: "json", allowed: ROLES },
+  { method: "DELETE", path: `/groups/${id}/invitations`, body: "json", allowed: ROLES },
 ]
 const send = (app: Parameters<typeof api>[0], route: Route, headers?: Record<string, string>) =>
   api(app, route.path, {

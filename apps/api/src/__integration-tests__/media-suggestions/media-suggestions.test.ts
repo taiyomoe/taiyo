@@ -234,6 +234,53 @@ describe("reviewing", () => {
     })
   })
 
+  test("searches the queue by media title or author, and your list by media title", async ({
+    app,
+    services,
+  }) => {
+    const { author, reviewer, mediaId } = await setup(services)
+    const other = await signInAs(services)
+    const otherMediaId = await seedMedia(services, reviewer.userId)
+
+    await seedTitle(services, {
+      mediaId: otherMediaId,
+      creatorId: reviewer.userId,
+      title: "Vagabond",
+      isMainTitle: true,
+    })
+
+    const onMain = idOf(
+      await suggest(app, mediaId, author.headers, { changes: { type: "MANHWA" } }),
+    )
+    const onOther = idOf(
+      await suggest(app, otherMediaId, author.headers, { changes: { type: "MANHUA" } }),
+    )
+    const byOther = idOf(
+      await suggest(app, otherMediaId, other.headers, { changes: { type: "MANHWA" } }),
+    )
+    const idsOf = async (path: string, headers: Record<string, string>) => {
+      const res = await api<Suggestion[]>(app, path, { headers })
+
+      return res.body.success ? res.body.data.map((suggestion) => suggestion.id) : []
+    }
+    const otherName = (
+      await services.db
+        .selectFrom("users")
+        .select("username")
+        .where("id", "=", other.userId)
+        .executeTakeFirstOrThrow()
+    ).username
+
+    expect(await idsOf("/media-suggestions?search=vagab", reviewer.headers)).toEqual([
+      onOther,
+      byOther,
+    ])
+    expect(
+      await idsOf(`/media-suggestions?search=${otherName.toUpperCase()}`, reviewer.headers),
+    ).toEqual([byOther])
+    expect(await idsOf("/users/me/media-suggestions?search=main", author.headers)).toEqual([onMain])
+  })
+
   test("is limited to uploaders, moderators and admins", async ({ app, services }) => {
     const statuses: Record<string, number> = {}
 

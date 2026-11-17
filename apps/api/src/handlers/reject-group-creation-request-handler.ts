@@ -7,6 +7,7 @@ import { checkGroupCreationRequest } from "../middlewares/check-group-creation-r
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { rejectGroupCreationRequest } from "../utils/group-creation-requests"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 
@@ -55,16 +56,14 @@ export const rejectGroupCreationRequestHandler = new Hono().post(
 
     c.var.audit.set({ reason: c.var.json.note })
 
-    const transitioned = await db
-      .updateTable("groupCreationRequests")
-      .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: c.var.json.note })
-      .where("id", "=", groupCreationRequest.id)
-      .where("status", "=", "PENDING")
-      .returning("id")
-      .executeTakeFirst()
+    const result = await rejectGroupCreationRequest(db, {
+      requestId: groupCreationRequest.id,
+      reviewerId: user.id,
+      note: c.var.json.note,
+    })
 
-    if (transitioned === undefined) {
-      return c.fail("GROUP_CREATION_REQUEST_NOT_PENDING")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
 
     return c.ok({ id: groupCreationRequest.id })

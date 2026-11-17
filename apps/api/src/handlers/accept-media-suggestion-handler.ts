@@ -1,5 +1,4 @@
 import { mediaSuggestionAudit } from "@taiyomoe/audit"
-import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -9,17 +8,8 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
-import {
-  applyMediaEdit,
-  checkMediaEdit,
-  diffMediaEdit,
-  editedFields,
-  lockMedia,
-  mediaEditSchema,
-  normalizeMediaEdit,
-  readMediaEdit,
-} from "../utils/media-edit"
-import { suggestionNoteSchema } from "../utils/media-suggestions"
+import { editedFields, mediaEditSchema } from "../utils/media-edit"
+import { acceptSuggestion, suggestionNoteSchema } from "../utils/media-suggestions"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -87,46 +77,35 @@ export const acceptMediaSuggestionHandler = new Hono().post(
     }
 
     const suggested = new Set(editedFields(locked.changes))
-    const accepted = editedFields(body.changes)
 
-    if (accepted.some((field) => !suggested.has(field))) {
+    if (editedFields(body.changes).some((field) => !suggested.has(field))) {
       return c.fail("MEDIA_SUGGESTION_UNKNOWN_FIELDS")
     }
 
-    if ((await lockMedia(db, mediaSuggestion.mediaId)) === undefined) {
-      return c.fail("MEDIA_NOT_FOUND")
+    const result = await acceptSuggestion(db, {
+      suggestion: {
+        id: mediaSuggestion.id,
+        mediaId: mediaSuggestion.mediaId,
+        authorId: locked.authorId,
+      },
+      changes: body.changes,
+      reviewerId: user.id,
+      note: body.note ?? null,
+    })
+
+    if (result.error?.code === "MEDIA_LINK_CONFLICT") {
+      return c.fail(result.error.code, result.error.details)
     }
 
-    const current = await readMediaEdit(db, mediaSuggestion.mediaId)
-    const edit = diffMediaEdit(current, normalizeMediaEdit(body.changes))
-    const error = await checkMediaEdit(db, mediaSuggestion.mediaId, edit)
-
-    if (error?.code === "MEDIA_LINK_CONFLICT") {
-      return c.fail(error.code, error.details)
-    }
-
-    if (error !== null) {
-      return c.fail(error.code)
+    if (result.error !== null) {
+      return c.fail(result.error.code)
     }
 
     c.var.audit.set({
       target: { mediaId: mediaSuggestion.mediaId, authorId: locked.authorId },
-      changes: auditChanges(current, edit),
+      changes: auditChanges(result.current, result.edit),
       ...(body.note === undefined || body.note === null ? {} : { reason: body.note }),
     })
-
-    await applyMediaEdit(db, { mediaId: mediaSuggestion.mediaId, actorId: locked.authorId, edit })
-    await db
-      .updateTable("mediaSuggestions")
-      .set({
-        status: "ACCEPTED",
-        acceptedFields: accepted,
-        reviewerId: user.id,
-        reviewerNote: body.note ?? null,
-        reviewedAt: sql<Date>`CURRENT_TIMESTAMP`,
-      })
-      .where("id", "=", mediaSuggestion.id)
-      .execute()
 
     return c.ok({ id: mediaSuggestion.id })
   },

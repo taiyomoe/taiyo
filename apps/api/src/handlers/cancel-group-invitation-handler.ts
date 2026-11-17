@@ -2,12 +2,12 @@ import { groupInvitationAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
-import { getLockedPermissions, withGroupLock } from "../group-membership"
 import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { cancelGroupInvitation } from "../utils/group-invitations"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -56,39 +56,7 @@ export const cancelGroupInvitationHandler = new Hono().delete(
   async (c) => {
     const { actor, db, group } = c.var
     const { invitationId } = c.var.param
-    const result = await withGroupLock(db, group.id, async (trx) => {
-      const invitation = await trx
-        .selectFrom("groupInvitations")
-        .select(["inviterId", "permissions", "status"])
-        .where("id", "=", invitationId)
-        .where("groupId", "=", group.id)
-        .executeTakeFirst()
-
-      if (invitation === undefined) {
-        return { ok: false, error: "GROUP_INVITATION_NOT_FOUND" } as const
-      }
-
-      const can = await getLockedPermissions(trx, actor, group.id)
-
-      if (
-        invitation.inviterId !== actor.id &&
-        !can("group.inviteMember", { groupId: group.id, permissions: invitation.permissions })
-      ) {
-        return { ok: false, error: "FORBIDDEN" } as const
-      }
-
-      if (invitation.status !== "PENDING") {
-        return { ok: false, error: "GROUP_INVITATION_NOT_PENDING" } as const
-      }
-
-      await trx
-        .updateTable("groupInvitations")
-        .set({ status: "CANCELLED" })
-        .where("id", "=", invitationId)
-        .execute()
-
-      return { ok: true } as const
-    })
+    const result = await cancelGroupInvitation(db, { actor, groupId: group.id, invitationId })
 
     if (!result.ok) {
       return c.fail(result.error)

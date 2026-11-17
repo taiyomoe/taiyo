@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Tooltip, TooltipPopup, TooltipTrigger } from "@taiyomoe/ui/components/ui/tooltip"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Comment } from "@/features/comments/api/comments"
+import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
@@ -57,9 +57,9 @@ export function CommentHeader({ comment }: { comment: Comment }) {
         <>
           <UserLink sx={styles.author} user={author} />
           {author.role === "ADMIN" || author.role === "MODERATOR" ? (
-            <Badge size="sm" variant="info">
+            <Pill size="sm" variant="info">
               {author.role === "ADMIN" ? m.comments_role_admin() : m.comments_role_moderator()}
-            </Badge>
+            </Pill>
           ) : null}
           <TitleBadge size="sm" title={author.title} />
         </>

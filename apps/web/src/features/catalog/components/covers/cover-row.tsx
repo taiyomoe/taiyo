@@ -11,7 +11,7 @@ import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
 import { ImageThumb } from "@/features/catalog/components/shared/image-thumb"
-import { MediaCell } from "@/features/catalog/components/shared/media-cell"
+import { MediaCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { Uploader } from "@/features/chapters/components/uploader"
@@ -51,12 +51,18 @@ export function CoverRow({
           detail={cover.volume === null ? undefined : m.catalog_volume({ volume: cover.volume })}
           mediaId={cover.media.id}
           narrow={{
-            from: "3xl",
+            from: "4xl",
             content: (
               <>
-                <LanguageChip language={cover.language} />
-                <OptionValueIcon options={CONTENT_RATING_OPTIONS} value={cover.contentRating} />
-                {main}
+                <Folded until="3xl">
+                  <LanguageChip language={cover.language} />
+                  <OptionValueIcon options={CONTENT_RATING_OPTIONS} value={cover.contentRating} />
+                  {main}
+                </Folded>
+                <Uploader uploader={cover.uploader} />
+                <span sx={catalogStyles.muted}>
+                  <TimeAgo length="long" date={cover.createdAt} />
+                </span>
               </>
             ),
           }}

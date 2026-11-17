@@ -33,7 +33,7 @@ const searchSchema = z.object({
     .optional()
     .catch(undefined),
   volume: z.string().trim().min(1).max(32).optional().catch(undefined),
-  q: z.string().trim().min(1).max(100).optional().catch(undefined),
+  q: z.coerce.string().trim().min(1).max(100).optional().catch(undefined),
   unread: z.boolean().optional().catch(undefined),
   comment: z.uuid().optional().catch(undefined),
   coverVolume: z.string().trim().min(1).max(32).optional().catch(undefined),

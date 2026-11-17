@@ -94,7 +94,7 @@ export function CoversPage() {
             key: "media",
             label: m.catalog_column_cover(),
             skeleton: (
-              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="cover" />
+              <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="cover" />
             ),
           },
           {

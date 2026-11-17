@@ -111,8 +111,14 @@ export function InviteMemberForm({ groupId, can }: { groupId: string; can: Permi
           canToggle={(permission) =>
             can("group.inviteMember", { groupId, permissions: [permission] })
           }
-          onChange={setPermissions}
-          value={permissions}
+          checked={(permission) => permissions.includes(permission)}
+          onToggle={(permission) => {
+            setPermissions(
+              GROUP_PERMISSIONS.filter((item) =>
+                item === permission ? !permissions.includes(item) : permissions.includes(item),
+              ),
+            )
+          }}
         />
         {GROUP_PERMISSIONS.every((permission) =>
           can("group.inviteMember", { groupId, permissions: [permission] }),

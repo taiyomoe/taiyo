@@ -5,14 +5,23 @@ import {
   MEDIA_SUGGESTION_STATUSES,
   type MediaEdit,
   type MediaEditField,
+  sql,
 } from "@taiyomoe/db"
 import z from "zod"
+import { bulkIdsSchema } from "./bulk"
+import { escapeLike } from "./escape-like"
 import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
 import {
+  applyMediaEdit,
+  checkMediaEdit,
+  diffMediaEdit,
   editedFields,
+  lockMedia,
   mediaEditFieldSchema,
   mediaEditSchema,
   mediaEditViewSchema,
+  normalizeMediaEdit,
+  readMediaEdit,
   readMediaEdits,
   sameValue,
 } from "./media-edit"
@@ -95,6 +104,38 @@ export const selectSuggestions = (db: Kysely<DB>) =>
     .innerJoin("users as authors", "authors.id", "mediaSuggestions.authorId")
     .leftJoin("users as reviewers", "reviewers.id", "mediaSuggestions.reviewerId")
     .where("medias.deletedAt", "is", null)
+
+/** Keeps the suggestions on a media with a matching title, or by a matching author. */
+export const searchSuggestions = (
+  query: ReturnType<typeof selectSuggestions>,
+  search: string | undefined,
+  { byAuthor }: { byAuthor: boolean },
+) => {
+  if (search === undefined) {
+    return query
+  }
+
+  const pattern = `%${escapeLike(search)}%`
+
+  return query.where((eb) =>
+    eb.or([
+      eb.exists(
+        eb
+          .selectFrom("titles")
+          .select("titles.mediaId")
+          .whereRef("titles.mediaId", "=", "mediaSuggestions.mediaId")
+          .where("titles.deletedAt", "is", null)
+          .where("titles.title", "ilike", pattern),
+      ),
+      ...(byAuthor
+        ? [
+            eb("authors.username", "ilike", pattern),
+            eb("authors.displayUsername", "ilike", pattern),
+          ]
+        : []),
+    ]),
+  )
+}
 
 export const selectSuggestionColumns = (query: ReturnType<typeof selectSuggestions>) =>
   query.select([
@@ -186,4 +227,96 @@ export const toSuggestionSummaries = async (db: Kysely<DB>, rows: SuggestionRow)
   return rows.map((row) =>
     summarize(row, conflictsOf(row, current.get(row.mediaId)), titles, covers),
   )
+}
+
+export const suggestionIdsSchema = bulkIdsSchema("suggestions", [
+  "4c2e8a1f-6b3d-4f9e-a7c5-1d8b2e6f9a3c",
+  "9e7d1b5a-2c4f-4a8e-b6d3-7f1c9a2e5b8d",
+])
+
+/** Locks the suggestions on live medias, oldest first, for a review or a withdrawal. */
+export const lockSuggestions = (db: Kysely<DB>, ids: readonly string[]) =>
+  db
+    .selectFrom("mediaSuggestions")
+    .select(["id", "mediaId", "authorId", "status", "changes", "base"])
+    .where("id", "in", ids)
+    .where("mediaId", "in", db.selectFrom("medias").select("id").where("deletedAt", "is", null))
+    .orderBy("createdAt")
+    .orderBy("id")
+    .forUpdate()
+    .execute()
+
+export const rejectSuggestions = async (
+  db: Kysely<DB>,
+  ids: readonly string[],
+  { reviewerId, note }: { reviewerId: string; note: string },
+) => {
+  if (ids.length > 0) {
+    await db
+      .updateTable("mediaSuggestions")
+      .set({
+        status: "REJECTED",
+        reviewerId,
+        reviewerNote: note,
+        reviewedAt: sql<Date>`CURRENT_TIMESTAMP`,
+      })
+      .where("id", "in", ids)
+      .execute()
+  }
+}
+
+export const withdrawSuggestions = async (db: Kysely<DB>, ids: readonly string[]) => {
+  if (ids.length > 0) {
+    await db
+      .updateTable("mediaSuggestions")
+      .set({ status: "WITHDRAWN" })
+      .where("id", "in", ids)
+      .execute()
+  }
+}
+
+/**
+ * Applies the accepted fields of a locked pending suggestion to its media, credited to the
+ * author, and marks the suggestion accepted. Nothing is written when the edit cannot apply.
+ */
+export const acceptSuggestion = async (
+  db: Kysely<DB>,
+  {
+    suggestion,
+    changes,
+    reviewerId,
+    note,
+  }: {
+    suggestion: { id: string; mediaId: string; authorId: string }
+    changes: MediaEdit
+    reviewerId: string
+    note: string | null
+  },
+) => {
+  if ((await lockMedia(db, suggestion.mediaId)) === undefined) {
+    return { error: { code: "MEDIA_NOT_FOUND" as const } }
+  }
+
+  const current = await readMediaEdit(db, suggestion.mediaId)
+  const edit = diffMediaEdit(current, normalizeMediaEdit(changes))
+  const error = await checkMediaEdit(db, suggestion.mediaId, edit)
+
+  if (error !== null) {
+    return { error }
+  }
+
+  await applyMediaEdit(db, { mediaId: suggestion.mediaId, actorId: suggestion.authorId, edit })
+  await db
+    .updateTable("mediaSuggestions")
+    .set({
+      status: "ACCEPTED",
+      acceptedFields: editedFields(changes),
+      reviewerId,
+      reviewerNote: note,
+      reviewedAt: sql<Date>`CURRENT_TIMESTAMP`,
+    })
+    .where("id", "=", suggestion.id)
+    .execute()
+
+  return { error: null, current, edit }
 }

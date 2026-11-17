@@ -10,6 +10,7 @@ import {
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
 import type { UpdateSearch } from "@/features/activity-log/hooks/use-activity-log"
+import { pageStyles } from "@/features/activity-log/components/page/page-styles"
 import { DEFAULT_QUERY } from "@/features/activity-log/lib/activity-log"
 import { m } from "@/paraglide/messages"
 
@@ -40,7 +41,7 @@ export function ResultsEmpty({
   const queried = query.trim() !== "" && query !== DEFAULT_QUERY
 
   return (
-    <Empty>
+    <Empty sx={pageStyles.panel}>
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <History />

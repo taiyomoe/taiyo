@@ -50,7 +50,17 @@ export type UserTarget = { id: string; role: Role }
 
 export type PermissionsDefinition = ValidateDefinition<{
   dashboard: ["open", "viewStats"]
-  media: ["create", "update", "suggest", "delete", "restore", "flag", "reindex", "syncMangaDex"]
+  media: [
+    "create",
+    "update",
+    "suggest",
+    "delete",
+    "restore",
+    "flag",
+    "reindex",
+    "syncMangaDex",
+    "feature",
+  ]
   mediaSuggestion: [
     "review",
     { name: "view"; type: MediaSuggestionTarget; required: true },

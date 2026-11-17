@@ -34,12 +34,18 @@ const styles = stylex.create({
   },
 })
 
-export function Uploader({ uploader, sx }: { uploader: LatestChapter["uploader"]; sx?: Sx }) {
+export function Uploader({
+  uploader,
+  title = m.chapter_uploaded_by({ name: uploader.displayUsername }),
+  sx,
+}: {
+  uploader: LatestChapter["uploader"]
+  /** What the user did, shown on hover; uploading by default. */
+  title?: string
+  sx?: Sx
+}) {
   return (
-    <span
-      sx={[styles.uploader, sx]}
-      title={m.chapter_uploaded_by({ name: uploader.displayUsername })}
-    >
+    <span sx={[styles.uploader, sx]} title={title}>
       <AvatarBorder border={uploader.avatarBorder}>
         <Avatar sx={styles.avatar}>
           {uploader.image === null ? null : <AvatarImage alt="" src={uploader.image} />}

@@ -40,6 +40,7 @@ import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/inv
 import { Route as DashboardMangadexSyncRouteImport } from './routes/dashboard/mangadex-sync'
 import { Route as DashboardMySuggestionsRouteImport } from './routes/dashboard/my-suggestions'
 import { Route as DashboardPageReportsRouteImport } from './routes/dashboard/page-reports'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as DashboardStaffsRouteImport } from './routes/dashboard/staffs'
 import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard/submissions'
 import { Route as DashboardUploadRouteImport } from './routes/dashboard/upload'
@@ -225,6 +226,11 @@ const DashboardPageReportsRoute = DashboardPageReportsRouteImport.update({
   path: '/page-reports',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardStaffsRoute = DashboardStaffsRouteImport.update({
   id: '/staffs',
   path: '/staffs',
@@ -404,6 +410,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
@@ -465,6 +472,7 @@ export interface FileRoutesByTo {
   '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
@@ -528,6 +536,7 @@ export interface FileRoutesById {
   '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
@@ -592,6 +601,7 @@ export interface FileRouteTypes {
     | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
+    | '/dashboard/settings'
     | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
@@ -653,6 +663,7 @@ export interface FileRouteTypes {
     | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
+    | '/dashboard/settings'
     | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
@@ -715,6 +726,7 @@ export interface FileRouteTypes {
     | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
+    | '/dashboard/settings'
     | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
@@ -998,6 +1010,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPageReportsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/staffs': {
       id: '/dashboard/staffs'
       path: '/staffs'
@@ -1235,6 +1254,7 @@ interface DashboardRouteRouteChildren {
   DashboardMangadexSyncRoute: typeof DashboardMangadexSyncRoute
   DashboardMySuggestionsRoute: typeof DashboardMySuggestionsRoute
   DashboardPageReportsRoute: typeof DashboardPageReportsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardStaffsRoute: typeof DashboardStaffsRoute
   DashboardSubmissionsRoute: typeof DashboardSubmissionsRoute
   DashboardUploadRoute: typeof DashboardUploadRoute
@@ -1265,6 +1285,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardMangadexSyncRoute: DashboardMangadexSyncRoute,
   DashboardMySuggestionsRoute: DashboardMySuggestionsRoute,
   DashboardPageReportsRoute: DashboardPageReportsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardStaffsRoute: DashboardStaffsRoute,
   DashboardSubmissionsRoute: DashboardSubmissionsRoute,
   DashboardUploadRoute: DashboardUploadRoute,

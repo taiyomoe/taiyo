@@ -8,6 +8,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
+import { rejectOwnershipRequest } from "../utils/ownership-requests"
 import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 
 const rejectSchema = z.object({
@@ -59,16 +60,14 @@ export const rejectOwnershipRequestHandler = new Hono().post(
       reason: note,
     })
 
-    const transitioned = await db
-      .updateTable("groupOwnershipRequests")
-      .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: note })
-      .where("id", "=", ownershipRequest.id)
-      .where("status", "=", "PENDING")
-      .returning("id")
-      .executeTakeFirst()
+    const result = await rejectOwnershipRequest(db, {
+      requestId: ownershipRequest.id,
+      reviewerId: user.id,
+      note,
+    })
 
-    if (transitioned === undefined) {
-      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
 
     return c.ok({ id: ownershipRequest.id })

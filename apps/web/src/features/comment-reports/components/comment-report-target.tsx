@@ -1,8 +1,6 @@
-import type * as stylex from "@stylexjs/stylex"
 import type { CommentTargetType } from "@taiyomoe/db/constants"
 import type { ComponentProps, ReactNode } from "react"
 import { Link } from "@tanstack/react-router"
-import type { ReportedComment } from "@/features/comment-reports/api/comment-reports"
 import { m } from "@/paraglide/messages"
 
 export const COMMENT_TARGET_LABELS = {
@@ -73,21 +71,5 @@ export function CommentTargetLink({
     >
       {children}
     </Link>
-  )
-}
-
-export function CommentReportTarget({
-  target,
-  commentId,
-  linkProps,
-}: {
-  target: ReportedComment["target"]
-  commentId: string
-  linkProps: ReturnType<typeof stylex.props>
-}) {
-  return (
-    <CommentTargetLink commentId={commentId} target={target} {...linkProps}>
-      {`${COMMENT_TARGET_LABELS[target.type]()} · ${target.label ?? m.media_untitled()}`}
-    </CommentTargetLink>
   )
 }

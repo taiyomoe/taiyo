@@ -21,6 +21,7 @@ import { z } from "zod"
 import type { GroupCreationInput } from "@/features/groups/api/groups"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { InputField, RichTextField, TextareaField } from "@/components/fields/form-field"
+import { PageAction } from "@/components/filters/filter-toolbar"
 import { ProofLinksFields, proofLinksSchema } from "@/features/groups/components/proof-links-fields"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
@@ -82,10 +83,10 @@ export function RequestGroupDialog() {
     >
       <DialogTrigger
         render={
-          <Button>
+          <PageAction>
             <Plus />
             {m.request_group_title()}
-          </Button>
+          </PageAction>
         }
       />
       <DialogPopup>

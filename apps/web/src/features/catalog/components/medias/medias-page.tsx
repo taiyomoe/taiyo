@@ -107,7 +107,7 @@ export function MediasPage() {
             key: "media",
             label: m.catalog_column_media(),
             skeleton: (
-              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="cover" />
+              <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="cover" />
             ),
           },
           {

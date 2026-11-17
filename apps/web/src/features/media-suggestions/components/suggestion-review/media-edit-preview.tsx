@@ -1,9 +1,9 @@
 import type { Language, MediaEditField } from "@taiyomoe/db/constants"
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaEditDraft } from "@/features/media-suggestions/lib/media-edit-model"
+import { Pill } from "@/components/badges/pill"
 import { LanguageFlag } from "@/components/flags/flags"
 import { getLanguageName } from "@/components/flags/language-flags"
 import { RichText } from "@/components/rich-text/rich-text"
@@ -97,11 +97,9 @@ export const FIELD_PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => R
           <li key={`${title.language}:${title.title}`} sx={styles.row}>
             <LanguageFlag language={title.language} />
             <span sx={styles.text}>{title.title}</span>
-            {title.isMainTitle ? (
-              <Badge variant="warning">{m.media_edit_title_main()}</Badge>
-            ) : null}
+            {title.isMainTitle ? <Pill variant="warning">{m.media_edit_title_main()}</Pill> : null}
             {title.isAcronym ? (
-              <Badge variant="secondary">{m.media_edit_title_acronym()}</Badge>
+              <Pill variant="secondary">{m.media_edit_title_acronym()}</Pill>
             ) : null}
           </li>
         ))}
@@ -175,7 +173,7 @@ export const FIELD_PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => R
         {draft.staffs.map((staff) => (
           <li key={`${staff.role}:${staff.staffId}`} sx={styles.row}>
             <span sx={styles.text}>{staff.name}</span>
-            <Badge variant="secondary">{STAFF_ROLE_LABELS[staff.role]()}</Badge>
+            <Pill variant="secondary">{STAFF_ROLE_LABELS[staff.role]()}</Pill>
           </li>
         ))}
       </ul>

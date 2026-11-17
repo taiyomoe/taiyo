@@ -25,6 +25,7 @@ export const syncStyles = stylex.create({
     paddingInline: "1.25rem",
     alignItems: "center",
     display: "flex",
+    flexWrap: "wrap",
     justifyContent: "space-between",
   },
   cardTitle: {

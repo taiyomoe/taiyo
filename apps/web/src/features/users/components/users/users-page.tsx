@@ -91,7 +91,7 @@ export function UsersPage() {
             key: "user",
             label: m.users_column_user(),
             skeleton: (
-              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="avatar" />
+              <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="avatar" />
             ),
           },
           {

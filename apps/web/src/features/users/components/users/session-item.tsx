@@ -1,10 +1,10 @@
 import type { dataTagSymbol } from "@tanstack/react-query"
 import * as stylex from "@stylexjs/stylex"
 import { Monitor } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { userSessionsQueryOptions } from "@/features/users/api/user-admin"
+import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { describeUserAgent } from "@/features/users/lib/user-agent"
 import { m } from "@/paraglide/messages"
@@ -70,7 +70,7 @@ export function SessionItem({
         <span sx={styles.sessionTitle}>
           {device === null ? m.sessions_unknown_device() : m.sessions_device(device)}
           {typeof session.impersonatedBy === "string" ? (
-            <Badge variant="warning">{m.sessions_impersonation()}</Badge>
+            <Pill variant="warning">{m.sessions_impersonation()}</Pill>
           ) : null}
         </span>
         <span sx={styles.sessionMeta}>

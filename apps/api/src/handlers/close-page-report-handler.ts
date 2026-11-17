@@ -1,5 +1,4 @@
 import { chapterReportAudit } from "@taiyomoe/audit"
-import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -9,6 +8,7 @@ import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
+import { closePageReports, closingStatusSchema, lockPageReports } from "../utils/page-reports"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 const paramSchema = z.object({
@@ -17,13 +17,7 @@ const paramSchema = z.object({
     example: "13548c83-8d1a-4163-8830-c8f16fcd2eb7",
   }),
 })
-const bodySchema = z.object({
-  status: z.enum(["RESOLVED", "DISMISSED"]).meta({
-    description:
-      "How the reports are closed: RESOLVED once the page is fixed, DISMISSED when nothing was wrong.",
-    example: "RESOLVED",
-  }),
-})
+const bodySchema = z.object({ status: closingStatusSchema })
 
 export const closePageReportHandler = new Hono().patch(
   "/page-reports/:reportId",
@@ -68,12 +62,7 @@ export const closePageReportHandler = new Hono().patch(
     const { db, user } = c.var
     const { reportId } = c.var.param
     const { status } = c.var.json
-    const report = await db
-      .selectFrom("pageReports")
-      .select(["chapterId", "pageId", "status"])
-      .where("id", "=", reportId)
-      .forUpdate()
-      .executeTakeFirst()
+    const [report] = await lockPageReports(db, [reportId])
 
     if (report === undefined) {
       return c.fail("PAGE_REPORT_NOT_FOUND")
@@ -83,14 +72,8 @@ export const closePageReportHandler = new Hono().patch(
       return c.fail("PAGE_REPORT_CLOSED")
     }
 
-    const result = await db
-      .updateTable("pageReports")
-      .set({ status, resolverId: user.id, resolvedAt: sql`CURRENT_TIMESTAMP` })
-      .where("chapterId", "=", report.chapterId)
-      .where("pageId", "=", report.pageId)
-      .where("status", "=", "OPEN")
-      .executeTakeFirst()
+    const closed = await closePageReports(db, { reports: [report], status, resolverId: user.id })
 
-    return c.ok({ closed: Number(result.numUpdatedRows) })
+    return c.ok({ closed })
   },
 )

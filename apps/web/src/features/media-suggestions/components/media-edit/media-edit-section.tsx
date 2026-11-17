@@ -1,8 +1,8 @@
 import type { MediaEditField } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import type { MediaEditDraft } from "@/features/media-suggestions/lib/media-edit-model"
+import { Pill } from "@/components/badges/pill"
 import { FieldEditor } from "@/features/media-suggestions/components/field-editors/field-editor"
 import { mediaEditStyles } from "@/features/media-suggestions/components/media-edit/media-edit-styles"
 import { FIELD_LABELS } from "@/features/media-suggestions/lib/media-edit-model"
@@ -43,7 +43,7 @@ export function MediaEditSection({
     <section sx={mediaEditStyles.card}>
       <div sx={styles.cardHeader}>
         <h2 sx={styles.cardTitle}>{title}</h2>
-        {changed ? <Badge variant="info">{m.media_edit_changed()}</Badge> : null}
+        {changed ? <Pill variant="info">{m.media_edit_changed()}</Pill> : null}
       </div>
       {fields.length === 1 ? (
         <FieldEditor draft={draft} field={fields[0] ?? "titles"} onChange={onChange} />
