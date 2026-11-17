@@ -9,7 +9,7 @@ import {
   STAFF_ROLES,
 } from "@taiyomoe/db"
 import z from "zod"
-import { languageSchema, mediaLanguageSchema } from "./schemas"
+import { languageSchema, mediaLanguageSchema, userSummarySchema } from "./schemas"
 
 const keySchema = z.string().meta({
   description: "The key to pass in `keys` to import this item.",
@@ -157,10 +157,7 @@ export const mangaDexSyncSchema = z.object({
     .record(z.string(), z.int())
     .meta({ description: "How many titles, synopses, staff, tags, links and fields it added." }),
   counts: counts.meta({ description: "How far the covers and chapters got." }),
-  user: z.object({
-    id: z.uuid().meta({ description: "The ID of the user who started the sync." }),
-    name: z.string().meta({ description: "The name of the user who started the sync." }),
-  }),
+  user: userSummarySchema.meta({ description: "The user who started the sync." }),
   createdAt: z.iso.datetime().meta({ description: "When the sync started." }),
   finishedAt: z.iso.datetime().nullable().meta({ description: "When the sync ended, if it did." }),
 })

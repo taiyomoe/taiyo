@@ -77,7 +77,15 @@ export const updateGroupMemberPermissions = (
     groupId,
     userId,
     permissions,
-  }: { actor: Actor; groupId: string; userId: string; permissions: readonly GroupPermission[] },
+  }: {
+    actor: Actor
+    groupId: string
+    userId: string
+    /** The new set, or how to derive it from the member's current one. */
+    permissions:
+      | readonly GroupPermission[]
+      | ((current: readonly GroupPermission[]) => readonly GroupPermission[])
+  },
 ) =>
   withGroupLock(db, groupId, async (trx) => {
     const member = await getMembership(trx, groupId, userId)
@@ -87,7 +95,9 @@ export const updateGroupMemberPermissions = (
     }
 
     const can = await getLockedPermissions(trx, actor, groupId)
-    const next = normalizeGroupPermissions(permissions)
+    const next = normalizeGroupPermissions(
+      typeof permissions === "function" ? permissions(member.permissions) : permissions,
+    )
 
     if (!can("group.updateMember", { member, permissions: next })) {
       return { ok: false, error: "FORBIDDEN" } as const

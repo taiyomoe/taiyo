@@ -1,6 +1,11 @@
 import { type DB, type Kysely, sql } from "@taiyomoe/db"
-import { createPermissions, toRole } from "@taiyomoe/permissions"
-import { getMembership, normalizeGroupPermissions, withGroupLock } from "../group-membership"
+import { type Actor, createPermissions, toRole } from "@taiyomoe/permissions"
+import {
+  getLockedPermissions,
+  getMembership,
+  normalizeGroupPermissions,
+  withGroupLock,
+} from "../group-membership"
 
 /**
  * Joins the group with the permissions the invitation grants, as long as it has not expired
@@ -122,3 +127,45 @@ export const declineGroupInvitation = async (
 
   return { ok: true, groupId: invitation.groupId } as const
 }
+
+/**
+ * Closes a pending invitation to the group. Its sender can always cancel it; anyone else must be
+ * allowed to send the same invitation themselves.
+ */
+export const cancelGroupInvitation = (
+  db: Kysely<DB>,
+  { actor, groupId, invitationId }: { actor: Actor; groupId: string; invitationId: string },
+) =>
+  withGroupLock(db, groupId, async (trx) => {
+    const invitation = await trx
+      .selectFrom("groupInvitations")
+      .select(["inviterId", "permissions", "status"])
+      .where("id", "=", invitationId)
+      .where("groupId", "=", groupId)
+      .executeTakeFirst()
+
+    if (invitation === undefined) {
+      return { ok: false, error: "GROUP_INVITATION_NOT_FOUND" } as const
+    }
+
+    const can = await getLockedPermissions(trx, actor, groupId)
+
+    if (
+      invitation.inviterId !== actor.id &&
+      !can("group.inviteMember", { groupId, permissions: invitation.permissions })
+    ) {
+      return { ok: false, error: "FORBIDDEN" } as const
+    }
+
+    if (invitation.status !== "PENDING") {
+      return { ok: false, error: "GROUP_INVITATION_NOT_PENDING" } as const
+    }
+
+    await trx
+      .updateTable("groupInvitations")
+      .set({ status: "CANCELLED" })
+      .where("id", "=", invitationId)
+      .execute()
+
+    return { ok: true } as const
+  })

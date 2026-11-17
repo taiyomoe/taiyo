@@ -115,6 +115,9 @@ const ROUTES: Route[] = [
   { method: "POST", path: "/group-invitations/accept", body: "json", allowed: ROLES },
   { method: "POST", path: "/group-invitations/decline", body: "json", allowed: ROLES },
   { method: "POST", path: "/group-reports/review", body: "json", allowed: ["MODERATOR", "ADMIN"] },
+  { method: "PATCH", path: `/groups/${id}/members`, body: "json", allowed: ROLES },
+  { method: "DELETE", path: `/groups/${id}/members`, body: "json", allowed: ROLES },
+  { method: "DELETE", path: `/groups/${id}/invitations`, body: "json", allowed: ROLES },
 ]
 const send = (app: Parameters<typeof api>[0], route: Route, headers?: Record<string, string>) =>
   api(app, route.path, {

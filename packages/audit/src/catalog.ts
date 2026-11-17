@@ -204,6 +204,8 @@ export const groupMemberAudit = defineAuditCatalog("group.member", {
   PROMOTE: { target: "group", severity: "high" },
   DEMOTE: { target: "group", severity: "high" },
   LEAVE: { target: "group", severity: "medium" },
+  UPDATE_MANY: { target: "group", severity: "high", requiresChanges: true },
+  REMOVE_MANY: { target: "group", severity: "high" },
 })
 
 export const groupOwnershipAudit = defineAuditCatalog("group.ownership", {
@@ -224,6 +226,7 @@ export const groupInvitationAudit = defineAuditCatalog("group.invitation", {
   DECLINE: { target: "groupInvitation", severity: "low" },
   ACCEPT_MANY: { severity: "medium" },
   DECLINE_MANY: { severity: "low" },
+  CANCEL_MANY: { target: "group", severity: "low" },
 })
 
 export const groupCreationAudit = defineAuditCatalog("group.creation", {
