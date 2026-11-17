@@ -1,5 +1,4 @@
 import type { UserSettings } from "@taiyomoe/db"
-import { tags } from "./tags"
 
 export const config = {
   openapi: {
@@ -105,7 +104,6 @@ export const config = {
     maxPerUser: 100,
     previewCovers: 4,
   },
-  tags,
   mangaDex: {
     apiUrl: "https://api.mangadex.org",
     uploadsUrl: "https://uploads.mangadex.org",
@@ -150,3 +148,7 @@ export const config = {
     maxJsonBodyBytes: 1024 * 1024,
   },
 } as const
+
+export { tags } from "./tags"
+
+export * from "./tag-keys"

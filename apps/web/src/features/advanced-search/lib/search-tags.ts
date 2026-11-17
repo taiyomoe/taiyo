@@ -1,7 +1,5 @@
-import { config } from "@taiyomoe/config"
+import { isTagKey, type TagKey, tags } from "@taiyomoe/config"
 import type { ContentLanguage } from "@/lib/locale"
-
-export type TagKey = keyof typeof config.tags
 
 export type TagState = "include" | "exclude"
 
@@ -33,8 +31,6 @@ const TAG_SECTION_IDS = [
 
 export type TagSectionId = (typeof TAG_SECTION_IDS)[number]
 
-export const isTagKey = (key: string): key is TagKey => Object.hasOwn(config.tags, key)
-
 const nameIn = (
   names: { en: string } & Partial<Record<string, string>>,
   language: ContentLanguage,
@@ -47,10 +43,10 @@ const byGroupLabel = (a: { label: string | null }, b: { label: string | null }) 
 
   return a.label.localeCompare(b.label)
 }
-const TAGS = Object.keys(config.tags)
+const TAGS = Object.keys(tags)
   .filter(isTagKey)
   .map((key) => {
-    const tag = config.tags[key]
+    const tag = tags[key]
     const [section = "", ...rest] = tag.category.split("-")
 
     return {
@@ -85,7 +81,7 @@ export const getTagSections = (language: ContentLanguage): TagSection[] =>
     return {
       id,
       groups: [...groups.entries()]
-        .map(([group, tags]) => ({ label: group, tags: tags.sort(byName) }))
+        .map(([group, groupTags]) => ({ label: group, tags: groupTags.sort(byName) }))
         .sort(byGroupLabel),
     }
   })

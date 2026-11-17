@@ -1,4 +1,4 @@
-import { config } from "@taiyomoe/config"
+import { config, tags } from "@taiyomoe/config"
 import {
   type ContentRating,
   type MediaDemography,
@@ -193,7 +193,7 @@ export const toGroupValues = (group: MangaDexGroup) => {
 
 const normalizeTagName = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, "")
 const TAG_KEYS = new Map(
-  Object.entries(config.tags).flatMap(([key, tag]) => [
+  Object.entries(tags).flatMap(([key, tag]) => [
     [normalizeTagName(key), key],
     [normalizeTagName(tag.name.en), key],
   ]),

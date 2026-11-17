@@ -1,3 +1,5 @@
+import type { TagKey } from "./tag-keys"
+
 type TagCategories =
   | "Genre"
   | "Technical"
@@ -5956,7 +5958,7 @@ export const tags = {
     isAdult: true,
   },
 } as const satisfies Record<
-  string,
+  TagKey,
   {
     name: Record<"en" | "pt_br" | "fr", string>
     description: Record<"en" | "pt_br", string>

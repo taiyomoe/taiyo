@@ -1,5 +1,5 @@
 import { cacheClient } from "@taiyomoe/cache"
-import { config } from "@taiyomoe/config"
+import { tags } from "@taiyomoe/config"
 import {
   type ContentRating,
   type DB,
@@ -29,7 +29,7 @@ const UPLOAD_MONTHS = 12
 const TOP_MEDIAS = 6
 const TOP_LANGUAGES = 6
 const DAY_MS = 86_400_000
-const GENRE_KEYS = Object.entries(config.tags)
+const GENRE_KEYS = Object.entries(tags)
   .filter(([, tag]) => tag.category === "Genre")
   .map(([key]) => key)
 const querySchema = z.object({

@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
-import type { getMediaTags } from "@/features/media/lib/media-labels"
+import type { getMediaTags } from "@/features/media/lib/media-tags"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

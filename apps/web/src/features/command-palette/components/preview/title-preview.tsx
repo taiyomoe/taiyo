@@ -13,10 +13,10 @@ import {
   MEDIA_STATUS_BADGES,
   MEDIA_STATUS_LABELS,
   MEDIA_TYPE_LABELS,
-  getMediaTags,
   getMediaYears,
   getSynopsis,
 } from "@/features/media/lib/media-labels"
+import { getMediaTags } from "@/features/media/lib/media-tags"
 import { m } from "@/paraglide/messages"
 
 const MAX_TAGS = 10

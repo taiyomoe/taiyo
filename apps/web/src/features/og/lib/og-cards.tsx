@@ -14,13 +14,13 @@ import {
   CONTENT_RATING_LABELS,
   getAltTitles,
   getMainTitle,
-  getMediaTags,
   getMediaYears,
   getSynopsis,
   MEDIA_DEMOGRAPHY_LABELS,
   MEDIA_STATUS_LABELS,
   MEDIA_TYPE_LABELS,
 } from "@/features/media/lib/media-labels"
+import { getMediaTags } from "@/features/media/lib/media-tags"
 import { ChapterOgCard } from "@/features/og/components/chapter-og-card"
 import { COVER_TEXT_WIDTH } from "@/features/og/components/cover-og-card"
 import { IDENTITY_TEXT_WIDTH, IdentityOgCard } from "@/features/og/components/identity-og-card"
