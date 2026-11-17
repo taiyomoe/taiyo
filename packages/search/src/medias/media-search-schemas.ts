@@ -56,6 +56,11 @@ const mediaFilterSchema = z
             .positive()
             .optional()
             .meta({ description: "The MyAnimeList media ID." }),
+          kuroMangas: z
+            .int()
+            .positive()
+            .optional()
+            .meta({ description: "The Kuro Mangás media ID." }),
         })
         .strict(),
       "Filters on the media's IDs on external sites.",

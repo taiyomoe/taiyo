@@ -23,7 +23,7 @@ export const toMediaLinks = (input: Record<string, unknown>): MediaLinks => {
       continue
     }
 
-    if (link === "myAnimeList" || link === "anilist") {
+    if (link === "myAnimeList" || link === "anilist" || link === "kuroMangas") {
       links[link] = Number.parseInt(value.split("/").find((part) => /^\d+$/.test(part)) ?? "", 10)
 
       continue

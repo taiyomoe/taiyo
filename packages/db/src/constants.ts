@@ -722,6 +722,7 @@ export const MEDIA_LINK_KEYS = [
   "mangaDex",
   "anilist",
   "myAnimeList",
+  "kuroMangas",
   "animePlanet",
   "bookWalker",
   "mangaUpdates",
@@ -738,7 +739,11 @@ export const MEDIA_LINK_KEYS = [
 
 export type MediaLink = (typeof MEDIA_LINK_KEYS)[number]
 
-export const MEDIA_LINK_NUMBER_KEYS = ["anilist", "myAnimeList"] as const satisfies MediaLink[]
+export const MEDIA_LINK_NUMBER_KEYS = [
+  "anilist",
+  "myAnimeList",
+  "kuroMangas",
+] as const satisfies MediaLink[]
 
 export type MediaLinkNumberKey = (typeof MEDIA_LINK_NUMBER_KEYS)[number]
 

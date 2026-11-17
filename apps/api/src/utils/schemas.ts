@@ -119,6 +119,11 @@ export const mediaLinksSchema = z
       .positive()
       .exactOptional()
       .meta({ description: "The ID of the media on MyAnimeList." }),
+    kuroMangas: z
+      .int()
+      .positive()
+      .exactOptional()
+      .meta({ description: "The ID of the media on Kuro Mangás." }),
     animePlanet: httpUrlSchema
       .exactOptional()
       .meta({ description: "The URL of the media on Anime-Planet." }),

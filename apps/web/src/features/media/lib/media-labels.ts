@@ -71,6 +71,7 @@ export const MEDIA_LINKS: Record<string, { label: string; href: (value: string) 
   mangaDex: { label: "MangaDex", href: (id) => `https://mangadex.org/title/${id}` },
   anilist: { label: "AniList", href: (id) => `https://anilist.co/manga/${id}` },
   myAnimeList: { label: "MyAnimeList", href: (id) => `https://myanimelist.net/manga/${id}` },
+  kuroMangas: { label: "Kuro Mangás", href: (id) => `https://kuromangas.com/manga/${id}` },
   animePlanet: { label: "Anime-Planet", href: (url) => url },
   bookWalker: { label: "BookWalker", href: (url) => url },
   mangaUpdates: { label: "MangaUpdates", href: (url) => url },

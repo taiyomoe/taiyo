@@ -2,6 +2,7 @@ import type { Hono } from "hono"
 import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
 import type { Services } from "../../services"
+import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { waitForMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
@@ -33,6 +34,23 @@ test.override({ search: true })
 describe("POST /medias/search links filter", () => {
   test("finds a media by its MangaDex id", async ({ app, services }) => {
     expect(await getIds(services, app, { mangaDex: SEEDED_MANGADEX_ID })).toEqual([SEEDED_MEDIA_ID])
+  })
+
+  test("finds a media by its Kuro Mangás id", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+
+    await api(app, `/medias/${SEEDED_MEDIA_ID}`, {
+      method: "PATCH",
+      headers,
+      json: { links: { mangaDex: SEEDED_MANGADEX_ID, kuroMangas: 2433 } },
+    })
+    await waitForMediaDoc(
+      services,
+      SEEDED_MEDIA_ID,
+      (doc) => doc?.linkValues.includes("kuroMangas:2433") ?? false,
+    )
+
+    expect(await getIds(services, app, { kuroMangas: 2433 })).toEqual([SEEDED_MEDIA_ID])
   })
 
   test("finds a media when any of the given ids matches", async ({ app, services }) => {
