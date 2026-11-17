@@ -38,6 +38,12 @@ const DASHBOARD_QUEUES: ReadonlyArray<{
     to: "/dashboard/comment-reports",
   },
   { key: "groupReports", label: m.reports_title, icon: Flag, to: "/dashboard/group-reports" },
+  {
+    key: "userReports",
+    label: m.user_reports_title,
+    icon: Flag,
+    to: "/dashboard/user-reports",
+  },
 ]
 
 /** The queues the viewer can review, with their size. */

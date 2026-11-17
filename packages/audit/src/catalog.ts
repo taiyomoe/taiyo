@@ -40,6 +40,9 @@ export const adminAudit = defineAuditCatalog("admin", {
   USER_SESSION_REVOKE: { target: "user", severity: "high" },
   USER_SESSIONS_REVOKE: { target: "user", severity: "high" },
   USER_PASSWORD_SET: { target: "user", severity: "critical" },
+  USER_PROFILE_UPDATE: { target: "user", severity: "high", requiresChanges: true },
+  USER_AVATAR_REMOVE: { target: "user", severity: "medium" },
+  USER_BANNER_REMOVE: { target: "user", severity: "medium" },
   USER_LIST: { severity: "medium" },
   USER_GET: { target: "user", severity: "medium" },
   USER_SESSIONS_LIST: { target: "user", severity: "medium" },
@@ -198,6 +201,12 @@ export const groupReportAudit = defineAuditCatalog("group.report", {
   REVIEW_MANY: { severity: "medium" },
 })
 
+export const userReportAudit = defineAuditCatalog("user.report", {
+  CREATE: { target: "user", severity: "low" },
+  REVIEW: { target: "userReport", severity: "medium" },
+  REVIEW_MANY: { severity: "medium" },
+})
+
 export const groupMemberAudit = defineAuditCatalog("group.member", {
   UPDATE: { target: "group", severity: "high", requiresChanges: true },
   REMOVE: { target: "group", severity: "high" },
@@ -248,6 +257,7 @@ export const listAudit = defineAuditCatalog("list", {
   ITEM_REMOVE: { target: "list", severity: "low" },
   VOTE: { target: "list", severity: "low" },
   UNVOTE: { target: "list", severity: "low" },
+  DELETE_MANY: { severity: "low" },
 })
 
 export const libraryAudit = defineAuditCatalog("library", {
@@ -315,6 +325,7 @@ export const auditCatalogs = [
   groupInvitationAudit,
   groupCreationAudit,
   groupReportAudit,
+  userReportAudit,
   listAudit,
   libraryAudit,
   historyAudit,
@@ -351,6 +362,7 @@ declare module "evlog" {
     groupInvitation: typeof groupInvitationAudit
     groupCreation: typeof groupCreationAudit
     groupReport: typeof groupReportAudit
+    userReport: typeof userReportAudit
     list: typeof listAudit
     library: typeof libraryAudit
     history: typeof historyAudit

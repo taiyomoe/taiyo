@@ -47,7 +47,7 @@ export function ListPage() {
               </>
             }
           >
-            <ListContent listId={listId} viewerId={user?.id ?? null} />
+            <ListContent listId={listId} user={user} />
           </Suspense>
         </CatchBoundary>
       </div>

@@ -84,11 +84,12 @@ const styles = stylex.create({
 
 export function ListHeader({
   list,
-  isOwner,
+  canEdit,
   viewerId,
 }: {
   list: ListDetail
-  isOwner: boolean
+  /** Its owner, or a moderator or admin on a public list. */
+  canEdit: boolean
   viewerId: string | null
 }) {
   return (
@@ -120,7 +121,7 @@ export function ListHeader({
         {list.visibility === "PUBLIC" ? (
           <ListVoteButton list={list} size="default" viewerId={viewerId} />
         ) : null}
-        {isOwner ? (
+        {canEdit ? (
           <Button
             render={<Link params={{ listId: list.id }} to="/lists/$listId/edit" />}
             variant="outline"

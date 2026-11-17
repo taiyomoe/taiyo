@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import {
   Coins,
   Comment,
+  Edit,
   ExternalLink,
   Eye,
   Key,
@@ -120,6 +121,9 @@ export function UserRow({
             render: <Link search={{ author: user.id }} to="/dashboard/comments" />,
           },
         ]
+      : []),
+    ...(can("user.moderateProfile", target) && !user.banned
+      ? [{ key: "editProfile", label: m.profile_edit(), icon: Edit, onClick: open("profile") }]
       : []),
     ...(!self && can("user.setRole", { id: user.id })
       ? [

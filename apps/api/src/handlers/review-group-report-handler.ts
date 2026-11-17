@@ -6,18 +6,14 @@ import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
-import {
-  groupReportNoteSchema,
-  groupReportOutcomeSchema,
-  reviewGroupReport,
-} from "../utils/group-reports"
+import { reviewGroupReport } from "../utils/group-reports"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, reportNoteSchema, reportOutcomeSchema } from "../utils/schemas"
 
 const paramSchema = z.object({ id: z.uuid().meta({ description: "The ID of the report." }) })
 const reviewSchema = z.object({
-  status: groupReportOutcomeSchema,
-  note: groupReportNoteSchema,
+  status: reportOutcomeSchema("group"),
+  note: reportNoteSchema("Confirmed with the original group."),
 })
 
 export const reviewGroupReportHandler = new Hono().post(

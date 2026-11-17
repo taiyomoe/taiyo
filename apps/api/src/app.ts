@@ -44,6 +44,7 @@ import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { searchRouter } from "./routers/search-router"
 import { shopRouter } from "./routers/shop-router"
 import { staffsRouter } from "./routers/staffs-router"
+import { userReportsRouter } from "./routers/user-reports-router"
 import { usersRouter } from "./routers/users-router"
 import { enrichAudit } from "./utils/audit"
 import { type ErrorCode, errors } from "./utils/errors"
@@ -102,7 +103,7 @@ const scalarExtensions = {
     { name: "Comments", tags: ["Comments", "Comment images", "Comment reports"] },
     {
       name: "Users",
-      tags: ["Users", "Profile", "Follows", "Notifications", "Settings", "Shop"],
+      tags: ["Users", "User reports", "Profile", "Follows", "Notifications", "Settings", "Shop"],
     },
     { name: "Administration", tags: ["Dashboard", "Audit logs"] },
   ],
@@ -249,6 +250,7 @@ export const createApp = (services: Services) => {
     .route("/media-suggestions", mediaSuggestionsRouter)
     .route("/mangadex-syncs", mangaDexSyncsRouter)
     .route("/users", usersRouter)
+    .route("/user-reports", userReportsRouter)
     .route("/lists", listsRouter)
     .route("/comments", commentsRouter)
     .route("/comment-images", commentImagesRouter)
@@ -373,6 +375,10 @@ export const createApp = (services: Services) => {
               description: "Reports about a comment, and their review by moderators.",
             },
             { name: "Users", description: "User profiles, stats and moderation: roles and bans." },
+            {
+              name: "User reports",
+              description: "Reports about a user's profile, and their review by moderators.",
+            },
             {
               name: "Profile",
               description: "Your own profile: display name, avatar, banner, cosmetics and account.",

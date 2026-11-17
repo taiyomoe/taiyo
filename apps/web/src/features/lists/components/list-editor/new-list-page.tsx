@@ -10,7 +10,7 @@ export function NewListPage() {
 
   return (
     <ListEditorShell title={m.list_editor_new_title()} user={session.user}>
-      <ListEditor list={null} />
+      <ListEditor canDelete={false} list={null} owned />
     </ListEditorShell>
   )
 }
