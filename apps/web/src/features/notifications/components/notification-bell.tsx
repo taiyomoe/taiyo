@@ -5,17 +5,19 @@ import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/u
 import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
-import { lazy, Suspense, useState } from "react"
+import { Suspense, useState } from "react"
 import { notificationCountsQueryOptions } from "@/features/notifications/api/notifications"
+import { createLazyComponent } from "@/lib/lazy-component"
 import { m } from "@/paraglide/messages"
 
 // The inbox and the followers dialog only download once the bell is hovered or opened.
 const loadInbox = () => import("@/features/notifications/components/notification-inbox")
-const NotificationInbox = lazy(async () => ({ default: (await loadInbox()).NotificationInbox }))
-const FollowListDialog = lazy(async () => ({
-  default: (await import("@/features/users/components/profile/dialogs/follow-list-dialog"))
-    .FollowListDialog,
-}))
+const NotificationInbox = createLazyComponent(async () => (await loadInbox()).NotificationInbox)
+const FollowListDialog = createLazyComponent(
+  async () =>
+    (await import("@/features/users/components/profile/dialogs/follow-list-dialog"))
+      .FollowListDialog,
+)
 const styles = stylex.create({
   trigger: {
     position: "relative",
@@ -65,6 +67,11 @@ export function NotificationBell({ viewerId }: { viewerId: string }) {
   const close = () => {
     setOpen(false)
   }
+  const inboxFallback = (
+    <div sx={styles.fallback}>
+      <Spinner />
+    </div>
+  )
 
   return (
     <>
@@ -89,14 +96,9 @@ export function NotificationBell({ viewerId }: { viewerId: string }) {
           {unread === 0 ? null : <span sx={styles.count}>{unread > 99 ? "99+" : unread}</span>}
         </PopoverTrigger>
         <PopoverPopup align="end" sideOffset={8} sx={styles.popup}>
-          <Suspense
-            fallback={
-              <div sx={styles.fallback}>
-                <Spinner />
-              </div>
-            }
-          >
+          <Suspense fallback={inboxFallback}>
             <NotificationInbox
+              fallback={inboxFallback}
               onClose={close}
               onShowFollowers={() => {
                 close()
@@ -110,6 +112,7 @@ export function NotificationBell({ viewerId }: { viewerId: string }) {
       {followers === "unmounted" ? null : (
         <Suspense>
           <FollowListDialog
+            retry={followers}
             direction={followers === "open" ? "followers" : null}
             hiddenFor={null}
             onClose={() => {

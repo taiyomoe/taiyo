@@ -31,6 +31,15 @@ const overviewSchema = z.object({
       groupRequests: queueCount(
         "The number of group ownership and creation requests waiting for review, or null when you cannot review both kinds.",
       ),
+      pageReports: queueCount(
+        "The number of open page reports, or null when you cannot review them.",
+      ),
+      commentReports: queueCount(
+        "The number of reported comments waiting for review, or null when you cannot review them.",
+      ),
+      groupReports: queueCount(
+        "The number of group reports waiting for review, or null when you cannot review them.",
+      ),
     })
     .meta({ description: "The number of items waiting in each review queue." }),
 })
@@ -68,6 +77,9 @@ export const getMyOverviewHandler = new Hono().get(
       suggestionQueue,
       ownershipQueue,
       creationQueue,
+      pageReportQueue,
+      commentReportQueue,
+      groupReportQueue,
     ] = await Promise.all([
       db
         .selectFrom("chapters")
@@ -138,6 +150,33 @@ export const getMyOverviewHandler = new Hono().get(
             .where("status", "=", "PENDING")
             .executeTakeFirst()
         : null,
+      can("pageReport.review")
+        ? db
+            .selectFrom("pageReports")
+            .innerJoin("chapters", "chapters.id", "pageReports.chapterId")
+            .innerJoin("medias", "medias.id", "chapters.mediaId")
+            .select(total)
+            .where("pageReports.status", "=", "OPEN")
+            .where("chapters.deletedAt", "is", null)
+            .where("medias.deletedAt", "is", null)
+            .executeTakeFirst()
+        : null,
+      can("comment.review")
+        ? db
+            .selectFrom("commentReports")
+            .select(sql<string>`count(distinct "commentId")`.as("count"))
+            .where("status", "=", "OPEN")
+            .executeTakeFirst()
+        : null,
+      can("groupReport.review")
+        ? db
+            .selectFrom("groupReports")
+            .innerJoin("groups", "groups.id", "groupReports.groupId")
+            .select(total)
+            .where("groupReports.status", "=", "PENDING")
+            .where("groups.deletedAt", "is", null)
+            .executeTakeFirst()
+        : null,
     ])
     const tally = (row: { pending: string; accepted: string; rejected: string }) => ({
       pending: Number(row.pending),
@@ -157,6 +196,9 @@ export const getMyOverviewHandler = new Hono().get(
           ownershipQueue === null || creationQueue === null
             ? null
             : count(ownershipQueue) + count(creationQueue),
+        pageReports: pageReportQueue === null ? null : count(pageReportQueue),
+        commentReports: commentReportQueue === null ? null : count(commentReportQueue),
+        groupReports: groupReportQueue === null ? null : count(groupReportQueue),
       },
     })
   },

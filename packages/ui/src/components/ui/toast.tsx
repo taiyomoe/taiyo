@@ -208,11 +208,14 @@ const styles = stylex.create({
   body: {
     gap: "0.5rem",
     display: "flex",
+    minWidth: 0,
   },
   text: {
     gap: "0.125rem",
     display: "flex",
     flexDirection: "column",
+    overflowWrap: "anywhere",
+    minWidth: 0,
   },
   title: {
     fontWeight: 500,

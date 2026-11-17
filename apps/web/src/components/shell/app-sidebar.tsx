@@ -26,6 +26,7 @@ import {
   SidebarResizeHandle,
   useSidebar,
 } from "@taiyomoe/ui/components/ui/sidebar"
+import { a11y } from "@taiyomoe/ui/styles/recipes"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { Link, type LinkProps, useMatchRoute } from "@tanstack/react-router"
@@ -46,6 +47,8 @@ export type AppSidebarSection = {
     onClick?: () => void
     pending?: boolean
     soon?: boolean
+    /** Items waiting behind the link, shown when there is at least one. */
+    count?: number | undefined
   }>
 }
 
@@ -115,6 +118,31 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
     minWidth: 0,
   },
+  // Pinned to the icon's top right corner without wrapping the icon, which would shift the label.
+  count: {
+    borderColor: colors.sidebar,
+    borderRadius: radius.full,
+    borderStyle: "solid",
+    borderWidth: 2,
+    paddingInline: "0.1875rem",
+    alignItems: "center",
+    backgroundColor: colors.primary,
+    boxSizing: "content-box",
+    color: colors.primaryForeground,
+    display: "inline-flex",
+    fontSize: "0.625rem",
+    fontVariantNumeric: "tabular-nums",
+    fontWeight: 700,
+    justifyContent: "center",
+    lineHeight: 1,
+    position: "absolute",
+    transform: "translateX(-100%)",
+    height: "0.875rem",
+    left: "calc(0.75rem + 1rem + 0.625rem)",
+    minWidth: "0.5rem",
+    top: "calc((2.625rem - 1rem) / 2 - 0.5rem)",
+  },
+
   soonBadge: {
     paddingInline: 0,
     transform: "translateY(-50%)",
@@ -190,7 +218,7 @@ export function AppSidebar({
             <SidebarGroupContent>
               <SidebarMenu sx={styles.menu}>
                 {section.items.map(
-                  ({ label, icon: Icon, to, params, highlight, onClick, pending, soon }) => {
+                  ({ label, icon: Icon, to, params, highlight, onClick, pending, soon, count }) => {
                     const isActive =
                       to !== undefined &&
                       highlight !== false &&
@@ -217,7 +245,15 @@ export function AppSidebar({
                             {...stylex.props(styles.icon, isActive && styles.iconActive)}
                             size={20}
                           />
+                          {count === undefined || count === 0 ? null : (
+                            <span aria-hidden sx={styles.count}>
+                              {count > 99 ? "99+" : count}
+                            </span>
+                          )}
                           <span sx={styles.label}>{label()}</span>
+                          {count === undefined || count === 0 ? null : (
+                            <span sx={a11y.srOnly}>{m.shell_nav_count({ count })}</span>
+                          )}
                         </SidebarMenuButton>
                         {soon === true ? (
                           <SidebarMenuBadge sx={styles.soonBadge}>

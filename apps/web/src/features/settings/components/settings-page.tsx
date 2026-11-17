@@ -17,7 +17,7 @@ import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/t
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
-import { lazy, Suspense } from "react"
+import { Suspense } from "react"
 import { pageFrame } from "@/components/layout/page-frame"
 import { AppShell } from "@/components/shell/app-shell"
 import { AccountSettings } from "@/features/settings/components/account/account-settings"
@@ -26,15 +26,17 @@ import { PreferencesSettings } from "@/features/settings/components/preferences/
 import { PrivacySettings } from "@/features/settings/components/privacy/privacy-settings"
 import { ProfileSettings } from "@/features/settings/components/profile/profile-settings"
 import { SETTINGS_TABS, type SettingsTab } from "@/features/settings/lib/settings-tabs"
+import { createLazyComponent } from "@/lib/lazy-component"
 import { m } from "@/paraglide/messages"
 
-const SecuritySettings = lazy(async () => ({
-  default: (await import("@/features/settings/components/security/security-settings"))
-    .SecuritySettings,
-}))
-const ReaderSettings = lazy(async () => ({
-  default: (await import("@/features/settings/components/reader/reader-settings")).ReaderSettings,
-}))
+const SecuritySettings = createLazyComponent(
+  async () =>
+    (await import("@/features/settings/components/security/security-settings")).SecuritySettings,
+)
+const ReaderSettings = createLazyComponent(
+  async () =>
+    (await import("@/features/settings/components/reader/reader-settings")).ReaderSettings,
+)
 const TABS = {
   profile: { label: m.user_settings_tab_profile, icon: User },
   account: { label: m.user_settings_tab_account, icon: UserCheck },
@@ -158,7 +160,7 @@ export function SettingsPage() {
           </TabsPanel>
           <TabsPanel value="security">
             <Suspense fallback={fallback}>
-              <SecuritySettings session={session} />
+              <SecuritySettings fallback={fallback} session={session} />
             </Suspense>
           </TabsPanel>
           <TabsPanel value="preferences">
@@ -166,7 +168,7 @@ export function SettingsPage() {
           </TabsPanel>
           <TabsPanel value="reader">
             <Suspense fallback={fallback}>
-              <ReaderSettings />
+              <ReaderSettings fallback={fallback} />
             </Suspense>
           </TabsPanel>
           <TabsPanel value="notifications">

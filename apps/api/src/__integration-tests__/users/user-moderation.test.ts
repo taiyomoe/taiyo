@@ -1,8 +1,9 @@
 import { describe, expect } from "vitest"
 import type { Services } from "../../services"
+import { postComment } from "../comments/helpers"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
-import { seedChapter, seedMedia } from "../helpers/seed"
+import { seedChapter, seedGroup, seedMedia } from "../helpers/seed"
 import { test } from "../setup"
 
 type ManagedUser = {
@@ -332,6 +333,67 @@ describe("GET /users/me/overview", () => {
     })
     expect(theirs.body).toMatchObject({
       data: { queues: { chapters: 1, suggestions: 0, groupRequests: null } },
+    })
+  })
+  test("counts the report queues for the moderators", async ({ app, services }) => {
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const user = await signInAs(services)
+    const getQueues = async (headers: Record<string, string>) => {
+      const res = await api<{ queues: Record<string, number | null> }>(app, "/users/me/overview", {
+        headers,
+      })
+
+      if (!res.body.success) {
+        throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+      }
+
+      return res.body.data.queues
+    }
+    const before = await getQueues(moderator.headers)
+    const mediaId = await seedMedia(services, moderator.userId)
+    const pageId = "00000000-0000-4000-8000-000000000003"
+    const chapterId = await seedChapter(services, {
+      mediaId,
+      uploaderId: moderator.userId,
+      number: 1,
+      status: "PUBLISHED",
+      pages: [{ id: pageId }],
+    })
+    const groupId = await seedGroup(services, moderator.userId, "Reported Scans")
+    const comment = await postComment(
+      app,
+      user.headers,
+      { type: "MEDIA", id: mediaId },
+      "Reported comment",
+    )
+
+    await services.db
+      .insertInto("pageReports")
+      .values({ reporterId: user.userId, chapterId, pageId, reason: "BROKEN" })
+      .execute()
+    await services.db
+      .insertInto("commentReports")
+      .values([
+        { commentId: comment.id, reporterId: user.userId, reason: "SPAM" },
+        { commentId: comment.id, reporterId: moderator.userId, reason: "SPAM" },
+      ])
+      .execute()
+    await services.db
+      .insertInto("groupReports")
+      .values({ groupId, reporterId: user.userId, reason: "SPAM" })
+      .execute()
+
+    const after = await getQueues(moderator.headers)
+
+    expect(after).toMatchObject({
+      pageReports: (before.pageReports ?? 0) + 1,
+      commentReports: (before.commentReports ?? 0) + 1,
+      groupReports: (before.groupReports ?? 0) + 1,
+    })
+    expect(await getQueues(user.headers)).toMatchObject({
+      pageReports: null,
+      commentReports: null,
+      groupReports: null,
     })
   })
 })

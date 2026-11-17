@@ -2,18 +2,19 @@ import * as stylex from "@stylexjs/stylex"
 import { Sparkles } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
-import { lazy, Suspense, useState } from "react"
+import { Suspense, useState } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import { UserName } from "@/components/user-name/user-name"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { SettingsSection } from "@/features/settings/components/settings-section"
 import { TitleBadge } from "@/features/users/components/profile/title-badge"
+import { createLazyComponent } from "@/lib/lazy-component"
 import { m } from "@/paraglide/messages"
 
-const CustomizeDialog = lazy(async () => ({
-  default: (await import("@/features/users/components/profile/dialogs/customize-dialog"))
-    .CustomizeDialog,
-}))
+const CustomizeDialog = createLazyComponent(
+  async () =>
+    (await import("@/features/users/components/profile/dialogs/customize-dialog")).CustomizeDialog,
+)
 const styles = stylex.create({
   preview: {
     gap: "0.625rem",

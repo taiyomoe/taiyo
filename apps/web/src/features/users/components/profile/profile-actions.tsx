@@ -3,17 +3,18 @@ import { Edit, Sparkles } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-import { lazy, Suspense, useState } from "react"
+import { Suspense, useState } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { Session } from "@/lib/session"
 import { FollowButton } from "@/features/users/components/profile/follow-button"
+import { createLazyComponent } from "@/lib/lazy-component"
 import { m } from "@/paraglide/messages"
 
 // The owner-only dialog is code-split: visitors never download it.
-const CustomizeDialog = lazy(async () => ({
-  default: (await import("@/features/users/components/profile/dialogs/customize-dialog"))
-    .CustomizeDialog,
-}))
+const CustomizeDialog = createLazyComponent(
+  async () =>
+    (await import("@/features/users/components/profile/dialogs/customize-dialog")).CustomizeDialog,
+)
 const styles = stylex.create({
   customize: {
     paddingInline: { default: 0, [breakpoints.sm]: "calc(1rem - 1px)" },
