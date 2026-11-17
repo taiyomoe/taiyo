@@ -40,7 +40,7 @@ const styles = stylex.create({
     minWidth: 0,
   },
   language: {
-    flexBasis: "11rem",
+    flexBasis: "13rem",
     flexGrow: { default: 1, [breakpoints.sm]: 0 },
     flexShrink: 1,
     minWidth: 0,
