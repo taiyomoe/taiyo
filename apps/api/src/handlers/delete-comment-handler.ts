@@ -77,7 +77,10 @@ export const deleteCommentHandler = new Hono().delete(
     }
 
     if (deletion !== "AUTHOR") {
-      await closeCommentReports(c.var, [comment.id], { status: "RESOLVED" })
+      await closeCommentReports(c.var, [comment.id], {
+        status: "RESOLVED",
+        notify: deletion === "MODERATOR",
+      })
     }
 
     c.var.audit.set({ target: { deletion, authorId: comment.authorId ?? undefined } })

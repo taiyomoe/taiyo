@@ -332,6 +332,43 @@ describe("report review notifications", () => {
     expect(await listNotifications(app, author.headers)).toEqual([])
   })
 
+  test("keep quiet when the profile owner, not the moderation team, removes a reported comment", async ({
+    app,
+    services,
+  }) => {
+    const owner = await signInAs(services)
+    const author = await signInAs(services)
+    const reporter = await signInAs(services)
+    const comment = await postComment(
+      app,
+      author.headers,
+      { type: "USER", id: owner.userId },
+      "Rude remark",
+    )
+
+    expectSuccess(
+      await api<{ id: string }>(app, `/comments/${comment.id}/reports`, {
+        method: "POST",
+        headers: reporter.headers,
+        json: { reason: "HARASSMENT" },
+      }),
+    )
+
+    const removal = await api(app, `/comments/${comment.id}`, {
+      method: "DELETE",
+      headers: owner.headers,
+    })
+    const report = await services.db
+      .selectFrom("commentReports")
+      .select("status")
+      .where("commentId", "=", comment.id)
+      .executeTakeFirstOrThrow()
+
+    expect(removal.status).toBe(200)
+    expect(report.status).toBe("RESOLVED")
+    expect(await listNotifications(app, reporter.headers)).toEqual([])
+  })
+
   test("tell the reporter of a group how their report was reviewed", async ({ app, services }) => {
     const moderator = await signInAs(services, { role: "MODERATOR" })
     const reporter = await signInAs(services)

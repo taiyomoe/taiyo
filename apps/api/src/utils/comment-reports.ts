@@ -59,7 +59,14 @@ export const toCommentReport = (row: CommentReportRow) =>
 export const closeCommentReports = async (
   context: ModerationContext,
   commentIds: readonly string[],
-  { status }: { status: "RESOLVED" | "DISMISSED" },
+  {
+    status,
+    notify = true,
+  }: {
+    status: "RESOLVED" | "DISMISSED"
+    /** Whether the reporters hear about it: not when the page owner removed the comment. */
+    notify?: boolean
+  },
 ) => {
   if (commentIds.length === 0) {
     return 0
@@ -75,7 +82,7 @@ export const closeCommentReports = async (
 
   await notifyModeration(
     context,
-    closed.map((report) => ({
+    (notify ? closed : []).map((report) => ({
       type: "REPORT_REVIEWED",
       userId: report.reporterId,
       payload: {
