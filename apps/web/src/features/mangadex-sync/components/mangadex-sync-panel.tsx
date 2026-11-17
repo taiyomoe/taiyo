@@ -8,7 +8,6 @@ import {
   mangaDexSyncsQueryOptions,
 } from "@/features/mangadex-sync/api/mangadex-sync"
 import { ActiveSync } from "@/features/mangadex-sync/components/active-sync"
-import { SyncHistory } from "@/features/mangadex-sync/components/sync-history"
 import { SyncPlan } from "@/features/mangadex-sync/components/sync-plan"
 import { syncStyles } from "@/features/mangadex-sync/components/sync-styles"
 
@@ -24,10 +23,5 @@ export function MangaDexSyncPanel({ mediaId }: { mediaId: string }) {
     current = <SyncPlan mangaDexId={mangaDexId} mediaId={mediaId} onLink={setMangaDexId} />
   }
 
-  return (
-    <div sx={syncStyles.column}>
-      {current}
-      <SyncHistory syncs={syncs.data ?? []} />
-    </div>
-  )
+  return <div sx={syncStyles.column}>{current}</div>
 }

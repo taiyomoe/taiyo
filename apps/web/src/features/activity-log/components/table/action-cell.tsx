@@ -1,14 +1,14 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { LogGroup } from "@/features/activity-log/lib/activity-log"
+import { Pill } from "@/components/badges/pill"
 import { getCategoryTone } from "@/features/activity-log/components/entity-avatar"
 import { tableStyles } from "@/features/activity-log/components/table/table-styles"
 import { getCategory } from "@/features/activity-log/lib/activity-log"
 import { formatCount } from "@/features/activity-log/lib/format"
 import { m } from "@/paraglide/messages"
 
-const OUTCOME_BADGES = {
+const OUTCOME_VARIANTS = {
   success: "success",
   failure: "warning",
   denied: "error",
@@ -84,9 +84,9 @@ export function ActionCell({ group: { entry, count } }: { group: LogGroup }) {
         ) : null}
       </span>
       <span sx={styles.actionMeta}>
-        <Badge size="sm" variant={OUTCOME_BADGES[entry.outcome]}>
+        <Pill size="sm" variant={OUTCOME_VARIANTS[entry.outcome]}>
           {OUTCOME_LABELS[entry.outcome]()}
-        </Badge>
+        </Pill>
         <span sx={styles.category}>
           <span sx={styles.categoryDot(getCategoryTone(getCategory(entry.action)))} />
           {getCategory(entry.action)}

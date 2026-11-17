@@ -41,8 +41,10 @@ const styles = stylex.create({
     height: "0.8125rem",
     width: "0.8125rem",
   },
+  // A line box taller than the text, so the clip keeps the accents of capitals (É).
   label: {
     overflow: "hidden",
+    lineHeight: 1.4,
     textOverflow: "ellipsis",
   },
 })

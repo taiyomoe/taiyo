@@ -1,3 +1,4 @@
+import type { GroupPermission } from "@taiyomoe/permissions"
 import type { InferRequestType, InferResponseType } from "hono/client"
 import { keepPreviousData, queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { isDefined, pickBy } from "remeda"
@@ -54,6 +55,20 @@ export const groupMembersQueryOptions = (groupId: string) =>
 
 export type GroupMember = InferResponseType<
   (typeof api.groups)[":id"]["members"]["$get"],
+  200
+>["data"][number]
+
+export const groupInvitationsQueryOptions = (groupId: string) =>
+  queryOptions({
+    queryKey: ["groups", groupId, "invitations"],
+    queryFn: async ({ signal }) =>
+      unwrap(
+        await api.groups[":id"].invitations.$get({ param: { id: groupId } }, { init: { signal } }),
+      ),
+  })
+
+export type GroupInvitation = InferResponseType<
+  (typeof api.groups)[":id"]["invitations"]["$get"],
   200
 >["data"][number]
 
@@ -431,4 +446,47 @@ export const useReviewGroupReports = () =>
     async (json: { reportIds: string[]; status: "RESOLVED" | "DISMISSED"; note?: string }) =>
       unwrap(await api["group-reports"].review.$post({ json })),
     [["group-reports"]],
+  )
+
+/** Grants and revokes permissions on members of a group, one or many. */
+export const useUpdateGroupMembers = (groupId: string) =>
+  useGroupsMutation(
+    async (json: { userIds: string[]; grant: GroupPermission[]; revoke: GroupPermission[] }) => {
+      const response = await api.groups[":id"].members.$patch({ param: { id: groupId }, json })
+
+      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+    },
+    [
+      ["groups", groupId],
+      ["me", "groups"],
+    ],
+  )
+
+export const useRemoveGroupMembers = (groupId: string) =>
+  useGroupsMutation(
+    async (userIds: string[]) => {
+      const response = await api.groups[":id"].members.$delete({
+        param: { id: groupId },
+        json: { userIds },
+      })
+
+      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+    },
+    [
+      ["groups", groupId],
+      ["me", "groups"],
+    ],
+  )
+
+export const useCancelGroupInvitations = (groupId: string) =>
+  useGroupsMutation(
+    async (invitationIds: string[]) => {
+      const response = await api.groups[":id"].invitations.$delete({
+        param: { id: groupId },
+        json: { invitationIds },
+      })
+
+      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+    },
+    [["groups", groupId, "invitations"]],
   )

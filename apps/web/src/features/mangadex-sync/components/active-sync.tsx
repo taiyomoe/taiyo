@@ -17,7 +17,7 @@ import {
   useRefreshMangaDexMedia,
 } from "@/features/mangadex-sync/api/mangadex-sync"
 import { SyncItemRow } from "@/features/mangadex-sync/components/sync-item-row"
-import { SyncStatusBadge } from "@/features/mangadex-sync/components/sync-status-badge"
+import { SyncStatusPill } from "@/features/mangadex-sync/components/sync-status-pill"
 import { syncStyles } from "@/features/mangadex-sync/components/sync-styles"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
@@ -60,7 +60,7 @@ export function ActiveSync({ mediaId, syncId }: { mediaId: string; syncId: strin
       <div sx={syncStyles.cardHeader}>
         <h2 sx={syncStyles.cardTitle}>
           {m.mangadex_active_title()}
-          {status === undefined ? null : <SyncStatusBadge status={status} />}
+          {status === undefined ? null : <SyncStatusPill status={status} />}
         </h2>
         <Button
           disabled={cancel.isPending || !active}

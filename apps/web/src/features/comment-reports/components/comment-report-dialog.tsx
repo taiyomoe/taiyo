@@ -232,8 +232,8 @@ export function CommentReportDialog({
             render={<CommentTargetLink commentId={comment.id} target={entry.target} />}
             variant="outline"
           >
-            <ExternalLink />
             {m.comments_view()}
+            <ExternalLink />
           </Button>
           {open ? (
             <Button

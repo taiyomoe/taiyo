@@ -5,6 +5,7 @@ import { getRouteApi } from "@tanstack/react-router"
 import { useState } from "react"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import { MangaDexSyncPanel } from "@/features/mangadex-sync/components/mangadex-sync-panel"
+import { SyncHistory } from "@/features/mangadex-sync/components/sync-history"
 import { syncStyles } from "@/features/mangadex-sync/components/sync-styles"
 import { managerStyles } from "@/features/media-images/components/shared/manager-styles"
 import { MediaImagesSettings } from "@/features/media-images/components/shared/media-images-settings"
@@ -36,6 +37,7 @@ export function MangaDexSyncPage() {
           <MangaDexSyncPanel key={media.id} mediaId={media.id} />
         )}
       </div>
+      {media === null ? null : <SyncHistory key={media.id} mediaId={media.id} />}
     </DashboardPage>
   )
 }

@@ -29,8 +29,8 @@ export function MediaImagesSettings({
           size="sm"
           variant="outline"
         >
-          <ExternalLink />
           {m.media_images_view_title()}
+          <ExternalLink />
         </Button>
       )}
     </div>

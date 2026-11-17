@@ -1,27 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
-import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { AuditLogScope } from "@/features/activity-log/api/audit-logs"
 import type { UpdateSearch } from "@/features/activity-log/hooks/use-activity-log"
 import type { LogGroup } from "@/features/activity-log/lib/activity-log"
-import { LogTable } from "@/features/activity-log/components/log-table"
+import { LogTable, LogTableSkeleton } from "@/features/activity-log/components/log-table"
 import { pageStyles } from "@/features/activity-log/components/page/page-styles"
 import { ResultsEmpty } from "@/features/activity-log/components/page/results-empty"
 import { CardNote } from "@/features/dashboard/components/overview/card-note"
 import { m } from "@/paraglide/messages"
-
-const styles = stylex.create({
-  skeletons: {
-    padding: "1.5rem",
-    gap: "0.75rem",
-    display: "flex",
-    flexDirection: "column",
-  },
-  skeletonRow: {
-    borderRadius: radius.md,
-    height: "2.75rem",
-  },
-})
 
 export function ResultsContent({
   blocked,
@@ -47,7 +32,11 @@ export function ResultsContent({
   onViewGroup: (group: LogGroup) => void
 }) {
   if (blocked) {
-    return <CardNote>{m.activity_fix_query()}</CardNote>
+    return (
+      <div {...stylex.props(pageStyles.panel)}>
+        <CardNote>{m.activity_fix_query()}</CardNote>
+      </div>
+    )
   }
 
   if (rows?.length === 0) {
@@ -71,11 +60,5 @@ export function ResultsContent({
     )
   }
 
-  return (
-    <div sx={styles.skeletons}>
-      {Array.from({ length: 8 }, (_, index) => (
-        <Skeleton key={index} sx={styles.skeletonRow} />
-      ))}
-    </div>
-  )
+  return <LogTableSkeleton sort={sort} />
 }

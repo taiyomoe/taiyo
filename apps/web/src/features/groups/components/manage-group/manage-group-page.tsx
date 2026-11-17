@@ -1,21 +1,20 @@
-import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { ExternalLink } from "@taiyomoe/ui/components/icons"
-import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
 import { breakpoints, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
+import { PageAction } from "@/components/filters/filter-toolbar"
 import { DashboardPage } from "@/components/layout/dashboard-page"
-import { ListCardSkeleton } from "@/components/layout/list-card-skeleton"
 import { groupQueryOptions } from "@/features/groups/api/groups"
 import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { GroupChaptersPanel } from "@/features/groups/components/manage-group/chapters/group-chapters-panel"
 import { GroupSettingsPanel } from "@/features/groups/components/manage-group/group-settings-panel"
 import { GroupInvitationsPanel } from "@/features/groups/components/manage-group/invitations/group-invitations-panel"
 import { GroupMembersPanel } from "@/features/groups/components/manage-group/members/group-members-panel"
+import { MANAGE_GROUP_TABS, type ManageGroupTab } from "@/features/groups/lib/manage-group-tabs"
 import { usePermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
@@ -30,11 +29,23 @@ const styles = stylex.create({
     gap: "1.5rem",
     display: "flex",
     flexDirection: "column",
+    minWidth: 0,
+  },
+  // Scrolls sideways on phones rather than widening the page.
+  tabList: {
+    justifyContent: "flex-start",
+    scrollbarWidth: "none",
+    maxWidth: "100%",
+    overflowX: "auto",
+  },
+  tab: {
+    flexShrink: 0,
   },
   panel: {
     gap: "1.5rem",
     display: "flex",
     flexDirection: "column",
+    minWidth: 0,
   },
   skeleton: {
     borderRadius: radius.xxl,
@@ -55,21 +66,32 @@ const styles = stylex.create({
 export function ManageGroupPage() {
   const { session } = routeApi.useRouteContext()
   const { groupId } = routeApi.useParams()
+  const search = routeApi.useSearch()
+  const navigate = routeApi.useNavigate()
   const { user } = session
   const can = usePermissions(user)
-  const canInvite = can("group.inviteMember", { groupId, permissions: [] })
-  const canEdit = can("group.update", { id: groupId })
   const groupChapter = { uploaderId: "", status: "PUBLISHED" as const, groupIds: [groupId] }
-  const canManageChapters =
-    can("chapter.update", groupChapter) || can("chapter.delete", groupChapter)
+  const shown: Record<ManageGroupTab, boolean> = {
+    members: true,
+    chapters: can("chapter.update", groupChapter) || can("chapter.delete", groupChapter),
+    invitations: can("group.inviteMember", { groupId, permissions: [] }),
+    settings: can("group.update", { id: groupId }),
+  }
+  const tab = search.tab !== undefined && shown[search.tab] ? search.tab : "members"
+  const labels: Record<ManageGroupTab, string> = {
+    members: m.manage_tab_members(),
+    chapters: m.manage_tab_chapters(),
+    invitations: m.manage_tab_invitations(),
+    settings: m.manage_tab_settings(),
+  }
 
   return (
     <DashboardPage
       actions={
-        <Button render={<Link params={{ groupId }} to="/groups/$groupId" />} variant="outline">
+        <PageAction render={<Link params={{ groupId }} to="/groups/$groupId" />} variant="outline">
           {m.manage_group_public_page()}
           <ExternalLink />
-        </Button>
+        </PageAction>
       }
       title={
         <Suspense
@@ -84,33 +106,47 @@ export function ManageGroupPage() {
         </Suspense>
       }
     >
-      <Tabs defaultValue="members" sx={styles.tabs}>
-        <TabsList variant="underline">
-          <TabsTab value="members">{m.manage_tab_members()}</TabsTab>
-          {canManageChapters ? <TabsTab value="chapters">{m.manage_tab_chapters()}</TabsTab> : null}
-          {canInvite ? <TabsTab value="invitations">{m.manage_tab_invitations()}</TabsTab> : null}
-          {canEdit ? <TabsTab value="settings">{m.manage_tab_settings()}</TabsTab> : null}
+      <Tabs
+        onValueChange={(next: ManageGroupTab) => {
+          void navigate({
+            replace: true,
+            search: { tab: next === "members" ? undefined : next, page: undefined },
+          })
+        }}
+        sx={styles.tabs}
+        value={tab}
+      >
+        <TabsList sx={styles.tabList} variant="underline">
+          {MANAGE_GROUP_TABS.filter((value) => shown[value]).map((value) => (
+            <TabsTab key={value} sx={styles.tab} value={value}>
+              {labels[value]}
+            </TabsTab>
+          ))}
         </TabsList>
         <TabsPanel sx={styles.panel} value="members">
-          <Suspense fallback={<ListCardSkeleton actions={["2rem"]} media="person" rows={3} />}>
-            <ManageGroupMembers can={can} groupId={groupId} userId={user.id} />
-          </Suspense>
+          <GroupMembersPanel can={can} groupId={groupId} userId={user.id} />
         </TabsPanel>
-        {canManageChapters ? (
+        {shown.chapters ? (
           <TabsPanel sx={styles.panel} value="chapters">
-            <Suspense fallback={<Skeleton sx={styles.skeleton} />}>
-              <GroupChaptersPanel can={can} groupId={groupId} />
-            </Suspense>
+            <GroupChaptersPanel
+              can={can}
+              groupId={groupId}
+              onPageChange={(page) => {
+                void navigate({
+                  replace: true,
+                  search: { tab: "chapters", page: page === 1 ? undefined : page },
+                })
+              }}
+              page={search.page ?? 1}
+            />
           </TabsPanel>
         ) : null}
-        {canInvite ? (
+        {shown.invitations ? (
           <TabsPanel sx={styles.panel} value="invitations">
-            <Suspense fallback={<Skeleton sx={styles.skeleton} />}>
-              <GroupInvitationsPanel can={can} groupId={groupId} userId={user.id} />
-            </Suspense>
+            <GroupInvitationsPanel can={can} groupId={groupId} userId={user.id} />
           </TabsPanel>
         ) : null}
-        {canEdit ? (
+        {shown.settings ? (
           <TabsPanel sx={styles.panel} value="settings">
             <Suspense fallback={<Skeleton sx={styles.skeleton} />}>
               <ManageGroupSettings groupId={groupId} />
@@ -131,20 +167,6 @@ function ManageGroupTitle({ groupId }: { groupId: string }) {
       {group.name}
     </span>
   )
-}
-
-function ManageGroupMembers({
-  can,
-  groupId,
-  userId,
-}: {
-  can: Permissions
-  groupId: string
-  userId: string
-}) {
-  const { data: group } = useSuspenseQuery(groupQueryOptions(groupId))
-
-  return <GroupMembersPanel can={can} group={group} userId={userId} />
 }
 
 function ManageGroupSettings({ groupId }: { groupId: string }) {

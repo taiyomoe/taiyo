@@ -42,14 +42,23 @@ const styles = stylex.create({
   },
 })
 
-export function InvitationGrants({ permissions }: { permissions: readonly GroupPermission[] }) {
+/** What an invitation lets its invitee do, told to the invitee unless `title` and `empty` say otherwise. */
+export function InvitationGrants({
+  permissions,
+  title = m.invitation_grants(),
+  empty = m.invitation_grants_nothing(),
+}: {
+  permissions: readonly GroupPermission[]
+  title?: string
+  empty?: string
+}) {
   return (
     <div sx={styles.grants}>
       {permissions.length === 0 ? (
-        <p sx={styles.grantsTitle}>{m.invitation_grants_nothing()}</p>
+        <p sx={styles.grantsTitle}>{empty}</p>
       ) : (
         <>
-          <p sx={styles.grantsTitle}>{m.invitation_grants()}</p>
+          <p sx={styles.grantsTitle}>{title}</p>
           <ul sx={styles.grantList}>
             {permissions.map((permission) => (
               <li key={permission} sx={styles.grant}>

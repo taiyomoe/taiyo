@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
-import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { pageFrame } from "@/components/layout/page-frame"
 
 const styles = stylex.create({
@@ -82,29 +82,6 @@ const styles = stylex.create({
     fontSize: "1rem",
     fontWeight: 600,
   },
-  list: {
-    margin: 0,
-    padding: 0,
-    borderColor: colors.border,
-    borderRadius: radius.xxl,
-    borderStyle: "solid",
-    borderWidth: 1,
-    listStyle: "none",
-    overflow: "hidden",
-    backgroundColor: colors.card,
-  },
-  row: {
-    gap: "1rem",
-    paddingBlock: "1rem",
-    paddingInline: "1.25rem",
-    alignItems: "center",
-    display: "flex",
-    flexWrap: { default: "wrap", [breakpoints.sm]: "nowrap" },
-    borderTopColor: colors.border,
-    borderTopStyle: "solid",
-    borderTopWidth: { default: 1, ":first-child": 0 },
-    minHeight: "4.5rem",
-  },
 })
 
 export function DashboardPage({
@@ -158,12 +135,4 @@ export function DashboardSection({
       {children}
     </section>
   )
-}
-
-export function ListCard({ children }: { children: ReactNode }) {
-  return <ul sx={styles.list}>{children}</ul>
-}
-
-export function ListRow({ children }: { children: ReactNode }) {
-  return <li sx={styles.row}>{children}</li>
 }

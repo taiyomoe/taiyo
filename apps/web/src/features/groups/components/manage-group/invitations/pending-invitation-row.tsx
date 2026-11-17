@@ -1,74 +1,115 @@
-import type { InferResponseType } from "hono/client"
 import * as stylex from "@stylexjs/stylex"
-import { Button } from "@taiyomoe/ui/components/ui/button"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import type { api } from "@/lib/api"
-import { ListRow } from "@/components/layout/dashboard-page"
+import { ExternalLink, Key, Undo, User } from "@taiyomoe/ui/components/icons"
+import { TableRow } from "@taiyomoe/ui/components/ui/table"
+import { Link } from "@tanstack/react-router"
+import type { RowAction } from "@/features/catalog/components/shared/row-actions"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
+import type { GroupInvitation } from "@/features/groups/api/groups"
 import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
-import { renderWithName } from "@/components/user-name/with-name"
+import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
+import { Folded, mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
+import { RowActions } from "@/features/catalog/components/shared/row-actions"
+import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
+import { Uploader } from "@/features/chapters/components/uploader"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
-import { PermissionChips } from "@/features/groups/components/permission-chips"
+import { PermissionPills } from "@/features/groups/components/permission-pills"
 import { m } from "@/paraglide/messages"
-
-type GroupInvitation = InferResponseType<
-  (typeof api.groups)[":id"]["invitations"]["$get"],
-  200
->["data"][number]
-
-const styles = stylex.create({
-  main: {
-    gap: "0.375rem",
-    display: "flex",
-    flexDirection: "column",
-    flexGrow: 1,
-    minWidth: 0,
-  },
-  name: {
-    fontWeight: 600,
-  },
-  meta: {
-    gap: "0.5rem",
-    alignItems: "center",
-    color: colors.mutedForeground,
-    display: "flex",
-    flexWrap: "wrap",
-    fontSize: "0.875rem",
-  },
-})
 
 export function PendingInvitationRow({
   invitation,
   canCancel,
-  cancelling,
+  selection,
+  onDetails,
   onCancel,
 }: {
   invitation: GroupInvitation
   canCancel: boolean
-  cancelling: boolean
+  selection: Selection
+  onDetails: () => void
   onCancel: () => void
 }) {
+  const inviter = (
+    <Uploader
+      title={m.invitation_invited_by({ name: invitation.inviter.displayUsername })}
+      uploader={invitation.inviter}
+    />
+  )
+  const actions: RowAction[] = [
+    { key: "details", label: m.invitation_see_grants(), icon: Key, onClick: onDetails },
+    {
+      key: "invitee",
+      label: m.invitation_view_invitee(),
+      icon: ExternalLink,
+      render: <Link params={{ username: invitation.invitee.username }} to="/users/$username" />,
+    },
+    {
+      key: "inviter",
+      label: m.invitation_view_sender(),
+      icon: User,
+      render: <Link params={{ username: invitation.inviter.username }} to="/users/$username" />,
+    },
+    ...(canCancel
+      ? [
+          {
+            key: "cancel",
+            label: m.invitation_cancel(),
+            icon: Undo,
+            destructive: true,
+            onClick: onCancel,
+          },
+        ]
+      : []),
+  ]
+
   return (
-    <ListRow>
-      <PersonAvatar person={invitation.invitee} />
-      <div sx={styles.main}>
-        <span sx={styles.name}>
-          <UserLink user={invitation.invitee} />
-        </span>
-        <div sx={styles.meta}>
-          <span>{renderWithName(m.invitation_invited_by, invitation.inviter, { link: true })}</span>
-          <span aria-hidden>·</span>
-          <TimeAgo date={invitation.createdAt} />
+    <TableRow>
+      <CatalogSelectCell
+        disabled={!canCancel}
+        id={invitation.id}
+        label={invitation.invitee.displayUsername}
+        selection={selection}
+      />
+      <CatalogCell column="invitee">
+        <TitleCell
+          detail={
+            <>
+              {m.invitation_expires()} <TimeAgo date={invitation.expiresAt} future length="long" />
+            </>
+          }
+          narrow={{
+            from: "4xl",
+            content: (
+              <>
+                <Folded until="3xl">
+                  {inviter}
+                  <PermissionPills compact permissions={invitation.permissions} />
+                </Folded>
+                <span {...stylex.props(catalogStyles.muted)}>
+                  <TimeAgo date={invitation.createdAt} length="long" />
+                </span>
+              </>
+            ),
+          }}
+          thumb={<PersonAvatar person={invitation.invitee} sx={mediaCellStyles.avatar} />}
+          title={<UserLink sx={mediaCellStyles.title} user={invitation.invitee} />}
+        />
+      </CatalogCell>
+      <CatalogCell column="inviter">{inviter}</CatalogCell>
+      <CatalogCell column="permissions">
+        <div {...stylex.props(catalogStyles.inline)}>
+          <PermissionPills permissions={invitation.permissions} />
         </div>
-        {invitation.permissions.length === 0 ? null : (
-          <PermissionChips permissions={invitation.permissions} />
-        )}
-      </div>
-      {canCancel ? (
-        <Button disabled={cancelling} onClick={onCancel} size="sm" variant="ghost">
-          {m.invitation_cancel()}
-        </Button>
-      ) : null}
-    </ListRow>
+      </CatalogCell>
+      <CatalogCell column="date" sx={catalogStyles.muted}>
+        <TimeAgo date={invitation.createdAt} length="long" />
+      </CatalogCell>
+      <CatalogCell column="actions">
+        <RowActions
+          actions={actions}
+          label={m.catalog_actions({ name: invitation.invitee.displayUsername })}
+        />
+      </CatalogCell>
+    </TableRow>
   )
 }

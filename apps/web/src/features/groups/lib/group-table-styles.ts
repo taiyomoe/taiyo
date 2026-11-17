@@ -5,7 +5,7 @@ import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 export const groupTableStyles = stylex.create({
   /** One permission pill and the count of the others side by side, in every language. */
   colPermissions: {
-    width: "15rem",
+    width: "17rem",
   },
   excerpt: {
     overflow: "hidden",

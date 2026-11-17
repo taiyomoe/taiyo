@@ -2,8 +2,8 @@
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { LANGUAGES } from "@taiyomoe/db/constants"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import type { MangaDexSyncItem } from "@/features/mangadex-sync/api/mangadex-sync"
+import { Pill } from "@/components/badges/pill"
 import { getLanguageName } from "@/components/flags/language-flags"
 import { syncStyles } from "@/features/mangadex-sync/components/sync-styles"
 import { m } from "@/paraglide/messages"
@@ -41,7 +41,7 @@ export function SyncItemRow({ item }: { item: MangaDexSyncItem }) {
         </span>
         {item.error === null ? null : <span sx={syncStyles.muted}>{item.error}</span>}
       </span>
-      <Badge variant={STATUSES[item.status].variant}>{STATUSES[item.status].label()}</Badge>
+      <Pill variant={STATUSES[item.status].variant}>{STATUSES[item.status].label()}</Pill>
     </li>
   )
 }
