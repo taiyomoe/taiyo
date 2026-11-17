@@ -12,7 +12,13 @@ import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
-export type MemberDialogKind = "permissions" | "promote" | "stepDown" | "leave" | "remove"
+export type MemberDialogKind =
+  | "permissions"
+  | "promote"
+  | "transfer"
+  | "stepDown"
+  | "leave"
+  | "remove"
 
 export type MemberDialog = {
   kind: MemberDialogKind
@@ -41,8 +47,23 @@ export function MemberDialogs({
   const navigate = useNavigate()
   const remove = useRemoveGroupMembers(groupId)
   const role = useMutation({
-    mutationFn: async ({ kind, userId }: { kind: "promote" | "stepDown"; userId: string }) => {
+    mutationFn: async ({
+      kind,
+      userId,
+    }: {
+      kind: "promote" | "transfer" | "stepDown"
+      userId: string
+    }) => {
       const param = { id: groupId, userId }
+
+      if (kind === "transfer") {
+        return ensureSuccess(
+          await api.groups[":id"].transfer.$post({
+            param: { id: groupId },
+            json: { toUserId: userId },
+          }),
+        )
+      }
 
       return ensureSuccess(
         kind === "promote"
@@ -76,6 +97,12 @@ export function MemberDialogs({
       description: m.member_promote_description(),
       confirmLabel: m.member_promote(),
       run: () => role.mutateAsync({ kind: "promote", userId: target.userId }),
+    }),
+    transfer: (target) => ({
+      title: renderWithName(m.member_transfer_title, target),
+      description: m.member_transfer_description(),
+      confirmLabel: m.member_transfer(),
+      run: () => role.mutateAsync({ kind: "transfer", userId: target.userId }),
     }),
     stepDown: (target) => ({
       title: m.member_step_down_title(),

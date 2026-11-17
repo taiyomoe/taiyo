@@ -10,6 +10,10 @@ import { Pill } from "@/components/badges/pill"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
+import {
+  ChapterPages,
+  FoldedChapterPages,
+} from "@/features/catalog/components/shared/chapter-pages"
 import { MediaCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
@@ -103,6 +107,7 @@ export function ChapterRow({
                 <Folded until="3xl">
                   {status}
                   <LanguageChip language={chapter.language} />
+                  <FoldedChapterPages chapter={chapter} />
                 </Folded>
                 <Uploader uploader={chapter.uploader} />
                 <ChapterGroups groups={chapter.groups} />
@@ -117,6 +122,9 @@ export function ChapterRow({
       </CatalogCell>
       <CatalogCell column="language">
         <LanguageChip language={chapter.language} />
+      </CatalogCell>
+      <CatalogCell column="pages">
+        <ChapterPages chapter={chapter} />
       </CatalogCell>
       <CatalogCell column="status">{status}</CatalogCell>
       <CatalogCell column="credits">

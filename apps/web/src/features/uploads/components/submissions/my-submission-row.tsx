@@ -8,6 +8,10 @@ import type { ChapterSubmission } from "@/features/uploads/api/submissions"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
+import {
+  ChapterPages,
+  FoldedChapterPages,
+} from "@/features/catalog/components/shared/chapter-pages"
 import { MediaCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
@@ -124,6 +128,7 @@ export function MySubmissionRow({
                 <Folded until="3xl">
                   {status}
                   <LanguageChip language={submission.language} />
+                  <FoldedChapterPages chapter={submission} />
                 </Folded>
                 <ChapterGroups groups={submission.groups} />
                 <span {...stylex.props(catalogStyles.muted)}>
@@ -138,6 +143,9 @@ export function MySubmissionRow({
       </CatalogCell>
       <CatalogCell column="language">
         <LanguageChip language={submission.language} />
+      </CatalogCell>
+      <CatalogCell column="pages">
+        <ChapterPages chapter={submission} />
       </CatalogCell>
       <CatalogCell column="status">
         <div {...stylex.props(catalogStyles.stack)}>

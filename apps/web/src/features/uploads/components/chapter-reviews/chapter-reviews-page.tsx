@@ -116,6 +116,13 @@ export function ChapterReviewsPage() {
             skeleton: <SkeletonPill width="3.75rem" />,
           },
           {
+            key: "pages",
+            label: m.catalog_column_pages(),
+            width: catalogStyles.colNarrow,
+            from: "3xl",
+            skeleton: <SkeletonText width="1.5rem" />,
+          },
+          {
             key: "credits",
             label: m.catalog_column_credits(),
             width: catalogStyles.colWide,

@@ -279,6 +279,9 @@ export const latestChapterSchema = chapterFeedItemSchema
   })
 
 export const latestChapterFeedItemSchema = latestChapterSchema.extend({
+  pageCount: z
+    .int()
+    .meta({ description: "The number of processed pages the chapter has.", example: 24 }),
   mediaId: chapterFeedItemSchema.shape.mediaId,
   mediaTitle: chapterFeedItemSchema.shape.mediaTitle,
   mediaCoverUrl: z
@@ -396,9 +399,6 @@ export const chapterSubmissionSchema = latestChapterFeedItemSchema.extend({
     .datetime()
     .nullable()
     .meta({ description: "When the chapter was reviewed, if any." }),
-  pageCount: z
-    .int()
-    .meta({ description: "The number of processed pages the chapter has.", example: 24 }),
   publishAt: z.iso
     .datetime()
     .nullable()

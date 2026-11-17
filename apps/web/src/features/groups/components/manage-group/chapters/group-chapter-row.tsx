@@ -10,6 +10,10 @@ import type { LatestChapter, UpcomingChapter } from "@/features/chapters/api/cha
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
+import {
+  ChapterPages,
+  FoldedChapterPages,
+} from "@/features/catalog/components/shared/chapter-pages"
 import { Folded, MediaCell } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
@@ -155,6 +159,7 @@ export function GroupChapterRow({
               <>
                 <Folded until="3xl">
                   <LanguageChip language={chapter.language} />
+                  <FoldedChapterPages chapter={chapter} />
                 </Folded>
                 <Uploader uploader={chapter.uploader} />
                 <ChapterGroups groups={chapter.groups} />
@@ -167,6 +172,9 @@ export function GroupChapterRow({
       </CatalogCell>
       <CatalogCell column="language">
         <LanguageChip language={chapter.language} />
+      </CatalogCell>
+      <CatalogCell column="pages">
+        <ChapterPages chapter={chapter} />
       </CatalogCell>
       <CatalogCell column="credits">
         <div {...stylex.props(catalogStyles.inline)}>

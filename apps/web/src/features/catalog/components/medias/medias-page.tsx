@@ -4,6 +4,7 @@ import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useQuery } from "@tanstack/react-query"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
+import type { ManagedMedia } from "@/features/catalog/api/catalog"
 import type { DeletableMedia } from "@/features/catalog/components/medias/delete-media-dialog"
 import {
   PageAction,
@@ -24,6 +25,7 @@ import {
 import { BulkDeleteMediasDialog } from "@/features/catalog/components/medias/bulk-delete-medias-dialog"
 import { BulkEditMediasDialog } from "@/features/catalog/components/medias/bulk-edit-medias-dialog"
 import { DeleteMediaDialog } from "@/features/catalog/components/medias/delete-media-dialog"
+import { MediaAccessDialog } from "@/features/catalog/components/medias/media-access-dialog"
 import { MediaRow } from "@/features/catalog/components/medias/media-row"
 import {
   BulkBar,
@@ -68,6 +70,7 @@ export function MediasPage() {
   const { data, isPlaceholderData } = useQuery(managedMediasQueryOptions(useDeferredValue(filter)))
   const restore = useRestoreMedia()
   const [deleting, setDeleting] = useState<DeletableMedia | null>(null)
+  const [access, setAccess] = useState<ManagedMedia | null>(null)
   const selection = useSelection(data?.data.map((media) => media.id) ?? [])
   const [bulk, setBulk] = useState<"edit" | "delete" | null>(null)
   const bulkRestore = useBulkRestoreMedias()
@@ -270,6 +273,9 @@ export function MediasPage() {
             selection={bulkActions ? selection : undefined}
             key={media.id}
             media={media}
+            onAccess={() => {
+              setAccess(media)
+            }}
             onDelete={() => {
               setDeleting({ id: media.id, title: media.title })
             }}
@@ -304,6 +310,12 @@ export function MediasPage() {
           setBulk(null)
         }}
         onDone={selection.clear}
+      />
+      <MediaAccessDialog
+        media={access}
+        onClose={() => {
+          setAccess(null)
+        }}
       />
       <DeleteMediaDialog
         media={deleting}

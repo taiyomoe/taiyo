@@ -28,6 +28,7 @@ export const getMemberAccess = (
       can("group.updateMember", { member: target, permissions: target.permissions }),
     remove: !self && can("group.removeMember", target),
     promote: can("group.promoteMember", target),
+    transfer: !self && member.role !== "OWNER" && can("group.transferOwnership", { id: groupId }),
     stepDown: self && !lastOwner && can("group.demoteMember", target),
     leave: self && !lastOwner,
   }

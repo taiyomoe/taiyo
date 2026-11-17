@@ -62,6 +62,7 @@ import {
   Upload04Icon,
   UserAdd01Icon,
   UserCheck01Icon,
+  UserSwitchIcon,
   ArrowUpRight01Icon,
   CrownIcon,
   Edit02Icon,
@@ -300,6 +301,8 @@ export const Upload: (props: IconProps) => React.ReactElement = icon(Upload04Ico
 export const UserAdd: (props: IconProps) => React.ReactElement = icon(UserAdd01Icon)
 
 export const UserCheck: (props: IconProps) => React.ReactElement = icon(UserCheck01Icon)
+
+export const UserSwitch: (props: IconProps) => React.ReactElement = icon(UserSwitchIcon)
 
 export const Copy: (props: IconProps) => React.ReactElement = icon(Copy01Icon)
 
