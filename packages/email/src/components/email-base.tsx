@@ -67,7 +67,7 @@ const EmailBase = ({ preview, footer, children }: Props) => (
         <Img
           src="https://taiyo.moe/email/sunrise.jpg"
           width={560}
-          height={179}
+          height={260}
           alt=""
           style={{ display: "block", height: "auto", maxWidth: "100%", width: "100%" }}
         />
