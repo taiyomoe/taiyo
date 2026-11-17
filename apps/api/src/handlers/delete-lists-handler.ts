@@ -7,6 +7,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { bulkIdsSchema, bulkResultSchema, partitionFound, skippedSchema } from "../utils/bulk"
+import { notifyModeration } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -27,7 +28,7 @@ export const deleteListsHandler = new Hono().delete(
   describeRoute({
     summary: "Delete lists in bulk",
     description:
-      "Deletes several lists at once. Lists that do not exist or that you cannot delete are skipped and reported.\n\n**Required access:** for each list, its owner, or a moderator or admin when the list is `PUBLIC`.",
+      "Deletes several lists at once. Lists that do not exist or that you cannot delete are skipped and reported. The owner of each deleted list that is not yours is notified.\n\n**Required access:** for each list, its owner, or a moderator or admin when the list is `PUBLIC`.",
     tags: ["Custom lists"],
     responses: {
       200: {
@@ -62,7 +63,8 @@ export const deleteListsHandler = new Hono().delete(
       .forUpdate()
       .execute()
     const { found, missing } = partitionFound(listIds, rows)
-    const done = found.filter((row) => can("list.delete", row)).map((row) => row.id)
+    const deleted = found.filter((row) => can("list.delete", row))
+    const done = deleted.map((row) => row.id)
 
     if (done.length > 0) {
       await db
@@ -71,6 +73,15 @@ export const deleteListsHandler = new Hono().delete(
         .where("id", "in", done)
         .execute()
     }
+
+    await notifyModeration(
+      c.var,
+      deleted.map((row) => ({
+        type: "LIST_MODERATED",
+        userId: row.userId,
+        payload: { listId: row.id, action: "DELETED" },
+      })),
+    )
 
     c.var.audit.set({ changes: { after: { listIds: done } } })
 

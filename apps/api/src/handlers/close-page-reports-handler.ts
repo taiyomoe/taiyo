@@ -29,7 +29,7 @@ export const closePageReportsHandler = new Hono().patch(
   describeRoute({
     summary: "Close page reports in bulk",
     description:
-      "Closes several page reports at once as resolved or dismissed, along with every other open report on the same pages. Reports that do not exist or are already closed are skipped and reported.\n\n**Required roles:** uploader, moderator, admin.",
+      "Closes several page reports at once as resolved or dismissed, along with every other open report on the same pages. Reports that do not exist or are already closed are skipped and reported. The reporter of each closed report is notified of the outcome, unless it is you.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Page reports"],
     responses: {
       200: {
@@ -62,12 +62,12 @@ export const closePageReportsHandler = new Hono().patch(
   validateJson(closePageReportsSchema),
   withTransaction,
   async (c) => {
-    const { db, user } = c.var
+    const { db } = c.var
     const { reportIds, status } = c.var.json
     const { found, missing } = partitionFound(reportIds, await lockPageReports(db, reportIds))
     const open = found.filter((report) => report.status === "OPEN")
     const done = open.map((report) => report.id)
-    const closed = await closePageReports(db, { reports: open, status, resolverId: user.id })
+    const closed = await closePageReports(c.var, { reports: open, status })
 
     c.var.audit.set({ changes: { after: { reportIds: done, status } } })
 

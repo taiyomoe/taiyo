@@ -6,6 +6,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, reportNoteSchema, reportOutcomeSchema } from "../utils/schemas"
 import { reviewUserReport } from "../utils/user-reports"
@@ -21,7 +22,7 @@ export const reviewUserReportHandler = new Hono().post(
   describeRoute({
     summary: "Review a user report",
     description:
-      "Reviews a pending report on a user, closing it as resolved or dismissed.\n\n**Required roles:** moderator, admin.",
+      "Reviews a pending report on a user, closing it as resolved or dismissed. The reporter is notified of the outcome, unless it is you.\n\n**Required roles:** moderator, admin.",
     tags: ["User reports"],
     responses: {
       201: {
@@ -49,16 +50,11 @@ export const reviewUserReportHandler = new Hono().post(
   withAuth("userReport.review"),
   validateParam(paramSchema),
   validateJson(reviewSchema),
+  withTransaction,
   async (c) => {
-    const { db, user } = c.var
     const { id } = c.var.param
     const { status, note } = c.var.json
-    const result = await reviewUserReport(db, {
-      reportId: id,
-      reviewerId: user.id,
-      status,
-      note,
-    })
+    const result = await reviewUserReport(c.var, { reportId: id, status, note })
 
     if (!result.ok) {
       return c.fail(result.error)

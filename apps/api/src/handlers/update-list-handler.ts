@@ -11,6 +11,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
+import { notifyModeration } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 import {
@@ -56,7 +57,7 @@ export const updateListHandler = new Hono().patch(
   describeRoute({
     summary: "Update a list",
     description:
-      "Updates the name, description or visibility of a list, and can replace its titles in order. Send at least one field. Titles kept on the list keep the date they were added. Moderators and admins can also update the `PUBLIC` lists of other users.\n\n**Required access:** the owner of the list, or a moderator or admin.",
+      "Updates the name, description or visibility of a list, and can replace its titles in order. Send at least one field. Titles kept on the list keep the date they were added. Moderators and admins can also update the `PUBLIC` lists of other users, and the owner is then notified of the change.\n\n**Required access:** the owner of the list, or a moderator or admin.",
     tags: ["Custom lists"],
     responses: {
       200: {
@@ -96,34 +97,47 @@ export const updateListHandler = new Hono().patch(
       }
     }
 
-    if (mediaIds === undefined) {
-      c.var.audit.set({ changes: auditChanges(list, updates) })
-    } else {
-      if ((await findMissingMediaIds(db, mediaIds)).length > 0) {
-        return c.fail("MEDIA_NOT_FOUND")
-      }
+    if (mediaIds !== undefined && (await findMissingMediaIds(db, mediaIds)).length > 0) {
+      return c.fail("MEDIA_NOT_FOUND")
+    }
 
-      const current = await db
-        .selectFrom("userListItems")
-        .select("mediaId")
-        .where("listId", "=", list.id)
-        .orderBy("position", "asc")
-        .orderBy("addedAt", "asc")
-        .execute()
+    const current =
+      mediaIds === undefined
+        ? null
+        : await db
+            .selectFrom("userListItems")
+            .select("mediaId")
+            .where("listId", "=", list.id)
+            .orderBy("position", "asc")
+            .orderBy("addedAt", "asc")
+            .execute()
+    const changes =
+      current === null
+        ? auditChanges(list, updates)
+        : auditChanges(
+            { ...list, mediaIds: current.map((item) => item.mediaId) },
+            { ...updates, mediaIds },
+          )
 
-      c.var.audit.set({
-        changes: auditChanges(
-          { ...list, mediaIds: current.map((item) => item.mediaId) },
-          { ...updates, mediaIds },
-        ),
-      })
+    c.var.audit.set({ changes })
 
+    if (mediaIds !== undefined) {
       await replaceListItems(db, list.id, mediaIds)
       await touchList(db, list.id)
     }
 
     if (Object.keys(updates).length > 0) {
       await db.updateTable("userLists").set(updates).where("id", "=", list.id).execute()
+    }
+
+    if (changes !== undefined) {
+      await notifyModeration(c.var, [
+        {
+          type: "LIST_MODERATED",
+          userId: list.userId,
+          payload: { listId: list.id, action: "UPDATED" },
+        },
+      ])
     }
 
     return c.ok({ id: list.id })

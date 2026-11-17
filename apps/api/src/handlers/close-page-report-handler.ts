@@ -24,7 +24,7 @@ export const closePageReportHandler = new Hono().patch(
   describeRoute({
     summary: "Close a page report",
     description:
-      "Closes a page report as resolved or dismissed, along with every other open report on the same page.\n\n**Required roles:** uploader, moderator, admin.",
+      "Closes a page report as resolved or dismissed, along with every other open report on the same page. The reporter of each closed report is notified of the outcome, unless it is you.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Page reports"],
     responses: {
       200: {
@@ -59,7 +59,7 @@ export const closePageReportHandler = new Hono().patch(
   validateJson(bodySchema),
   withTransaction,
   async (c) => {
-    const { db, user } = c.var
+    const { db } = c.var
     const { reportId } = c.var.param
     const { status } = c.var.json
     const [report] = await lockPageReports(db, [reportId])
@@ -72,7 +72,7 @@ export const closePageReportHandler = new Hono().patch(
       return c.fail("PAGE_REPORT_CLOSED")
     }
 
-    const closed = await closePageReports(db, { reports: [report], status, resolverId: user.id })
+    const closed = await closePageReports(c.var, { reports: [report], status })
 
     return c.ok({ closed })
   },

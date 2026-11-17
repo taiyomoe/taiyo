@@ -73,20 +73,45 @@ const NOTIFICATION_TYPES = [
   "FOLLOW",
   "RANKING_REWARD",
   "ACHIEVEMENT_EARNED",
+  "LIST_MODERATED",
+  "PROFILE_MODERATED",
+  "REPORT_REVIEWED",
 ] as const
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number]
 
-export const NOTIFICATION_CATEGORY_NAMES = ["chapters", "replies", "activity", "rewards"] as const
+export const NOTIFICATION_CATEGORY_NAMES = [
+  "chapters",
+  "replies",
+  "activity",
+  "rewards",
+  "moderation",
+] as const
 
 export const NOTIFICATION_CATEGORIES = {
   chapters: ["CHAPTER_PUBLISHED"],
   replies: ["COMMENT_REPLY"],
   activity: ["COMMENT_LIKE", "FOLLOW"],
   rewards: ["RANKING_REWARD", "ACHIEVEMENT_EARNED"],
+  moderation: ["LIST_MODERATED", "PROFILE_MODERATED", "REPORT_REVIEWED"],
 } as const satisfies Record<NotificationCategory, readonly NotificationType[]>
 
 export type NotificationCategory = (typeof NOTIFICATION_CATEGORY_NAMES)[number]
+
+export const LIST_MODERATION_ACTIONS = ["UPDATED", "DELETED"] as const
+
+export type ListModerationAction = (typeof LIST_MODERATION_ACTIONS)[number]
+
+/** The parts of a profile the moderation team can change, named after the fields of the API. */
+export const PROFILE_MODERATION_FIELDS = [
+  "displayUsername",
+  "about",
+  "city",
+  "avatar",
+  "banner",
+] as const
+
+export type ProfileModerationField = (typeof PROFILE_MODERATION_FIELDS)[number]
 
 export const COMMENT_REPORT_REASONS = [
   "SPAM",

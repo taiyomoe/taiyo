@@ -1,5 +1,5 @@
 import { adminAudit } from "@taiyomoe/audit"
-import { sql } from "@taiyomoe/db"
+import { PROFILE_MODERATION_FIELDS, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -10,6 +10,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
+import { notifyModeration } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import {
@@ -60,7 +61,7 @@ export const updateUserProfileHandler = new Hono().patch(
   describeRoute({
     summary: "Update a user's profile",
     description:
-      "Updates the display name, about text or city of a user's profile, and leaves the omitted ones unchanged. Send at least one field. Moderators can only edit users with the `USER` role, and you cannot edit your own profile this way.\n\n**Required roles:** moderator, admin.",
+      "Updates the display name, about text or city of a user's profile, and leaves the omitted ones unchanged. Send at least one field. The user is notified of the parts that changed. Moderators can only edit users with the `USER` role, and you cannot edit your own profile this way.\n\n**Required roles:** moderator, admin.",
     tags: ["Users"],
     responses: {
       200: {
@@ -115,13 +116,14 @@ export const updateUserProfileHandler = new Hono().patch(
         : { about: Object.fromEntries(Object.entries(about).filter(([, text]) => text !== "")) }),
       ...(city === undefined ? {} : { city: city === "" ? null : city }),
     }
+    const changes = auditChanges(
+      { displayUsername: targetUser.displayUsername, ...before },
+      { ...(displayUsername === undefined ? {} : { displayUsername }), ...patch },
+    )
+    const changed = new Set(changes?.patch?.map((op) => op.path.split("/")[1]))
+    const fields = PROFILE_MODERATION_FIELDS.filter((field) => changed.has(field))
 
-    c.var.audit.set({
-      changes: auditChanges(
-        { displayUsername: targetUser.displayUsername, ...before },
-        { ...(displayUsername === undefined ? {} : { displayUsername }), ...patch },
-      ),
-    })
+    c.var.audit.set({ changes })
 
     if (displayUsername !== undefined) {
       await db
@@ -143,6 +145,12 @@ export const updateUserProfileHandler = new Hono().patch(
             .onConflict((oc) => oc.column("userId").doUpdateSet(row))
             .returning(["about", "city"])
             .executeTakeFirstOrThrow()
+
+    if (fields.length > 0) {
+      await notifyModeration(c.var, [
+        { type: "PROFILE_MODERATED", userId: targetUser.id, payload: { fields } },
+      ])
+    }
 
     return c.ok({
       id: targetUser.id,
