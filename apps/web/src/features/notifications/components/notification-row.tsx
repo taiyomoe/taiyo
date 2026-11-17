@@ -5,12 +5,15 @@ import {
   BookOpenText,
   Check,
   Comment,
+  Flag,
+  List,
   Mail,
   Medal,
   Reply,
   ThumbsUp,
   Trash,
   Trophy,
+  User,
   UserAdd,
 } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
@@ -43,6 +46,7 @@ import { m } from "@/paraglide/messages"
 export type NotificationRowVariant = "popover" | "page"
 
 const CHAPTER_NUMBER_COLOR = `color-mix(in srgb, ${colors.primary} 78%, ${colors.foreground})`
+const MODERATION_COLORS = { text: colors.destructiveForeground, tint: colors.destructive }
 /** Text on the theme's background, then the tint behind icons. */
 const KIND_COLORS = {
   CHAPTER_PUBLISHED: { text: CHAPTER_NUMBER_COLOR, tint: colors.primary },
@@ -54,6 +58,20 @@ const KIND_COLORS = {
     text: `color-mix(in srgb, ${colors.chart3} 72%, ${colors.foreground})`,
     tint: colors.chart3,
   },
+  LIST_MODERATED: MODERATION_COLORS,
+  PROFILE_MODERATED: MODERATION_COLORS,
+  REPORT_REVIEWED: MODERATION_COLORS,
+} as const
+const KINDS = {
+  CHAPTER_PUBLISHED: { icon: BookOpenText, label: m.notifications_label_chapter },
+  COMMENT_REPLY: { icon: Comment, label: m.notifications_label_reply },
+  COMMENT_LIKE: { icon: ThumbsUp, label: m.notifications_label_upvotes },
+  FOLLOW: { icon: UserAdd, label: m.notifications_label_follow },
+  RANKING_REWARD: { icon: Trophy, label: m.notifications_label_ranking },
+  ACHIEVEMENT_EARNED: { icon: Medal, label: m.notifications_label_achievement },
+  LIST_MODERATED: { icon: List, label: m.notifications_label_list },
+  PROFILE_MODERATED: { icon: User, label: m.notifications_label_profile },
+  REPORT_REVIEWED: { icon: Flag, label: m.notifications_label_report },
 } as const
 const styles = stylex.create({
   row: {
@@ -427,14 +445,7 @@ function IconAction({
 }
 
 function KindLabel({ notification }: { notification: Notification }) {
-  const { icon: Icon, label } = {
-    CHAPTER_PUBLISHED: { icon: BookOpenText, label: m.notifications_label_chapter },
-    COMMENT_REPLY: { icon: Comment, label: m.notifications_label_reply },
-    COMMENT_LIKE: { icon: ThumbsUp, label: m.notifications_label_upvotes },
-    FOLLOW: { icon: UserAdd, label: m.notifications_label_follow },
-    RANKING_REWARD: { icon: Trophy, label: m.notifications_label_ranking },
-    ACHIEVEMENT_EARNED: { icon: Medal, label: m.notifications_label_achievement },
-  }[notification.type]
+  const { icon: Icon, label } = KINDS[notification.type]
 
   return (
     <span sx={[styles.label, styles.kind(KIND_COLORS[notification.type].text)]}>
@@ -469,12 +480,7 @@ function Thumbnail({ notification, page }: { notification: Notification; page: b
     )
   }
 
-  const Icon = {
-    FOLLOW: UserAdd,
-    COMMENT_LIKE: ThumbsUp,
-    RANKING_REWARD: Trophy,
-    ACHIEVEMENT_EARNED: Medal,
-  }[notification.type]
+  const Icon = KINDS[notification.type].icon
 
   return (
     <span
@@ -489,16 +495,110 @@ function Thumbnail({ notification, page }: { notification: Notification; page: b
   )
 }
 
+/** Links to your profile, which the moderation team edited. */
+function OwnProfileLink({
+  onOpen,
+  children,
+  sx,
+}: {
+  onOpen: () => void
+  children: ReactNode
+  sx?: Sx
+}) {
+  const { data: session } = useQuery({ ...sessionQueryOptions, staleTime: "static" })
+
+  return (
+    <Link
+      {...stylex.props(styles.primary, sx)}
+      data-primary=""
+      onClick={onOpen}
+      params={{ username: session?.user.username ?? "" }}
+      to="/users/$username"
+    >
+      {children}
+    </Link>
+  )
+}
+
+/** The link to what a moderation notification is about, or null once it cannot be opened. */
+const getModerationLink = (
+  notification: Extract<
+    Notification,
+    { type: "LIST_MODERATED" | "PROFILE_MODERATED" | "REPORT_REVIEWED" }
+  >,
+  { onOpen, children, sx }: { onOpen: () => void; children: ReactNode; sx?: Sx },
+) => {
+  const props = { onClick: onOpen, "data-primary": "", ...stylex.props(styles.primary, sx) }
+
+  if (notification.type === "PROFILE_MODERATED") {
+    return (
+      <OwnProfileLink onOpen={onOpen} sx={sx}>
+        {children}
+      </OwnProfileLink>
+    )
+  }
+
+  if (notification.type === "LIST_MODERATED") {
+    return notification.list.deleted ? null : (
+      <Link {...props} params={{ listId: notification.list.id }} to="/lists/$listId">
+        {children}
+      </Link>
+    )
+  }
+
+  const { report } = notification
+
+  if (report.kind === "PAGE") {
+    return report.chapter === null || report.chapter.deleted ? null : (
+      <Link {...props} params={{ chapterId: report.chapter.id }} to="/chapters/$chapterId">
+        {children}
+      </Link>
+    )
+  }
+
+  if (report.kind === "COMMENT") {
+    return report.comment === null ||
+      report.comment.deleted ||
+      report.comment.target === null ? null : (
+      <CommentLink
+        commentId={report.comment.id}
+        data-primary=""
+        onClick={onOpen}
+        sx={[styles.primary, sx]}
+        target={report.comment.target}
+      >
+        {children}
+      </CommentLink>
+    )
+  }
+
+  if (report.kind === "GROUP") {
+    return report.group === null || report.group.deleted ? null : (
+      <Link {...props} params={{ groupId: report.group.id }} to="/groups/$groupId">
+        {children}
+      </Link>
+    )
+  }
+
+  return report.user === null ? null : (
+    <Link {...props} params={{ username: report.user.username }} to="/users/$username">
+      {children}
+    </Link>
+  )
+}
+
 /** The link that opens the notification: it covers the whole row. */
 function PrimaryLink({
   notification,
   onOpen,
+  onRead,
   onShowFollowers,
   children,
   sx,
 }: {
   notification: Notification
   onOpen: () => void
+  onRead?: () => void
   onShowFollowers?: (() => void) | undefined
   children: ReactNode
   sx?: Sx
@@ -506,6 +606,26 @@ function PrimaryLink({
   const props = { onClick: onOpen, ...stylex.props(styles.primary, sx) }
   const { data: session } = useQuery({ ...sessionQueryOptions, staleTime: "static" })
   const username = session?.user.username
+
+  if (
+    notification.type === "LIST_MODERATED" ||
+    notification.type === "PROFILE_MODERATED" ||
+    notification.type === "REPORT_REVIEWED"
+  ) {
+    // Once what it was about is gone, opening it only marks it read.
+    return (
+      getModerationLink(notification, { onOpen, children, sx }) ?? (
+        <button
+          {...stylex.props(styles.primary, styles.primaryButton, sx)}
+          data-primary=""
+          onClick={onRead ?? onOpen}
+          type="button"
+        >
+          {children}
+        </button>
+      )
+    )
+  }
 
   if (notification.type === "CHAPTER_PUBLISHED") {
     return (
@@ -817,11 +937,13 @@ export function NotificationRow({
   const [replying, setReplying] = useState(false)
   const unread = notification.readAt === null
   const page = variant === "page"
-  const onOpen = () => {
+  const onRead = () => {
     if (unread) {
       markRead.mutate(notification.id)
     }
-
+  }
+  const onOpen = () => {
+    onRead()
     onNavigate?.()
   }
 
@@ -853,6 +975,7 @@ export function NotificationRow({
           <PrimaryLink
             notification={notification}
             onOpen={onOpen}
+            onRead={onRead}
             onShowFollowers={onShowFollowers}
             sx={styles.sentence}
           >
@@ -888,17 +1011,7 @@ export function NotificationRow({
             ) : null}
           </>
         ) : null}
-        {notification.type === "COMMENT_LIKE" && page ? (
-          <span sx={styles.quote}>
-            <span sx={styles.quoteText}>
-              {notification.comment.excerpt === "" ? (
-                <span sx={styles.quoteImage}>{m.notifications_comment_image()}</span>
-              ) : (
-                notification.comment.excerpt
-              )}
-            </span>
-          </span>
-        ) : null}
+        {page ? <CommentQuote notification={notification} /> : null}
       </div>
       {page ? (
         <PageActions notification={notification} onOpen={onOpen} />
@@ -906,6 +1019,33 @@ export function NotificationRow({
         <PopoverAside notification={notification} onOpen={onOpen} />
       )}
     </article>
+  )
+}
+
+/** The text of the upvoted or reported comment, while it is up. */
+const getQuotedExcerpt = (notification: Notification) => {
+  if (notification.type === "COMMENT_LIKE") {
+    return notification.comment.excerpt
+  }
+
+  return notification.type === "REPORT_REVIEWED" && notification.report.kind === "COMMENT"
+    ? (notification.report.comment?.excerpt ?? null)
+    : null
+}
+
+function CommentQuote({ notification }: { notification: Notification }) {
+  const excerpt = getQuotedExcerpt(notification)
+
+  return excerpt === null ? null : (
+    <span sx={styles.quote}>
+      <span sx={styles.quoteText}>
+        {excerpt === "" ? (
+          <span sx={styles.quoteImage}>{m.notifications_comment_image()}</span>
+        ) : (
+          excerpt
+        )}
+      </span>
+    </span>
   )
 }
 

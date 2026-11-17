@@ -30,7 +30,13 @@ export type NotificationFilters = {
 
 type NotificationPage = InferResponseType<typeof api.users.me.notifications.$get, 200>
 
-export const NOTIFICATION_CATEGORIES = ["chapters", "replies", "activity", "rewards"] as const
+export const NOTIFICATION_CATEGORIES = [
+  "chapters",
+  "replies",
+  "activity",
+  "rewards",
+  "moderation",
+] as const
 
 const CATEGORY_OF_TYPE = {
   CHAPTER_PUBLISHED: "chapters",
@@ -39,6 +45,9 @@ const CATEGORY_OF_TYPE = {
   FOLLOW: "activity",
   RANKING_REWARD: "rewards",
   ACHIEVEMENT_EARNED: "rewards",
+  LIST_MODERATED: "moderation",
+  PROFILE_MODERATED: "moderation",
+  REPORT_REVIEWED: "moderation",
 } as const satisfies Record<Notification["type"], NotificationCategory>
 const categoryOf = (notification: Notification) => CATEGORY_OF_TYPE[notification.type]
 
@@ -141,7 +150,7 @@ const applyChange = (queryClient: QueryClient, change: Change) => {
       return {
         ...counts,
         unread: 0,
-        categories: { chapters: 0, replies: 0, activity: 0, rewards: 0 },
+        categories: { chapters: 0, replies: 0, activity: 0, rewards: 0, moderation: 0 },
       }
     }
 

@@ -9,6 +9,8 @@ import { getLocale } from "@/paraglide/runtime"
 
 type CommentTarget = Extract<Notification, { type: "COMMENT_REPLY" }>["comment"]["target"]
 type Actors = Extract<Notification, { type: "FOLLOW" }>["actors"]
+type Report = Extract<Notification, { type: "REPORT_REVIEWED" }>["report"]
+type ProfileField = Extract<Notification, { type: "PROFILE_MODERATED" }>["fields"][number]
 
 const styles = stylex.create({
   strong: {
@@ -68,6 +70,56 @@ const targetNode = (target: CommentTarget, viewerId: string) => (
     )}
   </>
 )
+const PROFILE_FIELDS = {
+  displayUsername: m.notifications_profile_field_display_name,
+  about: m.notifications_profile_field_about,
+  city: m.notifications_profile_field_city,
+  avatar: m.notifications_profile_field_avatar,
+  banner: m.notifications_profile_field_banner,
+} satisfies Record<ProfileField, () => string>
+/** What a report was about, named as precisely as what is left of it allows. */
+const reportTargetNode = (report: Report, viewerId: string) => {
+  if (report.kind === "PAGE") {
+    return report.chapter === null
+      ? m.notifications_report_page_unknown()
+      : richMessage(m.notifications_report_page({ target: "{target}" }), {
+          target: targetNode(
+            {
+              type: "CHAPTER",
+              id: report.chapter.id,
+              username: null,
+              title: report.chapter.mediaTitle,
+              chapterNumber: report.chapter.number,
+            },
+            viewerId,
+          ),
+        })
+  }
+
+  if (report.kind === "COMMENT") {
+    const target = report.comment?.target ?? null
+
+    return target === null
+      ? m.notifications_report_comment_unknown()
+      : richMessage(m.notifications_report_comment({ target: "{target}" }), {
+          target: targetNode(target, viewerId),
+        })
+  }
+
+  if (report.kind === "GROUP") {
+    return report.group === null ? (
+      m.notifications_report_group_unknown()
+    ) : (
+      <Strong>{report.group.name}</Strong>
+    )
+  }
+
+  return report.user === null ? (
+    m.notifications_report_profile_unknown()
+  ) : (
+    <Strong>{m.notifications_target_profile({ name: report.user.displayUsername })}</Strong>
+  )
+}
 /** "Sora", "Sora and Mina", "Sora and 13 others": the people behind a gathered notification. */
 const actorsText = (
   actors: Actors,
@@ -96,7 +148,7 @@ const actorsText = (
   })
 }
 
-/** The sentence of a reply, upvote, follow, ranking reward or achievement notification, with its names in bold. */
+/** The sentence of a reply, upvote, follow, ranking reward, achievement or moderation notification, with its names in bold. */
 export const notificationText = (notification: Notification, viewerId: string) => {
   if (notification.type === "COMMENT_REPLY") {
     return richMessage(m.notifications_reply_text({ name: "{name}", target: "{target}" }), {
@@ -161,6 +213,40 @@ export const notificationText = (notification: Notification, viewerId: string) =
             </Strong>
           ),
         })
+  }
+
+  if (notification.type === "LIST_MODERATED") {
+    const template =
+      notification.action === "DELETED"
+        ? m.notifications_list_deleted
+        : m.notifications_list_updated
+
+    return richMessage(template({ list: "{list}" }), {
+      list: <Strong>{notification.list.name}</Strong>,
+    })
+  }
+
+  if (notification.type === "PROFILE_MODERATED") {
+    // Avatars and banners can only be removed, the other fields are edited.
+    const template = notification.fields.every((field) => field === "avatar" || field === "banner")
+      ? m.notifications_profile_removed
+      : m.notifications_profile_changed
+    const fields = new Intl.ListFormat(getLocale(), { type: "conjunction" }).format(
+      notification.fields.map((field) => PROFILE_FIELDS[field]()),
+    )
+
+    return richMessage(template({ fields: "{fields}" }), { fields: <Strong>{fields}</Strong> })
+  }
+
+  if (notification.type === "REPORT_REVIEWED") {
+    const template =
+      notification.report.outcome === "RESOLVED"
+        ? m.notifications_report_resolved
+        : m.notifications_report_dismissed
+
+    return richMessage(template({ target: "{target}" }), {
+      target: reportTargetNode(notification.report, viewerId),
+    })
   }
 
   return null
