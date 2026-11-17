@@ -7,6 +7,7 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, userSummarySchema } from "../utils/schemas"
+import { isBannedSql, managedUserSchema } from "../utils/user-moderation"
 
 const querySchema = paginationQuerySchema.extend({
   status: z.enum(USER_REPORT_STATUSES).default("PENDING").meta({
@@ -34,7 +35,9 @@ const itemSchema = z.object({
     description: "The note the moderator left when reviewing the report, if any.",
     example: "Removed the avatar and the about text.",
   }),
-  user: userSummarySchema.meta({ description: "The reported user." }),
+  user: userSummarySchema.extend(managedUserSchema.pick({ role: true, banned: true }).shape).meta({
+    description: "The reported user, with the role and ban that decide who can act on them.",
+  }),
   reporter: userSummarySchema.meta({ description: "The user who filed the report." }),
   createdAt: z.iso.datetime().meta({ description: "When the report was filed." }),
   updatedAt: z.iso.datetime().meta({ description: "When the report was last updated." }),
@@ -70,7 +73,7 @@ export const listUserReportsHandler = new Hono().get(
     const { page, perPage, status, reason } = c.var.query
     const base = db
       .selectFrom("userReports")
-      .innerJoin("users as reported", "reported.id", "userReports.userId")
+      .innerJoin("users", "users.id", "userReports.userId")
       .innerJoin("users as reporter", "reporter.id", "userReports.reporterId")
       .where("userReports.status", "=", status)
       .where((eb) => eb.and(reason === undefined ? [] : [eb("userReports.reason", "=", reason)]))
@@ -84,12 +87,14 @@ export const listUserReportsHandler = new Hono().get(
           "userReports.reviewerNote",
           "userReports.createdAt",
           "userReports.updatedAt",
-          "reported.id as userId",
-          "reported.username as userUsername",
-          "reported.displayUsername as userDisplayUsername",
-          "reported.image as userImage",
-          "reported.nameEffect as userNameEffect",
-          "reported.avatarBorder as userAvatarBorder",
+          "users.id as userId",
+          "users.username as userUsername",
+          "users.displayUsername as userDisplayUsername",
+          "users.image as userImage",
+          "users.nameEffect as userNameEffect",
+          "users.avatarBorder as userAvatarBorder",
+          "users.role as userRole",
+          isBannedSql.as("userBanned"),
           "reporter.id as reporterId",
           "reporter.username as reporterUsername",
           "reporter.displayUsername as reporterDisplayUsername",
@@ -119,6 +124,8 @@ export const listUserReportsHandler = new Hono().get(
           image: row.userImage,
           nameEffect: row.userNameEffect,
           avatarBorder: row.userAvatarBorder,
+          role: row.userRole,
+          banned: row.userBanned,
         },
         reporter: {
           id: row.reporterId,

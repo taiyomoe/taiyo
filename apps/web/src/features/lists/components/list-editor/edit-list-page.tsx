@@ -16,7 +16,7 @@ export function EditListPage() {
     <ListEditorShell title={m.list_editor_edit_title()} user={session.user}>
       <CatchBoundary errorComponent={ListError} getResetKey={() => listId}>
         <Suspense fallback={<PageBodySkeleton blocks={["24rem", "16rem"]} />}>
-          <EditListForm listId={listId} viewerId={session.user.id} />
+          <EditListForm listId={listId} user={session.user} />
         </Suspense>
       </CatchBoundary>
     </ListEditorShell>

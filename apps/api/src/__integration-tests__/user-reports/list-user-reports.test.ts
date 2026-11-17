@@ -10,7 +10,7 @@ type Report = {
   details: string | null
   status: string
   reviewerNote: string | null
-  user: { id: string; username: string }
+  user: { id: string; username: string; role: string; banned: boolean }
   reporter: { id: string; username: string }
 }
 
@@ -81,7 +81,7 @@ describe("GET /user-reports", () => {
       details: "They pretend to be a staff member.",
       status: "PENDING",
       reviewerNote: null,
-      user: { id: reported.userId },
+      user: { id: reported.userId, role: "USER", banned: false },
       reporter: { id: firstReporter.userId },
     })
   })

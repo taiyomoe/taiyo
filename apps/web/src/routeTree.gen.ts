@@ -37,6 +37,7 @@ import { Route as DashboardCommentsRouteImport } from './routes/dashboard/commen
 import { Route as DashboardGroupReportsRouteImport } from './routes/dashboard/group-reports'
 import { Route as DashboardGroupRequestsRouteImport } from './routes/dashboard/group-requests'
 import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/invitations'
+import { Route as DashboardListsRouteImport } from './routes/dashboard/lists'
 import { Route as DashboardMangadexSyncRouteImport } from './routes/dashboard/mangadex-sync'
 import { Route as DashboardMySuggestionsRouteImport } from './routes/dashboard/my-suggestions'
 import { Route as DashboardPageReportsRouteImport } from './routes/dashboard/page-reports'
@@ -44,6 +45,7 @@ import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settin
 import { Route as DashboardStaffsRouteImport } from './routes/dashboard/staffs'
 import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard/submissions'
 import { Route as DashboardUploadRouteImport } from './routes/dashboard/upload'
+import { Route as DashboardUserReportsRouteImport } from './routes/dashboard/user-reports'
 import { Route as DashboardUsersRouteImport } from './routes/dashboard/users'
 import { Route as GroupsIndexRouteImport } from './routes/groups/index'
 import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
@@ -211,6 +213,11 @@ const DashboardInvitationsRoute = DashboardInvitationsRouteImport.update({
   path: '/invitations',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardListsRoute = DashboardListsRouteImport.update({
+  id: '/lists',
+  path: '/lists',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardMangadexSyncRoute = DashboardMangadexSyncRouteImport.update({
   id: '/mangadex-sync',
   path: '/mangadex-sync',
@@ -244,6 +251,11 @@ const DashboardSubmissionsRoute = DashboardSubmissionsRouteImport.update({
 const DashboardUploadRoute = DashboardUploadRouteImport.update({
   id: '/upload',
   path: '/upload',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardUserReportsRoute = DashboardUserReportsRouteImport.update({
+  id: '/user-reports',
+  path: '/user-reports',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardUsersRoute = DashboardUsersRouteImport.update({
@@ -407,6 +419,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/lists': typeof DashboardListsRoute
   '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
@@ -414,6 +427,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard/user-reports': typeof DashboardUserReportsRoute
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/lists/$listId': typeof ListsListIdRoute
@@ -469,6 +483,7 @@ export interface FileRoutesByTo {
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/lists': typeof DashboardListsRoute
   '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
@@ -476,6 +491,7 @@ export interface FileRoutesByTo {
   '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard/user-reports': typeof DashboardUserReportsRoute
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/lists/$listId': typeof ListsListIdRoute
@@ -533,6 +549,7 @@ export interface FileRoutesById {
   '/dashboard/group-reports': typeof DashboardGroupReportsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/lists': typeof DashboardListsRoute
   '/dashboard/mangadex-sync': typeof DashboardMangadexSyncRoute
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/page-reports': typeof DashboardPageReportsRoute
@@ -540,6 +557,7 @@ export interface FileRoutesById {
   '/dashboard/staffs': typeof DashboardStaffsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard/user-reports': typeof DashboardUserReportsRoute
   '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/lists/$listId': typeof ListsListIdRoute
@@ -598,6 +616,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/lists'
     | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
@@ -605,6 +624,7 @@ export interface FileRouteTypes {
     | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
+    | '/dashboard/user-reports'
     | '/dashboard/users'
     | '/groups/$groupId'
     | '/lists/$listId'
@@ -660,6 +680,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/lists'
     | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
@@ -667,6 +688,7 @@ export interface FileRouteTypes {
     | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
+    | '/dashboard/user-reports'
     | '/dashboard/users'
     | '/groups/$groupId'
     | '/lists/$listId'
@@ -723,6 +745,7 @@ export interface FileRouteTypes {
     | '/dashboard/group-reports'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/lists'
     | '/dashboard/mangadex-sync'
     | '/dashboard/my-suggestions'
     | '/dashboard/page-reports'
@@ -730,6 +753,7 @@ export interface FileRouteTypes {
     | '/dashboard/staffs'
     | '/dashboard/submissions'
     | '/dashboard/upload'
+    | '/dashboard/user-reports'
     | '/dashboard/users'
     | '/groups/$groupId'
     | '/lists/$listId'
@@ -989,6 +1013,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardInvitationsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/lists': {
+      id: '/dashboard/lists'
+      path: '/lists'
+      fullPath: '/dashboard/lists'
+      preLoaderRoute: typeof DashboardListsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/mangadex-sync': {
       id: '/dashboard/mangadex-sync'
       path: '/mangadex-sync'
@@ -1036,6 +1067,13 @@ declare module '@tanstack/react-router' {
       path: '/upload'
       fullPath: '/dashboard/upload'
       preLoaderRoute: typeof DashboardUploadRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/user-reports': {
+      id: '/dashboard/user-reports'
+      path: '/user-reports'
+      fullPath: '/dashboard/user-reports'
+      preLoaderRoute: typeof DashboardUserReportsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/users': {
@@ -1251,6 +1289,7 @@ interface DashboardRouteRouteChildren {
   DashboardGroupReportsRoute: typeof DashboardGroupReportsRoute
   DashboardGroupRequestsRoute: typeof DashboardGroupRequestsRoute
   DashboardInvitationsRoute: typeof DashboardInvitationsRoute
+  DashboardListsRoute: typeof DashboardListsRoute
   DashboardMangadexSyncRoute: typeof DashboardMangadexSyncRoute
   DashboardMySuggestionsRoute: typeof DashboardMySuggestionsRoute
   DashboardPageReportsRoute: typeof DashboardPageReportsRoute
@@ -1258,6 +1297,7 @@ interface DashboardRouteRouteChildren {
   DashboardStaffsRoute: typeof DashboardStaffsRoute
   DashboardSubmissionsRoute: typeof DashboardSubmissionsRoute
   DashboardUploadRoute: typeof DashboardUploadRoute
+  DashboardUserReportsRoute: typeof DashboardUserReportsRoute
   DashboardUsersRoute: typeof DashboardUsersRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardBannersUploadRoute: typeof DashboardBannersUploadRoute
@@ -1282,6 +1322,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardGroupReportsRoute: DashboardGroupReportsRoute,
   DashboardGroupRequestsRoute: DashboardGroupRequestsRoute,
   DashboardInvitationsRoute: DashboardInvitationsRoute,
+  DashboardListsRoute: DashboardListsRoute,
   DashboardMangadexSyncRoute: DashboardMangadexSyncRoute,
   DashboardMySuggestionsRoute: DashboardMySuggestionsRoute,
   DashboardPageReportsRoute: DashboardPageReportsRoute,
@@ -1289,6 +1330,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardStaffsRoute: DashboardStaffsRoute,
   DashboardSubmissionsRoute: DashboardSubmissionsRoute,
   DashboardUploadRoute: DashboardUploadRoute,
+  DashboardUserReportsRoute: DashboardUserReportsRoute,
   DashboardUsersRoute: DashboardUsersRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardBannersUploadRoute: DashboardBannersUploadRoute,

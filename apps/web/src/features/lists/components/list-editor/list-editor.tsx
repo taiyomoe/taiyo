@@ -42,7 +42,16 @@ const styles = stylex.create({
   },
 })
 
-export function ListEditor({ list }: { list: ListDetail | null }) {
+export function ListEditor({
+  list,
+  owned,
+  canDelete,
+}: {
+  list: ListDetail | null
+  /** Moderators and admins also edit the public lists of others. */
+  owned: boolean
+  canDelete: boolean
+}) {
   const navigate = useNavigate()
   const create = useCreateList()
   const update = useUpdateList()
@@ -88,6 +97,14 @@ export function ListEditor({ list }: { list: ListDetail | null }) {
       title: list === null ? m.list_editor_created() : m.list_editor_saved(),
       type: "success",
     })
+
+    // Staff cannot open a list once it is private: they go back to the lists they moderate.
+    if (!owned && visibility === "PRIVATE") {
+      await navigate({ to: "/dashboard/lists", ignoreBlocker: true })
+
+      return
+    }
+
     await navigate({ to: "/lists/$listId", params: { listId: id }, ignoreBlocker: true })
   })
 
@@ -109,7 +126,17 @@ export function ListEditor({ list }: { list: ListDetail | null }) {
             name="name"
             placeholder={m.list_editor_name_placeholder()}
           />
-          <VisibilityField control={form.control} />
+          <VisibilityField
+            control={form.control}
+            hints={
+              owned
+                ? undefined
+                : {
+                    PUBLIC: m.list_editor_visibility_public_hint_staff(),
+                    PRIVATE: m.list_editor_visibility_private_hint_staff(),
+                  }
+            }
+          />
           <div sx={styles.wide}>
             <TextareaField
               control={form.control}
@@ -122,7 +149,7 @@ export function ListEditor({ list }: { list: ListDetail | null }) {
         </div>
       </section>
       <TitlesPanel disabled={submitting} items={items} onChange={setItems} />
-      <EditorBar list={list} submitting={submitting} />
+      <EditorBar canDelete={canDelete} list={list} submitting={submitting} />
       <UnsavedChangesGuard dirty={dirty} />
     </Form>
   )
