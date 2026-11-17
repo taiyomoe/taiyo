@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Library } from "@taiyomoe/ui/components/icons"
+import { surface } from "@taiyomoe/ui/styles/recipes"
 import { breakpoints, colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi, Link } from "@tanstack/react-router"
 import type { LibraryCounts } from "@/features/library/api/library"
@@ -49,10 +50,9 @@ const styles = stylex.create({
     height: "2.375rem",
   },
   tabActive: {
-    borderColor: "transparent",
     backgroundColor: colors.card,
-    boxShadow: `inset 0 1px 0 rgb(255 255 255 / 6%), 0 0 0 1px ${colors.border}`,
     color: colors.foreground,
+    position: "relative",
   },
   icon: {
     flexShrink: 0,
@@ -101,7 +101,7 @@ export function LibraryStatusTabs({ counts }: { counts: LibraryCounts | undefine
             resetScroll={false}
             search={{ ...search, status, page: undefined }}
             to="/library"
-            {...stylex.props(styles.tab, active && styles.tabActive)}
+            {...stylex.props(styles.tab, active && [surface.raisedEdge, styles.tabActive])}
           >
             <Icon
               size={17}
