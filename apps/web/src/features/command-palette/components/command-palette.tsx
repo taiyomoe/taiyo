@@ -2,10 +2,12 @@ import * as stylex from "@stylexjs/stylex"
 import { CommandDialog, CommandDialogPopup } from "@taiyomoe/ui/components/ui/command"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { HotkeysProvider } from "@tanstack/react-hotkeys"
-import { useEffect, useRef, useState } from "react"
-import { PaletteBody } from "@/features/command-palette/components/palette-body"
+import { lazy, Suspense, useEffect, useRef, useState } from "react"
 import { m } from "@/paraglide/messages"
 
+const PaletteBody = lazy(async () => ({
+  default: (await import("@/features/command-palette/components/palette-body")).PaletteBody,
+}))
 const styles = stylex.create({
   popup: {
     maxHeight: { default: "min(36rem, 80dvh)", [breakpoints.maxSm]: "none" },
@@ -69,14 +71,16 @@ export function CommandPalette({
       >
         {warm || open ? (
           <HotkeysProvider enabled={open} exclusive scope="command-palette">
-            <PaletteBody
-              escapeRef={escapeRef}
-              initialQuery={initialQuery}
-              open={open}
-              onClose={() => {
-                onOpenChange(false)
-              }}
-            />
+            <Suspense>
+              <PaletteBody
+                escapeRef={escapeRef}
+                initialQuery={initialQuery}
+                open={open}
+                onClose={() => {
+                  onOpenChange(false)
+                }}
+              />
+            </Suspense>
           </HotkeysProvider>
         ) : null}
       </CommandDialogPopup>
