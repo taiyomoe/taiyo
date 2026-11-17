@@ -8,6 +8,7 @@ import {
   getMainTitles,
   selectVisibleChapters,
   withChapterDetails,
+  chapterPageCount,
 } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
@@ -78,6 +79,7 @@ export const listUpcomingChaptersHandler = new Hono().get(
         "chapters.contentRating",
         "chapters.mediaId",
         "chapters.isExternal",
+        chapterPageCount.as("pageCount"),
         publishAtIso.as("publishAt"),
         "users.id as uploaderId",
         "users.username as uploaderUsername",

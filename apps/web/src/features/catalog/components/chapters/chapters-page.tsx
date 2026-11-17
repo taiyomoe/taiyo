@@ -113,6 +113,13 @@ export function ChaptersPage() {
             skeleton: <SkeletonPill width="3.75rem" />,
           },
           {
+            key: "pages",
+            label: m.catalog_column_pages(),
+            width: catalogStyles.colNarrow,
+            from: "3xl",
+            skeleton: <SkeletonText width="1.5rem" />,
+          },
+          {
             key: "status",
             label: m.media_info_status(),
             width: catalogStyles.colMedium,
@@ -254,6 +261,7 @@ export function ChaptersPage() {
         onDone={selection.clear}
       />
       <EditChapterDialog
+        can={can}
         chapter={editing}
         onClose={() => {
           setEditing(null)

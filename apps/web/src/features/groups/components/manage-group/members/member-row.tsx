@@ -1,5 +1,13 @@
 import * as stylex from "@stylexjs/stylex"
-import { Crown, ExternalLink, Key, Logout, Undo, UserRemove } from "@taiyomoe/ui/components/icons"
+import {
+  Crown,
+  ExternalLink,
+  Key,
+  Logout,
+  Undo,
+  UserRemove,
+  UserSwitch,
+} from "@taiyomoe/ui/components/icons"
 import { TableRow } from "@taiyomoe/ui/components/ui/table"
 import { Link } from "@tanstack/react-router"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
@@ -53,6 +61,16 @@ export function MemberRow({
       : []),
     ...(access.promote
       ? [{ key: "promote", label: m.member_promote(), icon: Crown, onClick: open("promote") }]
+      : []),
+    ...(access.transfer
+      ? [
+          {
+            key: "transfer",
+            label: m.member_transfer(),
+            icon: UserSwitch,
+            onClick: open("transfer"),
+          },
+        ]
       : []),
     ...(access.stepDown
       ? [{ key: "stepDown", label: m.member_step_down(), icon: Undo, onClick: open("stepDown") }]

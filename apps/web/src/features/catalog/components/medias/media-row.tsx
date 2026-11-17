@@ -28,14 +28,21 @@ import {
   MEDIA_STATUS_LABELS,
   MEDIA_TYPE_LABELS,
 } from "@/features/media/lib/media-labels"
-import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
+import { CONTENT_RATING_OPTIONS, MEDIA_FLAG_OPTIONS } from "@/features/media/lib/media-options"
 import { m } from "@/paraglide/messages"
+
+const FLAG_PILL_LABELS = {
+  STAFF_ONLY: m.catalog_media_staff_only,
+  VIP_ONLY: m.catalog_media_vip_only,
+  LOCKED: m.catalog_media_locked,
+}
 
 export function MediaRow({
   media,
   can,
   selection,
   restoring,
+  onAccess,
   onDelete,
   onRestore,
 }: {
@@ -43,6 +50,7 @@ export function MediaRow({
   can: Permissions
   selection: Selection | undefined
   restoring: boolean
+  onAccess: () => void
   onDelete: () => void
   onRestore: () => void
 }) {
@@ -76,6 +84,9 @@ export function MediaRow({
           },
         ]
       : []),
+    ...(can("media.flag")
+      ? [{ key: "access", label: m.catalog_media_change_access(), icon: Lock, onClick: onAccess }]
+      : []),
     ...(can("media.delete")
       ? [
           {
@@ -102,11 +113,15 @@ export function MediaRow({
   const status = (
     <>
       <Pill variant={MEDIA_STATUS_BADGES[media.status]}>{MEDIA_STATUS_LABELS[media.status]()}</Pill>
-      {media.flag === "LOCKED" ? (
-        <Pill icon={Lock} variant="warning">
-          {m.catalog_media_locked()}
+      {media.flag === "OK" ? null : (
+        <Pill
+          icon={MEDIA_FLAG_OPTIONS.icon(media.flag)}
+          iconSx={media.flag === "LOCKED" ? undefined : MEDIA_FLAG_OPTIONS.tone?.(media.flag)}
+          variant={media.flag === "LOCKED" ? "warning" : "outline"}
+        >
+          {FLAG_PILL_LABELS[media.flag]()}
         </Pill>
-      ) : null}
+      )}
     </>
   )
 

@@ -6,6 +6,7 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import {
   getMainCoverUrls,
   getMainTitles,
+  chapterPageCount,
   selectLatestChapters,
   selectVisibleChapters,
   withChapterDetails,
@@ -62,6 +63,7 @@ export const listLatestChaptersHandler = new Hono().get(
     const { page, perPage, contentRating, mediaId, groupId, uploaderId } = c.var.query
     const [rows, totalRow] = await Promise.all([
       selectLatestChapters(db, { contentRatings: contentRating, mediaId, groupId, uploaderId })
+        .select(chapterPageCount.as("pageCount"))
         .orderBy("chapters.createdAt", "desc")
         .orderBy("chapters.id", "desc")
         .limit(perPage)

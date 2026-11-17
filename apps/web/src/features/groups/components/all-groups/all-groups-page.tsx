@@ -23,6 +23,7 @@ import { useSelection } from "@/features/catalog/hooks/use-selection"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { managedGroupsQueryOptions } from "@/features/groups/api/groups"
+import { CreateGroupDialog } from "@/features/groups/components/all-groups/create-group-dialog"
 import { DeleteGroupsDialog } from "@/features/groups/components/all-groups/delete-groups-dialog"
 import { ManagedGroupRow } from "@/features/groups/components/all-groups/managed-group-row"
 import { getPermissions } from "@/lib/permissions"
@@ -58,7 +59,11 @@ export function AllGroupsPage() {
   }
 
   return (
-    <DashboardPage subtitle={m.all_groups_subtitle()} title={m.dashboard_nav_all_groups()}>
+    <DashboardPage
+      actions={can("group.create") ? <CreateGroupDialog /> : undefined}
+      subtitle={m.all_groups_subtitle()}
+      title={m.dashboard_nav_all_groups()}
+    >
       <CatalogTable
         bulkBar={
           <BulkBar count={selection.ids.length} onClear={selection.clear}>

@@ -80,6 +80,7 @@ export function GroupChaptersPanel({
 
     return chapter !== null && isScheduled(chapter) ? chapter : null
   }
+  const editing = pick("edit")
   const deleting = pick("delete")
   const close = () => {
     setDialog(null)
@@ -138,7 +139,15 @@ export function GroupChaptersPanel({
           total={published.data?.meta.total}
         />
       </DashboardSection>
-      <EditChapterDialog chapter={pick("edit")} onClose={close} />
+      <EditChapterDialog
+        can={can}
+        chapter={
+          editing === null
+            ? null
+            : { ...editing, status: isScheduled(editing) ? "SCHEDULED" : "PUBLISHED" }
+        }
+        onClose={close}
+      />
       <DeleteChapterDialog
         chapter={deleting === null ? null : { id: deleting.id, label: chapterLabel(deleting) }}
         onClose={close}
@@ -228,6 +237,13 @@ function GroupChaptersTable({
           width: catalogStyles.colNarrow,
           from: "3xl",
           skeleton: <SkeletonPill width="3.75rem" />,
+        },
+        {
+          key: "pages",
+          label: m.catalog_column_pages(),
+          width: catalogStyles.colNarrow,
+          from: "3xl",
+          skeleton: <SkeletonText width="1.5rem" />,
         },
         {
           key: "credits",
