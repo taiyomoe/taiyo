@@ -3,8 +3,8 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
+import { authorizeList } from "../middlewares/authorize-list-middleware"
 import { checkList } from "../middlewares/check-list-middleware"
-import { requireListOwner } from "../middlewares/require-list-owner-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -14,7 +14,8 @@ export const deleteListHandler = new Hono().delete(
   "/:id",
   describeRoute({
     summary: "Delete a list",
-    description: "Deletes one of your lists.\n\n**Required access:** the owner of the list.",
+    description:
+      "Deletes a list. Moderators and admins can also delete the `PUBLIC` lists of other users.\n\n**Required access:** the owner of the list, or a moderator or admin.",
     tags: ["Custom lists"],
     responses: {
       200: {
@@ -31,7 +32,7 @@ export const deleteListHandler = new Hono().delete(
       },
       ...getOpenApiResponses({
         401: true,
-        403: "You are not the owner of the list, or you do not have permission to perform this action.",
+        403: "You are neither the owner of the list nor a moderator or admin, or the list is someone else's `PRIVATE` list.",
         404: "No list with the given ID exists.",
         422: "The provided ID is not a valid UUID.",
       }),
@@ -40,7 +41,7 @@ export const deleteListHandler = new Hono().delete(
   audited(listAudit.DELETE),
   withAuth(),
   checkList(),
-  requireListOwner,
+  authorizeList("delete"),
   withTransaction,
   async (c) => {
     const { db, list } = c.var

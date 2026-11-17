@@ -248,6 +248,7 @@ export const listAudit = defineAuditCatalog("list", {
   ITEM_REMOVE: { target: "list", severity: "low" },
   VOTE: { target: "list", severity: "low" },
   UNVOTE: { target: "list", severity: "low" },
+  DELETE_MANY: { severity: "low" },
 })
 
 export const libraryAudit = defineAuditCatalog("library", {

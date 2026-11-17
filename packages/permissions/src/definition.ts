@@ -4,6 +4,7 @@ import type {
   GroupPermission,
   MediaSuggestionStatus,
   Role,
+  UserListVisibility,
 } from "@taiyomoe/db/constants"
 import type { ValidateDefinition } from "permix"
 
@@ -47,6 +48,8 @@ type MemberPermissionsTarget = {
 export type MediaSuggestionTarget = { authorId: string; status: MediaSuggestionStatus }
 
 export type UserTarget = { id: string; role: Role }
+
+export type ListTarget = { userId: string; visibility: UserListVisibility }
 
 export type PermissionsDefinition = ValidateDefinition<{
   dashboard: ["open", "viewStats"]
@@ -101,6 +104,11 @@ export type PermissionsDefinition = ValidateDefinition<{
   groupCreationRequest: ["create", "review"]
   groupReport: ["create", "review"]
   comment: ["create", "delete", "review", "removeImage"]
+  list: [
+    "moderate",
+    { name: "update"; type: ListTarget; required: true },
+    { name: "delete"; type: ListTarget; required: true },
+  ]
   user: [
     "list",
     "grant",

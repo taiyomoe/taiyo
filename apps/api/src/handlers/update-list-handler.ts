@@ -5,8 +5,8 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
+import { authorizeList } from "../middlewares/authorize-list-middleware"
 import { checkList } from "../middlewares/check-list-middleware"
-import { requireListOwner } from "../middlewares/require-list-owner-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -40,7 +40,7 @@ const updateListSchema = z
         example: "Fights, friendship and training arcs.",
       }),
     visibility: z.enum(USER_LIST_VISIBILITIES).optional().meta({
-      description: "Who can see the list: everyone (`PUBLIC`) or only you (`PRIVATE`).",
+      description: "Who can see the list: everyone (`PUBLIC`) or only its owner (`PRIVATE`).",
       example: "PUBLIC",
     }),
     mediaIds: listMediaIdsSchema.optional().meta({
@@ -56,7 +56,7 @@ export const updateListHandler = new Hono().patch(
   describeRoute({
     summary: "Update a list",
     description:
-      "Updates the name, description or visibility of one of your lists, and can replace its titles in order. Send at least one field. Titles kept on the list keep the date they were added.\n\n**Required access:** the owner of the list.",
+      "Updates the name, description or visibility of a list, and can replace its titles in order. Send at least one field. Titles kept on the list keep the date they were added. Moderators and admins can also update the `PUBLIC` lists of other users.\n\n**Required access:** the owner of the list, or a moderator or admin.",
     tags: ["Custom lists"],
     responses: {
       200: {
@@ -73,7 +73,7 @@ export const updateListHandler = new Hono().patch(
       },
       ...getOpenApiResponses({
         401: true,
-        403: "You are not the owner of the list, or you do not have permission to perform this action.",
+        403: "You are neither the owner of the list nor a moderator or admin, or the list is someone else's `PRIVATE` list.",
         404: "No list with the given ID exists, or one of the medias does not exist.",
         422: "The provided ID is not a valid UUID, or the request body failed validation.",
       }),
@@ -83,7 +83,7 @@ export const updateListHandler = new Hono().patch(
   withAuth(),
   validateJson(updateListSchema),
   checkList(),
-  requireListOwner,
+  authorizeList("update"),
   withTransaction,
   async (c) => {
     const { db, list } = c.var

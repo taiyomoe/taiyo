@@ -3,6 +3,7 @@ import { createRules } from "permix"
 import type {
   Actor,
   ChapterTarget,
+  ListTarget,
   MediaSuggestionTarget,
   PermissionsDefinition,
   UserTarget,
@@ -58,6 +59,10 @@ export const buildRules = (actor: Actor | null) => {
   const managesChapters = is("UPLOADER", "MODERATOR", "ADMIN")
   const reviewsChapters = is("UPLOADER", "ADMIN")
   const reviewsSuggestions = is("UPLOADER", "MODERATOR", "ADMIN")
+  const moderatesLists = is("MODERATOR", "ADMIN")
+  // Staff moderate what everyone can see: a `PRIVATE` list stays its owner's alone.
+  const managesList = (list: ListTarget) =>
+    isSelf(list.userId) || (moderatesLists && list.visibility === "PUBLIC")
   const isOwnPendingSuggestion = (suggestion: MediaSuggestionTarget) =>
     suggestion.status === "PENDING" && isSelf(suggestion.authorId)
   const isLive = (chapter: ChapterTarget) =>
@@ -214,6 +219,11 @@ export const buildRules = (actor: Actor | null) => {
       delete: is("MODERATOR", "ADMIN"),
       review: is("MODERATOR", "ADMIN"),
       removeImage: is("MODERATOR", "ADMIN"),
+    },
+    list: {
+      moderate: moderatesLists,
+      update: managesList,
+      delete: managesList,
     },
     user: {
       list: is("MODERATOR", "ADMIN"),
