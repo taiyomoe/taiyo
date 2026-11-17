@@ -31,7 +31,7 @@ type DashboardOverview = {
     previousChapters: number
   }>
   catalogMix: Array<{ type: string; count: number }>
-  attention: { pendingOwnershipRequests: number; failedUploads: number }
+  attention: { failedUploads: number }
   recentActivity: Array<{
     kind: string
     at: string
@@ -476,34 +476,10 @@ describe("GET /dashboard/overview", () => {
     expect(catalogMix.some((entry) => entry.count === 0)).toBe(true)
   })
 
-  test("counts pending ownership requests and failed uploads", async ({ app, services }) => {
+  test("counts failed uploads", async ({ app, services }) => {
     const headers = await signInAndAgeSeeds(services)
-    const [first, second, third] = await createReaders(services, 3)
-    const { db } = services
-    const liveGroupId = crypto.randomUUID()
-    const deletedGroupId = crypto.randomUUID()
 
-    await db
-      .insertInto("groups")
-      .values([
-        { id: liveGroupId, name: `Group ${liveGroupId}`, creatorId: defined(first) },
-        {
-          id: deletedGroupId,
-          name: `Group ${deletedGroupId}`,
-          creatorId: defined(first),
-          deletedAt: new Date(),
-        },
-      ])
-      .execute()
-    await db
-      .insertInto("groupOwnershipRequests")
-      .values([
-        { userId: defined(first), groupId: liveGroupId, status: "PENDING" },
-        { userId: defined(second), groupId: liveGroupId, status: "APPROVED" },
-        { userId: defined(third), groupId: deletedGroupId, status: "PENDING" },
-      ])
-      .execute()
-    await db
+    await services.db
       .insertInto("tasks")
       .values(
         (["FAILED", "FINISHED", "PENDING"] as const).map((status) => ({
@@ -517,7 +493,7 @@ describe("GET /dashboard/overview", () => {
 
     const { attention } = await getOverview(app, headers)
 
-    expect(attention).toEqual({ pendingOwnershipRequests: 1, failedUploads: 1 })
+    expect(attention).toEqual({ failedUploads: 1 })
   })
 
   test("groups recent uploads by uploader, media and hour", async ({ app, services }) => {
@@ -701,19 +677,19 @@ describe("GET /dashboard/overview", () => {
     const [readerId] = await createReaders(services, 1)
     const [chapter] = await getChapters(services, 1)
     const uploaderId = await signInUploader(services)
-    const groupId = crypto.randomUUID()
     const first = await getOverview(app, headers, "range=7d&tz=US/Eastern")
 
     await read(services, [
       { userId: defined(readerId), chapterId: defined(chapter).id, createdAt: dayAt(1, 12) },
     ])
     await services.db
-      .insertInto("groups")
-      .values({ id: groupId, name: `Group ${groupId}`, creatorId: uploaderId })
-      .execute()
-    await services.db
-      .insertInto("groupOwnershipRequests")
-      .values({ userId: uploaderId, groupId, status: "PENDING" })
+      .insertInto("tasks")
+      .values({
+        type: "UPLOAD_CHAPTER",
+        status: "FAILED",
+        sessionId: crypto.randomUUID(),
+        payload: {},
+      })
       .execute()
     await insertChapters(services, uploaderId, [{ createdAt: withinHour(0.5) }])
 
@@ -723,9 +699,7 @@ describe("GET /dashboard/overview", () => {
     expect(first.timeZone).toBe("America/New_York")
     expect(cached.metrics).toEqual(first.metrics)
     expect(cached.topUploaders).toEqual(first.topUploaders)
-    expect(cached.attention.pendingOwnershipRequests).toBe(
-      first.attention.pendingOwnershipRequests + 1,
-    )
+    expect(cached.attention.failedUploads).toBe(first.attention.failedUploads + 1)
     expect(cached.recentActivity[0]?.actor.id).toBe(uploaderId)
     expect(fresh.metrics.reads.total).toBe(first.metrics.reads.total + 1)
     expect(fresh.topUploaders.map((uploader) => uploader.id)).toContain(uploaderId)

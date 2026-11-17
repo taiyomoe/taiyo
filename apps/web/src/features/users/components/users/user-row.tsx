@@ -122,7 +122,7 @@ export function UserRow({
           },
         ]
       : []),
-    ...(can("user.moderateProfile", target) && !user.banned
+    ...(can("user.moderateProfile", target)
       ? [{ key: "editProfile", label: m.profile_edit(), icon: Edit, onClick: open("profile") }]
       : []),
     ...(!self && can("user.setRole", { id: user.id })

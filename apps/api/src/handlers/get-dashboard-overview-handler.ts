@@ -163,10 +163,6 @@ const dashboardOverviewSchema = z.object({
     .meta({ description: "Every media type with its number of medias, all time." }),
   attention: z
     .object({
-      pendingOwnershipRequests: z.int().meta({
-        description: "The number of group ownership requests awaiting review.",
-        example: 3,
-      }),
       failedUploads: z.int().meta({
         description: "The number of chapter uploads that failed.",
         example: 1,
@@ -269,13 +265,6 @@ export const getDashboardOverviewHandler = new Hono().get(
       db
         .selectNoFrom((eb) => [
           eb
-            .selectFrom("groupOwnershipRequests")
-            .innerJoin("groups", "groups.id", "groupOwnershipRequests.groupId")
-            .where("groupOwnershipRequests.status", "=", "PENDING")
-            .where("groups.deletedAt", "is", null)
-            .select((e) => e.fn.countAll<string>().as("count"))
-            .as("pendingOwnershipRequests"),
-          eb
             .selectFrom("tasks")
             .where("tasks.status", "=", "FAILED")
             .select((e) => e.fn.countAll<string>().as("count"))
@@ -283,7 +272,6 @@ export const getDashboardOverviewHandler = new Hono().get(
         ])
         .executeTakeFirstOrThrow()
         .then((row) => ({
-          pendingOwnershipRequests: Number(row.pendingOwnershipRequests),
           failedUploads: Number(row.failedUploads),
         })),
       db
