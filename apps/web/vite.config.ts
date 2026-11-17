@@ -3,13 +3,42 @@ import stylex from "@stylexjs/unplugin"
 import { devtools } from "@tanstack/devtools-vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import viteReact from "@vitejs/plugin-react"
-import { defineConfig, loadEnv, type PluginOption } from "vite"
+import { defineConfig, loadEnv, type Plugin } from "vite"
 import { twemojiAssets } from "./twemoji-assets"
 
 type StylexOptions = NonNullable<Parameters<typeof stylex.vite>[0]> & {
   externalPackages?: string[]
 }
 
+// Rolldown checks a hook filter natively and skips the call into JavaScript when it fails. These
+// hooks declare none, so every module of the build went through them for nothing.
+const withHookFilters = (plugin: Plugin): Plugin => {
+  const { name, resolveId, load, transform } = plugin
+
+  if (
+    name === "@stylexjs/unplugin" &&
+    typeof resolveId === "function" &&
+    typeof load === "function"
+  ) {
+    return {
+      ...plugin,
+      resolveId: { filter: { id: /virtual:stylex/ }, handler: resolveId },
+      load: { filter: { id: /virtual:stylex/ }, handler: load },
+    }
+  }
+
+  if (name === "@tanstack/devtools:remove-devtools-on-build" && typeof transform === "function") {
+    return {
+      ...plugin,
+      transform: {
+        filter: { id: { exclude: /node_modules/ }, code: /@tanstack\/[\w-]*devtools/ },
+        handler: transform,
+      },
+    }
+  }
+
+  return plugin
+}
 const config = defineConfig(({ mode }) => {
   const env = loadEnv(mode, import.meta.dirname, "")
   const apiOrigin = `http://localhost:${env.API_PORT ?? 3002}`
@@ -30,7 +59,7 @@ const config = defineConfig(({ mode }) => {
     externalPackages: ["@taiyomoe/ui"],
   }
   // oxlint-disable-next-line typescript/no-unsafe-assignment
-  const stylexPlugin: PluginOption = stylex.vite(stylexOptions)
+  const stylexPlugin: Plugin = stylex.vite(stylexOptions)
 
   return {
     resolve: { tsconfigPaths: true },
@@ -50,9 +79,9 @@ const config = defineConfig(({ mode }) => {
       },
     },
     plugins: [
-      devtools(),
+      devtools().map(withHookFilters),
       // StyleX compiles ahead of the React transform.
-      stylexPlugin,
+      withHookFilters(stylexPlugin),
       tanstackStart(),
       viteReact({ compiler: true }),
       twemojiAssets(),
