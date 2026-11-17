@@ -1,8 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { Progress } from "@taiyomoe/ui/components/ui/progress"
 import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useQueryClient } from "@tanstack/react-query"
-import { useEffect, useSyncExternalStore } from "react"
+import { useSyncExternalStore } from "react"
 import { UploadTrayBatch } from "@/components/shell/upload-tray-batch"
 import { UploadTrayHeader } from "@/components/shell/upload-tray-header"
 import { summarize, uploadStore } from "@/features/uploads/lib/chapter-batch/upload-store"
@@ -64,11 +63,6 @@ export function UploadTray() {
     uploadStore.getServerSnapshot,
   )
   const open = useSyncExternalStore(expandedStore.subscribe, expandedStore.get, () => false)
-  const queryClient = useQueryClient()
-
-  useEffect(() => {
-    uploadStore.connect(queryClient)
-  }, [queryClient])
   const jobs = batches.flatMap((batch) => batch.jobs)
   const summary = summarize(jobs)
   const progress =

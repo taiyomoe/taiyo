@@ -3,18 +3,27 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { useSidebar } from "@taiyomoe/ui/components/ui/sidebar"
 import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-import { useEffect, useRef } from "react"
+import { lazy, Suspense, useEffect, useRef } from "react"
 import type { Session } from "@/lib/session"
 import { layout } from "@/components/layout/layout.stylex"
 import { AppNavbarBrand } from "@/components/shell/app-navbar-brand"
 import { AppNavbarSearch } from "@/components/shell/app-navbar-search"
-import { UserMenu } from "@/components/shell/user-menu"
 import { NotificationBell } from "@/features/notifications/components/notification-bell"
 import { useCurrentHref } from "@/hooks/use-current-href"
 import { m } from "@/paraglide/messages"
 
 const FILL_DISTANCE = 160
+// The server renders the menu, and hydration keeps that markup until its code arrives.
+const UserMenu = lazy(async () => ({
+  default: (await import("@/components/shell/user-menu")).UserMenu,
+}))
 const styles = stylex.create({
+  menuPlaceholder: {
+    borderRadius: "50%",
+    backgroundColor: colors.well,
+    height: { default: "2.75rem", [breakpoints.sm]: "2.5rem" },
+    width: { default: "2.75rem", [breakpoints.sm]: "2.5rem" },
+  },
   header: {
     insetInline: 0,
     alignItems: "center",
@@ -130,7 +139,9 @@ export function AppNavbar({
         ) : (
           <>
             <NotificationBell viewerId={user.id} />
-            <UserMenu user={user} />
+            <Suspense fallback={<span aria-hidden sx={styles.menuPlaceholder} />}>
+              <UserMenu user={user} />
+            </Suspense>
           </>
         )}
       </div>
