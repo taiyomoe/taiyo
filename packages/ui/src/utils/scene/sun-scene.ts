@@ -1,22 +1,20 @@
-import {
-  Group,
-  MathUtils,
-  Mesh,
-  PerspectiveCamera,
-  PlaneGeometry,
-  Quaternion,
-  Scene,
-  ShaderMaterial,
-  SphereGeometry,
-  Timer,
-  Vector3,
-  WebGLRenderer,
-} from "three"
 import { BEAMS_FRAGMENT, PLANE_VERTEX, PLASMA_FRAGMENT, SPHERE_VERTEX } from "./shaders"
+import {
+  axisAngle,
+  createMesh,
+  createProgram,
+  IDENTITY,
+  modelView,
+  multiply,
+  perspective,
+  planeGeometry,
+  rotation,
+  sphereGeometry,
+} from "./webgl"
 
 const FOV = 30
 const CAMERA_Z = 12
-const VISIBLE_HEIGHT = 2 * CAMERA_Z * Math.tan(MathUtils.degToRad(FOV / 2))
+const VISIBLE_HEIGHT = 2 * CAMERA_Z * Math.tan(((FOV / 2) * Math.PI) / 180)
 const BEAM_EXTENT = 3
 const BREATH_SECONDS = 5
 const AUTO_SPIN = 0.05
@@ -43,36 +41,21 @@ export const createSunScene = ({
   reducedMotion: boolean
   onReady: () => void
 }) => {
-  const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true })
+  const gl = canvas.getContext("webgl2", { antialias: true, alpha: true, stencil: false })
 
-  renderer.setClearColor(0x000000, 0)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75))
+  if (gl === null) {
+    throw new Error("WebGL2 is unavailable")
+  }
 
-  const uniforms = { uTime: { value: 0 }, uBreath: { value: 0 } }
-  const scene = new Scene()
-  const camera = new PerspectiveCamera(FOV, 1, 0.1, 100)
-  const group = new Group()
-  const spin = new Group()
-  const sphereGeometry = new SphereGeometry(1, 96, 64)
-  const planeGeometry = new PlaneGeometry(1, 1)
-  const plasma = new ShaderMaterial({
-    uniforms: { uTime: uniforms.uTime },
-    vertexShader: SPHERE_VERTEX,
-    fragmentShader: PLASMA_FRAGMENT,
-  })
-  const beamUniforms = { ...uniforms, uExtent: { value: BEAM_EXTENT }, uSize: { value: 1 } }
-  const beamMaterial = new ShaderMaterial({
-    uniforms: beamUniforms,
-    vertexShader: PLANE_VERTEX,
-    fragmentShader: BEAMS_FRAGMENT,
-    transparent: true,
-    depthWrite: false,
-  })
-  const beams = new Mesh(planeGeometry, beamMaterial)
-  const timer = new Timer()
-  const turn = new Quaternion()
-  const axis = new Vector3()
-  const up = new Vector3(0, 1, 0)
+  const pixelRatio = Math.min(window.devicePixelRatio, 1.75)
+  const uniforms = { uTime: 0, uBreath: 0, uExtent: BEAM_EXTENT, uSize: 1 }
+  const plasmaProgram = createProgram(gl, SPHERE_VERTEX, PLASMA_FRAGMENT)
+  const beamProgram = createProgram(gl, PLANE_VERTEX, BEAMS_FRAGMENT)
+  const sphere = createMesh(gl, plasmaProgram, sphereGeometry(96, 64))
+  const plane = createMesh(gl, beamProgram, planeGeometry())
+  const group = { x: 0, y: 0, scale: 1 }
+  let projection = perspective(FOV, 1, 0.1, 100)
+  let spin = axisAngle(0, 0, 1, 0.12)
   const drag = { pointer: -1, x: 0, y: 0, time: 0, velocityX: 0, velocityY: 0, held: 0, radius: 1 }
   let disc = { x: 0, y: 0, radius: 0 }
   let layoutKey = ""
@@ -80,15 +63,51 @@ export const createSunScene = ({
   let visible = true
   let frame = 0
   let ready = false
+  let lastTimestamp: number | null = null
+  const setUniforms = (program: WebGLProgram, values: Record<string, number>) => {
+    for (const [name, value] of Object.entries(values)) {
+      gl.uniform1f(gl.getUniformLocation(program, name), value)
+    }
+  }
+  // three.js's order and state: the opaque sphere first, then the beams blended behind it.
+  const render = () => {
+    const turned = rotation(spin)
+    const translation: [number, number, number] = [group.x, group.y, -CAMERA_Z]
 
-  camera.position.z = CAMERA_Z
-  spin.rotation.z = 0.12
-  spin.add(new Mesh(sphereGeometry, plasma))
-  beams.scale.setScalar(BEAM_EXTENT * 2)
-  beams.renderOrder = -1
-  group.add(spin, beams)
-  scene.add(group)
+    gl.clearColor(0, 0, 0, 0)
+    gl.depthMask(true)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+    gl.enable(gl.DEPTH_TEST)
+    gl.depthFunc(gl.LEQUAL)
+    gl.enable(gl.CULL_FACE)
+    gl.cullFace(gl.BACK)
+    gl.disable(gl.BLEND)
 
+    gl.useProgram(plasmaProgram)
+    gl.uniformMatrix4fv(gl.getUniformLocation(plasmaProgram, "projectionMatrix"), false, projection)
+    gl.uniformMatrix4fv(
+      gl.getUniformLocation(plasmaProgram, "modelViewMatrix"),
+      false,
+      modelView(turned, group.scale, translation),
+    )
+    gl.uniformMatrix3fv(gl.getUniformLocation(plasmaProgram, "normalMatrix"), false, turned)
+    setUniforms(plasmaProgram, { uTime: uniforms.uTime })
+    sphere.draw()
+
+    gl.enable(gl.BLEND)
+    gl.blendEquation(gl.FUNC_ADD)
+    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
+    gl.depthMask(false)
+    gl.useProgram(beamProgram)
+    gl.uniformMatrix4fv(gl.getUniformLocation(beamProgram, "projectionMatrix"), false, projection)
+    gl.uniformMatrix4fv(
+      gl.getUniformLocation(beamProgram, "modelViewMatrix"),
+      false,
+      modelView(IDENTITY, group.scale * BEAM_EXTENT * 2, translation),
+    )
+    setUniforms(beamProgram, uniforms)
+    plane.draw()
+  }
   const measure = () => {
     const canvasBox = canvas.getBoundingClientRect()
     const anchorBox = anchor.getBoundingClientRect()
@@ -115,15 +134,17 @@ export const createSunScene = ({
     }
 
     layoutKey = key
-    renderer.setSize(width, height, false)
-    camera.aspect = width / height
-    camera.updateProjectionMatrix()
+    canvas.width = Math.floor(width * pixelRatio)
+    canvas.height = Math.floor(height * pixelRatio)
+    gl.viewport(0, 0, Math.round(width * pixelRatio), Math.round(height * pixelRatio))
+    projection = perspective(FOV, width / height, 0.1, 100)
 
     const unit = VISIBLE_HEIGHT / height
 
-    group.position.set((x - width / 2) * unit, (height / 2 - y) * unit, 0)
-    group.scale.setScalar(disc.radius * unit)
-    beamUniforms.uSize.value = disc.radius / 235
+    group.x = (x - width / 2) * unit
+    group.y = (height / 2 - y) * unit
+    group.scale = disc.radius * unit
+    uniforms.uSize = disc.radius / 235
 
     return true
   }
@@ -134,8 +155,7 @@ export const createSunScene = ({
       return
     }
 
-    turn.setFromAxisAngle(axis.set(dy, dx, 0).normalize(), angle)
-    spin.quaternion.premultiply(turn)
+    spin = multiply(axisAngle(dy, dx, 0, angle), spin)
   }
   const onSun = (event: PointerEvent) =>
     Math.hypot(event.clientX - disc.x, event.clientY - disc.y) <= disc.radius * 1.03 &&
@@ -199,9 +219,10 @@ export const createSunScene = ({
   }
   const tick = (timestamp: number) => {
     frame = requestAnimationFrame(tick)
-    timer.update(timestamp)
 
-    const delta = Math.min(Math.max(timer.getDelta(), 0), 0.1)
+    const delta = Math.min(Math.max((timestamp - (lastTimestamp ?? timestamp)) / 1000, 0), 0.1)
+
+    lastTimestamp = timestamp
 
     if (!visible || document.hidden) {
       return
@@ -229,16 +250,16 @@ export const createSunScene = ({
     }
 
     if (!reducedMotion) {
-      uniforms.uTime.value += delta
+      uniforms.uTime += delta
       breathPhase += delta / BREATH_SECONDS
-      uniforms.uBreath.value = 0.5 - 0.5 * Math.cos(breathPhase * Math.PI * 2)
+      uniforms.uBreath = 0.5 - 0.5 * Math.cos(breathPhase * Math.PI * 2)
 
       if (!dragging && !coasting) {
-        spin.quaternion.premultiply(turn.setFromAxisAngle(up, delta * AUTO_SPIN))
+        spin = multiply(axisAngle(0, 1, 0, delta * AUTO_SPIN), spin)
       }
     }
 
-    renderer.render(scene, camera)
+    render()
 
     if (!ready) {
       ready = true
@@ -265,12 +286,10 @@ export const createSunScene = ({
       surface.removeEventListener("pointerup", onPointerUp)
       surface.removeEventListener("pointercancel", onPointerUp)
       surface.style.cursor = ""
-      timer.dispose()
-      sphereGeometry.dispose()
-      planeGeometry.dispose()
-      plasma.dispose()
-      beamMaterial.dispose()
-      renderer.dispose()
+      sphere.dispose()
+      plane.dispose()
+      gl.deleteProgram(plasmaProgram)
+      gl.deleteProgram(beamProgram)
     },
   }
 }

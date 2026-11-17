@@ -1,3 +1,4 @@
+import { isTagKey } from "@taiyomoe/config"
 import { isMediaLanguage, isSupportedLanguage, type MediaEditField } from "@taiyomoe/db/constants"
 import type {
   MediaEditChanges,
@@ -112,7 +113,13 @@ export const toChanges = (draft: MediaEditDraft, fields: readonly MediaEditField
     ...(has("contentRating") ? { contentRating: draft.contentRating } : {}),
     ...(has("startDate") ? { startDate: draft.startDate } : {}),
     ...(has("endDate") ? { endDate: draft.endDate } : {}),
-    ...(has("tags") ? { tags: draft.tags } : {}),
+    ...(has("tags")
+      ? {
+          tags: draft.tags.flatMap(({ key, isSpoiler }) =>
+            isTagKey(key) ? [{ key, isSpoiler }] : [],
+          ),
+        }
+      : {}),
     ...(has("links") ? { links: cleanLinks(draft.links) } : {}),
     ...(has("staffs")
       ? { staffs: draft.staffs.map(({ staffId, role }) => ({ staffId, role })) }

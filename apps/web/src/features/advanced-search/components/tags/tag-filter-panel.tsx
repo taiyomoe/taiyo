@@ -1,3 +1,4 @@
+import type { TagKey } from "@taiyomoe/config"
 import * as stylex from "@stylexjs/stylex"
 import { Search } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
@@ -22,7 +23,6 @@ import {
   getTagSections,
   nextTagState,
   setTagState,
-  type TagKey,
 } from "@/features/advanced-search/lib/search-tags"
 import { getContentLanguage } from "@/lib/locale"
 import { m } from "@/paraglide/messages"

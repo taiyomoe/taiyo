@@ -1,14 +1,23 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { SidebarInset, SidebarProvider } from "@taiyomoe/ui/components/ui/sidebar"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouteContext } from "@tanstack/react-router"
+import { lazy, Suspense, useEffect, useSyncExternalStore } from "react"
 import type { Session } from "@/lib/session"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
-import { ImpersonationBar } from "@/components/shell/impersonation-bar"
 import { ShellCommands } from "@/components/shell/shell-commands"
-import { UploadTray } from "@/components/shell/upload-tray"
+import { uploadStore } from "@/features/uploads/lib/chapter-batch/upload-store"
+import { sessionQueryOptions } from "@/lib/session"
 
+// Both only show in rare states, so they download when that state starts.
+const UploadTray = lazy(async () => ({
+  default: (await import("@/components/shell/upload-tray")).UploadTray,
+}))
+const ImpersonationBar = lazy(async () => ({
+  default: (await import("@/components/shell/impersonation-bar")).ImpersonationBar,
+}))
 const styles = stylex.create({
   provider: {
     "--navbar-height": "4.5rem",
@@ -50,9 +59,38 @@ export function AppShell({
         <AppSidebar fullHeight={overlayNavbar} sections={sections} />
         <SidebarInset sx={styles.inset}>{children}</SidebarInset>
       </div>
-      <UploadTray />
-      <ImpersonationBar />
+      <ActiveUploads />
+      <Impersonation />
       <ShellCommands />
     </SidebarProvider>
   )
+}
+
+function ActiveUploads() {
+  const queryClient = useQueryClient()
+  const uploading = useSyncExternalStore(
+    uploadStore.subscribe,
+    () => uploadStore.getSnapshot().length > 0,
+    () => false,
+  )
+
+  useEffect(() => {
+    uploadStore.connect(queryClient)
+  }, [queryClient])
+
+  return uploading ? (
+    <Suspense>
+      <UploadTray />
+    </Suspense>
+  ) : null
+}
+
+function Impersonation() {
+  const { data } = useQuery(sessionQueryOptions)
+
+  return typeof data?.session.impersonatedBy === "string" ? (
+    <Suspense>
+      <ImpersonationBar />
+    </Suspense>
+  ) : null
 }

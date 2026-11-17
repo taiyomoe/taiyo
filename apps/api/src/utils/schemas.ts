@@ -1,4 +1,4 @@
-import { config } from "@taiyomoe/config"
+import { config, tagKeys } from "@taiyomoe/config"
 import {
   CHAPTER_STATUSES,
   CONTENT_RATINGS,
@@ -89,9 +89,7 @@ export const fileSchema = (description: string) =>
 
 export const mediaTagsSchema = z
   .object({
-    key: z
-      .enum(Object.keys(config.tags))
-      .meta({ description: "The key of the tag.", example: "COWBOYS" }),
+    key: z.enum(tagKeys).meta({ description: "The key of the tag.", example: "COWBOYS" }),
     isSpoiler: z
       .boolean()
       .default(false)

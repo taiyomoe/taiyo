@@ -26,9 +26,6 @@ import {
 import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
-import BrazilFlag from "country-flag-icons/react/3x2/BR"
-import FranceFlag from "country-flag-icons/react/3x2/FR"
-import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
 import { use } from "react"
 import { filter, isTruthy, join, map, pipe, take } from "remeda"
 import type { Session } from "@/lib/session"
@@ -47,9 +44,9 @@ const THEMES = [
   { value: "system", label: m.shell_theme_system, icon: Monitor },
 ] as const
 const LANGUAGES = [
-  { value: "en", label: "English", flag: UnitedStatesFlag },
-  { value: "pt-BR", label: "Português (Brasil)", flag: BrazilFlag },
-  { value: "fr", label: "Français", flag: FranceFlag },
+  { value: "en", label: "English", flag: "US" },
+  { value: "pt-BR", label: "Português (Brasil)", flag: "BR" },
+  { value: "fr", label: "Français", flag: "FR" },
 ] as const satisfies ReadonlyArray<{ value: Locale; label: string; flag: unknown }>
 const styles = stylex.create({
   trigger: {
@@ -100,7 +97,7 @@ export function UserMenu({ user }: { user: Session["user"] }) {
     mutationFn: () => auth.signOut(),
   })
   const locale = getLocale()
-  const localeFlag = LANGUAGES.find(({ value }) => value === locale)?.flag ?? UnitedStatesFlag
+  const localeFlag = LANGUAGES.find(({ value }) => value === locale)?.flag ?? "US"
   const ThemeIcon = THEMES.find(({ value }) => value === theme.preference)?.icon ?? Moon
 
   return (
@@ -174,7 +171,7 @@ export function UserMenu({ user }: { user: Session["user"] }) {
         </MenuSub>
         <MenuSub>
           <MenuSubTrigger>
-            <Flag flag={localeFlag} />
+            <Flag country={localeFlag} />
             {m.shell_language()}
           </MenuSubTrigger>
           <MenuSubPopup sx={styles.subPopup}>
@@ -187,7 +184,7 @@ export function UserMenu({ user }: { user: Session["user"] }) {
               {LANGUAGES.map(({ value, label, flag }) => (
                 <MenuRadioItem key={value} lang={value} value={value}>
                   <span sx={styles.radioLabel}>
-                    <Flag flag={flag} />
+                    <Flag country={flag} />
                     {label}
                   </span>
                 </MenuRadioItem>

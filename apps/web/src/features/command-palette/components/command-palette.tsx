@@ -2,12 +2,10 @@ import * as stylex from "@stylexjs/stylex"
 import { CommandDialog, CommandDialogPopup } from "@taiyomoe/ui/components/ui/command"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { HotkeysProvider } from "@tanstack/react-hotkeys"
-import { lazy, Suspense, useEffect, useRef, useState } from "react"
+import { useRef } from "react"
+import { PaletteBody } from "@/features/command-palette/components/palette-body"
 import { m } from "@/paraglide/messages"
 
-const PaletteBody = lazy(async () => ({
-  default: (await import("@/features/command-palette/components/palette-body")).PaletteBody,
-}))
 const styles = stylex.create({
   popup: {
     maxHeight: { default: "min(36rem, 80dvh)", [breakpoints.maxSm]: "none" },
@@ -29,27 +27,6 @@ export function CommandPalette({
   onOpenChange: (open: boolean) => void
 }) {
   const escapeRef = useRef<(() => boolean) | null>(null)
-  const [warm, setWarm] = useState(false)
-
-  useEffect(() => {
-    const warmUp = () => {
-      setWarm(true)
-    }
-
-    if (typeof requestIdleCallback === "undefined") {
-      const timer = setTimeout(warmUp, 1500)
-
-      return () => {
-        clearTimeout(timer)
-      }
-    }
-
-    const handle = requestIdleCallback(warmUp, { timeout: 2000 })
-
-    return () => {
-      cancelIdleCallback(handle)
-    }
-  }, [])
 
   return (
     <CommandDialog
@@ -69,20 +46,16 @@ export function CommandPalette({
         portalProps={{ keepMounted: true }}
         sx={styles.popup}
       >
-        {warm || open ? (
-          <HotkeysProvider enabled={open} exclusive scope="command-palette">
-            <Suspense>
-              <PaletteBody
-                escapeRef={escapeRef}
-                initialQuery={initialQuery}
-                open={open}
-                onClose={() => {
-                  onOpenChange(false)
-                }}
-              />
-            </Suspense>
-          </HotkeysProvider>
-        ) : null}
+        <HotkeysProvider enabled={open} exclusive scope="command-palette">
+          <PaletteBody
+            escapeRef={escapeRef}
+            initialQuery={initialQuery}
+            open={open}
+            onClose={() => {
+              onOpenChange(false)
+            }}
+          />
+        </HotkeysProvider>
       </CommandDialogPopup>
     </CommandDialog>
   )

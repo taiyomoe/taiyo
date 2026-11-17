@@ -8,12 +8,8 @@ import { MediaAltTitles } from "@/features/media/components/media-info/media-alt
 import { MediaDetails } from "@/features/media/components/media-info/media-details"
 import { MediaLinks } from "@/features/media/components/media-info/media-links"
 import { MediaTagList } from "@/features/media/components/media-info/media-tag-list"
-import {
-  getAltTitles,
-  getMediaLinks,
-  getMediaTags,
-  getSynopsis,
-} from "@/features/media/lib/media-labels"
+import { getAltTitles, getMediaLinks, getSynopsis } from "@/features/media/lib/media-labels"
+import { getMediaTags } from "@/features/media/lib/media-tags"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

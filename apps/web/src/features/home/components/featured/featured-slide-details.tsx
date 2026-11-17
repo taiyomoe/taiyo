@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { config } from "@taiyomoe/config"
+import { isTagKey, tags } from "@taiyomoe/config"
 import { breakpoints, colors, font, motion, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { FeaturedMedia } from "@/features/media/api/medias"
@@ -111,11 +111,10 @@ const styles = stylex.create({
     overflowWrap: "anywhere",
   },
 })
-const isTagKey = (key: string): key is keyof typeof config.tags => key in config.tags
-const getGenres = (tags: string[]) =>
-  tags
+const getGenres = (mediaTags: string[]) =>
+  mediaTags
     .filter(isTagKey)
-    .map((key) => config.tags[key])
+    .map((key) => tags[key])
     .filter((tag) => tag.category === "Genre")
     .slice(0, MAX_GENRES)
     .map((tag) => localizeTagName(tag.name))

@@ -1,9 +1,7 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
-import type { FlagComponent } from "country-flag-icons/react/3x2"
 import * as stylex from "@stylexjs/stylex"
 import { Globe } from "@taiyomoe/ui/components/icons"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useEffect, useState } from "react"
 import type { LatestChapter, LatestMediaUpdate } from "@/features/chapters/api/chapters"
 import { COUNTRY_FLAGS, getLanguageCode, LANGUAGE_FLAGS } from "@/components/flags/language-flags"
 const styles = stylex.create({
@@ -49,23 +47,21 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
 })
-const USER_COUNTRY_FLAGS = import.meta.glob<string>("/node_modules/country-flag-icons/3x2/*.svg", {
-  query: "?url",
+// URLs only: the flags download as images, so the bundle carries none of their SVG.
+const FLAG_URLS = import.meta.glob<string>("/node_modules/country-flag-icons/3x2/*.svg", {
+  query: "?url&no-inline",
   import: "default",
+  eager: true,
 })
+const getFlagUrl = (country: string) =>
+  FLAG_URLS[`/node_modules/country-flag-icons/3x2/${country.toUpperCase()}.svg`] ?? null
 
-export function Flag({ flag: Icon, sx }: { flag: FlagComponent | string | null; sx?: Sx }) {
-  if (Icon === null) {
-    return <span aria-hidden sx={[styles.flag, sx]} />
-  }
+export function Flag({ country, sx }: { country: string; sx?: Sx | undefined }) {
+  const src = getFlagUrl(country)
 
   return (
     <span aria-hidden sx={[styles.flag, sx]}>
-      {typeof Icon === "string" ? (
-        <img alt="" decoding="async" src={Icon} sx={styles.svg} />
-      ) : (
-        <Icon {...stylex.props(styles.svg)} />
-      )}
+      {src === null ? null : <img alt="" decoding="async" src={src} sx={styles.svg} />}
     </span>
   )
 }
@@ -78,7 +74,7 @@ export function LanguageFlag({ language, sx }: { language: LatestChapter["langua
       <Globe {...stylex.props(styles.neutralIcon)} />
     </span>
   ) : (
-    <Flag flag={flag} sx={sx} />
+    <Flag country={flag} sx={sx} />
   )
 }
 
@@ -92,27 +88,5 @@ export function LanguageChip({ language }: { language: LatestChapter["language"]
 }
 
 export function CountryFlag({ country }: { country: LatestMediaUpdate["countryOfOrigin"] }) {
-  return <Flag flag={COUNTRY_FLAGS[country]} />
-}
-
-export function UserCountryFlag({ country }: { country: string }) {
-  const [loaded, setLoaded] = useState<{ country: string; src: string } | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    const load =
-      USER_COUNTRY_FLAGS[`/node_modules/country-flag-icons/3x2/${country.toUpperCase()}.svg`]
-
-    void load?.().then((src) => {
-      if (!cancelled) {
-        setLoaded({ country, src })
-      }
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [country])
-
-  return <Flag flag={loaded?.country === country ? loaded.src : null} />
+  return <Flag country={COUNTRY_FLAGS[country]} />
 }
