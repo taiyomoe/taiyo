@@ -124,6 +124,35 @@ describe("GET /lists/managed", () => {
     expect(res.body.data[0]?.owner).toMatchObject({ id: userId, username })
   })
 
+  test("searches by the display name of the owner", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const { userId } = await signInAs(services)
+    const displayUsername = `Owner ${userId.slice(0, 8)}`
+
+    await services.db
+      .updateTable("users")
+      .set({ displayUsername })
+      .where("id", "=", userId)
+      .execute()
+
+    const list = await services.db
+      .insertInto("userLists")
+      .values({ userId, name: "Anything", visibility: "PUBLIC" })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+    const res = await api<ManagedList[]>(
+      app,
+      `/lists/managed?search=${encodeURIComponent(displayUsername)}`,
+      { headers },
+    )
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.map((item) => item.id)).toEqual([list.id])
+  })
+
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     expectFailure(await api(app, "/lists/managed"), 401, "UNAUTHORIZED")
   })

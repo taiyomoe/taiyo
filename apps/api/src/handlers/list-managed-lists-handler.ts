@@ -14,7 +14,7 @@ import { listSummarySchema, selectListSummaries } from "../utils/user-lists"
 const querySchema = paginationQuerySchema.extend({
   search: z.string().trim().min(1).max(100).optional().meta({
     description:
-      "Only list the lists whose name or owner's username contains this text, ignoring case.",
+      "Only list the lists whose name, or owner's username or display name, contains this text, ignoring case.",
     example: "shounen",
   }),
 })
@@ -74,6 +74,7 @@ export const listManagedListsHandler = new Hono().get(
               eb.or([
                 eb("userLists.name", "ilike", `%${escapeLike(search)}%`),
                 eb("users.username", "ilike", `%${escapeLike(search)}%`),
+                eb("users.displayUsername", "ilike", `%${escapeLike(search)}%`),
               ]),
             ]),
       ])
