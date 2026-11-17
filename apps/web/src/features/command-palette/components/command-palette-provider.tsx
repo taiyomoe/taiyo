@@ -1,14 +1,16 @@
 import type { ReactNode } from "react"
 import { useHotkeys } from "@tanstack/react-hotkeys"
-import { lazy, Suspense, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { createCommandRegistry } from "@/features/command-palette/lib/command-registry"
 import { PaletteContext } from "@/features/command-palette/lib/palette-context"
 import { appHotkeys } from "@/lib/app-hotkeys"
+import { createLazyComponent } from "@/lib/lazy-component"
 
 // The palette downloads once the browser is idle, so it still opens at once on the first shortcut.
-const CommandPalette = lazy(async () => ({
-  default: (await import("@/features/command-palette/components/command-palette")).CommandPalette,
-}))
+const CommandPalette = createLazyComponent(
+  async () =>
+    (await import("@/features/command-palette/components/command-palette")).CommandPalette,
+)
 
 export function CommandPaletteProvider({ children }: { children: ReactNode }) {
   const [registry] = useState(createCommandRegistry)
@@ -66,13 +68,13 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
     >
       {children}
       {warm || state.open ? (
-        <Suspense>
-          <CommandPalette
-            initialQuery={state.initialQuery}
-            onOpenChange={setOpen}
-            open={state.open}
-          />
-        </Suspense>
+        // A download that failed offline is tried again when the palette opens.
+        <CommandPalette
+          initialQuery={state.initialQuery}
+          onOpenChange={setOpen}
+          open={state.open}
+          retry={state.open}
+        />
       ) : null}
     </PaletteContext>
   )
