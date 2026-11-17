@@ -49,6 +49,7 @@ import type { UserList } from "./models/user-list-model"
 import type { UserListVote } from "./models/user-list-vote-model"
 import type { User } from "./models/user-model"
 import type { UserProfile } from "./models/user-profile-model"
+import type { UserReport } from "./models/user-report-model"
 import type { Verification } from "./models/verification-model"
 
 export type DB = {
@@ -102,6 +103,7 @@ export type DB = {
   userLists: UserList
   userListVotes: UserListVote
   userProfiles: UserProfile
+  userReports: UserReport
   users: User
   verifications: Verification
 }

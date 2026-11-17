@@ -127,6 +127,8 @@ export * from "./models/user-list-vote-model"
 
 export * from "./models/user-profile-model"
 
+export * from "./models/user-report-model"
+
 export * from "./models/user-model"
 
 export * from "./models/verification-model"

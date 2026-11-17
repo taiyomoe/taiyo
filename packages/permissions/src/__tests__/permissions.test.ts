@@ -74,6 +74,8 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "groupCreationRequest.review": ["ADMIN"],
   "groupReport.create": ROLES,
   "groupReport.review": ["MODERATOR", "ADMIN"],
+  "userReport.create": ROLES,
+  "userReport.review": ["MODERATOR", "ADMIN"],
   "comment.create": ROLES,
   "comment.delete": ["MODERATOR", "ADMIN"],
   "comment.review": ["MODERATOR", "ADMIN"],

@@ -344,6 +344,33 @@ export const reviewNoteSchema = z
   .max(2000)
   .meta({ description: "Explanation shown to the requester.", example: "No proof of ownership." })
 
+const optionalReportTextSchema = z
+  .string()
+  .trim()
+  .max(2000)
+  .optional()
+  .transform((value) => (value === undefined || value === "" ? null : value))
+
+export const reportDetailsSchema = (example: string) =>
+  optionalReportTextSchema.meta({
+    description: "Anything that helps the moderators look into it, up to 2000 characters.",
+    example,
+  })
+
+export const reportOutcomeSchema = (subject: string) =>
+  z.enum(["RESOLVED", "DISMISSED"]).meta({
+    description: `The outcome of the review: \`RESOLVED\` when action was taken on the ${subject}, \`DISMISSED\` when nothing was wrong.`,
+    example: "RESOLVED",
+  })
+
+export type ReportOutcome = z.infer<ReturnType<typeof reportOutcomeSchema>>
+
+export const reportNoteSchema = (example: string) =>
+  optionalReportTextSchema.meta({
+    description: "An internal note about the decision, up to 2000 characters.",
+    example,
+  })
+
 export const displayNameSchema = z.string().trim().regex(config.auth.displayName.regex)
 
 export const profileAboutSchema = z.partialRecord(

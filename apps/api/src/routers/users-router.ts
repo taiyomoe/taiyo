@@ -2,6 +2,7 @@ import { Hono } from "hono"
 import { addUsersPointsHandler } from "../handlers/add-users-points-handler"
 import { banUserHandler } from "../handlers/ban-user-handler"
 import { createListHandler } from "../handlers/create-list-handler"
+import { createUserReportHandler } from "../handlers/create-user-report-handler"
 import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-handler"
 import { deleteMyAvatarHandler } from "../handlers/delete-my-avatar-handler"
 import { deleteMyBannerHandler } from "../handlers/delete-my-banner-handler"
@@ -69,6 +70,7 @@ export const usersRouter = new Hono()
   .route("/", setUserRoleHandler)
   .route("/", banUserHandler)
   .route("/", unbanUserHandler)
+  .route("/", createUserReportHandler)
   .route("/", followUserHandler)
   .route("/", unfollowUserHandler)
   .route("/", listFollowersHandler)

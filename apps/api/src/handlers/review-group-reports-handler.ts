@@ -7,21 +7,17 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { bulkIdsSchema, bulkResultSchema, skippedSchema } from "../utils/bulk"
-import {
-  groupReportNoteSchema,
-  groupReportOutcomeSchema,
-  reviewGroupReport,
-} from "../utils/group-reports"
+import { reviewGroupReport } from "../utils/group-reports"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, reportNoteSchema, reportOutcomeSchema } from "../utils/schemas"
 
 const reviewSchema = z.object({
   reportIds: bulkIdsSchema("reports", [
     "9a4c2e7b-3d8f-4a1c-b6e5-7f2d9c4a1e38",
     "c6e3b9d1-8a2f-4c7e-9d4b-2a6f8e1c3b57",
   ]),
-  status: groupReportOutcomeSchema,
-  note: groupReportNoteSchema,
+  status: reportOutcomeSchema("group"),
+  note: reportNoteSchema("Confirmed with the original group."),
 })
 const skippedReportSchema = skippedSchema(
   "report",

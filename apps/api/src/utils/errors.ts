@@ -268,6 +268,22 @@ const userErrors = {
     message: "Your account already has a password. Change it instead.",
     code: 409,
   },
+  USER_REPORT_SELF: {
+    message: "You cannot report yourself.",
+    code: 403,
+  },
+  USER_REPORT_EXISTS: {
+    message: "You already reported this user. Our moderators will look into it.",
+    code: 409,
+  },
+  USER_REPORT_NOT_FOUND: {
+    message: "The requested user report was not found.",
+    code: 404,
+  },
+  USER_REPORT_NOT_PENDING: {
+    message: "This report was already reviewed.",
+    code: 409,
+  },
 } as const
 const followErrors = {
   FOLLOW_SELF: {

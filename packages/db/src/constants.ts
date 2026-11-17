@@ -173,6 +173,20 @@ export const USER_LIST_VISIBILITIES = ["PUBLIC", "PRIVATE"] as const
 
 export type UserListVisibility = (typeof USER_LIST_VISIBILITIES)[number]
 
+export const USER_REPORT_REASONS = [
+  "INAPPROPRIATE_PROFILE",
+  "IMPERSONATION",
+  "HARASSMENT",
+  "SPAM",
+  "OTHER",
+] as const
+
+export type UserReportReason = (typeof USER_REPORT_REASONS)[number]
+
+export const USER_REPORT_STATUSES = ["PENDING", "RESOLVED", "DISMISSED"] as const
+
+export type UserReportStatus = (typeof USER_REPORT_STATUSES)[number]
+
 export const MEDIA_TYPES = ["MANGA", "MANHWA", "MANHUA", "LIGHT_NOVEL", "OTHER"] as const
 
 export type MediaType = (typeof MEDIA_TYPES)[number]

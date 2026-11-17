@@ -40,6 +40,9 @@ const overviewSchema = z.object({
       groupReports: queueCount(
         "The number of group reports waiting for review, or null when you cannot review them.",
       ),
+      userReports: queueCount(
+        "The number of user reports waiting for review, or null when you cannot review them.",
+      ),
     })
     .meta({ description: "The number of items waiting in each review queue." }),
 })
@@ -80,6 +83,7 @@ export const getMyOverviewHandler = new Hono().get(
       pageReportQueue,
       commentReportQueue,
       groupReportQueue,
+      userReportQueue,
     ] = await Promise.all([
       db
         .selectFrom("chapters")
@@ -177,6 +181,13 @@ export const getMyOverviewHandler = new Hono().get(
             .where("groups.deletedAt", "is", null)
             .executeTakeFirst()
         : null,
+      can("userReport.review")
+        ? db
+            .selectFrom("userReports")
+            .select(total)
+            .where("status", "=", "PENDING")
+            .executeTakeFirst()
+        : null,
     ])
     const tally = (row: { pending: string; accepted: string; rejected: string }) => ({
       pending: Number(row.pending),
@@ -199,6 +210,7 @@ export const getMyOverviewHandler = new Hono().get(
         pageReports: pageReportQueue === null ? null : count(pageReportQueue),
         commentReports: commentReportQueue === null ? null : count(commentReportQueue),
         groupReports: groupReportQueue === null ? null : count(groupReportQueue),
+        userReports: userReportQueue === null ? null : count(userReportQueue),
       },
     })
   },

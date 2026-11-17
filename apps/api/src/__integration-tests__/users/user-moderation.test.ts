@@ -328,11 +328,11 @@ describe("GET /users/me/overview", () => {
     expect(mine.body).toMatchObject({
       data: {
         chapters: { pending: 1, accepted: 1, rejected: 1 },
-        queues: { chapters: null, suggestions: null, groupRequests: null },
+        queues: { chapters: null, suggestions: null, groupRequests: null, userReports: null },
       },
     })
     expect(theirs.body).toMatchObject({
-      data: { queues: { chapters: 1, suggestions: 0, groupRequests: null } },
+      data: { queues: { chapters: 1, suggestions: 0, groupRequests: null, userReports: null } },
     })
   })
   test("counts the report queues for the moderators", async ({ app, services }) => {
@@ -395,5 +395,24 @@ describe("GET /users/me/overview", () => {
       commentReports: null,
       groupReports: null,
     })
+  })
+
+  test("counts the pending user reports for moderators", async ({ app, services }) => {
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const reported = await signInAs(services)
+    const reporter = await signInAs(services)
+    const other = await signInAs(services)
+
+    await services.db
+      .insertInto("userReports")
+      .values([
+        { userId: reported.userId, reporterId: reporter.userId, reason: "SPAM" },
+        { userId: reported.userId, reporterId: other.userId, reason: "SPAM", status: "RESOLVED" },
+      ])
+      .execute()
+
+    const res = await api(app, "/users/me/overview", { headers: moderator.headers })
+
+    expect(res.body).toMatchObject({ data: { queues: { userReports: 1 } } })
   })
 })
