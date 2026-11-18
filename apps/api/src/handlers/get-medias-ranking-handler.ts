@@ -1,4 +1,3 @@
-import { cacheClient } from "@taiyomoe/cache"
 import {
   type ContentRating,
   type DB,
@@ -16,6 +15,7 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { getMainCoverUrls, getMainTitles } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
+  getCachedBoard,
   getRankingWindow,
   RANKING_CACHE_TTL_SECONDS,
   rankingBoardSchema,
@@ -166,16 +166,10 @@ export const getMediasRankingHandler = new Hono().get(
     const { db, cacheNamespace } = c.var
     const { period, contentRating } = c.var.query
     const contentRatings = [...new Set(contentRating)].sort()
-    const cacheKey = `${cacheNamespace}medias:${period}:${getRankingWindow(period).startsAt ?? "all"}:${contentRatings.join(",")}`
-    const cached = await cacheClient.rankings.get<Board>(cacheKey)
-
-    if (cached !== null) {
-      return c.ok(cached)
-    }
-
-    const board = await loadBoard(db, period, contentRatings)
-
-    await cacheClient.rankings.set(cacheKey, board, RANKING_CACHE_TTL_SECONDS)
+    const board = await getCachedBoard(
+      `${cacheNamespace}medias:${period}:${getRankingWindow(period).startsAt ?? "all"}:${contentRatings.join(",")}`,
+      () => loadBoard(db, period, contentRatings),
+    )
 
     return c.ok(board)
   },

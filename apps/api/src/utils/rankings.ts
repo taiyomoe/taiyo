@@ -1,9 +1,34 @@
+import { cacheClient } from "@taiyomoe/cache"
 import { ALL_TIME_START, getRankingPeriodEnd, getRankingPeriodStart } from "@taiyomoe/db"
 import { RANKING_SIZE } from "@taiyomoe/queue"
 import z from "zod"
 import { userSummarySchema } from "./schemas"
 
 export const RANKING_CACHE_TTL_SECONDS = 300
+
+/**
+ * The board cached under `key`, or loaded and cached. An empty board is never cached: it costs
+ * next to nothing to load, and once a period starts it would hide its first entries for minutes,
+ * saying nobody is ranked next to the live standing of a reader who already is.
+ */
+export const getCachedBoard = async <Board extends { entries: unknown[] }>(
+  key: string,
+  load: () => Promise<Board>,
+) => {
+  const cached = await cacheClient.rankings.get<Board>(key)
+
+  if (cached !== null) {
+    return cached
+  }
+
+  const board = await load()
+
+  if (board.entries.length > 0) {
+    await cacheClient.rankings.set(key, board, RANKING_CACHE_TTL_SECONDS)
+  }
+
+  return board
+}
 
 const KINDS = { week: "WEEK", month: "MONTH" } as const
 const PERIODS = ["week", "month", "all"] as const

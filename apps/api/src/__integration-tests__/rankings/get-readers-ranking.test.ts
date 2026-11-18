@@ -130,6 +130,23 @@ describe("GET /rankings/readers", () => {
     expect(ranking.me).toMatchObject({ rank: 1, value: 7, above: null })
   })
 
+  test("ranks the first reader of a period at once, never caching an empty ranking", async ({
+    app,
+    services,
+  }) => {
+    const reader = await signInAs(services)
+    const target = await seedReadingTarget(services)
+
+    expect((await getRanking(app, "", reader.headers)).entries).toEqual([])
+
+    await creditChapters(services, { userId: reader.userId, target, at: new Date() })
+
+    const ranking = await getRanking(app, "", reader.headers)
+
+    expect(ranking.entries.map((entry) => entry.user.id)).toEqual([reader.userId])
+    expect(ranking.me).toMatchObject({ rank: 1, above: null })
+  })
+
   test("returns VALIDATION_ERROR for an unknown period", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const res = await api(app, "/rankings/readers?period=year", { headers })
