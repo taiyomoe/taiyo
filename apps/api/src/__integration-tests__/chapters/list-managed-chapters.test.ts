@@ -103,11 +103,28 @@ describe("GET /chapters", () => {
     expectFailure(await api(app, "/chapters", { headers }), 403, "FORBIDDEN")
   })
 
+  test("lists only their own uploads to an intern without groups", async ({ app, services }) => {
+    const admin = await signInAs(services, { role: "ADMIN" })
+    const { headers, userId } = await signInAs(services, { role: "UPLOADER_INTERN" })
+    const mediaId = await seedMedia(services, admin.userId)
+    const own = await seedChapter(services, { mediaId, uploaderId: userId, number: 1 })
+
+    await seedChapter(services, { mediaId, uploaderId: admin.userId, number: 2 })
+
+    const res = await api<ManagedChapter[]>(app, `/chapters?mediaId=${mediaId}`, { headers })
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.map((chapter) => chapter.id)).toEqual([own])
+  })
+
   test("rejects users without a role or a group chapter permission with FORBIDDEN", async ({
     app,
     services,
   }) => {
-    const { headers } = await signInAs(services, { role: "UPLOADER_INTERN" })
+    const { headers } = await signInAs(services)
 
     expectFailure(await api(app, "/chapters", { headers }), 403, "FORBIDDEN")
   })

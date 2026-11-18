@@ -23,7 +23,7 @@ export const linkChapterGroupHandler = new Hono().post(
   describeRoute({
     summary: "Link a group to a chapter",
     description:
-      "Credits a group on a chapter. Anyone who can edit the chapter's credits can credit any group.\n\n**Required access:** uploader or admin, a moderator or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading or pending.",
+      "Credits a group on a chapter. Anyone who can edit the chapter's credits can credit any group.\n\n**Required access:** uploader or admin, a moderator, the uploader intern who uploaded it or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading or pending.",
     tags: ["Chapter groups"],
     responses: {
       201: {

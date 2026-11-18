@@ -55,13 +55,10 @@ const setup = async (services: Services) => {
 }
 
 describe("submitting", () => {
-  test("regular users, interns and moderators send chapters to review", async ({
-    app,
-    services,
-  }) => {
+  test("regular users and moderators send chapters to review", async ({ app, services }) => {
     const { mediaId, groupId } = await setup(services)
 
-    for (const role of ["USER", "UPLOADER_INTERN", "MODERATOR"] as const) {
+    for (const role of ["USER", "MODERATOR"] as const) {
       const { headers } = await signInAs(services, { role })
       const res = await create(app, mediaId, headers, { groupIds: [groupId] })
 
@@ -70,12 +67,13 @@ describe("submitting", () => {
     }
   })
 
-  test("uploaders, admins and members publishing for their group upload straight to publication", async ({
+  test("interns, uploaders, admins and members publishing for their group upload straight to publication", async ({
     app,
     services,
   }) => {
     const { admin, reviewer, mediaId, groupId } = await setup(services)
     const member = await signInAs(services)
+    const intern = await signInAs(services, { role: "UPLOADER_INTERN" })
 
     await seedMembership(services, {
       groupId,
@@ -83,7 +81,7 @@ describe("submitting", () => {
       permissions: ["UPLOAD_CHAPTERS"],
     })
 
-    for (const headers of [admin.headers, reviewer.headers]) {
+    for (const headers of [admin.headers, reviewer.headers, intern.headers]) {
       expect((await create(app, mediaId, headers)).body).toMatchObject({
         data: { status: "UPLOADING" },
       })
