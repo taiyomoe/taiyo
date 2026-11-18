@@ -1,4 +1,3 @@
-import { cacheClient } from "@taiyomoe/cache"
 import { ALL_TIME_START, type DB, isBannedSql, type Kysely, sql } from "@taiyomoe/db"
 import { getLevelProgress } from "@taiyomoe/db/levels"
 import { RANKING_SIZE, READER_ORDER, selectReaderTotals } from "@taiyomoe/queue"
@@ -9,6 +8,7 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
+  getCachedBoard,
   getRankingWindow,
   RANKING_CACHE_TTL_SECONDS,
   rankedUserSchema,
@@ -242,13 +242,10 @@ export const getReadersRankingHandler = new Hono().get(
     const { db, user, cacheNamespace } = c.var
     const { period } = c.var.query
     const window = getRankingWindow(period)
-    const cacheKey = `${cacheNamespace}readers:${period}:${window.startsAt ?? "all"}`
-    const cached = await cacheClient.rankings.get<Board>(cacheKey)
-    const board = cached ?? (await loadBoard(db, period, window))
-
-    if (cached === null) {
-      await cacheClient.rankings.set(cacheKey, board, RANKING_CACHE_TTL_SECONDS)
-    }
+    const board = await getCachedBoard(
+      `${cacheNamespace}readers:${period}:${window.startsAt ?? "all"}`,
+      () => loadBoard(db, period, window),
+    )
 
     return c.ok({
       ...board,
