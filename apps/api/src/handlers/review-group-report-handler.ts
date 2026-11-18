@@ -1,4 +1,5 @@
 import { groupReportAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -21,8 +22,7 @@ export const reviewGroupReportHandler = new Hono().post(
   "/:id/review",
   describeRoute({
     summary: "Review a group report",
-    description:
-      "Reviews a pending report on a group, closing it as resolved or dismissed. The reporter is notified of the outcome, unless it is you.\n\n**Required roles:** moderator, admin.",
+    description: `Reviews a pending report on a group, closing it as resolved or dismissed. The reporter is notified of the outcome, unless it is you, and earns ${config.reports.rewardPoints} points when it is resolved.\n\n**Required roles:** moderator, admin.`,
     tags: ["Group reports"],
     responses: {
       201: {

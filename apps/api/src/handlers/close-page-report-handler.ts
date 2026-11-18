@@ -1,4 +1,5 @@
 import { chapterReportAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -23,8 +24,7 @@ export const closePageReportHandler = new Hono().patch(
   "/page-reports/:reportId",
   describeRoute({
     summary: "Close a page report",
-    description:
-      "Closes a page report as resolved or dismissed, along with every other open report on the same page. The reporter of each closed report is notified of the outcome, unless it is you.\n\n**Required roles:** uploader, moderator, admin.",
+    description: `Closes a page report as resolved or dismissed, along with every other open report on the same page. The reporter of each closed report is notified of the outcome, unless it is you, and earns ${config.reports.rewardPoints} points when it is resolved.\n\n**Required roles:** uploader, moderator, admin.`,
     tags: ["Page reports"],
     responses: {
       200: {

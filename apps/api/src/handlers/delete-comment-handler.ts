@@ -1,4 +1,5 @@
 import { commentAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { COMMENT_DELETIONS, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -15,8 +16,7 @@ export const deleteCommentHandler = new Hono().delete(
   "/:id",
   describeRoute({
     summary: "Delete a comment",
-    description:
-      "Deletes a comment. A top-level comment with visible replies stays as a placeholder saying who removed it, and its replies stay. Deleting someone else's comment also resolves its open reports, and their reporters are notified.\n\n**Required access:** the author of the comment or the owner of the profile it is on, or moderator or admin.",
+    description: `Deletes a comment. A top-level comment with visible replies stays as a placeholder saying who removed it, and its replies stay. Deleting someone else's comment also resolves its open reports. When a moderator or admin deletes it, their reporters are notified and earn ${config.reports.rewardPoints} points each.\n\n**Required access:** the author of the comment or the owner of the profile it is on, or moderator or admin.`,
     tags: ["Comments"],
     responses: {
       200: {

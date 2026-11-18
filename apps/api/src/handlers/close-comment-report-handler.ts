@@ -1,4 +1,5 @@
 import { commentReportAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -18,8 +19,7 @@ export const closeCommentReportHandler = new Hono().patch(
   "/:id",
   describeRoute({
     summary: "Close a comment report",
-    description:
-      "Closes a report as resolved or dismissed, along with every other open report on the same comment. Deleting the comment as a moderator already resolves its reports.\n\n**Required roles:** moderator, admin.",
+    description: `Closes a report as resolved or dismissed, along with every other open report on the same comment. The reporter of each closed report is notified of the outcome, unless it is you, and earns ${config.reports.rewardPoints} points when it is resolved. Deleting the comment as a moderator already resolves its reports.\n\n**Required roles:** moderator, admin.`,
     tags: ["Comment reports"],
     responses: {
       200: {

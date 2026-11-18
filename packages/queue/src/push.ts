@@ -239,7 +239,8 @@ const moderationMessage = (row: PushRow, payload: NotificationPayload) => {
     } satisfies PushMessage
   }
 
-  const title = `The moderation team ${payload.outcome === "RESOLVED" ? "resolved" : "dismissed"} your report`
+  const reviewed = `The moderation team ${payload.outcome === "RESOLVED" ? "resolved" : "dismissed"} your report`
+  const title = payload.points === undefined ? reviewed : `${reviewed}: +${payload.points} points`
 
   if (payload.kind === "PAGE") {
     return {
