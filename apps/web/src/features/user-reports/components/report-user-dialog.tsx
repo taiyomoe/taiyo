@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { config } from "@taiyomoe/config"
 import { USER_REPORT_REASONS, type UserReportReason } from "@taiyomoe/db/constants"
 import { Flag } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
@@ -110,7 +111,10 @@ export function ReportUserDialog({
       <DialogPopup>
         <DialogHeader>
           <DialogTitle sx={styles.title}>{renderWithName(m.group_report_title, user)}</DialogTitle>
-          <DialogDescription>{m.user_report_description()}</DialogDescription>
+          <DialogDescription>
+            {m.user_report_description()}{" "}
+            {m.report_reward_hint({ points: config.reports.rewardPoints })}
+          </DialogDescription>
         </DialogHeader>
         <form
           onSubmit={(event) => {

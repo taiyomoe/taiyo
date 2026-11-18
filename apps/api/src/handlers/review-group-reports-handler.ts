@@ -1,4 +1,5 @@
 import { groupReportAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -33,8 +34,7 @@ export const reviewGroupReportsHandler = new Hono().post(
   "/review",
   describeRoute({
     summary: "Review group reports in bulk",
-    description:
-      "Reviews several pending reports on groups at once, closing them all as resolved or dismissed with the same note. Reports that do not exist or were already reviewed are skipped and reported. The reporter of each reviewed report is notified of the outcome, unless it is you.\n\n**Required roles:** moderator, admin.",
+    description: `Reviews several pending reports on groups at once, closing them all as resolved or dismissed with the same note. Reports that do not exist or were already reviewed are skipped and reported. The reporter of each reviewed report is notified of the outcome, unless it is you, and earns ${config.reports.rewardPoints} points when it is resolved.\n\n**Required roles:** moderator, admin.`,
     tags: ["Group reports"],
     responses: {
       201: {

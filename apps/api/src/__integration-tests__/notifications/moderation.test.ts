@@ -1,4 +1,5 @@
 import type { Hono } from "hono"
+import { config } from "@taiyomoe/config"
 import { sendPendingPushes } from "@taiyomoe/queue"
 import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
@@ -405,12 +406,14 @@ describe("report review notifications", () => {
       id: onSunray,
       kind: "GROUP",
       outcome: "RESOLVED",
+      points: 10,
       group: { id: sunray, name: "Sunray Scans", deleted: false },
     })
     expect(reports.get(onMoonlight)).toEqual({
       id: onMoonlight,
       kind: "GROUP",
       outcome: "DISMISSED",
+      points: 0,
       group: { id: moonlight, name: "Moonlight Scans", deleted: false },
     })
     expect(await listNotifications(app, moderator.headers)).toEqual([])
@@ -452,16 +455,85 @@ describe("report review notifications", () => {
       id: onRude,
       kind: "USER",
       outcome: "DISMISSED",
+      points: 0,
       user: await getHandle(services, rude.userId),
     })
     expect(reports.get(onFake)).toEqual({
       id: onFake,
       kind: "USER",
       outcome: "RESOLVED",
+      points: 10,
       user: await getHandle(services, fake.userId),
     })
     expect(await listNotifications(app, moderator.headers)).toEqual([])
     expect(await listNotifications(app, rude.headers)).toEqual([])
+  })
+})
+
+describe("report rewards", () => {
+  test("credit the reporter for each report the moderation team acts on, and for nothing else", async ({
+    app,
+    services,
+  }) => {
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const reporter = await signInAs(services)
+    const groups = await Promise.all(
+      ["Alpha", "Beta", "Gamma", "Delta"].map((name) =>
+        seedGroup(services, moderator.userId, `${name} Scans`),
+      ),
+    )
+    const report = async (groupId: string | undefined, reporterId: string) =>
+      (
+        await services.db
+          .insertInto("groupReports")
+          .values({ groupId: groupId ?? "", reporterId, reason: "SPAM" })
+          .returning("id")
+          .executeTakeFirstOrThrow()
+      ).id
+    const getPoints = async (userId: string) =>
+      (
+        await services.db
+          .selectFrom("userProfiles")
+          .select("points")
+          .where("userId", "=", userId)
+          .executeTakeFirst()
+      )?.points ?? 0
+    const resolvedTwice = [
+      await report(groups[0], reporter.userId),
+      await report(groups[1], reporter.userId),
+    ]
+    const dismissed = await report(groups[2], reporter.userId)
+    const own = await report(groups[3], moderator.userId)
+    const before = await getPoints(reporter.userId)
+    const ownBefore = await getPoints(moderator.userId)
+    const review = (path: string, json: Record<string, unknown>) =>
+      api(app, path, { method: "POST", headers: moderator.headers, json })
+    const bulk = await review("/group-reports/review", {
+      reportIds: resolvedTwice,
+      status: "RESOLVED",
+    })
+    const dismissal = await review(`/group-reports/${dismissed}/review`, { status: "DISMISSED" })
+    const ownReview = await review(`/group-reports/${own}/review`, { status: "RESOLVED" })
+    const again = await review(`/group-reports/${resolvedTwice[0] ?? ""}/review`, {
+      status: "RESOLVED",
+    })
+
+    expect([bulk.status, dismissal.status, ownReview.status, again.status]).toEqual([
+      201, 201, 201, 409,
+    ])
+    expect(await getPoints(reporter.userId)).toBe(before + 2 * config.reports.rewardPoints)
+    expect(await getPoints(moderator.userId)).toBe(ownBefore)
+
+    const reports = await listReports(app, reporter.headers)
+
+    expect(reports.get(dismissed)).toMatchObject({ outcome: "DISMISSED", points: 0 })
+
+    for (const id of resolvedTwice) {
+      expect(reports.get(id)).toMatchObject({
+        outcome: "RESOLVED",
+        points: config.reports.rewardPoints,
+      })
+    }
   })
 })
 
@@ -579,10 +651,9 @@ describe("the moderation category", () => {
       icon: null,
     })
     expect(destinationOf("The moderation team edited your profile")).toBe(`/users/${username}`)
-    expect(pushes.get("The moderation team resolved your report")).toMatchObject({
-      body: "Sunray Scans",
-      icon: null,
-    })
-    expect(destinationOf("The moderation team resolved your report")).toBe(`/groups/${groupId}`)
+    const resolved = `The moderation team resolved your report: +${config.reports.rewardPoints} points`
+
+    expect(pushes.get(resolved)).toMatchObject({ body: "Sunray Scans", icon: null })
+    expect(destinationOf(resolved)).toBe(`/groups/${groupId}`)
   })
 })

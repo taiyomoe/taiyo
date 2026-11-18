@@ -239,14 +239,29 @@ export const notificationText = (notification: Notification, viewerId: string) =
   }
 
   if (notification.type === "REPORT_REVIEWED") {
+    const { report } = notification
+    const target = reportTargetNode(report, viewerId)
+
+    if (report.points > 0) {
+      return richMessage(
+        m.notifications_report_resolved_points({ target: "{target}", points: "{points}" }),
+        {
+          target,
+          points: (
+            <Strong>
+              {m.notifications_points({ points: report.points.toLocaleString(getLocale()) })}
+            </Strong>
+          ),
+        },
+      )
+    }
+
     const template =
-      notification.report.outcome === "RESOLVED"
+      report.outcome === "RESOLVED"
         ? m.notifications_report_resolved
         : m.notifications_report_dismissed
 
-    return richMessage(template({ target: "{target}" }), {
-      target: reportTargetNode(notification.report, viewerId),
-    })
+    return richMessage(template({ target: "{target}" }), { target })
   }
 
   return null

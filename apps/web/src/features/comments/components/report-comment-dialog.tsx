@@ -74,7 +74,10 @@ export function ReportCommentDialog({
       <DialogPopup>
         <DialogHeader>
           <DialogTitle>{m.comments_report_title()}</DialogTitle>
-          <DialogDescription>{m.comments_report_description()}</DialogDescription>
+          <DialogDescription>
+            {m.comments_report_description()}{" "}
+            {m.report_reward_hint({ points: config.reports.rewardPoints })}
+          </DialogDescription>
         </DialogHeader>
         <DialogPanel sx={styles.panel}>
           <ErrorAlert

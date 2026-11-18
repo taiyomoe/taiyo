@@ -1,4 +1,5 @@
 import { commentReportAudit } from "@taiyomoe/audit"
+import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -28,8 +29,7 @@ export const closeCommentReportsHandler = new Hono().patch(
   "/",
   describeRoute({
     summary: "Close comment reports in bulk",
-    description:
-      "Closes several reports at once as resolved or dismissed, each along with every other open report on the same comment. Reports that do not exist or are already closed are skipped and reported. The reporter of each closed report is notified of the outcome, unless it is you.\n\n**Required roles:** moderator, admin.",
+    description: `Closes several reports at once as resolved or dismissed, each along with every other open report on the same comment. Reports that do not exist or are already closed are skipped and reported. The reporter of each closed report is notified of the outcome, unless it is you, and earns ${config.reports.rewardPoints} points when it is resolved.\n\n**Required roles:** moderator, admin.`,
     tags: ["Comment reports"],
     responses: {
       200: {

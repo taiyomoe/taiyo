@@ -99,6 +99,10 @@ export const config = {
     activityPushDelayMinutes: 5,
     maxBulkIds: 100,
   },
+  reports: {
+    /** The points a reporter earns when the moderation team acts on their report. */
+    rewardPoints: 10,
+  },
   lists: {
     maxItems: 500,
     maxPerUser: 100,

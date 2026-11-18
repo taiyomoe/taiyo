@@ -97,7 +97,12 @@ export type UserSettings = {
 export type NotificationPayload =
   | { listId: string; action: ListModerationAction }
   | { fields: ProfileModerationField[] }
-  | ({ reportId: string; outcome: "RESOLVED" | "DISMISSED" } & (
+  | ({
+      reportId: string
+      outcome: "RESOLVED" | "DISMISSED"
+      /** The points the reporter earned, when the moderation team acted on the report. */
+      points?: number | undefined
+    } & (
       | { kind: "PAGE"; chapterId: string }
       | { kind: "COMMENT"; commentId: string }
       | { kind: "GROUP"; groupId: string }

@@ -79,6 +79,11 @@ const reportBaseSchema = z.object({
       "How the moderation team closed the report: `RESOLVED` when they acted on it, `DISMISSED` when they found nothing wrong.",
     example: "RESOLVED",
   }),
+  points: z.int().nonnegative().meta({
+    description:
+      "The number of points the report earned you: some when the moderation team acted on it, none when they dismissed it.",
+    example: 10,
+  }),
 })
 const reportSchema = z
   .discriminatedUnion("kind", [
@@ -565,6 +570,7 @@ const MODERATION_TYPES = NOTIFICATION_CATEGORIES.moderation
 const storedReportSchema = z.object({
   reportId: z.guid(),
   outcome: z.enum(["RESOLVED", "DISMISSED"]),
+  points: z.int().nonnegative().optional(),
 })
 /** What each moderation notification stores, checked again when it is read. */
 const moderationPayloadSchemas = {
@@ -711,7 +717,7 @@ export const listNotifications = async (
     row: (typeof rows)[number],
     payload: z.infer<typeof moderationPayloadSchemas.REPORT_REVIEWED>,
   ) => {
-    const report = { id: payload.reportId, outcome: payload.outcome }
+    const report = { id: payload.reportId, outcome: payload.outcome, points: payload.points ?? 0 }
 
     if (payload.kind === "PAGE") {
       return {
@@ -1027,7 +1033,14 @@ export const notifyModeration = async (
   { db, user, afterCommit, notificationEvents }: ModerationContext,
   notices: readonly ModerationNotice[],
 ) => {
-  const kept = notices.filter((notice) => notice.userId !== user.id)
+  // Reports the moderation team acted on earn their reporter a few points, told in the notice.
+  const kept = notices
+    .filter((notice) => notice.userId !== user.id)
+    .map((notice) =>
+      notice.type === "REPORT_REVIEWED" && notice.payload.outcome === "RESOLVED"
+        ? { ...notice, payload: { ...notice.payload, points: config.reports.rewardPoints } }
+        : notice,
+    )
 
   if (kept.length === 0) {
     return
@@ -1037,6 +1050,26 @@ export const notifyModeration = async (
     .insertInto("notifications")
     .values(kept.map(({ type, userId, payload }) => ({ type, userId, payload })))
     .execute()
+
+  const rewards = new Map<string, number>()
+
+  for (const notice of kept) {
+    if (notice.type === "REPORT_REVIEWED" && notice.payload.points !== undefined) {
+      rewards.set(notice.userId, (rewards.get(notice.userId) ?? 0) + notice.payload.points)
+    }
+  }
+
+  for (const [userId, points] of rewards) {
+    await db
+      .insertInto("userProfiles")
+      .values({ userId, points })
+      .onConflict((oc) =>
+        oc
+          .column("userId")
+          .doUpdateSet({ points: sql<number>`"userProfiles"."points" + ${points}` }),
+      )
+      .execute()
+  }
 
   afterCommit(() => notificationEvents.publish([...new Set(kept.map(({ userId }) => userId))]))
 }
