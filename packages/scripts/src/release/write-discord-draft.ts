@@ -12,7 +12,7 @@ const message = await writeAnnouncement(releasePull.title, releasePull.body ?? "
 const body = `${draftMarker}
 ### Discord announcement
 
-When this PR is merged, the message inside the block below is posted to Discord exactly as written. Edit this comment to change it, delete the comment to post nothing, or add the \`discord-draft\` label again for a new draft.
+When this PR is merged, the message inside the block below is posted to Discord exactly as written. Edit this comment to change it, drop images below the block to post them with it, delete the comment to post nothing, or add the \`discord-draft\` label again for a new draft.
 
 ~~~~markdown
 ${roleMention}
