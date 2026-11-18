@@ -123,6 +123,26 @@ describe("GET /users/by-username/:username", () => {
       followsViewer: true,
     })
   })
+
+  test("hides banned users, except from moderators and admins", async ({ app, services }) => {
+    const banned = await signInAs(services, { banned: true })
+    const viewer = await signInAs(services)
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const { username } = await services.db
+      .selectFrom("users")
+      .select("username")
+      .where("id", "=", banned.userId)
+      .executeTakeFirstOrThrow()
+    const path = `/users/by-username/${username}`
+    const asGuest = await api(app, path)
+    const asUser = await api(app, path, { headers: viewer.headers })
+    const asModerator = await api(app, path, { headers: moderator.headers })
+
+    expect(asGuest.status).toBe(404)
+    expect(asUser.status).toBe(404)
+    expect(asModerator.status).toBe(200)
+    expect(asModerator.body).toMatchObject({ data: { id: banned.userId, username } })
+  })
 })
 
 // Each frame lights a different pixel: the GIF encoder merges frames that look the same.

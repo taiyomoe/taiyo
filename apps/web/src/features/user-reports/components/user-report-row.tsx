@@ -118,7 +118,7 @@ export function UserReportRow({
       icon: User,
       render: <Link params={{ username: report.reporter.username }} to="/users/$username" />,
     },
-    ...(can("user.moderateProfile", target) && !report.user.banned
+    ...(can("user.moderateProfile", target)
       ? [{ key: "editProfile", label: m.profile_edit(), icon: Edit, onClick: open("profile") }]
       : []),
     ...(pending

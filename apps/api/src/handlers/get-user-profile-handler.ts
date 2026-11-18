@@ -112,7 +112,7 @@ export const getUserProfileHandler = new Hono().get(
   describeRoute({
     summary: "Get a user's profile",
     description:
-      "Returns the profile of the user with the given username: identity, about text, counts and the groups the user belongs to. Banned users are not found. Signed-in viewers also see whether they follow the user and whether the user follows them.\n\n**Authentication:** optional.",
+      "Returns the profile of the user with the given username: identity, about text, counts and the groups the user belongs to. Banned users are not found, except by moderators and admins, who need their profile to clean it up. Signed-in viewers also see whether they follow the user and whether the user follows them.\n\n**Authentication:** optional.",
     tags: ["Users"],
     responses: {
       200: {
@@ -122,7 +122,7 @@ export const getUserProfileHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given username exists, or the user is banned.",
+        404: "No user with the given username exists, or the user is banned and you are not a moderator or admin.",
         422: "The provided username is not valid.",
       }),
     },
@@ -130,7 +130,7 @@ export const getUserProfileHandler = new Hono().get(
   validateParam(paramSchema),
   withOptionalAuth,
   async (c) => {
-    const { db, viewer } = c.var
+    const { db, viewer, can } = c.var
     const notBanned = sql<boolean>`not (${isBannedSql})`
     const { username } = c.var.param
     const user = await db
@@ -156,7 +156,7 @@ export const getUserProfileHandler = new Hono().get(
         sql<string>`to_char("users"."createdAt", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`.as("createdAt"),
       ])
       .where(sql`lower("users"."username")`, "=", username.toLowerCase())
-      .where(notBanned)
+      .$if(!can("user.list"), (query) => query.where(notBanned))
       .executeTakeFirst()
 
     if (!user) {
