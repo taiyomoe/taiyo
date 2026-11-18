@@ -1,7 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
 const MODERATION_TYPES = ["LIST_MODERATED", "PROFILE_MODERATED", "REPORT_REVIEWED"]
-
 /** The subject check before this migration: one subject per type, none for follows. */
 const addSubjectCheckWithoutPayload = (db: Kysely<unknown>) =>
   sql`

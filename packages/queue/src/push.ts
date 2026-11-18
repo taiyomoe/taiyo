@@ -139,7 +139,6 @@ const ACHIEVEMENT_NAMES: Record<AchievementKey, string> = {
   monthlyPodium: "Monthly podium",
   monthlyChampion: "Monthly champion",
 }
-
 const MODERATION_INBOX = "/notifications?category=moderation"
 const PROFILE_FIELD_LABELS = {
   displayUsername: "display name",
