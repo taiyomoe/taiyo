@@ -10,6 +10,13 @@
     width: 0.875rem;
   }
 
+  [data-slot="segmented-control-item"] svg {
+    flex-shrink: 0;
+    height: 1rem;
+    pointer-events: none;
+    width: 1rem;
+  }
+
   [data-slot="menu-checkbox-item"] svg,
   [data-slot="menu-radio-item"] svg {
     flex-shrink: 0;

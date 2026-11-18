@@ -1,4 +1,4 @@
-import { COUNTRIES, GENDERS, LANGUAGES, sql } from "@taiyomoe/db"
+import { COUNTRIES, GENDERS, isBannedSql, LANGUAGES, sql } from "@taiyomoe/db"
 import { GROUP_MEMBERSHIP_ROLES, ROLES } from "@taiyomoe/permissions"
 import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
@@ -9,7 +9,6 @@ import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { liveCommentSql } from "../utils/comments"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
-import { isBannedSql } from "../utils/user-moderation"
 
 const paramSchema = z.object({
   username: z
@@ -81,6 +80,10 @@ const userProfileSchema = z.object({
   commentCount: z
     .int()
     .meta({ description: "The number of comments on the user's profile.", example: 9 }),
+  achievementCount: z.int().meta({
+    description: "The number of different achievements the user earned.",
+    example: 5,
+  }),
   listCount: z.int().meta({
     description:
       "The number of lists the user owns that you can see: PUBLIC ones, or all of them when the user is you.",
@@ -208,6 +211,11 @@ export const getUserProfileHandler = new Hono().get(
             .select(eb.fn.countAll<string>().as("count"))
             .as("comments"),
           eb
+            .selectFrom("userAchievements")
+            .where("userAchievements.userId", "=", user.id)
+            .select(eb.fn.countAll<string>().as("count"))
+            .as("achievements"),
+          eb
             .selectFrom("userLists")
             .where("userLists.userId", "=", user.id)
             .where("userLists.deletedAt", "is", null)
@@ -273,6 +281,7 @@ export const getUserProfileHandler = new Hono().get(
       followingHidden: user.settings.showFollowing === false && viewerId !== user.id,
       uploadCount: Number(counts.uploads ?? 0),
       commentCount: Number(counts.comments ?? 0),
+      achievementCount: Number(counts.achievements ?? 0),
       listCount: Number(counts.lists ?? 0),
       viewerFollows: viewer === null ? null : counts.viewerFollows === true,
       followsViewer: viewer === null ? null : counts.followsViewer === true,

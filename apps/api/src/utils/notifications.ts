@@ -1,6 +1,11 @@
 import { config } from "@taiyomoe/config"
 import {
+  ACHIEVEMENT_CATEGORIES,
+  ACHIEVEMENT_KEYS,
+  ACHIEVEMENTS,
   COMMENT_TARGET_TYPES,
+  COSMETIC_RARITIES,
+  isAchievementKey,
   type DB,
   type Kysely,
   NOTIFICATION_CATEGORIES,
@@ -143,12 +148,53 @@ export const notificationSchema = z.discriminatedUnion("type", [
     type: z.literal("FOLLOW").meta({ description: "The kind of notification." }),
     actors: actorsSchema.meta({ description: "Who started following you." }),
   }),
+  notificationBaseSchema.extend({
+    type: z.literal("RANKING_REWARD").meta({ description: "The kind of notification." }),
+    ranking: z
+      .object({
+        period: z
+          .enum(["WEEK", "MONTH"])
+          .meta({ description: "The kind of period that closed.", example: "WEEK" }),
+        startsAt: z.iso.datetime().meta({ description: "When the period started, in UTC." }),
+        endsAt: z.iso.datetime().meta({ description: "When the period ended, in UTC." }),
+        rank: z.int().positive().meta({ description: "Your final rank.", example: 2 }),
+        chapters: z.int().positive().meta({
+          description: "The number of chapters you read and got credit for in the period.",
+          example: 87,
+        }),
+        points: z.int().positive().meta({
+          description: "The number of points added to your balance.",
+          example: 150,
+        }),
+      })
+      .meta({ description: "Your result in the readers ranking of a period that closed." }),
+  }),
+  notificationBaseSchema.extend({
+    type: z.literal("ACHIEVEMENT_EARNED").meta({ description: "The kind of notification." }),
+    achievement: z
+      .object({
+        key: z
+          .enum(ACHIEVEMENT_KEYS)
+          .meta({ description: "The key of the achievement.", example: "weeklyChampion" }),
+        category: z
+          .enum(ACHIEVEMENT_CATEGORIES)
+          .meta({ description: "The category of the achievement.", example: "ranking" }),
+        rarity: z
+          .enum(COSMETIC_RARITIES)
+          .meta({ description: "The rarity of the achievement.", example: "epic" }),
+        points: z.int().nonnegative().meta({
+          description: "The number of points the achievement added to your balance.",
+          example: 0,
+        }),
+      })
+      .meta({ description: "The achievement you earned." }),
+  }),
 ])
 
 export const notificationFiltersSchema = z.object({
   category: z.enum(NOTIFICATION_CATEGORY_NAMES).optional().meta({
     description:
-      "Only list this kind: new chapters, replies to your comments, or activity (upvotes and follows).",
+      "Only list this kind: new chapters, replies to your comments, activity (upvotes and follows), or rewards (ranking rewards and achievements).",
     example: "chapters",
   }),
   unread: z
@@ -232,6 +278,8 @@ export const selectVisibleNotifications = (
     .leftJoin("comments as c", "c.id", "n.commentId")
     .leftJoin("users as u", "u.id", "c.authorId")
     .leftJoin("commentThreads as t", "t.id", "c.threadId")
+    .leftJoin("rankingResults as rr", "rr.id", "n.rankingResultId")
+    .leftJoin("rankingPeriods as rp", "rp.id", "rr.periodId")
     .where("n.userId", "=", userId)
     .where((eb) =>
       eb.or([
@@ -253,6 +301,11 @@ export const selectVisibleNotifications = (
           hasLiveActorSql,
         ]),
         eb.and([eb("n.type", "=", "FOLLOW"), hasLiveActorSql]),
+        eb.and([eb("n.type", "=", "RANKING_REWARD"), eb("rr.id", "is not", null)]),
+        eb.and([
+          eb("n.type", "=", "ACHIEVEMENT_EARNED"),
+          eb("n.achievement", "in", ACHIEVEMENT_KEYS),
+        ]),
       ]),
     )
     .$call((qb) =>
@@ -275,6 +328,7 @@ export const countNotifications = async (db: Kysely<DB>, userId: string) => {
       unreadOf("chapters").as("chapters"),
       unreadOf("replies").as("replies"),
       unreadOf("activity").as("activity"),
+      unreadOf("rewards").as("rewards"),
     ])
     .executeTakeFirstOrThrow()
 
@@ -285,6 +339,7 @@ export const countNotifications = async (db: Kysely<DB>, userId: string) => {
       chapters: Number(row.chapters),
       replies: Number(row.replies),
       activity: Number(row.activity),
+      rewards: Number(row.rewards),
     },
   }
 }
@@ -406,6 +461,13 @@ export const listNotifications = async (
       "u.image as authorImage",
       "u.nameEffect as authorNameEffect",
       "u.avatarBorder as authorAvatarBorder",
+      "n.achievement",
+      "rp.kind as rankingKind",
+      timestampSql("rp.startsAt").$castTo<string | null>().as("rankingStartsAt"),
+      timestampSql("rp.endsAt").$castTo<string | null>().as("rankingEndsAt"),
+      "rr.rank as rankingRank",
+      "rr.chapters as rankingChapters",
+      "rr.points as rankingPoints",
     ])
     .orderBy("n.lastEventAt", "desc")
     .orderBy("n.id", "desc")
@@ -506,6 +568,47 @@ export const listNotifications = async (
                 })),
               },
             }
+      }
+
+      if (row.type === "RANKING_REWARD") {
+        return (row.rankingKind !== "WEEK" && row.rankingKind !== "MONTH") ||
+          row.rankingStartsAt === null ||
+          row.rankingEndsAt === null ||
+          row.rankingRank === null ||
+          row.rankingChapters === null ||
+          row.rankingPoints === null
+          ? null
+          : {
+              ...base,
+              type: row.type,
+              ranking: {
+                period: row.rankingKind,
+                startsAt: row.rankingStartsAt,
+                endsAt: row.rankingEndsAt,
+                rank: row.rankingRank,
+                chapters: row.rankingChapters,
+                points: row.rankingPoints,
+              },
+            }
+      }
+
+      if (row.type === "ACHIEVEMENT_EARNED") {
+        if (!isAchievementKey(row.achievement)) {
+          return null
+        }
+
+        const { category, rarity, rewards } = ACHIEVEMENTS[row.achievement]
+
+        return {
+          ...base,
+          type: row.type,
+          achievement: {
+            key: row.achievement,
+            category,
+            rarity,
+            points: rewards.points ?? 0,
+          },
+        }
       }
 
       if (row.type === "FOLLOW") {

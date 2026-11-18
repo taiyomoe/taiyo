@@ -36,6 +36,10 @@ const rise = stylex.keyframes({
   "25%": { opacity: 1 },
   "100%": { opacity: 0, transform: "translateY(-14px)" },
 })
+const sweep = stylex.keyframes({
+  "0%": { strokeDashoffset: 0 },
+  "100%": { strokeDashoffset: -100 },
+})
 const loop = {
   animationIterationCount: "infinite",
 } as const
@@ -95,6 +99,13 @@ export const borderMotion = stylex.create({
     ...loop,
     animationDuration: duration,
     animationName: { default: travel, [consts.reducedMotion]: "none" },
+    animationTimingFunction: "linear",
+  }),
+  /** A dash on a `pathLength={100}` stroke, going once around per `duration`. */
+  sweep: (duration: string) => ({
+    ...loop,
+    animationDuration: duration,
+    animationName: { default: sweep, [consts.reducedMotion]: "none" },
     animationTimingFunction: "linear",
   }),
   rise: (duration: string, delay: string) => ({

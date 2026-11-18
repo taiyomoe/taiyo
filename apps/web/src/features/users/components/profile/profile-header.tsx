@@ -34,6 +34,7 @@ const styles = stylex.create({
     marginTop: { default: "-3rem", [breakpoints.md]: "-4.25rem" },
   },
   actions: {
+    minWidth: 0,
     paddingTop: "0.875rem",
   },
   identity: {

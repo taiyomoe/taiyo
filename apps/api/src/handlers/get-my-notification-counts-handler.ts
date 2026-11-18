@@ -16,6 +16,7 @@ const countsSchema = z.object({
       chapters: count("The number of unread notifications about new chapters.", 4),
       replies: count("The number of unread replies to your comments.", 2),
       activity: count("The number of unread upvotes and follows.", 1),
+      rewards: count("The number of unread ranking rewards and achievements.", 1),
     })
     .meta({ description: "The number of unread notifications of each kind." }),
 })

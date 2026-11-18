@@ -47,6 +47,11 @@ export const cacheClient = {
       get: <T>(key: string) => parseCache<T>(client.get(`medias:showcase:${key}`)),
     },
   },
+  rankings: {
+    set: (key: string, value: unknown, ttl: number) =>
+      client.setex(`rankings:${key}`, ttl, SuperJSON.stringify(value)),
+    get: <T>(key: string) => parseCache<T>(client.get(`rankings:${key}`)),
+  },
   dashboard: {
     overview: {
       set: (key: string, value: unknown, ttl: number) =>

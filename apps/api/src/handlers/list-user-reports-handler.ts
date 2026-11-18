@@ -1,4 +1,4 @@
-import { sql, USER_REPORT_REASONS, USER_REPORT_STATUSES } from "@taiyomoe/db"
+import { isBannedSql, sql, USER_REPORT_REASONS, USER_REPORT_STATUSES } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -7,7 +7,7 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, userSummarySchema } from "../utils/schemas"
-import { isBannedSql, managedUserSchema } from "../utils/user-moderation"
+import { managedUserSchema } from "../utils/user-moderation"
 
 const querySchema = paginationQuerySchema.extend({
   status: z.enum(USER_REPORT_STATUSES).default("PENDING").meta({

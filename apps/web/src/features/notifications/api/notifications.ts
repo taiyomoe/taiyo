@@ -20,7 +20,7 @@ export type NotificationCounts = InferResponseType<
   200
 >["data"]
 
-export type NotificationCategory = keyof NotificationCounts["categories"]
+export type NotificationCategory = (typeof NOTIFICATION_CATEGORIES)[number]
 
 export type NotificationFilters = {
   category?: NotificationCategory | undefined
@@ -30,13 +30,15 @@ export type NotificationFilters = {
 
 type NotificationPage = InferResponseType<typeof api.users.me.notifications.$get, 200>
 
-export const NOTIFICATION_CATEGORIES = ["chapters", "replies", "activity"] as const
+export const NOTIFICATION_CATEGORIES = ["chapters", "replies", "activity", "rewards"] as const
 
 const CATEGORY_OF_TYPE = {
   CHAPTER_PUBLISHED: "chapters",
   COMMENT_REPLY: "replies",
   COMMENT_LIKE: "activity",
   FOLLOW: "activity",
+  RANKING_REWARD: "rewards",
+  ACHIEVEMENT_EARNED: "rewards",
 } as const satisfies Record<Notification["type"], NotificationCategory>
 const categoryOf = (notification: Notification) => CATEGORY_OF_TYPE[notification.type]
 
@@ -136,7 +138,11 @@ const applyChange = (queryClient: QueryClient, change: Change) => {
     }
 
     if (!("deleted" in change) && change.ids === "all" && change.readAt !== null) {
-      return { ...counts, unread: 0, categories: { chapters: 0, replies: 0, activity: 0 } }
+      return {
+        ...counts,
+        unread: 0,
+        categories: { chapters: 0, replies: 0, activity: 0, rewards: 0 },
+      }
     }
 
     const next = structuredClone(counts)

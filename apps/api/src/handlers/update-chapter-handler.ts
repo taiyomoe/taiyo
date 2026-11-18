@@ -11,6 +11,7 @@ import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { awardAchievements } from "../utils/achievements"
 import { auditChanges } from "../utils/audit"
 import { externalUrlSchema, isFuture, publishAtSchema, toPublishAt } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -137,6 +138,10 @@ export const updateChapterHandler = new Hono().patch(
 
     if (Object.keys(updates).length > 0) {
       await db.updateTable("chapters").set(updates).where("id", "=", chapter.id).execute()
+    }
+
+    if (updates.status === "PUBLISHED") {
+      await awardAchievements(c.var, chapter.uploaderId)
     }
 
     return c.ok({ id: chapter.id })

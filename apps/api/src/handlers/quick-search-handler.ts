@@ -1,5 +1,5 @@
 import type { MediaDocument } from "@taiyomoe/search"
-import { MEDIA_STATUSES, MEDIA_TYPES, sql } from "@taiyomoe/db"
+import { isBannedSql, MEDIA_STATUSES, MEDIA_TYPES, sql } from "@taiyomoe/db"
 import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -15,7 +15,6 @@ import {
   storedLocalizedTextSchema,
   userSummarySchema,
 } from "../utils/schemas"
-import { isBannedSql } from "../utils/user-moderation"
 
 const querySchema = z.object({
   q: z.string().trim().min(1).max(100).meta({

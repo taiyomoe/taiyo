@@ -1,4 +1,5 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
+import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { Book } from "@taiyomoe/ui/components/icons"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
@@ -63,13 +64,21 @@ type CoverProps = {
   src: string | null
   alt?: string
   priority?: "high" | "low" | "auto"
+  /** Shown instead of the book placeholder when there is no cover or it fails to load. */
+  fallback?: ReactNode
   sx?: Sx
 }
 
-export function Cover({ src, alt = "", priority = "auto", sx }: CoverProps) {
+export function Cover({ src, alt = "", priority = "auto", fallback, sx }: CoverProps) {
+  const placeholder = fallback ?? <CoverPlaceholder />
+
   return (
     <span sx={[styles.frame, sx]}>
-      {src === null ? <CoverPlaceholder /> : <CoverImage alt={alt} priority={priority} src={src} />}
+      {src === null ? (
+        placeholder
+      ) : (
+        <CoverImage alt={alt} fallback={placeholder} priority={priority} src={src} />
+      )}
     </span>
   )
 }
@@ -94,15 +103,17 @@ function CoverImage({
   src,
   alt,
   priority,
+  fallback,
 }: {
   src: string
   alt: string
   priority: CoverProps["priority"]
+  fallback: ReactNode
 }) {
   const { loaded, failed, ref, onLoad, onError } = useImageLoaded()
 
   if (failed) {
-    return <CoverPlaceholder />
+    return fallback
   }
 
   return (

@@ -1,3 +1,4 @@
+import type { AchievementKey } from "./achievements"
 import type { Role } from "./constants"
 
 export const COSMETIC_KINDS = ["NAME_EFFECT", "TITLE", "AVATAR_BORDER"] as const
@@ -8,19 +9,10 @@ export const COSMETIC_RARITIES = ["common", "rare", "epic", "legendary"] as cons
 
 export type CosmeticRarity = (typeof COSMETIC_RARITIES)[number]
 
-export const ACHIEVEMENT_METRICS = [
-  "chaptersRead",
-  "chaptersUploaded",
-  "followers",
-  "commentsWritten",
-] as const
-
-type AchievementMetric = (typeof ACHIEVEMENT_METRICS)[number]
-
 export type CosmeticUnlock =
   | { type: "free" }
   | { type: "role"; roles: readonly Role[] }
-  | { type: "achievement"; metric: AchievementMetric; threshold: number }
+  | { type: "achievement"; achievement: AchievementKey }
   | { type: "shop"; price: number }
   | { type: "lootBox" }
 
@@ -28,8 +20,7 @@ export type CosmeticDefinition = { rarity: CosmeticRarity; unlock: CosmeticUnloc
 
 const free = { type: "free" } as const
 const roles = (...granted: Role[]) => ({ type: "role", roles: granted }) as const
-const achievement = (metric: AchievementMetric, threshold: number) =>
-  ({ type: "achievement", metric, threshold }) as const
+const achievement = (key: AchievementKey) => ({ type: "achievement", achievement: key }) as const
 const shop = (price: number) => ({ type: "shop", price }) as const
 const lootBox = { type: "lootBox" } as const
 
@@ -61,8 +52,8 @@ export const NAME_EFFECTS: Record<NameEffect, CosmeticDefinition> = {
   crimson: { rarity: "legendary", unlock: roles("ADMIN") },
   azure: { rarity: "epic", unlock: roles("MODERATOR", "ADMIN") },
   jade: { rarity: "epic", unlock: roles("UPLOADER", "UPLOADER_INTERN", "ADMIN") },
-  ember: { rarity: "rare", unlock: achievement("chaptersRead", 100) },
-  tide: { rarity: "rare", unlock: achievement("chaptersUploaded", 10) },
+  ember: { rarity: "rare", unlock: achievement("chaptersRead100") },
+  tide: { rarity: "rare", unlock: achievement("chaptersUploaded10") },
   sakura: { rarity: "rare", unlock: shop(300) },
   frost: { rarity: "rare", unlock: shop(400) },
   gold: { rarity: "epic", unlock: shop(500) },
@@ -96,6 +87,11 @@ export const USER_TITLE_KEYS = [
   "legend",
   "treasureHunter",
   "fortunesFavorite",
+  "champion",
+  "monarch",
+  "unstoppable",
+  "sovereign",
+  "grandArchivist",
 ] as const
 
 export type UserTitle = (typeof USER_TITLE_KEYS)[number]
@@ -106,19 +102,24 @@ export const USER_TITLES: Record<UserTitle, CosmeticDefinition> = {
   administrator: { rarity: "legendary", unlock: roles("ADMIN") },
   moderator: { rarity: "epic", unlock: roles("MODERATOR", "ADMIN") },
   uploader: { rarity: "epic", unlock: roles("UPLOADER", "UPLOADER_INTERN", "ADMIN") },
-  bookworm: { rarity: "rare", unlock: achievement("chaptersRead", 100) },
-  bingeReader: { rarity: "epic", unlock: achievement("chaptersRead", 1000) },
-  livingLibrary: { rarity: "legendary", unlock: achievement("chaptersRead", 5000) },
-  contributor: { rarity: "rare", unlock: achievement("chaptersUploaded", 10) },
-  scanlationHero: { rarity: "epic", unlock: achievement("chaptersUploaded", 250) },
-  socialite: { rarity: "rare", unlock: achievement("followers", 25) },
-  chatterbox: { rarity: "rare", unlock: achievement("commentsWritten", 50) },
+  bookworm: { rarity: "rare", unlock: achievement("chaptersRead100") },
+  bingeReader: { rarity: "epic", unlock: achievement("chaptersRead1000") },
+  livingLibrary: { rarity: "legendary", unlock: achievement("chaptersRead5000") },
+  contributor: { rarity: "rare", unlock: achievement("chaptersUploaded10") },
+  scanlationHero: { rarity: "epic", unlock: achievement("chaptersUploaded250") },
+  socialite: { rarity: "rare", unlock: achievement("followers25") },
+  chatterbox: { rarity: "rare", unlock: achievement("commentsWritten50") },
   nightOwl: { rarity: "common", unlock: shop(250) },
   sunChaser: { rarity: "rare", unlock: shop(500) },
   sensei: { rarity: "epic", unlock: shop(750) },
   legend: { rarity: "legendary", unlock: shop(2500) },
   treasureHunter: { rarity: "epic", unlock: lootBox },
   fortunesFavorite: { rarity: "legendary", unlock: lootBox },
+  champion: { rarity: "epic", unlock: achievement("weeklyChampion") },
+  monarch: { rarity: "legendary", unlock: achievement("monthlyChampion") },
+  unstoppable: { rarity: "epic", unlock: achievement("unstoppable") },
+  sovereign: { rarity: "legendary", unlock: achievement("sovereign") },
+  grandArchivist: { rarity: "legendary", unlock: achievement("chaptersUploaded100000") },
 }
 
 export const AVATAR_BORDER_KEYS = [
@@ -134,6 +135,7 @@ export const AVATAR_BORDER_KEYS = [
   "phoenix",
   "nebula",
   "eclipse",
+  "enso",
 ] as const
 
 export type AvatarBorder = (typeof AVATAR_BORDER_KEYS)[number]
@@ -151,6 +153,7 @@ export const AVATAR_BORDERS: Record<AvatarBorder, CosmeticDefinition> = {
   phoenix: { rarity: "legendary", unlock: shop(2200) },
   nebula: { rarity: "legendary", unlock: lootBox },
   eclipse: { rarity: "legendary", unlock: lootBox },
+  enso: { rarity: "legendary", unlock: achievement("chaptersUploaded100000") },
 }
 
 export const isNameEffect = (value: unknown): value is NameEffect =>
@@ -174,11 +177,9 @@ export const getCosmeticDefinition = (kind: CosmeticKind, key: string) => {
   return Object.hasOwn(catalog, key) ? catalog[key] : undefined
 }
 
-export type CosmeticProgress = Record<AchievementMetric, number>
-
 export const isCosmeticUnlocked = (
   unlock: CosmeticUnlock,
-  { role, owned, progress }: { role: Role; owned: boolean; progress: CosmeticProgress },
+  { role, owned, achievements }: { role: Role; owned: boolean; achievements: ReadonlySet<string> },
 ) => {
   if (owned) {
     return true
@@ -189,7 +190,7 @@ export const isCosmeticUnlocked = (
   }
 
   if (unlock.type === "achievement") {
-    return progress[unlock.metric] >= unlock.threshold
+    return achievements.has(unlock.achievement)
   }
 
   return unlock.type === "free"

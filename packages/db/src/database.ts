@@ -32,6 +32,9 @@ import type { NotificationOutboxEntry } from "./models/notification-outbox-model
 import type { PageBookmark } from "./models/page-bookmark-model"
 import type { PageReport } from "./models/page-report-model"
 import type { PushSubscription } from "./models/push-subscription-model"
+import type { RankingPeriod } from "./models/ranking-period-model"
+import type { RankingResult } from "./models/ranking-result-model"
+import type { ReaderTotal } from "./models/reader-total-model"
 import type { ReadingReward } from "./models/reading-reward-model"
 import type { SearchOutboxEntry } from "./models/search-outbox-model"
 import type { Session } from "./models/session-model"
@@ -40,6 +43,7 @@ import type { Staff } from "./models/staff-model"
 import type { Task } from "./models/task-model"
 import type { Title } from "./models/title-model"
 import type { TwoFactor } from "./models/two-factor-model"
+import type { UserAchievement } from "./models/user-achievement-model"
 import type { UserCosmetic } from "./models/user-cosmetic-model"
 import type { UserFollow } from "./models/user-follow-model"
 import type { UserHistory } from "./models/user-history-model"
@@ -87,6 +91,9 @@ export type DB = {
   pageBookmarks: PageBookmark
   pageReports: PageReport
   pushSubscriptions: PushSubscription
+  rankingPeriods: RankingPeriod
+  rankingResults: RankingResult
+  readerTotals: ReaderTotal
   readingRewards: ReadingReward
   searchOutbox: SearchOutboxEntry
   sessions: Session
@@ -95,6 +102,7 @@ export type DB = {
   tasks: Task
   titles: Title
   twoFactors: TwoFactor
+  userAchievements: UserAchievement
   userCosmetics: UserCosmetic
   userFollows: UserFollow
   userHistories: UserHistory

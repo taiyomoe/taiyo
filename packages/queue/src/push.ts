@@ -1,5 +1,6 @@
-import type { DB, NotificationType } from "@taiyomoe/db"
+import type { AchievementKey, DB, NotificationType, RankingPeriodKind } from "@taiyomoe/db"
 import { config } from "@taiyomoe/config"
+import { isAchievementKey } from "@taiyomoe/db"
 import { getCoverUrl } from "@taiyomoe/s3"
 import { getCommentText } from "@taiyomoe/schemas/comment-content"
 import { sql, type Kysely } from "kysely"
@@ -95,8 +96,32 @@ type PushRow = {
   actorName: string | null
   actorUsername: string | null
   actorImage: string | null
+  username: string
+  rankingKind: RankingPeriodKind | null
+  rankingRank: number | null
+  rankingPoints: number | null
+  achievement: string | null
 }
 
+const ACHIEVEMENT_NAMES: Record<AchievementKey, string> = {
+  chaptersRead100: "100 chapters read",
+  chaptersRead1000: "1,000 chapters read",
+  chaptersRead5000: "5,000 chapters read",
+  chaptersUploaded10: "10 chapters uploaded",
+  chaptersUploaded250: "250 chapters uploaded",
+  chaptersUploaded100000: "100,000 chapters uploaded",
+  followers25: "25 followers",
+  commentsWritten50: "50 comments written",
+  dailyChampion: "Daily champion",
+  hatTrick: "Hat trick",
+  unstoppable: "Unstoppable",
+  sovereign: "Sovereign",
+  topTen: "Top ten",
+  weeklyPodium: "Weekly podium",
+  weeklyChampion: "Weekly champion",
+  monthlyPodium: "Monthly podium",
+  monthlyChampion: "Monthly champion",
+}
 const commentPath = (row: PushRow) => {
   const query = `comment=${row.commentId ?? ""}`
 
@@ -133,6 +158,28 @@ const toMessage = (row: PushRow) => {
         row.mediaId === null || row.coverId === null || row.coverExtension === null
           ? null
           : getCoverUrl(row.mediaId, row.coverId, row.coverExtension),
+      tag: row.notificationId,
+    } satisfies PushMessage
+  }
+
+  if (row.type === "RANKING_REWARD") {
+    const period = row.rankingKind === "MONTH" ? "month" : "week"
+
+    return {
+      title: `You finished #${row.rankingRank ?? ""} of the ${period}`,
+      body: `+${row.rankingPoints ?? 0} points`,
+      url: open(`/rankings?period=${period}`),
+      icon: null,
+      tag: row.notificationId,
+    } satisfies PushMessage
+  }
+
+  if (row.type === "ACHIEVEMENT_EARNED") {
+    return {
+      title: "Achievement unlocked",
+      body: isAchievementKey(row.achievement) ? ACHIEVEMENT_NAMES[row.achievement] : "",
+      url: open(`/users/${encodeURIComponent(row.username)}?tab=achievements`),
+      icon: null,
       tag: row.notificationId,
     } satisfies PushMessage
   }
@@ -222,7 +269,12 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
       "act"."count" AS "actorCount",
       "act"."name" AS "actorName",
       "act"."username" AS "actorUsername",
-      "act"."image" AS "actorImage"
+      "act"."image" AS "actorImage",
+      "u"."username",
+      "rp"."kind" AS "rankingKind",
+      "rr"."rank" AS "rankingRank",
+      "rr"."points" AS "rankingPoints",
+      "n"."achievement"
     FROM "notifications" AS "n"
     INNER JOIN "users" AS "u" ON "u"."id" = "n"."userId"
     INNER JOIN "pushSubscriptions" AS "ps" ON "ps"."userId" = "n"."userId"
@@ -239,6 +291,8 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
     LEFT JOIN "users" AS "au" ON "au"."id" = "c"."authorId"
     LEFT JOIN "commentThreads" AS "th" ON "th"."id" = "c"."threadId"
     LEFT JOIN "users" AS "pu" ON "pu"."id" = "th"."profileId"
+    LEFT JOIN "rankingResults" AS "rr" ON "rr"."id" = "n"."rankingResultId"
+    LEFT JOIN "rankingPeriods" AS "rp" ON "rp"."id" = "rr"."periodId"
     LEFT JOIN LATERAL (
       SELECT
         count(*) AS "count",
@@ -311,6 +365,8 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
           AND "act"."count" > 0
           AND coalesce(("u"."settings" ->> 'pushFollows')::boolean, ${defaults.pushFollows})
         )
+        OR ("n"."type" = 'RANKING_REWARD' AND "rr"."id" IS NOT NULL)
+        OR "n"."type" = 'ACHIEVEMENT_EARNED'
       )
   `.execute(db)
 

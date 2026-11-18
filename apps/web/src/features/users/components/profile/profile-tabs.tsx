@@ -7,6 +7,10 @@ import type { UserProfile } from "@/features/users/api/profile"
 import type { ProfileTab } from "@/features/users/lib/profile-page"
 import type { Session } from "@/lib/session"
 import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
+import {
+  AchievementsTab,
+  AchievementsTabSkeleton,
+} from "@/features/users/components/profile/tabs/achievements-tab"
 import { CommentsTab } from "@/features/users/components/profile/tabs/comments-tab"
 import { ListsTab, ListsTabSkeleton } from "@/features/users/components/profile/tabs/lists-tab"
 import { OverviewTab } from "@/features/users/components/profile/tabs/overview/overview-tab"
@@ -84,6 +88,12 @@ export function ProfileTabs({
         <TabsTab sx={styles.tab} value="stats">
           {m.profile_tab_stats()}
         </TabsTab>
+        <TabsTab sx={styles.tab} value="achievements">
+          {m.profile_tab_achievements()}
+          {profile.achievementCount === 0 ? null : (
+            <span sx={styles.count}>{profile.achievementCount}</span>
+          )}
+        </TabsTab>
         <TabsTab sx={styles.tab} value="uploads">
           {m.profile_tab_uploads()}
           {profile.uploadCount === 0 ? null : <span sx={styles.count}>{profile.uploadCount}</span>}
@@ -107,6 +117,11 @@ export function ProfileTabs({
       <TabsPanel value="stats">
         <Suspense fallback={<StatsTabSkeleton />}>
           <StatsTab fallback={<StatsTabSkeleton />} profile={profile} />
+        </Suspense>
+      </TabsPanel>
+      <TabsPanel value="achievements">
+        <Suspense fallback={<AchievementsTabSkeleton />}>
+          <AchievementsTab profile={profile} />
         </Suspense>
       </TabsPanel>
       <TabsPanel value="uploads">

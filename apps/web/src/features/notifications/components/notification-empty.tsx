@@ -1,5 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
-import { Bell, BookOpenText, Comment, Search, ThumbsUp } from "@taiyomoe/ui/components/icons"
+import {
+  Bell,
+  BookOpenText,
+  Comment,
+  Search,
+  ThumbsUp,
+  Trophy,
+} from "@taiyomoe/ui/components/icons"
 import {
   Empty,
   EmptyDescription,
@@ -35,6 +42,11 @@ const CATEGORY_EMPTY = {
     icon: ThumbsUp,
     title: m.notifications_empty_activity,
     description: m.notifications_empty_activity_description,
+  },
+  rewards: {
+    icon: Trophy,
+    title: m.notifications_empty_rewards,
+    description: m.notifications_empty_rewards_description,
   },
 } as const
 const emptyStateOf = ({

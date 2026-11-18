@@ -6,11 +6,13 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./achievements": "./src/achievements.ts",
     "./constants": "./src/constants.ts",
     "./cosmetics": "./src/cosmetics.ts",
     "./env": "./src/env.ts",
     "./levels": "./src/levels.ts",
     "./loot-boxes": "./src/loot-boxes.ts",
+    "./rankings": "./src/rankings.ts",
     "./sample": "./src/sample.ts"
   },
   "scripts": {

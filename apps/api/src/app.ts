@@ -41,6 +41,7 @@ import { mangaDexSyncsRouter } from "./routers/mangadex-syncs-router"
 import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
+import { rankingsRouter } from "./routers/rankings-router"
 import { searchRouter } from "./routers/search-router"
 import { shopRouter } from "./routers/shop-router"
 import { staffsRouter } from "./routers/staffs-router"
@@ -103,7 +104,16 @@ const scalarExtensions = {
     { name: "Comments", tags: ["Comments", "Comment images", "Comment reports"] },
     {
       name: "Users",
-      tags: ["Users", "User reports", "Profile", "Follows", "Notifications", "Settings", "Shop"],
+      tags: [
+        "Users",
+        "User reports",
+        "Profile",
+        "Follows",
+        "Rankings",
+        "Notifications",
+        "Settings",
+        "Shop",
+      ],
     },
     { name: "Administration", tags: ["Dashboard", "Audit logs"] },
   ],
@@ -258,6 +268,7 @@ export const createApp = (services: Services) => {
     .route("/dashboard", dashboardRouter)
     .route("/search", searchRouter)
     .route("/shop", shopRouter)
+    .route("/rankings", rankingsRouter)
     .route("/audit-logs", auditLogsRouter)
 
   app
@@ -387,6 +398,11 @@ export const createApp = (services: Services) => {
               name: "Follows",
               description:
                 "Following other users. A follow goes one way; following each other takes two follows.",
+            },
+            {
+              name: "Rankings",
+              description:
+                "Live leaderboards of readers, groups and medias over the current week, the current month or all time, in UTC.",
             },
             {
               name: "Notifications",

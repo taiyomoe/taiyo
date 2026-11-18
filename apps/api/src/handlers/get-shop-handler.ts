@@ -12,7 +12,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { withAuth } from "../middlewares/with-auth-middleware"
-import { getCosmeticProgress } from "../utils/cosmetic-progress"
+import { getHeldAchievements } from "../utils/achievements"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 import { cosmeticUnlockSchema, getPointBalance } from "../utils/shop"
@@ -46,7 +46,7 @@ const shopSchema = z.object({
       owned: z.boolean().meta({ description: "Whether you own the cosmetic." }),
       unlocked: z.boolean().meta({
         description:
-          "Whether you can equip the cosmetic: you own it, it is free, or you meet its role or achievement rule.",
+          "Whether you can equip the cosmetic: you own it, it is free, you have its role, or you hold its achievement.",
       }),
     })
     .array()
@@ -104,9 +104,9 @@ export const getShopHandler = new Hono().get(
   withAuth(),
   async (c) => {
     const { db, user, actor } = c.var
-    const [balance, progress, owned, equipped] = await Promise.all([
+    const [balance, achievements, owned, equipped] = await Promise.all([
       getPointBalance(db, user.id),
-      getCosmeticProgress(db, user.id),
+      getHeldAchievements(db, user.id),
       db
         .selectFrom("userCosmetics")
         .select(["kind", "key"])
@@ -133,7 +133,7 @@ export const getShopHandler = new Hono().get(
           unlocked: isCosmeticUnlocked(definition.unlock, {
             role: actor.role,
             owned: isOwned,
-            progress,
+            achievements,
           }),
         }
       }),

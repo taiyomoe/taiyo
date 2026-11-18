@@ -7,6 +7,8 @@ export type Notification = {
   type: NotificationType
   chapterId: string | null
   commentId: string | null
+  rankingResultId: string | null
+  achievement: string | null
   createdAt: Generated<Timestamp>
   lastEventAt: Generated<Timestamp>
   readAt: Timestamp | null

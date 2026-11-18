@@ -69,6 +69,17 @@ describe("reading rewards", () => {
 
     expect(await complete(app, chapterId, headers)).toEqual({ pages: 45, points: 2 })
     expect(await getPoints(services, userId)).toBe(2)
+
+    const totals = await services.db
+      .selectFrom("readerTotals")
+      .select(["kind", "chapters", "pages"])
+      .where("userId", "=", userId)
+      .orderBy("kind")
+      .execute()
+
+    expect(totals).toEqual(
+      ["DAY", "WEEK", "MONTH", "ALL"].map((kind) => ({ kind, chapters: 1, pages: 45 })),
+    )
   })
 
   test("credits only the pages the elapsed time allows", async ({ app, services }) => {
@@ -225,5 +236,64 @@ describe("reading rewards", () => {
     await openAgo(services, userId, chapterId, 600)
 
     expect(await complete(app, chapterId, headers)).toBeNull()
+  })
+
+  test("earns the reading achievement when a credited chapter crosses its threshold", async ({
+    app,
+    services,
+  }) => {
+    const { headers, userId, uploaderId, mediaId } = await seedReader(services)
+    const otherMediaId = await seedMedia(services, uploaderId)
+    const [earlier, chapterId, nextId] = await Promise.all([
+      seedChapter(services, { mediaId: otherMediaId, uploaderId, number: 1 }),
+      seedChapter(services, { mediaId, uploaderId, number: 1, pages: makePages(20) }),
+      seedChapter(services, { mediaId, uploaderId, number: 2, pages: makePages(20) }),
+    ])
+    const getEarned = async () => ({
+      achievements: await services.db
+        .selectFrom("userAchievements")
+        .select(["key", "count"])
+        .where("userId", "=", userId)
+        .execute(),
+      notifications: await services.db
+        .selectFrom("notifications")
+        .select(["type", "achievement"])
+        .where("userId", "=", userId)
+        .execute(),
+    })
+
+    await services.db
+      .insertInto("readingRewards")
+      .values(
+        Array.from({ length: 99 }, (_, index) => ({
+          userId,
+          chapterId: earlier,
+          mediaId: otherMediaId,
+          number: index + 1,
+          pages: 1,
+          points: 0,
+          createdAt: sql<Date>`localtimestamp - interval '2 days'`,
+        })),
+      )
+      .execute()
+    await openAgo(services, userId, chapterId, 600)
+
+    expect(await getEarned()).toEqual({ achievements: [], notifications: [] })
+    expect(await complete(app, chapterId, headers)).toEqual({ pages: 20, points: 1 })
+    expect(await getEarned()).toEqual({
+      achievements: [{ key: "chaptersRead100", count: 1 }],
+      notifications: [{ type: "ACHIEVEMENT_EARNED", achievement: "chaptersRead100" }],
+    })
+
+    // The next credit is not held back by the previous one, and earns nothing new.
+    await services.db
+      .updateTable("readingRewards")
+      .set({ createdAt: sql<Date>`localtimestamp - interval '1 hour'` })
+      .where("chapterId", "=", chapterId)
+      .execute()
+    await openAgo(services, userId, nextId, 600)
+
+    expect(await complete(app, nextId, headers)).not.toBeNull()
+    expect((await getEarned()).notifications).toHaveLength(1)
   })
 })

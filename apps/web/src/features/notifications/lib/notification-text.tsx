@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Fragment } from "react"
 import type { Notification } from "@/features/notifications/api/notifications"
+import { ACHIEVEMENT_LABELS } from "@/features/users/lib/achievement-labels"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
@@ -95,7 +96,7 @@ const actorsText = (
   })
 }
 
-/** The sentence of a reply, upvote or follow notification, with its names in bold. */
+/** The sentence of a reply, upvote, follow, ranking reward or achievement notification, with its names in bold. */
 export const notificationText = (notification: Notification, viewerId: string) => {
   if (notification.type === "COMMENT_REPLY") {
     return richMessage(m.notifications_reply_text({ name: "{name}", target: "{target}" }), {
@@ -125,6 +126,41 @@ export const notificationText = (notification: Notification, viewerId: string) =
       two: () => m.notifications_follows_two({ name: "{name}", other: "{other}" }),
       many: () => m.notifications_follows_many({ name: "{name}", count: "{count}" }),
     })
+  }
+
+  if (notification.type === "RANKING_REWARD") {
+    const { ranking } = notification
+    const template =
+      ranking.period === "WEEK" ? m.notifications_ranking_week : m.notifications_ranking_month
+
+    return richMessage(template({ rank: "{rank}", points: "{points}" }), {
+      rank: (
+        <Strong>
+          {m.notifications_ranking_rank({ rank: ranking.rank.toLocaleString(getLocale()) })}
+        </Strong>
+      ),
+      points: (
+        <Strong>
+          {m.notifications_points({ points: ranking.points.toLocaleString(getLocale()) })}
+        </Strong>
+      ),
+    })
+  }
+
+  if (notification.type === "ACHIEVEMENT_EARNED") {
+    const { achievement } = notification
+    const name = <Strong>{ACHIEVEMENT_LABELS[achievement.key].name()}</Strong>
+
+    return achievement.points === 0
+      ? richMessage(m.notifications_achievement({ name: "{name}" }), { name })
+      : richMessage(m.notifications_achievement_points({ name: "{name}", points: "{points}" }), {
+          name,
+          points: (
+            <Strong>
+              {m.notifications_points({ points: achievement.points.toLocaleString(getLocale()) })}
+            </Strong>
+          ),
+        })
   }
 
   return null

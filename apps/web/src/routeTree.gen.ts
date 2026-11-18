@@ -18,6 +18,7 @@ import { Route as LatestRouteImport } from './routes/latest'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as RecentlyAddedRouteImport } from './routes/recently-added'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ShopRouteImport } from './routes/shop'
@@ -116,6 +117,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RankingsRoute = RankingsRouteImport.update({
+  id: '/rankings',
+  path: '/rankings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecentlyAddedRoute = RecentlyAddedRouteImport.update({
@@ -401,6 +407,7 @@ export interface FileRoutesByFullPath {
   '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
+  '/rankings': typeof RankingsRoute
   '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -465,6 +472,7 @@ export interface FileRoutesByTo {
   '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
+  '/rankings': typeof RankingsRoute
   '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -531,6 +539,7 @@ export interface FileRoutesById {
   '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
+  '/rankings': typeof RankingsRoute
   '/recently-added': typeof RecentlyAddedRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -598,6 +607,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/notifications'
     | '/privacy'
+    | '/rankings'
     | '/recently-added'
     | '/settings'
     | '/shop'
@@ -662,6 +672,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/notifications'
     | '/privacy'
+    | '/rankings'
     | '/recently-added'
     | '/settings'
     | '/shop'
@@ -727,6 +738,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/notifications'
     | '/privacy'
+    | '/rankings'
     | '/recently-added'
     | '/settings'
     | '/shop'
@@ -793,6 +805,7 @@ export interface RootRouteChildren {
   LibraryRoute: typeof LibraryRoute
   NotificationsRoute: typeof NotificationsRoute
   PrivacyRoute: typeof PrivacyRoute
+  RankingsRoute: typeof RankingsRoute
   RecentlyAddedRoute: typeof RecentlyAddedRoute
   SettingsRoute: typeof SettingsRoute
   ShopRoute: typeof ShopRoute
@@ -878,6 +891,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rankings': {
+      id: '/rankings'
+      path: '/rankings'
+      fullPath: '/rankings'
+      preLoaderRoute: typeof RankingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recently-added': {
@@ -1359,6 +1379,7 @@ const rootRouteChildren: RootRouteChildren = {
   LibraryRoute: LibraryRoute,
   NotificationsRoute: NotificationsRoute,
   PrivacyRoute: PrivacyRoute,
+  RankingsRoute: RankingsRoute,
   RecentlyAddedRoute: RecentlyAddedRoute,
   SettingsRoute: SettingsRoute,
   ShopRoute: ShopRoute,

@@ -85,4 +85,34 @@ describe("POST /users/:id/follow", () => {
 
     expect(res.status).toBe(422)
   })
+
+  test("earns the followers achievement with the 25th follower", async ({ app, services }) => {
+    const target = await signInAs(services)
+    const followers = await Promise.all(Array.from({ length: 25 }, () => signInAs(services)))
+
+    await services.db
+      .insertInto("userFollows")
+      .values(
+        followers.slice(1).map((follower) => ({
+          followerId: follower.userId,
+          followingId: target.userId,
+        })),
+      )
+      .execute()
+
+    const res = await api(app, `/users/${target.userId}/follow`, {
+      method: "POST",
+      headers: followers[0]?.headers ?? {},
+    })
+
+    expect(res.status).toBe(201)
+
+    const earned = await services.db
+      .selectFrom("userAchievements")
+      .select("key")
+      .where("userId", "=", target.userId)
+      .execute()
+
+    expect(earned).toEqual([{ key: "followers25" }])
+  })
 })

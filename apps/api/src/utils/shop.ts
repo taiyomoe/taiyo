@@ -1,7 +1,8 @@
 import type { Session } from "@taiyomoe/auth/server"
 import type { CosmeticKind } from "@taiyomoe/db/cosmetics"
 import { type DB, type Kysely, ROLES, sql } from "@taiyomoe/db"
-import { ACHIEVEMENT_METRICS, COSMETIC_KINDS, COSMETIC_RARITIES } from "@taiyomoe/db/cosmetics"
+import { ACHIEVEMENT_KEYS } from "@taiyomoe/db/achievements"
+import { COSMETIC_KINDS, COSMETIC_RARITIES } from "@taiyomoe/db/cosmetics"
 import z from "zod"
 
 export const isImpersonating = (session: Session["session"]) =>
@@ -72,13 +73,12 @@ export const cosmeticUnlockSchema = z
         }),
     }),
     z.object({
-      type: z.literal("achievement").meta({ description: "The cosmetic unlocks with progress." }),
-      metric: z
-        .enum(ACHIEVEMENT_METRICS)
-        .meta({ description: "The metric to grow.", example: "chaptersRead" }),
-      threshold: z
-        .int()
-        .meta({ description: "The value of the metric that unlocks the cosmetic.", example: 100 }),
+      type: z
+        .literal("achievement")
+        .meta({ description: "The cosmetic comes with an achievement." }),
+      achievement: z
+        .enum(ACHIEVEMENT_KEYS)
+        .meta({ description: "The key of the achievement.", example: "chaptersRead100" }),
     }),
     z.object({
       type: z.literal("shop").meta({ description: "The cosmetic is bought with points." }),

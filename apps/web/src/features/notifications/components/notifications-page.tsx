@@ -14,6 +14,7 @@ import {
   Search,
   Settings,
   Trash,
+  Trophy,
 } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
@@ -71,6 +72,7 @@ const NAV_ITEMS = [
   { category: "chapters", label: m.notifications_category_chapters, icon: BookOpenText },
   { category: "replies", label: m.notifications_category_replies, icon: Comment },
   { category: "activity", label: m.notifications_category_activity, icon: Activity },
+  { category: "rewards", label: m.notifications_category_rewards, icon: Trophy },
 ] as const satisfies ReadonlyArray<{
   category: NotificationCategory | undefined
   label: () => string

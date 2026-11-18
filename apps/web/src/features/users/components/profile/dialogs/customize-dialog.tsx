@@ -1,5 +1,6 @@
 import type { AvatarBorder, CosmeticUnlock, NameEffect, UserTitle } from "@taiyomoe/db/cosmetics"
 import * as stylex from "@stylexjs/stylex"
+import { ACHIEVEMENTS } from "@taiyomoe/db/achievements"
 import { CheckCircle, Lock } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -228,6 +229,12 @@ const styles = stylex.create({
     justifyContent: "space-between",
     marginBottom: "0.75rem",
   },
+  links: {
+    columnGap: "0.75rem",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
+  },
   shopLink: {
     color: {
       default: colors.mutedForeground,
@@ -281,6 +288,7 @@ function UnlockProgress({ value, threshold }: { value: number; threshold: number
 
 function Unlock({ item, progress }: { item: Item; progress: MyCosmetics["progress"] }) {
   const unlock: CosmeticUnlock = item.unlock
+  const criteria = unlock.type === "achievement" ? ACHIEVEMENTS[unlock.achievement].criteria : null
 
   if (item.unlocked) {
     return <span sx={styles.unlock}>{describeUnlock(unlock)}</span>
@@ -292,8 +300,8 @@ function Unlock({ item, progress }: { item: Item; progress: MyCosmetics["progres
         <Lock size={12} />
         {describeUnlock(unlock)}
       </span>
-      {unlock.type === "achievement" ? (
-        <UnlockProgress threshold={unlock.threshold} value={progress[unlock.metric]} />
+      {criteria?.type === "metric" ? (
+        <UnlockProgress threshold={criteria.threshold} value={progress[criteria.metric]} />
       ) : null}
     </span>
   )
@@ -347,9 +355,19 @@ function Picker({ profile, cosmetics }: { profile: UserProfile; cosmetics: MyCos
   const unlockedTitles = cosmetics.titles.filter((item) => item.unlocked).length
   const unlockedBorders = cosmetics.avatarBorders.filter((item) => item.unlocked).length
   const shopLink = (
-    <Link {...stylex.props(styles.shopLink)} to="/shop">
-      {m.profile_customize_visit_shop()}
-    </Link>
+    <span sx={styles.links}>
+      <Link
+        {...stylex.props(styles.shopLink)}
+        params={{ username: profile.username }}
+        search={{ tab: "achievements" }}
+        to="/users/$username"
+      >
+        {m.profile_customize_see_achievements()}
+      </Link>
+      <Link {...stylex.props(styles.shopLink)} to="/shop">
+        {m.profile_customize_visit_shop()}
+      </Link>
+    </span>
   )
   // Unlocked first, then by rarity as the catalog orders it.
   const sorted = <T extends Item>(items: T[]) =>

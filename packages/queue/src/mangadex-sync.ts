@@ -28,6 +28,7 @@ import {
 import { Queue } from "bullmq"
 import { type Kysely, sql, type Transaction } from "kysely"
 import sharp from "sharp"
+import { awardMetricAchievements } from "./achievements"
 import { createBullConnection } from "./connection"
 import { transcodeChapterPage } from "./processor"
 
@@ -294,6 +295,7 @@ const importChapter = async (ctx: SyncContext, chapter: MangaDexChapter, item: S
           .execute()
       }
 
+      await awardMetricAchievements(trx, ctx.userId)
       await finishItem(trx, item, { status: "DONE", entityId: id })
     })
   } catch (error) {

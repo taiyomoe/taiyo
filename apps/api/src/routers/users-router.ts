@@ -35,6 +35,7 @@ import { listMyLibraryHandler } from "../handlers/list-my-library-handler"
 import { listMyListsHandler } from "../handlers/list-my-lists-handler"
 import { listMyMediaSuggestionsHandler } from "../handlers/list-my-media-suggestions-handler"
 import { listMyNotificationsHandler } from "../handlers/list-my-notifications-handler"
+import { listUserAchievementsHandler } from "../handlers/list-user-achievements-handler"
 import { listUserListsHandler } from "../handlers/list-user-lists-handler"
 import { listUserReadingHistoryHandler } from "../handlers/list-user-reading-history-handler"
 import { listUsersHandler } from "../handlers/list-users-handler"
@@ -122,3 +123,4 @@ export const usersRouter = new Hono()
   .route("/", getUserStatsHandler)
   .route("/", listUserReadingHistoryHandler)
   .route("/", listUserListsHandler)
+  .route("/", listUserAchievementsHandler)

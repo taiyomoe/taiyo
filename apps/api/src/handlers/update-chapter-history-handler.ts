@@ -8,6 +8,7 @@ import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { awardAchievements } from "../utils/achievements"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -165,6 +166,7 @@ export const updateChapterHistoryHandler = new Hono().patch(
         points,
       })
       .execute()
+    await awardAchievements(c.var, user.id)
 
     if (points > 0) {
       await db

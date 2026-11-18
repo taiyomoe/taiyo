@@ -7,6 +7,7 @@ import type {
   NameEffect,
   UserTitle,
 } from "@taiyomoe/db/cosmetics"
+import { ACHIEVEMENT_LABELS } from "@/features/users/lib/achievement-labels"
 import { ROLE_LABELS } from "@/features/users/lib/role-labels"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
@@ -45,6 +46,7 @@ export const USER_TITLE_LABELS: Record<UserTitle, Label> = {
   livingLibrary: m.user_title_living_library,
   contributor: m.user_title_contributor,
   scanlationHero: m.user_title_scanlation_hero,
+  grandArchivist: m.user_title_grand_archivist,
   socialite: m.user_title_socialite,
   chatterbox: m.user_title_chatterbox,
   nightOwl: m.user_title_night_owl,
@@ -53,6 +55,10 @@ export const USER_TITLE_LABELS: Record<UserTitle, Label> = {
   legend: m.user_title_legend,
   treasureHunter: m.user_title_treasure_hunter,
   fortunesFavorite: m.user_title_fortunes_favorite,
+  champion: m.user_title_champion,
+  monarch: m.user_title_monarch,
+  unstoppable: m.user_title_unstoppable,
+  sovereign: m.user_title_sovereign,
 }
 
 export const AVATAR_BORDER_LABELS: Record<AvatarBorder, Label> = {
@@ -68,6 +74,7 @@ export const AVATAR_BORDER_LABELS: Record<AvatarBorder, Label> = {
   phoenix: m.avatar_border_phoenix,
   nebula: m.avatar_border_nebula,
   eclipse: m.avatar_border_eclipse,
+  enso: m.avatar_border_enso,
 }
 
 export const COSMETIC_KIND_LABELS: Record<CosmeticKind, Label> = {
@@ -118,19 +125,7 @@ export const describeUnlock = (unlock: CosmeticUnlock) => {
   }
 
   if (unlock.type === "achievement") {
-    const threshold = unlock.threshold.toLocaleString(getLocale())
-
-    if (unlock.metric === "chaptersRead") {
-      return m.profile_unlock_chapters_read({ threshold })
-    }
-
-    if (unlock.metric === "chaptersUploaded") {
-      return m.profile_unlock_chapters_uploaded({ threshold })
-    }
-
-    return unlock.metric === "followers"
-      ? m.profile_unlock_followers({ threshold })
-      : m.profile_unlock_comments_written({ threshold })
+    return m.profile_unlock_achievement({ name: ACHIEVEMENT_LABELS[unlock.achievement].name() })
   }
 
   return m.profile_unlock_free()

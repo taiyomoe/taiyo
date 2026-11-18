@@ -64,7 +64,9 @@ import {
   UserCheck01Icon,
   UserSwitchIcon,
   ArrowUpRight01Icon,
+  ChampionIcon,
   CrownIcon,
+  Medal01Icon,
   Edit02Icon,
   FileEditIcon,
   NoteEditIcon,
@@ -489,3 +491,7 @@ export const Repeat: (props: IconProps) => React.ReactElement = icon(RepeatIcon)
 export const PauseCircle: (props: IconProps) => React.ReactElement = icon(PauseCircleIcon)
 
 export const CancelCircle: (props: IconProps) => React.ReactElement = icon(CancelCircleIcon)
+
+export const Trophy: (props: IconProps) => React.ReactElement = icon(ChampionIcon)
+
+export const Medal: (props: IconProps) => React.ReactElement = icon(Medal01Icon)

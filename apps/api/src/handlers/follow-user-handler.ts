@@ -6,6 +6,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { awardAchievements } from "../utils/achievements"
 import { recordActivity } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
@@ -68,6 +69,8 @@ export const followUserHandler = new Hono().post(
     ) {
       afterCommit(() => notificationEvents.publish([targetUser.id]))
     }
+
+    await awardAchievements(c.var, targetUser.id)
 
     return c.ok({ followerId: user.id, followingId: targetUser.id })
   },

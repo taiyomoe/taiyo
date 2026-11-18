@@ -16,8 +16,8 @@ import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { getHeldAchievements } from "../utils/achievements"
 import { auditChanges } from "../utils/audit"
-import { getCosmeticProgress } from "../utils/cosmetic-progress"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope } from "../utils/schemas"
@@ -100,8 +100,8 @@ export const updateMyCosmeticsHandler = new Hono().patch(
     ]
 
     if (requested.length > 0) {
-      const [progress, owned] = await Promise.all([
-        getCosmeticProgress(db, user.id),
+      const [achievements, owned] = await Promise.all([
+        getHeldAchievements(db, user.id),
         db
           .selectFrom("userCosmetics")
           .select(["kind", "key"])
@@ -113,7 +113,7 @@ export const updateMyCosmeticsHandler = new Hono().patch(
           !isCosmeticUnlocked(item.def.unlock, {
             role: actor.role,
             owned: owned.some((row) => row.kind === item.kind && row.key === item.key),
-            progress,
+            achievements,
           }),
       )
 

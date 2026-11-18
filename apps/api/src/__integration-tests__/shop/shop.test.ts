@@ -41,6 +41,29 @@ const buy = (app: Parameters<typeof api>[0], headers: Record<string, string>, js
   api<Purchase>(app, "/shop/purchases", { method: "POST", headers, json })
 
 describe("GET /shop", () => {
+  test("unlocks achievement items for holders of the achievement", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+
+    await services.db
+      .insertInto("userAchievements")
+      .values({ userId, key: "monthlyChampion" })
+      .execute()
+
+    const res = await api<Shop>(app, "/shop", { headers })
+
+    if (!res.body.success) {
+      throw new Error("Expected success")
+    }
+
+    const unlockedOf = (key: string) =>
+      res.body.success
+        ? res.body.data.items.find((item) => item.kind === "TITLE" && item.key === key)
+        : undefined
+
+    expect(unlockedOf("monarch")).toMatchObject({ owned: false, unlocked: true })
+    expect(unlockedOf("champion")).toMatchObject({ owned: false, unlocked: false })
+  })
+
   test("lists the balance, items and boxes with odds that add up", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services)
 

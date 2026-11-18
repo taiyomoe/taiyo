@@ -1,5 +1,5 @@
+import { ACHIEVEMENT_METRICS } from "@taiyomoe/db/achievements"
 import {
-  ACHIEVEMENT_METRICS,
   AVATAR_BORDER_KEYS,
   AVATAR_BORDERS,
   COSMETIC_RARITIES,
@@ -11,11 +11,12 @@ import {
   USER_TITLE_KEYS,
   USER_TITLES,
 } from "@taiyomoe/db/cosmetics"
+import { getAchievementProgress } from "@taiyomoe/queue"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { withAuth } from "../middlewares/with-auth-middleware"
-import { getCosmeticProgress } from "../utils/cosmetic-progress"
+import { getHeldAchievements } from "../utils/achievements"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 import { cosmeticUnlockSchema as unlockSchema } from "../utils/shop"
@@ -57,7 +58,7 @@ export const getMyCosmeticsHandler = new Hono().get(
   describeRoute({
     summary: "Get my cosmetics",
     description:
-      "Returns every name effect, profile title and avatar border, whether you unlocked each one and how it unlocks, along with what you have equipped and your progress towards achievement unlocks.\n\n**Authentication:** signed-in user.",
+      "Returns every name effect, profile title and avatar border, whether you unlocked each one and how it unlocks, along with what you have equipped and your progress towards the achievements that unlock some of them.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
     responses: {
       200: {
@@ -70,8 +71,9 @@ export const getMyCosmeticsHandler = new Hono().get(
   withAuth(),
   async (c) => {
     const { db, user, actor } = c.var
-    const [progress, owned, profile] = await Promise.all([
-      getCosmeticProgress(db, user.id),
+    const [progress, achievements, owned, profile] = await Promise.all([
+      getAchievementProgress(db, user.id),
+      getHeldAchievements(db, user.id),
       db
         .selectFrom("userCosmetics")
         .select(["kind", "key"])
@@ -96,7 +98,7 @@ export const getMyCosmeticsHandler = new Hono().get(
       unlocked: isCosmeticUnlocked(definition.unlock, {
         role: actor.role,
         owned: ownedKeys.has(`${kind}:${key}`),
-        progress,
+        achievements,
       }),
     })
 

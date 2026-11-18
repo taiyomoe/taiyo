@@ -1,4 +1,4 @@
-import { sql } from "@taiyomoe/db"
+import { sql, isBannedSql } from "@taiyomoe/db"
 import { ROLES } from "@taiyomoe/permissions"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
@@ -9,7 +9,7 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { escapeLike } from "../utils/escape-like"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
-import { isBannedSql, managedUserSchema } from "../utils/user-moderation"
+import { managedUserSchema } from "../utils/user-moderation"
 
 const querySchema = paginationQuerySchema.extend({
   search: z.string().trim().min(1).max(100).optional().meta({

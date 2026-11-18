@@ -132,6 +132,7 @@ export const user = (images: string, overrides: Partial<UserProfile> = {}): User
   followingHidden: false,
   uploadCount: 45,
   commentCount: 3,
+  achievementCount: 0,
   listCount: 4,
   viewerFollows: null,
   followsViewer: null,
