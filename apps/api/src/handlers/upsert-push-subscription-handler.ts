@@ -1,5 +1,6 @@
 import { notificationAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
+import { LOCALES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -27,13 +28,18 @@ const bodySchema = z.object({
       }),
     })
     .meta({ description: "The keys from the browser's `PushSubscription`." }),
+  locale: z.enum(LOCALES).default("en").meta({
+    description:
+      "The language of the interface on the device, which its push notifications are written in.",
+    example: "pt-BR",
+  }),
 })
 
 export const upsertPushSubscriptionHandler = new Hono().put(
   "/me/push-subscriptions",
   describeRoute({
     summary: "Subscribe my device to push notifications",
-    description: `Subscribes the device to push notifications with the browser's push subscription. The subscription lasts as long as your current session. Saving an endpoint another account used moves it to you, and saving it again refreshes its keys. Only your ${config.notifications.maxPushSubscriptions} most recently saved devices are kept.\n\n**Authentication:** signed-in user.`,
+    description: `Subscribes the device to push notifications with the browser's push subscription. The subscription lasts as long as your current session. Its push notifications are written in the given \`locale\`. Saving an endpoint another account used moves it to you, and saving it again refreshes its keys and its \`locale\`. Only your ${config.notifications.maxPushSubscriptions} most recently saved devices are kept.\n\n**Authentication:** signed-in user.`,
     tags: ["Notifications"],
     responses: {
       200: {
@@ -65,7 +71,7 @@ export const upsertPushSubscriptionHandler = new Hono().put(
   withTransaction,
   async (c) => {
     const { db, user, session } = c.var
-    const { endpoint, keys } = c.var.json
+    const { endpoint, keys, locale } = c.var.json
     const userAgent = c.req.header("user-agent")?.slice(0, 512) ?? null
     const { id } = await db
       .insertInto("pushSubscriptions")
@@ -76,6 +82,7 @@ export const upsertPushSubscriptionHandler = new Hono().put(
         p256dh: keys.p256dh,
         auth: keys.auth,
         userAgent,
+        locale,
       })
       .onConflict((oc) =>
         oc.column("endpoint").doUpdateSet({
@@ -84,6 +91,7 @@ export const upsertPushSubscriptionHandler = new Hono().put(
           p256dh: keys.p256dh,
           auth: keys.auth,
           userAgent,
+          locale,
         }),
       )
       .returning("id")

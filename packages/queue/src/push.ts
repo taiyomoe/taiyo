@@ -1,9 +1,8 @@
 import type {
-  AchievementKey,
   DB,
+  Locale,
   NotificationPayload,
   NotificationType,
-  ProfileModerationField,
   RankingPeriodKind,
 } from "@taiyomoe/db"
 import { config } from "@taiyomoe/config"
@@ -13,6 +12,7 @@ import { getCommentText } from "@taiyomoe/schemas/comment-content"
 import { sql, type Kysely } from "kysely"
 import { generateRequestDetails } from "web-push"
 import { env } from "./env"
+import { PUSH_TEXTS } from "./push-texts"
 
 type PushTarget = { endpoint: string; p256dh: string; auth: string }
 
@@ -86,6 +86,7 @@ type PushRow = {
   endpoint: string
   p256dh: string
   auth: string
+  locale: Locale
   chapterId: string | null
   chapterNumber: number | null
   mediaId: string | null
@@ -120,34 +121,7 @@ type PushRow = {
   reportedName: string | null
 }
 
-const ACHIEVEMENT_NAMES: Record<AchievementKey, string> = {
-  chaptersRead100: "100 chapters read",
-  chaptersRead1000: "1,000 chapters read",
-  chaptersRead5000: "5,000 chapters read",
-  chaptersUploaded10: "10 chapters uploaded",
-  chaptersUploaded250: "250 chapters uploaded",
-  chaptersUploaded100000: "100,000 chapters uploaded",
-  followers25: "25 followers",
-  commentsWritten50: "50 comments written",
-  dailyChampion: "Daily champion",
-  hatTrick: "Hat trick",
-  unstoppable: "Unstoppable",
-  sovereign: "Sovereign",
-  topTen: "Top ten",
-  weeklyPodium: "Weekly podium",
-  weeklyChampion: "Weekly champion",
-  monthlyPodium: "Monthly podium",
-  monthlyChampion: "Monthly champion",
-}
 const MODERATION_INBOX = "/notifications?category=moderation"
-const PROFILE_FIELD_LABELS = {
-  displayUsername: "display name",
-  about: "about text",
-  city: "city",
-  avatar: "avatar",
-  banner: "banner",
-} satisfies Record<ProfileModerationField, string>
-const fieldList = new Intl.ListFormat("en", { type: "conjunction" })
 /** The start of a comment's text, or null when it only holds images. */
 const excerptOf = (content: string | null) => {
   const text = Array.from(
@@ -214,15 +188,13 @@ const moderationPath = (row: PushRow, payload: NotificationPayload) => {
 }
 /** The moderation team stays anonymous: no name, no avatar. */
 const moderationMessage = (row: PushRow, payload: NotificationPayload) => {
+  const texts = PUSH_TEXTS[row.locale]
   const message = { url: "", icon: null, tag: row.notificationId }
 
   if ("listId" in payload) {
     return {
       ...message,
-      title:
-        payload.action === "DELETED"
-          ? "The moderation team deleted your list"
-          : "The moderation team edited your list",
+      title: texts.listTitle(payload.action === "DELETED"),
       body: row.listName ?? "",
     } satisfies PushMessage
   }
@@ -230,17 +202,18 @@ const moderationMessage = (row: PushRow, payload: NotificationPayload) => {
   if ("fields" in payload) {
     // Avatars and banners can only be removed, the other parts are edited.
     const removed = payload.fields.every((field) => field === "avatar" || field === "banner")
-    const fields = fieldList.format(payload.fields.map((field) => PROFILE_FIELD_LABELS[field]))
+    const fields = new Intl.ListFormat(row.locale, { type: "conjunction" }).format(
+      payload.fields.map((field) => texts.profileFields[field]),
+    )
 
     return {
       ...message,
-      title: "The moderation team edited your profile",
-      body: `${removed ? "Removed" : "Changed"}: ${fields}`,
+      title: texts.profileTitle,
+      body: texts.profileBody(removed, fields),
     } satisfies PushMessage
   }
 
-  const reviewed = `The moderation team ${payload.outcome === "RESOLVED" ? "resolved" : "dismissed"} your report`
-  const title = payload.points === undefined ? reviewed : `${reviewed}: +${payload.points} points`
+  const title = texts.reportTitle(payload.outcome === "RESOLVED", payload.points)
 
   if (payload.kind === "PAGE") {
     return {
@@ -248,8 +221,8 @@ const moderationMessage = (row: PushRow, payload: NotificationPayload) => {
       title,
       body:
         row.chapterId === null
-          ? "A page"
-          : `A page of ${row.mediaTitle ?? "a chapter"}, chapter ${row.chapterNumber ?? ""}`,
+          ? texts.aPage
+          : texts.pageOf(row.mediaTitle, String(row.chapterNumber ?? "")),
       icon: getCover(row),
     } satisfies PushMessage
   }
@@ -258,12 +231,14 @@ const moderationMessage = (row: PushRow, payload: NotificationPayload) => {
     return {
       ...message,
       title,
-      body: row.commentLive ? (excerptOf(row.commentContent) ?? "A comment") : "A removed comment",
+      body: row.commentLive
+        ? (excerptOf(row.commentContent) ?? texts.aComment)
+        : texts.aRemovedComment,
     } satisfies PushMessage
   }
 
   if (payload.kind === "GROUP") {
-    return { ...message, title, body: row.groupName ?? "A group" } satisfies PushMessage
+    return { ...message, title, body: row.groupName ?? texts.aGroup } satisfies PushMessage
   }
 
   return {
@@ -271,20 +246,19 @@ const moderationMessage = (row: PushRow, payload: NotificationPayload) => {
     title,
     body:
       row.reportedName === null
-        ? "A profile"
+        ? texts.aProfile
         : `${row.reportedName} (@${row.reportedUsername ?? ""})`,
   } satisfies PushMessage
 }
 const toMessage = (row: PushRow) => {
+  const texts = PUSH_TEXTS[row.locale]
   const open = (path: string) =>
     `/notifications/open?id=${row.notificationId}&to=${encodeURIComponent(path)}`
 
   if (row.type === "CHAPTER_PUBLISHED") {
-    const chapter = `New chapter ${row.chapterNumber ?? ""}`
-
     return {
-      title: row.mediaTitle ?? "New chapter",
-      body: row.groups === null ? chapter : `${chapter} by ${row.groups}`,
+      title: row.mediaTitle ?? texts.newChapter,
+      body: texts.chapterBody(String(row.chapterNumber ?? ""), row.groups),
       url: open(`/chapters/${row.chapterId ?? ""}`),
       icon: getCover(row),
       tag: row.notificationId,
@@ -292,12 +266,12 @@ const toMessage = (row: PushRow) => {
   }
 
   if (row.type === "RANKING_REWARD") {
-    const period = row.rankingKind === "MONTH" ? "month" : "week"
+    const kind = row.rankingKind ?? "WEEK"
 
     return {
-      title: `You finished #${row.rankingRank ?? ""} of the ${period}`,
-      body: `+${row.rankingPoints ?? 0} points`,
-      url: open(`/rankings?period=${period}`),
+      title: texts.rankingTitle(kind, row.rankingRank ?? 0),
+      body: texts.points(row.rankingPoints ?? 0),
+      url: open(`/rankings?period=${kind === "MONTH" ? "month" : "week"}`),
       icon: null,
       tag: row.notificationId,
     } satisfies PushMessage
@@ -305,8 +279,8 @@ const toMessage = (row: PushRow) => {
 
   if (row.type === "ACHIEVEMENT_EARNED") {
     return {
-      title: "Achievement unlocked",
-      body: isAchievementKey(row.achievement) ? ACHIEVEMENT_NAMES[row.achievement] : "",
+      title: texts.achievementUnlocked,
+      body: isAchievementKey(row.achievement) ? texts.achievements[row.achievement] : "",
       url: open(`/users/${encodeURIComponent(row.username)}?tab=achievements`),
       icon: null,
       tag: row.notificationId,
@@ -318,16 +292,13 @@ const toMessage = (row: PushRow) => {
   }
 
   const excerpt = excerptOf(row.commentContent)
-  const others = Number(row.actorCount ?? 1) - 1
-  const actors =
-    others === 0
-      ? (row.actorName ?? "Someone")
-      : `${row.actorName ?? "Someone"} and ${others} ${others === 1 ? "other" : "others"}`
 
   if (row.type === "FOLLOW") {
+    const others = Number(row.actorCount ?? 1) - 1
+
     return {
-      title: `${actors} started following you`,
-      body: others === 0 ? `@${row.actorUsername ?? ""}` : "See who in your inbox",
+      title: texts.followTitle(row.actorName ?? texts.someone, others),
+      body: others === 0 ? `@${row.actorUsername ?? ""}` : texts.seeWho,
       url: open(
         others === 0
           ? `/users/${encodeURIComponent(row.actorUsername ?? "")}`
@@ -339,11 +310,9 @@ const toMessage = (row: PushRow) => {
   }
 
   if (row.type === "COMMENT_LIKE") {
-    const count = Number(row.actorCount ?? 1)
-
     return {
-      title: `${count} ${count === 1 ? "reader" : "readers"} upvoted your comment`,
-      body: excerpt ?? "An image",
+      title: texts.upvoteTitle(Number(row.actorCount ?? 1)),
+      body: excerpt ?? texts.anImage,
       url: open(commentPath(row)),
       icon: null,
       tag: row.notificationId,
@@ -351,8 +320,8 @@ const toMessage = (row: PushRow) => {
   }
 
   return {
-    title: `${row.authorName ?? "Someone"} replied to your comment`,
-    body: excerpt ?? "Sent an image",
+    title: texts.replyTitle(row.authorName ?? texts.someone),
+    body: excerpt ?? texts.sentAnImage,
     url: open(commentPath(row)),
     icon: row.authorImage,
     tag: row.notificationId,
@@ -370,6 +339,7 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
       "ps"."endpoint",
       "ps"."p256dh",
       "ps"."auth",
+      "ps"."locale",
       "ch"."id" AS "chapterId",
       "ch"."number" AS "chapterNumber",
       "ch"."mediaId",

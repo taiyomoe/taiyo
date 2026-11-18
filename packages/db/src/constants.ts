@@ -487,6 +487,11 @@ export const LANGUAGES = [
 
 export type Language = (typeof LANGUAGES)[number]
 
+/** The languages of the interface, as the web app names them. */
+export const LOCALES = ["en", "fr", "pt-BR"] as const
+
+export type Locale = (typeof LOCALES)[number]
+
 export const SUPPORTED_LANGUAGES = ["en", "fr", "pt_br", "pt_pt"] as const satisfies Language[]
 
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number]

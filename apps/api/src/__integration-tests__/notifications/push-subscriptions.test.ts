@@ -15,11 +15,12 @@ const subscribe = (
   app: Parameters<typeof api>[0],
   headers: Record<string, string>,
   endpoint: string,
+  locale?: string,
 ) =>
   api(app, "/users/me/push-subscriptions", {
     method: "PUT",
     headers,
-    json: { endpoint, keys: KEYS },
+    json: { endpoint, keys: KEYS, locale },
   })
 const subscriptionsOf = async ({ db }: Services, userId: string) => {
   const rows = await db
@@ -113,6 +114,29 @@ describe("push subscriptions", () => {
     expect(getSentPushes(services.pushSender)).toMatchObject([
       { endpoint, message: { url: "/notifications" } },
     ])
+  })
+
+  test("writes a device's pushes in the last language it saved", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+    const endpoint = endpointFor("tablet")
+    const sendTest = () =>
+      api(app, "/users/me/push-subscriptions/test", { method: "POST", headers, json: { endpoint } })
+
+    await subscribe(app, headers, endpoint)
+    await sendTest()
+    await subscribe(app, headers, endpoint, "fr")
+    await sendTest()
+
+    expect(getSentPushes(services.pushSender).map(({ message }) => message.title)).toEqual([
+      "Notifications are on",
+      "Les notifications sont activées",
+    ])
+  })
+
+  test("rejects a language the interface does not have", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+
+    expect((await subscribe(app, headers, endpointFor("phone"), "de")).status).toBe(422)
   })
 
   test("forgets a device the push service dropped", async ({ app, services }) => {

@@ -1,5 +1,5 @@
 import { notificationAudit } from "@taiyomoe/audit"
-import { isExpiredPushStatus } from "@taiyomoe/queue"
+import { isExpiredPushStatus, PUSH_TEXTS } from "@taiyomoe/queue"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -18,7 +18,7 @@ export const testPushSubscriptionHandler = new Hono().post(
   "/me/push-subscriptions/test",
   describeRoute({
     summary: "Send a test push to my device",
-    description: `Sends a test push notification to one of your subscribed devices, so you can check that pushes reach it. You can send at most ${TESTS_PER_MINUTE} tests per minute.\n\n**Authentication:** signed-in user.`,
+    description: `Sends a test push notification to one of your subscribed devices, in the language the device saved, so you can check that pushes reach it. You can send at most ${TESTS_PER_MINUTE} tests per minute.\n\n**Authentication:** signed-in user.`,
     tags: ["Notifications"],
     responses: {
       201: {
@@ -63,7 +63,7 @@ export const testPushSubscriptionHandler = new Hono().post(
 
     const subscription = await db
       .selectFrom("pushSubscriptions")
-      .select(["id", "endpoint", "p256dh", "auth"])
+      .select(["id", "endpoint", "p256dh", "auth", "locale"])
       .where("userId", "=", user.id)
       .where("endpoint", "=", endpoint)
       .executeTakeFirst()
@@ -74,9 +74,10 @@ export const testPushSubscriptionHandler = new Hono().post(
 
     c.var.audit.set({ target: { id: subscription.id } })
 
+    const { testTitle, testBody } = PUSH_TEXTS[subscription.locale]
     const status = await pushSender(subscription, {
-      title: "Notifications are on",
-      body: "This device will now get new chapters and replies from Taiyō.",
+      title: testTitle,
+      body: testBody,
       url: "/notifications",
       icon: null,
       tag: `test-${subscription.id}`,
