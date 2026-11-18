@@ -19,6 +19,7 @@ import {
   type PushSender,
   sendPendingPushes,
 } from "./push"
+import { PUSH_TEXTS } from "./push-texts"
 import { CHAPTER_UPLOAD_QUEUE, type ChapterUploadProducer, getChapterUploadProducer } from "./queue"
 import {
   closeRankingPeriods,
@@ -45,6 +46,7 @@ export {
   isExpiredPushStatus,
   MANGADEX_SYNC_QUEUE,
   processChapterUpload,
+  PUSH_TEXTS,
   publishScheduledChapters,
   purgeNotifications,
   RANKING_REWARD_POINTS,
