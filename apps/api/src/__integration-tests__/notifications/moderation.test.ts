@@ -651,10 +651,9 @@ describe("the moderation category", () => {
       icon: null,
     })
     expect(destinationOf("The moderation team edited your profile")).toBe(`/users/${username}`)
-    expect(pushes.get("The moderation team resolved your report")).toMatchObject({
-      body: "Sunray Scans",
-      icon: null,
-    })
-    expect(destinationOf("The moderation team resolved your report")).toBe(`/groups/${groupId}`)
+    const resolved = `The moderation team resolved your report: +${config.reports.rewardPoints} points`
+
+    expect(pushes.get(resolved)).toMatchObject({ body: "Sunray Scans", icon: null })
+    expect(destinationOf(resolved)).toBe(`/groups/${groupId}`)
   })
 })
