@@ -9,8 +9,13 @@ const groupsSchema = z.object({
     entries: z.array(z.object({ rank: z.number(), group: z.object({ name: z.string() }) })),
   }),
 })
-const standingSchema = z.object({
-  data: z.object({ me: z.object({ rank: z.number() }).nullable() }),
+const readersSchema = z.object({
+  data: z.object({
+    entries: z.array(
+      z.object({ rank: z.number(), user: z.object({ displayUsername: z.string() }) }),
+    ),
+    me: z.object({ rank: z.number() }).nullable(),
+  }),
 })
 const visit = async (page: Page, path: string) => {
   await page.goto(path)
@@ -20,9 +25,9 @@ const visit = async (page: Page, path: string) => {
 }
 const option = (page: Page, control: "Ranking type" | "Period", name: string) =>
   page.getByRole("radiogroup", { name: control }).getByRole("radio", { name })
-const getStanding = async (page: Page) =>
-  standingSchema.parse(await (await page.request.get(`${API}/rankings/readers?period=all`)).json())
-    .data.me
+const getReaders = async (page: Page) =>
+  readersSchema.parse(await (await page.request.get(`${API}/rankings/readers?period=all`)).json())
+    .data
 
 test("ranks the groups of all time as the API does, and keeps the choice in the URL", async ({
   page,
@@ -83,21 +88,24 @@ test.describe("a reader", () => {
             data: { completed: true },
           })
 
-          return getStanding(page)
+          return (await getReaders(page)).me
         },
         { intervals: [1000], timeout: 20_000 },
       )
       .not.toBeNull()
 
-    const me = await getStanding(page)
+    // An empty ranking is never cached, so the board already counts the reader.
+    const { entries, me } = await getReaders(page)
+    const name = entries.find((entry) => entry.rank === me?.rank)?.user.displayUsername ?? ""
 
     await visit(page, "/rankings?period=all")
 
-    // The board can be a few minutes old, but the reader's own standing is always live.
     const board = page.getByRole("region", { name: "Top readers" })
 
     await expect(option(page, "Period", "All time")).toBeChecked()
+    await expect(board.getByRole("link", { name, exact: true }).first()).toBeVisible()
     await expect(board.getByText("You", { exact: true })).toBeVisible()
-    await expect(board.getByText(`#${me?.rank}`, { exact: true })).toBeVisible()
+    // The podium shows its ranks too, and the standing card comes after it.
+    await expect(board.getByText(`#${me?.rank}`, { exact: true }).last()).toBeVisible()
   })
 })
