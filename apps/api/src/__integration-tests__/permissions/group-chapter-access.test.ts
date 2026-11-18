@@ -156,13 +156,13 @@ describe("group chapter access", () => {
       }
     })
 
-    test("moderators, interns and users send chapters without a group to review", async ({
+    test("moderators and users send chapters without a group to review", async ({
       app,
       services,
     }) => {
       const { mediaId } = await setup(services)
 
-      for (const role of ["MODERATOR", "UPLOADER_INTERN", "USER"] as const) {
+      for (const role of ["MODERATOR", "USER"] as const) {
         const { headers } = await signInAs(services, { role })
         const res = await api(app, `/medias/${mediaId}/chapters`, {
           method: "POST",
@@ -314,10 +314,43 @@ describe("group chapter access", () => {
       expect(res.status).toBe(403)
     })
 
-    test("interns cannot edit or delete chapters outside their groups", async ({
+    test("interns can edit, recredit and delete the chapters they uploaded once published", async ({
       app,
       services,
     }) => {
+      const { mediaId, groupA, groupB } = await setup(services)
+      const { headers, userId } = await signInAs(services, { role: "UPLOADER_INTERN" })
+      const chapterId = await seedChapter(services, {
+        mediaId,
+        uploaderId: userId,
+        number: 1,
+        groupIds: [groupA],
+      })
+      const update = await api(app, `/chapters/${chapterId}`, {
+        method: "PATCH",
+        headers,
+        json: { title: "x" },
+      })
+      const credit = await api(app, `/chapters/${chapterId}/groups`, {
+        method: "POST",
+        headers,
+        json: { groupId: groupB },
+      })
+      const uncredit = await api(app, `/chapters/${chapterId}/groups/${groupA}`, {
+        method: "DELETE",
+        headers,
+      })
+
+      expect([update.status, credit.status, uncredit.status]).toEqual([200, 201, 200])
+      expect(await getCredits(services, chapterId)).toEqual([groupB])
+
+      const remove = await api(app, `/chapters/${chapterId}`, { method: "DELETE", headers })
+
+      expect(remove.status).toBe(200)
+      expect(await isDeleted(services, chapterId)).toBe(true)
+    })
+
+    test("interns cannot edit or delete chapters others uploaded", async ({ app, services }) => {
       const { groupA, chapterOf } = await setup(services)
       const chapterId = await chapterOf([groupA])
       const { headers } = await signInAs(services, { role: "UPLOADER_INTERN" })

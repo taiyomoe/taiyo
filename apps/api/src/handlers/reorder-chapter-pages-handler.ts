@@ -28,7 +28,7 @@ export const reorderChapterPagesHandler = new Hono().patch(
   describeRoute({
     summary: "Reorder a chapter's pages",
     description:
-      "Reorders the pages of a chapter. The list must contain every page of the chapter exactly once.\n\n**Required access:** uploader or admin, a moderator or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.",
+      "Reorders the pages of a chapter. The list must contain every page of the chapter exactly once.\n\n**Required access:** uploader or admin, a moderator, the uploader intern who uploaded it or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.",
     tags: ["Chapters"],
     responses: {
       200: {

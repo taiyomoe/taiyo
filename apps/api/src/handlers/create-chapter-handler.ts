@@ -74,7 +74,7 @@ export const createChapterHandler = new Hono().post(
   "/:id/chapters",
   describeRoute({
     summary: "Create a chapter",
-    description: `Creates a chapter of a media crediting the given groups: its pages are uploaded afterwards, unless it is external (\`isExternal\`) and only links to \`externalUrl\`. If you are uploader or admin, or credit a group where you have the \`UPLOAD_CHAPTERS\` permission, it is published once its pages are processed (right away when external), or scheduled when \`publishAt\` is in the future. Otherwise it waits for review, hidden from everyone but you and the reviewers, and you can have at most ${config.input.maxPendingChapters} chapters waiting.\n\n**Authentication:** signed-in user.`,
+    description: `Creates a chapter of a media crediting the given groups: its pages are uploaded afterwards, unless it is external (\`isExternal\`) and only links to \`externalUrl\`. If you are uploader intern, uploader or admin, or credit a group where you have the \`UPLOAD_CHAPTERS\` permission, it is published once its pages are processed (right away when external), or scheduled when \`publishAt\` is in the future. Otherwise it waits for review, hidden from everyone but you and the reviewers, and you can have at most ${config.input.maxPendingChapters} chapters waiting.\n\n**Authentication:** signed-in user.`,
     tags: ["Chapters"],
     responses: {
       201: {

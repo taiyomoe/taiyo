@@ -27,7 +27,7 @@ const uploaderMayPublish = sql<boolean>`exists (
   where "u"."id" = "chapters"."uploaderId"
     and not (coalesce("u"."banned", false) and ("u"."banExpires" is null or "u"."banExpires" > (CURRENT_TIMESTAMP at time zone 'UTC')))
     and (
-      "u"."role" in ('UPLOADER', 'ADMIN')
+      "u"."role" in ('UPLOADER_INTERN', 'UPLOADER', 'ADMIN')
       or exists (
         select 1 from "chapterGroups" as "cg"
         inner join "groups" as "g" on "g"."id" = "cg"."groupId" and "g"."deletedAt" is null

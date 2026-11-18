@@ -53,7 +53,7 @@ export const updateChapterHandler = new Hono().patch(
   describeRoute({
     summary: "Update a chapter",
     description:
-      "Updates the details of a chapter. Omitted fields are kept as they are; at least one field is required. Setting `publishAt` to `null` or a past time releases a scheduled chapter right away, but a chapter that is already out cannot be scheduled again. An external chapter always keeps its `externalUrl`.\n\nChanging `flag` requires the uploader, moderator or admin role. The user who uploaded a scheduled chapter can only change its `publishAt`, unless they could also edit it once out.\n\n**Required access:** uploader or admin, a moderator or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.",
+      "Updates the details of a chapter. Omitted fields are kept as they are; at least one field is required. Setting `publishAt` to `null` or a past time releases a scheduled chapter right away, but a chapter that is already out cannot be scheduled again. An external chapter always keeps its `externalUrl`.\n\nChanging `flag` requires the uploader, moderator or admin role. The user who uploaded a scheduled chapter can only change its `publishAt`, unless they could also edit it once out.\n\n**Required access:** uploader or admin, a moderator, the uploader intern who uploaded it or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.",
     tags: ["Chapters"],
     responses: {
       200: {

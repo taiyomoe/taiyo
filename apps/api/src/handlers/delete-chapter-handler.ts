@@ -15,7 +15,7 @@ export const deleteChapterHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a chapter",
     description:
-      "Deletes a chapter, whatever its status. It no longer shows up anywhere.\n\n**Required access:** uploader or admin, or a moderator or a member of a credited group with the `DELETE_CHAPTERS` permission when the chapter is published or scheduled.",
+      "Deletes a chapter, whatever its status. It no longer shows up anywhere.\n\n**Required access:** uploader or admin, or a moderator, the uploader intern who uploaded it or a member of a credited group with the `DELETE_CHAPTERS` permission when the chapter is published or scheduled.",
     tags: ["Chapters"],
     responses: {
       200: {

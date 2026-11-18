@@ -57,12 +57,12 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "staff.create": ["UPLOADER_INTERN", "UPLOADER", "ADMIN"],
   "staff.update": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
   "staff.delete": ["UPLOADER", "ADMIN"],
-  "chapter.publish": ["UPLOADER", "ADMIN"],
+  "chapter.publish": ["UPLOADER_INTERN", "UPLOADER", "ADMIN"],
   "chapter.submit": ROLES,
   "chapter.review": ["UPLOADER", "ADMIN"],
   "chapter.flag": ["UPLOADER", "MODERATOR", "ADMIN"],
   "chapter.list": ["UPLOADER", "MODERATOR", "ADMIN"],
-  "chapter.listInGroups": ["UPLOADER", "MODERATOR", "ADMIN"],
+  "chapter.listInGroups": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
   "group.create": ["UPLOADER", "ADMIN"],
   "group.delete": ["ADMIN"],
   "group.list": ["UPLOADER", "MODERATOR", "ADMIN"],
@@ -249,6 +249,26 @@ describe("chapters", () => {
 
     expect(can("chapter.update", chapter([], ACTOR_ID))).toBe(false)
     expect(can("chapter.delete", chapter([], ACTOR_ID))).toBe(false)
+  })
+
+  it("lets interns edit, delete and recredit the chapters they uploaded once out", () => {
+    const can = createPermissions(actor("UPLOADER_INTERN"))
+
+    for (const status of ["PUBLISHED", "SCHEDULED"] as const) {
+      const own = chapter([GROUP_A], ACTOR_ID, status)
+
+      expect(can("chapter.update", own)).toBe(true)
+      expect(can("chapter.delete", own)).toBe(true)
+      expect(can("chapter.credit", { chapter: own, groupId: GROUP_B })).toBe(true)
+      expect(can("chapter.uncredit", { chapter: own, groupId: GROUP_A })).toBe(true)
+    }
+
+    expect(
+      createPermissions(actor("UPLOADER_INTERN", [], true))(
+        "chapter.update",
+        chapter([], ACTOR_ID),
+      ),
+    ).toBe(false)
   })
 
   it("lets a group owner edit and delete every chapter credited to the group", () => {
