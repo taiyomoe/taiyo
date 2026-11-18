@@ -7,6 +7,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { checkComment } from "../middlewares/check-comment-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { closeCommentReports } from "../utils/comment-reports"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -15,7 +16,7 @@ export const deleteCommentHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a comment",
     description:
-      "Deletes a comment. A top-level comment with visible replies stays as a placeholder saying who removed it, and its replies stay. Deleting someone else's comment also resolves its open reports.\n\n**Required access:** the author of the comment or the owner of the profile it is on, or moderator or admin.",
+      "Deletes a comment. A top-level comment with visible replies stays as a placeholder saying who removed it, and its replies stay. Deleting someone else's comment also resolves its open reports, and their reporters are notified.\n\n**Required access:** the author of the comment or the owner of the profile it is on, or moderator or admin.",
     tags: ["Comments"],
     responses: {
       200: {
@@ -76,12 +77,10 @@ export const deleteCommentHandler = new Hono().delete(
     }
 
     if (deletion !== "AUTHOR") {
-      await db
-        .updateTable("commentReports")
-        .set({ status: "RESOLVED", resolverId: user.id, resolvedAt: sql<Date>`CURRENT_TIMESTAMP` })
-        .where("commentId", "=", comment.id)
-        .where("status", "=", "OPEN")
-        .execute()
+      await closeCommentReports(c.var, [comment.id], {
+        status: "RESOLVED",
+        notify: deletion === "MODERATOR",
+      })
     }
 
     c.var.audit.set({ target: { deletion, authorId: comment.authorId ?? undefined } })

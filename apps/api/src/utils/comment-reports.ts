@@ -1,5 +1,6 @@
 import { COMMENT_REPORT_REASONS, type DB, type Kysely, sql } from "@taiyomoe/db"
 import z from "zod"
+import { type ModerationContext, notifyModeration } from "./notifications"
 import { userSummarySchema } from "./schemas"
 
 export const commentReportSchema = z.object({
@@ -51,24 +52,49 @@ export const toCommentReport = (row: CommentReportRow) =>
     },
   }) satisfies z.infer<typeof commentReportSchema>
 
-/** Closes every open report on the comments. */
+/**
+ * Closes every open report on the comments in your name, notifies each reporter of the outcome,
+ * and returns how many it closed.
+ */
 export const closeCommentReports = async (
-  db: Kysely<DB>,
+  context: ModerationContext,
   commentIds: readonly string[],
-  { status, resolverId }: { status: "RESOLVED" | "DISMISSED"; resolverId: string },
+  {
+    status,
+    notify = true,
+  }: {
+    status: "RESOLVED" | "DISMISSED"
+    /** Whether the reporters hear about it: not when the page owner removed the comment. */
+    notify?: boolean
+  },
 ) => {
   if (commentIds.length === 0) {
     return 0
   }
 
-  const result = await db
+  const closed = await context.db
     .updateTable("commentReports")
-    .set({ status, resolverId, resolvedAt: sql<Date>`CURRENT_TIMESTAMP` })
+    .set({ status, resolverId: context.user.id, resolvedAt: sql<Date>`CURRENT_TIMESTAMP` })
     .where("commentId", "in", commentIds)
     .where("status", "=", "OPEN")
-    .executeTakeFirst()
+    .returning(["id", "reporterId", "commentId"])
+    .execute()
 
-  return Number(result.numUpdatedRows)
+  await notifyModeration(
+    context,
+    (notify ? closed : []).map((report) => ({
+      type: "REPORT_REVIEWED",
+      userId: report.reporterId,
+      payload: {
+        kind: "COMMENT",
+        reportId: report.id,
+        outcome: status,
+        commentId: report.commentId,
+      },
+    })),
+  )
+
+  return closed.length
 }
 
 export const closeStatusSchema = z.enum(["RESOLVED", "DISMISSED"]).meta({

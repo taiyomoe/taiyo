@@ -8,6 +8,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { bulkIdsSchema, bulkResultSchema, partitionFound, skippedSchema } from "../utils/bulk"
+import { closeCommentReports } from "../utils/comment-reports"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -28,7 +29,7 @@ export const deleteCommentsHandler = new Hono().delete(
   describeRoute({
     summary: "Delete comments in bulk",
     description:
-      "Deletes several comments at once, each as if deleted on its own: a top-level comment with visible replies stays as a placeholder saying who removed it. Deleting someone else's comment also resolves its open reports. Comments that do not exist or were already removed are skipped and reported.\n\n**Required roles:** moderator, admin.",
+      "Deletes several comments at once, each as if deleted on its own: a top-level comment with visible replies stays as a placeholder saying who removed it. Deleting someone else's comment also resolves its open reports, and their reporters are notified. Comments that do not exist or were already removed are skipped and reported.\n\n**Required roles:** moderator, admin.",
     tags: ["Comments"],
     responses: {
       200: {
@@ -79,14 +80,7 @@ export const deleteCommentsHandler = new Hono().delete(
     await markDeleted(own, "AUTHOR")
     await markDeleted(others, "MODERATOR")
 
-    if (others.length > 0) {
-      await db
-        .updateTable("commentReports")
-        .set({ status: "RESOLVED", resolverId: user.id, resolvedAt: sql<Date>`CURRENT_TIMESTAMP` })
-        .where("commentId", "in", others)
-        .where("status", "=", "OPEN")
-        .execute()
-    }
+    await closeCommentReports(c.var, others, { status: "RESOLVED" })
 
     c.var.audit.set({ changes: { after: { commentIds: done } } })
 

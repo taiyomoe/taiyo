@@ -53,7 +53,7 @@ export const closeCommentReportHandler = new Hono().patch(
   validateJson(bodySchema),
   withTransaction,
   async (c) => {
-    const { db, user } = c.var
+    const { db } = c.var
     const { id } = c.var.param
     const { status } = c.var.json
     const report = await db
@@ -71,10 +71,7 @@ export const closeCommentReportHandler = new Hono().patch(
       return c.fail("COMMENT_REPORT_CLOSED")
     }
 
-    const closed = await closeCommentReports(db, [report.commentId], {
-      status,
-      resolverId: user.id,
-    })
+    const closed = await closeCommentReports(c.var, [report.commentId], { status })
 
     c.var.audit.set({ target: { commentId: report.commentId, status } })
 

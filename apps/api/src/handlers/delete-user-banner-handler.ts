@@ -9,6 +9,7 @@ import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
+import { notifyModeration } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -17,7 +18,7 @@ export const deleteUserBannerHandler = new Hono().delete(
   describeRoute({
     summary: "Remove a user's profile banner",
     description:
-      "Removes the profile banner of a user. Removing a banner the user does not have does nothing. Moderators can only edit users with the `USER` role, and you cannot remove your own banner this way.\n\n**Required roles:** moderator, admin.",
+      "Removes the profile banner of a user and notifies the user. Removing a banner the user does not have does nothing. Moderators can only edit users with the `USER` role, and you cannot remove your own banner this way.\n\n**Required roles:** moderator, admin.",
     tags: ["Users"],
     responses: {
       200: {
@@ -74,6 +75,9 @@ export const deleteUserBannerHandler = new Hono().delete(
         .execute()
 
       removeImage(c.var, previous.banner)
+      await notifyModeration(c.var, [
+        { type: "PROFILE_MODERATED", userId: targetUser.id, payload: { fields: ["banner"] } },
+      ])
     }
 
     return c.ok({ id: targetUser.id, bannerUrl: null })

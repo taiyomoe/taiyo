@@ -4,6 +4,7 @@ import {
   BookOpenText,
   Comment,
   Search,
+  Shield,
   ThumbsUp,
   Trophy,
 } from "@taiyomoe/ui/components/icons"
@@ -47,6 +48,11 @@ const CATEGORY_EMPTY = {
     icon: Trophy,
     title: m.notifications_empty_rewards,
     description: m.notifications_empty_rewards_description,
+  },
+  moderation: {
+    icon: Shield,
+    title: m.notifications_empty_moderation,
+    description: m.notifications_empty_moderation_description,
   },
 } as const
 const emptyStateOf = ({

@@ -1,21 +1,23 @@
-import type { DB, Kysely } from "@taiyomoe/db"
 import type { ReportOutcome } from "./schemas"
+import { type ModerationContext, notifyModeration } from "./notifications"
 
-/** Closes a pending report as resolved or dismissed, with an optional internal note. */
+/**
+ * Closes a pending report in your name as resolved or dismissed, with an optional internal note,
+ * and notifies the reporter of the outcome.
+ */
 export const reviewGroupReport = async (
-  db: Kysely<DB>,
+  context: ModerationContext,
   {
     reportId,
-    reviewerId,
     status,
     note,
   }: {
     reportId: string
-    reviewerId: string
     status: ReportOutcome
     note: string | null
   },
 ) => {
+  const { db, user } = context
   const report = await db
     .selectFrom("groupReports")
     .select("groupId")
@@ -28,13 +30,23 @@ export const reviewGroupReport = async (
 
   const reviewed = await db
     .updateTable("groupReports")
-    .set({ status, reviewerId, reviewerNote: note })
+    .set({ status, reviewerId: user.id, reviewerNote: note })
     .where("id", "=", reportId)
     .where("status", "=", "PENDING")
-    .returning("id")
+    .returning("reporterId")
     .executeTakeFirst()
 
-  return reviewed === undefined
-    ? ({ ok: false, error: "GROUP_REPORT_NOT_PENDING", groupId: report.groupId } as const)
-    : ({ ok: true, groupId: report.groupId } as const)
+  if (reviewed === undefined) {
+    return { ok: false, error: "GROUP_REPORT_NOT_PENDING", groupId: report.groupId } as const
+  }
+
+  await notifyModeration(context, [
+    {
+      type: "REPORT_REVIEWED",
+      userId: reviewed.reporterId,
+      payload: { kind: "GROUP", reportId, outcome: status, groupId: report.groupId },
+    },
+  ])
+
+  return { ok: true, groupId: report.groupId } as const
 }

@@ -34,7 +34,7 @@ export const reviewUserReportsHandler = new Hono().post(
   describeRoute({
     summary: "Review user reports in bulk",
     description:
-      "Reviews several pending reports on users at once, closing them all as resolved or dismissed with the same note. Reports that do not exist or were already reviewed are skipped and reported.\n\n**Required roles:** moderator, admin.",
+      "Reviews several pending reports on users at once, closing them all as resolved or dismissed with the same note. Reports that do not exist or were already reviewed are skipped and reported. The reporter of each reviewed report is notified of the outcome, unless it is you.\n\n**Required roles:** moderator, admin.",
     tags: ["User reports"],
     responses: {
       201: {
@@ -59,13 +59,12 @@ export const reviewUserReportsHandler = new Hono().post(
   validateJson(reviewSchema),
   withTransaction,
   async (c) => {
-    const { db, user } = c.var
     const { reportIds, status, note } = c.var.json
     const done: string[] = []
     const skipped: Array<z.infer<typeof skippedReportSchema>> = []
 
     for (const reportId of reportIds) {
-      const result = await reviewUserReport(db, { reportId, reviewerId: user.id, status, note })
+      const result = await reviewUserReport(c.var, { reportId, status, note })
 
       if (result.ok) {
         done.push(reportId)

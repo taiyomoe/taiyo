@@ -9,6 +9,7 @@ import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
+import { notifyModeration } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope } from "../utils/schemas"
@@ -19,7 +20,7 @@ export const deleteUserAvatarHandler = new Hono().delete(
   describeRoute({
     summary: "Remove a user's avatar",
     description:
-      "Removes the avatar of a user, so the user's initial shows instead. Removing an avatar the user does not have does nothing. Moderators can only edit users with the `USER` role, and you cannot remove your own avatar this way.\n\n**Required roles:** moderator, admin.",
+      "Removes the avatar of a user, so the user's initial shows instead, and notifies the user. Removing an avatar the user does not have does nothing. Moderators can only edit users with the `USER` role, and you cannot remove your own avatar this way.\n\n**Required roles:** moderator, admin.",
     tags: ["Users"],
     responses: {
       200: {
@@ -65,6 +66,12 @@ export const deleteUserAvatarHandler = new Hono().delete(
 
     if (key !== null) {
       removeImage(c.var, key)
+    }
+
+    if (targetUser.image !== null) {
+      await notifyModeration(c.var, [
+        { type: "PROFILE_MODERATED", userId: targetUser.id, payload: { fields: ["avatar"] } },
+      ])
     }
 
     c.var.afterCommit(() => refreshUserSessions(auth, targetUser.id))

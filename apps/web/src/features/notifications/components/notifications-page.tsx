@@ -13,6 +13,7 @@ import {
   Mail,
   Search,
   Settings,
+  Shield,
   Trash,
   Trophy,
 } from "@taiyomoe/ui/components/icons"
@@ -73,6 +74,7 @@ const NAV_ITEMS = [
   { category: "replies", label: m.notifications_category_replies, icon: Comment },
   { category: "activity", label: m.notifications_category_activity, icon: Activity },
   { category: "rewards", label: m.notifications_category_rewards, icon: Trophy },
+  { category: "moderation", label: m.notifications_category_moderation, icon: Shield },
 ] as const satisfies ReadonlyArray<{
   category: NotificationCategory | undefined
   label: () => string

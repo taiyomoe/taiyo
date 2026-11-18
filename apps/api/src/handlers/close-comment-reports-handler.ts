@@ -29,7 +29,7 @@ export const closeCommentReportsHandler = new Hono().patch(
   describeRoute({
     summary: "Close comment reports in bulk",
     description:
-      "Closes several reports at once as resolved or dismissed, each along with every other open report on the same comment. Reports that do not exist or are already closed are skipped and reported.\n\n**Required roles:** moderator, admin.",
+      "Closes several reports at once as resolved or dismissed, each along with every other open report on the same comment. Reports that do not exist or are already closed are skipped and reported. The reporter of each closed report is notified of the outcome, unless it is you.\n\n**Required roles:** moderator, admin.",
     tags: ["Comment reports"],
     responses: {
       200: {
@@ -54,7 +54,7 @@ export const closeCommentReportsHandler = new Hono().patch(
   validateJson(bodySchema),
   withTransaction,
   async (c) => {
-    const { db, user } = c.var
+    const { db } = c.var
     const { reportIds, status } = c.var.json
     const rows = await db
       .selectFrom("commentReports")
@@ -66,7 +66,7 @@ export const closeCommentReportsHandler = new Hono().patch(
     const open = found.filter((row) => row.status === "OPEN")
     const commentIds = [...new Set(open.map((row) => row.commentId))]
 
-    await closeCommentReports(db, commentIds, { status, resolverId: user.id })
+    await closeCommentReports(c.var, commentIds, { status })
 
     c.var.audit.set({ changes: { after: { commentIds, status } } })
 
