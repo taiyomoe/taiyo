@@ -2,11 +2,14 @@ import { Hono } from "hono"
 import { addUsersPointsHandler } from "../handlers/add-users-points-handler"
 import { banUserHandler } from "../handlers/ban-user-handler"
 import { createListHandler } from "../handlers/create-list-handler"
+import { createUserReportHandler } from "../handlers/create-user-report-handler"
 import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-handler"
 import { deleteMyAvatarHandler } from "../handlers/delete-my-avatar-handler"
 import { deleteMyBannerHandler } from "../handlers/delete-my-banner-handler"
 import { deleteMyNotificationsHandler } from "../handlers/delete-my-notifications-handler"
 import { deletePushSubscriptionHandler } from "../handlers/delete-push-subscription-handler"
+import { deleteUserAvatarHandler } from "../handlers/delete-user-avatar-handler"
+import { deleteUserBannerHandler } from "../handlers/delete-user-banner-handler"
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
@@ -32,6 +35,7 @@ import { listMyLibraryHandler } from "../handlers/list-my-library-handler"
 import { listMyListsHandler } from "../handlers/list-my-lists-handler"
 import { listMyMediaSuggestionsHandler } from "../handlers/list-my-media-suggestions-handler"
 import { listMyNotificationsHandler } from "../handlers/list-my-notifications-handler"
+import { listUserAchievementsHandler } from "../handlers/list-user-achievements-handler"
 import { listUserListsHandler } from "../handlers/list-user-lists-handler"
 import { listUserReadingHistoryHandler } from "../handlers/list-user-reading-history-handler"
 import { listUsersHandler } from "../handlers/list-users-handler"
@@ -53,6 +57,7 @@ import { updateMyNotificationsHandler } from "../handlers/update-my-notification
 import { updateMyProfileHandler } from "../handlers/update-my-profile-handler"
 import { updateMyReaderSettingsHandler } from "../handlers/update-my-reader-settings-handler"
 import { updateMySettingsHandler } from "../handlers/update-my-settings-handler"
+import { updateUserProfileHandler } from "../handlers/update-user-profile-handler"
 import { upsertLibraryEntryHandler } from "../handlers/upsert-library-entry-handler"
 import { upsertPushSubscriptionHandler } from "../handlers/upsert-push-subscription-handler"
 
@@ -66,6 +71,7 @@ export const usersRouter = new Hono()
   .route("/", setUserRoleHandler)
   .route("/", banUserHandler)
   .route("/", unbanUserHandler)
+  .route("/", createUserReportHandler)
   .route("/", followUserHandler)
   .route("/", unfollowUserHandler)
   .route("/", listFollowersHandler)
@@ -110,6 +116,11 @@ export const usersRouter = new Hono()
   .route("/", deleteMyAvatarHandler)
   .route("/", updateMyBannerHandler)
   .route("/", deleteMyBannerHandler)
+  // After the `/me/...` routes, which `/:id/...` would otherwise catch.
+  .route("/", updateUserProfileHandler)
+  .route("/", deleteUserAvatarHandler)
+  .route("/", deleteUserBannerHandler)
   .route("/", getUserStatsHandler)
   .route("/", listUserReadingHistoryHandler)
   .route("/", listUserListsHandler)
+  .route("/", listUserAchievementsHandler)

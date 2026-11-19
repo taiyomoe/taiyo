@@ -6,6 +6,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { checkMediaSuggestion } from "../middlewares/check-media-suggestion-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { withdrawSuggestions } from "../utils/media-suggestions"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -60,11 +61,7 @@ export const withdrawMediaSuggestionHandler = new Hono().post(
         : c.fail("FORBIDDEN")
     }
 
-    await db
-      .updateTable("mediaSuggestions")
-      .set({ status: "WITHDRAWN" })
-      .where("id", "=", mediaSuggestion.id)
-      .execute()
+    await withdrawSuggestions(db, [mediaSuggestion.id])
 
     return c.ok({ id: mediaSuggestion.id })
   },

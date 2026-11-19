@@ -1,3 +1,4 @@
+import type { UserListVisibility } from "@taiyomoe/db/constants"
 import type { Control } from "react-hook-form"
 import * as stylex from "@stylexjs/stylex"
 import { Globe, Lock } from "@taiyomoe/ui/components/icons"
@@ -34,7 +35,14 @@ const styles = stylex.create({
   },
 })
 
-export function VisibilityField({ control }: { control: Control<ListDetailsValues> }) {
+export function VisibilityField({
+  control,
+  hints,
+}: {
+  control: Control<ListDetailsValues>
+  /** What each choice means to whoever edits the list; written for its owner by default. */
+  hints?: Record<UserListVisibility, string> | undefined
+}) {
   const labelId = useId()
   const descriptionId = useId()
 
@@ -68,9 +76,10 @@ export function VisibilityField({ control }: { control: Control<ListDetailsValue
             </SegmentedControlItem>
           </SegmentedControl>
           <p id={descriptionId} sx={styles.description}>
-            {field.value === "PUBLIC"
-              ? m.list_editor_visibility_public_hint()
-              : m.list_editor_visibility_private_hint()}
+            {hints?.[field.value] ??
+              (field.value === "PUBLIC"
+                ? m.list_editor_visibility_public_hint()
+                : m.list_editor_visibility_private_hint())}
           </p>
         </div>
       )}

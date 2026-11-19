@@ -6,6 +6,7 @@ import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { awardAchievements } from "../utils/achievements"
 import {
   checkContent,
   commentSchema,
@@ -72,6 +73,7 @@ export const createCommentHandler = new Hono().post(
       .executeTakeFirstOrThrow()
 
     await saveImageUsages(db, id, checked.imageIds)
+    await awardAchievements(c.var, user.id)
     c.var.audit.set({ target: { id } })
 
     return c.ok(

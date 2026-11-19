@@ -10,7 +10,11 @@ import { Pill } from "@/components/badges/pill"
 import { LanguageChip } from "@/components/flags/flags"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
-import { MediaCell } from "@/features/catalog/components/shared/media-cell"
+import {
+  ChapterPages,
+  FoldedChapterPages,
+} from "@/features/catalog/components/shared/chapter-pages"
+import { MediaCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { ChapterGroups } from "@/features/chapters/components/chapter-groups"
@@ -97,11 +101,19 @@ export function ChapterRow({
           }
           mediaId={chapter.mediaId}
           narrow={{
-            from: "3xl",
+            from: "4xl",
             content: (
               <>
-                {status}
-                <LanguageChip language={chapter.language} />
+                <Folded until="3xl">
+                  {status}
+                  <LanguageChip language={chapter.language} />
+                  <FoldedChapterPages chapter={chapter} />
+                </Folded>
+                <Uploader uploader={chapter.uploader} />
+                <ChapterGroups groups={chapter.groups} />
+                <span sx={catalogStyles.muted}>
+                  <TimeAgo length="long" date={chapter.createdAt} />
+                </span>
               </>
             ),
           }}
@@ -111,11 +123,14 @@ export function ChapterRow({
       <CatalogCell column="language">
         <LanguageChip language={chapter.language} />
       </CatalogCell>
+      <CatalogCell column="pages">
+        <ChapterPages chapter={chapter} />
+      </CatalogCell>
       <CatalogCell column="status">{status}</CatalogCell>
       <CatalogCell column="credits">
         <div sx={catalogStyles.inline}>
           <Uploader uploader={chapter.uploader} />
-          <ChapterGroups groups={chapter.groups} />
+          <ChapterGroups groups={chapter.groups} underUploader />
         </div>
       </CatalogCell>
       <CatalogCell column="date" sx={catalogStyles.muted}>

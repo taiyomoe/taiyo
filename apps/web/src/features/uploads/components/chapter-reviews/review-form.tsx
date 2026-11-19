@@ -6,6 +6,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@taiyomoe/ui/components/ui/dialog"
+import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
@@ -77,6 +78,10 @@ export function ReviewForm({
   const [rejecting, setRejecting] = useState(false)
   const [reason, setReason] = useState("")
   const [touched, setTouched] = useState(false)
+  const done = (message: (args: { count: number }) => string) => () => {
+    toastManager.add({ title: message({ count: 1 }), type: "success" })
+    onDone()
+  }
   const parsedNumber = Number(number)
   const numberInvalid = number.trim() === "" || !Number.isFinite(parsedNumber) || parsedNumber < 0
 
@@ -140,7 +145,7 @@ export function ReviewForm({
                 groupIds: groups.map((group) => group.id),
               },
             },
-            { onSuccess: onDone },
+            { onSuccess: done(m.review_bulk_approved) },
           )
         }}
         onCancelReject={() => {
@@ -150,7 +155,10 @@ export function ReviewForm({
           setTouched(true)
 
           if (reason.trim() !== "") {
-            review.mutate({ id: submission.id, reason: reason.trim() }, { onSuccess: onDone })
+            review.mutate(
+              { id: submission.id, reason: reason.trim() },
+              { onSuccess: done(m.review_bulk_rejected) },
+            )
           }
         }}
         onStartReject={() => {

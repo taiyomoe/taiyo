@@ -3,6 +3,9 @@ import { getCoverUrl } from "@taiyomoe/s3"
 import { group } from "radashi"
 import { escapeLike } from "./escape-like"
 
+/** The number of processed pages of the chapter. */
+export const chapterPageCount = sql<number>`coalesce(cardinality(${sql.ref("chapters.pages")}), 0)`
+
 const effectiveContentRating = sql<ContentRating>`greatest(${sql.ref("medias.contentRating")}, ${sql.ref("chapters.contentRating")})`
 
 type ChapterFilters = {

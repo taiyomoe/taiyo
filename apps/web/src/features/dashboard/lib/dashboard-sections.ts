@@ -11,13 +11,13 @@ import {
   History,
   Image,
   Library,
+  List,
   Mail,
   ListNumbered,
   NoteEdit,
   PenTool,
   Refresh,
   Settings,
-  Tag,
   Upload,
   User,
   UserCheck,
@@ -36,8 +36,6 @@ type DashboardItem = AppSidebarSection["items"][number] & {
 }
 
 type DashboardSection = Omit<AppSidebarSection, "items"> & { items: DashboardItem[] }
-
-const ANOTHER_USER = { id: "", role: "USER" } as const
 
 export const DASHBOARD_SECTIONS: DashboardSection[] = [
   {
@@ -154,7 +152,6 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         to: "/dashboard/banners",
         visible: canOpenImages,
       },
-      { label: m.dashboard_nav_tags, icon: Tag, visible: (can) => can("media.update") },
     ],
   },
   {
@@ -190,10 +187,22 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         visible: (can) => can("comment.review"),
       },
       {
+        label: m.dashboard_nav_lists,
+        icon: List,
+        to: "/dashboard/lists",
+        visible: (can) => can("list.moderate"),
+      },
+      {
         label: m.dashboard_nav_group_reports,
         icon: Flag,
         to: "/dashboard/group-reports",
         visible: (can) => can("groupReport.review"),
+      },
+      {
+        label: m.user_reports_title,
+        icon: Flag,
+        to: "/dashboard/user-reports",
+        visible: (can) => can("userReport.review"),
       },
     ],
   },
@@ -203,7 +212,8 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
       {
         label: m.dashboard_nav_settings,
         icon: Settings,
-        visible: (can) => can("user.setRole", ANOTHER_USER),
+        to: "/dashboard/settings",
+        visible: (can) => can("media.feature"),
       },
     ],
   },

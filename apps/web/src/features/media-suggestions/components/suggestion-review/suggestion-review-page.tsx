@@ -1,11 +1,11 @@
 import type { MediaEditField } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
 import { ArrowLeft, ExternalLink } from "@taiyomoe/ui/components/icons"
-import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
+import { PageAction } from "@/components/filters/filter-toolbar"
 import { DashboardPage } from "@/components/layout/dashboard-page"
 import {
   PageBodySkeleton,
@@ -100,7 +100,7 @@ function SuggestionReview() {
         </Link>
       }
       actions={
-        <Button
+        <PageAction
           render={
             <Link
               params={{ mediaId: suggestion.media.id }}
@@ -113,7 +113,7 @@ function SuggestionReview() {
         >
           {m.suggestion_open_media()}
           <ExternalLink />
-        </Button>
+        </PageAction>
       }
       title={suggestion.media.title ?? m.media_untitled()}
     >

@@ -33,13 +33,47 @@ describe("DELETE /lists/:id", () => {
     const { headers: otherHeaders } = await signInAs(services)
     const list = await services.db
       .insertInto("userLists")
-      .values({ userId: ownerId, name: "Mine" })
+      .values({ userId: ownerId, name: "Mine", visibility: "PUBLIC" })
       .returning("id")
       .executeTakeFirstOrThrow()
     const res = await api(app, `/lists/${list.id}`, {
       method: "DELETE",
       headers: otherHeaders,
     })
+
+    expect(res.status).toBe(403)
+  })
+
+  test("moderators delete the PUBLIC lists of others", async ({ app, services }) => {
+    const { userId: ownerId } = await signInAs(services)
+    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const list = await services.db
+      .insertInto("userLists")
+      .values({ userId: ownerId, name: "Offensive", visibility: "PUBLIC" })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+    const res = await api(app, `/lists/${list.id}`, { method: "DELETE", headers })
+
+    expect(res.status).toBe(200)
+
+    const row = await services.db
+      .selectFrom("userLists")
+      .select("deletedAt")
+      .where("id", "=", list.id)
+      .executeTakeFirstOrThrow()
+
+    expect(row.deletedAt).not.toBeNull()
+  })
+
+  test("moderators get FORBIDDEN on the PRIVATE lists of others", async ({ app, services }) => {
+    const { userId: ownerId } = await signInAs(services)
+    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const list = await services.db
+      .insertInto("userLists")
+      .values({ userId: ownerId, name: "Secret", visibility: "PRIVATE" })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+    const res = await api(app, `/lists/${list.id}`, { method: "DELETE", headers })
 
     expect(res.status).toBe(403)
   })

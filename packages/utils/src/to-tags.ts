@@ -1,5 +1,5 @@
 import type { MediaTags } from "@taiyomoe/db"
-import { config } from "@taiyomoe/config"
+import { isTagKey } from "@taiyomoe/config"
 
 const TAGS_MAP = new Map([
   ["COOKING", "FOOD"],
@@ -19,7 +19,7 @@ export const toTags = (input: string[] | null): MediaTags[] => {
       .replaceAll("-", "_")
       .replaceAll("'", "")
 
-    if (normalizedTag in config.tags) {
+    if (isTagKey(normalizedTag)) {
       tags.push({
         key: normalizedTag,
         isSpoiler: false,

@@ -40,7 +40,7 @@ export const listManagedChaptersHandler = new Hono().get(
   describeRoute({
     summary: "List chapters",
     description:
-      "Lists chapters for management, whatever their status, newest first, with their media, uploader and credited groups. Uploaders, moderators and admins see every chapter; group members see the chapters credited to the groups where they can upload, edit or delete chapters, and the chapters they uploaded.\n\n**Required access:** uploader, moderator or admin, or the owner of a group or a member with the `UPLOAD_CHAPTERS`, `EDIT_CHAPTERS` or `DELETE_CHAPTERS` permission.",
+      "Lists chapters for management, whatever their status, newest first, with their media, uploader and credited groups. Uploaders, moderators and admins see every chapter; uploader interns and group members see the chapters credited to the groups where they can upload, edit or delete chapters, and the chapters they uploaded.\n\n**Required access:** uploader intern, uploader, moderator or admin, or the owner of a group or a member with the `UPLOAD_CHAPTERS`, `EDIT_CHAPTERS` or `DELETE_CHAPTERS` permission.",
     tags: ["Chapters"],
     responses: {
       200: {
@@ -77,13 +77,17 @@ export const listManagedChaptersHandler = new Hono().get(
           ? eb.and([])
           : eb.or([
               eb("chapters.uploaderId", "=", actor.id),
-              eb.exists(
-                eb
-                  .selectFrom("chapterGroups")
-                  .select("chapterGroups.chapterId")
-                  .whereRef("chapterGroups.chapterId", "=", "chapters.id")
-                  .where("chapterGroups.groupId", "in", groupIds),
-              ),
+              ...(groupIds.length === 0
+                ? []
+                : [
+                    eb.exists(
+                      eb
+                        .selectFrom("chapterGroups")
+                        .select("chapterGroups.chapterId")
+                        .whereRef("chapterGroups.chapterId", "=", "chapters.id")
+                        .where("chapterGroups.groupId", "in", groupIds),
+                    ),
+                  ]),
             ]),
       )
       .where((eb) => matchChapterSearch(eb, search))

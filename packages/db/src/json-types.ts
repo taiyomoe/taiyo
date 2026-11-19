@@ -2,6 +2,7 @@ import type {
   ContentRating,
   Language,
   LatestUpdatesLayout,
+  ListModerationAction,
   MediaCountryOfOrigin,
   MediaDemography,
   MediaLink,
@@ -9,6 +10,7 @@ import type {
   MediaSource,
   MediaStatus,
   MediaType,
+  ProfileModerationField,
   StaffLink,
   StaffRole,
 } from "./constants"
@@ -87,3 +89,22 @@ export type UserSettings = {
   pushLikes?: boolean
   pushFollows?: boolean
 }
+
+/**
+ * What a moderation notification is about. IDs are kept without foreign keys: the notification
+ * outlives the comment, chapter or group it points at.
+ */
+export type NotificationPayload =
+  | { listId: string; action: ListModerationAction }
+  | { fields: ProfileModerationField[] }
+  | ({
+      reportId: string
+      outcome: "RESOLVED" | "DISMISSED"
+      /** The points the reporter earned, when the moderation team acted on the report. */
+      points?: number | undefined
+    } & (
+      | { kind: "PAGE"; chapterId: string }
+      | { kind: "COMMENT"; commentId: string }
+      | { kind: "GROUP"; groupId: string }
+      | { kind: "USER"; userId: string }
+    ))

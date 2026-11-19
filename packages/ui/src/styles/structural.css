@@ -10,6 +10,13 @@
     width: 0.875rem;
   }
 
+  [data-slot="segmented-control-item"] svg {
+    flex-shrink: 0;
+    height: 1rem;
+    pointer-events: none;
+    width: 1rem;
+  }
+
   [data-slot="menu-checkbox-item"] svg,
   [data-slot="menu-radio-item"] svg {
     flex-shrink: 0;
@@ -426,17 +433,17 @@
     font-weight: 500;
   }
 
-  [data-slot="autocomplete-start-addon"] svg {
+  [data-slot="autocomplete-start-addon"] > svg {
     margin-inline: -0.125rem;
   }
 
-  [data-slot="autocomplete-start-addon"] svg {
+  [data-slot="autocomplete-start-addon"] > svg {
     height: 0.875rem;
     width: 0.875rem;
   }
 
   @media (width >= 40rem) {
-    [data-slot="autocomplete-start-addon"] svg {
+    [data-slot="autocomplete-start-addon"] > svg {
       height: 0.75rem;
       width: 0.75rem;
     }
@@ -483,19 +490,19 @@
     margin-top: 0.5rem;
   }
 
-  [data-slot="combobox-start-addon"] svg {
+  [data-slot="combobox-start-addon"] > svg {
     margin-left: -0.125rem;
     margin-right: -0.375rem;
     pointer-events: none;
   }
 
-  [data-slot="combobox-start-addon"] svg {
+  [data-slot="combobox-start-addon"] > svg {
     height: 0.875rem;
     width: 0.875rem;
   }
 
   @media (width >= 40rem) {
-    [data-slot="combobox-start-addon"] svg {
+    [data-slot="combobox-start-addon"] > svg {
       height: 0.75rem;
       width: 0.75rem;
     }

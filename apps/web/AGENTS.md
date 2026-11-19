@@ -283,6 +283,15 @@ non-suspending `useQuery` with its own inline skeleton.
 - **StyleX in dev.** TanStack Start renders no `index.html`, so the StyleX
   plugin's own dev injection never runs; `__root.tsx` links
   `/virtual:stylex.css` and its HMR runtime itself in dev.
+- **A route's `pendingComponent` ships in the initial bundle.** The router splits
+  `component` into its own chunk but not `pendingComponent`, so import the
+  skeleton from a module that does not also export the page, or the whole page
+  lands in every visitor's first load.
+- **Everything the shell imports statically is in the first load.** Load
+  popups, dialogs and rare banners with `lazy()` behind the state that shows
+  them, as the notification inbox, the user menu, the palette and the upload
+  tray do. Import `tags` from `@taiyomoe/config` only where tag names are
+  shown: `isTagKey` and `tagKeys` validate a key without the 150 kB catalogue.
 
 ## Open Graph previews
 

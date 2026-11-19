@@ -1,4 +1,3 @@
-import { sql } from "@taiyomoe/db"
 import { ROLES } from "@taiyomoe/permissions"
 import z from "zod"
 import { userSummarySchema } from "./schemas"
@@ -25,5 +24,3 @@ export const managedUserSchema = userSummarySchema.extend({
     .meta({ description: "The profile title the user has equipped, if any.", example: "bookworm" }),
   createdAt: z.iso.datetime().meta({ description: "When the user signed up." }),
 })
-
-export const isBannedSql = sql<boolean>`coalesce("users"."banned", false) and ("users"."banExpires" is null or "users"."banExpires" > (CURRENT_TIMESTAMP at time zone 'UTC'))`

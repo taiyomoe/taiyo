@@ -1,10 +1,18 @@
-import type { DB, NotificationType } from "@taiyomoe/db"
+import type {
+  DB,
+  Locale,
+  NotificationPayload,
+  NotificationType,
+  RankingPeriodKind,
+} from "@taiyomoe/db"
 import { config } from "@taiyomoe/config"
+import { isAchievementKey } from "@taiyomoe/db"
 import { getCoverUrl } from "@taiyomoe/s3"
 import { getCommentText } from "@taiyomoe/schemas/comment-content"
 import { sql, type Kysely } from "kysely"
 import { generateRequestDetails } from "web-push"
 import { env } from "./env"
+import { PUSH_TEXTS } from "./push-texts"
 
 type PushTarget = { endpoint: string; p256dh: string; auth: string }
 
@@ -72,10 +80,13 @@ const ACTIVITY_TYPES = ["COMMENT_LIKE", "FOLLOW"] as const
 type PushRow = {
   notificationId: string
   type: NotificationType
+  payload: NotificationPayload | null
+  recipientUsername: string
   subscriptionId: string
   endpoint: string
   p256dh: string
   auth: string
+  locale: Locale
   chapterId: string | null
   chapterNumber: number | null
   mediaId: string | null
@@ -95,8 +106,37 @@ type PushRow = {
   actorName: string | null
   actorUsername: string | null
   actorImage: string | null
+  username: string
+  rankingKind: RankingPeriodKind | null
+  rankingRank: number | null
+  rankingPoints: number | null
+  achievement: string | null
+  chapterDeleted: boolean
+  commentLive: boolean
+  listName: string | null
+  listDeleted: boolean | null
+  groupName: string | null
+  groupDeleted: boolean | null
+  reportedUsername: string | null
+  reportedName: string | null
 }
 
+const MODERATION_INBOX = "/notifications?category=moderation"
+/** The start of a comment's text, or null when it only holds images. */
+const excerptOf = (content: string | null) => {
+  const text = Array.from(
+    graphemes.segment(getCommentText(content ?? "")),
+    ({ segment }) => segment,
+  )
+
+  return text.length === 0
+    ? null
+    : `${text.slice(0, EXCERPT_LENGTH).join("")}${text.length > EXCERPT_LENGTH ? "…" : ""}`
+}
+const getCover = (row: PushRow) =>
+  row.mediaId === null || row.coverId === null || row.coverExtension === null
+    ? null
+    : getCoverUrl(row.mediaId, row.coverId, row.coverExtension)
 const commentPath = (row: PushRow) => {
   const query = `comment=${row.commentId ?? ""}`
 
@@ -118,43 +158,147 @@ const commentPath = (row: PushRow) => {
 
   return "/notifications"
 }
+/** Where a moderation push leads: what it is about while it can still be opened, else the inbox. */
+const moderationPath = (row: PushRow, payload: NotificationPayload) => {
+  if ("listId" in payload) {
+    return row.listDeleted === false ? `/lists/${payload.listId}` : MODERATION_INBOX
+  }
+
+  if ("fields" in payload) {
+    return `/users/${encodeURIComponent(row.recipientUsername)}`
+  }
+
+  if (payload.kind === "PAGE") {
+    return row.chapterId === null || row.chapterDeleted
+      ? MODERATION_INBOX
+      : `/chapters/${row.chapterId}`
+  }
+
+  if (payload.kind === "COMMENT") {
+    return row.commentLive ? commentPath(row) : MODERATION_INBOX
+  }
+
+  if (payload.kind === "GROUP") {
+    return row.groupDeleted === false ? `/groups/${payload.groupId}` : MODERATION_INBOX
+  }
+
+  return row.reportedUsername === null
+    ? MODERATION_INBOX
+    : `/users/${encodeURIComponent(row.reportedUsername)}`
+}
+/** The moderation team stays anonymous: no name, no avatar. */
+const moderationMessage = (row: PushRow, payload: NotificationPayload) => {
+  const texts = PUSH_TEXTS[row.locale]
+  const message = { url: "", icon: null, tag: row.notificationId }
+
+  if ("listId" in payload) {
+    return {
+      ...message,
+      title: texts.listTitle(payload.action === "DELETED"),
+      body: row.listName ?? "",
+    } satisfies PushMessage
+  }
+
+  if ("fields" in payload) {
+    // Avatars and banners can only be removed, the other parts are edited.
+    const removed = payload.fields.every((field) => field === "avatar" || field === "banner")
+    const fields = new Intl.ListFormat(row.locale, { type: "conjunction" }).format(
+      payload.fields.map((field) => texts.profileFields[field]),
+    )
+
+    return {
+      ...message,
+      title: texts.profileTitle,
+      body: texts.profileBody(removed, fields),
+    } satisfies PushMessage
+  }
+
+  const title = texts.reportTitle(payload.outcome === "RESOLVED", payload.points)
+
+  if (payload.kind === "PAGE") {
+    return {
+      ...message,
+      title,
+      body:
+        row.chapterId === null
+          ? texts.aPage
+          : texts.pageOf(row.mediaTitle, String(row.chapterNumber ?? "")),
+      icon: getCover(row),
+    } satisfies PushMessage
+  }
+
+  if (payload.kind === "COMMENT") {
+    return {
+      ...message,
+      title,
+      body: row.commentLive
+        ? (excerptOf(row.commentContent) ?? texts.aComment)
+        : texts.aRemovedComment,
+    } satisfies PushMessage
+  }
+
+  if (payload.kind === "GROUP") {
+    return { ...message, title, body: row.groupName ?? texts.aGroup } satisfies PushMessage
+  }
+
+  return {
+    ...message,
+    title,
+    body:
+      row.reportedName === null
+        ? texts.aProfile
+        : `${row.reportedName} (@${row.reportedUsername ?? ""})`,
+  } satisfies PushMessage
+}
 const toMessage = (row: PushRow) => {
+  const texts = PUSH_TEXTS[row.locale]
   const open = (path: string) =>
     `/notifications/open?id=${row.notificationId}&to=${encodeURIComponent(path)}`
 
   if (row.type === "CHAPTER_PUBLISHED") {
-    const chapter = `New chapter ${row.chapterNumber ?? ""}`
-
     return {
-      title: row.mediaTitle ?? "New chapter",
-      body: row.groups === null ? chapter : `${chapter} by ${row.groups}`,
+      title: row.mediaTitle ?? texts.newChapter,
+      body: texts.chapterBody(String(row.chapterNumber ?? ""), row.groups),
       url: open(`/chapters/${row.chapterId ?? ""}`),
-      icon:
-        row.mediaId === null || row.coverId === null || row.coverExtension === null
-          ? null
-          : getCoverUrl(row.mediaId, row.coverId, row.coverExtension),
+      icon: getCover(row),
       tag: row.notificationId,
     } satisfies PushMessage
   }
 
-  const text = Array.from(
-    graphemes.segment(getCommentText(row.commentContent ?? "")),
-    ({ segment }) => segment,
-  )
-  const excerpt =
-    text.length === 0
-      ? "An image"
-      : `${text.slice(0, EXCERPT_LENGTH).join("")}${text.length > EXCERPT_LENGTH ? "…" : ""}`
-  const others = Number(row.actorCount ?? 1) - 1
-  const actors =
-    others === 0
-      ? (row.actorName ?? "Someone")
-      : `${row.actorName ?? "Someone"} and ${others} ${others === 1 ? "other" : "others"}`
+  if (row.type === "RANKING_REWARD") {
+    const kind = row.rankingKind ?? "WEEK"
+
+    return {
+      title: texts.rankingTitle(kind, row.rankingRank ?? 0),
+      body: texts.points(row.rankingPoints ?? 0),
+      url: open(`/rankings?period=${kind === "MONTH" ? "month" : "week"}`),
+      icon: null,
+      tag: row.notificationId,
+    } satisfies PushMessage
+  }
+
+  if (row.type === "ACHIEVEMENT_EARNED") {
+    return {
+      title: texts.achievementUnlocked,
+      body: isAchievementKey(row.achievement) ? texts.achievements[row.achievement] : "",
+      url: open(`/users/${encodeURIComponent(row.username)}?tab=achievements`),
+      icon: null,
+      tag: row.notificationId,
+    } satisfies PushMessage
+  }
+
+  if (row.payload !== null) {
+    return { ...moderationMessage(row, row.payload), url: open(moderationPath(row, row.payload)) }
+  }
+
+  const excerpt = excerptOf(row.commentContent)
 
   if (row.type === "FOLLOW") {
+    const others = Number(row.actorCount ?? 1) - 1
+
     return {
-      title: `${actors} started following you`,
-      body: others === 0 ? `@${row.actorUsername ?? ""}` : "See who in your inbox",
+      title: texts.followTitle(row.actorName ?? texts.someone, others),
+      body: others === 0 ? `@${row.actorUsername ?? ""}` : texts.seeWho,
       url: open(
         others === 0
           ? `/users/${encodeURIComponent(row.actorUsername ?? "")}`
@@ -166,11 +310,9 @@ const toMessage = (row: PushRow) => {
   }
 
   if (row.type === "COMMENT_LIKE") {
-    const count = Number(row.actorCount ?? 1)
-
     return {
-      title: `${count} ${count === 1 ? "reader" : "readers"} upvoted your comment`,
-      body: excerpt,
+      title: texts.upvoteTitle(Number(row.actorCount ?? 1)),
+      body: excerpt ?? texts.anImage,
       url: open(commentPath(row)),
       icon: null,
       tag: row.notificationId,
@@ -178,8 +320,8 @@ const toMessage = (row: PushRow) => {
   }
 
   return {
-    title: `${row.authorName ?? "Someone"} replied to your comment`,
-    body: text.length === 0 ? "Sent an image" : excerpt,
+    title: texts.replyTitle(row.authorName ?? texts.someone),
+    body: excerpt ?? texts.sentAnImage,
     url: open(commentPath(row)),
     icon: row.authorImage,
     tag: row.notificationId,
@@ -191,10 +333,13 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
     SELECT
       "n"."id" AS "notificationId",
       "n"."type",
+      "n"."payload",
+      "u"."username" AS "recipientUsername",
       "ps"."id" AS "subscriptionId",
       "ps"."endpoint",
       "ps"."p256dh",
       "ps"."auth",
+      "ps"."locale",
       "ch"."id" AS "chapterId",
       "ch"."number" AS "chapterNumber",
       "ch"."mediaId",
@@ -222,23 +367,43 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
       "act"."count" AS "actorCount",
       "act"."name" AS "actorName",
       "act"."username" AS "actorUsername",
-      "act"."image" AS "actorImage"
+      "act"."image" AS "actorImage",
+      "u"."username",
+      "rp"."kind" AS "rankingKind",
+      "rr"."rank" AS "rankingRank",
+      "rr"."points" AS "rankingPoints",
+      "n"."achievement",
+      ("ch"."deletedAt" IS NOT NULL OR "m"."deletedAt" IS NOT NULL) AS "chapterDeleted",
+      ("c"."deletedAt" IS NULL AND "au"."id" IS NOT NULL) AS "commentLive",
+      "ml"."name" AS "listName",
+      "ml"."deletedAt" IS NOT NULL AS "listDeleted",
+      "rg"."name" AS "groupName",
+      "rg"."deletedAt" IS NOT NULL AS "groupDeleted",
+      "ru"."username" AS "reportedUsername",
+      "ru"."displayUsername" AS "reportedName"
     FROM "notifications" AS "n"
     INNER JOIN "users" AS "u" ON "u"."id" = "n"."userId"
     INNER JOIN "pushSubscriptions" AS "ps" ON "ps"."userId" = "n"."userId"
     INNER JOIN "sessions" AS "s" ON "s"."id" = "ps"."sessionId"
       AND "s"."expiresAt" > (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
-    LEFT JOIN "chapters" AS "ch" ON "ch"."id" = "n"."chapterId"
+    LEFT JOIN "chapters" AS "ch"
+      ON "ch"."id" = coalesce("n"."chapterId", ("n"."payload" ->> 'chapterId')::uuid)
     LEFT JOIN "medias" AS "m" ON "m"."id" = "ch"."mediaId"
     LEFT JOIN LATERAL (
       SELECT "cover"."id", "cover"."extension" FROM "covers" AS "cover"
       WHERE "cover"."mediaId" = "ch"."mediaId" AND "cover"."isMainCover" AND "cover"."deletedAt" IS NULL
       LIMIT 1
     ) AS "cv" ON true
-    LEFT JOIN "comments" AS "c" ON "c"."id" = "n"."commentId"
+    LEFT JOIN "comments" AS "c"
+      ON "c"."id" = coalesce("n"."commentId", ("n"."payload" ->> 'commentId')::uuid)
     LEFT JOIN "users" AS "au" ON "au"."id" = "c"."authorId"
     LEFT JOIN "commentThreads" AS "th" ON "th"."id" = "c"."threadId"
     LEFT JOIN "users" AS "pu" ON "pu"."id" = "th"."profileId"
+    LEFT JOIN "rankingResults" AS "rr" ON "rr"."id" = "n"."rankingResultId"
+    LEFT JOIN "rankingPeriods" AS "rp" ON "rp"."id" = "rr"."periodId"
+    LEFT JOIN "userLists" AS "ml" ON "ml"."id" = ("n"."payload" ->> 'listId')::uuid
+    LEFT JOIN "groups" AS "rg" ON "rg"."id" = ("n"."payload" ->> 'groupId')::uuid
+    LEFT JOIN "users" AS "ru" ON "ru"."id" = ("n"."payload" ->> 'userId')::uuid
     LEFT JOIN LATERAL (
       SELECT
         count(*) AS "count",
@@ -311,6 +476,11 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
           AND "act"."count" > 0
           AND coalesce(("u"."settings" ->> 'pushFollows')::boolean, ${defaults.pushFollows})
         )
+        OR ("n"."type" = 'RANKING_REWARD' AND "rr"."id" IS NOT NULL)
+        OR "n"."type" = 'ACHIEVEMENT_EARNED'
+        -- Moderation notices have no setting: people always learn when their content changes.
+        OR ("n"."type" = 'LIST_MODERATED' AND "ml"."id" IS NOT NULL)
+        OR "n"."type" IN ('PROFILE_MODERATED', 'REPORT_REVIEWED')
       )
   `.execute(db)
 

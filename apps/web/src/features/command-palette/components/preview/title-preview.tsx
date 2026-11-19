@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { useQuery } from "@tanstack/react-query"
 import type { TitleEntity } from "@/features/command-palette/lib/palette-command"
+import { Pill } from "@/components/badges/pill"
 import { getRichTextParagraphs, parseRichText } from "@/components/rich-text/rich-text-document"
 import { previewStyles } from "@/features/command-palette/components/preview/preview-styles"
 import { mediaQueryOptions } from "@/features/media/api/medias"
@@ -13,10 +13,10 @@ import {
   MEDIA_STATUS_BADGES,
   MEDIA_STATUS_LABELS,
   MEDIA_TYPE_LABELS,
-  getMediaTags,
   getMediaYears,
   getSynopsis,
 } from "@/features/media/lib/media-labels"
+import { getMediaTags } from "@/features/media/lib/media-tags"
 import { m } from "@/paraglide/messages"
 
 const MAX_TAGS = 10
@@ -78,9 +78,9 @@ export function TitlePreview({ title }: { title: TitleEntity }) {
           )}
           <span sx={previewStyles.subtle}>{meta}</span>
           {media === undefined ? null : (
-            <Badge size="sm" sx={styles.status} variant={MEDIA_STATUS_BADGES[media.status]}>
+            <Pill size="sm" tone={styles.status} variant={MEDIA_STATUS_BADGES[media.status]}>
               {MEDIA_STATUS_LABELS[media.status]()}
-            </Badge>
+            </Pill>
           )}
         </div>
       </div>
@@ -106,9 +106,9 @@ export function TitlePreview({ title }: { title: TitleEntity }) {
           <span sx={previewStyles.label}>{m.media_info_tags()}</span>
           <div sx={previewStyles.chips}>
             {tags.slice(0, MAX_TAGS).map((tag) => (
-              <Badge key={tag.key} size="sm" variant="outline">
+              <Pill key={tag.key} size="sm">
                 {tag.name}
-              </Badge>
+              </Pill>
             ))}
           </div>
         </div>

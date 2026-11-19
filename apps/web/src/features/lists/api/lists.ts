@@ -148,15 +148,11 @@ export function useUpdateList() {
   })
 }
 
-export function useDeleteList() {
+export function useDeleteLists() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (id: string) => {
-      const response = await api.lists[":id"].$delete({ param: { id } })
-
-      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
-    },
+    mutationFn: async (listIds: string[]) => unwrap(await api.lists.$delete({ json: { listIds } })),
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({

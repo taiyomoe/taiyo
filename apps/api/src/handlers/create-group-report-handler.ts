@@ -10,22 +10,13 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, reportDetailsSchema } from "../utils/schemas"
 
 const createReportSchema = z.object({
   reason: z
     .enum(GROUP_REPORT_REASONS)
     .meta({ description: "Why you report the group.", example: "STOLEN_WORK" }),
-  details: z
-    .string()
-    .trim()
-    .max(2000)
-    .optional()
-    .transform((value) => (value === undefined || value === "" ? null : value))
-    .meta({
-      description: "Anything that helps the moderators look into it, up to 2000 characters.",
-      example: "They post our chapters with our credits page cropped out.",
-    }),
+  details: reportDetailsSchema("They post our chapters with our credits page cropped out."),
 })
 
 export const createGroupReportHandler = new Hono().post(

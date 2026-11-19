@@ -1,10 +1,10 @@
 import type { LinkProps } from "@tanstack/react-router"
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Card } from "@taiyomoe/ui/components/ui/card"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
+import { Pill } from "@/components/badges/pill"
 import { homeStyles } from "@/features/dashboard/components/home/home-styles"
 import { m } from "@/paraglide/messages"
 
@@ -50,7 +50,7 @@ export function QueueCard({
         <span sx={homeStyles.statValue}>{count}</span>
         <span sx={styles.queueLabel}>{label}</span>
       </span>
-      {count > 0 ? <Badge variant="warning">{m.home_overview_waiting()}</Badge> : null}
+      {count > 0 ? <Pill variant="warning">{m.home_overview_waiting()}</Pill> : null}
     </Card>
   )
 }

@@ -3,6 +3,7 @@ import { createRules } from "permix"
 import type {
   Actor,
   ChapterTarget,
+  ListTarget,
   MediaSuggestionTarget,
   PermissionsDefinition,
   UserTarget,
@@ -40,6 +41,8 @@ export const buildRules = (actor: Actor | null) => {
   const isSelf = (userId: string) => active?.id === userId
   const actsForUser = (target: UserTarget) =>
     is("ADMIN") && !isSelf(target.id) && target.role !== "ADMIN"
+  const moderatesUser = (target: UserTarget) =>
+    !isSelf(target.id) && (is("ADMIN") || (is("MODERATOR") && target.role === "USER"))
   const memberships = new Map(active?.memberships.map((m) => [m.groupId, m]))
   const permissionsIn = (groupId: string) => {
     const membership = memberships.get(groupId)
@@ -58,10 +61,16 @@ export const buildRules = (actor: Actor | null) => {
   const managesChapters = is("UPLOADER", "MODERATOR", "ADMIN")
   const reviewsChapters = is("UPLOADER", "ADMIN")
   const reviewsSuggestions = is("UPLOADER", "MODERATOR", "ADMIN")
+  const moderatesLists = is("MODERATOR", "ADMIN")
+  // Staff moderate what everyone can see: a `PRIVATE` list stays its owner's alone.
+  const managesList = (list: ListTarget) =>
+    isSelf(list.userId) || (moderatesLists && list.visibility === "PUBLIC")
   const isOwnPendingSuggestion = (suggestion: MediaSuggestionTarget) =>
     suggestion.status === "PENDING" && isSelf(suggestion.authorId)
   const isLive = (chapter: ChapterTarget) =>
     chapter.status === "PUBLISHED" || chapter.status === "SCHEDULED"
+  const isInternsOwn = (chapter: ChapterTarget) =>
+    is("UPLOADER_INTERN") && isSelf(chapter.uploaderId)
   const isOwnUnpublished = (chapter: ChapterTarget) =>
     (chapter.status === "PENDING" || chapter.status === "UPLOADING") && isSelf(chapter.uploaderId)
   const canManage = (groupId: string, permissions: readonly GroupPermission[]) => {
@@ -88,6 +97,7 @@ export const buildRules = (actor: Actor | null) => {
       flag: is("MODERATOR", "ADMIN"),
       reindex: is("ADMIN"),
       syncMangaDex: is("UPLOADER", "ADMIN"),
+      feature: is("ADMIN"),
     },
     mediaSuggestion: {
       review: reviewsSuggestions,
@@ -101,13 +111,14 @@ export const buildRules = (actor: Actor | null) => {
       delete: is("UPLOADER", "ADMIN"),
     },
     chapter: {
-      publish: is("UPLOADER", "ADMIN"),
+      publish: is("UPLOADER_INTERN", "UPLOADER", "ADMIN"),
       submit: active !== null,
       review: reviewsChapters,
       flag: managesChapters,
       list: managesChapters,
       // Seeing every chapter includes seeing the ones of one's groups.
-      listInGroups: managesChapters || getChapterGroupIds(active).length > 0,
+      listInGroups:
+        managesChapters || is("UPLOADER_INTERN") || getChapterGroupIds(active).length > 0,
       view: (chapter) => {
         if (chapter.status === "PUBLISHED") {
           return true
@@ -123,21 +134,27 @@ export const buildRules = (actor: Actor | null) => {
       update: (chapter) =>
         isLive(chapter)
           ? managesChapters ||
+            isInternsOwn(chapter) ||
             holdsInAny(chapter.groupIds, "EDIT_CHAPTERS") ||
             (chapter.status === "SCHEDULED" && isSelf(chapter.uploaderId))
           : reviewsChapters || isOwnUnpublished(chapter),
       withdraw: (chapter) => isOwnUnpublished(chapter),
       delete: (chapter) =>
         isLive(chapter)
-          ? managesChapters || holdsInAny(chapter.groupIds, "DELETE_CHAPTERS")
+          ? managesChapters ||
+            isInternsOwn(chapter) ||
+            holdsInAny(chapter.groupIds, "DELETE_CHAPTERS")
           : reviewsChapters,
       credit: ({ chapter }) =>
         isLive(chapter)
-          ? managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")
+          ? managesChapters ||
+            isInternsOwn(chapter) ||
+            holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")
           : reviewsChapters || isOwnUnpublished(chapter),
       uncredit: ({ chapter, groupId }) =>
         isLive(chapter)
           ? managesChapters ||
+            isInternsOwn(chapter) ||
             (chapter.groupIds.includes(groupId) && holds(groupId, "EDIT_CHAPTERS"))
           : reviewsChapters || isOwnUnpublished(chapter),
     },
@@ -208,17 +225,26 @@ export const buildRules = (actor: Actor | null) => {
       create: active !== null,
       review: is("MODERATOR", "ADMIN"),
     },
+    userReport: {
+      create: active !== null,
+      review: is("MODERATOR", "ADMIN"),
+    },
     comment: {
       create: active !== null,
       delete: is("MODERATOR", "ADMIN"),
       review: is("MODERATOR", "ADMIN"),
       removeImage: is("MODERATOR", "ADMIN"),
     },
+    list: {
+      moderate: moderatesLists,
+      update: managesList,
+      delete: managesList,
+    },
     user: {
       list: is("MODERATOR", "ADMIN"),
       grant: is("ADMIN"),
-      ban: (target) =>
-        !isSelf(target.id) && (is("ADMIN") || (is("MODERATOR") && target.role === "USER")),
+      ban: moderatesUser,
+      moderateProfile: moderatesUser,
       setRole: (target) => is("ADMIN") && !isSelf(target.id),
       impersonate: actsForUser,
       setPassword: actsForUser,

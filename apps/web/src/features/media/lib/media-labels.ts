@@ -1,7 +1,6 @@
 import type { BadgeVariant } from "@taiyomoe/ui/components/ui/badge"
-import { config } from "@taiyomoe/config"
 import type { Media } from "@/features/media/api/medias"
-import { localizeTagName, pickLocalized } from "@/lib/locale"
+import { pickLocalized } from "@/lib/locale"
 import { m } from "@/paraglide/messages"
 
 type Label = () => string
@@ -72,6 +71,7 @@ export const MEDIA_LINKS: Record<string, { label: string; href: (value: string) 
   mangaDex: { label: "MangaDex", href: (id) => `https://mangadex.org/title/${id}` },
   anilist: { label: "AniList", href: (id) => `https://anilist.co/manga/${id}` },
   myAnimeList: { label: "MyAnimeList", href: (id) => `https://myanimelist.net/manga/${id}` },
+  kuroMangas: { label: "Kuro Mangás", href: (id) => `https://kuromangas.com/manga/${id}` },
   animePlanet: { label: "Anime-Planet", href: (url) => url },
   bookWalker: { label: "BookWalker", href: (url) => url },
   mangaUpdates: { label: "MangaUpdates", href: (url) => url },
@@ -97,19 +97,6 @@ export const getMediaLinks = (links: Media["links"]) =>
     return link === undefined || href === undefined || !/^https?:\/\//.test(href)
       ? []
       : [{ key, label: link.label, href }]
-  })
-
-const isTagKey = (key: string): key is keyof typeof config.tags => key in config.tags
-
-export const getMediaTags = (tags: Media["tags"]) =>
-  (tags ?? []).flatMap(({ key, isSpoiler }) => {
-    if (!isTagKey(key)) {
-      return []
-    }
-
-    const tag = config.tags[key]
-
-    return [{ key, isSpoiler, isGenre: tag.category === "Genre", name: localizeTagName(tag.name) }]
   })
 
 export const getSynopsis = (synopsis: Media["synopsis"]) =>

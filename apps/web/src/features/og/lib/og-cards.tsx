@@ -2,6 +2,7 @@ import type { ImageSource } from "@takumi-rs/core"
 import type { InferResponseType } from "hono/client"
 import type { ReactNode } from "react"
 import { config } from "@taiyomoe/config"
+import * as countryFlags from "country-flag-icons/react/3x2"
 import type { Group } from "@/features/groups/api/groups"
 import type { ListDetail } from "@/features/lists/api/lists"
 import type { Media } from "@/features/media/api/medias"
@@ -14,13 +15,13 @@ import {
   CONTENT_RATING_LABELS,
   getAltTitles,
   getMainTitle,
-  getMediaTags,
   getMediaYears,
   getSynopsis,
   MEDIA_DEMOGRAPHY_LABELS,
   MEDIA_STATUS_LABELS,
   MEDIA_TYPE_LABELS,
 } from "@/features/media/lib/media-labels"
+import { getMediaTags } from "@/features/media/lib/media-tags"
 import { ChapterOgCard } from "@/features/og/components/chapter-og-card"
 import { COVER_TEXT_WIDTH } from "@/features/og/components/cover-og-card"
 import { IDENTITY_TEXT_WIDTH, IdentityOgCard } from "@/features/og/components/identity-og-card"
@@ -159,7 +160,8 @@ export const chapterOgCard = async (
 ) => {
   const cover = getCover(media)
   const { images, src } = await fetchImages(cover?.url)
-  const Flag = LANGUAGE_FLAGS[chapter.language]
+  const flagCode = LANGUAGE_FLAGS[chapter.language]
+  const Flag = flagCode === null ? null : countryFlags[flagCode]
   const groups = entry?.groups.map((group) => group.name) ?? []
   const pages = entry?.pageCount ?? chapter.pages?.length ?? 0
   const title = chapter.title?.trim() === "" ? null : chapter.title

@@ -1,5 +1,5 @@
-import type { UserSettings } from "@taiyomoe/db"
-import { drainNotificationOutbox, sendPendingPushes } from "@taiyomoe/queue"
+import type { Locale, UserSettings } from "@taiyomoe/db"
+import { closeRankingPeriods, drainNotificationOutbox, sendPendingPushes } from "@taiyomoe/queue"
 import { describe, expect } from "vitest"
 import type { Services } from "../../services"
 import { postComment, postReply } from "../comments/helpers"
@@ -7,10 +7,11 @@ import { signInAs } from "../helpers/auth"
 import { answerPushWith, getSentPushes } from "../helpers/push-sender"
 import { api } from "../helpers/request"
 import { seedChapter, seedGroup } from "../helpers/seed"
+import { creditChapters, DAY_MS, seedReadingTarget, setWatermark } from "../rankings/helpers"
 import { test } from "../setup"
 import { setupMedia } from "./helpers"
 
-const addDevice = async ({ db }: Services, userId: string, name: string) => {
+const addDevice = async ({ db }: Services, userId: string, name: string, locale?: Locale) => {
   const endpoint = `https://push.example/send/${name}`
 
   await db
@@ -21,6 +22,7 @@ const addDevice = async ({ db }: Services, userId: string, name: string) => {
       endpoint,
       p256dh: "p256dh-key",
       auth: "auth-secret",
+      locale,
     }))
     .execute()
 
@@ -42,8 +44,81 @@ const publishChapter = async (services: Services, number = 1) => {
 
   return { mediaId, groupId, reader, chapter }
 }
+/** Makes the reader #1 of a week, which earns a ranking reward and three achievements. */
+const winWeek = async (services: Services, userId: string) => {
+  const week = new Date("2031-03-03T00:00:00.000Z")
+  const nextWeek = new Date(week.getTime() + 7 * DAY_MS)
+
+  await setWatermark(services, "DAY", new Date(nextWeek.getTime() - DAY_MS), nextWeek)
+  await setWatermark(services, "WEEK", new Date(week.getTime() - 7 * DAY_MS), week)
+  await setWatermark(services, "MONTH", new Date("2031-02-01"), new Date("2031-03-01"))
+  await creditChapters(services, { userId, target: await seedReadingTarget(services), at: week })
+  await closeRankingPeriods(services, { now: nextWeek })
+}
+const sentMessages = (services: Services) =>
+  getSentPushes(services.pushSender).map(({ endpoint, message }) => ({
+    endpoint,
+    title: message.title,
+    body: message.body,
+  }))
 
 describe("sendPendingPushes", () => {
+  test("pushes a weekly ranking reward and the achievements it earned", async ({ services }) => {
+    const reader = await signInAs(services)
+    const device = await addDevice(services, reader.userId, "phone")
+
+    await winWeek(services, reader.userId)
+
+    expect(await send(services)).toMatchObject({ notifications: 4, sent: 4 })
+
+    const messages = sentMessages(services)
+
+    expect(messages).toContainEqual({
+      endpoint: device,
+      title: "You finished #1 of the week",
+      body: "+250 points",
+    })
+    expect(
+      messages
+        .filter(({ title }) => title === "Achievement unlocked")
+        .map(({ body }) => body)
+        .sort(),
+    ).toEqual(["Champion of the Week", "Top Ten", "Weekly Podium"])
+  })
+
+  test("writes each device's pushes in the language it saved", async ({ services }) => {
+    const reader = await signInAs(services)
+    const laptop = await addDevice(services, reader.userId, "laptop", "fr")
+    const phone = await addDevice(services, reader.userId, "phone", "pt-BR")
+
+    await winWeek(services, reader.userId)
+
+    expect(await send(services)).toMatchObject({ notifications: 4, sent: 8 })
+
+    const messages = sentMessages(services)
+
+    expect(messages).toContainEqual({
+      endpoint: laptop,
+      title: "Vous avez fini n°1 de la semaine",
+      body: "+250 points",
+    })
+    expect(messages).toContainEqual({
+      endpoint: phone,
+      title: "Você terminou em 1º na semana",
+      body: "+250 pontos",
+    })
+    expect(messages).toContainEqual({
+      endpoint: laptop,
+      title: "Succès débloqué",
+      body: "Champion de la semaine",
+    })
+    expect(messages).toContainEqual({
+      endpoint: phone,
+      title: "Conquista desbloqueada",
+      body: "Campeão da semana",
+    })
+  })
+
   test("pushes a reply to every device of the comment's author, once", async ({
     app,
     services,

@@ -1,47 +1,15 @@
 import * as stylex from "@stylexjs/stylex"
 import { Image, Trash } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UserProfile } from "@/features/users/api/profile"
-import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import { SettingsSection } from "@/features/settings/components/settings-section"
 import { settingsStyles } from "@/features/settings/components/settings-styles"
+import { ProfileImagesPreview } from "@/features/users/components/profile/profile-images-preview"
 import { useProfileImageUpload } from "@/features/users/components/profile/use-profile-image-upload"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
-  preview: {
-    position: "relative",
-    paddingBottom: { default: "2.75rem", [breakpoints.sm]: "3.5rem" },
-  },
-  banner: {
-    borderRadius: radius.xl,
-    overflow: "hidden",
-    aspectRatio: "3 / 1",
-    backgroundColor: colors.muted,
-    width: "100%",
-  },
-  bannerImage: {
-    display: "block",
-    objectFit: "cover",
-    height: "100%",
-    width: "100%",
-  },
-  avatarFrame: {
-    padding: "0.25rem",
-    borderRadius: radius.full,
-    backgroundColor: colors.card,
-    position: "absolute",
-    bottom: 0,
-    left: { default: "1rem", [breakpoints.sm]: "1.5rem" },
-  },
-  avatar: {
-    height: { default: "5.5rem", [breakpoints.sm]: "7rem" },
-    width: { default: "5.5rem", [breakpoints.sm]: "7rem" },
-  },
-  avatarFallback: {
-    fontSize: "2rem",
-  },
   controls: {
     gap: "1rem",
     display: "grid",
@@ -76,16 +44,7 @@ export function ProfileImagesSection({ profile }: { profile: UserProfile }) {
       title={m.user_settings_images_title()}
     >
       <div sx={settingsStyles.stack}>
-        <div sx={styles.preview}>
-          <div sx={styles.banner}>
-            {profile.bannerUrl === null ? null : (
-              <img alt="" draggable={false} src={profile.bannerUrl} sx={styles.bannerImage} />
-            )}
-          </div>
-          <div sx={styles.avatarFrame}>
-            <PersonAvatar fallbackSx={styles.avatarFallback} person={profile} sx={styles.avatar} />
-          </div>
-        </div>
+        <ProfileImagesPreview profile={profile} />
         <div sx={styles.controls}>
           <div sx={styles.control}>
             <span sx={styles.label}>{m.user_settings_avatar()}</span>

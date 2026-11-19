@@ -8,6 +8,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { awardAchievements } from "../utils/achievements"
 import {
   chapterIdsSchema,
   lockReviewableChapters,
@@ -78,7 +79,7 @@ export const approveChaptersHandler = new Hono().post(
     }
 
     if (approved.length > 0) {
-      await db
+      const released = await db
         .updateTable("chapters")
         .set({
           status: readyStatus,
@@ -87,7 +88,14 @@ export const approveChaptersHandler = new Hono().post(
           createdAt: readyCreatedAt,
         })
         .where("id", "in", approved)
+        .returning(["uploaderId", "status"])
         .execute()
+
+      for (const uploaderId of new Set(
+        released.filter((row) => row.status === "PUBLISHED").map((row) => row.uploaderId),
+      )) {
+        await awardAchievements(c.var, uploaderId)
+      }
     }
 
     c.var.audit.set({ changes: { after: { chapterIds: approved } } })

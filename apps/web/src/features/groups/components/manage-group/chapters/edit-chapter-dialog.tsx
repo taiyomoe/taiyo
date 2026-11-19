@@ -1,3 +1,4 @@
+import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { Dialog, DialogPopup } from "@taiyomoe/ui/components/ui/dialog"
 import {
@@ -13,9 +14,11 @@ const styles = stylex.create({
 
 export function EditChapterDialog({
   chapter,
+  can,
   onClose,
 }: {
   chapter: EditableChapter | null
+  can: Permissions
   onClose: () => void
 }) {
   return (
@@ -28,7 +31,7 @@ export function EditChapterDialog({
       open={chapter !== null}
     >
       <DialogPopup sx={styles.popup}>
-        {chapter === null ? null : <EditChapterForm chapter={chapter} onDone={onClose} />}
+        {chapter === null ? null : <EditChapterForm can={can} chapter={chapter} onDone={onClose} />}
       </DialogPopup>
     </Dialog>
   )

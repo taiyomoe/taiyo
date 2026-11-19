@@ -71,7 +71,7 @@ export function StaffsPage() {
             key: "staff",
             label: m.staffs_column_name(),
             skeleton: (
-              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="avatar" />
+              <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="avatar" />
             ),
           },
           {

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
+import { Pill } from "@/components/badges/pill"
 import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { m } from "@/paraglide/messages"
 
@@ -40,7 +40,7 @@ export function GroupCard({ group }: { group: { id: string; name: string; owned:
     <Link params={{ groupId: group.id }} {...stylex.props(styles.card)} to="/groups/$groupId">
       <GroupAvatar id={group.id} name={group.name} />
       <span sx={styles.name}>{group.name}</span>
-      {group.owned ? <Badge variant="success">{m.group_owned()}</Badge> : null}
+      {group.owned ? <Pill variant="success">{m.group_owned()}</Pill> : null}
     </Link>
   )
 }

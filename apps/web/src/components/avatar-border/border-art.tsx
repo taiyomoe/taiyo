@@ -3,6 +3,7 @@ import type { ReactElement } from "react"
 import { CircuitBorder } from "@/components/avatar-border/borders/circuit"
 import { DuskBorder } from "@/components/avatar-border/borders/dusk"
 import { EclipseBorder } from "@/components/avatar-border/borders/eclipse"
+import { EnsoBorder } from "@/components/avatar-border/borders/enso"
 import { FrostbiteBorder } from "@/components/avatar-border/borders/frostbite"
 import { HaloBorder } from "@/components/avatar-border/borders/halo"
 import { NebulaBorder } from "@/components/avatar-border/borders/nebula"
@@ -26,4 +27,5 @@ export const BORDER_ART: Record<AvatarBorder, () => ReactElement> = {
   phoenix: PhoenixBorder,
   nebula: NebulaBorder,
   eclipse: EclipseBorder,
+  enso: EnsoBorder,
 }

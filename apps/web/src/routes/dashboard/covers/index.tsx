@@ -7,7 +7,7 @@ import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
 const searchSchema = z.object({
-  q: z.string().trim().min(1).max(100).optional().catch(undefined),
+  q: z.coerce.string().trim().min(1).max(100).optional().catch(undefined),
   language: z.enum(MEDIA_LANGUAGES).optional().catch(undefined),
   contentRating: z.enum(CONTENT_RATINGS).optional().catch(undefined),
   page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),

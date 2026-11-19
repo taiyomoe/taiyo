@@ -1,5 +1,6 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
+import { config } from "@taiyomoe/config"
 import { CheckCircle, Flag } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -152,7 +153,10 @@ export function ReportGroupDialog({
       <DialogPopup>
         <DialogHeader>
           <DialogTitle>{m.group_report_title({ name: group.name })}</DialogTitle>
-          <DialogDescription>{m.group_report_description()}</DialogDescription>
+          <DialogDescription>
+            {m.group_report_description()}{" "}
+            {m.report_reward_hint({ points: config.reports.rewardPoints })}
+          </DialogDescription>
         </DialogHeader>
         {report.isSuccess ? (
           <>

@@ -54,6 +54,7 @@ const styles = stylex.create({
     borderRadius: radius.full,
     borderStyle: "solid",
     borderWidth: 1,
+    gap: "0.5rem",
     paddingInline: "calc(0.75rem - 1px)",
     alignItems: "center",
     backgroundColor: "transparent",
@@ -159,10 +160,13 @@ export function SegmentedControl({
   children,
   fullWidth = false,
   sx,
+  indicatorSx,
   ...props
 }: RadioGroupPrimitive.Props & {
   fullWidth?: boolean
   sx?: Sx
+  /** Restyles the sliding pill behind the checked item. */
+  indicatorSx?: Sx
 }): React.ReactElement {
   const styleProps = stylex.props(styles.root, fullWidth && styles.fullWidth, sx)
   const [checkedRect, setCheckedRect] = React.useState<CheckedRect | null>(null)
@@ -185,7 +189,7 @@ export function SegmentedControl({
         <span
           aria-hidden
           data-slot="segmented-control-indicator"
-          {...stylex.props(styles.indicator, styles.indicatorPosition(checkedRect))}
+          {...stylex.props(styles.indicator, styles.indicatorPosition(checkedRect), indicatorSx)}
         />
       )}
     </RadioGroupPrimitive>

@@ -66,19 +66,52 @@ export const COMMENT_DELETIONS = ["AUTHOR", "PAGE_OWNER", "MODERATOR"] as const
 
 export type CommentDeletion = (typeof COMMENT_DELETIONS)[number]
 
-const NOTIFICATION_TYPES = ["CHAPTER_PUBLISHED", "COMMENT_REPLY", "COMMENT_LIKE", "FOLLOW"] as const
+const NOTIFICATION_TYPES = [
+  "CHAPTER_PUBLISHED",
+  "COMMENT_REPLY",
+  "COMMENT_LIKE",
+  "FOLLOW",
+  "RANKING_REWARD",
+  "ACHIEVEMENT_EARNED",
+  "LIST_MODERATED",
+  "PROFILE_MODERATED",
+  "REPORT_REVIEWED",
+] as const
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number]
 
-export const NOTIFICATION_CATEGORY_NAMES = ["chapters", "replies", "activity"] as const
+export const NOTIFICATION_CATEGORY_NAMES = [
+  "chapters",
+  "replies",
+  "activity",
+  "rewards",
+  "moderation",
+] as const
 
 export const NOTIFICATION_CATEGORIES = {
   chapters: ["CHAPTER_PUBLISHED"],
   replies: ["COMMENT_REPLY"],
   activity: ["COMMENT_LIKE", "FOLLOW"],
+  rewards: ["RANKING_REWARD", "ACHIEVEMENT_EARNED"],
+  moderation: ["LIST_MODERATED", "PROFILE_MODERATED", "REPORT_REVIEWED"],
 } as const satisfies Record<NotificationCategory, readonly NotificationType[]>
 
 export type NotificationCategory = (typeof NOTIFICATION_CATEGORY_NAMES)[number]
+
+export const LIST_MODERATION_ACTIONS = ["UPDATED", "DELETED"] as const
+
+export type ListModerationAction = (typeof LIST_MODERATION_ACTIONS)[number]
+
+/** The parts of a profile the moderation team can change, named after the fields of the API. */
+export const PROFILE_MODERATION_FIELDS = [
+  "displayUsername",
+  "about",
+  "city",
+  "avatar",
+  "banner",
+] as const
+
+export type ProfileModerationField = (typeof PROFILE_MODERATION_FIELDS)[number]
 
 export const COMMENT_REPORT_REASONS = [
   "SPAM",
@@ -172,6 +205,20 @@ export type UserLibraryStatus = (typeof USER_LIBRARY_STATUSES)[number]
 export const USER_LIST_VISIBILITIES = ["PUBLIC", "PRIVATE"] as const
 
 export type UserListVisibility = (typeof USER_LIST_VISIBILITIES)[number]
+
+export const USER_REPORT_REASONS = [
+  "INAPPROPRIATE_PROFILE",
+  "IMPERSONATION",
+  "HARASSMENT",
+  "SPAM",
+  "OTHER",
+] as const
+
+export type UserReportReason = (typeof USER_REPORT_REASONS)[number]
+
+export const USER_REPORT_STATUSES = ["PENDING", "RESOLVED", "DISMISSED"] as const
+
+export type UserReportStatus = (typeof USER_REPORT_STATUSES)[number]
 
 export const MEDIA_TYPES = ["MANGA", "MANHWA", "MANHUA", "LIGHT_NOVEL", "OTHER"] as const
 
@@ -439,6 +486,11 @@ export const LANGUAGES = [
 ] as const
 
 export type Language = (typeof LANGUAGES)[number]
+
+/** The languages of the interface, as the web app names them. */
+export const LOCALES = ["en", "fr", "pt-BR"] as const
+
+export type Locale = (typeof LOCALES)[number]
 
 export const SUPPORTED_LANGUAGES = ["en", "fr", "pt_br", "pt_pt"] as const satisfies Language[]
 
@@ -722,6 +774,7 @@ export const MEDIA_LINK_KEYS = [
   "mangaDex",
   "anilist",
   "myAnimeList",
+  "kuroMangas",
   "animePlanet",
   "bookWalker",
   "mangaUpdates",
@@ -738,7 +791,11 @@ export const MEDIA_LINK_KEYS = [
 
 export type MediaLink = (typeof MEDIA_LINK_KEYS)[number]
 
-export const MEDIA_LINK_NUMBER_KEYS = ["anilist", "myAnimeList"] as const satisfies MediaLink[]
+export const MEDIA_LINK_NUMBER_KEYS = [
+  "anilist",
+  "myAnimeList",
+  "kuroMangas",
+] as const satisfies MediaLink[]
 
 export type MediaLinkNumberKey = (typeof MEDIA_LINK_NUMBER_KEYS)[number]
 

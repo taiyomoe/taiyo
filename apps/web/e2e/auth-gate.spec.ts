@@ -5,7 +5,7 @@ const MEDIA = "11616192-2351-4e1e-8d70-3bf7908b796c"
 test.use({ storageState: { cookies: [], origins: [] } })
 
 test("signed-out visitors are sent to sign in, then back to the page", async ({ request }) => {
-  for (const path of ["/changelog", "/groups", `/media/${MEDIA}`, "/missing-page"]) {
+  for (const path of ["/changelog", "/groups", "/rankings", `/media/${MEDIA}`, "/missing-page"]) {
     const response = await request.get(path, { maxRedirects: 0 })
 
     expect(response.status()).toBe(307)

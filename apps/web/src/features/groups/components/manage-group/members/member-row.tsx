@@ -1,167 +1,153 @@
-import type { MemberTarget, Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import type { Confirmation } from "@/components/dialogs/confirm-dialog"
-import type { Group, GroupMember } from "@/features/groups/api/groups"
-import { ListRow } from "@/components/layout/dashboard-page"
+import {
+  Crown,
+  ExternalLink,
+  Key,
+  Logout,
+  Undo,
+  UserRemove,
+  UserSwitch,
+} from "@taiyomoe/ui/components/icons"
+import { TableRow } from "@taiyomoe/ui/components/ui/table"
+import { Link } from "@tanstack/react-router"
+import type { RowAction } from "@/features/catalog/components/shared/row-actions"
+import type { Selection } from "@/features/catalog/hooks/use-selection"
+import type { GroupMember } from "@/features/groups/api/groups"
+import type { MemberDialogKind } from "@/features/groups/components/manage-group/members/member-dialogs"
+import type { MemberAccess } from "@/features/groups/lib/member-access"
+import { TimeAgo } from "@/components/time/time-ago"
 import { UserLink } from "@/components/user-name/user-link"
-import { renderWithName } from "@/components/user-name/with-name"
+import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
+import { Folded, mediaCellStyles, TitleCell } from "@/features/catalog/components/shared/media-cell"
+import { RowActions } from "@/features/catalog/components/shared/row-actions"
+import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
-import { MemberActionsMenu } from "@/features/groups/components/manage-group/members/member-actions-menu"
-import { MemberPermissions } from "@/features/groups/components/member-permissions"
+import { PermissionPills } from "@/features/groups/components/permission-pills"
 import { RoleBadge } from "@/features/groups/components/role-badge"
 import { m } from "@/paraglide/messages"
 
-const styles = stylex.create({
-  main: {
-    gap: "0.375rem",
-    display: "flex",
-    flexDirection: "column",
-    flexGrow: 1,
-    minWidth: 0,
-  },
-  titleLine: {
-    gap: "0.5rem",
-    alignItems: "center",
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  name: {
-    fontWeight: 600,
-    overflowWrap: "anywhere",
-  },
-  username: {
-    color: colors.mutedForeground,
-    fontSize: "0.875rem",
-  },
-  muted: {
-    color: colors.mutedForeground,
-    fontSize: "0.875rem",
-  },
-})
-
 export function MemberRow({
   member,
-  group,
-  userId,
-  owners,
-  can,
-  onEdit,
-  onConfirm,
-  onAction,
-  onLeave,
+  access,
+  selection,
+  onDialog,
 }: {
   member: GroupMember
-  group: Group
-  userId: string
-  owners: number
-  can: Permissions
-  onEdit: () => void
-  onConfirm: (confirmation: Confirmation) => void
-  onAction: (action: "remove" | "promote" | "demote") => Promise<unknown>
-  onLeave: () => Promise<unknown>
+  access: MemberAccess
+  /** Absent when the viewer cannot manage the group's members. */
+  selection: Selection | undefined
+  onDialog: (kind: MemberDialogKind) => void
 }) {
-  const target: MemberTarget = {
-    groupId: group.id,
-    userId: member.userId,
-    role: member.role,
-    permissions: member.permissions ?? [],
+  const open = (kind: MemberDialogKind) => () => {
+    onDialog(kind)
   }
-  const self = member.userId === userId
-  const canEdit =
-    member.permissions !== null &&
-    can("group.updateMember", { member: target, permissions: target.permissions })
-  const canRemove = !self && can("group.removeMember", target)
-  const canPromote = can("group.promoteMember", target)
-  const canStepDown = self && can("group.demoteMember", target)
-  const isLastOwner = member.role === "OWNER" && owners <= 1
-  const items = [
-    canEdit ? { key: "edit", label: m.member_edit_permissions(), onClick: onEdit } : null,
-    canPromote
-      ? {
-          key: "promote",
-          label: m.member_promote(),
-          onClick: () => {
-            onConfirm({
-              title: renderWithName(m.member_promote_title, member),
-              description: m.member_promote_description(),
-              confirmLabel: m.member_promote(),
-              run: () => onAction("promote"),
-            })
+  const role = <RoleBadge role={member.role} />
+  const actions: RowAction[] = [
+    {
+      key: "profile",
+      label: m.users_view_profile(),
+      icon: ExternalLink,
+      render: <Link params={{ username: member.username }} to="/users/$username" />,
+    },
+    ...(access.edit
+      ? [
+          {
+            key: "permissions",
+            label: m.member_edit_permissions(),
+            icon: Key,
+            onClick: open("permissions"),
           },
-        }
-      : null,
-    canStepDown && !isLastOwner
-      ? {
-          key: "demote",
-          label: m.member_step_down(),
-          onClick: () => {
-            onConfirm({
-              title: m.member_step_down_title(),
-              description: m.member_step_down_description(),
-              confirmLabel: m.member_step_down(),
-              run: () => onAction("demote"),
-            })
+        ]
+      : []),
+    ...(access.promote
+      ? [{ key: "promote", label: m.member_promote(), icon: Crown, onClick: open("promote") }]
+      : []),
+    ...(access.transfer
+      ? [
+          {
+            key: "transfer",
+            label: m.member_transfer(),
+            icon: UserSwitch,
+            onClick: open("transfer"),
           },
-        }
-      : null,
-    self && !isLastOwner
-      ? {
-          key: "leave",
-          label: m.member_leave(),
-          destructive: true,
-          onClick: () => {
-            onConfirm({
-              title: m.member_leave_title({ name: group.name }),
-              description: m.member_leave_description(),
-              confirmLabel: m.member_leave(),
-              destructive: true,
-              run: onLeave,
-            })
+        ]
+      : []),
+    ...(access.stepDown
+      ? [{ key: "stepDown", label: m.member_step_down(), icon: Undo, onClick: open("stepDown") }]
+      : []),
+    ...(access.leave
+      ? [
+          {
+            key: "leave",
+            label: m.member_leave(),
+            icon: Logout,
+            destructive: true,
+            onClick: open("leave"),
           },
-        }
-      : null,
-    canRemove
-      ? {
-          key: "remove",
-          label: m.member_remove(),
-          destructive: true,
-          onClick: () => {
-            onConfirm({
-              title: renderWithName(m.member_remove_title, member),
-              description: m.member_remove_description(),
-              confirmLabel: m.member_remove(),
-              destructive: true,
-              run: () => onAction("remove"),
-            })
+        ]
+      : []),
+    ...(access.remove
+      ? [
+          {
+            key: "remove",
+            label: m.member_remove(),
+            icon: UserRemove,
+            destructive: true,
+            onClick: open("remove"),
           },
-        }
-      : null,
-  ].filter((item) => item !== null)
+        ]
+      : []),
+  ]
 
   return (
-    <ListRow>
-      <PersonAvatar
-        person={{
-          id: member.userId,
-          displayUsername: member.displayUsername,
-          image: member.image,
-        }}
-      />
-      <div sx={styles.main}>
-        <div sx={styles.titleLine}>
-          <span sx={styles.name}>
-            <UserLink user={member} />
-          </span>
-          <span sx={styles.username}>@{member.username}</span>
-          <RoleBadge role={member.role} />
-          {self ? <span sx={styles.muted}>· {m.member_you()}</span> : null}
-        </div>
-        <MemberPermissions permissions={member.permissions} role={member.role} />
-      </div>
-      {items.length === 0 ? null : (
-        <MemberActionsMenu items={items} name={member.displayUsername} />
+    <TableRow>
+      {selection === undefined ? null : (
+        <CatalogSelectCell
+          disabled={!access.edit && !access.remove}
+          id={member.userId}
+          label={member.displayUsername}
+          selection={selection}
+        />
       )}
-    </ListRow>
+      <CatalogCell column="member">
+        <TitleCell
+          detail={access.self ? `@${member.username} · ${m.member_you()}` : `@${member.username}`}
+          narrow={{
+            from: "4xl",
+            content: (
+              <>
+                <Folded until="3xl">
+                  {role}
+                  {member.permissions === null ? null : (
+                    <PermissionPills compact permissions={member.permissions} role={member.role} />
+                  )}
+                </Folded>
+                <span {...stylex.props(catalogStyles.muted)}>
+                  <TimeAgo date={member.createdAt} length="long" />
+                </span>
+              </>
+            ),
+          }}
+          thumb={
+            <PersonAvatar person={{ ...member, id: member.userId }} sx={mediaCellStyles.avatar} />
+          }
+          title={<UserLink sx={mediaCellStyles.title} user={member} />}
+        />
+      </CatalogCell>
+      <CatalogCell column="role">{role}</CatalogCell>
+      {member.permissions === null ? null : (
+        <CatalogCell column="permissions">
+          <div {...stylex.props(catalogStyles.inline)}>
+            <PermissionPills permissions={member.permissions} role={member.role} />
+          </div>
+        </CatalogCell>
+      )}
+      <CatalogCell column="joined" sx={catalogStyles.muted}>
+        <TimeAgo date={member.createdAt} length="long" />
+      </CatalogCell>
+      <CatalogCell column="actions">
+        <RowActions actions={actions} label={m.catalog_actions({ name: member.displayUsername })} />
+      </CatalogCell>
+    </TableRow>
   )
 }

@@ -30,6 +30,7 @@ const styles = stylex.create({
   actions: {
     gap: "0.5rem",
     display: "flex",
+    flexWrap: "wrap",
   },
 })
 

@@ -7,6 +7,7 @@ import { checkOwnershipRequest } from "../middlewares/check-ownership-request-mi
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
+import { cancelOwnershipRequest } from "../utils/ownership-requests"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 export const cancelOwnershipRequestHandler = new Hono().delete(
@@ -53,16 +54,10 @@ export const cancelOwnershipRequestHandler = new Hono().delete(
       return c.fail("OWNERSHIP_REQUEST_NOT_FOUND")
     }
 
-    const transitioned = await db
-      .updateTable("groupOwnershipRequests")
-      .set({ status: "CANCELLED" })
-      .where("id", "=", ownershipRequest.id)
-      .where("status", "=", "PENDING")
-      .returning("id")
-      .executeTakeFirst()
+    const result = await cancelOwnershipRequest(db, ownershipRequest.id)
 
-    if (transitioned === undefined) {
-      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
 
     return c.ok({ id: ownershipRequest.id })

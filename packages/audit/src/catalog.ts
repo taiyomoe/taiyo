@@ -40,6 +40,9 @@ export const adminAudit = defineAuditCatalog("admin", {
   USER_SESSION_REVOKE: { target: "user", severity: "high" },
   USER_SESSIONS_REVOKE: { target: "user", severity: "high" },
   USER_PASSWORD_SET: { target: "user", severity: "critical" },
+  USER_PROFILE_UPDATE: { target: "user", severity: "high", requiresChanges: true },
+  USER_AVATAR_REMOVE: { target: "user", severity: "medium" },
+  USER_BANNER_REMOVE: { target: "user", severity: "medium" },
   USER_LIST: { severity: "medium" },
   USER_GET: { target: "user", severity: "medium" },
   USER_SESSIONS_LIST: { target: "user", severity: "medium" },
@@ -81,6 +84,7 @@ export const commentAudit = defineAuditCatalog("comment", {
 export const commentReportAudit = defineAuditCatalog("comment.report", {
   CREATE: { target: "comment", severity: "low" },
   CLOSE: { target: "commentReport", severity: "medium" },
+  CLOSE_MANY: { severity: "medium" },
 })
 
 export const commentImageAudit = defineAuditCatalog("comment.image", {
@@ -96,6 +100,7 @@ export const mediaAudit = defineAuditCatalog("media", {
   UPDATE: { target: "media", severity: "medium", requiresChanges: true },
   DELETE: { target: "media", severity: "high" },
   RESTORE: { target: "media", severity: "high" },
+  FEATURED_SET: { severity: "medium", requiresChanges: true },
   FLAG: { target: "media", severity: "high", requiresChanges: true, requiresReason: true },
   REINDEX: { target: "media", severity: "low" },
   UPDATE_MANY: { severity: "medium" },
@@ -132,6 +137,9 @@ export const mediaSuggestionAudit = defineAuditCatalog("media.suggestion", {
   WITHDRAW: { target: "mediaSuggestion", severity: "low" },
   ACCEPT: { target: "mediaSuggestion", severity: "medium", requiresChanges: true },
   REJECT: { target: "mediaSuggestion", severity: "low" },
+  WITHDRAW_MANY: { severity: "low" },
+  ACCEPT_MANY: { severity: "medium" },
+  REJECT_MANY: { severity: "low" },
 })
 
 export const mediaStaffAudit = defineAuditCatalog("media.staff", {
@@ -151,6 +159,7 @@ export const chapterAudit = defineAuditCatalog("chapter", {
   UPDATE: { target: "chapter", severity: "medium", requiresChanges: true },
   DELETE: { target: "chapter", severity: "high" },
   WITHDRAW: { target: "chapter", severity: "low" },
+  WITHDRAW_MANY: { severity: "low" },
   PAGES_REORDER: { target: "chapter", severity: "low" },
   PUBLISH: { target: "chapter", severity: "medium" },
   UPDATE_MANY: { severity: "medium" },
@@ -189,6 +198,13 @@ export const groupAudit = defineAuditCatalog("group", {
 export const groupReportAudit = defineAuditCatalog("group.report", {
   CREATE: { target: "group", severity: "low" },
   REVIEW: { target: "groupReport", severity: "medium" },
+  REVIEW_MANY: { severity: "medium" },
+})
+
+export const userReportAudit = defineAuditCatalog("user.report", {
+  CREATE: { target: "user", severity: "low" },
+  REVIEW: { target: "userReport", severity: "medium" },
+  REVIEW_MANY: { severity: "medium" },
 })
 
 export const groupMemberAudit = defineAuditCatalog("group.member", {
@@ -197,6 +213,8 @@ export const groupMemberAudit = defineAuditCatalog("group.member", {
   PROMOTE: { target: "group", severity: "high" },
   DEMOTE: { target: "group", severity: "high" },
   LEAVE: { target: "group", severity: "medium" },
+  UPDATE_MANY: { target: "group", severity: "high", requiresChanges: true },
+  REMOVE_MANY: { target: "group", severity: "high" },
 })
 
 export const groupOwnershipAudit = defineAuditCatalog("group.ownership", {
@@ -205,6 +223,9 @@ export const groupOwnershipAudit = defineAuditCatalog("group.ownership", {
   REQUEST_REJECT: { target: "ownershipRequest", severity: "medium" },
   REQUEST_CANCEL: { target: "ownershipRequest", severity: "low" },
   TRANSFER: { target: "group", severity: "high" },
+  REQUEST_APPROVE_MANY: { severity: "high" },
+  REQUEST_REJECT_MANY: { severity: "medium" },
+  REQUEST_CANCEL_MANY: { severity: "low" },
 })
 
 export const groupInvitationAudit = defineAuditCatalog("group.invitation", {
@@ -212,6 +233,9 @@ export const groupInvitationAudit = defineAuditCatalog("group.invitation", {
   CANCEL: { target: "groupInvitation", severity: "low" },
   ACCEPT: { target: "groupInvitation", severity: "medium" },
   DECLINE: { target: "groupInvitation", severity: "low" },
+  ACCEPT_MANY: { severity: "medium" },
+  DECLINE_MANY: { severity: "low" },
+  CANCEL_MANY: { target: "group", severity: "low" },
 })
 
 export const groupCreationAudit = defineAuditCatalog("group.creation", {
@@ -219,6 +243,9 @@ export const groupCreationAudit = defineAuditCatalog("group.creation", {
   REQUEST_APPROVE: { target: "groupCreationRequest", severity: "high" },
   REQUEST_REJECT: { target: "groupCreationRequest", severity: "medium" },
   REQUEST_CANCEL: { target: "groupCreationRequest", severity: "low" },
+  REQUEST_APPROVE_MANY: { severity: "high" },
+  REQUEST_REJECT_MANY: { severity: "medium" },
+  REQUEST_CANCEL_MANY: { severity: "low" },
 })
 
 export const listAudit = defineAuditCatalog("list", {
@@ -230,6 +257,7 @@ export const listAudit = defineAuditCatalog("list", {
   ITEM_REMOVE: { target: "list", severity: "low" },
   VOTE: { target: "list", severity: "low" },
   UNVOTE: { target: "list", severity: "low" },
+  DELETE_MANY: { severity: "low" },
 })
 
 export const libraryAudit = defineAuditCatalog("library", {
@@ -264,6 +292,11 @@ export const bookmarkAudit = defineAuditCatalog("bookmark", {
 export const chapterReportAudit = defineAuditCatalog("chapter.report", {
   CREATE: { target: "chapter", severity: "low" },
   CLOSE: { target: "pageReport", severity: "medium" },
+  CLOSE_MANY: { severity: "medium" },
+})
+
+export const rankingAudit = defineAuditCatalog("ranking", {
+  PERIOD_CLOSE: { target: "rankingPeriod", severity: "medium" },
 })
 
 export const auditLogAudit = defineAuditCatalog("audit.log", {
@@ -296,12 +329,14 @@ export const auditCatalogs = [
   groupInvitationAudit,
   groupCreationAudit,
   groupReportAudit,
+  userReportAudit,
   listAudit,
   libraryAudit,
   historyAudit,
   notificationAudit,
   bookmarkAudit,
   chapterReportAudit,
+  rankingAudit,
   auditLogAudit,
 ]
 
@@ -332,12 +367,14 @@ declare module "evlog" {
     groupInvitation: typeof groupInvitationAudit
     groupCreation: typeof groupCreationAudit
     groupReport: typeof groupReportAudit
+    userReport: typeof userReportAudit
     list: typeof listAudit
     library: typeof libraryAudit
     history: typeof historyAudit
     notification: typeof notificationAudit
     bookmark: typeof bookmarkAudit
     chapterReport: typeof chapterReportAudit
+    ranking: typeof rankingAudit
     auditLog: typeof auditLogAudit
   }
 }

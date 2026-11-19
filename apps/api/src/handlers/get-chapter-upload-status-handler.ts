@@ -23,7 +23,7 @@ export const getChapterUploadStatusHandler = new Hono().get(
   describeRoute({
     summary: "Get the status of a chapter upload",
     description:
-      "Returns the processing status of a chapter page upload. Pages are ready once the status is `FINISHED`.\n\n**Required access:** uploader or admin, a moderator or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.",
+      "Returns the processing status of a chapter page upload. Pages are ready once the status is `FINISHED`.\n\n**Required access:** uploader or admin, a moderator, the uploader intern who uploaded it or a member of a credited group with the `EDIT_CHAPTERS` permission when the chapter is published or scheduled, or the user who uploaded the chapter while it is uploading, pending or scheduled.",
     tags: ["Chapters"],
     responses: {
       200: {

@@ -30,12 +30,37 @@ if (draft === undefined) {
   process.exit(0)
 }
 
-const message = /~~~~markdown\r?\n([\s\S]*?)\r?\n~~~~/.exec(draft.body)?.[1]?.trim()
+const block = /~~~~markdown\r?\n([\s\S]*?)\r?\n~~~~/.exec(draft.body)
+const message = block?.[1]?.trim()
 
-if (message === undefined || message === "") {
+if (block === null || message === undefined || message === "") {
   throw new Error(`The Discord draft on #${releasePull.number} has no ~~~~markdown block`)
 }
 
+const outsideBlock = draft.body.replace(block[0], "")
+const imageUrls = [
+  ...outsideBlock.matchAll(
+    /!\[[^\]]*\]\((https:\/\/[^)\s]+)\)|<img[^>]*\ssrc="(https:\/\/[^"]+)"/g,
+  ),
+]
+  .map((match) => match[1] ?? match[2] ?? "")
+  .slice(0, 10)
+const images = await Promise.all(
+  imageUrls.map(async (url, index) => {
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      throw new Error(`Could not download ${url}: ${response.status}`)
+    }
+
+    const type = response.headers.get("content-type") ?? "image/png"
+
+    return {
+      blob: new Blob([await response.arrayBuffer()], { type }),
+      filename: `image-${index + 1}.${type.split("/")[1]?.split(/[;+]/)[0] ?? "png"}`,
+    }
+  }),
+)
 const chunks = message.split(/\n{2,}/).reduce<string[]>((acc, paragraph) => {
   const last = acc.at(-1)
 
@@ -48,12 +73,24 @@ const chunks = message.split(/\n{2,}/).reduce<string[]>((acc, paragraph) => {
   return acc
 }, [])
 
-for (const content of chunks) {
-  const response = await fetch(`${webhookUrl}?wait=true`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ content, allowed_mentions: { parse: [], roles: [roleId] } }),
-  })
+for (const [index, content] of chunks.entries()) {
+  const attached = index === chunks.length - 1 ? images : []
+  const form = new FormData()
+
+  form.append(
+    "payload_json",
+    JSON.stringify({
+      content,
+      allowed_mentions: { parse: [], roles: [roleId] },
+      attachments: attached.map((image, id) => ({ id, filename: image.filename })),
+    }),
+  )
+
+  for (const [id, image] of attached.entries()) {
+    form.append(`files[${id}]`, image.blob, image.filename)
+  }
+
+  const response = await fetch(`${webhookUrl}?wait=true`, { method: "POST", body: form })
 
   if (!response.ok) {
     throw new Error(
@@ -63,5 +100,5 @@ for (const content of chunks) {
 }
 
 console.log(
-  `Posted the ${tag} announcement from #${releasePull.number} in ${chunks.length} message(s).`,
+  `Posted the ${tag} announcement from #${releasePull.number} in ${chunks.length} message(s) with ${images.length} image(s).`,
 )

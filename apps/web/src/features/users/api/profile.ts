@@ -1,6 +1,7 @@
 import type { InferRequestType, InferResponseType } from "hono/client"
 import {
   infiniteQueryOptions,
+  type QueryClient,
   queryOptions,
   useMutation,
   useQueryClient,
@@ -12,6 +13,9 @@ import { ensureSuccess, unwrap, unwrapEnvelope } from "@/lib/envelope"
 import { sessionQueryOptions } from "@/lib/session"
 
 const FOLLOWS_PER_PAGE = 30
+// Every list that shows a user's name or avatar carries what changed on their profile.
+const refreshUserEverywhere = (queryClient: QueryClient) =>
+  queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] !== "session" })
 
 export const userProfileQueryOptions = (username: string) =>
   queryOptions({
@@ -42,6 +46,20 @@ export const userStatsQueryOptions = (userId: string, contentRatings: readonly C
         ),
       ),
   })
+
+export const userAchievementsQueryOptions = (userId: string) =>
+  queryOptions({
+    queryKey: ["users", "achievements", userId],
+    queryFn: async ({ signal }) =>
+      unwrap(
+        await api.users[":id"].achievements.$get({ param: { id: userId } }, { init: { signal } }),
+      ),
+  })
+
+export type UserAchievement = InferResponseType<
+  (typeof api.users)[":id"]["achievements"]["$get"],
+  200
+>["data"][number]
 
 export type UserStats = InferResponseType<(typeof api.users)[":id"]["stats"]["$get"], 200>["data"]
 
@@ -193,9 +211,7 @@ export function useEquipCosmetics(username: string) {
       )
       refreshSession({ nameEffect: equipped.nameEffect, avatarBorder: equipped.avatarBorder })
     },
-    // Every list that shows this user's name carries their effect.
-    onSettled: () =>
-      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] !== "session" }),
+    onSettled: () => refreshUserEverywhere(queryClient),
   })
 }
 
@@ -271,4 +287,58 @@ export function useProfileImage(username: string, kind: ProfileImageKind) {
   })
 
   return { upload, remove }
+}
+
+type ProfileModeration = InferRequestType<(typeof api.users)[":id"]["profile"]["$patch"]>["json"]
+
+/** Lets staff fix someone else's display name, about text or city. */
+export function useModerateProfile(user: Pick<UserProfile, "id" | "username">) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (patch: ProfileModeration) => {
+      const response = await api.users[":id"].profile.$patch({
+        param: { id: user.id },
+        json: patch,
+      })
+
+      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+    },
+    onSuccess: ({ displayUsername, about, city }) => {
+      queryClient.setQueryData(profileKey(user.username), (current) =>
+        current === undefined ? current : { ...current, displayUsername, about, city },
+      )
+    },
+    onSettled: () => refreshUserEverywhere(queryClient),
+  })
+}
+
+/** Lets staff remove someone else's avatar or banner. */
+export function useRemoveUserImage(
+  user: Pick<UserProfile, "id" | "username">,
+  kind: ProfileImageKind,
+) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async () => {
+      const param = { param: { id: user.id } }
+
+      await ensureSuccess(
+        kind === "avatar"
+          ? await api.users[":id"].avatar.$delete(param)
+          : await api.users[":id"].banner.$delete(param),
+      )
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(profileKey(user.username), (current) => {
+        if (current === undefined) {
+          return current
+        }
+
+        return kind === "avatar" ? { ...current, image: null } : { ...current, bannerUrl: null }
+      })
+    },
+    onSettled: () => refreshUserEverywhere(queryClient),
+  })
 }

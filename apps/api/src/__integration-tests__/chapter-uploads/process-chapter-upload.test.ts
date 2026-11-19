@@ -293,6 +293,24 @@ describe("processChapterUpload", () => {
     expect(await stage(96_204, [groupId])).toMatchObject({ status: "PENDING" })
   })
 
+  test("publishes an intern's chapter, and sends it to review once they are demoted", async ({
+    services,
+  }) => {
+    const intern = await signInAs(services, { role: "UPLOADER_INTERN" })
+    const stage = (number: number) =>
+      stageAndProcess(services, { status: "UPLOADING", number, uploaderId: intern.userId })
+
+    expect(await stage(96_301)).toMatchObject({ status: "PUBLISHED" })
+
+    await services.db
+      .updateTable("users")
+      .set({ role: "USER" })
+      .where("id", "=", intern.userId)
+      .execute()
+
+    expect(await stage(96_302)).toMatchObject({ status: "PENDING" })
+  })
+
   test("leaves rejected and withdrawn chapters without pages and removes the processed files", async ({
     services,
   }) => {

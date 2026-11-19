@@ -1,10 +1,10 @@
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { Monitor } from "@taiyomoe/ui/components/icons"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { useQuery } from "@tanstack/react-query"
+import { Pill } from "@/components/badges/pill"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { TimeAgo } from "@/components/time/time-ago"
 import { mySessionsQueryOptions, useRevokeSessions } from "@/features/settings/api/account"
@@ -63,7 +63,7 @@ export function SessionsSection({ currentToken }: { currentToken: string }) {
                     <span sx={settingsStyles.itemTitle}>
                       {device === null ? m.sessions_unknown_device() : m.sessions_device(device)}
                       {current ? (
-                        <Badge variant="success">{m.user_settings_sessions_current()}</Badge>
+                        <Pill variant="success">{m.user_settings_sessions_current()}</Pill>
                       ) : null}
                     </span>
                     <span sx={settingsStyles.itemMeta}>

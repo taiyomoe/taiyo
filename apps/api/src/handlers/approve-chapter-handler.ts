@@ -9,6 +9,7 @@ import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { awardAchievements } from "../utils/achievements"
 import { auditChanges } from "../utils/audit"
 import { readyCreatedAt, readyStatus } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -136,7 +137,7 @@ export const approveChapterHandler = new Hono().post(
 
     c.var.audit.set({ changes: auditChanges(chapter, edits) })
 
-    await db
+    const { status } = await db
       .updateTable("chapters")
       .set({
         ...edits,
@@ -146,7 +147,12 @@ export const approveChapterHandler = new Hono().post(
         createdAt: readyCreatedAt,
       })
       .where("id", "=", chapter.id)
-      .execute()
+      .returning("status")
+      .executeTakeFirstOrThrow()
+
+    if (status === "PUBLISHED") {
+      await awardAchievements(c.var, chapter.uploaderId)
+    }
 
     return c.ok({ id: chapter.id })
   },

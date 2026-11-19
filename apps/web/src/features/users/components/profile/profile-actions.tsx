@@ -3,17 +3,25 @@ import { Edit, Sparkles } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-import { lazy, Suspense, useState } from "react"
+import { Suspense, useState } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { Session } from "@/lib/session"
+import { ReportUserDialog } from "@/features/user-reports/components/report-user-dialog"
 import { FollowButton } from "@/features/users/components/profile/follow-button"
+import { createLazyComponent } from "@/lib/lazy-component"
+import { getPermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
-// The owner-only dialog is code-split: visitors never download it.
-const CustomizeDialog = lazy(async () => ({
-  default: (await import("@/features/users/components/profile/dialogs/customize-dialog"))
-    .CustomizeDialog,
-}))
+// The owner-only and staff-only dialogs are code-split: visitors never download them.
+const CustomizeDialog = createLazyComponent(
+  async () =>
+    (await import("@/features/users/components/profile/dialogs/customize-dialog")).CustomizeDialog,
+)
+const ModerateProfileDialog = createLazyComponent(
+  async () =>
+    (await import("@/features/users/components/users/moderate-profile-dialog"))
+      .ModerateProfileDialog,
+)
 const styles = stylex.create({
   customize: {
     paddingInline: { default: 0, [breakpoints.sm]: "calc(1rem - 1px)" },
@@ -25,7 +33,7 @@ const styles = stylex.create({
   root: {
     gap: "0.5rem",
     display: "flex",
-    flexShrink: 0,
+    flexWrap: "wrap",
     justifyContent: "flex-end",
   },
 })
@@ -37,7 +45,9 @@ export function ProfileActions({
   profile: UserProfile
   viewer: Session["user"] | null
 }) {
+  const can = getPermissions(viewer)
   const [customizing, setCustomizing] = useState(false)
+  const [moderating, setModerating] = useState(false)
 
   if (viewer === null) {
     return null
@@ -46,7 +56,29 @@ export function ProfileActions({
   if (viewer.id !== profile.id) {
     return (
       <div sx={styles.root}>
+        {can("user.moderateProfile", { id: profile.id, role: profile.role }) ? (
+          <Button
+            aria-label={m.profile_edit()}
+            onClick={() => {
+              setModerating(true)
+            }}
+            size="icon"
+            title={m.profile_edit()}
+            variant="outline"
+          >
+            <Edit />
+          </Button>
+        ) : null}
+        <ReportUserDialog user={profile} />
         <FollowButton profile={profile} />
+        {moderating ? (
+          <ModerateProfileDialog
+            onClose={() => {
+              setModerating(false)
+            }}
+            user={profile}
+          />
+        ) : null}
       </div>
     )
   }

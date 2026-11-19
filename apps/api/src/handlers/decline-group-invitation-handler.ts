@@ -6,6 +6,7 @@ import { audited } from "../middlewares/audited-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { declineGroupInvitation } from "../utils/group-invitations"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -46,29 +47,15 @@ export const declineGroupInvitationHandler = new Hono().post(
   async (c) => {
     const { db, user } = c.var
     const { id } = c.var.param
-    const invitation = await db
-      .selectFrom("groupInvitations")
-      .select(["status", "groupId"])
-      .where("id", "=", id)
-      .where("inviteeId", "=", user.id)
-      .forUpdate()
-      .executeTakeFirst()
+    const result = await declineGroupInvitation(db, { invitationId: id, userId: user.id })
 
-    if (invitation === undefined) {
-      return c.fail("GROUP_INVITATION_NOT_FOUND")
+    if (result.groupId !== null) {
+      c.var.audit.set({ target: { groupId: result.groupId } })
     }
 
-    c.var.audit.set({ target: { groupId: invitation.groupId } })
-
-    if (invitation.status !== "PENDING") {
-      return c.fail("GROUP_INVITATION_NOT_PENDING")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
-
-    await db
-      .updateTable("groupInvitations")
-      .set({ status: "DECLINED" })
-      .where("id", "=", id)
-      .execute()
 
     return c.ok({ id })
   },

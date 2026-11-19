@@ -1,5 +1,5 @@
 import type { IconProps } from "@taiyomoe/ui/components/icons"
-import type { ReactElement, ReactNode } from "react"
+import type { ComponentProps, ReactElement, ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { Search } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
@@ -10,7 +10,11 @@ import {
 } from "@taiyomoe/ui/components/ui/input-group"
 import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
-import { type OptionSet, OptionalOptionSelect } from "@/components/fields/option-select"
+import {
+  type OptionSet,
+  OptionalOptionSelect,
+  OptionSelect,
+} from "@/components/fields/option-select"
 import { filterContainers } from "@/components/filters/filters.stylex"
 
 const styles = stylex.create({
@@ -118,6 +122,33 @@ export function FilterSelect<TValue extends string>({
   )
 }
 
+/** A filter that always holds one value, like the queue or the status a page shows. */
+export function FilterChoice<TValue extends string>({
+  options,
+  values,
+  label,
+  value,
+  onChange,
+}: {
+  options: OptionSet<TValue>
+  values?: readonly TValue[] | undefined
+  label: string
+  value: TValue
+  onChange: (value: TValue) => void
+}) {
+  return (
+    <div sx={styles.select}>
+      <OptionSelect
+        label={label}
+        onChange={onChange}
+        options={options}
+        value={value}
+        values={values}
+      />
+    </div>
+  )
+}
+
 export function FilterToggle({
   icon: Icon,
   label,
@@ -145,10 +176,6 @@ export function FilterToggle({
 }
 
 /** The page's main action, as tall as the filters under it. */
-export function PageAction({ render, children }: { render: ReactElement; children: ReactNode }) {
-  return (
-    <Button render={render} sx={styles.control}>
-      {children}
-    </Button>
-  )
+export function PageAction({ sx, ...props }: ComponentProps<typeof Button>) {
+  return <Button {...props} sx={[styles.control, sx]} />
 }

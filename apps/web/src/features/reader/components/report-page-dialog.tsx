@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { config } from "@taiyomoe/config"
 import { PAGE_REPORT_REASONS, type PageReportReason } from "@taiyomoe/db/constants"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -76,7 +77,7 @@ export function ReportPageDialog({
           <DialogDescription>
             {target === null
               ? null
-              : m.reader_report_description({ chapter: target.chapterLabel, page: target.page })}
+              : `${m.reader_report_description({ chapter: target.chapterLabel, page: target.page })} ${m.report_reward_hint({ points: config.reports.rewardPoints })}`}
           </DialogDescription>
         </DialogHeader>
         <DialogPanel sx={styles.panel}>

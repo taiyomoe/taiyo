@@ -1,24 +1,24 @@
 import type { IconProps } from "@taiyomoe/ui/components/icons"
+import type { LinkProps } from "@tanstack/react-router"
 import type { ReactElement } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { AlertTriangle, UserCheck } from "@taiyomoe/ui/components/icons"
+import { AlertTriangle } from "@taiyomoe/ui/components/icons"
 import { colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useQuery } from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
 import type { DashboardOverview } from "@/features/dashboard/api/overview"
+import { myOverviewQueryOptions } from "@/features/dashboard/api/my-overview"
+import { getVisibleQueues } from "@/features/dashboard/lib/dashboard-queues"
 import { formatNumber } from "@/features/dashboard/lib/format"
 import { m } from "@/paraglide/messages"
 
-const ITEMS: ReadonlyArray<{
-  key: keyof DashboardOverview["attention"]
+type AttentionItem = {
+  key: string
   label: () => string
   icon: (props: IconProps) => ReactElement
-}> = [
-  {
-    key: "pendingOwnershipRequests",
-    label: m.dashboard_attention_ownership_requests,
-    icon: UserCheck,
-  },
-  { key: "failedUploads", label: m.dashboard_attention_failed_uploads, icon: AlertTriangle },
-]
+  count: number
+  to?: NonNullable<LinkProps["to"]>
+}
 const styles = stylex.create({
   list: {
     margin: 0,
@@ -35,11 +35,18 @@ const styles = stylex.create({
     borderWidth: 1,
     gap: "0.875rem",
     paddingBlock: "0.75rem",
+    textDecoration: "none",
     alignItems: "center",
     backgroundColor: colors.well,
+    color: "inherit",
     display: "flex",
     paddingInlineEnd: "1.125rem",
     paddingInlineStart: "0.75rem",
+  },
+  rowLink: {
+    backgroundColor: { default: colors.well, ":hover": colors.wellRaised },
+    transitionDuration: "150ms",
+    transitionProperty: "background-color",
   },
   chip: {
     borderRadius: radius.full,
@@ -74,19 +81,42 @@ const styles = stylex.create({
 })
 
 export function AttentionList({ overview: { attention } }: { overview: DashboardOverview }) {
+  const { data: mine } = useQuery(myOverviewQueryOptions)
+  const items: AttentionItem[] = [
+    ...getVisibleQueues(mine?.queues),
+    {
+      key: "failedUploads",
+      label: m.dashboard_attention_failed_uploads,
+      icon: AlertTriangle,
+      count: attention.failedUploads,
+    },
+  ]
+
   return (
     <ul sx={styles.list}>
-      {ITEMS.map(({ key, label, icon: Icon }) => (
-        <li key={key} sx={styles.row}>
-          <span sx={[styles.chip, attention[key] === 0 && styles.chipIdle]}>
-            <Icon size={18} />
-          </span>
-          <span sx={styles.label}>{label()}</span>
-          <span sx={[styles.count, attention[key] === 0 && styles.countIdle]}>
-            {formatNumber(attention[key])}
-          </span>
-        </li>
-      ))}
+      {items.map(({ key, label, icon: Icon, count, to }) => {
+        const content = (
+          <>
+            <span sx={[styles.chip, count === 0 && styles.chipIdle]}>
+              <Icon size={18} />
+            </span>
+            <span sx={styles.label}>{label()}</span>
+            <span sx={[styles.count, count === 0 && styles.countIdle]}>{formatNumber(count)}</span>
+          </>
+        )
+
+        return (
+          <li key={key}>
+            {to === undefined ? (
+              <div sx={styles.row}>{content}</div>
+            ) : (
+              <Link to={to} {...stylex.props(styles.row, styles.rowLink)}>
+                {content}
+              </Link>
+            )}
+          </li>
+        )
+      })}
     </ul>
   )
 }

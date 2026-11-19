@@ -7,14 +7,16 @@ import {
 } from "@taiyomoe/ui/components/ui/preview-card"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-import { lazy, Suspense } from "react"
+import { Suspense } from "react"
 import { type NameEffectProp, UserName } from "@/components/user-name/user-name"
 import { UserHoverCardSkeleton } from "@/features/users/components/hover-card/user-hover-card-skeleton"
+import { createLazyComponent } from "@/lib/lazy-component"
 
 // The card only downloads the first time someone hovers a name.
-const UserHoverCard = lazy(async () => ({
-  default: (await import("@/features/users/components/hover-card/user-hover-card")).UserHoverCard,
-}))
+const UserHoverCard = createLazyComponent(
+  async () =>
+    (await import("@/features/users/components/hover-card/user-hover-card")).UserHoverCard,
+)
 const styles = stylex.create({
   link: {
     borderRadius: radius.sm,
@@ -62,7 +64,8 @@ export function UserLink({ user, sx }: { user: LinkedUser; sx?: Sx }) {
       </PreviewCardTrigger>
       <PreviewCardPopup align="start" sideOffset={8} sx={styles.popup}>
         <Suspense fallback={<UserHoverCardSkeleton />}>
-          <UserHoverCard username={user.username} />
+          {/* Mounted on each open, so a download that failed offline is tried again on the next hover. */}
+          <UserHoverCard fallback={<UserHoverCardSkeleton />} username={user.username} />
         </Suspense>
       </PreviewCardPopup>
     </PreviewCard>

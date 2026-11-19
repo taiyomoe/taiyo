@@ -5,7 +5,7 @@ import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { Session } from "@/lib/session"
 import { Pill } from "@/components/badges/pill"
-import { UserCountryFlag } from "@/components/flags/flags"
+import { Flag } from "@/components/flags/flags"
 import { UserName } from "@/components/user-name/user-name"
 import { ProfileActions } from "@/features/users/components/profile/profile-actions"
 import { ProfileAvatar } from "@/features/users/components/profile/profile-avatar"
@@ -34,6 +34,7 @@ const styles = stylex.create({
     marginTop: { default: "-3rem", [breakpoints.md]: "-4.25rem" },
   },
   actions: {
+    minWidth: 0,
     paddingTop: "0.875rem",
   },
   identity: {
@@ -138,11 +139,7 @@ export function ProfileHeader({
         <ul sx={styles.meta}>
           {location === "" ? null : (
             <li sx={styles.metaItem}>
-              {profile.country === null ? (
-                <Globe size={16} />
-              ) : (
-                <UserCountryFlag country={profile.country} />
-              )}
+              {profile.country === null ? <Globe size={16} /> : <Flag country={profile.country} />}
               <span sx={styles.metaText}>{location}</span>
             </li>
           )}

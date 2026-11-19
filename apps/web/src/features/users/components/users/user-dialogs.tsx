@@ -8,13 +8,14 @@ import { CosmeticDialog } from "@/features/users/components/users/actions/cosmet
 import { PointsDialog } from "@/features/users/components/users/actions/points-dialog"
 import { RoleDialog } from "@/features/users/components/users/actions/role-dialog"
 import { BanDialog } from "@/features/users/components/users/ban-dialog"
+import { ModerateProfileDialog } from "@/features/users/components/users/moderate-profile-dialog"
 import { SessionsDialog } from "@/features/users/components/users/sessions-dialog"
 import { SetPasswordDialog } from "@/features/users/components/users/set-password-dialog"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
 export type UserDialog = {
-  kind: "ban" | "impersonate" | "sessions" | "password" | "role" | "points" | "cosmetic"
+  kind: "ban" | "impersonate" | "sessions" | "password" | "role" | "points" | "cosmetic" | "profile"
   users: ManagedUser[]
   /** Opened from the selection, which clears once the action succeeds. */
   bulk: boolean
@@ -48,6 +49,10 @@ export function UserDialogs({
       <PointsDialog onClose={onClose} onDone={onDone} users={pick("points")} />
       <CosmeticDialog onClose={onClose} onDone={onDone} users={pick("cosmetic")} />
       <BanDialog onClose={onClose} user={dialog?.kind === "ban" ? (user ?? null) : null} />
+      <ModerateProfileDialog
+        onClose={onClose}
+        user={dialog?.kind === "profile" ? (user ?? null) : null}
+      />
       <ConfirmDialog
         confirmation={
           dialog?.kind === "impersonate" && user !== undefined

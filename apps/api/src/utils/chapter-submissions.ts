@@ -1,6 +1,18 @@
-import { type DB, type Kysely, sql } from "@taiyomoe/db"
+import type { DB, Kysely } from "@taiyomoe/db"
+import z from "zod"
 import { publishAtIso } from "./chapter-release"
-import { getMainCoverUrls, getMainTitles, withChapterDetails } from "./latest-chapters"
+import {
+  chapterPageCount,
+  getMainCoverUrls,
+  getMainTitles,
+  withChapterDetails,
+} from "./latest-chapters"
+
+export const submissionSearchSchema = z.string().trim().min(1).max(100).optional().meta({
+  description:
+    "Only list the chapters whose title or media title contains this text, or whose number is this number.",
+  example: "one punch",
+})
 
 export const selectSubmissions = (db: Kysely<DB>) =>
   db
@@ -26,7 +38,7 @@ export const selectSubmissionColumns = (query: ReturnType<typeof selectSubmissio
     "chapters.externalUrl",
     "chapters.isExternal",
     publishAtIso.as("publishAt"),
-    sql<number>`coalesce(cardinality("chapters"."pages"), 0)`.as("pageCount"),
+    chapterPageCount.as("pageCount"),
     "users.id as uploaderId",
     "users.username as uploaderUsername",
     "users.displayUsername as uploaderDisplayUsername",

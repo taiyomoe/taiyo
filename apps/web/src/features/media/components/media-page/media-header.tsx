@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { sceneFont } from "@taiyomoe/ui/styles/scene.stylex"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { Media } from "@/features/media/api/medias"
+import { Pill } from "@/components/badges/pill"
 import { mediaPageStyles } from "@/features/media/components/media-page/media-page-styles"
 import {
   MEDIA_STATUS_BADGES,
@@ -75,16 +75,14 @@ export function MediaHeader({ media }: { media: Media }) {
         {title ?? <span sx={styles.untitled}>{m.media_untitled()}</span>}
       </h1>
       <div sx={styles.badges}>
-        <Badge size="lg" variant="outline">
-          {MEDIA_TYPE_LABELS[media.type]()}
-        </Badge>
-        <Badge size="lg" variant={MEDIA_STATUS_BADGES[media.status]}>
+        <Pill>{MEDIA_TYPE_LABELS[media.type]()}</Pill>
+        <Pill variant={MEDIA_STATUS_BADGES[media.status]}>
           {MEDIA_STATUS_LABELS[media.status]()}
-        </Badge>
+        </Pill>
         {years === null ? null : (
-          <Badge size="lg" sx={styles.years} variant="secondary">
+          <Pill tone={styles.years} variant="secondary">
             {years}
-          </Badge>
+          </Pill>
         )}
       </div>
     </header>

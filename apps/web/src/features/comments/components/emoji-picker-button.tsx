@@ -3,7 +3,8 @@ import { Smile } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/ui/popover"
 import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
-import { lazy, Suspense, useState } from "react"
+import { Suspense, useState } from "react"
+import { createLazyComponent } from "@/lib/lazy-component"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -15,7 +16,9 @@ const styles = stylex.create({
     width: "min(21rem, calc(100vw - 4rem))",
   },
 })
-const EmojiPickerPanel = lazy(() => import("@/features/comments/components/emoji-picker-panel"))
+const EmojiPickerPanel = createLazyComponent(
+  async () => (await import("@/features/comments/components/emoji-picker-panel")).default,
+)
 
 export function EmojiPickerButton({
   disabled,
@@ -48,6 +51,7 @@ export function EmojiPickerButton({
         <div sx={styles.panel}>
           <Suspense fallback={<Spinner />}>
             <EmojiPickerPanel
+              fallback={<Spinner />}
               onPick={(emoji) => {
                 setOpen(false)
                 onPick(emoji)

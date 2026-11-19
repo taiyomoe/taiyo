@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaSuggestionDetail } from "@/features/media-suggestions/api/media-suggestions"
+import { Pill } from "@/components/badges/pill"
 import { TimeAgo } from "@/components/time/time-ago"
 import { renderWithName } from "@/components/user-name/with-name"
 import { Uploader } from "@/features/chapters/components/uploader"
@@ -22,9 +22,9 @@ const styles = stylex.create({
 export function SuggestionMeta({ suggestion }: { suggestion: MediaSuggestionDetail }) {
   return (
     <div sx={styles.meta}>
-      <Badge variant={SUGGESTION_STATUS[suggestion.status].variant}>
+      <Pill variant={SUGGESTION_STATUS[suggestion.status].variant}>
         {SUGGESTION_STATUS[suggestion.status].label()}
-      </Badge>
+      </Pill>
       <Uploader uploader={suggestion.author} />
       <TimeAgo date={suggestion.createdAt} />
       {suggestion.reviewer === null ? null : (

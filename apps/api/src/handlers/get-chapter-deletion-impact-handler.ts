@@ -15,7 +15,7 @@ export const getChapterDeletionImpactHandler = new Hono().get(
   describeRoute({
     summary: "Get what deleting a chapter affects",
     description:
-      "Returns what disappears from the site if you delete the chapter: its pages, the reading history and bookmarks of its readers, its comments and its page reports, counted.\n\n**Required access:** uploader or admin, or a moderator or a member of a credited group with the `DELETE_CHAPTERS` permission when the chapter is published or scheduled.",
+      "Returns what disappears from the site if you delete the chapter: its pages, the reading history and bookmarks of its readers, its comments and its page reports, counted.\n\n**Required access:** uploader or admin, or a moderator, the uploader intern who uploaded it or a member of a credited group with the `DELETE_CHAPTERS` permission when the chapter is published or scheduled.",
     tags: ["Chapters"],
     responses: {
       200: {

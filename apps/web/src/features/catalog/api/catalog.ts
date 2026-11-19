@@ -1,6 +1,7 @@
 import type {
   ChapterStatus,
   ContentRating,
+  Flag,
   MediaLanguage,
   MediaStatus,
   MediaType,
@@ -228,6 +229,16 @@ export function useRestoreMedia() {
   return useMutation({
     mutationFn: async (id: string) =>
       ensureSuccess(await api.medias[":id"].restore.$post({ param: { id } })),
+    onSuccess: invalidate,
+  })
+}
+
+export function useFlagMedia() {
+  const invalidate = useInvalidateCatalog()
+
+  return useMutation({
+    mutationFn: async ({ id, ...json }: { id: string; flag: Flag; reason: string }) =>
+      ensureSuccess(await api.medias[":id"].flag.$post({ param: { id }, json })),
     onSuccess: invalidate,
   })
 }

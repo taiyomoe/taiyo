@@ -52,7 +52,22 @@ export const mediaCellStyles = stylex.create({
     flexWrap: "wrap",
     marginTop: "0.125rem",
   },
+  folded: {
+    gap: "0.375rem",
+    alignItems: "center",
+    flexWrap: "wrap",
+    maxWidth: "100%",
+    minWidth: 0,
+  },
 })
+
+/**
+ * One hidden column's content under the title, for a column that shows before the others:
+ * it leaves the fold once its column shows.
+ */
+export function Folded({ until, children }: { until: CatalogBreakpoint; children: ReactNode }) {
+  return <span sx={[mediaCellStyles.folded, catalogHiddenFrom[until]]}>{children}</span>
+}
 
 /** The first cell of a row: a thumbnail, the row's title, a detail line, and the folded columns. */
 export function TitleCell({
@@ -64,7 +79,10 @@ export function TitleCell({
   thumb?: ReactNode
   title: ReactNode
   detail?: ReactNode
-  /** What the hidden columns hold, shown under the title while they are hidden. */
+  /**
+   * What the hidden columns hold, shown under the title until the last of them shows (`from`).
+   * Wrap the content of a column that shows earlier in `Folded`.
+   */
   narrow?: { from: CatalogBreakpoint; content: ReactNode } | undefined
 }) {
   return (

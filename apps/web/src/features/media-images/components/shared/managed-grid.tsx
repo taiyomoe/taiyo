@@ -1,6 +1,8 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { breakpoints, colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { ManagedImageCardSkeleton } from "@/features/media-images/components/shared/managed-image-card"
 
 const styles = stylex.create({
   section: {
@@ -38,6 +40,10 @@ const styles = stylex.create({
     listStyle: "none",
     display: "grid",
   },
+  skeletonTitle: {
+    height: "1lh",
+    width: "10rem",
+  },
   covers: {
     gridTemplateColumns: {
       default: "repeat(auto-fill, minmax(8.5rem, 1fr))",
@@ -73,6 +79,25 @@ export function ManagedGrid({
         {actions === undefined ? null : <div sx={styles.actions}>{actions}</div>}
       </header>
       <ul sx={[styles.grid, kind === "cover" ? styles.covers : styles.banners]}>{children}</ul>
+    </section>
+  )
+}
+
+export function ManagedGridSkeleton({ kind }: { kind: "cover" | "banner" }) {
+  return (
+    <section sx={styles.section}>
+      <header sx={styles.header}>
+        <span sx={styles.title}>
+          <Skeleton sx={styles.skeletonTitle} />
+        </span>
+      </header>
+      <ul sx={[styles.grid, kind === "cover" ? styles.covers : styles.banners]}>
+        {Array.from({ length: kind === "cover" ? 8 : 4 }, (_, index) => (
+          <li key={index}>
+            <ManagedImageCardSkeleton kind={kind} />
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }

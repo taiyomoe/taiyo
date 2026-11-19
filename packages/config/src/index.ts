@@ -1,5 +1,4 @@
 import type { UserSettings } from "@taiyomoe/db"
-import { tags } from "./tags"
 
 export const config = {
   openapi: {
@@ -100,12 +99,15 @@ export const config = {
     activityPushDelayMinutes: 5,
     maxBulkIds: 100,
   },
+  reports: {
+    /** The points a reporter earns when the moderation team acts on their report. */
+    rewardPoints: 10,
+  },
   lists: {
     maxItems: 500,
     maxPerUser: 100,
     previewCovers: 4,
   },
-  tags,
   mangaDex: {
     apiUrl: "https://api.mangadex.org",
     uploadsUrl: "https://uploads.mangadex.org",
@@ -141,6 +143,7 @@ export const config = {
     maxMediaTitles: 50,
     maxMediaTags: 100,
     maxMediaStaffs: 50,
+    maxFeaturedMedias: 20,
     maxPendingSuggestions: 100,
     // Issues a 422 carries: enough to fix a request, while one issue per bad array element would
     // grow the response with the request.
@@ -149,3 +152,7 @@ export const config = {
     maxJsonBodyBytes: 1024 * 1024,
   },
 } as const
+
+export { tags } from "./tags"
+
+export * from "./tag-keys"

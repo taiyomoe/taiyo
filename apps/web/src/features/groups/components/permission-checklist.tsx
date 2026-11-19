@@ -2,7 +2,6 @@ import type { GroupPermission } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { GROUP_PERMISSIONS } from "@taiyomoe/permissions"
 import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
-import { CheckboxGroup } from "@taiyomoe/ui/components/ui/checkbox-group"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { GROUP_PERMISSION_LABELS } from "@/features/groups/lib/group-permission-labels"
 import { m } from "@/paraglide/messages"
@@ -48,27 +47,26 @@ const styles = stylex.create({
   },
 })
 
+/**
+ * Every group permission with what it allows. A permission is checked, unchecked, or `mixed`
+ * when only some of the members being edited hold it.
+ */
 export function PermissionChecklist({
-  value,
-  onChange,
+  checked,
+  onToggle,
   canToggle,
   disabled = false,
 }: {
-  value: readonly GroupPermission[]
-  onChange: (value: GroupPermission[]) => void
+  checked: (permission: GroupPermission) => boolean | "mixed"
+  onToggle: (permission: GroupPermission) => void
   canToggle: (permission: GroupPermission) => boolean
   disabled?: boolean
 }) {
   return (
-    <CheckboxGroup
-      onValueChange={(next) => {
-        onChange(GROUP_PERMISSIONS.filter((permission) => next.includes(permission)))
-      }}
-      sx={styles.list}
-      value={[...value]}
-    >
+    <div role="group" sx={styles.list}>
       {GROUP_PERMISSIONS.map((permission) => {
         const locked = disabled || !canToggle(permission)
+        const state = checked(permission)
 
         return (
           <label
@@ -76,7 +74,16 @@ export function PermissionChecklist({
             sx={[styles.option, locked && styles.disabled]}
             title={locked && !disabled ? m.group_permission_not_grantable() : undefined}
           >
-            <Checkbox disabled={locked} name={permission} sx={styles.checkbox} value={permission} />
+            <Checkbox
+              checked={state === true}
+              disabled={locked}
+              indeterminate={state === "mixed"}
+              name={permission}
+              onCheckedChange={() => {
+                onToggle(permission)
+              }}
+              sx={styles.checkbox}
+            />
             <span sx={styles.text}>
               <span sx={styles.label}>{GROUP_PERMISSION_LABELS[permission].label()}</span>
               <span sx={styles.description}>
@@ -86,6 +93,6 @@ export function PermissionChecklist({
           </label>
         )
       })}
-    </CheckboxGroup>
+    </div>
   )
 }

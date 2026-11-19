@@ -16,10 +16,10 @@ import type { ManagedMedia } from "@/features/catalog/api/catalog"
 import type { RowAction } from "@/features/catalog/components/shared/row-actions"
 import type { Selection } from "@/features/catalog/hooks/use-selection"
 import { Pill } from "@/components/badges/pill"
-import { OptionLabel } from "@/components/fields/option-select"
+import { OptionLabel, OptionValueIcon } from "@/components/fields/option-select"
 import { TimeAgo } from "@/components/time/time-ago"
 import { CatalogCell, CatalogSelectCell } from "@/features/catalog/components/shared/catalog-table"
-import { MediaCell } from "@/features/catalog/components/shared/media-cell"
+import { MediaCell, Folded } from "@/features/catalog/components/shared/media-cell"
 import { RowActions } from "@/features/catalog/components/shared/row-actions"
 import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { formatNumber } from "@/features/dashboard/lib/format"
@@ -28,14 +28,21 @@ import {
   MEDIA_STATUS_LABELS,
   MEDIA_TYPE_LABELS,
 } from "@/features/media/lib/media-labels"
-import { CONTENT_RATING_OPTIONS } from "@/features/media/lib/media-options"
+import { CONTENT_RATING_OPTIONS, MEDIA_FLAG_OPTIONS } from "@/features/media/lib/media-options"
 import { m } from "@/paraglide/messages"
+
+const FLAG_PILL_LABELS = {
+  STAFF_ONLY: m.catalog_media_staff_only,
+  VIP_ONLY: m.catalog_media_vip_only,
+  LOCKED: m.catalog_media_locked,
+}
 
 export function MediaRow({
   media,
   can,
   selection,
   restoring,
+  onAccess,
   onDelete,
   onRestore,
 }: {
@@ -43,6 +50,7 @@ export function MediaRow({
   can: Permissions
   selection: Selection | undefined
   restoring: boolean
+  onAccess: () => void
   onDelete: () => void
   onRestore: () => void
 }) {
@@ -76,6 +84,9 @@ export function MediaRow({
           },
         ]
       : []),
+    ...(can("media.flag")
+      ? [{ key: "access", label: m.catalog_media_change_access(), icon: Lock, onClick: onAccess }]
+      : []),
     ...(can("media.delete")
       ? [
           {
@@ -102,11 +113,15 @@ export function MediaRow({
   const status = (
     <>
       <Pill variant={MEDIA_STATUS_BADGES[media.status]}>{MEDIA_STATUS_LABELS[media.status]()}</Pill>
-      {media.flag === "LOCKED" ? (
-        <Pill icon={Lock} variant="warning">
-          {m.catalog_media_locked()}
+      {media.flag === "OK" ? null : (
+        <Pill
+          icon={MEDIA_FLAG_OPTIONS.icon(media.flag)}
+          iconSx={media.flag === "LOCKED" ? undefined : MEDIA_FLAG_OPTIONS.tone?.(media.flag)}
+          variant={media.flag === "LOCKED" ? "warning" : "outline"}
+        >
+          {FLAG_PILL_LABELS[media.flag]()}
         </Pill>
-      ) : null}
+      )}
     </>
   )
 
@@ -125,13 +140,19 @@ export function MediaRow({
           detail={MEDIA_TYPE_LABELS[media.type]()}
           mediaId={media.id}
           narrow={{
-            from: "3xl",
+            from: "4xl",
             content: (
               <>
-                {status}
-                <span {...stylex.props(catalogStyles.inline, catalogStyles.muted)}>
-                  <ListNumbered size={14} />
-                  {formatNumber(media.chapterCount)}
+                <Folded until="3xl">
+                  {status}
+                  <span {...stylex.props(catalogStyles.inline, catalogStyles.muted)}>
+                    <ListNumbered size={14} />
+                    {formatNumber(media.chapterCount)}
+                  </span>
+                </Folded>
+                <OptionValueIcon options={CONTENT_RATING_OPTIONS} value={media.contentRating} />
+                <span sx={catalogStyles.muted}>
+                  <TimeAgo length="long" date={media.deletedAt ?? media.createdAt} />
                 </span>
               </>
             ),

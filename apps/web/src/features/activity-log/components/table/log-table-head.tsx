@@ -1,14 +1,14 @@
 import * as stylex from "@stylexjs/stylex"
 import { ArrowUpDown } from "@taiyomoe/ui/components/icons"
 import { TableHead, TableHeader, TableRow } from "@taiyomoe/ui/components/ui/table"
+import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   colToggle: { width: "2.75rem" },
-  colTime: { width: "7rem" },
+  colTime: { width: "8rem" },
   colActor: { width: "11.5rem" },
   colAction: { width: "15.5rem" },
-  colSeverity: { width: "6.25rem" },
   srOnly: {
     margin: -1,
     padding: 0,
@@ -64,7 +64,7 @@ export function LogTableHead({
         <TableHead sx={styles.colActor}>{m.activity_column_actor()}</TableHead>
         <TableHead sx={styles.colAction}>{m.activity_column_action()}</TableHead>
         <TableHead>{m.activity_column_target()}</TableHead>
-        <TableHead sx={styles.colSeverity}>{m.activity_column_severity()}</TableHead>
+        <TableHead sx={catalogStyles.colNarrow}>{m.activity_column_severity()}</TableHead>
       </TableRow>
     </TableHeader>
   )

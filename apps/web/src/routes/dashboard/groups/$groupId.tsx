@@ -1,5 +1,6 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute, notFound } from "@tanstack/react-router"
+import { z } from "zod"
 import { isNotFoundError } from "@/components/boundaries/not-found-page"
 import {
   groupMembersQueryOptions,
@@ -8,9 +9,16 @@ import {
 } from "@/features/groups/api/groups"
 import { ManageGroupNotFound } from "@/features/groups/components/manage-group/manage-group-not-found"
 import { ManageGroupPage } from "@/features/groups/components/manage-group/manage-group-page"
+import { MANAGE_GROUP_TABS } from "@/features/groups/lib/manage-group-tabs"
 import { m } from "@/paraglide/messages"
 
+const searchSchema = z.object({
+  tab: z.enum(MANAGE_GROUP_TABS).optional().catch(undefined),
+  page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),
+})
+
 export const Route = createFileRoute("/dashboard/groups/$groupId")({
+  validateSearch: searchSchema,
   loader: async ({ context, params: { groupId } }) => {
     const group = context.queryClient.query(groupQueryOptions(groupId))
     const prefetch = Promise.all(

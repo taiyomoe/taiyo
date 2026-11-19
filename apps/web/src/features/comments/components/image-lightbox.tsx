@@ -70,8 +70,8 @@ export function ImageLightbox({
               size="sm"
               variant="ghost"
             >
-              <ExternalLink />
               {m.comments_image_original()}
+              <ExternalLink />
             </Button>
           </>
         )}

@@ -49,7 +49,24 @@ html:has([data-app-shell]) body {
   }
 }
 
+/* The rankings' metal rings and borders sweep a conic gradient: the angle has to be a registered
+   property to animate, which StyleX cannot declare. */
+@property --ranking-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes ranking-spin {
+  to {
+    --ranking-angle: 360deg;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  [data-rankings] *,
+  [data-rankings] *::before,
+  [data-rankings] *::after,
   [data-auth-screen] *,
   [data-auth-screen] *::before,
   [data-auth-screen] *::after,

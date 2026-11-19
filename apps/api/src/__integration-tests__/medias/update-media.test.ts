@@ -134,6 +134,21 @@ describe("PATCH /medias/:id", () => {
     expect(https.status).toBe(200)
   })
 
+  test("stores a Kuro Mangás id as a number", async ({ app, services }) => {
+    const { uploader, mediaId } = await setup(services)
+    const text = await patch(app, mediaId, uploader.headers, { links: { kuroMangas: "2433" } })
+    const number = await patch(app, mediaId, uploader.headers, { links: { kuroMangas: 2433 } })
+    const media = await services.db
+      .selectFrom("medias")
+      .select("links")
+      .where("id", "=", mediaId)
+      .executeTakeFirstOrThrow()
+
+    expect(text.status).toBe(422)
+    expect(number.status).toBe(200)
+    expect(media.links).toEqual({ kuroMangas: 2433 })
+  })
+
   test("refuses links that belong to another media", async ({ app, services }) => {
     const { uploader, mediaId } = await setup(services)
     const other = await seedMedia(services, uploader.userId)

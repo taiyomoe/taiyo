@@ -1,5 +1,6 @@
 import type * as React from "react"
 import {
+  DragDropVerticalIcon,
   Share08Icon,
   AtIcon,
   SentIcon,
@@ -61,8 +62,11 @@ import {
   Upload04Icon,
   UserAdd01Icon,
   UserCheck01Icon,
+  UserSwitchIcon,
   ArrowUpRight01Icon,
+  ChampionIcon,
   CrownIcon,
+  Medal01Icon,
   Edit02Icon,
   FileEditIcon,
   NoteEditIcon,
@@ -168,6 +172,8 @@ export const Plus: (props: IconProps) => React.ReactElement = icon(PlusSignIcon)
 export const Minus: (props: IconProps) => React.ReactElement = icon(MinusSignIcon)
 
 export const Ellipsis: (props: IconProps) => React.ReactElement = icon(MoreHorizontalIcon)
+
+export const GripVertical: (props: IconProps) => React.ReactElement = icon(DragDropVerticalIcon)
 
 export const PanelLeft: (props: IconProps) => React.ReactElement = icon(SidebarLeft01Icon)
 
@@ -297,6 +303,8 @@ export const Upload: (props: IconProps) => React.ReactElement = icon(Upload04Ico
 export const UserAdd: (props: IconProps) => React.ReactElement = icon(UserAdd01Icon)
 
 export const UserCheck: (props: IconProps) => React.ReactElement = icon(UserCheck01Icon)
+
+export const UserSwitch: (props: IconProps) => React.ReactElement = icon(UserSwitchIcon)
 
 export const Copy: (props: IconProps) => React.ReactElement = icon(Copy01Icon)
 
@@ -483,3 +491,7 @@ export const Repeat: (props: IconProps) => React.ReactElement = icon(RepeatIcon)
 export const PauseCircle: (props: IconProps) => React.ReactElement = icon(PauseCircleIcon)
 
 export const CancelCircle: (props: IconProps) => React.ReactElement = icon(CancelCircleIcon)
+
+export const Trophy: (props: IconProps) => React.ReactElement = icon(ChampionIcon)
+
+export const Medal: (props: IconProps) => React.ReactElement = icon(Medal01Icon)

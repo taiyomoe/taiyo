@@ -1,6 +1,6 @@
 import type { DB, Kysely } from "@taiyomoe/db"
+import { isBannedSql } from "@taiyomoe/db"
 import { type Actor, toRole } from "@taiyomoe/permissions"
-import { isBannedSql } from "./user-moderation"
 
 export const loadActor = async (db: Kysely<DB>, userId: string) => {
   const [user, memberships] = await Promise.all([

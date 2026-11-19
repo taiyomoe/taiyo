@@ -28,7 +28,7 @@ export function RejectNoteField({
         value={reason}
       />
       {touched && reason.trim() === "" ? (
-        <FieldError match>{m.review_reject_note_required()}</FieldError>
+        <FieldError match>{m.review_chapter_note_required()}</FieldError>
       ) : null}
     </Field>
   )

@@ -1,12 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
 import { AlertCircle, Bell, Download, Info, Monitor } from "@taiyomoe/ui/components/icons"
 import { Alert, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { Session } from "@/lib/session"
+import { Pill } from "@/components/badges/pill"
 import {
   NOTIFY_SETTINGS,
   useBooleanSettings,
@@ -57,14 +57,14 @@ function PushDevice() {
           <Skeleton sx={styles.badgeSkeleton} />
         ) : (
           {
-            on: <Badge variant="success">{m.user_settings_push_badge_on()}</Badge>,
-            off: <Badge variant="secondary">{m.user_settings_push_badge_off()}</Badge>,
-            denied: <Badge variant="warning">{m.user_settings_push_badge_blocked()}</Badge>,
+            on: <Pill variant="success">{m.user_settings_push_badge_on()}</Pill>,
+            off: <Pill variant="secondary">{m.user_settings_push_badge_off()}</Pill>,
+            denied: <Pill variant="warning">{m.user_settings_push_badge_blocked()}</Pill>,
             "needs-install": (
-              <Badge variant="secondary">{m.user_settings_push_badge_unavailable()}</Badge>
+              <Pill variant="secondary">{m.user_settings_push_badge_unavailable()}</Pill>
             ),
             unsupported: (
-              <Badge variant="secondary">{m.user_settings_push_badge_unavailable()}</Badge>
+              <Pill variant="secondary">{m.user_settings_push_badge_unavailable()}</Pill>
             ),
           }[state.data]
         )

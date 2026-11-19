@@ -38,9 +38,12 @@ const styles = stylex.create({
 export function GroupPicker({
   value,
   onChange,
+  locked,
 }: {
   value: GroupOption[]
   onChange: (value: GroupOption[]) => void
+  /** The groups the viewer cannot remove: they stay selected. */
+  locked?: ReadonlySet<string> | undefined
 }) {
   const [input, setInput] = useState("")
   const query = useDeferredValue(input.trim())
@@ -65,7 +68,22 @@ export function GroupPicker({
       items={items}
       multiple
       onInputValueChange={setInput}
-      onValueChange={onChange}
+      onValueChange={(next, details) => {
+        // Escape on a closed list would clear every group: let it close the dialog instead.
+        if (details.reason === "escape-key") {
+          details.allowPropagation()
+
+          return
+        }
+
+        onChange([
+          ...value.filter(
+            (item) =>
+              locked?.has(item.id) === true && !next.some((picked) => picked.id === item.id),
+          ),
+          ...next,
+        ])
+      }}
       value={value}
     >
       <ComboboxChips>
@@ -73,7 +91,11 @@ export function GroupPicker({
           {(selected: GroupOption[]) => (
             <>
               {selected.map((group) => (
-                <ComboboxChip aria-label={group.name} key={group.id}>
+                <ComboboxChip
+                  aria-label={group.name}
+                  key={group.id}
+                  removable={locked?.has(group.id) !== true}
+                >
                   {group.name}
                 </ComboboxChip>
               ))}

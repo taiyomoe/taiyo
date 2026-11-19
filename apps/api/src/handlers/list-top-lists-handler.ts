@@ -1,4 +1,4 @@
-import { sql } from "@taiyomoe/db"
+import { isBannedSql, sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -12,7 +12,6 @@ import {
   selectListSummaries,
   toListSummaries,
 } from "../utils/user-lists"
-import { isBannedSql } from "../utils/user-moderation"
 
 const querySchema = paginationQuerySchema.extend({ contentRating: contentRatingsQuerySchema })
 

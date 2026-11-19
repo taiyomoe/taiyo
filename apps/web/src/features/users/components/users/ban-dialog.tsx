@@ -40,7 +40,13 @@ const BAN_LENGTHS = [
   { value: "forever", days: null, label: m.ban_length_forever },
 ] as const
 
-export function BanDialog({ user, onClose }: { user: ManagedUser | null; onClose: () => void }) {
+export function BanDialog({
+  user,
+  onClose,
+}: {
+  user: Pick<ManagedUser, "id" | "displayUsername" | "nameEffect"> | null
+  onClose: () => void
+}) {
   const queryClient = useQueryClient()
   const ban = useMutation({
     mutationFn: async ({
@@ -58,7 +64,12 @@ export function BanDialog({ user, onClose }: { user: ManagedUser | null; onClose
           json: { reason: banReason, days },
         }),
       ),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
+    // The user table and the profile reports both show who is banned.
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["users"] }),
+        queryClient.invalidateQueries({ queryKey: ["user-reports"] }),
+      ]),
   })
   const [reason, setReason] = useState("")
   const [length, setLength] = useState<(typeof BAN_LENGTHS)[number]["value"]>("7")

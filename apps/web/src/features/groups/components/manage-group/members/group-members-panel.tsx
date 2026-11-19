@@ -1,125 +1,165 @@
 import type { Permissions } from "@taiyomoe/permissions"
-import { Dialog, DialogPopup } from "@taiyomoe/ui/components/ui/dialog"
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
+import { Key, UserRemove, Users } from "@taiyomoe/ui/components/icons"
+import { Button } from "@taiyomoe/ui/components/ui/button"
+import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
-import { type Confirmation, ConfirmDialog } from "@/components/dialogs/confirm-dialog"
-import { ListCard } from "@/components/layout/dashboard-page"
+import type { CatalogColumn } from "@/features/catalog/components/shared/catalog-table"
+import type { MemberDialog } from "@/features/groups/components/manage-group/members/member-dialogs"
+import { BulkBar } from "@/features/catalog/components/shared/bulk-bar"
 import {
-  type Group,
-  type GroupMember,
-  groupMembersQueryOptions,
-} from "@/features/groups/api/groups"
+  SkeletonActions,
+  SkeletonMediaCell,
+  SkeletonPill,
+  SkeletonText,
+} from "@/features/catalog/components/shared/catalog-skeletons"
+import {
+  CatalogFooter,
+  CatalogTable,
+  VisuallyHidden,
+} from "@/features/catalog/components/shared/catalog-table"
+import { useSelection } from "@/features/catalog/hooks/use-selection"
+import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
+import { formatNumber } from "@/features/dashboard/lib/format"
+import { groupMembersQueryOptions, groupQueryOptions } from "@/features/groups/api/groups"
+import { MemberDialogs } from "@/features/groups/components/manage-group/members/member-dialogs"
 import { MemberRow } from "@/features/groups/components/manage-group/members/member-row"
-import { PermissionsForm } from "@/features/groups/components/manage-group/members/permissions-form"
-import { api } from "@/lib/api"
-import { ensureSuccess } from "@/lib/envelope"
-import { getErrorMessage } from "@/lib/errors"
+import { groupTableStyles } from "@/features/groups/lib/group-table-styles"
+import { getMemberAccess } from "@/features/groups/lib/member-access"
+import { m } from "@/paraglide/messages"
 
 export function GroupMembersPanel({
-  group,
+  groupId,
   userId,
   can,
 }: {
-  group: Group
+  groupId: string
   userId: string
   can: Permissions
 }) {
-  const { data: members } = useSuspenseQuery(groupMembersQueryOptions(group.id))
-  const queryClient = useQueryClient()
-  const invalidate = () =>
-    Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["groups", group.id] }),
-      queryClient.invalidateQueries({ queryKey: ["me", "groups"] }),
-    ])
-  const action = useMutation({
-    mutationFn: async ({
-      userId: memberId,
-      action: kind,
-    }: {
-      userId: string
-      action: "remove" | "promote" | "demote"
-    }) => {
-      const param = { id: group.id, userId: memberId }
-
-      if (kind === "remove") {
-        return ensureSuccess(await api.groups[":id"].members[":userId"].$delete({ param }))
-      }
-
-      return ensureSuccess(
-        kind === "promote"
-          ? await api.groups[":id"].members[":userId"].promote.$post({ param })
-          : await api.groups[":id"].members[":userId"].demote.$post({ param }),
-      )
+  const { data: group } = useQuery(groupQueryOptions(groupId))
+  const { data: members } = useQuery(groupMembersQueryOptions(groupId))
+  const owners = members?.filter((member) => member.role === "OWNER").length ?? 0
+  const rows = (members ?? []).map((member) => ({
+    member,
+    access: getMemberAccess(member, { can, groupId, userId, owners }),
+  }))
+  const manages = can("group.manageMembers", { id: groupId })
+  const showPermissions = manages || rows.some(({ member }) => member.permissions !== null)
+  const selection = useSelection(
+    rows.filter(({ access }) => access.edit || access.remove).map(({ member }) => member.userId),
+  )
+  const selected = rows.filter(({ member }) => selection.has(member.userId))
+  const [dialog, setDialog] = useState<MemberDialog | null>(null)
+  const bulk = (kind: "permissions" | "remove") => () => {
+    setDialog({
+      kind,
+      members: selected
+        .filter(({ access }) => (kind === "permissions" ? access.edit : access.remove))
+        .map(({ member }) => member),
+      bulk: true,
+    })
+  }
+  const columns: CatalogColumn[] = [
+    {
+      key: "member",
+      label: m.group_members_column_member(),
+      skeleton: <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="avatar" />,
     },
-    onSuccess: invalidate,
-  })
-  const leave = useMutation({
-    mutationFn: async () =>
-      ensureSuccess(await api.groups[":id"].leave.$post({ param: { id: group.id } })),
-    onSuccess: invalidate,
-  })
-  const navigate = useNavigate()
-  const [confirmation, setConfirmation] = useState<Confirmation | null>(null)
-  const [editing, setEditing] = useState<GroupMember | null>(null)
-  const owners = members.filter((member) => member.role === "OWNER").length
-  const failure = action.error ?? leave.error
-  const confirmError = failure === null ? null : getErrorMessage(failure)
+    {
+      key: "role",
+      label: m.my_groups_column_role(),
+      width: catalogStyles.colMedium,
+      from: "3xl",
+      skeleton: <SkeletonPill width="5rem" />,
+    },
+    ...(showPermissions
+      ? [
+          {
+            key: "permissions",
+            label: m.invitation_column_permissions(),
+            width: groupTableStyles.colPermissions,
+            from: "3xl" as const,
+            skeleton: <SkeletonPill width="7rem" />,
+          },
+        ]
+      : []),
+    {
+      key: "joined",
+      label: m.my_groups_column_joined(),
+      width: catalogStyles.colMedium,
+      from: "4xl",
+      skeleton: <SkeletonText width="5.5rem" />,
+    },
+    {
+      key: "actions",
+      label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
+      width: catalogStyles.colActions,
+      skeleton: <SkeletonActions />,
+    },
+  ]
 
   return (
     <>
-      <ListCard>
-        {members.map((member) => (
+      <CatalogTable
+        bulkBar={
+          <BulkBar count={selection.ids.length} onClear={selection.clear}>
+            {selected.some(({ access }) => access.edit) ? (
+              <Button onClick={bulk("permissions")} variant="outline">
+                <Key />
+                {m.invite_permissions()}
+              </Button>
+            ) : null}
+            {selected.some(({ access }) => access.remove) ? (
+              <Button onClick={bulk("remove")} variant="destructive-outline">
+                <UserRemove />
+                {m.member_remove()}
+              </Button>
+            ) : null}
+          </BulkBar>
+        }
+        columns={columns}
+        empty={
+          members?.length === 0
+            ? {
+                icon: Users,
+                title: m.group_members_empty_title(),
+                description: m.group_members_empty(),
+              }
+            : null
+        }
+        footer={
+          members === undefined ? null : (
+            <CatalogFooter total={m.catalog_results({ count: formatNumber(members.length) })}>
+              {null}
+            </CatalogFooter>
+          )
+        }
+        loading={members === undefined}
+        selection={manages ? selection : undefined}
+        toolbar={null}
+      >
+        {rows.map(({ member, access }) => (
           <MemberRow
-            can={can}
-            group={group}
+            access={access}
             key={member.userId}
             member={member}
-            onAction={(kind) => action.mutateAsync({ userId: member.userId, action: kind })}
-            onConfirm={setConfirmation}
-            onEdit={() => {
-              setEditing(member)
+            onDialog={(kind) => {
+              setDialog({ kind, members: [member], bulk: false })
             }}
-            onLeave={async () => {
-              await leave.mutateAsync()
-              await navigate({ to: "/dashboard/groups" })
-            }}
-            owners={owners}
-            userId={userId}
+            selection={manages ? selection : undefined}
           />
         ))}
-      </ListCard>
-      <ConfirmDialog
-        confirmation={confirmation}
-        error={confirmError}
+      </CatalogTable>
+      <MemberDialogs
+        can={can}
+        dialog={dialog}
+        groupId={groupId}
+        groupName={group?.name ?? ""}
+        onBulkDone={selection.clear}
         onClose={() => {
-          setConfirmation(null)
-          action.reset()
-          leave.reset()
+          setDialog(null)
         }}
-        pending={action.isPending || leave.isPending}
       />
-      <Dialog
-        onOpenChange={(open) => {
-          if (!open) {
-            setEditing(null)
-          }
-        }}
-        open={editing !== null}
-      >
-        <DialogPopup>
-          {editing === null ? null : (
-            <PermissionsForm
-              can={can}
-              groupId={group.id}
-              member={editing}
-              onDone={() => {
-                setEditing(null)
-              }}
-            />
-          )}
-        </DialogPopup>
-      </Dialog>
     </>
   )
 }

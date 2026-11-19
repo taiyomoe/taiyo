@@ -1,4 +1,4 @@
-import { config } from "@taiyomoe/config"
+import { config, tagKeys } from "@taiyomoe/config"
 import {
   CHAPTER_STATUSES,
   CONTENT_RATINGS,
@@ -89,9 +89,7 @@ export const fileSchema = (description: string) =>
 
 export const mediaTagsSchema = z
   .object({
-    key: z
-      .enum(Object.keys(config.tags))
-      .meta({ description: "The key of the tag.", example: "COWBOYS" }),
+    key: z.enum(tagKeys).meta({ description: "The key of the tag.", example: "COWBOYS" }),
     isSpoiler: z
       .boolean()
       .default(false)
@@ -121,6 +119,11 @@ export const mediaLinksSchema = z
       .positive()
       .exactOptional()
       .meta({ description: "The ID of the media on MyAnimeList." }),
+    kuroMangas: z
+      .int()
+      .positive()
+      .exactOptional()
+      .meta({ description: "The ID of the media on Kuro Mangás." }),
     animePlanet: httpUrlSchema
       .exactOptional()
       .meta({ description: "The URL of the media on Anime-Planet." }),
@@ -279,6 +282,9 @@ export const latestChapterSchema = chapterFeedItemSchema
   })
 
 export const latestChapterFeedItemSchema = latestChapterSchema.extend({
+  pageCount: z
+    .int()
+    .meta({ description: "The number of processed pages the chapter has.", example: 24 }),
   mediaId: chapterFeedItemSchema.shape.mediaId,
   mediaTitle: chapterFeedItemSchema.shape.mediaTitle,
   mediaCoverUrl: z
@@ -338,6 +344,42 @@ export const reviewNoteSchema = z
   .max(2000)
   .meta({ description: "Explanation shown to the requester.", example: "No proof of ownership." })
 
+const optionalReportTextSchema = z
+  .string()
+  .trim()
+  .max(2000)
+  .optional()
+  .transform((value) => (value === undefined || value === "" ? null : value))
+
+export const reportDetailsSchema = (example: string) =>
+  optionalReportTextSchema.meta({
+    description: "Anything that helps the moderators look into it, up to 2000 characters.",
+    example,
+  })
+
+export const reportOutcomeSchema = (subject: string) =>
+  z.enum(["RESOLVED", "DISMISSED"]).meta({
+    description: `The outcome of the review: \`RESOLVED\` when action was taken on the ${subject}, \`DISMISSED\` when nothing was wrong.`,
+    example: "RESOLVED",
+  })
+
+export type ReportOutcome = z.infer<ReturnType<typeof reportOutcomeSchema>>
+
+export const reportNoteSchema = (example: string) =>
+  optionalReportTextSchema.meta({
+    description: "An internal note about the decision, up to 2000 characters.",
+    example,
+  })
+
+export const displayNameSchema = z.string().trim().regex(config.auth.displayName.regex)
+
+export const profileAboutSchema = z.partialRecord(
+  z.enum(SUPPORTED_LANGUAGES),
+  z.string().trim().max(2000),
+)
+
+export const profileCitySchema = z.string().trim().max(64)
+
 export const userSummarySchema = z.object({
   id: z.uuid().meta({ description: "The ID of the user." }),
   username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
@@ -396,9 +438,6 @@ export const chapterSubmissionSchema = latestChapterFeedItemSchema.extend({
     .datetime()
     .nullable()
     .meta({ description: "When the chapter was reviewed, if any." }),
-  pageCount: z
-    .int()
-    .meta({ description: "The number of processed pages the chapter has.", example: 24 }),
   publishAt: z.iso
     .datetime()
     .nullable()

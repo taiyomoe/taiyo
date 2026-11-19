@@ -7,6 +7,7 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import {
   mediaSuggestionSchema,
+  searchSuggestions,
   selectSuggestionColumns,
   selectSuggestions,
   toSuggestionSummaries,
@@ -19,6 +20,10 @@ const querySchema = paginationQuerySchema.extend({
     .enum(MEDIA_SUGGESTION_STATUSES)
     .optional()
     .meta({ description: "Only list the suggestions with this status.", example: "PENDING" }),
+  search: z.string().trim().min(1).max(100).optional().meta({
+    description: "Only list the suggestions on a media with a title containing this text.",
+    example: "one punch",
+  }),
 })
 
 export const listMyMediaSuggestionsHandler = new Hono().get(
@@ -50,12 +55,16 @@ export const listMyMediaSuggestionsHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db, user } = c.var
-    const { page, perPage, status } = c.var.query
-    const base = selectSuggestions(db)
-      .where("mediaSuggestions.authorId", "=", user.id)
-      .where((eb) =>
-        status === undefined ? eb.and([]) : eb("mediaSuggestions.status", "=", status),
-      )
+    const { page, perPage, status, search } = c.var.query
+    const base = searchSuggestions(
+      selectSuggestions(db)
+        .where("mediaSuggestions.authorId", "=", user.id)
+        .where((eb) =>
+          status === undefined ? eb.and([]) : eb("mediaSuggestions.status", "=", status),
+        ),
+      search,
+      { byAuthor: false },
+    )
     const [rows, totalRow] = await Promise.all([
       selectSuggestionColumns(base)
         .orderBy("mediaSuggestions.createdAt", "desc")

@@ -1,4 +1,4 @@
-import { resend } from "./client"
+import { sendEmail } from "./client"
 import GroupInvitationEmail from "./templates/group-invitation-email"
 
 export type GroupInvitationMail = {
@@ -10,15 +10,9 @@ export type GroupInvitationMail = {
   url: string | null
 }
 
-export const sendGroupInvitationEmail = async ({ to, ...props }: GroupInvitationMail) => {
-  const { error } = await resend.emails.send({
-    from: "Taiyō <no-reply@taiyo.moe>",
+export const sendGroupInvitationEmail = ({ to, ...props }: GroupInvitationMail) =>
+  sendEmail({
     to,
     subject: `${props.inviterName} invited you to join ${props.groupName} on Taiyō`,
     react: <GroupInvitationEmail {...props} />,
   })
-
-  if (error !== null) {
-    throw new Error(error.message)
-  }
-}

@@ -41,9 +41,11 @@ import { mangaDexSyncsRouter } from "./routers/mangadex-syncs-router"
 import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
+import { rankingsRouter } from "./routers/rankings-router"
 import { searchRouter } from "./routers/search-router"
 import { shopRouter } from "./routers/shop-router"
 import { staffsRouter } from "./routers/staffs-router"
+import { userReportsRouter } from "./routers/user-reports-router"
 import { usersRouter } from "./routers/users-router"
 import { enrichAudit } from "./utils/audit"
 import { type ErrorCode, errors } from "./utils/errors"
@@ -102,7 +104,16 @@ const scalarExtensions = {
     { name: "Comments", tags: ["Comments", "Comment images", "Comment reports"] },
     {
       name: "Users",
-      tags: ["Users", "Profile", "Follows", "Notifications", "Settings", "Shop"],
+      tags: [
+        "Users",
+        "User reports",
+        "Profile",
+        "Follows",
+        "Rankings",
+        "Notifications",
+        "Settings",
+        "Shop",
+      ],
     },
     { name: "Administration", tags: ["Dashboard", "Audit logs"] },
   ],
@@ -249,6 +260,7 @@ export const createApp = (services: Services) => {
     .route("/media-suggestions", mediaSuggestionsRouter)
     .route("/mangadex-syncs", mangaDexSyncsRouter)
     .route("/users", usersRouter)
+    .route("/user-reports", userReportsRouter)
     .route("/lists", listsRouter)
     .route("/comments", commentsRouter)
     .route("/comment-images", commentImagesRouter)
@@ -256,6 +268,7 @@ export const createApp = (services: Services) => {
     .route("/dashboard", dashboardRouter)
     .route("/search", searchRouter)
     .route("/shop", shopRouter)
+    .route("/rankings", rankingsRouter)
     .route("/audit-logs", auditLogsRouter)
 
   app
@@ -374,6 +387,10 @@ export const createApp = (services: Services) => {
             },
             { name: "Users", description: "User profiles, stats and moderation: roles and bans." },
             {
+              name: "User reports",
+              description: "Reports about a user's profile, and their review by moderators.",
+            },
+            {
               name: "Profile",
               description: "Your own profile: display name, avatar, banner, cosmetics and account.",
             },
@@ -381,6 +398,11 @@ export const createApp = (services: Services) => {
               name: "Follows",
               description:
                 "Following other users. A follow goes one way; following each other takes two follows.",
+            },
+            {
+              name: "Rankings",
+              description:
+                "Live leaderboards of readers, groups and medias over the current week, the current month or all time, in UTC.",
             },
             {
               name: "Notifications",

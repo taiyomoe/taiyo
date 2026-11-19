@@ -32,14 +32,16 @@ const styles = stylex.create({
 
 export function EditorBar({
   list,
+  canDelete,
   submitting,
 }: {
-  list: { id: string; name: string } | null
+  list: { id: string; name: string; upvoteCount: number } | null
+  canDelete: boolean
   submitting: boolean
 }) {
   return (
     <div sx={styles.bar}>
-      {list === null ? null : <DeleteListButton list={list} />}
+      {list === null || !canDelete ? null : <DeleteListButton list={list} />}
       <div sx={styles.end}>
         <Button
           render={

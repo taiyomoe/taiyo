@@ -4,6 +4,7 @@ import type {
   GroupPermission,
   MediaSuggestionStatus,
   Role,
+  UserListVisibility,
 } from "@taiyomoe/db/constants"
 import type { ValidateDefinition } from "permix"
 
@@ -48,9 +49,21 @@ export type MediaSuggestionTarget = { authorId: string; status: MediaSuggestionS
 
 export type UserTarget = { id: string; role: Role }
 
+export type ListTarget = { userId: string; visibility: UserListVisibility }
+
 export type PermissionsDefinition = ValidateDefinition<{
   dashboard: ["open", "viewStats"]
-  media: ["create", "update", "suggest", "delete", "restore", "flag", "reindex", "syncMangaDex"]
+  media: [
+    "create",
+    "update",
+    "suggest",
+    "delete",
+    "restore",
+    "flag",
+    "reindex",
+    "syncMangaDex",
+    "feature",
+  ]
   mediaSuggestion: [
     "review",
     { name: "view"; type: MediaSuggestionTarget; required: true },
@@ -90,11 +103,18 @@ export type PermissionsDefinition = ValidateDefinition<{
   ownershipRequest: ["create", "review"]
   groupCreationRequest: ["create", "review"]
   groupReport: ["create", "review"]
+  userReport: ["create", "review"]
   comment: ["create", "delete", "review", "removeImage"]
+  list: [
+    "moderate",
+    { name: "update"; type: ListTarget; required: true },
+    { name: "delete"; type: ListTarget; required: true },
+  ]
   user: [
     "list",
     "grant",
     { name: "ban"; type: UserTarget; required: true },
+    { name: "moderateProfile"; type: UserTarget; required: true },
     { name: "setRole"; type: { id: string }; required: true },
     { name: "impersonate"; type: UserTarget; required: true },
     { name: "setPassword"; type: UserTarget; required: true },

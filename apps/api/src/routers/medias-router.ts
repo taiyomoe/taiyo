@@ -19,6 +19,7 @@ import { listChapterNumbersHandler } from "../handlers/list-chapter-numbers-hand
 import { listChaptersHandler } from "../handlers/list-chapters-handler"
 import { listCoversHandler } from "../handlers/list-covers-handler"
 import { listFeaturedMediasHandler } from "../handlers/list-featured-medias-handler"
+import { listManagedFeaturedMediasHandler } from "../handlers/list-managed-featured-medias-handler"
 import { listManagedMediasHandler } from "../handlers/list-managed-medias-handler"
 import { listMangaDexSyncsHandler } from "../handlers/list-mangadex-syncs-handler"
 import { listMediaStaffsHandler } from "../handlers/list-media-staffs-handler"
@@ -28,6 +29,7 @@ import { reindexMediaHandler } from "../handlers/reindex-media-handler"
 import { restoreMediaHandler } from "../handlers/restore-media-handler"
 import { restoreMediasHandler } from "../handlers/restore-medias-handler"
 import { searchMediasHandler } from "../handlers/search-medias-handler"
+import { setFeaturedMediasHandler } from "../handlers/set-featured-medias-handler"
 import { startMangaDexSyncHandler } from "../handlers/start-mangadex-sync-handler"
 import { unlinkMediaStaffHandler } from "../handlers/unlink-media-staff-handler"
 import { updateMediaHandler } from "../handlers/update-media-handler"
@@ -41,6 +43,8 @@ export const mediasRouter = new Hono()
   .route("/", restoreMediasHandler)
   .route("/", getMediasDeletionImpactHandler)
   .route("/", listFeaturedMediasHandler)
+  .route("/", listManagedFeaturedMediasHandler)
+  .route("/", setFeaturedMediasHandler)
   .route("/", listShowcaseMediasHandler)
   .route("/", getMediaHandler)
   .route("/", searchMediasHandler)

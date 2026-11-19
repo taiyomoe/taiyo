@@ -1,3 +1,4 @@
+import { isTagKey } from "@taiyomoe/config"
 import {
   CONTENT_RATINGS,
   MEDIA_COUNTRIES_OF_ORIGIN,
@@ -9,7 +10,6 @@ import {
 import { z } from "zod"
 import type { SearchMediasBody } from "@/features/media/api/medias"
 import type { ContentRating } from "@/lib/settings"
-import { isTagKey } from "./search-tags"
 
 export const SEARCH_PER_PAGE = 24
 

@@ -1,17 +1,19 @@
 import { toastManager } from "@taiyomoe/ui/components/ui/toast"
-import { lazy, Suspense, useRef, useState } from "react"
+import { Suspense, useRef, useState } from "react"
 import {
   type ProfileImageKind,
   type UserProfile,
   useProfileImage,
 } from "@/features/users/api/profile"
+import { createLazyComponent } from "@/lib/lazy-component"
 import { m } from "@/paraglide/messages"
 
 // The editor is only for the profile's owner and only once they pick a file.
-const ImageEditorDialog = lazy(async () => ({
-  default: (await import("@/features/users/components/image-editor/image-editor-dialog"))
-    .ImageEditorDialog,
-}))
+const ImageEditorDialog = createLazyComponent(
+  async () =>
+    (await import("@/features/users/components/image-editor/image-editor-dialog"))
+      .ImageEditorDialog,
+)
 const ACCEPT = "image/png,image/jpeg,image/gif,image/webp"
 
 /**

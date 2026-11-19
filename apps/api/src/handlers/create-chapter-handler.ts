@@ -15,6 +15,7 @@ import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { awardAchievements } from "../utils/achievements"
 import { externalUrlSchema, isFuture, publishAtSchema, toPublishAt } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
@@ -73,7 +74,7 @@ export const createChapterHandler = new Hono().post(
   "/:id/chapters",
   describeRoute({
     summary: "Create a chapter",
-    description: `Creates a chapter of a media crediting the given groups: its pages are uploaded afterwards, unless it is external (\`isExternal\`) and only links to \`externalUrl\`. If you are uploader or admin, or credit a group where you have the \`UPLOAD_CHAPTERS\` permission, it is published once its pages are processed (right away when external), or scheduled when \`publishAt\` is in the future. Otherwise it waits for review, hidden from everyone but you and the reviewers, and you can have at most ${config.input.maxPendingChapters} chapters waiting.\n\n**Authentication:** signed-in user.`,
+    description: `Creates a chapter of a media crediting the given groups: its pages are uploaded afterwards, unless it is external (\`isExternal\`) and only links to \`externalUrl\`. If you are uploader intern, uploader or admin, or credit a group where you have the \`UPLOAD_CHAPTERS\` permission, it is published once its pages are processed (right away when external), or scheduled when \`publishAt\` is in the future. Otherwise it waits for review, hidden from everyone but you and the reviewers, and you can have at most ${config.input.maxPendingChapters} chapters waiting.\n\n**Authentication:** signed-in user.`,
     tags: ["Chapters"],
     responses: {
       201: {
@@ -201,6 +202,10 @@ export const createChapterHandler = new Hono().post(
         .insertInto("chapterGroups")
         .values(groupIds.map((groupId) => ({ chapterId: id, groupId })))
         .execute()
+    }
+
+    if (status === "PUBLISHED") {
+      await awardAchievements(c.var, user.id)
     }
 
     c.var.audit.set({ target: { id, number: body.number, language: body.language } })

@@ -1,11 +1,20 @@
+import type { NotificationEvents } from "@taiyomoe/cache/notification-events"
 import { config } from "@taiyomoe/config"
 import {
+  ACHIEVEMENT_CATEGORIES,
+  ACHIEVEMENT_KEYS,
+  ACHIEVEMENTS,
   COMMENT_TARGET_TYPES,
+  COSMETIC_RARITIES,
+  isAchievementKey,
   type DB,
   type Kysely,
+  LIST_MODERATION_ACTIONS,
   NOTIFICATION_CATEGORIES,
   NOTIFICATION_CATEGORY_NAMES,
   type NotificationCategory,
+  type NotificationPayload,
+  PROFILE_MODERATION_FIELDS,
   type SqlBool,
   sql,
 } from "@taiyomoe/db"
@@ -61,6 +70,84 @@ const commentTargetSchema = z
     }),
   })
   .meta({ description: "What the comment thread is about." })
+const deletedSchema = (subject: string) =>
+  z.boolean().meta({ description: `Whether the ${subject} was deleted since.` })
+const reportBaseSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the report." }),
+  outcome: z.enum(["RESOLVED", "DISMISSED"]).meta({
+    description:
+      "How the moderation team closed the report: `RESOLVED` when they acted on it, `DISMISSED` when they found nothing wrong.",
+    example: "RESOLVED",
+  }),
+  points: z.int().nonnegative().meta({
+    description:
+      "The number of points the report earned you: some when the moderation team acted on it, none when they dismissed it.",
+    example: 10,
+  }),
+})
+const reportSchema = z
+  .discriminatedUnion("kind", [
+    reportBaseSchema.extend({
+      kind: z.literal("PAGE").meta({ description: "What you reported: a page of a chapter." }),
+      chapter: z
+        .object({
+          id: z.uuid().meta({ description: "The ID of the chapter." }),
+          number: z.number().meta({ description: "The number of the chapter.", example: 112 }),
+          title: z
+            .string()
+            .nullable()
+            .meta({ description: "The title of the chapter, if any.", example: "Arise" }),
+          mediaId: z.uuid().meta({ description: "The ID of the media the chapter belongs to." }),
+          mediaTitle: z.string().nullable().meta({
+            description: "The main title of the media, if any.",
+            example: "Solo Leveling",
+          }),
+          deleted: deletedSchema("chapter or its media"),
+        })
+        .nullable()
+        .meta({ description: "The chapter of the reported page, if it still exists." }),
+    }),
+    reportBaseSchema.extend({
+      kind: z.literal("COMMENT").meta({ description: "What you reported: a comment." }),
+      comment: z
+        .object({
+          id: z.uuid().meta({ description: "The ID of the comment." }),
+          excerpt: z.string().nullable().meta({
+            description:
+              "The start of the comment's text, without its images, if the comment is still up.",
+          }),
+          deleted: z.boolean().meta({ description: "Whether the comment was removed since." }),
+          target: commentTargetSchema.nullable(),
+        })
+        .nullable()
+        .meta({ description: "The reported comment, if it still exists." }),
+    }),
+    reportBaseSchema.extend({
+      kind: z.literal("GROUP").meta({ description: "What you reported: a group." }),
+      group: z
+        .object({
+          id: z.uuid().meta({ description: "The ID of the group." }),
+          name: z.string().meta({ description: "The name of the group.", example: "Sunray Scans" }),
+          deleted: deletedSchema("group"),
+        })
+        .nullable()
+        .meta({ description: "The reported group, if it still exists." }),
+    }),
+    reportBaseSchema.extend({
+      kind: z.literal("USER").meta({ description: "What you reported: a user's profile." }),
+      user: z
+        .object({
+          id: z.uuid().meta({ description: "The ID of the user." }),
+          username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
+          displayUsername: z
+            .string()
+            .meta({ description: "The display name of the user.", example: "Kaito" }),
+        })
+        .nullable()
+        .meta({ description: "The reported user, if they still exist." }),
+    }),
+  ])
+  .meta({ description: "Your report and what it was about." })
 const actorsSchema = z.object({
   count: z.int().positive().meta({
     description:
@@ -143,12 +230,86 @@ export const notificationSchema = z.discriminatedUnion("type", [
     type: z.literal("FOLLOW").meta({ description: "The kind of notification." }),
     actors: actorsSchema.meta({ description: "Who started following you." }),
   }),
+  notificationBaseSchema.extend({
+    type: z.literal("RANKING_REWARD").meta({ description: "The kind of notification." }),
+    ranking: z
+      .object({
+        period: z
+          .enum(["WEEK", "MONTH"])
+          .meta({ description: "The kind of period that closed.", example: "WEEK" }),
+        startsAt: z.iso.datetime().meta({ description: "When the period started, in UTC." }),
+        endsAt: z.iso.datetime().meta({ description: "When the period ended, in UTC." }),
+        rank: z.int().positive().meta({ description: "Your final rank.", example: 2 }),
+        chapters: z.int().positive().meta({
+          description: "The number of chapters you read and got credit for in the period.",
+          example: 87,
+        }),
+        points: z.int().positive().meta({
+          description: "The number of points added to your balance.",
+          example: 150,
+        }),
+      })
+      .meta({ description: "Your result in the readers ranking of a period that closed." }),
+  }),
+  notificationBaseSchema.extend({
+    type: z.literal("ACHIEVEMENT_EARNED").meta({ description: "The kind of notification." }),
+    achievement: z
+      .object({
+        key: z
+          .enum(ACHIEVEMENT_KEYS)
+          .meta({ description: "The key of the achievement.", example: "weeklyChampion" }),
+        category: z
+          .enum(ACHIEVEMENT_CATEGORIES)
+          .meta({ description: "The category of the achievement.", example: "ranking" }),
+        rarity: z
+          .enum(COSMETIC_RARITIES)
+          .meta({ description: "The rarity of the achievement.", example: "epic" }),
+        points: z.int().nonnegative().meta({
+          description: "The number of points the achievement added to your balance.",
+          example: 0,
+        }),
+      })
+      .meta({ description: "The achievement you earned." }),
+  }),
+  notificationBaseSchema.extend({
+    type: z.literal("LIST_MODERATED").meta({ description: "The kind of notification." }),
+    action: z.enum(LIST_MODERATION_ACTIONS).meta({
+      description: "What the moderation team did to your list: `UPDATED` or `DELETED`.",
+      example: "UPDATED",
+    }),
+    list: z
+      .object({
+        id: z.uuid().meta({ description: "The ID of the list." }),
+        name: z.string().meta({ description: "The name of the list.", example: "Best shounen" }),
+        deleted: deletedSchema("list"),
+      })
+      .meta({ description: "Your list." }),
+  }),
+  notificationBaseSchema.extend({
+    type: z.literal("PROFILE_MODERATED").meta({ description: "The kind of notification." }),
+    fields: z
+      .enum(PROFILE_MODERATION_FIELDS)
+      .meta({
+        description:
+          "A part of your profile: `displayUsername`, `about`, `city`, `avatar` or `banner`.",
+        example: "avatar",
+      })
+      .array()
+      .meta({
+        description: "The parts of your profile the moderation team changed.",
+        examples: [["displayUsername", "about"], ["avatar"]],
+      }),
+  }),
+  notificationBaseSchema.extend({
+    type: z.literal("REPORT_REVIEWED").meta({ description: "The kind of notification." }),
+    report: reportSchema,
+  }),
 ])
 
 export const notificationFiltersSchema = z.object({
   category: z.enum(NOTIFICATION_CATEGORY_NAMES).optional().meta({
     description:
-      "Only list this kind: new chapters, replies to your comments, or activity (upvotes and follows).",
+      "Only list this kind: new chapters, replies to your comments, activity (upvotes and follows), rewards (ranking rewards and achievements), or moderation (changes the moderation team made to your lists or profile, and the outcome of your reports).",
     example: "chapters",
   }),
   unread: z
@@ -161,7 +322,7 @@ export const notificationFiltersSchema = z.object({
     }),
   q: z.string().trim().max(100).optional().meta({
     description:
-      "Only list the notifications whose media titles, chapter titles, groups, repliers, followers or comment text contain this text.",
+      "Only list the notifications whose media titles, chapter titles, groups, repliers, followers, comment text, list names or reported users contain this text.",
     example: "solo",
   }),
 })
@@ -217,6 +378,10 @@ const searchSql = (search: string) => {
       where "sa"."notificationId" = "n"."id"
         and ("su"."username" ilike ${pattern} or "su"."displayUsername" ilike ${pattern})
     ))
+    or "ml"."name" ilike ${pattern}
+    or "rg"."name" ilike ${pattern}
+    or "ru"."username" ilike ${pattern}
+    or "ru"."displayUsername" ilike ${pattern}
   )`
 }
 
@@ -227,11 +392,32 @@ export const selectVisibleNotifications = (
 ) =>
   db
     .selectFrom("notifications as n")
-    .leftJoin("chapters as ch", "ch.id", "n.chapterId")
+    // A page or comment report keeps its chapter or comment in the payload: the same joins
+    // resolve it.
+    .leftJoin("chapters as ch", (join) =>
+      join.on(
+        sql<SqlBool>`"ch"."id" = coalesce("n"."chapterId", ("n"."payload" ->> 'chapterId')::uuid)`,
+      ),
+    )
     .leftJoin("medias as md", "md.id", "ch.mediaId")
-    .leftJoin("comments as c", "c.id", "n.commentId")
+    .leftJoin("comments as c", (join) =>
+      join.on(
+        sql<SqlBool>`"c"."id" = coalesce("n"."commentId", ("n"."payload" ->> 'commentId')::uuid)`,
+      ),
+    )
     .leftJoin("users as u", "u.id", "c.authorId")
     .leftJoin("commentThreads as t", "t.id", "c.threadId")
+    .leftJoin("rankingResults as rr", "rr.id", "n.rankingResultId")
+    .leftJoin("rankingPeriods as rp", "rp.id", "rr.periodId")
+    .leftJoin("userLists as ml", (join) =>
+      join.on(sql<SqlBool>`"ml"."id" = ("n"."payload" ->> 'listId')::uuid`),
+    )
+    .leftJoin("groups as rg", (join) =>
+      join.on(sql<SqlBool>`"rg"."id" = ("n"."payload" ->> 'groupId')::uuid`),
+    )
+    .leftJoin("users as ru", (join) =>
+      join.on(sql<SqlBool>`"ru"."id" = ("n"."payload" ->> 'userId')::uuid`),
+    )
     .where("n.userId", "=", userId)
     .where((eb) =>
       eb.or([
@@ -253,6 +439,13 @@ export const selectVisibleNotifications = (
           hasLiveActorSql,
         ]),
         eb.and([eb("n.type", "=", "FOLLOW"), hasLiveActorSql]),
+        eb.and([eb("n.type", "=", "RANKING_REWARD"), eb("rr.id", "is not", null)]),
+        eb.and([
+          eb("n.type", "=", "ACHIEVEMENT_EARNED"),
+          eb("n.achievement", "in", ACHIEVEMENT_KEYS),
+        ]),
+        eb.and([eb("n.type", "=", "LIST_MODERATED"), eb("ml.id", "is not", null)]),
+        eb("n.type", "in", ["PROFILE_MODERATED", "REPORT_REVIEWED"]),
       ]),
     )
     .$call((qb) =>
@@ -275,6 +468,8 @@ export const countNotifications = async (db: Kysely<DB>, userId: string) => {
       unreadOf("chapters").as("chapters"),
       unreadOf("replies").as("replies"),
       unreadOf("activity").as("activity"),
+      unreadOf("rewards").as("rewards"),
+      unreadOf("moderation").as("moderation"),
     ])
     .executeTakeFirstOrThrow()
 
@@ -285,6 +480,8 @@ export const countNotifications = async (db: Kysely<DB>, userId: string) => {
       chapters: Number(row.chapters),
       replies: Number(row.replies),
       activity: Number(row.activity),
+      rewards: Number(row.rewards),
+      moderation: Number(row.moderation),
     },
   }
 }
@@ -369,6 +566,23 @@ const resolveTargets = async (
     groupNames: new Map(groups.map((item) => [item.id, item.name])),
   }
 }
+const MODERATION_TYPES = NOTIFICATION_CATEGORIES.moderation
+const storedReportSchema = z.object({
+  reportId: z.guid(),
+  outcome: z.enum(["RESOLVED", "DISMISSED"]),
+  points: z.int().nonnegative().optional(),
+})
+/** What each moderation notification stores, checked again when it is read. */
+const moderationPayloadSchemas = {
+  LIST_MODERATED: z.object({ listId: z.guid(), action: z.enum(LIST_MODERATION_ACTIONS) }),
+  PROFILE_MODERATED: z.object({ fields: z.enum(PROFILE_MODERATION_FIELDS).array().min(1) }),
+  REPORT_REVIEWED: z.discriminatedUnion("kind", [
+    storedReportSchema.extend({ kind: z.literal("PAGE"), chapterId: z.guid() }),
+    storedReportSchema.extend({ kind: z.literal("COMMENT"), commentId: z.guid() }),
+    storedReportSchema.extend({ kind: z.literal("GROUP"), groupId: z.guid() }),
+    storedReportSchema.extend({ kind: z.literal("USER"), userId: z.guid() }),
+  ]),
+} satisfies Record<(typeof MODERATION_TYPES)[number], z.ZodType<NotificationPayload>>
 
 export const listNotifications = async (
   db: Kysely<DB>,
@@ -406,6 +620,24 @@ export const listNotifications = async (
       "u.image as authorImage",
       "u.nameEffect as authorNameEffect",
       "u.avatarBorder as authorAvatarBorder",
+      "n.achievement",
+      "rp.kind as rankingKind",
+      timestampSql("rp.startsAt").$castTo<string | null>().as("rankingStartsAt"),
+      timestampSql("rp.endsAt").$castTo<string | null>().as("rankingEndsAt"),
+      "rr.rank as rankingRank",
+      "rr.chapters as rankingChapters",
+      "rr.points as rankingPoints",
+      "n.payload",
+      sql<boolean>`("ch"."deletedAt" is not null or "md"."deletedAt" is not null)`.as(
+        "chapterDeleted",
+      ),
+      liveCommentSql("c", "u").as("commentLive"),
+      "ml.name as listName",
+      sql<boolean>`"ml"."deletedAt" is not null`.as("listDeleted"),
+      "rg.name as groupName",
+      sql<boolean>`"rg"."deletedAt" is not null`.as("groupDeleted"),
+      "ru.username as reportedUsername",
+      "ru.displayUsername as reportedDisplayUsername",
     ])
     .orderBy("n.lastEventAt", "desc")
     .orderBy("n.id", "desc")
@@ -416,7 +648,8 @@ export const listNotifications = async (
     db,
     rows.map((row) => ({ chapterId: row.threadChapterId, groupId: row.threadGroupId })),
   )
-  const chapterIds = rows.flatMap((row) => row.chapterId ?? [])
+  const published = rows.filter((row) => row.type === "CHAPTER_PUBLISHED")
+  const chapterIds = published.flatMap((row) => row.chapterId ?? [])
   const mediaIds = [
     ...new Set(
       rows
@@ -432,7 +665,7 @@ export const listNotifications = async (
     getMainTitles(db, mediaIds),
     getMainCoverUrls(
       db,
-      rows.flatMap((row) => row.mediaId ?? []),
+      published.flatMap((row) => row.mediaId ?? []),
     ),
     chapterIds.length === 0
       ? []
@@ -480,6 +713,70 @@ export const listNotifications = async (
       chapterNumber: chapter?.number ?? null,
     }
   }
+  const reportOf = (
+    row: (typeof rows)[number],
+    payload: z.infer<typeof moderationPayloadSchemas.REPORT_REVIEWED>,
+  ) => {
+    const report = { id: payload.reportId, outcome: payload.outcome, points: payload.points ?? 0 }
+
+    if (payload.kind === "PAGE") {
+      return {
+        ...report,
+        kind: payload.kind,
+        chapter:
+          row.chapterId === null || row.mediaId === null
+            ? null
+            : {
+                id: row.chapterId,
+                number: row.chapterNumber ?? 0,
+                title: row.chapterTitle,
+                mediaId: row.mediaId,
+                mediaTitle: titles.get(row.mediaId) ?? null,
+                deleted: row.chapterDeleted,
+              },
+      }
+    }
+
+    if (payload.kind === "COMMENT") {
+      return {
+        ...report,
+        kind: payload.kind,
+        comment:
+          row.commentId === null
+            ? null
+            : {
+                id: row.commentId,
+                excerpt: row.commentLive ? excerptOf(row.commentContent) : null,
+                deleted: !row.commentLive,
+                target: targetOf(row),
+              },
+      }
+    }
+
+    if (payload.kind === "GROUP") {
+      return {
+        ...report,
+        kind: payload.kind,
+        group:
+          row.groupName === null
+            ? null
+            : { id: payload.groupId, name: row.groupName, deleted: row.groupDeleted },
+      }
+    }
+
+    return {
+      ...report,
+      kind: payload.kind,
+      user:
+        row.reportedUsername === null || row.reportedDisplayUsername === null
+          ? null
+          : {
+              id: payload.userId,
+              username: row.reportedUsername,
+              displayUsername: row.reportedDisplayUsername,
+            },
+    }
+  }
 
   return rows
     .map((row) => {
@@ -508,10 +805,78 @@ export const listNotifications = async (
             }
       }
 
+      if (row.type === "RANKING_REWARD") {
+        return (row.rankingKind !== "WEEK" && row.rankingKind !== "MONTH") ||
+          row.rankingStartsAt === null ||
+          row.rankingEndsAt === null ||
+          row.rankingRank === null ||
+          row.rankingChapters === null ||
+          row.rankingPoints === null
+          ? null
+          : {
+              ...base,
+              type: row.type,
+              ranking: {
+                period: row.rankingKind,
+                startsAt: row.rankingStartsAt,
+                endsAt: row.rankingEndsAt,
+                rank: row.rankingRank,
+                chapters: row.rankingChapters,
+                points: row.rankingPoints,
+              },
+            }
+      }
+
+      if (row.type === "ACHIEVEMENT_EARNED") {
+        if (!isAchievementKey(row.achievement)) {
+          return null
+        }
+
+        const { category, rarity, rewards } = ACHIEVEMENTS[row.achievement]
+
+        return {
+          ...base,
+          type: row.type,
+          achievement: {
+            key: row.achievement,
+            category,
+            rarity,
+            points: rewards.points ?? 0,
+          },
+        }
+      }
+
       if (row.type === "FOLLOW") {
         const followers = actors.get(row.id)
 
         return followers === undefined ? null : { ...base, type: row.type, actors: followers }
+      }
+
+      if (row.type === "LIST_MODERATED") {
+        const payload = moderationPayloadSchemas.LIST_MODERATED.safeParse(row.payload)
+
+        return !payload.success || row.listName === null
+          ? null
+          : {
+              ...base,
+              type: row.type,
+              action: payload.data.action,
+              list: { id: payload.data.listId, name: row.listName, deleted: row.listDeleted },
+            }
+      }
+
+      if (row.type === "PROFILE_MODERATED") {
+        const payload = moderationPayloadSchemas.PROFILE_MODERATED.safeParse(row.payload)
+
+        return payload.success ? { ...base, type: row.type, fields: payload.data.fields } : null
+      }
+
+      if (row.type === "REPORT_REVIEWED") {
+        const payload = moderationPayloadSchemas.REPORT_REVIEWED.safeParse(row.payload)
+
+        return payload.success
+          ? { ...base, type: row.type, report: reportOf(row, payload.data) }
+          : null
       }
 
       const target = targetOf(row)
@@ -641,4 +1006,70 @@ export const recordActivity = async (
   await db.insertInto("notificationActors").values({ notificationId: id, actorId }).execute()
 
   return true
+}
+
+type ModerationNotice = {
+  [Type in keyof typeof moderationPayloadSchemas]: {
+    type: Type
+    userId: string
+    payload: z.infer<(typeof moderationPayloadSchemas)[Type]>
+  }
+}[keyof typeof moderationPayloadSchemas]
+
+/** What a route that notifies of a moderation action has once it is signed in and in a transaction. */
+export type ModerationContext = {
+  db: Kysely<DB>
+  user: { id: string }
+  afterCommit: (callback: () => Promise<void>) => void
+  notificationEvents: NotificationEvents
+}
+
+/**
+ * Tells people what the moderation team did to their lists, their profile or their reports: one
+ * notification per notice, never gathered, and none for the moderator who acted. Nobody can turn
+ * these off. The inboxes hear of them once the transaction commits.
+ */
+export const notifyModeration = async (
+  { db, user, afterCommit, notificationEvents }: ModerationContext,
+  notices: readonly ModerationNotice[],
+) => {
+  // Reports the moderation team acted on earn their reporter a few points, told in the notice.
+  const kept = notices
+    .filter((notice) => notice.userId !== user.id)
+    .map((notice) =>
+      notice.type === "REPORT_REVIEWED" && notice.payload.outcome === "RESOLVED"
+        ? { ...notice, payload: { ...notice.payload, points: config.reports.rewardPoints } }
+        : notice,
+    )
+
+  if (kept.length === 0) {
+    return
+  }
+
+  await db
+    .insertInto("notifications")
+    .values(kept.map(({ type, userId, payload }) => ({ type, userId, payload })))
+    .execute()
+
+  const rewards = new Map<string, number>()
+
+  for (const notice of kept) {
+    if (notice.type === "REPORT_REVIEWED" && notice.payload.points !== undefined) {
+      rewards.set(notice.userId, (rewards.get(notice.userId) ?? 0) + notice.payload.points)
+    }
+  }
+
+  for (const [userId, points] of rewards) {
+    await db
+      .insertInto("userProfiles")
+      .values({ userId, points })
+      .onConflict((oc) =>
+        oc
+          .column("userId")
+          .doUpdateSet({ points: sql<number>`"userProfiles"."points" + ${points}` }),
+      )
+      .execute()
+  }
+
+  afterCommit(() => notificationEvents.publish([...new Set(kept.map(({ userId }) => userId))]))
 }

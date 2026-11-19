@@ -102,7 +102,7 @@ export function ChaptersPage() {
             key: "chapter",
             label: m.catalog_column_chapter(),
             skeleton: (
-              <SkeletonMediaCell narrow={{ from: "3xl", content: "pills" }} thumb="cover" />
+              <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="cover" />
             ),
           },
           {
@@ -111,6 +111,13 @@ export function ChaptersPage() {
             width: catalogStyles.colNarrow,
             from: "3xl",
             skeleton: <SkeletonPill width="3.75rem" />,
+          },
+          {
+            key: "pages",
+            label: m.catalog_column_pages(),
+            width: catalogStyles.colNarrow,
+            from: "3xl",
+            skeleton: <SkeletonText width="1.5rem" />,
           },
           {
             key: "status",
@@ -254,6 +261,7 @@ export function ChaptersPage() {
         onDone={selection.clear}
       />
       <EditChapterDialog
+        can={can}
         chapter={editing}
         onClose={() => {
           setEditing(null)

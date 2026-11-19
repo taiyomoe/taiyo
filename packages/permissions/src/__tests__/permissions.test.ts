@@ -53,15 +53,16 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "media.flag": ["MODERATOR", "ADMIN"],
   "media.reindex": ["ADMIN"],
   "media.syncMangaDex": ["UPLOADER", "ADMIN"],
+  "media.feature": ["ADMIN"],
   "staff.create": ["UPLOADER_INTERN", "UPLOADER", "ADMIN"],
   "staff.update": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
   "staff.delete": ["UPLOADER", "ADMIN"],
-  "chapter.publish": ["UPLOADER", "ADMIN"],
+  "chapter.publish": ["UPLOADER_INTERN", "UPLOADER", "ADMIN"],
   "chapter.submit": ROLES,
   "chapter.review": ["UPLOADER", "ADMIN"],
   "chapter.flag": ["UPLOADER", "MODERATOR", "ADMIN"],
   "chapter.list": ["UPLOADER", "MODERATOR", "ADMIN"],
-  "chapter.listInGroups": ["UPLOADER", "MODERATOR", "ADMIN"],
+  "chapter.listInGroups": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
   "group.create": ["UPLOADER", "ADMIN"],
   "group.delete": ["ADMIN"],
   "group.list": ["UPLOADER", "MODERATOR", "ADMIN"],
@@ -73,10 +74,13 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "groupCreationRequest.review": ["ADMIN"],
   "groupReport.create": ROLES,
   "groupReport.review": ["MODERATOR", "ADMIN"],
+  "userReport.create": ROLES,
+  "userReport.review": ["MODERATOR", "ADMIN"],
   "comment.create": ROLES,
   "comment.delete": ["MODERATOR", "ADMIN"],
   "comment.review": ["MODERATOR", "ADMIN"],
   "comment.removeImage": ["MODERATOR", "ADMIN"],
+  "list.moderate": ["MODERATOR", "ADMIN"],
   "user.list": ["MODERATOR", "ADMIN"],
   "user.grant": ["ADMIN"],
   "auditLog.read": ["ADMIN"],
@@ -148,7 +152,10 @@ describe("signed-out and banned users", () => {
       can("group.removeMember", target()),
       can("group.promoteMember", target()),
       can("group.demoteMember", target({ role: "OWNER", userId: ACTOR_ID })),
+      can("list.update", { userId: ACTOR_ID, visibility: "PUBLIC" }),
+      can("list.delete", { userId: ACTOR_ID, visibility: "PUBLIC" }),
       can("user.ban", { id: OTHER_ID, role: "USER" }),
+      can("user.moderateProfile", { id: OTHER_ID, role: "USER" }),
       can("user.setRole", { id: OTHER_ID }),
       can("user.impersonate", { id: OTHER_ID, role: "USER" }),
       can("user.setPassword", { id: OTHER_ID, role: "USER" }),
@@ -242,6 +249,26 @@ describe("chapters", () => {
 
     expect(can("chapter.update", chapter([], ACTOR_ID))).toBe(false)
     expect(can("chapter.delete", chapter([], ACTOR_ID))).toBe(false)
+  })
+
+  it("lets interns edit, delete and recredit the chapters they uploaded once out", () => {
+    const can = createPermissions(actor("UPLOADER_INTERN"))
+
+    for (const status of ["PUBLISHED", "SCHEDULED"] as const) {
+      const own = chapter([GROUP_A], ACTOR_ID, status)
+
+      expect(can("chapter.update", own)).toBe(true)
+      expect(can("chapter.delete", own)).toBe(true)
+      expect(can("chapter.credit", { chapter: own, groupId: GROUP_B })).toBe(true)
+      expect(can("chapter.uncredit", { chapter: own, groupId: GROUP_A })).toBe(true)
+    }
+
+    expect(
+      createPermissions(actor("UPLOADER_INTERN", [], true))(
+        "chapter.update",
+        chapter([], ACTOR_ID),
+      ),
+    ).toBe(false)
   })
 
   it("lets a group owner edit and delete every chapter credited to the group", () => {
@@ -609,6 +636,40 @@ describe("groups", () => {
   })
 })
 
+describe("lists", () => {
+  const actions = ["list.update", "list.delete"] as const
+
+  it("lets owners manage their lists, whatever their visibility", () => {
+    const can = createPermissions(actor("USER"))
+
+    for (const action of actions) {
+      expect(can(action, { userId: ACTOR_ID, visibility: "PUBLIC" })).toBe(true)
+      expect(can(action, { userId: ACTOR_ID, visibility: "PRIVATE" })).toBe(true)
+    }
+  })
+
+  it("lets moderators and admins manage the public lists of others only", () => {
+    for (const role of ["MODERATOR", "ADMIN"] as const) {
+      const can = createPermissions(actor(role))
+
+      for (const action of actions) {
+        expect(can(action, { userId: OTHER_ID, visibility: "PUBLIC" })).toBe(true)
+        expect(can(action, { userId: OTHER_ID, visibility: "PRIVATE" })).toBe(false)
+      }
+    }
+  })
+
+  it("does not let other users manage someone else's list", () => {
+    for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER"] as const) {
+      const can = createPermissions(actor(role))
+
+      for (const action of actions) {
+        expect(can(action, { userId: OTHER_ID, visibility: "PUBLIC" })).toBe(false)
+      }
+    }
+  })
+})
+
 describe("users", () => {
   it("lets moderators ban regular users only", () => {
     const can = createPermissions(actor("MODERATOR"))
@@ -628,6 +689,30 @@ describe("users", () => {
     }
 
     expect(can("user.ban", { id: ACTOR_ID, role: "ADMIN" })).toBe(false)
+  })
+
+  it("lets moderators edit the profiles of regular users only, and admins anyone else's", () => {
+    const moderator = createPermissions(actor("MODERATOR"))
+    const admin = createPermissions(actor("ADMIN"))
+
+    expect(moderator("user.moderateProfile", { id: OTHER_ID, role: "USER" })).toBe(true)
+
+    for (const role of ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"] as const) {
+      expect(moderator("user.moderateProfile", { id: OTHER_ID, role })).toBe(false)
+    }
+
+    for (const role of ROLES) {
+      expect(admin("user.moderateProfile", { id: OTHER_ID, role })).toBe(true)
+    }
+
+    expect(moderator("user.moderateProfile", { id: ACTOR_ID, role: "USER" })).toBe(false)
+    expect(admin("user.moderateProfile", { id: ACTOR_ID, role: "ADMIN" })).toBe(false)
+
+    for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER"] as const) {
+      expect(
+        createPermissions(actor(role))("user.moderateProfile", { id: OTHER_ID, role: "USER" }),
+      ).toBe(false)
+    }
   })
 
   it("only lets admins change roles, never their own", () => {

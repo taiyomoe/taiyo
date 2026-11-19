@@ -1,4 +1,4 @@
-import { MEDIA_STATUSES, MEDIA_TYPES } from "@taiyomoe/db"
+import { isBannedSql, MEDIA_STATUSES, MEDIA_TYPES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -13,7 +13,6 @@ import {
   contentRatingsQuerySchema,
 } from "../utils/schemas"
 import { listSummarySchema, selectListSummaries, toListSummary } from "../utils/user-lists"
-import { isBannedSql } from "../utils/user-moderation"
 
 const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
 const listDetailSchema = listSummarySchema.extend({

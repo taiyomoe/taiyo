@@ -316,6 +316,9 @@ const styles = stylex.create({
     paddingLeft: "0.625rem",
     paddingRight: "0.375rem",
   },
+  chipFixed: {
+    paddingRight: "0.625rem",
+  },
   chipRemove: {
     alignItems: "center",
     cursor: "pointer",
@@ -777,14 +780,17 @@ export function ComboboxChips({
 
 export function ComboboxChip({
   children,
+  removable = true,
   removeProps,
   sx,
   ...props
 }: ComboboxPrimitive.Chip.Props & {
+  /** Whether the chip shows its remove button. */
+  removable?: boolean
   removeProps?: ComboboxPrimitive.ChipRemove.Props
   sx?: Sx
 }): React.ReactElement {
-  const styleProps = stylex.props(styles.chip, sx)
+  const styleProps = stylex.props(styles.chip, !removable && styles.chipFixed, sx)
 
   return (
     <ComboboxPrimitive.Chip
@@ -794,7 +800,7 @@ export function ComboboxChip({
       {...props}
     >
       {children}
-      <ComboboxChipRemove {...removeProps} />
+      {removable ? <ComboboxChipRemove {...removeProps} /> : null}
     </ComboboxPrimitive.Chip>
   )
 }

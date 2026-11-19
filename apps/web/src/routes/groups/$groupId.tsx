@@ -13,7 +13,8 @@ import {
   groupStatsQueryOptions,
 } from "@/features/groups/api/groups"
 import { GroupNotFoundPage } from "@/features/groups/components/group/group-not-found-page"
-import { GroupPage, GroupPageSkeleton } from "@/features/groups/components/group/group-page"
+import { GroupPage } from "@/features/groups/components/group/group-page"
+import { GroupPageSkeleton } from "@/features/groups/components/group/group-page-skeleton"
 import {
   GROUP_CHAPTER_ORDERS,
   GROUP_LATEST_RELEASES,
@@ -31,7 +32,7 @@ const searchSchema = z.object({
   tab: z.enum(GROUP_TABS).optional().catch(undefined),
   page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),
   comment: z.uuid().optional().catch(undefined),
-  q: z.string().trim().min(1).max(100).optional().catch(undefined),
+  q: z.coerce.string().trim().min(1).max(100).optional().catch(undefined),
   media: z.uuid().optional().catch(undefined),
   order: z.enum(GROUP_CHAPTER_ORDERS).optional().catch(undefined),
   sort: z.enum(GROUP_MEDIA_SORTS).optional().catch(undefined),

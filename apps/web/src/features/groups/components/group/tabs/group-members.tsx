@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { breakpoints, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
@@ -9,6 +8,7 @@ import { formatNumber } from "@/features/dashboard/lib/format"
 import { groupMembersQueryOptions } from "@/features/groups/api/groups"
 import { GroupPeopleRow } from "@/features/groups/components/group/profile/group-people-row"
 import { groupProfileStyles } from "@/features/groups/components/group/profile/group-profile-styles"
+import { RoleBadge } from "@/features/groups/components/role-badge"
 import { formatMonthYear } from "@/features/groups/lib/group-format"
 import { m } from "@/paraglide/messages"
 
@@ -83,11 +83,7 @@ function MemberSections({ groupId }: { groupId: string }) {
                     date: formatMonthYear(member.createdAt),
                     count: formatNumber(member.chapterCount),
                   })}
-                  trailing={
-                    member.role === "OWNER" ? (
-                      <Badge variant="warning">{m.group_role_owner()}</Badge>
-                    ) : null
-                  }
+                  trailing={member.role === "OWNER" ? <RoleBadge role="OWNER" /> : null}
                 />
               </li>
             ))}

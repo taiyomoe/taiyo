@@ -1,5 +1,6 @@
 import { api } from "@/lib/api"
 import { ensureSuccess, getApiErrorCode, unwrap } from "@/lib/envelope"
+import { getLocale } from "@/paraglide/runtime"
 
 const isIos = () =>
   /iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -27,7 +28,7 @@ const saveSubscription = async (subscription: PushSubscription) => {
 
   await ensureSuccess(
     await api.users.me["push-subscriptions"].$put({
-      json: { endpoint, keys: { p256dh: keys.p256dh, auth: keys.auth } },
+      json: { endpoint, keys: { p256dh: keys.p256dh, auth: keys.auth }, locale: getLocale() },
     }),
   )
 }
@@ -105,7 +106,10 @@ export const sendTestPush = async () => {
   }
 }
 
-/** Re-saves this device's subscription so the server keeps fresh keys and the right owner. */
+/**
+ * Re-saves this device's subscription so the server keeps fresh keys, the right owner and the
+ * language pushes are written in. Changing the language reloads the page, which saves it again.
+ */
 export const syncPushSubscription = async () => {
   if (!isPushSupported() || Notification.permission !== "granted") {
     return

@@ -15,6 +15,7 @@ import {
   Shuffle,
   Sparkles,
   Sun,
+  Trophy,
   User,
   UserAdd,
   Users,
@@ -132,6 +133,14 @@ export function useGlobalCommands() {
     ...(user === null
       ? []
       : [
+          {
+            id: "nav.rankings",
+            label: m.shell_nav_rankings(),
+            section: "navigate",
+            icon: Trophy,
+            keywords: ["ranking", "leaderboard", "top", "readers", "podium", "best"],
+            run: { type: "navigate", to: { to: "/rankings" } },
+          } satisfies PaletteCommand,
           {
             id: "nav.profile",
             label: m.palette_nav_profile(),

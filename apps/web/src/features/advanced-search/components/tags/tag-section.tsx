@@ -1,7 +1,7 @@
+import type { TagKey } from "@taiyomoe/config"
 import * as stylex from "@stylexjs/stylex"
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type {
-  TagKey,
   TagSection as TagSectionData,
   TagState,
 } from "@/features/advanced-search/lib/search-tags"

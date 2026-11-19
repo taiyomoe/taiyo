@@ -17,7 +17,7 @@ export const listMyNotificationsHandler = new Hono().get(
   describeRoute({
     summary: "List my notifications",
     description:
-      "Lists your notifications, latest activity first: new chapters of the media in your library and of the groups you follow, replies to your comments, upvotes on your comments and new followers. Upvotes and follows are gathered into one notification until you read it. Notifications whose chapter, comment or people are gone are left out.\n\n**Authentication:** signed-in user.",
+      "Lists your notifications, latest activity first: new chapters of the media in your library and of the groups you follow, replies to your comments, upvotes on your comments, new followers, points from the readers ranking and achievements you earn, and what the moderation team did to your lists, your profile and your reports. Upvotes and follows are gathered into one notification until you read it. Notifications whose chapter, comment or people are gone are left out, except moderation notifications, which stay and tell what is gone.\n\n**Authentication:** signed-in user.",
     tags: ["Notifications"],
     responses: {
       200: {

@@ -1,4 +1,5 @@
-import { Button, Container, Section, Text } from "react-email"
+import { Text } from "react-email"
+import EmailAction from "../components/email-action"
 import EmailBase from "../components/email-base"
 import { emailStyles } from "../theme"
 
@@ -8,25 +9,16 @@ type Props = {
 }
 
 const SignUpEmail = ({ name, url }: Props) => (
-  <EmailBase preview="Verify your account on Taiyō">
-    <Container style={emailStyles.body}>
-      <Text style={emailStyles.title}>Verify your email</Text>
-      <Text>
-        Hi {name}, thank you for your interest in Taiyō. We want to ensure that it&apos;s really you
-        who created your account, please click the button below. This link will be valid for 1 hour.
-      </Text>
-      <Section>
-        <Button href={url} style={emailStyles.button}>
-          Click here
-        </Button>
-      </Section>
-      <Text>
-        If the button does not work, copy and paste the link below into your browser: {url}
-      </Text>
-    </Container>
-    <Container style={emailStyles.footer}>
-      <Text>If you did not request this email, please ignore it.</Text>
-    </Container>
+  <EmailBase
+    preview="Verify your account on Taiyō"
+    footer="If you did not create a Taiyō account, you can ignore this email."
+  >
+    <Text style={emailStyles.title}>Verify your email</Text>
+    <Text style={emailStyles.text}>
+      Hi {name}, welcome to Taiyō! To finish creating your account, confirm that this email address
+      is yours. The link is valid for 1 hour.
+    </Text>
+    <EmailAction href={url} label="Verify my email" />
   </EmailBase>
 )
 

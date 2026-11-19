@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors, font, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { getRouteApi } from "@tanstack/react-router"
 import { useState } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import { FollowListDialog } from "@/features/users/components/profile/dialogs/follow-list-dialog"
@@ -43,10 +44,12 @@ const styles = stylex.create({
     fontWeight: 600,
   },
 })
+const routeApi = getRouteApi("/users/$username")
 const compact = new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 1 })
 
 export function ProfileStats({ profile }: { profile: UserProfile }) {
   const [followList, setFollowList] = useState<"followers" | "following" | null>(null)
+  const navigate = routeApi.useNavigate()
   const stats = [
     {
       value: profile.followerCount,
@@ -60,6 +63,16 @@ export function ProfileStats({ profile }: { profile: UserProfile }) {
       label: m.profile_following_title(),
       onClick: () => {
         setFollowList("following")
+      },
+    },
+    {
+      value: profile.achievementCount,
+      label:
+        profile.achievementCount === 1
+          ? m.profile_achievement_title()
+          : m.profile_achievements_title(),
+      onClick: () => {
+        void navigate({ resetScroll: false, search: { tab: "achievements" } })
       },
     },
   ]

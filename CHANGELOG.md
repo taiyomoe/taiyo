@@ -1,5 +1,37 @@
 # Changelog
 
+## [2.2.0](https://github.com/taiyomoe/taiyo/compare/v2.1.0...v2.2.0) (2026-11-18)
+
+
+### Features
+
+* add community rankings with period rewards and achievements ([#3545](https://github.com/taiyomoe/taiyo/issues/3545)) ([d29611d](https://github.com/taiyomoe/taiyo/commit/d29611d24c80012a9e57a27170476ba4abaf4b71))
+* add the missing dashboard actions and chapter page counts ([#3538](https://github.com/taiyomoe/taiyo/issues/3538)) ([8fd950c](https://github.com/taiyomoe/taiyo/commit/8fd950cd686130d8a6dbeaa4e863661e001c0ef2))
+* let uploader interns publish their chapters directly ([#3555](https://github.com/taiyomoe/taiyo/issues/3555)) ([73a1fe8](https://github.com/taiyomoe/taiyo/commit/73a1fe8028348e0551fcac5ffac6d5cfcfa7da2b))
+* link medias to kuro mangás ([#3533](https://github.com/taiyomoe/taiyo/issues/3533)) ([60a0c26](https://github.com/taiyomoe/taiyo/commit/60a0c26fc1c692d6e2b80618ada5c607856cb5e2))
+* moderate lists and profiles, and let users report profiles ([#3542](https://github.com/taiyomoe/taiyo/issues/3542)) ([50f1e6e](https://github.com/taiyomoe/taiyo/commit/50f1e6ec132e94e14201eb58b6726f1567880f87))
+* publish a bimi logo for the taiyo.moe emails ([#3536](https://github.com/taiyomoe/taiyo/issues/3536)) ([1c1d8ed](https://github.com/taiyomoe/taiyo/commit/1c1d8ed29343fa8a3968a4329be06e1dc1fb0ea9))
+* reward reporters with points when moderation acts on their report ([#3548](https://github.com/taiyomoe/taiyo/issues/3548)) ([af72ef9](https://github.com/taiyomoe/taiyo/commit/af72ef99526267931e63b5b60836d5864a2c1809))
+* send emails through Amazon SES in the landing page's sunrise ([#3534](https://github.com/taiyomoe/taiyo/issues/3534)) ([d4de5db](https://github.com/taiyomoe/taiyo/commit/d4de5db3eacb4f5621bca0789c4e2a0b7810c778))
+* tell users when moderation acts on their content or reports ([#3547](https://github.com/taiyomoe/taiyo/issues/3547)) ([ebaf14c](https://github.com/taiyomoe/taiyo/commit/ebaf14ccfc6507d26fc34b47f1e91c059e124777))
+* turn the dashboard queues into tables with bulk actions ([#3532](https://github.com/taiyomoe/taiyo/issues/3532)) ([3508c2e](https://github.com/taiyomoe/taiyo/commit/3508c2eade2ab19681ccc820980edafe42d69454))
+* write push notifications in each device's language ([#3549](https://github.com/taiyomoe/taiyo/issues/3549)) ([a386931](https://github.com/taiyomoe/taiyo/commit/a386931cd672b70ea92104366d46bb0ae5388906))
+
+
+### Bug Fixes
+
+* count every review queue and keep lazy chunks from crashing the page ([#3541](https://github.com/taiyomoe/taiyo/issues/3541)) ([9bd8d2e](https://github.com/taiyomoe/taiyo/commit/9bd8d2e943f27de8b8090c1b1b75a0e1fe49b0d8))
+* draw the active library tab's edge on its border ([#3543](https://github.com/taiyomoe/taiyo/issues/3543)) ([58eb087](https://github.com/taiyomoe/taiyo/commit/58eb087a2804be04bc2fe11925bdc069a1803294))
+* let staff edit banned users' profiles and drop an unused overview count ([#3544](https://github.com/taiyomoe/taiyo/issues/3544)) ([25f4139](https://github.com/taiyomoe/taiyo/commit/25f41398f1f0950f730d4ba807c9f45cdd32487e))
+* never cache an empty ranking ([#3551](https://github.com/taiyomoe/taiyo/issues/3551)) ([b1d9858](https://github.com/taiyomoe/taiyo/commit/b1d9858202b64cc8e766733e944c75498f417d15))
+* **ui:** size only the addon's own icon in combobox and autocomplete inputs ([#3554](https://github.com/taiyomoe/taiyo/issues/3554)) ([d52fc7e](https://github.com/taiyomoe/taiyo/commit/d52fc7edbe7f23a6a429f18698f822145d5fe5cd))
+
+
+### Performance
+
+* shrink the first load and draw the sun without three.js ([#3540](https://github.com/taiyomoe/taiyo/issues/3540)) ([848ba7d](https://github.com/taiyomoe/taiyo/commit/848ba7dd4085dfccaa4e12d5eab16f71ce8a00a5))
+* **web:** keep the group page and palette body out of the initial bundle ([#3535](https://github.com/taiyomoe/taiyo/issues/3535)) ([a7d652e](https://github.com/taiyomoe/taiyo/commit/a7d652ea148c10c3e226168b26419eca02f5313e))
+
 ## [2.1.0](https://github.com/taiyomoe/taiyo/compare/v2.0.0...v2.1.0) (2026-11-16)
 
 

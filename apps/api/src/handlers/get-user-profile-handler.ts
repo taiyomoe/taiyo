@@ -1,4 +1,4 @@
-import { COUNTRIES, GENDERS, LANGUAGES, sql } from "@taiyomoe/db"
+import { COUNTRIES, GENDERS, isBannedSql, LANGUAGES, sql } from "@taiyomoe/db"
 import { GROUP_MEMBERSHIP_ROLES, ROLES } from "@taiyomoe/permissions"
 import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
@@ -9,7 +9,6 @@ import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { liveCommentSql } from "../utils/comments"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
-import { isBannedSql } from "../utils/user-moderation"
 
 const paramSchema = z.object({
   username: z
@@ -81,6 +80,10 @@ const userProfileSchema = z.object({
   commentCount: z
     .int()
     .meta({ description: "The number of comments on the user's profile.", example: 9 }),
+  achievementCount: z.int().meta({
+    description: "The number of different achievements the user earned.",
+    example: 5,
+  }),
   listCount: z.int().meta({
     description:
       "The number of lists the user owns that you can see: PUBLIC ones, or all of them when the user is you.",
@@ -112,7 +115,7 @@ export const getUserProfileHandler = new Hono().get(
   describeRoute({
     summary: "Get a user's profile",
     description:
-      "Returns the profile of the user with the given username: identity, about text, counts and the groups the user belongs to. Banned users are not found. Signed-in viewers also see whether they follow the user and whether the user follows them.\n\n**Authentication:** optional.",
+      "Returns the profile of the user with the given username: identity, about text, counts and the groups the user belongs to. Banned users are not found, except by moderators and admins, who need their profile to clean it up. Signed-in viewers also see whether they follow the user and whether the user follows them.\n\n**Authentication:** optional.",
     tags: ["Users"],
     responses: {
       200: {
@@ -122,7 +125,7 @@ export const getUserProfileHandler = new Hono().get(
         },
       },
       ...getOpenApiResponses({
-        404: "No user with the given username exists, or the user is banned.",
+        404: "No user with the given username exists, or the user is banned and you are not a moderator or admin.",
         422: "The provided username is not valid.",
       }),
     },
@@ -130,7 +133,7 @@ export const getUserProfileHandler = new Hono().get(
   validateParam(paramSchema),
   withOptionalAuth,
   async (c) => {
-    const { db, viewer } = c.var
+    const { db, viewer, can } = c.var
     const notBanned = sql<boolean>`not (${isBannedSql})`
     const { username } = c.var.param
     const user = await db
@@ -156,7 +159,7 @@ export const getUserProfileHandler = new Hono().get(
         sql<string>`to_char("users"."createdAt", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`.as("createdAt"),
       ])
       .where(sql`lower("users"."username")`, "=", username.toLowerCase())
-      .where(notBanned)
+      .$if(!can("user.list"), (query) => query.where(notBanned))
       .executeTakeFirst()
 
     if (!user) {
@@ -207,6 +210,11 @@ export const getUserProfileHandler = new Hono().get(
             .where(liveCommentSql("c", "u"))
             .select(eb.fn.countAll<string>().as("count"))
             .as("comments"),
+          eb
+            .selectFrom("userAchievements")
+            .where("userAchievements.userId", "=", user.id)
+            .select(eb.fn.countAll<string>().as("count"))
+            .as("achievements"),
           eb
             .selectFrom("userLists")
             .where("userLists.userId", "=", user.id)
@@ -273,6 +281,7 @@ export const getUserProfileHandler = new Hono().get(
       followingHidden: user.settings.showFollowing === false && viewerId !== user.id,
       uploadCount: Number(counts.uploads ?? 0),
       commentCount: Number(counts.comments ?? 0),
+      achievementCount: Number(counts.achievements ?? 0),
       listCount: Number(counts.lists ?? 0),
       viewerFollows: viewer === null ? null : counts.viewerFollows === true,
       followsViewer: viewer === null ? null : counts.followsViewer === true,

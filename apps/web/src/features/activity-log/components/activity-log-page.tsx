@@ -129,6 +129,7 @@ export function ActivityLogPage() {
               />
             ) : (
               <ResultsCard
+                blocked={blocked}
                 entryCount={log.entryCount}
                 grouping={log.grouping}
                 loaded={results.data !== undefined}

@@ -344,7 +344,7 @@ test.describe("reader, signed in", () => {
   test("reports a page, and a reviewer resolves it from the dashboard", async ({ page }) => {
     const reports = z
       .array(z.object({ id: z.string(), chapter: z.object({ id: z.string() }) }))
-      .parse(await apiData(page.request, "/chapters/page-reports?perPage=100"))
+      .parse(await apiData(page.request, "/chapters/page-reports?status=OPEN&perPage=100"))
 
     for (const report of reports) {
       if (report.chapter.id === FIRST) {
@@ -369,14 +369,16 @@ test.describe("reader, signed in", () => {
     await page.goto("/dashboard/page-reports")
     await waitForHydration(page, "header")
 
+    const actions = page.getByRole("button", { name: `Actions for ${MANGA.title} — Ch. 1 · p. 3` })
     const row = page
-      .getByRole("listitem")
-      .filter({ hasText: `${MANGA.title} · Ch. 1 · p. 3` })
+      .getByRole("row")
+      .filter({ has: actions })
       .filter({ hasText: "Page 3 should come after page 4" })
 
-    await expect(row).toContainText("The pages are in the wrong order")
+    await expect(row).toContainText("Wrong order")
 
-    await row.getByRole("button", { name: "Resolved" }).click()
+    await row.getByRole("button", { name: /^Actions for / }).click()
+    await page.getByRole("menuitem", { name: "Mark resolved" }).click()
 
     await expect(row).toHaveCount(0)
   })

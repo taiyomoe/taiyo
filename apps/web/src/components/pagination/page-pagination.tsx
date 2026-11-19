@@ -25,10 +25,9 @@ const styles = stylex.create({
   },
   // Sized against the nearest container, for paginations that sit in a narrow table.
   edgeFit: {
-    padding: { default: 0, [containers.xl]: null },
     aspectRatio: { default: "1", [containers.xl]: "auto" },
-    height: { default: "2rem", [containers.xl]: null },
-    width: { default: "2rem", [containers.xl]: null },
+    height: "2rem",
+    width: { default: "2rem", [containers.xl]: "auto" },
   },
   labelFit: {
     display: { default: "none", [containers.xl]: "inline" },

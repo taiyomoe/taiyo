@@ -2,12 +2,12 @@ import { groupOwnershipAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
-import { claimGroup } from "../group-membership"
 import { audited } from "../middlewares/audited-middleware"
 import { checkOwnershipRequest } from "../middlewares/check-ownership-request-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
+import { approveOwnershipRequest } from "../utils/ownership-requests"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 export const approveOwnershipRequestHandler = new Hono().post(
@@ -54,39 +54,14 @@ export const approveOwnershipRequestHandler = new Hono().post(
       target: { groupId: ownershipRequest.groupId, userId: ownershipRequest.userId },
     })
 
-    if (ownershipRequest.status !== "PENDING") {
-      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
-    }
-
-    const result = await claimGroup(db, {
-      groupId: ownershipRequest.groupId,
-      userId: ownershipRequest.userId,
-      addedBy: user.id,
+    const result = await approveOwnershipRequest(db, {
+      requestId: ownershipRequest.id,
+      reviewerId: user.id,
     })
 
     if (!result.ok) {
       return c.fail(result.error)
     }
-
-    const transitioned = await db
-      .updateTable("groupOwnershipRequests")
-      .set({ status: "APPROVED", reviewerId: user.id })
-      .where("id", "=", ownershipRequest.id)
-      .where("status", "=", "PENDING")
-      .returning("id")
-      .executeTakeFirst()
-
-    if (transitioned === undefined) {
-      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
-    }
-
-    await db
-      .updateTable("groupOwnershipRequests")
-      .set({ status: "CANCELLED" })
-      .where("groupId", "=", ownershipRequest.groupId)
-      .where("status", "=", "PENDING")
-      .where("id", "!=", ownershipRequest.id)
-      .execute()
 
     return c.ok({
       id: ownershipRequest.id,

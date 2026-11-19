@@ -1,104 +1,226 @@
-import * as stylex from "@stylexjs/stylex"
-import { Badge } from "@taiyomoe/ui/components/ui/badge"
+import { CancelCircle, CheckCircle } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Link } from "@tanstack/react-router"
-import type { GroupReport } from "@/features/groups/api/groups"
-import { ErrorAlert } from "@/components/feedback/error-alert"
+import { useQuery } from "@tanstack/react-query"
+import { getRouteApi, Link } from "@tanstack/react-router"
+import { useDeferredValue, useState } from "react"
+import type { GroupReportsFilter } from "@/features/groups/api/groups"
+import type { GroupReportDialog } from "@/features/groups/components/group-reports/group-report-dialogs"
+import { FilterChoice, FilterSelect, FilterToolbar } from "@/components/filters/filter-toolbar"
 import { DashboardPage } from "@/components/layout/dashboard-page"
-import { TimeAgo } from "@/components/time/time-ago"
-import { GroupAvatar } from "@/features/groups/components/group-avatar"
-import { requestCardStyles } from "@/features/groups/components/group-requests/request-card-styles"
-import { RequestList } from "@/features/groups/components/group-requests/request-list"
-import { Requester } from "@/features/groups/components/group-requests/requester"
-import { GROUP_REPORT_REASON_LABELS } from "@/features/groups/lib/group-report-labels"
-import { api } from "@/lib/api"
-import { ensureSuccess, unwrapEnvelope } from "@/lib/envelope"
+import { PagePagination } from "@/components/pagination/page-pagination"
+import { CATALOG_PER_PAGE } from "@/features/catalog/api/catalog"
+import { BulkBar } from "@/features/catalog/components/shared/bulk-bar"
+import {
+  SkeletonActions,
+  SkeletonIconText,
+  SkeletonMediaCell,
+  SkeletonText,
+  SkeletonUsers,
+} from "@/features/catalog/components/shared/catalog-skeletons"
+import {
+  CatalogFooter,
+  CatalogTable,
+  VisuallyHidden,
+} from "@/features/catalog/components/shared/catalog-table"
+import { useSelection } from "@/features/catalog/hooks/use-selection"
+import { catalogStyles } from "@/features/catalog/lib/catalog-styles"
+import { formatNumber } from "@/features/dashboard/lib/format"
+import { groupReportsQueryOptions, useReviewGroupReports } from "@/features/groups/api/groups"
+import { GroupReportDialogs } from "@/features/groups/components/group-reports/group-report-dialogs"
+import { GroupReportRow } from "@/features/groups/components/group-reports/group-report-row"
+import { toastGroupsResult } from "@/features/groups/lib/group-bulk-toast"
+import {
+  GROUP_REPORT_REASON_OPTIONS,
+  GROUP_REPORT_STATUS_OPTIONS,
+} from "@/features/groups/lib/group-report-labels"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
-const REPORTS_PER_PAGE = 50
-const styles = stylex.create({
-  actions: {
-    gap: "0.5rem",
-    display: "flex",
-    justifyContent: "flex-end",
-  },
-})
+const routeApi = getRouteApi("/dashboard/group-reports")
+const DONE = {
+  RESOLVED: m.group_reports_bulk_resolved,
+  DISMISSED: m.group_reports_bulk_dismissed,
+}
+const SKIP_REASONS = { NOT_PENDING: m.group_requests_skipped_closed }
 
 export function GroupReportsPage() {
-  const reports = useQuery({
-    queryKey: ["group-reports", { page: 1 }],
-    queryFn: async ({ signal }) =>
-      unwrapEnvelope(
-        await api["group-reports"].$get(
-          { query: { page: "1", perPage: String(REPORTS_PER_PAGE) } },
-          { init: { signal } },
-        ),
-      ),
+  const params = routeApi.useSearch()
+  const navigate = routeApi.useNavigate()
+  const filter: GroupReportsFilter = {
+    status: params.status ?? "PENDING",
+    reason: params.reason,
+    page: params.page ?? 1,
+  }
+  const { data, isPlaceholderData } = useQuery(groupReportsQueryOptions(useDeferredValue(filter)))
+  const pending = filter.status === "PENDING"
+  const unfiltered = pending && filter.reason === undefined
+  const selection = useSelection(data?.data.map((report) => report.id) ?? [])
+  const review = useReviewGroupReports()
+  const [dialog, setDialog] = useState<GroupReportDialog | null>(null)
+  const search = (next: GroupReportsFilter) => ({
+    status: next.status === "PENDING" ? undefined : next.status,
+    reason: next.reason,
+    page: next.page === 1 ? undefined : next.page,
   })
+  const update = (patch: Partial<GroupReportsFilter>) => {
+    void navigate({ replace: true, search: search({ ...filter, ...patch, page: patch.page ?? 1 }) })
+  }
+  const bulk = (kind: "RESOLVED" | "DISMISSED") => () => {
+    setDialog({
+      kind,
+      reports: data?.data.filter((report) => selection.has(report.id)) ?? [],
+      bulk: true,
+    })
+  }
 
   return (
     <DashboardPage subtitle={m.reports_subtitle()} title={m.reports_title()}>
-      <RequestList
-        items={reports.data?.data}
-        render={(report) => <ReportCard key={report.id} report={report} />}
+      <CatalogTable
+        bulkBar={
+          <BulkBar count={selection.ids.length} onClear={selection.clear}>
+            <Button onClick={bulk("RESOLVED")} variant="outline">
+              <CheckCircle />
+              {m.reports_resolve()}
+            </Button>
+            <Button onClick={bulk("DISMISSED")} variant="outline">
+              <CancelCircle />
+              {m.reports_dismiss()}
+            </Button>
+          </BulkBar>
+        }
+        columns={[
+          {
+            key: "group",
+            label: m.all_groups_column_group(),
+            skeleton: <SkeletonMediaCell narrow={{ from: "4xl", content: "pills" }} thumb="logo" />,
+          },
+          {
+            key: "reason",
+            label: m.group_report_reason(),
+            width: catalogStyles.colTarget,
+            from: "3xl",
+            skeleton: <SkeletonIconText width="8rem" />,
+          },
+          {
+            key: "reporter",
+            label: m.group_reports_column_reporter(),
+            width: catalogStyles.colWide,
+            from: "4xl",
+            skeleton: <SkeletonUsers />,
+          },
+          {
+            key: "date",
+            label: m.group_reports_column_reported(),
+            width: catalogStyles.colWide,
+            from: "3xl",
+            skeleton: <SkeletonText width="5.5rem" />,
+          },
+          {
+            key: "actions",
+            label: <VisuallyHidden>{m.catalog_column_actions()}</VisuallyHidden>,
+            width: catalogStyles.colActions,
+            skeleton: <SkeletonActions />,
+          },
+        ]}
+        empty={
+          data?.data.length === 0
+            ? {
+                icon: CheckCircle,
+                title: unfiltered ? m.review_empty_title() : m.group_reports_empty_filtered(),
+                description: unfiltered
+                  ? m.group_reports_empty_description()
+                  : m.catalog_empty_description(),
+              }
+            : null
+        }
+        fetching={isPlaceholderData}
+        footer={
+          data === undefined ? null : (
+            <CatalogFooter total={m.catalog_results({ count: formatNumber(data.meta.total) })}>
+              <PagePagination
+                fit="container"
+                onJump={(page) => {
+                  update({ page })
+                }}
+                page={filter.page}
+                pageCount={Math.ceil(data.meta.total / CATALOG_PER_PAGE)}
+                renderLink={(page) => (
+                  <Link search={search({ ...filter, page })} to="/dashboard/group-reports" />
+                )}
+              />
+            </CatalogFooter>
+          )
+        }
+        loading={data === undefined}
+        selection={pending ? selection : undefined}
+        toolbar={
+          <FilterToolbar>
+            <FilterChoice
+              label={m.group_reports_status()}
+              onChange={(status) => {
+                update({ status })
+              }}
+              options={GROUP_REPORT_STATUS_OPTIONS}
+              value={filter.status}
+            />
+            <FilterSelect
+              allLabel={m.group_reports_all_reasons()}
+              label={m.group_report_reason()}
+              onChange={(reason) => {
+                update({ reason })
+              }}
+              options={GROUP_REPORT_REASON_OPTIONS}
+              value={filter.reason}
+            />
+          </FilterToolbar>
+        }
+      >
+        {data?.data.map((report) => (
+          <GroupReportRow
+            key={report.id}
+            onDetails={() => {
+              setDialog({ kind: "details", reports: [report], bulk: false })
+            }}
+            onReview={(kind) => {
+              setDialog({ kind, reports: [report], bulk: false })
+            }}
+            report={report}
+            selection={pending ? selection : undefined}
+          />
+        ))}
+      </CatalogTable>
+      <GroupReportDialogs
+        dialog={dialog}
+        error={review.isError ? getErrorMessage(review.error) : null}
+        onClose={() => {
+          setDialog(null)
+          review.reset()
+        }}
+        onOpenReview={(kind, report) => {
+          setDialog({ kind, reports: [report], bulk: false })
+        }}
+        onReview={(status, reports, note) => {
+          review.mutate(
+            {
+              reportIds: reports.map((report) => report.id),
+              status,
+              ...(note === "" ? {} : { note }),
+            },
+            {
+              onSuccess: (result) => {
+                toastGroupsResult(result, DONE[status], SKIP_REASONS)
+
+                if (dialog?.bulk === true) {
+                  selection.clear()
+                }
+
+                setDialog(null)
+              },
+            },
+          )
+        }}
+        pending={review.isPending}
       />
     </DashboardPage>
-  )
-}
-
-function ReportCard({ report }: { report: GroupReport }) {
-  const queryClient = useQueryClient()
-  const review = useMutation({
-    mutationFn: async (status: "RESOLVED" | "DISMISSED") =>
-      ensureSuccess(
-        await api["group-reports"][":id"].review.$post({
-          param: { id: report.id },
-          json: { status },
-        }),
-      ),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["group-reports"] }),
-  })
-
-  return (
-    <li sx={requestCardStyles.card}>
-      <div sx={requestCardStyles.top}>
-        <Requester person={report.reporter} verb={m.reports_reported()} />
-        <TimeAgo date={report.createdAt} sx={requestCardStyles.time} />
-      </div>
-      <div sx={requestCardStyles.target}>
-        <GroupAvatar id={report.group.id} name={report.group.name} />
-        <Link
-          params={{ groupId: report.group.id }}
-          {...stylex.props(requestCardStyles.targetName)}
-          to="/groups/$groupId"
-        >
-          {report.group.name}
-        </Link>
-        <Badge variant="error">{GROUP_REPORT_REASON_LABELS[report.reason]()}</Badge>
-      </div>
-      {report.details === null ? null : <p sx={requestCardStyles.quote}>{report.details}</p>}
-      <ErrorAlert message={review.isError ? getErrorMessage(review.error) : null} />
-      <div sx={styles.actions}>
-        <Button
-          disabled={review.isPending}
-          onClick={() => {
-            review.mutate("DISMISSED")
-          }}
-          variant="outline"
-        >
-          {m.reports_dismiss()}
-        </Button>
-        <Button
-          disabled={review.isPending}
-          onClick={() => {
-            review.mutate("RESOLVED")
-          }}
-        >
-          {m.reports_resolve()}
-        </Button>
-      </div>
-    </li>
   )
 }

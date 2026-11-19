@@ -2,11 +2,15 @@ import * as stylex from "@stylexjs/stylex"
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi } from "@tanstack/react-router"
-import { lazy, Suspense } from "react"
+import { Suspense } from "react"
 import type { UserProfile } from "@/features/users/api/profile"
 import type { ProfileTab } from "@/features/users/lib/profile-page"
 import type { Session } from "@/lib/session"
 import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
+import {
+  AchievementsTab,
+  AchievementsTabSkeleton,
+} from "@/features/users/components/profile/tabs/achievements-tab"
 import { CommentsTab } from "@/features/users/components/profile/tabs/comments-tab"
 import { ListsTab, ListsTabSkeleton } from "@/features/users/components/profile/tabs/lists-tab"
 import { OverviewTab } from "@/features/users/components/profile/tabs/overview/overview-tab"
@@ -15,12 +19,13 @@ import {
   UploadsTab,
   UploadsTabSkeleton,
 } from "@/features/users/components/profile/tabs/uploads-tab"
+import { createLazyComponent } from "@/lib/lazy-component"
 import { m } from "@/paraglide/messages"
 
 // Stats is the heaviest tab to render and the least visited: split it out.
-const StatsTab = lazy(async () => ({
-  default: (await import("@/features/users/components/profile/tabs/stats-tab")).StatsTab,
-}))
+const StatsTab = createLazyComponent(
+  async () => (await import("@/features/users/components/profile/tabs/stats-tab")).StatsTab,
+)
 const routeApi = getRouteApi("/users/$username")
 const styles = stylex.create({
   tabs: {
@@ -83,6 +88,12 @@ export function ProfileTabs({
         <TabsTab sx={styles.tab} value="stats">
           {m.profile_tab_stats()}
         </TabsTab>
+        <TabsTab sx={styles.tab} value="achievements">
+          {m.profile_tab_achievements()}
+          {profile.achievementCount === 0 ? null : (
+            <span sx={styles.count}>{profile.achievementCount}</span>
+          )}
+        </TabsTab>
         <TabsTab sx={styles.tab} value="uploads">
           {m.profile_tab_uploads()}
           {profile.uploadCount === 0 ? null : <span sx={styles.count}>{profile.uploadCount}</span>}
@@ -105,7 +116,12 @@ export function ProfileTabs({
       </TabsPanel>
       <TabsPanel value="stats">
         <Suspense fallback={<StatsTabSkeleton />}>
-          <StatsTab profile={profile} />
+          <StatsTab fallback={<StatsTabSkeleton />} profile={profile} />
+        </Suspense>
+      </TabsPanel>
+      <TabsPanel value="achievements">
+        <Suspense fallback={<AchievementsTabSkeleton />}>
+          <AchievementsTab profile={profile} />
         </Suspense>
       </TabsPanel>
       <TabsPanel value="uploads">

@@ -8,12 +8,15 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import {
   selectSubmissionColumns,
   selectSubmissions,
+  submissionSearchSchema,
   withSubmissionDetails,
 } from "../utils/chapter-submissions"
+import { matchChapterSearch } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, chapterSubmissionSchema } from "../utils/schemas"
 
 const querySchema = paginationQuerySchema.extend({
+  search: submissionSearchSchema,
   status: z
     .enum(CHAPTER_STATUSES)
     .optional()
@@ -49,7 +52,7 @@ export const listMyChapterSubmissionsHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db, user } = c.var
-    const { page, perPage, status } = c.var.query
+    const { page, perPage, search, status } = c.var.query
     const base = selectSubmissions(db)
       .where("chapters.uploaderId", "=", user.id)
       .where((eb) =>
@@ -59,6 +62,7 @@ export const listMyChapterSubmissionsHandler = new Hono().get(
         ]),
       )
       .where((eb) => (status === undefined ? eb.and([]) : eb("chapters.status", "=", status)))
+      .where((eb) => matchChapterSearch(eb, search))
     const [rows, totalRow] = await Promise.all([
       selectSubmissionColumns(base)
         .orderBy("chapters.createdAt", "desc")

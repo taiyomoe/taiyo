@@ -6,14 +6,23 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
-import { getMainTitles } from "../utils/latest-chapters"
+import { getMainTitles, matchChapterSearch } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, storedLanguageSchema } from "../utils/schemas"
+import { apiSuccessEnvelope, storedLanguageSchema, userSummarySchema } from "../utils/schemas"
 
 const querySchema = paginationQuerySchema.extend({
-  status: z.enum(PAGE_REPORT_STATUSES).default("OPEN").meta({
-    description: "The status of the reports to list. Defaults to OPEN.",
+  status: z.enum(PAGE_REPORT_STATUSES).optional().meta({
+    description: "Only list the reports with this status. Every status is listed when omitted.",
     example: "OPEN",
+  }),
+  reason: z
+    .enum(PAGE_REPORT_REASONS)
+    .optional()
+    .meta({ description: "Only list the reports with this reason.", example: "BROKEN" }),
+  search: z.string().trim().min(1).max(100).optional().meta({
+    description:
+      "Only list the reports on chapters whose title or media title contains this text, or whose number is this number.",
+    example: "one punch",
   }),
 })
 const pageReportSchema = z.object({
@@ -66,15 +75,7 @@ const pageReportSchema = z.object({
       }),
     })
     .meta({ description: "The chapter the page belongs to." }),
-  reporter: z
-    .object({
-      id: z.uuid().meta({ description: "The ID of the user." }),
-      username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
-      displayUsername: z
-        .string()
-        .meta({ description: "The display name of the user.", example: "Kaito" }),
-    })
-    .meta({ description: "The user who sent the report." }),
+  reporter: userSummarySchema.meta({ description: "The user who sent the report." }),
 })
 
 export const listPageReportsHandler = new Hono().get(
@@ -82,7 +83,7 @@ export const listPageReportsHandler = new Hono().get(
   describeRoute({
     summary: "List page reports",
     description:
-      "Lists the reports about broken or wrong chapter pages with the given status, oldest first for open reports and newest first otherwise.\n\n**Required roles:** uploader, moderator, admin.",
+      "Lists the reports about broken or wrong chapter pages, oldest first when only open reports are listed and newest first otherwise.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Page reports"],
     responses: {
       200: {
@@ -104,13 +105,15 @@ export const listPageReportsHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage, status } = c.var.query
+    const { page, perPage, status, reason, search } = c.var.query
     const base = db
       .selectFrom("pageReports")
       .innerJoin("chapters", "chapters.id", "pageReports.chapterId")
       .innerJoin("medias", "medias.id", "chapters.mediaId")
       .innerJoin("users", "users.id", "pageReports.reporterId")
-      .where("pageReports.status", "=", status)
+      .where((eb) => (status === undefined ? eb.and([]) : eb("pageReports.status", "=", status)))
+      .where((eb) => (reason === undefined ? eb.and([]) : eb("pageReports.reason", "=", reason)))
+      .where((eb) => matchChapterSearch(eb, search))
       .where("chapters.deletedAt", "is", null)
       .where("medias.deletedAt", "is", null)
     const [rows, totalRow] = await Promise.all([
@@ -131,6 +134,9 @@ export const listPageReportsHandler = new Hono().get(
           "users.id as reporterId",
           "users.username",
           "users.displayUsername",
+          "users.image",
+          "users.nameEffect",
+          "users.avatarBorder",
           sql<
             number | null
           >`(select ${sql.ref("p.ord")}::int from unnest(${sql.ref("chapters.pages")}) with ordinality as p(page, ord) where ${sql.ref("p.page")}->>'id' = ${sql.ref("pageReports.pageId")}::text)`.as(
@@ -177,6 +183,9 @@ export const listPageReportsHandler = new Hono().get(
           id: row.reporterId,
           username: row.username,
           displayUsername: row.displayUsername,
+          image: row.image,
+          nameEffect: row.nameEffect,
+          avatarBorder: row.avatarBorder,
         },
       })),
       { page, perPage, total: Number(totalRow.count) },
