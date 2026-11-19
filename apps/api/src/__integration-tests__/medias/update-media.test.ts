@@ -149,6 +149,23 @@ describe("PATCH /medias/:id", () => {
     expect(media.links).toEqual({ kuroMangas: 2433 })
   })
 
+  test("keeps a link another media already shared", async ({ app, services }) => {
+    const { uploader, mediaId } = await setup(services)
+    const other = await seedMedia(services, uploader.userId)
+
+    await services.db
+      .updateTable("medias")
+      .set({ links: { anilist: 42 } })
+      .where("id", "in", [mediaId, other])
+      .execute()
+
+    const res = await patch(app, mediaId, uploader.headers, {
+      links: { anilist: 42, kuroMangas: 2433 },
+    })
+
+    expect(res.status).toBe(200)
+  })
+
   test("refuses links that belong to another media", async ({ app, services }) => {
     const { uploader, mediaId } = await setup(services)
     const other = await seedMedia(services, uploader.userId)

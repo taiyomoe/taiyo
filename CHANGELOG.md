@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/taiyomoe/taiyo/compare/v2.2.0...v2.2.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* check only the links a media edit changes for conflicts ([#3556](https://github.com/taiyomoe/taiyo/issues/3556)) ([e363cef](https://github.com/taiyomoe/taiyo/commit/e363cef56a13b011a72f38a2b9cda4aa49ba54f0))
+
 ## [2.2.0](https://github.com/taiyomoe/taiyo/compare/v2.1.0...v2.2.0) (2026-11-18)
 
 
