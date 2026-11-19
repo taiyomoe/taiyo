@@ -356,7 +356,15 @@ export const checkMediaEdit = async (db: Kysely<DB>, mediaId: string, edit: Medi
     }
   }
 
-  const links = Object.entries(edit.links ?? {})
+  // Only the links that change are checked: two medias already sharing one
+  // (from before the check existed) can still be edited.
+  const current = edit.links
+    ? await db.selectFrom("medias").select("links").where("id", "=", mediaId).executeTakeFirst()
+    : undefined
+  const currentLinks: Record<string, unknown> = current?.links ?? {}
+  const links = Object.entries(edit.links ?? {}).filter(
+    ([key, value]) => currentLinks[key] !== value,
+  )
 
   if (links.length > 0) {
     const existing = await db
