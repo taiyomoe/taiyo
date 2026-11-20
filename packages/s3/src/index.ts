@@ -1,4 +1,5 @@
 import {
+  CopyObjectCommand,
   CreateBucketCommand,
   DeleteObjectsCommand,
   GetObjectCommand,
@@ -27,6 +28,7 @@ export const getS3Client = (endpoint = env.S3_ENDPOINT) =>
 export const getS3Bucket = () => env.S3_BUCKET_NAME
 
 export {
+  CopyObjectCommand,
   CreateBucketCommand,
   DeleteObjectsCommand,
   GetObjectCommand,

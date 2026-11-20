@@ -53,6 +53,18 @@ const mediaErrors = {
     message: "The media is not in a deleted state.",
     code: 409,
   },
+  MEDIA_MERGE_INTO_ITSELF: {
+    message: "A media cannot be merged into itself.",
+    code: 422,
+  },
+  MEDIA_MERGE_BUSY: {
+    message: "One of the medias still has chapters or a MangaDex sync being processed.",
+    code: 409,
+  },
+  MEDIA_FLAG_MISMATCH: {
+    message: "The medias to merge do not have the same flag as this media.",
+    code: 409,
+  },
   MEDIA_LOCKED: {
     message: "This media is locked following a copyright notice.",
     code: 451,
