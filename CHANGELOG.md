@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/taiyomoe/taiyo/compare/v2.2.1...v2.3.0) (2026-11-20)
+
+
+### Features
+
+* merge duplicate medias into one ([#3558](https://github.com/taiyomoe/taiyo/issues/3558)) ([b2d1bd7](https://github.com/taiyomoe/taiyo/commit/b2d1bd78bbf27a349188e77af79cbeb23b1e9ab5))
+
+
+### Bug Fixes
+
+* fold a copy of a release whatever its credit pages when merging medias ([#3560](https://github.com/taiyomoe/taiyo/issues/3560)) ([15b2109](https://github.com/taiyomoe/taiyo/commit/15b2109283f89be298bd684bce0c3ab2c77250c8))
+
 ## [2.2.1](https://github.com/taiyomoe/taiyo/compare/v2.2.0...v2.2.1) (2026-11-19)
 
 

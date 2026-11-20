@@ -94,6 +94,7 @@ export const buildRules = (actor: Actor | null) => {
       suggest: active !== null,
       delete: is("UPLOADER", "ADMIN"),
       restore: is("ADMIN"),
+      merge: is("ADMIN"),
       flag: is("MODERATOR", "ADMIN"),
       reindex: is("ADMIN"),
       syncMangaDex: is("UPLOADER", "ADMIN"),
