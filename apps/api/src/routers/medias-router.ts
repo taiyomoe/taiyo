@@ -25,6 +25,7 @@ import { listMangaDexSyncsHandler } from "../handlers/list-mangadex-syncs-handle
 import { listMediaStaffsHandler } from "../handlers/list-media-staffs-handler"
 import { listShowcaseMediasHandler } from "../handlers/list-showcase-medias-handler"
 import { markMediaReadHandler } from "../handlers/mark-media-read-handler"
+import { mergeMediasHandler } from "../handlers/merge-medias-handler"
 import { reindexMediaHandler } from "../handlers/reindex-media-handler"
 import { restoreMediaHandler } from "../handlers/restore-media-handler"
 import { restoreMediasHandler } from "../handlers/restore-medias-handler"
@@ -54,6 +55,7 @@ export const mediasRouter = new Hono()
   .route("/", deleteMediaHandler)
   .route("/", getMediaDeletionImpactHandler)
   .route("/", restoreMediaHandler)
+  .route("/", mergeMediasHandler)
   .route("/", flagMediaHandler)
   .route("/", reindexMediaHandler)
   .route("/", listCoversHandler)

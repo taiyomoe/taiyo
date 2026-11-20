@@ -223,6 +223,66 @@ export const diffMediaEdit = (current: MediaEdit, proposed: MediaEdit) =>
     editedFields(proposed).filter((field) => !sameValue(current[field], proposed[field])),
   )
 
+const firstOf = <T>(items: readonly T[], key: (item: T) => string) => {
+  const seen = new Set<string>()
+
+  return items.filter((item) => {
+    const value = key(item)
+
+    if (seen.has(value)) {
+      return false
+    }
+
+    seen.add(value)
+
+    return true
+  })
+}
+
+/**
+ * The details of a media once its duplicates are merged into it: the media
+ * keeps its own, and takes from the duplicates, in order, the titles, synopses,
+ * tags, links, staff credits and dates it does not have.
+ */
+export const mergeMediaEdits = (
+  media: Required<MediaEdit>,
+  duplicates: ReadonlyArray<Required<MediaEdit>>,
+) => {
+  const edits = [media, ...duplicates]
+  const merged: MediaEdit = {
+    titles: firstOf(
+      edits.flatMap((edit, index) =>
+        edit.titles.map((title) => ({ ...title, isMainTitle: index === 0 && title.isMainTitle })),
+      ),
+      titleKey,
+    ).slice(0, config.input.maxMediaTitles),
+    synopsis: Object.fromEntries(
+      SUPPORTED_LANGUAGES.flatMap((language) => {
+        const text = edits
+          .map((edit) => edit.synopsis[language])
+          .find((value) => value !== undefined && value !== "")
+
+        return text === undefined ? [] : [[language, text]]
+      }),
+    ),
+    tags: firstOf(
+      edits.flatMap((edit) => edit.tags),
+      (tag) => tag.key,
+    ).slice(0, config.input.maxMediaTags),
+    links: [...edits]
+      .reverse()
+      .reduce<MediaLinks>((links, edit) => ({ ...links, ...edit.links }), {}),
+    staffs: firstOf(
+      edits.flatMap((edit) => edit.staffs),
+      (staff) => `${staff.role}:${staff.staffId}`,
+    ).slice(0, config.input.maxMediaStaffs),
+    startDate: edits.map((edit) => edit.startDate).find((date) => date !== null) ?? null,
+    endDate: edits.map((edit) => edit.endDate).find((date) => date !== null) ?? null,
+  }
+
+  return merged
+}
+
 const isoTimestamp = (column: "startDate" | "endDate") =>
   sql<string | null>`to_char(${sql.ref(`medias.${column}`)}, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`.as(
     column,

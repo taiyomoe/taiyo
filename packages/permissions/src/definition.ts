@@ -59,6 +59,7 @@ export type PermissionsDefinition = ValidateDefinition<{
     "suggest",
     "delete",
     "restore",
+    "merge",
     "flag",
     "reindex",
     "syncMangaDex",
