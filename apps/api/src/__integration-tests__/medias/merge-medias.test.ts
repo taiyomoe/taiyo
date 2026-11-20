@@ -313,6 +313,59 @@ describe("POST /medias/:id/merge", () => {
     expect(chapters.find((row) => row.id === copy)?.deletedAt).not.toBeNull()
   })
 
+  test("folds a copy with credit pages more into the media's copy", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services, { role: "ADMIN" })
+    const reader = await signInAs(services)
+    const mediaId = await seedMedia(services, userId)
+    const duplicateId = await seedMedia(services, userId)
+    const keptPages = [{ id: randomUUID() }, { id: randomUUID() }]
+    const longerPages = [{ id: randomUUID() }, { id: randomUUID() }, { id: randomUUID() }]
+    const kept = await seedChapter(services, {
+      mediaId,
+      uploaderId: userId,
+      number: 124,
+      pages: keptPages,
+    })
+    const longer = await seedChapter(services, {
+      mediaId: duplicateId,
+      uploaderId: userId,
+      number: 124,
+      pages: longerPages,
+    })
+
+    await services.db
+      .insertInto("pageBookmarks")
+      .values([
+        { userId: reader.userId, chapterId: longer, pageId: longerPages[1]?.id ?? "" },
+        { userId: reader.userId, chapterId: longer, pageId: longerPages[2]?.id ?? "" },
+      ])
+      .execute()
+
+    const res = await merge(app, headers, mediaId, [duplicateId])
+
+    expect(res.status).toBe(201)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data).toMatchObject({ movedChapters: 0, foldedChapters: 1 })
+
+    const bookmarks = await services.db
+      .selectFrom("pageBookmarks")
+      .select(["chapterId", "pageId"])
+      .where("userId", "=", reader.userId)
+      .orderBy("createdAt")
+      .execute()
+
+    expect(bookmarks).toEqual(
+      expect.arrayContaining([
+        { chapterId: kept, pageId: keptPages[1]?.id },
+        { chapterId: kept, pageId: longerPages[2]?.id },
+      ]),
+    )
+  })
+
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     const res = await api(app, `/medias/${randomUUID()}/merge`, {
       method: "POST",

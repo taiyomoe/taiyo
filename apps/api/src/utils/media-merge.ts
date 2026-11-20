@@ -55,10 +55,10 @@ export const isMergeBusy = async (db: Kysely<DB>, mediaIds: readonly string[]) =
 /**
  * Splits the live chapters of the duplicates into the ones that move to the
  * media and the ones that fold into a copy of the same release it already
- * has: same language, number, status, credited groups and pages count (or
- * external link). The media's own chapters come first, then each duplicate's
- * in order, so a release the media lacks is taken from the first duplicate
- * that has it.
+ * has: same language, number, status, credited groups and external link. A
+ * copy with a scanlator's credit pages more or less is still that release.
+ * The media's own chapters come first, then each duplicate's in order, so a
+ * release the media lacks is taken from the first duplicate that has it.
  */
 export const planChapterMerge = async (
   db: Kysely<DB>,
@@ -96,7 +96,7 @@ export const planChapterMerge = async (
       chapter.language,
       chapter.number,
       chapter.status,
-      chapter.isExternal ? chapter.externalUrl : (chapter.pages?.length ?? 0),
+      chapter.isExternal ? chapter.externalUrl : null,
       [...(groupsOf.get(chapter.id) ?? [])].sort(),
     ])
   const releases = new Map<string, MergedChapter>()
@@ -271,7 +271,9 @@ const moveHistories = async (
 /**
  * Folds a duplicate copy of a release into the copy kept: its readers,
  * bookmarks, page reports, reading rewards, notifications and comments move
- * to the kept copy, page by page, and the duplicate copy is deleted.
+ * to the kept copy, page by page, and the duplicate copy is deleted. A page
+ * matches the kept copy's page at the same position; one past the kept copy's
+ * last page keeps its ID.
  */
 export const foldChapter = async (
   db: Kysely<DB>,
