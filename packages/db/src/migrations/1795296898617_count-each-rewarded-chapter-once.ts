@@ -34,6 +34,14 @@ const countChapters = async (db: Kysely<unknown>, distinct: boolean) => {
       ))`
     : `count(*)`
 
+  // Postgres checks the inserted row before turning it into an update on conflict: a credit
+  // adding no new chapter to an existing total proposes 0 chapters.
+  await sql`ALTER TABLE "readerTotals" DROP CONSTRAINT "readerTotals_chapters_check"`.execute(db)
+  await sql`
+    ALTER TABLE "readerTotals" ADD CONSTRAINT "readerTotals_chapters_check"
+      CHECK ("chapters" ${sql.raw(distinct ? ">=" : ">")} 0)
+  `.execute(db)
+
   await sql`
     CREATE OR REPLACE FUNCTION reader_totals_add() RETURNS trigger AS $$
     BEGIN
