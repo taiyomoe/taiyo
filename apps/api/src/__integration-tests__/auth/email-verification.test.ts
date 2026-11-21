@@ -1,42 +1,46 @@
-import type * as Email from "@taiyomoe/email"
-import type { Hono } from "hono"
+import { createAuth } from "@taiyomoe/auth/server"
 import { randomInt, randomUUID } from "node:crypto"
-import { describe, expect, vi } from "vitest"
+import { describe, expect } from "vitest"
 import { test } from "../setup"
 
-const { sendEmail } = vi.hoisted(() => ({ sendEmail: vi.fn<typeof Email.sendEmail>() }))
-
-vi.mock("@taiyomoe/email", async (importOriginal) => ({
-  ...(await importOriginal<typeof Email>()),
-  sendEmail,
-}))
-
+const ORIGIN = "http://localhost"
 const PASSWORD = "password123"
-const signIn = async (app: Hono, email: string) => {
-  const res = await app.request("/api/auth/sign-in/email", {
-    method: "POST",
-    headers: {
-      origin: "http://localhost",
-      "content-type": "application/json",
-      "cf-connecting-ip": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
-    },
-    body: JSON.stringify({ email, password: PASSWORD }),
-  })
-  const body: unknown = await res.json()
-
-  return { status: res.status, body }
-}
 
 describe("Email sign-in of an unverified account", () => {
   test("sends a new verification link, then refuses to resend it within the hour", async ({
-    app,
     services,
   }) => {
-    const { db, auth } = services
+    const { db } = services
+    const sent: Array<{ to: string; subject: string }> = []
+    const auth = createAuth({
+      db,
+      trustedOrigins: [ORIGIN],
+      sendEmail: ({ to, subject }) => {
+        sent.push({ to, subject })
+
+        return Promise.resolve()
+      },
+    })
     const userId = randomUUID()
     const handle = `u${userId.replace(/-/g, "").slice(0, 12)}`
     const email = `${handle}@test.local`
     const { password } = await auth.$context
+    const signIn = async () => {
+      const res = await auth.handler(
+        new Request(`${ORIGIN}/api/auth/sign-in/email`, {
+          method: "POST",
+          headers: {
+            origin: ORIGIN,
+            "content-type": "application/json",
+            "cf-connecting-ip": `10.${randomInt(256)}.${randomInt(256)}.${randomInt(1, 255)}`,
+          },
+          body: JSON.stringify({ email, password: PASSWORD }),
+        }),
+      )
+      const body: unknown = await res.json()
+
+      return { status: res.status, body }
+    }
 
     await db
       .insertInto("users")
@@ -62,20 +66,13 @@ describe("Email sign-in of an unverified account", () => {
       })
       .execute()
 
-    expect(await signIn(app, email)).toMatchObject({
-      status: 403,
-      body: { code: "EMAIL_NOT_VERIFIED" },
-    })
-    await vi.waitFor(() => {
-      expect(sendEmail).toHaveBeenCalledWith(
-        expect.objectContaining({ to: email, subject: "Verify your email" }),
-      )
-    })
+    expect(await signIn()).toMatchObject({ status: 403, body: { code: "EMAIL_NOT_VERIFIED" } })
+    expect(sent).toEqual([{ to: email, subject: "Verify your email" }])
 
-    expect(await signIn(app, email)).toMatchObject({
+    expect(await signIn()).toMatchObject({
       status: 403,
       body: { code: "VERIFICATION_EMAIL_ALREADY_SENT" },
     })
-    expect(sendEmail).toHaveBeenCalledTimes(1)
+    expect(sent).toHaveLength(1)
   })
 })

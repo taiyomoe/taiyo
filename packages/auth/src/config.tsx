@@ -6,7 +6,7 @@ import {
   ChangeEmailEmail,
   MagicLinkEmail,
   ResetPasswordEmail,
-  sendEmail,
+  sendEmail as sendSesEmail,
   SignUpEmail,
 } from "@taiyomoe/email"
 import { createPermissions, toRole } from "@taiyomoe/permissions"
@@ -74,9 +74,11 @@ export const rateLimitRules = {
 export const createAuth = ({
   db,
   trustedOrigins = [],
+  sendEmail = sendSesEmail,
 }: {
   db: Kysely<DB>
   trustedOrigins?: string[]
+  sendEmail?: typeof sendSesEmail
 }) =>
   betterAuth({
     appName: "Taiyō",
