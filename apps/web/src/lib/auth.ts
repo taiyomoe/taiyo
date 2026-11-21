@@ -52,6 +52,7 @@ export type AuthResult = { ok: true; twoFactor?: true } | { ok: false; message: 
 const messagesByCode: Record<string, () => string> = {
   INVALID_EMAIL_OR_PASSWORD: m.auth_error_invalid_credentials,
   EMAIL_NOT_VERIFIED: m.auth_error_email_not_verified,
+  VERIFICATION_EMAIL_ALREADY_SENT: m.auth_error_verification_email_already_sent,
   USER_ALREADY_EXISTS: m.auth_error_email_taken,
   USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: m.auth_error_email_taken,
   INVALID_CODE: m.user_settings_2fa_invalid_code,

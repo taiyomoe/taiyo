@@ -102,6 +102,8 @@ export const createAuth = ({
     },
     emailVerification: {
       sendOnSignUp: true,
+      // The sign-in hook below lets an unverified sign-in through once an hour, to resend the link.
+      sendOnSignIn: true,
       autoSignInAfterVerification: true,
       sendVerificationEmail: async (data) => {
         await sendEmail({
