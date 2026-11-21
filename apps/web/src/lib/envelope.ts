@@ -42,7 +42,13 @@ function assertSuccessBody<TBody extends SuccessBody | FailureBody>(
 export const unwrapEnvelope = async <TBody extends SuccessBody | FailureBody>(
   response: EnvelopeResponse<TBody>,
 ): Promise<Extract<TBody, { success: true }>> => {
-  const body = await response.json()
+  // A proxy in front of the api (Cloudflare's 52x pages, a gateway timeout) answers with HTML.
+  const body = await response.json().catch(() => {
+    throw new ApiError(
+      { success: false, code: "NOT_AN_ENVELOPE", message: "The response isn't JSON" },
+      response.status,
+    )
+  })
 
   assertSuccessBody(body, response.status)
 

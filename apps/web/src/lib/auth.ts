@@ -1,5 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { m } from "../paraglide/messages"
+import { AUTH_ERROR_MESSAGES, SOCIAL_ERROR_MESSAGES } from "./error-messages"
+import { getCodeMessage } from "./errors"
 import { sessionQueryOptions } from "./session"
 
 export type SocialProvider = "discord" | "google"
@@ -49,60 +51,38 @@ export type AuthRouter = {
 
 export type AuthResult = { ok: true; twoFactor?: true } | { ok: false; message: string }
 
-const messagesByCode: Record<string, () => string> = {
-  INVALID_EMAIL_OR_PASSWORD: m.auth_error_invalid_credentials,
-  EMAIL_NOT_VERIFIED: m.auth_error_email_not_verified,
-  USER_ALREADY_EXISTS: m.auth_error_email_taken,
-  USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: m.auth_error_email_taken,
-  INVALID_CODE: m.user_settings_2fa_invalid_code,
-  INVALID_BACKUP_CODE: m.user_settings_2fa_invalid_backup_code,
-  TOO_MANY_ATTEMPTS_REQUEST_NEW_CODE: m.user_settings_2fa_too_many_attempts,
-  ACCOUNT_TEMPORARILY_LOCKED: m.user_settings_2fa_locked,
-  INVALID_TWO_FACTOR_COOKIE: m.user_settings_2fa_expired,
-  MISSING_RESPONSE: m.auth_error_captcha,
-  VERIFICATION_FAILED: m.auth_error_captcha,
-  INVALID_TOKEN: m.auth_error_reset_link_invalid,
-}
-
-export const getAuthErrorMessage = (error: AuthError) => {
-  if (error.status === 429) {
-    return m.auth_error_rate_limited()
-  }
-
-  const message = error.code === undefined ? undefined : messagesByCode[error.code]
-
-  return message === undefined ? m.auth_error_generic() : message()
-}
-
-const socialErrorMessages: Record<string, (inputs: { provider: string }) => string> = {
-  access_denied: m.auth_error_social_cancelled,
-  account_not_linked: m.auth_error_social_not_linked,
-  SOCIAL_EMAIL_NOT_VERIFIED: m.auth_error_social_email_unverified,
-  email_not_found: m.auth_error_social_no_email,
-  unable_to_create_user: m.auth_error_social_create_failed,
-  BANNED_USER: m.auth_error_social_banned,
-  state_not_found: m.auth_error_social_session,
-  state_mismatch: m.auth_error_social_session,
-  state_security_mismatch: m.auth_error_social_session,
-  state_invalid: m.auth_error_social_session,
-  invalid_code: m.auth_error_social_session,
-}
 const providerNames: Record<SocialProvider, () => string> = {
   google: m.global_google,
   discord: m.global_discord,
 }
 
+export const getAuthErrorMessage = (
+  error: AuthError,
+  messages: Record<string, () => string> = {},
+) =>
+  // Better Auth's rate limiter answers without a code.
+  error.status === 429 ? m.auth_error_rate_limited() : getCodeMessage(error, messages)
+
 export const getSocialErrorMessage = (code: string, provider: SocialProvider | undefined) => {
   const inputs = {
     provider: provider === undefined ? "Google/Discord" : providerNames[provider](),
   }
-  const message = socialErrorMessages[code]
+  const social = SOCIAL_ERROR_MESSAGES[code]
 
-  return message === undefined ? m.auth_error_social_unknown({ ...inputs, code }) : message(inputs)
+  if (social !== undefined) {
+    return social(inputs)
+  }
+
+  const message = AUTH_ERROR_MESSAGES[code]
+
+  return message === undefined ? m.auth_error_social_unknown({ ...inputs, code }) : message()
 }
 
-const toResult = ({ error }: AuthResponse): AuthResult =>
-  error === null ? { ok: true } : { ok: false, message: getAuthErrorMessage(error) }
+const toResult = (
+  { error }: AuthResponse,
+  messages: Record<string, () => string> = {},
+): AuthResult =>
+  error === null ? { ok: true } : { ok: false, message: getAuthErrorMessage(error, messages) }
 const captchaHeaders = (captchaToken: string | null) =>
   captchaToken !== null && captchaToken !== "" ? { "x-captcha-response": captchaToken } : {}
 const needsTwoFactor = (data: unknown) =>
@@ -188,7 +168,9 @@ export const createAuthActions = ({
         ),
       ),
     resetPassword: async (values: { newPassword: string; token: string }) =>
-      toResult(await client.resetPassword(values)),
+      toResult(await client.resetPassword(values), {
+        INVALID_TOKEN: m.auth_error_reset_link_invalid,
+      }),
     signInSocial: async (provider: SocialProvider) => {
       const errorCallbackURL = new URL("/auth/sign-in", getOrigin())
 

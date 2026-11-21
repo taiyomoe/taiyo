@@ -17,7 +17,10 @@ export const seedReadingTarget = async (
   return { mediaId, chapterId }
 }
 
-/** Credits `chapters` chapter reads of `pages` pages each to the user, all at `at`. */
+// Chapters count once each, so every call credits chapter numbers no call credited before.
+let nextNumber = 1
+
+/** Credits `chapters` new chapter reads of `pages` pages each to the user, all at `at`. */
 export const creditChapters = async (
   { db }: Services,
   {
@@ -34,6 +37,10 @@ export const creditChapters = async (
     pages?: number
   },
 ) => {
+  const first = nextNumber
+
+  nextNumber += chapters
+
   await db
     .insertInto("readingRewards")
     .values(
@@ -41,7 +48,7 @@ export const creditChapters = async (
         userId,
         chapterId: target.chapterId,
         mediaId: target.mediaId,
-        number: index + 1,
+        number: first + index,
         pages,
         points: 1,
         createdAt: at,

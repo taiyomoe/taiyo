@@ -1,7 +1,13 @@
 import { QueryClient } from "@tanstack/react-query"
 import { describe, expect, it } from "vitest"
 import { m } from "../../paraglide/messages"
-import { type AuthClient, type AuthError, createAuthActions, getAuthErrorMessage } from "../auth"
+import {
+  type AuthClient,
+  type AuthError,
+  createAuthActions,
+  getAuthErrorMessage,
+  getSocialErrorMessage,
+} from "../auth"
 import { sessionQueryOptions } from "../session"
 
 const origin = "http://localhost"
@@ -156,7 +162,7 @@ describe("createAuthActions", () => {
   it("keeps the session when sign-out fails", async () => {
     const { actions, navigation, hasCachedSession } = setup({ status: 500 })
 
-    expect(await actions.signOut()).toEqual({ ok: false, message: m.auth_error_generic() })
+    expect(await actions.signOut()).toEqual({ ok: false, message: m.error_server() })
     expect(hasCachedSession()).toBe(true)
     expect(navigation).toEqual([])
   })
@@ -237,15 +243,46 @@ describe("getAuthErrorMessage", () => {
   it.each([
     [{ code: "INVALID_EMAIL_OR_PASSWORD", status: 401 }, m.auth_error_invalid_credentials()],
     [{ code: "EMAIL_NOT_VERIFIED", status: 403 }, m.auth_error_email_not_verified()],
+    [
+      { code: "VERIFICATION_EMAIL_ALREADY_SENT", status: 403 },
+      m.auth_error_verification_email_already_sent(),
+    ],
     [{ code: "USER_ALREADY_EXISTS", status: 422 }, m.auth_error_email_taken()],
     [{ code: "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL", status: 422 }, m.auth_error_email_taken()],
     [{ code: "MISSING_RESPONSE", status: 400 }, m.auth_error_captcha()],
     [{ code: "VERIFICATION_FAILED", status: 403 }, m.auth_error_captcha()],
-    [{ code: "INVALID_TOKEN", status: 400 }, m.auth_error_reset_link_invalid()],
+    [{ code: "INVALID_TOKEN", status: 400 }, m.error_auth_invalid_token()],
+    [
+      { code: "INVALID_USERNAME_OR_PASSWORD", status: 401 },
+      m.error_auth_invalid_username_credentials(),
+    ],
+    [{ code: "BANNED_USER", status: 403 }, m.auth_error_social_banned()],
+    [{ code: "FORBIDDEN_TARGET", status: 403 }, m.user_admin_forbidden()],
     [{ status: 429 }, m.auth_error_rate_limited()],
-    [{ code: "SOMETHING_NEW", status: 400 }, m.auth_error_generic()],
-    [{ status: 500 }, m.auth_error_generic()],
+    [{ code: "SOMETHING_NEW", status: 400 }, m.error_api_bad_request()],
+    [{ code: "SOMETHING_NEW", status: 418 }, m.error_generic()],
+    [{ status: 500 }, m.error_server()],
+    [{ status: 0 }, m.error_network()],
   ])("maps %o to a message", (error, message) => {
     expect(getAuthErrorMessage(error)).toBe(message)
+  })
+})
+
+describe("getSocialErrorMessage", () => {
+  it.each([
+    [
+      "account_already_linked_to_different_user",
+      "discord",
+      m.auth_error_social_linked_elsewhere({ provider: m.global_discord() }),
+    ],
+    ["state_mismatch", "google", m.auth_error_social_session({ provider: m.global_google() })],
+    ["TOKEN_EXPIRED", undefined, m.error_auth_token_expired()],
+    [
+      "brand_new",
+      undefined,
+      m.auth_error_social_unknown({ provider: "Google/Discord", code: "brand_new" }),
+    ],
+  ] as const)("maps %s from %s to a message", (code, provider, message) => {
+    expect(getSocialErrorMessage(code, provider)).toBe(message)
   })
 })

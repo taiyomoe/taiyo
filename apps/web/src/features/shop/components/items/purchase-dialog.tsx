@@ -17,7 +17,6 @@ import { type ShopItem, useBuyShopItem } from "@/features/shop/api/shop"
 import { ItemPreview, type ShopViewer } from "@/features/shop/components/items/item-preview"
 import { PointsAmount } from "@/features/shop/components/points-amount"
 import { createChestAudio } from "@/features/shop/lib/chest-audio"
-import { SHOP_ERROR_MESSAGES } from "@/features/shop/lib/shop-errors"
 import { useSoundPreference } from "@/features/shop/lib/use-sound-preference"
 import { getCosmeticLabel } from "@/features/users/lib/cosmetic-labels"
 import { getErrorMessage } from "@/lib/errors"
@@ -83,9 +82,7 @@ export function PurchaseDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogPanel>
-          <ErrorAlert
-            message={buy.isError ? getErrorMessage(buy.error, SHOP_ERROR_MESSAGES) : null}
-          />
+          <ErrorAlert message={buy.isError ? getErrorMessage(buy.error) : null} />
           <div sx={styles.preview}>
             <ItemPreview itemKey={item.key} kind={item.kind} size="5rem" viewer={viewer} />
           </div>

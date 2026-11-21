@@ -13,7 +13,6 @@ import { CheckboxField, PasswordField } from "@/components/fields/form-field"
 import { useChangePassword, useSetPassword } from "@/features/settings/api/account"
 import { SettingsSection } from "@/features/settings/components/settings-section"
 import { settingsStyles } from "@/features/settings/components/settings-styles"
-import { AUTH_SETTINGS_MESSAGES } from "@/features/settings/lib/auth-messages"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -102,9 +101,7 @@ function ChangePasswordForm() {
         title={m.user_settings_password_title()}
       >
         <div sx={settingsStyles.form}>
-          <ErrorAlert
-            message={change.isError ? getErrorMessage(change.error, AUTH_SETTINGS_MESSAGES) : null}
-          />
+          <ErrorAlert message={change.isError ? getErrorMessage(change.error) : null} />
           <PasswordField
             autoComplete="current-password"
             control={form.control}
@@ -170,9 +167,7 @@ function SetPasswordForm() {
         title={m.user_settings_password_title()}
       >
         <div sx={settingsStyles.form}>
-          <ErrorAlert
-            message={set.isError ? getErrorMessage(set.error, AUTH_SETTINGS_MESSAGES) : null}
-          />
+          <ErrorAlert message={set.isError ? getErrorMessage(set.error) : null} />
           <div sx={settingsStyles.row}>
             <PasswordField
               autoComplete="new-password"

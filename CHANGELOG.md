@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.4.0](https://github.com/taiyomoe/taiyo/compare/v2.3.0...v2.4.0) (2026-11-21)
+
+
+### Features
+
+* translate every api and auth error code in the web app ([#3562](https://github.com/taiyomoe/taiyo/issues/3562)) ([f687084](https://github.com/taiyomoe/taiyo/commit/f6870841e37fb956fab7c0b63d5eab12d7cbad61))
+
+
+### Bug Fixes
+
+* count a chapter credited over several reads once ([#3564](https://github.com/taiyomoe/taiyo/issues/3564)) ([eb7be3a](https://github.com/taiyomoe/taiyo/commit/eb7be3afea971a1e160646eb7f02f033528cb061))
+* resend the verification link when an unverified account signs in ([#3561](https://github.com/taiyomoe/taiyo/issues/3561)) ([07730ea](https://github.com/taiyomoe/taiyo/commit/07730ea5703414cf8fb68012d217d054c8096863))
+* show the toast of a failed auth redirect once ([#3565](https://github.com/taiyomoe/taiyo/issues/3565)) ([30611f7](https://github.com/taiyomoe/taiyo/commit/30611f7baccd64b150acaf80c5632aa6ce90b09c))
+
 ## [2.3.0](https://github.com/taiyomoe/taiyo/compare/v2.2.1...v2.3.0) (2026-11-20)
 
 

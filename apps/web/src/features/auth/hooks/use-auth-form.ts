@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useAuthRedirect } from "@/features/auth/hooks/use-auth-redirect"
 import { useAuthActions } from "@/hooks/use-auth-actions"
 import { type AuthResult, getSocialErrorMessage, type SocialProvider } from "@/lib/auth"
-import { m } from "@/paraglide/messages"
+import { getErrorMessage } from "@/lib/errors"
 
 export const useAuthForm = () => {
   const actions = useAuthActions(useAuthRedirect())
@@ -15,9 +15,9 @@ export const useAuthForm = () => {
   const run = async (action: () => Promise<AuthResult>) => {
     setError(null)
 
-    const result = await action().catch((): AuthResult => ({
+    const result = await action().catch((failure: unknown): AuthResult => ({
       ok: false,
-      message: m.auth_error_generic(),
+      message: getErrorMessage(failure),
     }))
 
     if (!result.ok) {

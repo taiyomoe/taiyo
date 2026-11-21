@@ -11,7 +11,6 @@ import { PasswordConfirmDialog } from "@/features/settings/components/security/p
 import { TwoFactorSetupDialog } from "@/features/settings/components/security/two-factor-setup-dialog"
 import { SettingsSection } from "@/features/settings/components/settings-section"
 import { settingsStyles } from "@/features/settings/components/settings-styles"
-import { AUTH_SETTINGS_MESSAGES } from "@/features/settings/lib/auth-messages"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -90,7 +89,7 @@ export function TwoFactorSection({
           confirmLabel={m.user_settings_2fa_disable()}
           description={m.user_settings_2fa_disable_description()}
           destructive
-          error={disable.isError ? getErrorMessage(disable.error, AUTH_SETTINGS_MESSAGES) : null}
+          error={disable.isError ? getErrorMessage(disable.error) : null}
           hasPassword={hasPassword}
           onClose={close}
           onConfirm={(password) => {
@@ -117,9 +116,7 @@ export function TwoFactorSection({
               ? m.user_settings_2fa_new_codes_description()
               : m.user_settings_2fa_codes_description()
           }
-          error={
-            regenerate.isError ? getErrorMessage(regenerate.error, AUTH_SETTINGS_MESSAGES) : null
-          }
+          error={regenerate.isError ? getErrorMessage(regenerate.error) : null}
           hasPassword={hasPassword && regenerate.data === undefined}
           onClose={close}
           onConfirm={(password) => {
