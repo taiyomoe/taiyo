@@ -237,6 +237,10 @@ describe("getAuthErrorMessage", () => {
   it.each([
     [{ code: "INVALID_EMAIL_OR_PASSWORD", status: 401 }, m.auth_error_invalid_credentials()],
     [{ code: "EMAIL_NOT_VERIFIED", status: 403 }, m.auth_error_email_not_verified()],
+    [
+      { code: "VERIFICATION_EMAIL_ALREADY_SENT", status: 403 },
+      m.auth_error_verification_email_already_sent(),
+    ],
     [{ code: "USER_ALREADY_EXISTS", status: 422 }, m.auth_error_email_taken()],
     [{ code: "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL", status: 422 }, m.auth_error_email_taken()],
     [{ code: "MISSING_RESPONSE", status: 400 }, m.auth_error_captcha()],

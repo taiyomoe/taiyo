@@ -6,7 +6,7 @@ import {
   ChangeEmailEmail,
   MagicLinkEmail,
   ResetPasswordEmail,
-  sendEmail,
+  sendEmail as sendSesEmail,
   SignUpEmail,
 } from "@taiyomoe/email"
 import { createPermissions, toRole } from "@taiyomoe/permissions"
@@ -74,9 +74,11 @@ export const rateLimitRules = {
 export const createAuth = ({
   db,
   trustedOrigins = [],
+  sendEmail = sendSesEmail,
 }: {
   db: Kysely<DB>
   trustedOrigins?: string[]
+  sendEmail?: typeof sendSesEmail
 }) =>
   betterAuth({
     appName: "Taiyō",
@@ -102,6 +104,8 @@ export const createAuth = ({
     },
     emailVerification: {
       sendOnSignUp: true,
+      // The sign-in hook below lets an unverified sign-in through once an hour, to resend the link.
+      sendOnSignIn: true,
       autoSignInAfterVerification: true,
       sendVerificationEmail: async (data) => {
         await sendEmail({
