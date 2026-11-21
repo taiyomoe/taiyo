@@ -138,13 +138,17 @@ function RootComponent() {
   const { session } = Route.useRouteContext()
 
   return (
-    <ToastProvider>
-      <CommandPaletteProvider>
-        {session === null ? null : <NotificationStream key={session.user.id} />}
-        <AuthRedirectError />
-        <Outlet />
-      </CommandPaletteProvider>
-    </ToastProvider>
+    <>
+      <ToastProvider>
+        <CommandPaletteProvider>
+          {session === null ? null : <NotificationStream key={session.user.id} />}
+          <Outlet />
+        </CommandPaletteProvider>
+      </ToastProvider>
+      {/* After the provider: React runs a child's effects before its parent's, so a toast shown
+          on mount from inside would be added before the provider listens, and never appear. */}
+      <AuthRedirectError />
+    </>
   )
 }
 

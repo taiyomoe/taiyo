@@ -17,7 +17,12 @@ export function AuthRedirectError() {
       return
     }
 
-    toastManager.add({ title: getSocialErrorMessage(code, undefined), type: "error" })
+    // The id makes a second run of this effect update the toast instead of stacking another one.
+    toastManager.add({
+      id: `auth-redirect-${code}`,
+      title: getSocialErrorMessage(code, undefined),
+      type: "error",
+    })
     params.delete("error")
 
     const search = params.size === 0 ? "" : `?${params.toString()}`
