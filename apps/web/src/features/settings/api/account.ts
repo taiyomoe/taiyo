@@ -88,7 +88,14 @@ export function useChangeEmail() {
 export function useLinkAccount() {
   return useMutation({
     mutationFn: (provider: "discord" | "google") =>
-      unwrapAuth(authClient.linkSocial({ provider, callbackURL: accountSettingsURL() })),
+      unwrapAuth(
+        authClient.linkSocial({
+          provider,
+          callbackURL: accountSettingsURL(),
+          // Without it, a failed link lands on the api's own error page.
+          errorCallbackURL: accountSettingsURL(),
+        }),
+      ),
   })
 }
 

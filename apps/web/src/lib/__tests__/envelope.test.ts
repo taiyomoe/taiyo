@@ -21,6 +21,12 @@ const failure = {
 }
 
 describe("unwrap", () => {
+  it("turns a response that isn't JSON into an ApiError with its status", async () => {
+    const html = { status: 520, json: () => Promise.reject(new SyntaxError("Unexpected token <")) }
+
+    await expect(unwrap(html)).rejects.toMatchObject({ name: "ApiError", status: 520 })
+  })
+
   it("returns data on a success envelope", async () => {
     await expect(unwrap(respond(200, success))).resolves.toEqual(success.data)
   })

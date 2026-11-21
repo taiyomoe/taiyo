@@ -10,18 +10,19 @@ import {
 } from "@taiyomoe/ui/components/ui/empty"
 import { Link } from "@tanstack/react-router"
 import { isNotFoundError } from "@/components/boundaries/not-found-page"
+import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
 export const isListNotFoundError = (error: unknown) => isNotFoundError(error, "LIST_NOT_FOUND")
 
-function ListErrorState({ notFound }: { notFound: boolean }) {
+function ListErrorState({ error, notFound }: { error: unknown; notFound: boolean }) {
   return (
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="icon">{notFound ? <List /> : <AlertCircle />}</EmptyMedia>
         <EmptyTitle>{notFound ? m.list_not_found_title() : m.error_heading()}</EmptyTitle>
         <EmptyDescription>
-          {notFound ? m.list_not_found_description() : m.error_unknown()}
+          {notFound ? m.list_not_found_description() : getErrorMessage(error)}
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
@@ -34,5 +35,5 @@ function ListErrorState({ notFound }: { notFound: boolean }) {
 }
 
 export function ListError({ error }: { error: unknown }) {
-  return <ListErrorState notFound={isListNotFoundError(error)} />
+  return <ListErrorState error={error} notFound={isListNotFoundError(error)} />
 }

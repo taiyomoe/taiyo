@@ -22,6 +22,7 @@ import { fromEntries, map, pipe } from "remeda"
 import type { FileRoutesById } from "@/routeTree.gen"
 import { env } from "@/env/client"
 import { UMAMI_PROXY_PATH } from "@/features/analytics/lib/umami"
+import { AuthRedirectError } from "@/features/auth/components/auth-redirect-error"
 import { CommandPaletteProvider } from "@/features/command-palette/components/command-palette-provider"
 import { NotificationStream } from "@/features/notifications/components/notification-stream"
 import { siteOgMeta } from "@/features/og/lib/og-meta"
@@ -140,6 +141,7 @@ function RootComponent() {
     <ToastProvider>
       <CommandPaletteProvider>
         {session === null ? null : <NotificationStream key={session.user.id} />}
+        <AuthRedirectError />
         <Outlet />
       </CommandPaletteProvider>
     </ToastProvider>
