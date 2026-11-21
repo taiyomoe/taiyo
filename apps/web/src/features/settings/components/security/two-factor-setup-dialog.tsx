@@ -21,7 +21,6 @@ import { useEnableTwoFactor, useVerifyTotp } from "@/features/settings/api/two-f
 import { BackupCodes } from "@/features/settings/components/security/backup-codes"
 import { QrCode } from "@/features/settings/components/security/qr-code"
 import { settingsStyles } from "@/features/settings/components/settings-styles"
-import { AUTH_SETTINGS_MESSAGES } from "@/features/settings/lib/auth-messages"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -136,9 +135,7 @@ export function TwoFactorSetupDialog({
           </DialogHeader>
           <DialogPanel>
             <div sx={settingsStyles.form}>
-              <ErrorAlert
-                message={error === null ? null : getErrorMessage(error, AUTH_SETTINGS_MESSAGES)}
-              />
+              <ErrorAlert message={error === null ? null : getErrorMessage(error)} />
               {step === "start" && hasPassword ? (
                 <Field>
                   <FieldLabel>{m.global_password()}</FieldLabel>

@@ -11,7 +11,6 @@ type AuthResponse<T> = {
 }
 
 const MESSAGES: Record<string, () => string> = {
-  FORBIDDEN_TARGET: m.user_admin_forbidden,
   BANNED_USER: m.user_admin_banned,
   PASSWORD_TOO_SHORT: () => m.user_admin_password_short({ min: config.auth.password.minLength }),
   PASSWORD_TOO_LONG: () => m.user_admin_password_long({ max: config.auth.password.maxLength }),

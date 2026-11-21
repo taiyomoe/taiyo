@@ -12,7 +12,6 @@ import { useOpeningSequence } from "@/features/shop/components/opening/use-openi
 import { SoundToggle } from "@/features/shop/components/sound-toggle"
 import { StageCanvas } from "@/features/shop/components/treasury/stage-canvas"
 import { toEquipPatch } from "@/features/shop/lib/equip-patch"
-import { SHOP_ERROR_MESSAGES } from "@/features/shop/lib/shop-errors"
 import { TIER_LABELS } from "@/features/shop/lib/tier-labels"
 import { useSoundPreference } from "@/features/shop/lib/use-sound-preference"
 import { useChestScene } from "@/features/shop/scene/use-chest-scene"
@@ -195,7 +194,7 @@ export function OpeningOverlay({
           <footer sx={styles.footer}>
             {stage === "failed" ? (
               <span role="alert" sx={styles.error}>
-                {getErrorMessage(sequence.error, SHOP_ERROR_MESSAGES)}
+                {getErrorMessage(sequence.error)}
               </span>
             ) : null}
             {equip.isError ? (
