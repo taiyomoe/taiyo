@@ -9,7 +9,10 @@ import { type Kysely, type RawBuilder, sql } from "kysely"
 
 /** The current value of each metric for one user, as a scalar subquery. */
 const metricSql = (userId: string): Record<AchievementMetric, RawBuilder<string>> => ({
-  chaptersRead: sql`(select count(*) from "readingRewards" where "userId" = ${userId})`,
+  // A chapter credited over several reads has several rows, and counts once.
+  chaptersRead: sql`(
+    select count(distinct ("mediaId", "number")) from "readingRewards" where "userId" = ${userId}
+  )`,
   chaptersUploaded: sql`(
     select count(*) from "chapters"
     where "uploaderId" = ${userId} and "deletedAt" is null and "status" = 'PUBLISHED'

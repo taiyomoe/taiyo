@@ -95,6 +95,28 @@ describe("GET /users/:id/achievements", () => {
     expect(asSelf.get("chaptersRead100")?.progress).toEqual({ value: 3, threshold: 100 })
   })
 
+  test("counts a chapter credited over several reads once", async ({ app, services }) => {
+    const user = await seedAchiever(services)
+    const { chapterId, mediaId } = await services.db
+      .selectFrom("readingRewards")
+      .select(["chapterId", "mediaId"])
+      .where("userId", "=", user.userId)
+      .executeTakeFirstOrThrow()
+
+    await services.db
+      .insertInto("readingRewards")
+      .values({ userId: user.userId, chapterId, mediaId, number: 0.5, pages: 3, points: 0 })
+      .execute()
+    await services.db
+      .insertInto("readingRewards")
+      .values({ userId: user.userId, chapterId, mediaId, number: 0.5, pages: 4, points: 0 })
+      .execute()
+
+    const achievements = await getAchievements(app, user.userId, user.headers)
+
+    expect(achievements.get("chaptersRead100")?.progress).toEqual({ value: 4, threshold: 100 })
+  })
+
   test("returns USER_NOT_FOUND for a banned or unknown user", async ({ app, services }) => {
     const banned = await signInAs(services, { banned: true })
 
