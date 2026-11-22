@@ -94,7 +94,7 @@ services:
       retries: 30
 
   rustfs:
-    image: rustfs/rustfs:1.0.4
+    image: rustfs/rustfs:1.0.5
     restart: unless-stopped
     environment:
       - RUSTFS_ACCESS_KEY=$RUSTFS_ACCESS_KEY
