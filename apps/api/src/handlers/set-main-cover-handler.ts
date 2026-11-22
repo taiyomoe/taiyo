@@ -48,6 +48,9 @@ export const setMainCoverHandler = new Hono().post(
 
     c.var.audit.set({ target: { mediaId: cover.mediaId } })
 
+    // Serializes main-cover changes of this media.
+    await db.selectFrom("medias").select("id").where("id", "=", cover.mediaId).forUpdate().execute()
+
     await db
       .updateTable("covers")
       .set({ isMainCover: false })

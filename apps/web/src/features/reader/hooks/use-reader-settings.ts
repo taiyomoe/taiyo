@@ -49,6 +49,14 @@ const schedulePush = () => {
     flushPush(false)
   }, PUSH_DELAY_MS)
 }
+
+export const resetReaderSettingsSync = () => {
+  clearTimeout(pendingPush)
+  pendingPush = undefined
+  edited = false
+  remoteSettled = false
+}
+
 const subscribe = (listener: () => void) => {
   const onStorage = (event: StorageEvent) => {
     if (event.key === STORAGE_KEY) {

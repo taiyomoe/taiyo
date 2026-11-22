@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest"
 import {
   toChapterNumber,
+  toExternalUrl,
   toGroupValues,
   toMediaLanguage,
   toMediaLinks,
@@ -88,5 +89,19 @@ describe("toGroupValues", () => {
       discord: "https://discord.gg/XN3zX9f",
       email: "bluesoloscans@gmail.com",
     })
+  })
+})
+
+describe("toExternalUrl", () => {
+  test("keeps http(s) links, trimmed", () => {
+    expect(toExternalUrl(" https://example.com/chapter/1 ")).toBe("https://example.com/chapter/1")
+    expect(toExternalUrl("http://example.com")).toBe("http://example.com")
+  })
+
+  test("refuses other schemes, non-URLs and over-long links", () => {
+    expect(toExternalUrl("ftp://example.com/chapter")).toBeNull()
+    expect(toExternalUrl("not a url")).toBeNull()
+    expect(toExternalUrl(`https://example.com/${"a".repeat(600)}`)).toBeNull()
+    expect(toExternalUrl(null)).toBeNull()
   })
 })

@@ -21,6 +21,7 @@ import { ChapterGroups } from "@/features/chapters/components/chapter-groups"
 import { ChapterNumber } from "@/features/chapters/components/chapter-number"
 import { Uploader } from "@/features/chapters/components/uploader"
 import { targetOf } from "@/features/groups/lib/chapter-target"
+import { toSafeHref } from "@/lib/safe-href"
 import { m } from "@/paraglide/messages"
 
 export type GroupChapter = LatestChapter | UpcomingChapter
@@ -73,6 +74,8 @@ export function GroupChapterRow({
   const open = (kind: GroupChapterDialogKind) => () => {
     onDialog(kind)
   }
+  const externalUrl =
+    scheduled || chapter.externalUrl === null ? null : toSafeHref(chapter.externalUrl)
   const actions: RowAction[] = [
     ...(scheduled
       ? []
@@ -84,16 +87,14 @@ export function GroupChapterRow({
             render: <Link params={{ chapterId: chapter.id }} to="/chapters/$chapterId" />,
           },
         ]),
-    ...(scheduled || chapter.externalUrl === null
+    ...(scheduled || externalUrl === null
       ? []
       : [
           {
             key: "external",
             label: m.submissions_open_external(),
             icon: Globe,
-            render: (
-              <a href={chapter.externalUrl} rel="noopener noreferrer nofollow" target="_blank" />
-            ),
+            render: <a href={externalUrl} rel="noopener noreferrer nofollow" target="_blank" />,
           },
         ]),
     ...(access.schedule

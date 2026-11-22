@@ -1,6 +1,8 @@
 import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
+import { seedMedia } from "../helpers/seed"
 import { test } from "../setup"
 
 const SEEDED_MAIN_COVER_ID = "a56cc54d-7776-4787-9b21-97a4674b80bc"
@@ -29,6 +31,36 @@ describe("POST /covers/:id/set-main", () => {
 
     expect(byId[SEEDED_NON_MAIN_COVER_ID]).toBe(true)
     expect(byId[SEEDED_MAIN_COVER_ID]).toBe(false)
+  }, 30_000)
+
+  test("keeps one main cover when two covers are made main at once", async ({ app, services }) => {
+    const { userId, headers } = await signInAs(services, { role: "ADMIN" })
+    const mediaId = await seedMedia(services, userId)
+    const covers = await services.db
+      .insertInto("covers")
+      .values([
+        { mediaId, uploaderId: userId, language: "en", isMainCover: true },
+        { mediaId, uploaderId: userId, language: "en" },
+        { mediaId, uploaderId: userId, language: "en" },
+      ])
+      .returning("id")
+      .execute()
+    const [, second, third] = covers
+    const setMain = (id: string) =>
+      api<{ id: string }>(app, `/covers/${id}/set-main`, { method: "POST", headers })
+    const results = await Promise.all([setMain(defined(second).id), setMain(defined(third).id)])
+
+    expect(results.map((res) => res.status)).toEqual([201, 201])
+
+    const mainCovers = await services.db
+      .selectFrom("covers")
+      .select("id")
+      .where("mediaId", "=", mediaId)
+      .where("isMainCover", "=", true)
+      .where("deletedAt", "is", null)
+      .execute()
+
+    expect(mainCovers).toHaveLength(1)
   }, 30_000)
 
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {

@@ -59,7 +59,8 @@ export const createWebPushSender = ({
       headers: Object.fromEntries(
         Object.entries(headers).filter(([name]) => name.toLowerCase() !== "content-length"),
       ),
-      body,
+      // Node's `Buffer` is not a DOM `BodyInit`, so hand `fetch` a plain copy of the bytes.
+      body: new Uint8Array(body),
       redirect: "manual",
       signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
     })

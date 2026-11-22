@@ -13,6 +13,7 @@ import {
   type MangaDexGroup,
   toChapterNumber,
   toChapterTitle,
+  toExternalUrl,
   toGroupValues,
   toMediaLanguage,
   toSupportedLanguage,
@@ -45,15 +46,22 @@ let queue: Queue<MangaDexSyncJobData> | undefined
 export const getMangaDexSyncProducer = () =>
   ({
     enqueue: async (data) => {
-      queue ??= new Queue<MangaDexSyncJobData>(MANGADEX_SYNC_QUEUE, {
-        connection: createBullConnection(),
-        defaultJobOptions: {
-          attempts: 3,
-          backoff: { type: "exponential", delay: 30_000 },
-          removeOnComplete: { age: 3_600, count: 1_000 },
-          removeOnFail: { age: 24 * 3_600 },
-        },
-      })
+      if (queue === undefined) {
+        queue = new Queue<MangaDexSyncJobData>(MANGADEX_SYNC_QUEUE, {
+          connection: createBullConnection(),
+          defaultJobOptions: {
+            attempts: 3,
+            backoff: { type: "exponential", delay: 30_000 },
+            removeOnComplete: { age: 3_600, count: 1_000 },
+            removeOnFail: { age: 24 * 3_600 },
+          },
+        })
+        queue.on("error", (err) => {
+          // oxlint-disable-next-line no-console
+          console.error(`${MANGADEX_SYNC_QUEUE} queue error:`, err.message)
+        })
+      }
+
       await queue.add("sync", data, { jobId: data.syncId })
     },
   }) satisfies MangaDexSyncProducer
@@ -198,6 +206,11 @@ const importChapter = async (ctx: SyncContext, chapter: MangaDexChapter, item: S
   }
 
   const isExternal = chapter.externalUrl !== null
+  const externalUrl = toExternalUrl(chapter.externalUrl)
+
+  if (isExternal && externalUrl === null) {
+    throw new SkipItem("The chapter's link is not an http(s) URL")
+  }
 
   if (!isExternal && (chapter.pages === 0 || chapter.pages > config.images.maxChapterPages)) {
     throw new SkipItem(`The chapter has ${chapter.pages} pages`)
@@ -211,6 +224,10 @@ const importChapter = async (ctx: SyncContext, chapter: MangaDexChapter, item: S
     if (!isExternal) {
       let source = await ctx.mangaDex.getPageSource(chapter.id)
 
+      if (source.urls.length === 0 || source.urls.length > config.images.maxChapterPages) {
+        throw new SkipItem(`MangaDex served ${source.urls.length} pages`)
+      }
+
       for (const [index, url] of source.urls.entries()) {
         const pageId = crypto.randomUUID()
         let body: Buffer
@@ -221,12 +238,19 @@ const importChapter = async (ctx: SyncContext, chapter: MangaDexChapter, item: S
           try {
             bytes = await ctx.mangaDex.download(source.urls[index] ?? url, {
               reportsTo: source.reportsTo,
+              maxBytes: config.images.maxChapterPageSizeBytes,
             })
           } catch {
             // A failing MangaDex@Home node is left for another one, which a new page source assigns.
             source = await ctx.mangaDex.getPageSource(chapter.id)
+
+            if (source.urls.length === 0 || source.urls.length > config.images.maxChapterPages) {
+              throw new Error(`MangaDex served ${source.urls.length} pages`)
+            }
+
             bytes = await ctx.mangaDex.download(source.urls[index] ?? url, {
               reportsTo: source.reportsTo,
+              maxBytes: config.images.maxChapterPageSizeBytes,
             })
           }
 
@@ -279,7 +303,7 @@ const importChapter = async (ctx: SyncContext, chapter: MangaDexChapter, item: S
           language,
           status: "PUBLISHED",
           isExternal,
-          externalUrl: chapter.externalUrl,
+          externalUrl,
           pages: isExternal ? null : pageIds.map((pageId) => ({ id: pageId })),
           createdAt:
             Number.isNaN(publishedAt.getTime()) || publishedAt > new Date()

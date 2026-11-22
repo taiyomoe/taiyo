@@ -1,4 +1,5 @@
 import { ListObjectsV2Command } from "@aws-sdk/client-s3"
+import { config } from "@taiyomoe/config"
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"
 import { invalidImage, tinyPng } from "../helpers/fixtures"
@@ -121,6 +122,30 @@ describe("POST /medias/:id/banners", () => {
 
     expect(res.body.code).toBe("VALIDATION_ERROR")
   })
+
+  test("returns VALIDATION_ERROR above the per-request image limit", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = new FormData()
+
+    for (let index = 0; index <= config.images.maxFilesPerRequest; index++) {
+      form.append(`banners.${index}.file`, await tinyPng())
+      form.append(`banners.${index}.contentRating`, "NORMAL")
+    }
+
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/banners`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(422)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("VALIDATION_ERROR")
+  }, 30_000)
 
   test("returns MEDIA_NOT_FOUND for an unknown media", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })

@@ -98,6 +98,26 @@ describe("drainSearchOutbox", () => {
   })
 
   test(
+    "keeps the rows when Meilisearch accepts the push and then fails it",
+    async ({ services }) => {
+      // An index keyed on a field media documents lack: Meilisearch enqueues the push, then fails it.
+      const mediasIndex = `${services.mediasIndex}_wrong_key`
+
+      await services.meili.createIndex(mediasIndex, { primaryKey: "missingKey" }).waitTask()
+
+      try {
+        await touchMedias(services, [SEEDED_MEDIA_ID])
+
+        await expect(drainSearchOutbox({ ...services, mediasIndex })).rejects.toThrow(/failed/)
+        expect(await countOutbox(services)).toBe(1)
+      } finally {
+        await services.meili.deleteIndex(mediasIndex).waitTask()
+      }
+    },
+    TIMEOUT,
+  )
+
+  test(
     "a staff rename over HTTP reaches the documents crediting them",
     async ({ app, services }) => {
       const credit = await services.db

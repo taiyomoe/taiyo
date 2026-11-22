@@ -171,6 +171,8 @@ const getReading = async (db: Kysely<DB>, userId: string, contentRatings: Conten
     .innerJoin("medias", "medias.id", "chapters.mediaId")
     .where("userHistories.userId", "=", userId)
     .where("userHistories.completed", "=", true)
+    .where("chapters.deletedAt", "is", null)
+    .where("chapters.status", "=", "PUBLISHED")
     .where("medias.deletedAt", "is", null)
     .where("medias.contentRating", "in", contentRatings)
   const since = new Date(Date.now() - ACTIVITY_DAYS * DAY_MS)
@@ -219,6 +221,8 @@ const getReading = async (db: Kysely<DB>, userId: string, contentRatings: Conten
       cross join lateral unnest("medias"."tags") as "tags"("tag")
       where "userHistories"."userId" = ${userId}
         and "userHistories"."completed"
+        and "chapters"."deletedAt" is null
+        and "chapters"."status" = 'PUBLISHED'
         and "medias"."deletedAt" is null
         and "medias"."contentRating"::text = any(${contentRatings})
         and "tag"->>'key' = any(${GENRE_KEYS})

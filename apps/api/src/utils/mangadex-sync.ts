@@ -22,6 +22,7 @@ import {
   type MangaDexClient,
   toChapterNumber,
   toContentRating,
+  toExternalUrl,
   toMangaDexLanguage,
   toMediaDemography,
   toMediaLanguage,
@@ -313,6 +314,7 @@ export const buildMangaDexPlan = async (
         language === null ||
         number === null ||
         chapter.isUnavailable ||
+        (isExternal && toExternalUrl(chapter.externalUrl) === null) ||
         (!isExternal && (chapter.pages === 0 || chapter.pages > config.images.maxChapterPages)) ||
         new Date(chapter.publishedAt) > new Date()
       ) {

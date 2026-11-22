@@ -134,6 +134,24 @@ describe("Audited routes", () => {
     expect(log?.event).toMatchObject({ audit: { actor: { impersonating: userId } } })
   })
 
+  test("records the target user without their personal data", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const email = "audit-target-person@test.local"
+    const target = await signInAs(services, { email })
+    const res = await api(app, `/users/${target.userId}/role`, {
+      method: "PATCH",
+      headers,
+      json: { role: "UPLOADER" },
+    })
+
+    expect(res.status).toBe(200)
+
+    const [log] = await findAuditLogs(services, "admin.ROLE_SET")
+
+    expect(log?.event).toMatchObject({ targetUser: { id: target.userId } })
+    expect(JSON.stringify(log?.event)).not.toContain(email)
+  })
+
   test("links the entry to the request id of the response", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const res = await app.request(`/users/${crypto.randomUUID()}/follow`, {

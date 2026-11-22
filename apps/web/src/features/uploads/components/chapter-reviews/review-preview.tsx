@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query"
 import { range } from "remeda"
 import { type ChapterSubmission, chapterQueryOptions } from "@/features/uploads/api/submissions"
 import { reviewStyles } from "@/features/uploads/components/chapter-reviews/review-styles"
+import { toSafeHref } from "@/lib/safe-href"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -67,6 +68,7 @@ const styles = stylex.create({
 export function ReviewPreview({ submission }: { submission: ChapterSubmission }) {
   const chapter = useQuery(chapterQueryOptions(submission.id))
   const pages = chapter.data?.pages
+  const externalUrl = submission.externalUrl === null ? null : toSafeHref(submission.externalUrl)
   let previews: ReactNode = <p sx={reviewStyles.muted}>{m.review_chapter_no_pages()}</p>
 
   if (pages === undefined) {
@@ -94,18 +96,18 @@ export function ReviewPreview({ submission }: { submission: ChapterSubmission })
     )
   }
 
-  if (submission.isExternal && submission.externalUrl !== null) {
+  if (submission.isExternal && externalUrl !== null) {
     return (
       <div sx={styles.external}>
         <p sx={reviewStyles.muted}>{m.review_chapter_external()}</p>
         <a
-          href={submission.externalUrl}
+          href={externalUrl}
           rel="noopener noreferrer nofollow ugc"
           sx={styles.externalLink}
           target="_blank"
         >
           <Globe size={16} />
-          {submission.externalUrl}
+          {externalUrl}
         </a>
       </div>
     )

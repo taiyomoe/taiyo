@@ -2,6 +2,7 @@ import { Kysely, PostgresDialect } from "kysely"
 import pg from "pg"
 import type { DB } from "./database"
 import { env } from "./env"
+import { createPool } from "./pool"
 
 // Timestamps are stored as UTC without a zone: read and write them as UTC whatever the process zone.
 pg.defaults.parseInputDatesAsUTC = true
@@ -13,7 +14,7 @@ pg.types.setTypeParser(
 export const getDb = (connectionString = env.DATABASE_URL) =>
   new Kysely<DB>({
     dialect: new PostgresDialect({
-      pool: new pg.Pool({ connectionString }),
+      pool: createPool(connectionString),
     }),
   })
 

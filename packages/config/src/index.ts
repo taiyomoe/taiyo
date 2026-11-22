@@ -52,6 +52,7 @@ export const config = {
   } satisfies Required<UserSettings>,
   images: {
     maxSizeBytes: 10 * 1024 * 1024,
+    maxFilesPerRequest: 10,
     quality: 85,
     chapterPageQuality: 82,
     maxChapterPageSizeBytes: 15 * 1024 * 1024,
@@ -122,6 +123,7 @@ export const config = {
     feedPageSize: 500,
     maxSelectedItems: 5000,
     recentSyncs: 10,
+    maxDownloadBytes: 25 * 1024 * 1024,
   },
   pagination: {
     defaultPage: 1,

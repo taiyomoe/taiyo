@@ -1,4 +1,4 @@
-import type { Meilisearch } from "meilisearch"
+import type { EnqueuedTaskPromise, Meilisearch } from "meilisearch"
 import { type DB, type Kysely, sql } from "@taiyomoe/db"
 import { isNullish } from "radashi"
 import { INDEXES_BATCH_SIZE } from "../utils/constants"
@@ -15,9 +15,23 @@ type DrainResult = {
   removed: number
 }
 
+// Meilisearch accepts tasks that can still fail.
+const applied = async (push: EnqueuedTaskPromise, timeout: number) => {
+  const task = await push.waitTask({ timeout })
+
+  if (task.status !== "succeeded") {
+    throw new Error(
+      `Meilisearch task ${task.uid} ${task.status}: ${task.error?.message ?? "no error given"}`,
+    )
+  }
+}
+
 export const drainSearchOutbox = async (
   deps: DrainSearchOutboxDeps,
-  { limit = INDEXES_BATCH_SIZE }: { limit?: number } = {},
+  {
+    limit = INDEXES_BATCH_SIZE,
+    taskTimeoutMs = 30_000,
+  }: { limit?: number; taskTimeoutMs?: number } = {},
 ): Promise<DrainResult> => {
   const result = { synced: 0, removed: 0 }
   let remaining = limit
@@ -50,11 +64,11 @@ export const drainSearchOutbox = async (
       const index = deps.meili.index(deps.mediasIndex)
 
       if (upserts.length > 0) {
-        await index.addDocuments(upserts)
+        await applied(index.addDocuments(upserts), taskTimeoutMs)
       }
 
       if (removals.length > 0) {
-        await index.deleteDocuments(removals)
+        await applied(index.deleteDocuments(removals), taskTimeoutMs)
       }
 
       await trx
