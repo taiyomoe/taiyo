@@ -23,7 +23,7 @@
     "test:e2e": "pnpm -F @taiyomoe/web test:e2e"
   },
   "devDependencies": {
-    "@stylexjs/eslint-plugin": "^0.19.1",
+    "@stylexjs/eslint-plugin": "^0.19.2",
     "@stylistic/eslint-plugin": "^6.0.0",
     "@types/node": "^26.6.6",
     "@vitejs/plugin-react": "^6.2.1",
@@ -34,7 +34,7 @@
     "oxlint": "^1.93.0",
     "sherif": "^1.13.0",
     "tsrs": "0.25.0-ts7.1.0-beta",
-    "turbo": "^2.11.10",
+    "turbo": "^2.11.11",
     "typescript": "^7.0.2",
     "vitest": "^5.1.0"
   },
