@@ -97,6 +97,27 @@ describe("createAuthActions", () => {
     expect(navigation).toEqual(["account changed", "invalidate", "navigate /media/1?tab=chapters"])
   })
 
+  it("goes home instead of a page outside the site after signing in", async () => {
+    const { actions, navigation } = setup(null, "//example.com/next")
+
+    expect(await actions.signIn(credentials)).toEqual({ ok: true })
+    expect(navigation).toEqual(["account changed", "invalidate", "navigate /"])
+    expect(navigation.some((entry) => entry.includes("example.com"))).toBe(false)
+  })
+
+  it("starts a social sign-in that comes back home when the page is outside the site", async () => {
+    const { actions, calls } = setup(null, "/\t/example.com")
+
+    expect(await actions.signInSocial("google")).toEqual({ ok: true })
+    expect(calls.map((call) => call.args[0])).toEqual([
+      {
+        provider: "google",
+        callbackURL: absolute("/"),
+        errorCallbackURL: absolute("/auth/sign-in?provider=google"),
+      },
+    ])
+  })
+
   it("leaves the session alone when sign-in fails", async () => {
     const { actions, navigation, hasCachedSession } = setup({
       code: "INVALID_EMAIL_OR_PASSWORD",

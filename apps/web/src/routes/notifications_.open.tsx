@@ -1,13 +1,12 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
 import { api } from "@/lib/api"
+import { toInternalPath } from "@/lib/internal-path"
 
 const searchSchema = z.object({
   id: z.uuid().optional().catch(undefined),
   to: z.string().optional().catch(undefined),
 })
-const isSafePath = (path: string | undefined): path is string =>
-  path !== undefined && path.startsWith("/") && !path.startsWith("//") && !path.includes("\\")
 
 // A push notification opens this route: it marks the notification read, then goes on to
 // what the notification is about.
@@ -24,6 +23,6 @@ export const Route = createFileRoute("/notifications_/open")({
         .catch(() => undefined)
     }
 
-    throw redirect({ href: isSafePath(search.to) ? search.to : "/notifications" })
+    throw redirect({ href: toInternalPath(search.to, "/notifications") })
   },
 })
