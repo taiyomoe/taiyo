@@ -47,7 +47,7 @@ jobs:
           --health-timeout 3s --health-retries 10
 
       dragonfly:
-        image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+        image: docker.dragonflydb.io/dragonflydb/dragonfly:v2.1.0
         ports: ["6379:6379"]
         env:
           DFLY_cluster_mode: emulated
@@ -58,7 +58,7 @@ jobs:
           --health-timeout 3s --health-retries 10
 
       meilisearch:
-        image: getmeili/meilisearch:latest
+        image: getmeili/meilisearch:v1.57.0
         ports: ["7700:7700"]
         env:
           MEILI_MASTER_KEY: ci-master-key
