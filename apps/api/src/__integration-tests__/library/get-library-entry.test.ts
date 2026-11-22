@@ -7,11 +7,14 @@ const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const OTHER_MEDIA_ID = "7a99da64-56e7-4bf6-8159-8db0d3b4f231"
 
 type LibraryEntry = {
-  mediaId: string
-  status: string
-  notify: boolean
-  createdAt: string
-  updatedAt: string
+  entry: {
+    mediaId: string
+    status: string
+    notify: boolean
+    createdAt: string
+    updatedAt: string
+  } | null
+  score: number | null
 }
 
 describe("GET /users/me/library/:mediaId", () => {
@@ -34,7 +37,7 @@ describe("GET /users/me/library/:mediaId", () => {
       ])
       .execute()
 
-    const res = await api<LibraryEntry | null>(app, `/users/me/library/${SEEDED_MEDIA_ID}`, {
+    const res = await api<LibraryEntry>(app, `/users/me/library/${SEEDED_MEDIA_ID}`, {
       headers,
     })
 
@@ -45,11 +48,14 @@ describe("GET /users/me/library/:mediaId", () => {
     }
 
     expect(res.body.data).toEqual({
-      mediaId: SEEDED_MEDIA_ID,
-      status: "ON_HOLD",
-      notify: true,
-      createdAt: createdAt.toISOString(),
-      updatedAt: updatedAt.toISOString(),
+      entry: {
+        mediaId: SEEDED_MEDIA_ID,
+        status: "ON_HOLD",
+        notify: true,
+        createdAt: createdAt.toISOString(),
+        updatedAt: updatedAt.toISOString(),
+      },
+      score: null,
     })
   })
 
@@ -62,7 +68,7 @@ describe("GET /users/me/library/:mediaId", () => {
       json: { status: "PLAN_TO_READ" },
     })
 
-    const res = await api<LibraryEntry | null>(app, `/users/me/library/${SEEDED_MEDIA_ID}`, {
+    const res = await api<LibraryEntry>(app, `/users/me/library/${SEEDED_MEDIA_ID}`, {
       headers,
     })
 
@@ -70,7 +76,28 @@ describe("GET /users/me/library/:mediaId", () => {
       throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
     }
 
-    expect(res.body.data?.status).toBe("PLAN_TO_READ")
+    expect(res.body.data.entry?.status).toBe("PLAN_TO_READ")
+  })
+
+  test("returns your score, even without a library entry", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+    const other = await signInAs(services)
+
+    await services.db
+      .insertInto("mediaRatings")
+      .values([
+        { userId, mediaId: SEEDED_MEDIA_ID, score: 7 },
+        { userId: other.userId, mediaId: SEEDED_MEDIA_ID, score: 2 },
+      ])
+      .execute()
+
+    const res = await api<LibraryEntry>(app, `/users/me/library/${SEEDED_MEDIA_ID}`, { headers })
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data).toEqual({ entry: null, score: 7 })
   })
 
   test("returns null when the media is not in the library", async ({ app, services }) => {
@@ -89,7 +116,7 @@ describe("GET /users/me/library/:mediaId", () => {
       throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
     }
 
-    expect(res.body.data).toBeNull()
+    expect(res.body.data).toEqual({ entry: null, score: null })
   })
 
   test("does not return another user's entry", async ({ app, services }) => {
@@ -107,7 +134,7 @@ describe("GET /users/me/library/:mediaId", () => {
       throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
     }
 
-    expect(res.body.data).toBeNull()
+    expect(res.body.data).toEqual({ entry: null, score: null })
   })
 
   test("returns null for an unknown media", async ({ app, services }) => {
@@ -122,7 +149,7 @@ describe("GET /users/me/library/:mediaId", () => {
       throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
     }
 
-    expect(res.body.data).toBeNull()
+    expect(res.body.data).toEqual({ entry: null, score: null })
   })
 
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {

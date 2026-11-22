@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
     "meilisearch": "^0.63.0",

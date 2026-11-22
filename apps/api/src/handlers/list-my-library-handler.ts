@@ -22,13 +22,14 @@ import {
   storedLanguageSchema,
 } from "../utils/schemas"
 
-const LIBRARY_SORTS = ["read", "updated", "added", "released", "title"] as const
+const LIBRARY_SORTS = ["read", "updated", "added", "released", "title", "score"] as const
 const ORDER_BY = {
   read: sql`"lastReadAt" desc nulls last, "updatedAt" desc`,
   updated: sql`"updatedAt" desc`,
   added: sql`"createdAt" desc`,
   released: sql`"latestChapterAt" desc nulls last, "updatedAt" desc`,
   title: sql`"title" asc nulls last`,
+  score: sql`"score" desc nulls last, "updatedAt" desc`,
 } satisfies Record<(typeof LIBRARY_SORTS)[number], unknown>
 const querySchema = paginationQuerySchema.extend({
   status: z.enum(USER_LIBRARY_STATUSES).optional().meta({
@@ -37,7 +38,7 @@ const querySchema = paginationQuerySchema.extend({
   }),
   sort: z.enum(LIBRARY_SORTS).default("read").meta({
     description:
-      "How to order the entries: `read` puts the media you read last first, `updated` the entries you changed last, `added` the ones you added last, `released` the media with the newest chapters, and `title` sorts by main title.",
+      "How to order the entries: `read` puts the media you read last first, `updated` the entries you changed last, `added` the ones you added last, `released` the media with the newest chapters, `title` sorts by main title, and `score` puts the media you scored highest first, then the ones you did not rate.",
     example: "read",
   }),
   q: z.string().trim().max(100).optional().meta({
@@ -59,6 +60,10 @@ const libraryItemSchema = z.object({
   notify: z.boolean().meta({ description: "Whether new chapters of the media notify you." }),
   createdAt: z.iso.datetime().meta({ description: "When you added the media to your library." }),
   updatedAt: z.iso.datetime().meta({ description: "When you last changed the entry." }),
+  score: z
+    .int()
+    .nullable()
+    .meta({ description: "Your score for the media, if you rated it.", example: 9 }),
   media: z
     .object({
       title: z
@@ -110,6 +115,7 @@ type Row = {
   notify: boolean
   createdAt: Date
   updatedAt: Date
+  score: number | null
   title: string | null
   mediaType: MediaType
   mediaStatus: MediaStatus
@@ -174,6 +180,10 @@ export const listMyLibraryHandler = new Hono().get(
         select
           "e"."mediaId", "e"."status", "e"."notify", "e"."createdAt", "e"."updatedAt",
           "m"."type" as "mediaType", "m"."status" as "mediaStatus",
+          (
+            select "r"."score" from "mediaRatings" "r"
+            where "r"."userId" = ${user.id} and "r"."mediaId" = "e"."mediaId"
+          ) as "score",
           (
             select "t"."title" from "titles" "t"
             where "t"."mediaId" = "e"."mediaId" and "t"."isMainTitle" and "t"."deletedAt" is null
@@ -273,6 +283,7 @@ export const listMyLibraryHandler = new Hono().get(
         notify: row.notify,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt,
+        score: row.score,
         media: {
           title: row.title,
           coverUrl: covers.get(row.mediaId) ?? null,

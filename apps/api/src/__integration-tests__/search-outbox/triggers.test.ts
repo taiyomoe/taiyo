@@ -90,6 +90,22 @@ describe("search outbox triggers", () => {
     expect(await readOutbox(services)).toEqual([SEEDED_MEDIA_ID, SEEDED_MEDIA_ID])
   })
 
+  test("writing rating stats enqueues the media each time", async ({ services }) => {
+    await resetOutbox(services)
+    await services.db.insertInto("mediaRatingStats").values({ mediaId: SEEDED_MEDIA_ID }).execute()
+    await services.db
+      .updateTable("mediaRatingStats")
+      .set({ ratingCount: 1, ratingSum: 8, scoreCounts: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0] })
+      .where("mediaId", "=", SEEDED_MEDIA_ID)
+      .execute()
+    await services.db
+      .deleteFrom("mediaRatingStats")
+      .where("mediaId", "=", SEEDED_MEDIA_ID)
+      .execute()
+
+    expect(await readOutbox(services)).toEqual([SEEDED_MEDIA_ID, SEEDED_MEDIA_ID, SEEDED_MEDIA_ID])
+  })
+
   test("linking and unlinking a staff enqueues the media each time", async ({ services }) => {
     const otherMediaId = await getOtherMediaId(services)
     const credit = await services.db

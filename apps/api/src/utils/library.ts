@@ -1,14 +1,6 @@
 import type { DB, Kysely, UserLibraryStatus } from "@taiyomoe/db"
 
-export const countLibraryEntries = async (db: Kysely<DB>, userId: string) => {
-  const rows = await db
-    .selectFrom("userLibraryEntries")
-    .innerJoin("medias", "medias.id", "userLibraryEntries.mediaId")
-    .where("userLibraryEntries.userId", "=", userId)
-    .where("medias.deletedAt", "is", null)
-    .select((eb) => ["userLibraryEntries.status", eb.fn.countAll<string>().as("count")])
-    .groupBy("userLibraryEntries.status")
-    .execute()
+const toLibraryCounts = (rows: Array<{ status: UserLibraryStatus; count: string }>) => {
   const countOf = (status: UserLibraryStatus) =>
     Number(rows.find((row) => row.status === status)?.count ?? 0)
   const byStatus = {
@@ -25,3 +17,25 @@ export const countLibraryEntries = async (db: Kysely<DB>, userId: string) => {
     byStatus,
   }
 }
+
+export const countLibraryEntries = async (db: Kysely<DB>, userId: string) =>
+  toLibraryCounts(
+    await db
+      .selectFrom("userLibraryEntries")
+      .innerJoin("medias", "medias.id", "userLibraryEntries.mediaId")
+      .where("userLibraryEntries.userId", "=", userId)
+      .where("medias.deletedAt", "is", null)
+      .select((eb) => ["userLibraryEntries.status", eb.fn.countAll<string>().as("count")])
+      .groupBy("userLibraryEntries.status")
+      .execute(),
+  )
+
+export const countMediaLibraryEntries = async (db: Kysely<DB>, mediaId: string) =>
+  toLibraryCounts(
+    await db
+      .selectFrom("userLibraryEntries")
+      .where("mediaId", "=", mediaId)
+      .select((eb) => ["status", eb.fn.countAll<string>().as("count")])
+      .groupBy("status")
+      .execute(),
+  )

@@ -10,6 +10,7 @@ import type {
   MediaStatus,
   MediaType,
 } from "@taiyomoe/db"
+import { config, getRatingAverage, getRatingScore } from "@taiyomoe/config"
 import { toUnixMs } from "../utils/to-unix-ms"
 
 export type MediaDocument = {
@@ -41,6 +42,9 @@ export type MediaDocument = {
   mainCoverId: string | null
   libraryCount: number
   chapterCount: number
+  ratingCount: number
+  ratingAverage: number | null
+  ratingScore: number
   _sortMainTitle: string
 }
 
@@ -59,7 +63,7 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     return null
   }
 
-  const [titles, covers, staffs, chapterRows, libraryCountRow] = await Promise.all([
+  const [titles, covers, staffs, chapterRows, libraryCountRow, ratingStats] = await Promise.all([
     db
       .selectFrom("titles")
       .select(["title", "language", "isMainTitle"])
@@ -91,12 +95,18 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
       .select(db.fn.countAll().as("count"))
       .where("mediaId", "=", mediaId)
       .executeTakeFirstOrThrow(),
+    db
+      .selectFrom("mediaRatingStats")
+      .select(["ratingCount", "ratingSum"])
+      .where("mediaId", "=", mediaId)
+      .executeTakeFirst(),
   ])
   const mainTitle = titles.find((t) => t.isMainTitle)
   const mainCover = covers.find((c) => c.isMainCover)
   const authorIds = staffs.filter((s) => s.role === "AUTHOR").map((s) => s.staffId)
   const artistIds = staffs.filter((s) => s.role === "ARTIST").map((s) => s.staffId)
   const tags = media.tags ?? []
+  const ratings = { count: ratingStats?.ratingCount ?? 0, sum: ratingStats?.ratingSum ?? 0 }
   const createdAt = toUnixMs(media.createdAt)
   const updatedAt = toUnixMs(media.updatedAt)
 
@@ -136,6 +146,9 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     mainCoverId: mainCover.id,
     libraryCount: Number(libraryCountRow.count),
     chapterCount: chapterRows.length,
+    ratingCount: ratings.count,
+    ratingAverage: getRatingAverage(ratings),
+    ratingScore: getRatingScore(ratings, config.ratings),
     _sortMainTitle: mainTitle.title.toLowerCase(),
     authorIds,
     artistIds,

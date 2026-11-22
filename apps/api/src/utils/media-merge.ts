@@ -13,6 +13,7 @@ import {
   getChapterPageKey,
   type S3Client,
 } from "@taiyomoe/s3"
+import { mergeRatings } from "./ratings"
 
 type MergedChapter = Pick<
   Selectable<Chapter>,
@@ -372,9 +373,9 @@ export const foldChapter = async (
 
 /**
  * Moves what readers keep about a duplicate to the media: library entries,
- * list items, reading rewards, the comment thread and a featured spot. A
- * reader who has both in their library keeps the most recently updated status,
- * and is notified when either was set to.
+ * ratings, list items, reading rewards, the comment thread and a featured spot.
+ * A reader who has both in their library keeps the most recently updated
+ * status, and is notified when either was set to.
  */
 export const mergeReaders = async (
   db: Kysely<DB>,
@@ -416,6 +417,8 @@ export const mergeReaders = async (
   await insertInBatches(rows, (batch) =>
     db.insertInto("userLibraryEntries").values(batch).execute(),
   )
+
+  await mergeRatings(db, { mediaId, duplicateId })
 
   await db
     .deleteFrom("userListItems as i")

@@ -5,12 +5,14 @@ import { createCoversHandler } from "../handlers/create-covers-handler"
 import { createMediaHandler } from "../handlers/create-media-handler"
 import { createMediaSuggestionHandler } from "../handlers/create-media-suggestion-handler"
 import { deleteMediaHandler } from "../handlers/delete-media-handler"
+import { deleteMediaRatingHandler } from "../handlers/delete-media-rating-handler"
 import { deleteMediasHandler } from "../handlers/delete-medias-handler"
 import { flagMediaHandler } from "../handlers/flag-media-handler"
 import { getMangaDexPlanHandler } from "../handlers/get-mangadex-plan-handler"
 import { getMediaDeletionImpactHandler } from "../handlers/get-media-deletion-impact-handler"
 import { getMediaEditHandler } from "../handlers/get-media-edit-handler"
 import { getMediaHandler } from "../handlers/get-media-handler"
+import { getMediaStatsHandler } from "../handlers/get-media-stats-handler"
 import { getMediasDeletionImpactHandler } from "../handlers/get-medias-deletion-impact-handler"
 import { linkMediaStaffHandler } from "../handlers/link-media-staff-handler"
 import { listBannersHandler } from "../handlers/list-banners-handler"
@@ -26,6 +28,7 @@ import { listMediaStaffsHandler } from "../handlers/list-media-staffs-handler"
 import { listShowcaseMediasHandler } from "../handlers/list-showcase-medias-handler"
 import { markMediaReadHandler } from "../handlers/mark-media-read-handler"
 import { mergeMediasHandler } from "../handlers/merge-medias-handler"
+import { putMediaRatingHandler } from "../handlers/put-media-rating-handler"
 import { reindexMediaHandler } from "../handlers/reindex-media-handler"
 import { restoreMediaHandler } from "../handlers/restore-media-handler"
 import { restoreMediasHandler } from "../handlers/restore-medias-handler"
@@ -66,6 +69,9 @@ export const mediasRouter = new Hono()
   .route("/", listChaptersHandler)
   .route("/", listChapterNumbersHandler)
   .route("/", markMediaReadHandler)
+  .route("/", getMediaStatsHandler)
+  .route("/", putMediaRatingHandler)
+  .route("/", deleteMediaRatingHandler)
   .route("/", createChapterHandler)
   .route("/", listMediaStaffsHandler)
   .route("/", linkMediaStaffHandler)

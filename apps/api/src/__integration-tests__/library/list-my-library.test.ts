@@ -33,6 +33,38 @@ describe("GET /users/me/library", () => {
     expect(res.body.data).toHaveLength(3)
   })
 
+  test("returns your scores and sorts by them", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+
+    await services.db
+      .insertInto("userLibraryEntries")
+      .values(SEEDED_MEDIA_IDS.map((mediaId) => ({ userId, mediaId, status: "READING" as const })))
+      .execute()
+    await services.db
+      .insertInto("mediaRatings")
+      .values([
+        { userId, mediaId: SEEDED_MEDIA_IDS[0], score: 4 },
+        { userId, mediaId: SEEDED_MEDIA_IDS[2], score: 9 },
+      ])
+      .execute()
+
+    const res = await api<Array<{ mediaId: string; score: number | null }>>(
+      app,
+      `/users/me/library?sort=score`,
+      { headers },
+    )
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.map(({ mediaId, score }) => ({ mediaId, score }))).toEqual([
+      { mediaId: SEEDED_MEDIA_IDS[2], score: 9 },
+      { mediaId: SEEDED_MEDIA_IDS[0], score: 4 },
+      { mediaId: SEEDED_MEDIA_IDS[1], score: null },
+    ])
+  })
+
   test("filters by status", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services)
 
