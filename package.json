@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@stylexjs/eslint-plugin": "^0.19.1",
-    "@stylistic/eslint-plugin": "^5.10.0",
+    "@stylistic/eslint-plugin": "^6.0.0",
     "@types/node": "^26.6.6",
     "@vitejs/plugin-react": "^6.2.1",
     "happy-dom": "^21.0.4",
