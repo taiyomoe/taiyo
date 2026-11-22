@@ -67,7 +67,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^2.29.3",
+    "@inlang/paraglide-js": "^3.2.2",
     "@playwright/test": "^1.65.0",
     "@stylexjs/unplugin": "^0.19.1",
     "@taiyomoe/api": "workspace:^",
