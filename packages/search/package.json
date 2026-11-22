@@ -12,7 +12,7 @@
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
-    "meilisearch": "^0.62.0",
+    "meilisearch": "^0.63.0",
     "remeda": "^2.58.0",
     "zod": "^4.6.7"
   },

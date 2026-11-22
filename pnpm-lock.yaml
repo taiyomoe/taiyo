@@ -761,8 +761,8 @@ importers:
         specifier: workspace:^
         version: link:../schemas
       meilisearch:
-        specifier: ^0.62.0
-        version: 0.62.0
+        specifier: ^0.63.0
+        version: 0.63.0
       remeda:
         specifier: ^2.58.0
         version: 2.58.0
@@ -6513,8 +6513,8 @@ packages:
   mdn-data@2.27.1:
     resolution: {integrity: sha512-9Yubnt3e8A0OKwxYSXyhLymGW4sCufcLG6VdiDdUGVkPhpqLxlvP5vl1983gQjJl3tqbrM731mjaZaP68AgosQ==}
 
-  meilisearch@0.62.0:
-    resolution: {integrity: sha512-/ETDW7mmWI2NcSmtJdTPhbjsIbs3VcuapszX5X6JhdHB0XbszPOhqd3EB2bEylL0HK7dgwh/4Z3MdyuycWVf5A==}
+  meilisearch@0.63.0:
+    resolution: {integrity: sha512-gpVdo4dpoma7MMVN4vbfZrWZWp1vIyKWRDKNJsHvB+z6+ykc3E210yb2lvbsTrRTNSM1hfq3vmXu4DRO00IDkA==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   meshoptimizer@1.1.1:
@@ -13341,7 +13341,7 @@ snapshots:
 
   mdn-data@2.27.1: {}
 
-  meilisearch@0.62.0: {}
+  meilisearch@0.63.0: {}
 
   meshoptimizer@1.1.1: {}
 
