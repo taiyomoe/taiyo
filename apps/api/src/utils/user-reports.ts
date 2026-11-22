@@ -1,5 +1,5 @@
 import type { ReportOutcome } from "./schemas"
-import { type ModerationContext, notifyModeration } from "./notifications"
+import { type ModerationContext, notifyModeration } from "./notifications/moderation"
 
 /**
  * Closes a pending report in your name as resolved or dismissed, with an optional internal note,

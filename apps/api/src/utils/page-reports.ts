@@ -1,6 +1,6 @@
 import { type DB, type Kysely, sql } from "@taiyomoe/db"
 import z from "zod"
-import { type ModerationContext, notifyModeration } from "./notifications"
+import { type ModerationContext, notifyModeration } from "./notifications/moderation"
 
 export const closingStatusSchema = z.enum(["RESOLVED", "DISMISSED"]).meta({
   description:
