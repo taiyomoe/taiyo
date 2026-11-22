@@ -1,51 +1,86 @@
 import { type Kysely, sql } from "kysely"
 
+type MigrationDb = {
+  users: { id: string; displayUsername: string; name: string; createdAt: Date }
+}
+
 // config.auth.displayName.maxLength when this migration was written.
 const MAX_LENGTH = 30
 const withSuffix = (base: string, suffix: string) =>
   `${base.slice(0, MAX_LENGTH - suffix.length)}${suffix}`
 
 // Names that differ only by case may exist: the oldest account keeps its name.
-export async function up(db: Kysely<unknown>): Promise<void> {
-  const { rows } = await sql<{ id: string; displayUsername: string }>`
-    SELECT "id", "displayUsername" FROM (
-      SELECT "id", "displayUsername", "createdAt", row_number() OVER (
-        PARTITION BY lower("displayUsername") ORDER BY "createdAt", "id"
-      ) AS "rank"
-      FROM "users"
-    ) AS "ranked"
-    WHERE "rank" > 1
-    ORDER BY "createdAt", "id"
-  `.execute(db)
+export async function up(db: Kysely<MigrationDb>): Promise<void> {
+  const rows = await db
+    .selectFrom((ranked) =>
+      ranked
+        .selectFrom((base) =>
+          base
+            .selectFrom("users")
+            .select((eb) => [
+              "id",
+              "displayUsername",
+              "createdAt",
+              eb.fn<string>("lower", ["displayUsername"]).as("lowered"),
+            ])
+            .as("base"),
+        )
+        .select((eb) => [
+          "id",
+          "displayUsername",
+          "createdAt",
+          eb.fn
+            .agg<number>("row_number")
+            .over((ob) => ob.partitionBy("lowered").orderBy("createdAt").orderBy("id"))
+            .as("rank"),
+        ])
+        .as("ranked"),
+    )
+    .select(["id", "displayUsername"])
+    .where("rank", ">", 1)
+    .orderBy("createdAt")
+    .orderBy("id")
+    .execute()
 
   for (const row of rows) {
     for (let suffix = 2; ; suffix++) {
       const candidate = withSuffix(row.displayUsername, `_${suffix}`)
-      const { rows: taken } = await sql`
-        SELECT 1 FROM "users" WHERE lower("displayUsername") = lower(${candidate})
-      `.execute(db)
+      const taken = await db
+        .selectFrom("users")
+        .select("id")
+        .where((eb) =>
+          eb(eb.fn("lower", ["displayUsername"]), "=", eb.fn("lower", [eb.val(candidate)])),
+        )
+        .executeTakeFirst()
 
-      if (taken.length === 0) {
-        await sql`
-          UPDATE "users" SET "displayUsername" = ${candidate}, "name" = ${candidate}
-          WHERE "id" = ${row.id}
-        `.execute(db)
+      if (!taken) {
+        await db
+          .updateTable("users")
+          .set({ displayUsername: candidate, name: candidate })
+          .where("id", "=", row.id)
+          .execute()
 
         break
       }
     }
   }
 
-  await sql`DROP INDEX "users_displayUsername_key"`.execute(db)
-  await sql`
-    CREATE UNIQUE INDEX "users_displayUsername_lower_key" ON "users" (lower("displayUsername"))
-  `.execute(db)
+  await db.schema.dropIndex("users_displayUsername_key").execute()
+  await db.schema
+    .createIndex("users_displayUsername_lower_key")
+    .on("users")
+    .unique()
+    .column(sql`lower("displayUsername")`)
+    .execute()
 }
 
 // The renamed display names are not restored: that data change is irreversible.
-export async function down(db: Kysely<unknown>): Promise<void> {
-  await sql`DROP INDEX "users_displayUsername_lower_key"`.execute(db)
-  await sql`
-    CREATE UNIQUE INDEX "users_displayUsername_key" ON "users" ("displayUsername")
-  `.execute(db)
+export async function down(db: Kysely<MigrationDb>): Promise<void> {
+  await db.schema.dropIndex("users_displayUsername_lower_key").execute()
+  await db.schema
+    .createIndex("users_displayUsername_key")
+    .on("users")
+    .column("displayUsername")
+    .unique()
+    .execute()
 }
