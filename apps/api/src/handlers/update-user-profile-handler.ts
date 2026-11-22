@@ -10,6 +10,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
+import { isUniqueViolation } from "../utils/database-errors"
 import { notifyModeration } from "../utils/notifications"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
@@ -126,11 +127,20 @@ export const updateUserProfileHandler = new Hono().patch(
     c.var.audit.set({ changes })
 
     if (displayUsername !== undefined) {
-      await db
-        .updateTable("users")
-        .set({ displayUsername, name: displayUsername })
-        .where("id", "=", targetUser.id)
-        .execute()
+      try {
+        await db
+          .updateTable("users")
+          .set({ displayUsername, name: displayUsername })
+          .where("id", "=", targetUser.id)
+          .execute()
+      } catch (err) {
+        // Two requests can pass the check above at the same moment: the index decides.
+        if (isUniqueViolation(err, "users_displayUsername_lower_key")) {
+          return c.fail("DISPLAY_NAME_TAKEN")
+        }
+
+        throw err
+      }
 
       c.var.afterCommit(() => refreshUserSessions(auth, targetUser.id))
     }
