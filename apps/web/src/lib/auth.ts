@@ -109,8 +109,6 @@ export const createAuthActions = ({
   // so the redirects it issues (social sign-in, verification links) would land on the
   // api. Resolved when an action runs: the hook also renders on the server.
   const authCallbackURL = () => new URL(callbackURL, getOrigin()).href
-  // A different account is signed in now: nothing cached for the previous one may show,
-  // and the session is part of what is dropped.
   const refreshSession = async () => {
     onAccountChange()
     await queryClient.cancelQueries()

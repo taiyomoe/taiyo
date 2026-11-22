@@ -50,8 +50,6 @@ const schedulePush = () => {
   }, PUSH_DELAY_MS)
 }
 
-// The signed-in account changed: the next account's saved settings must apply, and nothing
-// edited for the previous one may be pushed to it.
 export const resetReaderSettingsSync = () => {
   clearTimeout(pendingPush)
   pendingPush = undefined
