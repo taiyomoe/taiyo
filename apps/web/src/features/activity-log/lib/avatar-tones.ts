@@ -18,6 +18,7 @@ const CATEGORY_TONES: Record<string, string> = {
   group: colors.chart3,
   list: colors.chart4,
   library: colors.chart2,
+  rating: colors.chart2,
   history: colors.info,
   comment: colors.chart3,
   audit: colors.mutedForeground,

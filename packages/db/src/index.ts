@@ -84,6 +84,10 @@ export * from "./models/mangadex-sync-model"
 
 export * from "./models/media-model"
 
+export * from "./models/media-rating-model"
+
+export * from "./models/media-rating-stats-model"
+
 export * from "./models/search-outbox-model"
 
 export * from "./models/notification-actor-model"
