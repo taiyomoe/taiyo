@@ -1,6 +1,5 @@
 import { config } from "@taiyomoe/config"
 
-/** Whether an endpoint is an https URL on one of the push services browsers use. */
 export const isPushServiceEndpoint = (endpoint: string) => {
   if (!URL.canParse(endpoint)) {
     return false

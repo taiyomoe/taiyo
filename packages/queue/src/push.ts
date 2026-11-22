@@ -43,7 +43,6 @@ export const createWebPushSender = ({
   subject = env.VAPID_SUBJECT,
   publicKey = env.VAPID_PUBLIC_KEY,
   privateKey = env.VAPID_PRIVATE_KEY,
-  // Tests point the sender at local servers.
   isAllowedEndpoint = isPushServiceEndpoint,
 } = {}) => {
   if (publicKey === undefined || privateKey === undefined || subject === undefined) {
@@ -52,7 +51,7 @@ export const createWebPushSender = ({
 
   const vapidDetails = { subject, publicKey, privateKey }
   const send: PushSender = async ({ endpoint, p256dh, auth }, message) => {
-    // Answered as gone, so the subscription is deleted rather than retried.
+    // 410 makes callers delete the subscription.
     if (!isAllowedEndpoint(endpoint)) {
       return 410
     }
