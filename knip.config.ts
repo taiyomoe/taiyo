@@ -30,6 +30,8 @@ const config: KnipConfig = {
     "packages/db/src/{migrations,seeds,fixtures}/*.ts": ["exports"],
     // coss primitives: the kit keeps its whole surface so components can be composed as documented.
     "packages/ui/src/components/ui/*.tsx": ["exports", "types"],
+    // knip 6.45's production run drops the react-email preview entries from the graph, so their imports go unseen.
+    "apps/api/src/emails/components/*.tsx": ["exports"],
   },
   workspaces: {
     "apps/api": {
