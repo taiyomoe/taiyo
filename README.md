@@ -17,7 +17,7 @@ A manga reading platform — manga, manhwa, manhua, light novels. The repo ships
 - **Group ownership workflow**: scanlation groups can be claimed by their actual owners through a request/approval flow; chapter and group mutations gate on membership (additive model — uploaders/mods/admins keep unconditional access)
 - **Observability**: HyperDX (OpenTelemetry) drains via evlog
 
-Not yet built (planned): the browse / detail / reader frontend and audit log instrumentation.
+What's next is tracked in [docs/roadmap.md](./docs/roadmap.md).
 
 ## 🏗️ Architecture
 
