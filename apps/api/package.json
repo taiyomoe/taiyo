@@ -37,7 +37,7 @@
     "@taiyomoe/search": "workspace:^",
     "evlog": "^2.35.1",
     "hono": "^4.13.17",
-    "hono-openapi": "^1.5.0",
+    "hono-openapi": "^1.6.0",
     "hono-rate-limiter": "^0.5.4",
     "magic-bytes.js": "^1.13.1",
     "react": "^19.3.1",
