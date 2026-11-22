@@ -61,6 +61,33 @@ describe("roles", () => {
     expect(after.status).not.toBe(403)
   })
 
+  test("unequips the cosmetics the new role does not unlock", async ({ app, services }) => {
+    const admin = await signInAs(services, { role: "ADMIN" })
+    const moderator = await signInAs(services, { role: "MODERATOR" })
+    const equipped = await api(app, "/users/me/cosmetics", {
+      method: "PATCH",
+      headers: moderator.headers,
+      json: { title: "moderator", nameEffect: "azure" },
+    })
+
+    expect(equipped.status).toBe(200)
+
+    const res = await api(app, `/users/${moderator.userId}/role`, {
+      method: "PATCH",
+      headers: admin.headers,
+      json: { role: "UPLOADER" },
+    })
+    const row = await services.db
+      .selectFrom("users")
+      .leftJoin("userProfiles", "userProfiles.userId", "users.id")
+      .select(["users.role", "users.nameEffect", "userProfiles.title"])
+      .where("users.id", "=", moderator.userId)
+      .executeTakeFirstOrThrow()
+
+    expect(res.status).toBe(200)
+    expect(row).toEqual({ role: "UPLOADER", nameEffect: null, title: null })
+  })
+
   test("are refused to a non-admin before the user is looked up", async ({ app, services }) => {
     const moderator = await signInAs(services, { role: "MODERATOR" })
     const missing = await api(app, `/users/${crypto.randomUUID()}/role`, {
