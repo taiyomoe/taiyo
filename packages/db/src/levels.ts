@@ -13,7 +13,11 @@ export type ReaderRank = (typeof READER_RANKS)[number]["key"]
 
 const MAX_LEVEL = 999
 
-/** Experience needed to go from `level` to the next one: one point per credited page read. */
+/**
+ * Experience needed to go from `level` to the next one: one point per credited page read.
+ *
+ * @internal Exported for its tests.
+ */
 export const getLevelCost = (level: number) => Math.round((250 + 60 * (level - 1) ** 1.5) / 10) * 10
 
 export const getLevelProgress = (xp: number) => {

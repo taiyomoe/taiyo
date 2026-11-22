@@ -41,6 +41,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: pnpm knip
 
+      - name: Knip (production code only)
+        if: ${{ !cancelled() }}
+        run: pnpm knip --production
+
       - name: i18n messages
         if: ${{ !cancelled() }}
         run: pnpm lint:messages

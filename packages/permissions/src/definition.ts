@@ -8,6 +8,7 @@ import type {
 } from "@taiyomoe/db/constants"
 import type { ValidateDefinition } from "permix"
 
+/** @internal Exported for its tests. */
 export type ActorMembership = {
   groupId: string
   role: GroupMembershipRole

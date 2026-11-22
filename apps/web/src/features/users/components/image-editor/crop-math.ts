@@ -63,7 +63,11 @@ export const rotatePoint = ({ x, y }: Point, degrees: number) => {
   return { x: x * cos - y * sin, y: x * sin + y * cos } satisfies Point
 }
 
-/** The axis-aligned box a W × H rectangle occupies once rotated. */
+/**
+ * The axis-aligned box a W × H rectangle occupies once rotated.
+ *
+ * @internal Exported for its tests.
+ */
 export const getRotatedBounds = ({ width, height }: Size, degrees: number) => {
   const radians = toRadians(degrees)
   const cos = Math.abs(Math.cos(radians))
@@ -153,7 +157,11 @@ export const getFrameSize = (viewport: Size, aspect: number, margin: number) => 
   return { width, height: width / aspect } satisfies Size
 }
 
-/** Maps any angle to [−180, 180), the range the server accepts. */
+/**
+ * Maps any angle to [−180, 180), the range the server accepts.
+ *
+ * @internal Exported for its tests.
+ */
 export const normalizeRotation = (degrees: number) => {
   const normalized = ((((degrees + 180) % 360) + 360) % 360) - 180
 

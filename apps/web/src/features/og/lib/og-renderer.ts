@@ -167,7 +167,11 @@ const flattenRuns = ({ transform, runs, children }: MeasuredNode, block = "0"): 
   ...children.flatMap((child, index) => flattenRuns(child, `${block}.${index}`)),
 ]
 
-/** A line of text, and the block it belongs to: lines of one block may touch. */
+/**
+ * A line of text, and the block it belongs to: lines of one block may touch.
+ *
+ * @internal Exported for its tests.
+ */
 export type TextBox = {
   text: string
   block: string
@@ -177,7 +181,11 @@ export type TextBox = {
   bottom: number
 }
 
-/** Where every line of text of a card lands, in card pixels. */
+/**
+ * Where every line of text of a card lands, in card pixels.
+ *
+ * @internal Exported for its tests.
+ */
 export const measureOgText = async (element: ReactNode, images: ImageSource[] = []) => {
   const instance = await getRenderer()
   const { html, emoji } = await withTwemoji(renderToStaticMarkup(element))

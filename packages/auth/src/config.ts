@@ -54,8 +54,10 @@ const createInvalidCredsError = (isEmail: boolean) =>
     message: isEmail ? "Invalid email or password" : "Invalid username or password",
   })
 
+/** @internal Exported for its tests. */
 export const captchaEndpoints = ["/sign-up/email", "/request-password-reset"]
 
+/** @internal Exported for its tests. */
 export const rateLimitRules = {
   "/sign-in/email": { window: 60, max: 3 },
   "/sign-in/username": { window: 60, max: 3 },

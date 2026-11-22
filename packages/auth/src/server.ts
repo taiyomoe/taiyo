@@ -1,6 +1,9 @@
 import type { Auth, AuthEmail, Session, User } from "./config"
 
-export { captchaEndpoints, createAuth, rateLimitRules } from "./config"
+export { createAuth } from "./config"
+
+/** @internal Exported for its tests. */
+export { captchaEndpoints, rateLimitRules } from "./config"
 
 export * from "./utils/before-user-created-hook"
 
