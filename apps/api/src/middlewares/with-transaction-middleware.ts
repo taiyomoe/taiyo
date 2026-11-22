@@ -64,8 +64,7 @@ export const withTransaction = createMiddleware<{
   if (committed) {
     await runCallbacks(c, afterCommitCallbacks)
 
-    // The response waits for this drain: bound it. A push still pending at the timeout rolls back
-    // and the worker's scheduled drain retries it within a minute.
+    // A push still pending at the timeout is retried by the worker.
     await drainSearchOutbox(
       { db: previous, meili: c.get("meili"), mediasIndex: c.get("mediasIndex") },
       { taskTimeoutMs: 2_000 },

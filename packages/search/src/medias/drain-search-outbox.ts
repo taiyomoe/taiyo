@@ -15,8 +15,7 @@ type DrainResult = {
   removed: number
 }
 
-// Meilisearch answers once a task is enqueued, and the task can still fail: keep the rows unless
-// it succeeded. Throwing rolls the claiming transaction back, so the next drain retries them.
+// Meilisearch accepts tasks that can still fail.
 const applied = async (push: EnqueuedTaskPromise, timeout: number) => {
   const task = await push.waitTask({ timeout })
 
