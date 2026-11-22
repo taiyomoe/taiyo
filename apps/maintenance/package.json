@@ -21,7 +21,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^2.29.3",
+    "@inlang/paraglide-js": "^3.2.2",
     "@stylexjs/unplugin": "^0.19.1",
     "@tanstack/router-plugin": "^1.169.0",
     "@types/node": "^26.6.6",
