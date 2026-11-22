@@ -2,6 +2,7 @@ import { awardMetricAchievements, getAchievementProgress } from "./achievements"
 import { reapOrphanCommentImages } from "./comment-image-reaper"
 import { createBullConnection } from "./connection"
 import {
+  failStaleMangaDexSyncs,
   getMangaDexSyncProducer,
   MANGADEX_SYNC_QUEUE,
   type MangaDexSyncJobData,
@@ -39,6 +40,7 @@ export {
   createBullConnection,
   createWebPushSender,
   drainNotificationOutbox,
+  failStaleMangaDexSyncs,
   getAchievementProgress,
   getChapterUploadProducer,
   getMangaDexSyncProducer,

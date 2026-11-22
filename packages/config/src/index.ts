@@ -124,6 +124,8 @@ export const config = {
     maxSelectedItems: 5000,
     recentSyncs: 10,
     maxDownloadBytes: 25 * 1024 * 1024,
+    // A running sync bumps updatedAt before each item: one this quiet, whose job is gone, died.
+    staleSyncMinutes: 120,
   },
   pagination: {
     defaultPage: 1,
