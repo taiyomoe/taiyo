@@ -8,7 +8,7 @@ import { checkComment } from "../middlewares/check-comment-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
-import { recordActivity } from "../utils/notifications"
+import { recordActivity } from "../utils/notifications/activity"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 

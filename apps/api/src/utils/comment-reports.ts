@@ -1,6 +1,6 @@
 import { COMMENT_REPORT_REASONS, type DB, type Kysely, sql } from "@taiyomoe/db"
 import z from "zod"
-import { type ModerationContext, notifyModeration } from "./notifications"
+import { type ModerationContext, notifyModeration } from "./notifications/moderation"
 import { userSummarySchema } from "./schemas"
 
 export const commentReportSchema = z.object({

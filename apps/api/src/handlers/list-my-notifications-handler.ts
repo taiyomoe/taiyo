@@ -3,12 +3,9 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
-import {
-  listNotifications,
-  notificationFiltersSchema,
-  notificationSchema,
-  selectVisibleNotifications,
-} from "../utils/notifications"
+import { listNotifications } from "../utils/notifications/list"
+import { selectVisibleNotifications } from "../utils/notifications/query"
+import { notificationFiltersSchema, notificationSchema } from "../utils/notifications/schemas"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 

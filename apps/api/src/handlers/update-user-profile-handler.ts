@@ -11,7 +11,7 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
 import { isUniqueViolation } from "../utils/database-errors"
-import { notifyModeration } from "../utils/notifications"
+import { notifyModeration } from "../utils/notifications/moderation"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import {

@@ -7,7 +7,7 @@ import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { awardAchievements } from "../utils/achievements"
-import { recordActivity } from "../utils/notifications"
+import { recordActivity } from "../utils/notifications/activity"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 

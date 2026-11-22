@@ -2,7 +2,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { withAuth } from "../middlewares/with-auth-middleware"
-import { countNotifications } from "../utils/notifications"
+import { countNotifications } from "../utils/notifications/query"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
