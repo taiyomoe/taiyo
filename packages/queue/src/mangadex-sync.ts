@@ -45,15 +45,23 @@ let queue: Queue<MangaDexSyncJobData> | undefined
 export const getMangaDexSyncProducer = () =>
   ({
     enqueue: async (data) => {
-      queue ??= new Queue<MangaDexSyncJobData>(MANGADEX_SYNC_QUEUE, {
-        connection: createBullConnection(),
-        defaultJobOptions: {
-          attempts: 3,
-          backoff: { type: "exponential", delay: 30_000 },
-          removeOnComplete: { age: 3_600, count: 1_000 },
-          removeOnFail: { age: 24 * 3_600 },
-        },
-      })
+      if (queue === undefined) {
+        queue = new Queue<MangaDexSyncJobData>(MANGADEX_SYNC_QUEUE, {
+          connection: createBullConnection(),
+          defaultJobOptions: {
+            attempts: 3,
+            backoff: { type: "exponential", delay: 30_000 },
+            removeOnComplete: { age: 3_600, count: 1_000 },
+            removeOnFail: { age: 24 * 3_600 },
+          },
+        })
+        // Unhandled, a Redis connection error would crash the API.
+        queue.on("error", (err) => {
+          // oxlint-disable-next-line no-console
+          console.error(`${MANGADEX_SYNC_QUEUE} queue error:`, err.message)
+        })
+      }
+
       await queue.add("sync", data, { jobId: data.syncId })
     },
   }) satisfies MangaDexSyncProducer
