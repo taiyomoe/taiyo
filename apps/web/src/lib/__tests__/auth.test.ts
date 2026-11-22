@@ -36,6 +36,7 @@ const setup = (error: AuthError | null = null, callbackURL?: string, signInData?
   const queryClient = new QueryClient()
 
   queryClient.setQueryData(sessionQueryOptions.queryKey, null)
+  queryClient.setQueryData(["library"], { entries: ["from the previous account"] })
 
   const actions = createAuthActions({
     client,
@@ -54,11 +55,15 @@ const setup = (error: AuthError | null = null, callbackURL?: string, signInData?
     },
     callbackURL,
     getOrigin: () => origin,
+    onAccountChange: () => {
+      navigation.push("account changed")
+    },
   })
   const hasCachedSession = () =>
     queryClient.getQueryState(sessionQueryOptions.queryKey) !== undefined
+  const hasCachedLibrary = () => queryClient.getQueryState(["library"]) !== undefined
 
-  return { actions, calls, navigation, hasCachedSession }
+  return { actions, calls, navigation, hasCachedSession, hasCachedLibrary }
 }
 const credentials = { email: "reader@taiyo.moe", password: "hunter22", rememberMe: true }
 
@@ -71,7 +76,7 @@ describe("createAuthActions", () => {
       { method: "signIn.email", args: [{ ...credentials, callbackURL: absolute("/") }] },
     ])
     expect(hasCachedSession()).toBe(false)
-    expect(navigation).toEqual(["invalidate", "navigate /"])
+    expect(navigation).toEqual(["account changed", "invalidate", "navigate /"])
   })
 
   it("comes back to the given page after signing in", async () => {
@@ -89,7 +94,7 @@ describe("createAuthActions", () => {
         ),
       },
     ])
-    expect(navigation).toEqual(["invalidate", "navigate /media/1?tab=chapters"])
+    expect(navigation).toEqual(["account changed", "invalidate", "navigate /media/1?tab=chapters"])
   })
 
   it("leaves the session alone when sign-in fails", async () => {
@@ -135,8 +140,10 @@ describe("createAuthActions", () => {
     ])
     expect(hasCachedSession()).toBe(false)
     expect(navigation).toEqual([
+      "account changed",
       "invalidate",
       "navigate /settings",
+      "account changed",
       "invalidate",
       "navigate /settings",
     ])
@@ -156,7 +163,33 @@ describe("createAuthActions", () => {
 
     expect(await actions.signOut()).toEqual({ ok: true })
     expect(hasCachedSession()).toBe(false)
-    expect(navigation).toEqual(["invalidate"])
+    expect(navigation).toEqual(["account changed", "invalidate"])
+  })
+
+  it("drops every cached query when signing in", async () => {
+    const { actions, hasCachedLibrary } = setup()
+
+    expect(hasCachedLibrary()).toBe(true)
+    expect(await actions.signIn(credentials)).toEqual({ ok: true })
+    expect(hasCachedLibrary()).toBe(false)
+  })
+
+  it("drops every cached query when signing out", async () => {
+    const { actions, hasCachedLibrary } = setup()
+
+    expect(hasCachedLibrary()).toBe(true)
+    expect(await actions.signOut()).toEqual({ ok: true })
+    expect(hasCachedLibrary()).toBe(false)
+  })
+
+  it("keeps the cache when sign-in fails", async () => {
+    const { actions, hasCachedLibrary } = setup({ code: "INVALID_EMAIL_OR_PASSWORD", status: 401 })
+
+    expect(await actions.signIn(credentials)).toEqual({
+      ok: false,
+      message: m.auth_error_invalid_credentials(),
+    })
+    expect(hasCachedLibrary()).toBe(true)
   })
 
   it("keeps the session when sign-out fails", async () => {

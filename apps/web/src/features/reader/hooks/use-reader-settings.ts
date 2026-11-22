@@ -49,6 +49,16 @@ const schedulePush = () => {
     flushPush(false)
   }, PUSH_DELAY_MS)
 }
+
+// The signed-in account changed: the next account's saved settings must apply, and nothing
+// edited for the previous one may be pushed to it.
+export const resetReaderSettingsSync = () => {
+  clearTimeout(pendingPush)
+  pendingPush = undefined
+  edited = false
+  remoteSettled = false
+}
+
 const subscribe = (listener: () => void) => {
   const onStorage = (event: StorageEvent) => {
     if (event.key === STORAGE_KEY) {
