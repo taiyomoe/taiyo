@@ -31,7 +31,7 @@ export function useMediaCommands(media: Media, signedIn: boolean) {
   useRegisterCommands([
     ...entityActions(title, {
       context: true,
-      libraryStatus: signedIn ? (entry.data?.status ?? null) : undefined,
+      libraryStatus: signedIn ? (entry.data?.entry?.status ?? null) : undefined,
     }),
     ...TABS.map(({ tab, label, icon }): PaletteCommand => ({
       id: `title.tab.${tab}`,

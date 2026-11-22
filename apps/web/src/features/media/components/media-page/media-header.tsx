@@ -12,6 +12,7 @@ import {
   getMainTitle,
   getMediaYears,
 } from "@/features/media/lib/media-labels"
+import { CommunityScore } from "@/features/ratings/components/community-score"
 import { m } from "@/paraglide/messages"
 
 const MAX_EYEBROW_TITLES = 3
@@ -84,6 +85,7 @@ export function MediaHeader({ media }: { media: Media }) {
             {years}
           </Pill>
         )}
+        <CommunityScore mediaId={media.id} />
       </div>
     </header>
   )

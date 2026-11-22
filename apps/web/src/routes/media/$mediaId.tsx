@@ -20,6 +20,7 @@ import { getMainTitle, getSynopsis } from "@/features/media/lib/media-labels"
 import { CHAPTERS_PER_PAGE, MEDIA_TABS } from "@/features/media/lib/media-page"
 import { pageOgMeta } from "@/features/og/lib/og-meta"
 import { serveLinkPreview } from "@/features/og/lib/og-preview"
+import { mediaStatsQueryOptions } from "@/features/ratings/api/ratings"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -61,6 +62,7 @@ export const Route = createFileRoute("/media/$mediaId")({
       [
         media,
         context.queryClient.query(mediaChapterFacetsQueryOptions(mediaId, filters)),
+        context.queryClient.query(mediaStatsQueryOptions(mediaId, contentRatings)),
         ...((deps.tab ?? "chapters") === "chapters"
           ? [
               context.queryClient.query(

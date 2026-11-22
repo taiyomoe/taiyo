@@ -12,6 +12,7 @@ import {
   SortNineOne,
   SortOneNine,
   Sparkles,
+  Star,
   SortZA,
 } from "@taiyomoe/ui/components/icons"
 import type { SearchSort } from "@/features/advanced-search/lib/advanced-search"
@@ -56,6 +57,7 @@ export const SORT_OPTIONS = [
   { value: "relevance", label: m.search_sort_relevance, icon: Sparkles },
   { value: "followers", label: m.search_sort_followers, icon: SortDescending },
   { value: "followers-asc", label: m.search_sort_followers_asc, icon: SortAscending },
+  { value: "rating", label: m.search_sort_rating, icon: Star },
   { value: "latest", label: m.search_sort_latest, icon: ClockArrowDown },
   { value: "oldest", label: m.search_sort_oldest, icon: ClockArrowUp },
   { value: "updated", label: m.search_sort_updated, icon: Refresh },

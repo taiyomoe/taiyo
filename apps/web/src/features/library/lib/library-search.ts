@@ -3,7 +3,7 @@ import { LIBRARY_STATUSES } from "@/features/library/lib/library-statuses"
 
 export const LIBRARY_PER_PAGE = 24
 
-export const LIBRARY_SORTS = ["read", "updated", "added", "released", "title"] as const
+export const LIBRARY_SORTS = ["read", "updated", "added", "released", "title", "score"] as const
 
 export const librarySearchSchema = z.object({
   status: z.enum(LIBRARY_STATUSES).optional().catch(undefined),

@@ -110,7 +110,7 @@ const findCachedEntry = (queryClient: QueryClient, mediaId: string) =>
 const applyToLists = (queryClient: QueryClient, { mediaId, status, notify }: StatusChange) => {
   const previousStatus =
     findCachedEntry(queryClient, mediaId)?.status ??
-    queryClient.getQueryData(libraryEntryQueryOptions(mediaId).queryKey)?.status ??
+    queryClient.getQueryData(libraryEntryQueryOptions(mediaId).queryKey)?.entry?.status ??
     null
 
   for (const [queryKey, page] of queryClient.getQueriesData<LibraryPage>({
@@ -188,27 +188,30 @@ export function useSetLibraryStatus() {
 
       await queryClient.cancelQueries({ queryKey: libraryKeys.all })
 
-      const previous = queryClient.getQueryData(queryKey)
+      const previous = queryClient.getQueryData(queryKey)?.entry ?? null
       const now = new Date().toISOString()
 
       applyToLists(queryClient, change)
-      queryClient.setQueryData(
-        queryKey,
-        status === null
-          ? null
-          : {
-              mediaId,
-              status,
-              notify: notify ?? previous?.notify ?? true,
-              createdAt: previous?.createdAt ?? now,
-              updatedAt: now,
-            },
-      )
+      queryClient.setQueryData(queryKey, (data) => ({
+        score: data?.score ?? null,
+        entry:
+          status === null
+            ? null
+            : {
+                mediaId,
+                status,
+                notify: notify ?? previous?.notify ?? true,
+                createdAt: previous?.createdAt ?? now,
+                updatedAt: now,
+              },
+      }))
 
       return { previous }
     },
     onError: (_error, { mediaId }, context) => {
-      queryClient.setQueryData(libraryEntryQueryOptions(mediaId).queryKey, context?.previous)
+      queryClient.setQueryData(libraryEntryQueryOptions(mediaId).queryKey, (data) =>
+        data === undefined ? data : { ...data, entry: context?.previous ?? null },
+      )
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: libraryKeys.all }),
   })

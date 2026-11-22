@@ -1,8 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
-import { Book, Bookmark } from "@taiyomoe/ui/components/icons"
+import { config } from "@taiyomoe/config"
+import { Book, Bookmark, Star } from "@taiyomoe/ui/components/icons"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { SearchHit } from "@/features/advanced-search/hooks/use-search-results"
 import { formatCompact, formatNumber } from "@/features/dashboard/lib/format"
+import { formatAverage, hasEnoughRatings } from "@/features/ratings/lib/ratings"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -24,6 +26,9 @@ const styles = stylex.create({
   },
   value: {
     color: colors.foreground,
+  },
+  star: {
+    color: colors.warning,
   },
   srOnly: {
     margin: "-1px",
@@ -59,6 +64,20 @@ export function ResultStats({ hit }: { hit: SearchHit }) {
         <span sx={styles.value}>{formatCompact(hit.chapterCount)}</span>
         <span sx={styles.srOnly}>{m.search_result_chapters_label()}</span>
       </span>
+      {hit.ratingAverage === null || !hasEnoughRatings(hit.ratingCount) ? null : (
+        <span
+          sx={styles.stat}
+          title={m.rating_community_label({
+            average: formatAverage(hit.ratingAverage),
+            max: config.ratings.maxScore,
+            count: formatNumber(hit.ratingCount),
+          })}
+        >
+          <Star aria-hidden size={14} {...stylex.props(styles.star)} />
+          <span sx={styles.value}>{formatAverage(hit.ratingAverage)}</span>
+          <span sx={styles.srOnly}>{m.search_result_rating_label()}</span>
+        </span>
+      )}
       {year === null ? null : <span sx={styles.stat}>{year}</span>}
     </p>
   )

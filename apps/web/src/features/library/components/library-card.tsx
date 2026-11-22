@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { config } from "@taiyomoe/config"
 import { Ellipsis, Play } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors, consts, font, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
@@ -16,6 +17,7 @@ import {
   libraryStatusTones,
 } from "@/features/library/lib/library-statuses"
 import { Cover } from "@/features/media/components/cover"
+import { StarGlyph } from "@/features/ratings/components/star-glyph"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -169,6 +171,18 @@ const styles = stylex.create({
     gridColumnEnd: "-1",
     gridColumnStart: "1",
   },
+  score: {
+    gap: "0.25rem",
+    alignItems: "center",
+    color: colors.foreground,
+    display: "inline-flex",
+    marginInlineStart: "auto",
+  },
+  scoreIcon: {
+    color: colors.warning,
+    height: "0.75rem",
+    width: "0.75rem",
+  },
   menuButton: {
     gridColumn: "2",
     gridRow: "1",
@@ -270,6 +284,23 @@ export function LibraryCard({
           {entry.totalCount === 0
             ? m.library_no_chapters()
             : m.library_progress_short({ read: entry.readCount, total: entry.totalCount })}
+          {entry.score === null ? null : (
+            <span
+              aria-label={m.rating_your_score_label({
+                score: entry.score,
+                max: config.ratings.maxScore,
+              })}
+              role="img"
+              sx={styles.score}
+              title={m.rating_your_score_label({
+                score: entry.score,
+                max: config.ratings.maxScore,
+              })}
+            >
+              <StarGlyph sx={styles.scoreIcon} />
+              {entry.score}
+            </span>
+          )}
         </span>
         <LibraryEntryMenu
           entry={entry}

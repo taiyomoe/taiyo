@@ -103,6 +103,7 @@ export const API_ERROR_MESSAGES = {
   PAGE_REPORT_NOT_FOUND: m.error_api_report_not_found,
   PAGE_REPORT_CLOSED: m.error_api_report_closed,
   LIBRARY_ENTRY_NOT_FOUND: m.error_api_library_entry_not_found,
+  RATING_NOT_FOUND: m.error_api_rating_not_found,
   LIST_NOT_FOUND: m.error_api_list_not_found,
   LIST_ITEM_NOT_FOUND: m.error_api_list_item_not_found,
   LIST_ITEM_EXISTS: m.error_api_list_item_exists,

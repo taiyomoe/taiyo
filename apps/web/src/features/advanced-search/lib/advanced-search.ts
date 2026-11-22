@@ -26,6 +26,7 @@ const SEARCH_SORTS = {
   relevance: [],
   followers: BY_FOLLOWERS,
   "followers-asc": [{ field: "libraryCount", direction: "asc" }],
+  rating: [{ field: "rating", direction: "desc" }],
   latest: [{ field: "createdAt", direction: "desc" }],
   oldest: [{ field: "createdAt", direction: "asc" }],
   updated: [{ field: "updatedAt", direction: "desc" }],
