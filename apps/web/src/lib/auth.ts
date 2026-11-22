@@ -2,6 +2,7 @@ import type { QueryClient } from "@tanstack/react-query"
 import { m } from "../paraglide/messages"
 import { AUTH_ERROR_MESSAGES, SOCIAL_ERROR_MESSAGES } from "./error-messages"
 import { getCodeMessage } from "./errors"
+import { toInternalPath } from "./internal-path"
 import { sessionQueryOptions } from "./session"
 
 export type SocialProvider = "discord" | "google"
@@ -95,7 +96,7 @@ export const createAuthActions = ({
   client,
   queryClient,
   router,
-  callbackURL = "/",
+  callbackURL: requestedCallbackURL = "/",
   getOrigin = () => window.location.origin,
 }: {
   client: AuthClient
@@ -104,6 +105,8 @@ export const createAuthActions = ({
   callbackURL?: string | undefined
   getOrigin?: () => string
 }) => {
+  // Where to land after signing in comes from the URL: only follow it when it stays on the site.
+  const callbackURL = toInternalPath(requestedCallbackURL)
   // Better Auth runs on the api's origin and resolves a relative callbackURL against it,
   // so the redirects it issues (social sign-in, verification links) would land on the
   // api. Resolved when an action runs: the hook also renders on the server.
