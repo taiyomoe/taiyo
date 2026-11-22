@@ -28,7 +28,7 @@
 
 ## Accounts
 
-**Session**: the signed-in user as the web app's root route loads it. It is cached with `staleTime: "static"`, so it never refetches on its own; an auth action that changes who is signed in (sign-in, sign-out) must drop it and re-run the router. That rule lives in `createAuthActions` (`apps/web/src/lib/auth.ts`), the only module the web app uses to change who is signed in. Settings updates (`useUpdateSettings`) patch the cached session in place instead, since the user stays the same.
+**Session**: the signed-in user as the web app's root route loads it. It is cached with `staleTime: "static"`, so it never refetches on its own; an auth action that changes who is signed in (sign-in, sign-out) must drop every cached query, the session included, reset the per-account state kept outside the cache (the reader-settings sync), and re-run the router. That rule lives in `createAuthActions` (`apps/web/src/lib/auth.ts`), the only module the web app uses to change who is signed in. Settings updates (`useUpdateSettings`) patch the cached session in place instead, since the user stays the same.
 
 **Auth error**: a failed auth action, reported to the user through a fixed message chosen from Better Auth's error code (or the 429 status). Server-provided error text is never shown.
 

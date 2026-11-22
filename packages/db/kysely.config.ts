@@ -1,11 +1,11 @@
 import { defineConfig } from "kysely-ctl"
-import pg from "pg"
 import { env } from "./src/env"
+import { createPool } from "./src/pool"
 
 export default defineConfig({
   dialect: "pg",
   dialectConfig: {
-    pool: new pg.Pool({ connectionString: env.DATABASE_URL }),
+    pool: createPool(env.DATABASE_URL),
   },
   migrations: {
     migrationFolder: "src/migrations",

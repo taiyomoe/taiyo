@@ -3,7 +3,6 @@ import { m } from "../paraglide/messages"
 import { AUTH_ERROR_MESSAGES, SOCIAL_ERROR_MESSAGES } from "./error-messages"
 import { getCodeMessage } from "./errors"
 import { toInternalPath } from "./internal-path"
-import { sessionQueryOptions } from "./session"
 
 export type SocialProvider = "discord" | "google"
 
@@ -98,12 +97,14 @@ export const createAuthActions = ({
   router,
   callbackURL: requestedCallbackURL = "/",
   getOrigin = () => window.location.origin,
+  onAccountChange = () => {},
 }: {
   client: AuthClient
   queryClient: QueryClient
   router: AuthRouter
   callbackURL?: string | undefined
   getOrigin?: () => string
+  onAccountChange?: () => void
 }) => {
   const callbackURL = toInternalPath(requestedCallbackURL)
   // Better Auth runs on the api's origin and resolves a relative callbackURL against it,
@@ -111,7 +112,9 @@ export const createAuthActions = ({
   // api. Resolved when an action runs: the hook also renders on the server.
   const authCallbackURL = () => new URL(callbackURL, getOrigin()).href
   const refreshSession = async () => {
-    queryClient.removeQueries({ queryKey: sessionQueryOptions.queryKey })
+    onAccountChange()
+    await queryClient.cancelQueries()
+    queryClient.removeQueries()
     await router.invalidate()
   }
   const finishSignIn = async (result: AuthResult) => {
