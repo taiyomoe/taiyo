@@ -32,8 +32,6 @@ export const config = {
       minLength: 8,
       maxLength: 50,
     },
-    // How recent a sign-in must be for actions that add a way into the account (linking a
-    // provider, adding a password). Better Auth's default, stated so the api can apply it too.
     sessionFreshAgeSeconds: 24 * 60 * 60,
   },
   settings: {

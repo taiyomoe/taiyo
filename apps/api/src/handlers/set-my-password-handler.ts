@@ -67,8 +67,7 @@ export const setMyPasswordHandler = new Hono().post(
       return c.fail("PASSWORD_ALREADY_SET")
     }
 
-    // A password is a new way into the account that outlives the session: like linking a
-    // provider, it needs a recent sign-in. Read from the database, which is authoritative.
+    // The session may come from the cache: the database row is authoritative.
     const { createdAt } = await db
       .selectFrom("sessions")
       .select("createdAt")
