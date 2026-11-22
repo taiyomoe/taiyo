@@ -68,12 +68,13 @@ jobs:
           5s --health-timeout 3s --health-retries 20
 
       rustfs:
-        image: rustfs/rustfs:1.0.4
+        image: rustfs/rustfs:1.0.5
         ports: ["9000:9000"]
         env:
           RUSTFS_ACCESS_KEY: ci-access-key
           RUSTFS_SECRET_KEY: ci-secret-key
           RUSTFS_VOLUMES: /data
+          RUSTFS_REGION: auto
         options: >-
           --health-cmd "curl -f http://127.0.0.1:9000/health" --health-interval
           5s --health-timeout 3s --health-retries 30
