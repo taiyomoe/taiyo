@@ -34,8 +34,6 @@ export const checkUser = (opts: { includeBanned?: boolean } = {}) =>
         return c.fail("USER_NOT_FOUND")
       }
 
-      // The row holds personal data (email, ban reason): the request log, which reaches HyperDX
-      // and the audit log, only gets what identifies the target.
       log.set({ targetUser: { id: targetUser.id, role: targetUser.role } })
 
       c.set("targetUser", targetUser)
