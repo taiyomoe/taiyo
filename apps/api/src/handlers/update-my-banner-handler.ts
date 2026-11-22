@@ -3,6 +3,7 @@ import { config } from "@taiyomoe/config"
 import { getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import { bodyLimit } from "hono/body-limit"
 import z from "zod"
 import { putImage } from "../image-store"
 import { audited } from "../middlewares/audited-middleware"
@@ -53,6 +54,10 @@ export const updateMyBannerHandler = new Hono().put(
   audited(userAudit.BANNER_UPDATE, (c) => ({ id: c.var.user?.id })),
   withAuth(),
   rateLimit({ prefix: "update-profile-banner", windowMs: 60_000, limit: 10 }),
+  bodyLimit({
+    maxSize: config.images.maxSizeBytes + 64 * 1024,
+    onError: (c) => c.fail("IMAGE_TOO_LARGE"),
+  }),
   validateFormData(bodySchema),
   checkImages(),
   transcodeSlot,

@@ -223,8 +223,7 @@ export const createApp = (services: Services) => {
       }),
     )
     .use(checkOrigin(corsAllowedOrigins))
-    // Every body but a multipart upload is JSON, parsed whole in memory: bound it before anything
-    // reads it. Uploads keep their own per-file limits.
+    // Multipart routes bound their own body after authentication.
     .use((c, next) =>
       c.req.header("content-type")?.includes("multipart/form-data") === true
         ? next()
