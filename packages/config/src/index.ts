@@ -122,6 +122,8 @@ export const config = {
     feedPageSize: 500,
     maxSelectedItems: 5000,
     recentSyncs: 10,
+    // Bytes read from one MangaDex download before it is refused: bounds the worker's memory.
+    maxDownloadBytes: 25 * 1024 * 1024,
   },
   pagination: {
     defaultPage: 1,

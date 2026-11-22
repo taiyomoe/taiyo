@@ -12,6 +12,7 @@ import { mediaQueryOptions } from "@/features/media/api/medias"
 import { getMainTitle } from "@/features/media/lib/media-labels"
 import { chapterQueryOptions } from "@/features/uploads/api/submissions"
 import { hostOf } from "@/features/uploads/lib/chapter-batch/links"
+import { toSafeHref } from "@/lib/safe-href"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -63,6 +64,7 @@ export function ChapterSource({ chapterId }: { chapterId: string }) {
   const mediaTitle =
     (media.data === undefined ? null : getMainTitle(media.data.titles)) ?? m.media_untitled()
   const label = getChapterLabel(chapter)
+  const externalUrl = chapter.externalUrl === null ? null : toSafeHref(chapter.externalUrl)
   const groupNames = (groups.data ?? []).map((group) => group.name)
   const back = (
     <Button
@@ -80,9 +82,9 @@ export function ChapterSource({ chapterId }: { chapterId: string }) {
         coverUrl={media.data?.covers.find((cover) => cover.isMainCover)?.url ?? null}
         label={label}
         mediaTitle={mediaTitle}
-        title={chapter.externalUrl === null ? m.leave_missing_title() : m.leave_title()}
+        title={externalUrl === null ? m.leave_missing_title() : m.leave_title()}
       />
-      {chapter.externalUrl === null ? (
+      {externalUrl === null ? (
         <>
           <p sx={styles.text}>{m.leave_missing_description()}</p>
           <div sx={styles.actions}>{back}</div>
@@ -95,15 +97,15 @@ export function ChapterSource({ chapterId }: { chapterId: string }) {
               ? null
               : ` ${m.leave_groups({ groups: groupNames.join(", ") })}`}
           </p>
-          <ChapterSourceDestination url={chapter.externalUrl} />
+          <ChapterSourceDestination url={externalUrl} />
           <p sx={styles.warning}>
             <Info size={14} {...stylex.props(styles.warningIcon)} />
             {m.leave_warning()}
           </p>
           <div sx={styles.actions}>
             {back}
-            <Button render={<a href={chapter.externalUrl} rel="noopener nofollow ugc" />}>
-              {m.leave_continue({ host: hostOf(chapter.externalUrl) })}
+            <Button render={<a href={externalUrl} rel="noopener nofollow ugc" />}>
+              {m.leave_continue({ host: hostOf(externalUrl) })}
               <ExternalLink />
             </Button>
           </div>

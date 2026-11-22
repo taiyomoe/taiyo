@@ -23,6 +23,7 @@ import {
   SubmissionStatus,
   submissionLabel,
 } from "@/features/uploads/components/submission-cells"
+import { toSafeHref } from "@/lib/safe-href"
 import { m } from "@/paraglide/messages"
 
 export type SubmissionDialog = "release" | "reschedule" | "note" | "withdraw"
@@ -40,6 +41,7 @@ export function MySubmissionRow({
   onDialog: (dialog: SubmissionDialog) => void
 }) {
   const label = submissionLabel(submission)
+  const externalUrl = submission.externalUrl === null ? null : toSafeHref(submission.externalUrl)
   const open = (dialog: SubmissionDialog) => () => {
     onDialog(dialog)
   }
@@ -55,16 +57,14 @@ export function MySubmissionRow({
           },
         ]
       : []),
-    ...(submission.externalUrl === null
+    ...(externalUrl === null
       ? []
       : [
           {
             key: "external",
             label: m.submissions_open_external(),
             icon: Globe,
-            render: (
-              <a href={submission.externalUrl} rel="noopener noreferrer nofollow" target="_blank" />
-            ),
+            render: <a href={externalUrl} rel="noopener noreferrer nofollow" target="_blank" />,
           },
         ]),
     ...(submission.rejectionReason === null

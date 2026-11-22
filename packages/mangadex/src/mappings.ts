@@ -79,6 +79,14 @@ const isHttpUrl = (value: string) => {
 }
 const urlOrNull = (value: string | null | undefined) =>
   value !== null && value !== undefined && isHttpUrl(value.trim()) ? value.trim() : null
+
+/** The same rule as a chapter link given to the API: http(s), at most maxUrlLength characters. */
+export const toExternalUrl = (value: string | null) => {
+  const url = urlOrNull(value)
+
+  return url !== null && url.length <= config.input.maxUrlLength ? url : null
+}
+
 const positiveInt = (value: string) => {
   const parsed = Number(value)
 

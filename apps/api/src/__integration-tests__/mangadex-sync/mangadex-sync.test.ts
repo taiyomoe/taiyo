@@ -296,6 +296,52 @@ describe("POST /medias/:id/mangadex-sync", () => {
     )
   }, 60_000)
 
+  test("leaves out a chapter whose link is not http(s) and still imports the others", async ({
+    app,
+    services,
+    mangaDex,
+  }) => {
+    const { headers, mediaId } = await setUp({ services, mangaDex })
+
+    mangaDex.chapters.set(MANGADEX_ID, [
+      {
+        id: defined(CHAPTER_IDS[0]),
+        chapter: "1",
+        translatedLanguage: "fr",
+        pages: 0,
+        externalUrl: "ftp://example.com/chapter",
+      },
+      { id: defined(CHAPTER_IDS[1]), chapter: "2", translatedLanguage: "fr", pages: 2 },
+    ])
+
+    const plan = await getPlan({ app }, mediaId, headers, `?mangaDexId=${MANGADEX_ID}`)
+
+    expect(plan.chapters.map((chapter) => chapter.mangaDexId)).not.toContain(CHAPTER_IDS[0])
+
+    const res = await api<{ id: string }>(app, `/medias/${mediaId}/mangadex-sync`, {
+      method: "POST",
+      headers,
+      json: {
+        mangaDexId: MANGADEX_ID,
+        keys: plan.chapters.map((chapter) => chapter.key),
+      },
+    })
+    const syncId = res.body.success ? res.body.data.id : ""
+
+    await runMangaDexSync(
+      { db: services.db, s3: services.s3, s3Bucket: services.s3Bucket, mangaDex: mangaDex.client },
+      { syncId },
+    )
+
+    const items = await services.db
+      .selectFrom("mangaDexSyncItems")
+      .select(["mangaDexId", "status"])
+      .where("syncId", "=", syncId)
+      .execute()
+
+    expect(items.find((item) => item.mangaDexId === CHAPTER_IDS[1])?.status).toBe("DONE")
+  }, 60_000)
+
   test("moves to another MangaDex@Home node when one fails", async ({
     app,
     services,
