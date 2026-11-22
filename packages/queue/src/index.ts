@@ -2,6 +2,7 @@ import { awardMetricAchievements, getAchievementProgress } from "./achievements"
 import { reapOrphanCommentImages } from "./comment-image-reaper"
 import { createBullConnection } from "./connection"
 import {
+  failStaleMangaDexSyncs,
   getMangaDexSyncProducer,
   MANGADEX_SYNC_QUEUE,
   type MangaDexSyncJobData,
@@ -19,6 +20,7 @@ import {
   type PushSender,
   sendPendingPushes,
 } from "./push"
+import { isPushServiceEndpoint } from "./push-service"
 import { PUSH_TEXTS } from "./push-texts"
 import { CHAPTER_UPLOAD_QUEUE, type ChapterUploadProducer, getChapterUploadProducer } from "./queue"
 import {
@@ -39,11 +41,13 @@ export {
   createBullConnection,
   createWebPushSender,
   drainNotificationOutbox,
+  failStaleMangaDexSyncs,
   getAchievementProgress,
   getChapterUploadProducer,
   getMangaDexSyncProducer,
   getVapidPublicKey,
   isExpiredPushStatus,
+  isPushServiceEndpoint,
   MANGADEX_SYNC_QUEUE,
   processChapterUpload,
   PUSH_TEXTS,

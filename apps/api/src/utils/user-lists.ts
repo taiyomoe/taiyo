@@ -7,7 +7,7 @@ import {
   sql,
   USER_LIST_VISIBILITIES,
 } from "@taiyomoe/db"
-import { group } from "radashi"
+import { groupBy } from "remeda"
 import z from "zod"
 import { getMainCoverUrls } from "./latest-chapters"
 import { userSummarySchema } from "./schemas"
@@ -139,7 +139,7 @@ const getSummarizer = async (
           .orderBy("rank", "asc")
           .execute()
   const coverUrls = await getMainCoverUrls(db, [...new Set(previews.map((row) => row.mediaId))])
-  const previewsByList = group(previews, (row) => row.listId)
+  const previewsByList = groupBy(previews, (row) => row.listId)
 
   return <T extends ListSummaryRow>({
     ownerId,

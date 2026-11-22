@@ -31,7 +31,11 @@ const target = (endpoint: string) => ({
 })
 const message = { title: "t", body: "b", url: "/", icon: null, tag: "x" }
 const sender = () => {
-  const send = createWebPushSender({ subject: "mailto:push@example.com", ...keyPair() })
+  const send = createWebPushSender({
+    subject: "mailto:push@example.com",
+    ...keyPair(),
+    isAllowedEndpoint: () => true,
+  })
 
   if (send === null) {
     throw new Error("Expected a sender")
@@ -72,6 +76,18 @@ describe("createWebPushSender", () => {
 
     expect(await sender()(target(`${endpoint}/drip`), message)).toBe(201)
     expect(Date.now() - started).toBeLessThan(2000)
+  })
+
+  it("answers 410 without a request for an endpoint off the push services", async () => {
+    let requests = 0
+    const endpoint = await listen((_, res) => {
+      requests += 1
+      res.writeHead(201).end()
+    })
+    const send = createWebPushSender({ subject: "mailto:push@example.com", ...keyPair() })
+
+    expect(await send?.(target(`${endpoint}/push`), message)).toBe(410)
+    expect(requests).toBe(0)
   })
 
   it("gives up on an endpoint that never answers", async () => {

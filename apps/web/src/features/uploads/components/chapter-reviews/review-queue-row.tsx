@@ -24,6 +24,7 @@ import {
   SubmissionRelease,
   submissionLabel,
 } from "@/features/uploads/components/submission-cells"
+import { toSafeHref } from "@/lib/safe-href"
 import { m } from "@/paraglide/messages"
 
 export type ReviewDialogKind = "review" | "approve" | "reject"
@@ -55,6 +56,7 @@ export function ReviewQueueRow({
   onDialog: (kind: ReviewDialogKind) => void
 }) {
   const label = submissionLabel(submission)
+  const externalUrl = submission.externalUrl === null ? null : toSafeHref(submission.externalUrl)
   const open = (kind: ReviewDialogKind) => () => {
     onDialog(kind)
   }
@@ -67,16 +69,14 @@ export function ReviewQueueRow({
       icon: ExternalLink,
       render: <Link params={{ mediaId: submission.mediaId }} to="/media/$mediaId" />,
     },
-    ...(submission.externalUrl === null
+    ...(externalUrl === null
       ? []
       : [
           {
             key: "external",
             label: m.submissions_open_external(),
             icon: Globe,
-            render: (
-              <a href={submission.externalUrl} rel="noopener noreferrer nofollow" target="_blank" />
-            ),
+            render: <a href={externalUrl} rel="noopener noreferrer nofollow" target="_blank" />,
           },
         ]),
     {

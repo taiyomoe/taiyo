@@ -12,7 +12,7 @@ export const config = {
       "## Pagination",
       "Paginated lists take `page` (from 1) and `perPage` query parameters and return `meta.page`, `meta.perPage` and `meta.total` next to `data`.",
       "## Limits",
-      "A JSON request body larger than 1 MB fails with a 413 `PAYLOAD_TOO_LARGE`, whatever the endpoint. Endpoints that are rate limited list their 429 `RATE_LIMITED` response.",
+      "A JSON request body larger than 1 MB fails with a 413 `PAYLOAD_TOO_LARGE`, whatever the endpoint. A multipart upload larger than 100 MB fails the same way. Endpoints that are rate limited list their 429 `RATE_LIMITED` response.",
     ].join("\n\n"),
   },
   auth: {
@@ -32,6 +32,7 @@ export const config = {
       minLength: 8,
       maxLength: 50,
     },
+    sessionFreshAgeSeconds: 24 * 60 * 60,
   },
   settings: {
     contentRating: ["NORMAL", "SUGGESTIVE"],
@@ -52,6 +53,7 @@ export const config = {
   } satisfies Required<UserSettings>,
   images: {
     maxSizeBytes: 10 * 1024 * 1024,
+    maxFilesPerRequest: 10,
     quality: 85,
     chapterPageQuality: 82,
     maxChapterPageSizeBytes: 15 * 1024 * 1024,
@@ -98,6 +100,14 @@ export const config = {
     maxPushSubscriptions: 10,
     activityPushDelayMinutes: 5,
     maxBulkIds: 100,
+    pushServiceHosts: [
+      "fcm.googleapis.com",
+      "android.googleapis.com",
+      "updates.push.services.mozilla.com",
+      "web.push.apple.com",
+    ],
+    // Edge's WNS uses numbered subdomains.
+    pushServiceDomains: [".notify.windows.com", ".push.apple.com"],
   },
   reports: {
     /** The points a reporter earns when the moderation team acts on their report. */
@@ -122,6 +132,9 @@ export const config = {
     feedPageSize: 500,
     maxSelectedItems: 5000,
     recentSyncs: 10,
+    maxDownloadBytes: 25 * 1024 * 1024,
+    // A running sync bumps updatedAt before each item: one this quiet, whose job is gone, died.
+    staleSyncMinutes: 120,
   },
   pagination: {
     defaultPage: 1,
@@ -150,6 +163,8 @@ export const config = {
     maxValidationIssues: 10,
     // Stated in `openapi.description`: change both together.
     maxJsonBodyBytes: 1024 * 1024,
+    // Stated in `openapi.description`: change both together.
+    maxMultipartBodyBytes: 100 * 1024 * 1024,
   },
 } as const
 

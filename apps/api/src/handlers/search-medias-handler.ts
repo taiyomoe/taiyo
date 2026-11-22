@@ -1,5 +1,9 @@
+import type { Actor } from "@taiyomoe/permissions"
+import { config } from "@taiyomoe/config"
 import {
+  type DB,
   FLAGS,
+  type Kysely,
   LANGUAGES,
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
@@ -14,6 +18,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
+import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { getMainCoverUrls } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
@@ -174,6 +179,20 @@ const mediaHitSchema = z.object({
     .int()
     .meta({ description: "The number of published chapters of the media.", example: 214 }),
 })
+const getCallerContentRatings = async (db: Kysely<DB>, viewer: Actor | null) => {
+  const row =
+    viewer === null
+      ? undefined
+      : await db
+          .selectFrom("users")
+          .select("settings")
+          .where("id", "=", viewer.id)
+          .executeTakeFirst()
+  const saved = row?.settings.contentRating
+
+  // An empty setting would turn into an `in: []` filter, which the search skips.
+  return saved && saved.length > 0 ? saved : [...config.settings.contentRating]
+}
 
 // oxlint-disable-next-line taiyo/require-audited-route
 export const searchMediasHandler = new Hono().post(
@@ -181,7 +200,7 @@ export const searchMediasHandler = new Hono().post(
   describeRoute({
     summary: "Search medias",
     description:
-      "Searches medias by text, tolerating typos, in their titles, synopses and staff names. `filter` narrows the results, including by IDs on external sites with `links` (a media matches when any of the given IDs does), and `sort` orders them, newest first by default. Each result carries the details of the media, its main title and cover, and its popularity counts: get the media for its full details.\n\n**Authentication:** none.",
+      "Searches medias by text, tolerating typos, in their titles, synopses and staff names. `filter` narrows the results, including by IDs on external sites with `links` (a media matches when any of the given IDs does), and `sort` orders them, newest first by default. Each result carries the details of the media, its main title and cover, and its popularity counts: get the media for its full details. Without a `contentRating` filter, results are limited to the content ratings of your settings, or to Normal and Suggestive when signed out.\n\n**Authentication:** optional.",
     tags: ["Medias"],
     responses: {
       201: {
@@ -200,9 +219,16 @@ export const searchMediasHandler = new Hono().post(
   }),
   rateLimit({ prefix: "search-medias", windowMs: 60_000, limit: 60 }),
   validateJson(searchMediasInputSchema),
+  withOptionalAuth,
   async (c) => {
     const input = c.var.json
-    const filters: Record<string, unknown> = input.filter
+    const filters: Record<string, unknown> =
+      input.filter.contentRating === undefined
+        ? {
+            ...input.filter,
+            contentRating: { in: await getCallerContentRatings(c.var.db, c.var.viewer) },
+          }
+        : input.filter
     const clauses: string[] = []
 
     for (const [field, fieldSpec] of Object.entries(mediaFilterSpec)) {

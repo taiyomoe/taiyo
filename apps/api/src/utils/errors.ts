@@ -280,6 +280,10 @@ const userErrors = {
     message: "Your account already has a password. Change it instead.",
     code: 409,
   },
+  SESSION_NOT_FRESH: {
+    message: "Sign in again to do this: it needs a sign-in from the last day.",
+    code: 403,
+  },
   USER_REPORT_SELF: {
     message: "You cannot report yourself.",
     code: 403,

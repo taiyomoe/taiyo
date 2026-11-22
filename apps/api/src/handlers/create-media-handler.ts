@@ -13,7 +13,7 @@ import {
 } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
-import { pick } from "radashi"
+import { pick } from "remeda"
 import z from "zod"
 import { putImage } from "../image-store"
 import { audited } from "../middlewares/audited-middleware"
@@ -109,6 +109,7 @@ const createMediaSchema = z.object({
     })
     .array()
     .min(1)
+    .max(config.images.maxFilesPerRequest)
     .meta({
       description: "The covers of the media. Exactly one of them must be the main cover.",
       examples: [
@@ -144,6 +145,7 @@ const createMediaSchema = z.object({
       contentRating: contentRatingSchema("The content rating of the banner."),
     })
     .array()
+    .max(config.images.maxFilesPerRequest)
     .default([])
     .meta({
       description: "The banners of the media.",
@@ -202,8 +204,7 @@ export const createMediaHandler = new Hono().post(
   "/",
   describeRoute({
     summary: "Create a media",
-    description:
-      "Creates a media with its titles, synopsis, release dates, covers, banners, tags, links and staff credits.\n\n**Required roles:** uploader intern, uploader, admin.",
+    description: `Creates a media with its titles, synopsis, release dates, covers, banners, tags, links and staff credits. Covers and banners take up to ${config.images.maxFilesPerRequest} images each per request.\n\n**Required roles:** uploader intern, uploader, admin.`,
     tags: ["Medias"],
     responses: {
       201: {
@@ -329,41 +330,41 @@ export const createMediaHandler = new Hono().post(
         .execute()
     }
 
-    const coverRows = await Promise.all(
-      body.covers.map(async (cover) => {
-        const id = crypto.randomUUID()
-        const { extension } = await putImage(c.var, { kind: "cover", mediaId, id }, cover.file)
+    const coverRows: NewCover[] = []
 
-        return {
-          id,
-          mediaId,
-          extension,
-          volume: cover.volume !== undefined ? String(cover.volume) : null,
-          language: cover.language,
-          contentRating: cover.contentRating,
-          isMainCover: cover.main,
-          uploaderId: c.var.user.id,
-        } satisfies NewCover
-      }),
-    )
+    for (const cover of body.covers) {
+      const id = crypto.randomUUID()
+      const { extension } = await putImage(c.var, { kind: "cover", mediaId, id }, cover.file)
+
+      coverRows.push({
+        id,
+        mediaId,
+        extension,
+        volume: cover.volume !== undefined ? String(cover.volume) : null,
+        language: cover.language,
+        contentRating: cover.contentRating,
+        isMainCover: cover.main,
+        uploaderId: c.var.user.id,
+      })
+    }
 
     await db.insertInto("covers").values(coverRows).execute()
 
     if (body.banners.length > 0) {
-      const bannerRows = await Promise.all(
-        body.banners.map(async (banner) => {
-          const id = crypto.randomUUID()
-          const { extension } = await putImage(c.var, { kind: "banner", mediaId, id }, banner.file)
+      const bannerRows: NewBanner[] = []
 
-          return {
-            id,
-            mediaId,
-            extension,
-            contentRating: banner.contentRating,
-            uploaderId: c.var.user.id,
-          } satisfies NewBanner
-        }),
-      )
+      for (const banner of body.banners) {
+        const id = crypto.randomUUID()
+        const { extension } = await putImage(c.var, { kind: "banner", mediaId, id }, banner.file)
+
+        bannerRows.push({
+          id,
+          mediaId,
+          extension,
+          contentRating: banner.contentRating,
+          uploaderId: c.var.user.id,
+        })
+      }
 
       await db.insertInto("banners").values(bannerRows).execute()
     }

@@ -2,7 +2,7 @@ import { sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
-import { group, omit } from "radashi"
+import { groupBy, omit } from "remeda"
 import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import {
@@ -135,7 +135,7 @@ export const listLatestMediaUpdatesHandler = new Hono().get(
       getMainCoverUrls(db, mediaIds),
       getMainTitles(db, mediaIds),
     ])
-    const chaptersByMedia = group(chapters, (chapter) => chapter.mediaId)
+    const chaptersByMedia = groupBy(chapters, (chapter) => chapter.mediaId)
 
     return c.ok(
       updates.map((update) => ({

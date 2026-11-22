@@ -10,7 +10,8 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
-import { notifyModeration } from "../utils/notifications"
+import { isUniqueViolation } from "../utils/database-errors"
+import { notifyModeration } from "../utils/notifications/moderation"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import {
@@ -126,11 +127,19 @@ export const updateUserProfileHandler = new Hono().patch(
     c.var.audit.set({ changes })
 
     if (displayUsername !== undefined) {
-      await db
-        .updateTable("users")
-        .set({ displayUsername, name: displayUsername })
-        .where("id", "=", targetUser.id)
-        .execute()
+      try {
+        await db
+          .updateTable("users")
+          .set({ displayUsername, name: displayUsername })
+          .where("id", "=", targetUser.id)
+          .execute()
+      } catch (err) {
+        if (isUniqueViolation(err, "users_displayUsername_lower_key")) {
+          return c.fail("DISPLAY_NAME_TAKEN")
+        }
+
+        throw err
+      }
 
       c.var.afterCommit(() => refreshUserSessions(auth, targetUser.id))
     }

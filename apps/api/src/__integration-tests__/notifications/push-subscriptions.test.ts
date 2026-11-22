@@ -10,7 +10,7 @@ const KEYS = {
   p256dh: "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u",
   auth: "tBHItJI5svbpez7KI4CCXg",
 }
-const endpointFor = (name: string) => `https://push.example/send/${name}`
+const endpointFor = (name: string) => `https://fcm.googleapis.com/fcm/send/${name}`
 const subscribe = (
   app: Parameters<typeof api>[0],
   headers: Record<string, string>,
@@ -72,7 +72,15 @@ describe("push subscriptions", () => {
   test("rejects an endpoint that is not https", async ({ app, services }) => {
     const { headers } = await signInAs(services)
 
-    expect((await subscribe(app, headers, "http://push.example/send/plain")).status).toBe(422)
+    expect((await subscribe(app, headers, "http://fcm.googleapis.com/fcm/send/plain")).status).toBe(
+      422,
+    )
+  })
+
+  test("rejects an endpoint that is not on a known push service", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+
+    expect((await subscribe(app, headers, "https://push.example/send/device")).status).toBe(422)
   })
 
   test("unsubscribing only forgets your own device", async ({ app, services }) => {

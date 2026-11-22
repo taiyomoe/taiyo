@@ -7,7 +7,7 @@ import { authorizeList } from "../middlewares/authorize-list-middleware"
 import { checkList } from "../middlewares/check-list-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
-import { notifyModeration } from "../utils/notifications"
+import { notifyModeration } from "../utils/notifications/moderation"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 

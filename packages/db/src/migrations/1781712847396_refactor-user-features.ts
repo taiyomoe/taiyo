@@ -1,5 +1,5 @@
 import { type Kysely, sql } from "kysely"
-import { cluster } from "radashi"
+import { chunk } from "remeda"
 
 type LibraryColumn = "reading" | "rereading" | "planToRead" | "completed" | "onHold" | "dropped"
 type RefactorUserFeaturesDb = {
@@ -190,7 +190,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     }
   }
 
-  for (const batch of cluster([...libraryEntries.values()], BATCH_SIZE)) {
+  for (const batch of chunk([...libraryEntries.values()], BATCH_SIZE)) {
     await db.insertInto("userLibraryEntries").values(batch).execute()
   }
 
@@ -252,7 +252,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .column("userId")
     .execute()
 
-  for (const readerIds of cluster(
+  for (const readerIds of chunk(
     historyReaders.map((historyReader) => historyReader.userId),
     READERS_PER_BATCH,
   )) {
@@ -289,7 +289,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
       }
     }
 
-    for (const batch of cluster([...historyEntries.values()], BATCH_SIZE)) {
+    for (const batch of chunk([...historyEntries.values()], BATCH_SIZE)) {
       await db.insertInto("userHistories").values(batch).execute()
     }
   }
@@ -426,7 +426,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
   ).filter((reader) => profiles.has(reader.userId))
   const earnedPoints: Array<{ userId: string; points: number }> = []
 
-  for (const readerIds of cluster(
+  for (const readerIds of chunk(
     readers.map((reader) => reader.userId),
     READERS_PER_BATCH,
   )) {
@@ -457,7 +457,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     })
     const { rewards, earned } = replayReads(reads)
 
-    for (const batch of cluster(rewards, BATCH_SIZE)) {
+    for (const batch of chunk(rewards, BATCH_SIZE)) {
       await db.insertInto("readingRewards").values(batch).execute()
     }
 
@@ -475,7 +475,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addColumn("points", "integer", (c) => c.notNull())
     .execute()
 
-  for (const batch of cluster(earnedPoints, BATCH_SIZE)) {
+  for (const batch of chunk(earnedPoints, BATCH_SIZE)) {
     await db.insertInto("earnedPoints").values(batch).execute()
   }
 

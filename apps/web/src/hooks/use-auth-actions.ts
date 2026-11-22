@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
 import { disablePush } from "@/features/notifications/lib/push"
 import { clearOfflineChapters } from "@/features/offline/hooks/use-offline-chapters"
+import { resetReaderSettingsSync } from "@/features/reader/hooks/use-reader-settings"
 import { createAuthActions } from "@/lib/auth"
 
 export const useAuthActions = (callbackURL?: string) => {
@@ -16,6 +17,7 @@ export const useAuthActions = (callbackURL?: string) => {
       navigate: (options) => router.navigate(options),
     },
     callbackURL,
+    onAccountChange: resetReaderSettingsSync,
   })
 
   return {

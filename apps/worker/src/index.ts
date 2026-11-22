@@ -18,6 +18,7 @@ import {
   createBullConnection,
   createWebPushSender,
   drainNotificationOutbox,
+  failStaleMangaDexSyncs,
   MANGADEX_SYNC_QUEUE,
   type MangaDexSyncJobData,
   processChapterUpload,
@@ -31,30 +32,44 @@ import {
 import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from "@taiyomoe/s3"
 import { drainSearchOutbox, getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { Queue, Worker } from "bullmq"
-import { audit, auditRedactPreset, initLogger } from "evlog"
+import { audit, auditRedactPreset, initLogger, log } from "evlog"
 import { createHyperDXDrain } from "evlog/hyperdx"
 import { env } from "./env"
+import {
+  CHAPTER_MAINTENANCE_QUEUE,
+  CLOSE_RANKING_PERIODS_JOB,
+  COMMENT_MAINTENANCE_QUEUE,
+  DRAIN_JOB,
+  DRAIN_NOTIFICATIONS_JOB,
+  FAIL_STALE_SYNCS_JOB,
+  NOTIFICATION_MAINTENANCE_QUEUE,
+  PUBLISH_JOB,
+  PURGE_NOTIFICATIONS_JOB,
+  RANKING_MAINTENANCE_QUEUE,
+  REAP_COMMENT_IMAGES_JOB,
+  REAP_JOB,
+  routeJobs,
+  SCHEDULES,
+  SEARCH_MAINTENANCE_QUEUE,
+  SEND_PUSHES_JOB,
+} from "./jobs"
 
-const CHAPTER_MAINTENANCE_QUEUE = "chapter-maintenance"
-const REAP_JOB = "reap-stale-uploads"
-const PUBLISH_JOB = "publish-scheduled-chapters"
-const SEARCH_MAINTENANCE_QUEUE = "search-maintenance"
-const DRAIN_JOB = "drain-search-outbox"
-const COMMENT_MAINTENANCE_QUEUE = "comment-maintenance"
-const REAP_COMMENT_IMAGES_JOB = "reap-orphan-comment-images"
-const NOTIFICATION_MAINTENANCE_QUEUE = "notification-maintenance"
-const DRAIN_NOTIFICATIONS_JOB = "drain-notification-outbox"
-const PURGE_NOTIFICATIONS_JOB = "purge-notifications"
-const SEND_PUSHES_JOB = "send-pushes"
-const RANKING_MAINTENANCE_QUEUE = "ranking-maintenance"
-const CLOSE_RANKING_PERIODS_JOB = "close-ranking-periods"
 const chapterUploadActor = systemActor("chapter-upload-worker")
 const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
 const mangaDexSyncActor = systemActor("mangadex-sync-worker")
 const rankingActor = systemActor("ranking-worker")
+const logConnectionErrors = (
+  name: string,
+  emitter: { on: (event: "error", listener: (err: Error) => void) => unknown },
+) => {
+  emitter.on("error", (err) => {
+    log.error("bullmq", `${name}: ${err.message}`)
+  })
+}
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const mangaDexDeps = { ...deps, mangaDex: createMangaDexClient() }
+const mangaDexSyncQueue = new Queue(MANGADEX_SYNC_QUEUE, { connection: createBullConnection() })
 const notificationEvents = createNotificationEvents()
 const pushDeps = { db: deps.db, send: createWebPushSender() }
 const searchDeps = { db: deps.db, meili: getMeiliClient(), mediasIndex: SEARCH_INDEXES.MEDIAS }
@@ -163,8 +178,8 @@ const mangaDexSyncWorker = new Worker<MangaDexSyncJobData>(
 )
 const maintenanceWorker = new Worker(
   CHAPTER_MAINTENANCE_QUEUE,
-  async (job) => {
-    if (job.name === PUBLISH_JOB) {
+  routeJobs(CHAPTER_MAINTENANCE_QUEUE, {
+    [PUBLISH_JOB]: async () => {
       const { chapters, awardedUserIds } = await publishScheduledChapters(deps)
 
       await notificationEvents.publish(awardedUserIds)
@@ -178,191 +193,151 @@ const maintenanceWorker = new Worker(
           }),
         )
       }
+    },
+    [FAIL_STALE_SYNCS_JOB]: async () => {
+      const failed = await failStaleMangaDexSyncs({
+        ...mangaDexDeps,
+        getJobState: (syncId) => mangaDexSyncQueue.getJobState(syncId),
+      })
 
-      return
-    }
+      for (const { id, mediaId, jobState } of failed) {
+        audit(
+          mangaDexSyncAudit.PROCESS({
+            actor: mangaDexSyncActor,
+            target: { id, mediaId },
+            outcome: "failure",
+            reason: `STALLED (job ${jobState})`,
+          }),
+        )
+      }
+    },
+    [REAP_JOB]: async () => {
+      const { abandonedChapters, tasks } = await reapStaleChapterUploads(deps)
 
-    const { abandonedChapters, tasks } = await reapStaleChapterUploads(deps)
+      for (const { id, mediaId } of abandonedChapters) {
+        audit(
+          chapterUploadAudit.ABANDON({
+            actor: maintenanceActor,
+            target: { id, mediaId },
+            outcome: "success",
+            reason: "PAGES_MISSING",
+          }),
+        )
+      }
 
-    for (const { id, mediaId } of abandonedChapters) {
-      audit(
-        chapterUploadAudit.ABANDON({
-          actor: maintenanceActor,
-          target: { id, mediaId },
-          outcome: "success",
-          reason: "PAGES_MISSING",
-        }),
-      )
-    }
-
-    for (const { id, ...task } of tasks) {
-      audit(
-        chapterUploadAudit.REAP({
-          actor: maintenanceActor,
-          target: { id, ...task },
-          outcome: "success",
-        }),
-      )
-    }
-  },
+      for (const { id, ...task } of tasks) {
+        audit(
+          chapterUploadAudit.REAP({
+            actor: maintenanceActor,
+            target: { id, ...task },
+            outcome: "success",
+          }),
+        )
+      }
+    },
+  }),
   { connection: createBullConnection(), concurrency: 1 },
 )
 const searchWorker = new Worker(
   SEARCH_MAINTENANCE_QUEUE,
-  async () => {
-    await drainSearchOutbox(searchDeps, { limit: Number.POSITIVE_INFINITY })
-  },
+  routeJobs(SEARCH_MAINTENANCE_QUEUE, {
+    [DRAIN_JOB]: async () => {
+      await drainSearchOutbox(searchDeps, { limit: Number.POSITIVE_INFINITY })
+    },
+  }),
   { connection: createBullConnection(), concurrency: 1 },
 )
 const commentWorker = new Worker(
   COMMENT_MAINTENANCE_QUEUE,
-  async () => {
-    const reaped = await reapOrphanCommentImages(deps)
+  routeJobs(COMMENT_MAINTENANCE_QUEUE, {
+    [REAP_COMMENT_IMAGES_JOB]: async () => {
+      const reaped = await reapOrphanCommentImages(deps)
 
-    for (const { id, uploaderId } of reaped) {
-      audit(
-        commentImageAudit.REAP({
-          actor: commentMaintenanceActor,
-          target: { id, uploaderId },
-          outcome: "success",
-        }),
-      )
-    }
-  },
+      for (const { id, uploaderId } of reaped) {
+        audit(
+          commentImageAudit.REAP({
+            actor: commentMaintenanceActor,
+            target: { id, uploaderId },
+            outcome: "success",
+          }),
+        )
+      }
+    },
+  }),
   { connection: createBullConnection(), concurrency: 1 },
 )
 const notificationWorker = new Worker(
   NOTIFICATION_MAINTENANCE_QUEUE,
-  async (job) => {
-    if (job.name === PURGE_NOTIFICATIONS_JOB) {
+  routeJobs(NOTIFICATION_MAINTENANCE_QUEUE, {
+    [PURGE_NOTIFICATIONS_JOB]: async () => {
       await purgeNotifications(deps)
-
-      return
-    }
-
-    if (job.name === DRAIN_NOTIFICATIONS_JOB) {
+    },
+    [DRAIN_NOTIFICATIONS_JOB]: async () => {
       const { userIds } = await drainNotificationOutbox(deps)
 
       await notificationEvents.publish(userIds)
-    }
-
-    await sendPendingPushes(pushDeps)
-  },
+      await sendPendingPushes(pushDeps)
+    },
+    [SEND_PUSHES_JOB]: async () => {
+      await sendPendingPushes(pushDeps)
+    },
+  }),
   { connection: createBullConnection(), concurrency: 1 },
 )
 const rankingWorker = new Worker(
   RANKING_MAINTENANCE_QUEUE,
-  async () => {
-    const closed = await closeRankingPeriods(deps)
+  routeJobs(RANKING_MAINTENANCE_QUEUE, {
+    [CLOSE_RANKING_PERIODS_JOB]: async () => {
+      const closed = await closeRankingPeriods(deps)
 
-    for (const { id, kind, startsAt, endsAt, results, points, achievements } of closed) {
-      audit(
-        rankingAudit.PERIOD_CLOSE({
-          actor: rankingActor,
-          target: { id, kind, startsAt, endsAt, results, points, achievements },
-          outcome: "success",
-        }),
-      )
-    }
+      for (const { id, kind, startsAt, endsAt, results, points, achievements } of closed) {
+        audit(
+          rankingAudit.PERIOD_CLOSE({
+            actor: rankingActor,
+            target: { id, kind, startsAt, endsAt, results, points, achievements },
+            outcome: "success",
+          }),
+        )
+      }
 
-    await notificationEvents.publish([...new Set(closed.flatMap(({ userIds }) => userIds))])
-  },
+      await notificationEvents.publish([...new Set(closed.flatMap(({ userIds }) => userIds))])
+    },
+  }),
   { connection: createBullConnection(), concurrency: 1 },
 )
+
+logConnectionErrors(MANGADEX_SYNC_QUEUE, mangaDexSyncQueue)
+logConnectionErrors(CHAPTER_UPLOAD_QUEUE, chapterWorker)
+logConnectionErrors(MANGADEX_SYNC_QUEUE, mangaDexSyncWorker)
+logConnectionErrors(CHAPTER_MAINTENANCE_QUEUE, maintenanceWorker)
+logConnectionErrors(SEARCH_MAINTENANCE_QUEUE, searchWorker)
+logConnectionErrors(COMMENT_MAINTENANCE_QUEUE, commentWorker)
+logConnectionErrors(NOTIFICATION_MAINTENANCE_QUEUE, notificationWorker)
+logConnectionErrors(RANKING_MAINTENANCE_QUEUE, rankingWorker)
 
 chapterWorker.on("ready", () => {
   // oxlint-disable-next-line no-console
   console.debug("chapter-upload worker ready")
 })
 
-const chapterMaintenanceQueue = new Queue(CHAPTER_MAINTENANCE_QUEUE, {
-  connection: createBullConnection(),
-})
+for (const queueName of new Set(SCHEDULES.map(({ queue }) => queue))) {
+  const queue = new Queue(queueName, { connection: createBullConnection() })
 
-await chapterMaintenanceQueue
-  .upsertJobScheduler(REAP_JOB, { pattern: "0 * * * *" }, { name: REAP_JOB })
-  .then(() =>
-    chapterMaintenanceQueue.upsertJobScheduler(
-      PUBLISH_JOB,
-      { every: 60_000 },
-      { name: PUBLISH_JOB },
-    ),
-  )
-  .then(() => chapterMaintenanceQueue.close())
-  .catch((err: unknown) => {
+  logConnectionErrors(queueName, queue)
+
+  try {
+    for (const { queue: scheduleQueue, job, repeat } of SCHEDULES) {
+      if (scheduleQueue === queueName) {
+        await queue.upsertJobScheduler(job, repeat, { name: job })
+      }
+    }
+
+    await queue.close()
+  } catch (err) {
     // oxlint-disable-next-line no-console
-    console.warn("chapter maintenance schedule not applied (store may not support it):", err)
-  })
-
-const searchMaintenanceQueue = new Queue(SEARCH_MAINTENANCE_QUEUE, {
-  connection: createBullConnection(),
-})
-
-await searchMaintenanceQueue
-  .upsertJobScheduler(DRAIN_JOB, { every: 60_000 }, { name: DRAIN_JOB })
-  .then(() => searchMaintenanceQueue.close())
-  .catch((err: unknown) => {
-    // oxlint-disable-next-line no-console
-    console.warn("search maintenance schedule not applied (store may not support it):", err)
-  })
-
-const commentMaintenanceQueue = new Queue(COMMENT_MAINTENANCE_QUEUE, {
-  connection: createBullConnection(),
-})
-
-await commentMaintenanceQueue
-  .upsertJobScheduler(
-    REAP_COMMENT_IMAGES_JOB,
-    { pattern: "30 * * * *" },
-    { name: REAP_COMMENT_IMAGES_JOB },
-  )
-  .then(() => commentMaintenanceQueue.close())
-  .catch((err: unknown) => {
-    // oxlint-disable-next-line no-console
-    console.warn("comment maintenance schedule not applied (store may not support it):", err)
-  })
-
-const notificationMaintenanceQueue = new Queue(NOTIFICATION_MAINTENANCE_QUEUE, {
-  connection: createBullConnection(),
-})
-
-await notificationMaintenanceQueue
-  .upsertJobScheduler(DRAIN_NOTIFICATIONS_JOB, { every: 10_000 }, { name: DRAIN_NOTIFICATIONS_JOB })
-  .then(() =>
-    notificationMaintenanceQueue.upsertJobScheduler(
-      SEND_PUSHES_JOB,
-      { every: 5000 },
-      { name: SEND_PUSHES_JOB },
-    ),
-  )
-  .then(() =>
-    notificationMaintenanceQueue.upsertJobScheduler(
-      PURGE_NOTIFICATIONS_JOB,
-      { pattern: "15 4 * * *" },
-      { name: PURGE_NOTIFICATIONS_JOB },
-    ),
-  )
-  .then(() => notificationMaintenanceQueue.close())
-  .catch((err: unknown) => {
-    // oxlint-disable-next-line no-console
-    console.warn("notification maintenance schedule not applied (store may not support it):", err)
-  })
-
-const rankingMaintenanceQueue = new Queue(RANKING_MAINTENANCE_QUEUE, {
-  connection: createBullConnection(),
-})
-
-// Periods end at UTC midnight: a short repeat closes them soon after, and catches up after downtime.
-await rankingMaintenanceQueue
-  .upsertJobScheduler(
-    CLOSE_RANKING_PERIODS_JOB,
-    { every: 10 * 60_000 },
-    { name: CLOSE_RANKING_PERIODS_JOB },
-  )
-  .then(() => rankingMaintenanceQueue.close())
-  .catch((err: unknown) => {
-    process.stderr.write(`ranking maintenance schedule not applied: ${String(err)}\n`)
-  })
+    console.warn(`${queueName} schedule not applied (store may not support it):`, err)
+  }
+}
 
 const handleShutdownSignal = () => {
   Promise.all([
@@ -373,6 +348,7 @@ const handleShutdownSignal = () => {
     commentWorker.close(),
     notificationWorker.close(),
     rankingWorker.close(),
+    mangaDexSyncQueue.close(),
   ])
     .then(() => {
       process.exit(0)

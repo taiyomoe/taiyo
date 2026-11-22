@@ -24,7 +24,7 @@ export const setMyPasswordHandler = new Hono().post(
   describeRoute({
     summary: "Set my password",
     description:
-      "Sets a password on your account when it only signs in with Discord, Google or a magic link. When your account already has a password, use the auth change-password endpoint instead.\n\n**Authentication:** signed-in user.",
+      "Sets a password on your account when it only signs in with Discord, Google or a magic link. When your account already has a password, use the auth change-password endpoint instead. It needs a sign-in from the last day.\n\n**Authentication:** signed-in user.",
     tags: ["Profile"],
     responses: {
       201: {
@@ -45,7 +45,7 @@ export const setMyPasswordHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         401: true,
-        403: true,
+        403: "You are banned, or you last signed in more than a day ago: sign in again first.",
         409: "Your account already has a password.",
         422: "The request body failed validation.",
       }),
@@ -65,6 +65,17 @@ export const setMyPasswordHandler = new Hono().post(
 
     if (credential !== undefined) {
       return c.fail("PASSWORD_ALREADY_SET")
+    }
+
+    // The session may come from the cache: the database row is authoritative.
+    const { createdAt } = await db
+      .selectFrom("sessions")
+      .select("createdAt")
+      .where("id", "=", c.var.session.id)
+      .executeTakeFirstOrThrow()
+
+    if (Date.now() - createdAt.getTime() >= config.auth.sessionFreshAgeSeconds * 1000) {
+      return c.fail("SESSION_NOT_FRESH")
     }
 
     await auth.api.setPassword({

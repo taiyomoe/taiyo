@@ -71,6 +71,29 @@ describe("PATCH /users/me/account", () => {
     expect(res.body).toMatchObject({ success: false, code: "DISPLAY_NAME_TAKEN" })
   })
 
+  test("lets only one of two users take a name at once, ignoring case", async ({
+    app,
+    services,
+  }) => {
+    const first = await signInAs(services)
+    const second = await signInAs(services)
+    const name = `Race ${crypto.randomUUID().replaceAll("-", "").slice(0, 8)}`
+    const results = await Promise.all([
+      api(app, "/users/me/account", {
+        method: "PATCH",
+        headers: first.headers,
+        json: { displayName: name },
+      }),
+      api(app, "/users/me/account", {
+        method: "PATCH",
+        headers: second.headers,
+        json: { displayName: name.toLowerCase() },
+      }),
+    ])
+
+    expect(results.map((res) => res.status).sort((a, b) => a - b)).toEqual([200, 409])
+  })
+
   test("keeps the user's own names when they are sent back unchanged", async ({
     app,
     services,
@@ -142,6 +165,34 @@ describe("POST /users/me/password", () => {
 
     expect(second.status).toBe(409)
     expect(second.body).toMatchObject({ success: false, code: "PASSWORD_ALREADY_SET" })
+  })
+
+  test("needs a recent sign-in", async ({ app, services }) => {
+    const { userId, headers } = await signInAs(services)
+
+    await services.db
+      .updateTable("sessions")
+      .set({ createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) })
+      .where("userId", "=", userId)
+      .execute()
+
+    const res = await api(app, "/users/me/password", {
+      method: "POST",
+      headers,
+      json: { newPassword: "a-long-password" },
+    })
+
+    expect(res.status).toBe(403)
+    expect(res.body).toMatchObject({ success: false, code: "SESSION_NOT_FRESH" })
+
+    const credential = await services.db
+      .selectFrom("accounts")
+      .select("id")
+      .where("userId", "=", userId)
+      .where("providerId", "=", "credential")
+      .executeTakeFirst()
+
+    expect(credential).toBeUndefined()
   })
 
   test("rejects a short password", async ({ app, services }) => {

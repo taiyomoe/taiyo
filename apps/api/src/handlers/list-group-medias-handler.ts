@@ -2,7 +2,7 @@ import { MEDIA_COUNTRIES_OF_ORIGIN, sql } from "@taiyomoe/db"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
-import { group } from "radashi"
+import { groupBy } from "remeda"
 import z from "zod"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
@@ -131,7 +131,7 @@ export const listGroupMediasHandler = new Hono().get(
             .orderBy("staffs.name", "asc")
             .execute(),
     ])
-    const authorsByMedia = group(authors, (author) => author.mediaId)
+    const authorsByMedia = groupBy(authors, (author) => author.mediaId)
 
     return c.ok(
       rows.map((row) => ({
