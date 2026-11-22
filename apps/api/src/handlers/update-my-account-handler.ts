@@ -102,7 +102,6 @@ export const updateMyAccountHandler = new Hono().patch(
 
     c.var.audit.set({ changes: auditChanges(before, patch) })
 
-    // Same columns as `before`.
     let updated: typeof before
 
     try {
@@ -113,7 +112,6 @@ export const updateMyAccountHandler = new Hono().patch(
         .returning(["username", "displayUsername", "name"])
         .executeTakeFirstOrThrow()
     } catch (err) {
-      // Two requests can pass the checks above at the same moment: the indexes decide.
       if (isUniqueViolation(err, "users_username_key")) {
         return c.fail("USERNAME_TAKEN")
       }

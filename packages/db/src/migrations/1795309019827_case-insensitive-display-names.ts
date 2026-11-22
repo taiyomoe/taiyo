@@ -5,10 +5,7 @@ const MAX_LENGTH = 30
 const withSuffix = (base: string, suffix: string) =>
   `${base.slice(0, MAX_LENGTH - suffix.length)}${suffix}`
 
-/**
- * Display names are unique ignoring case. The index used to be case-sensitive, so names that
- * differ only by case may exist: the oldest account keeps its name, the others get a suffix.
- */
+// Names that differ only by case may exist: the oldest account keeps its name.
 export async function up(db: Kysely<unknown>): Promise<void> {
   const { rows } = await sql<{ id: string; displayUsername: string }>`
     SELECT "id", "displayUsername" FROM (

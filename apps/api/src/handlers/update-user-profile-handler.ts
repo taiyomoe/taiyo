@@ -134,7 +134,6 @@ export const updateUserProfileHandler = new Hono().patch(
           .where("id", "=", targetUser.id)
           .execute()
       } catch (err) {
-        // Two requests can pass the check above at the same moment: the index decides.
         if (isUniqueViolation(err, "users_displayUsername_lower_key")) {
           return c.fail("DISPLAY_NAME_TAKEN")
         }
