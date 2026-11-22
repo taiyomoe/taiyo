@@ -24,7 +24,6 @@ export const validateJson = <TSchema extends z.ZodType>(schema: TSchema) =>
     >(async (c, next) => {
       let raw: unknown = {}
 
-      // Only a body sent as JSON is read: any other is left unread, and the schema sees `{}`.
       if (isJsonContentType(c.req.header("content-type"))) {
         try {
           raw = await c.req.json()

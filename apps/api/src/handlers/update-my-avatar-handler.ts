@@ -61,7 +61,6 @@ export const updateMyAvatarHandler = new Hono().put(
   audited(userAudit.AVATAR_UPDATE, (c) => ({ id: c.var.user?.id })),
   withAuth(),
   rateLimit({ prefix: "update-avatar", windowMs: 60_000, limit: 10 }),
-  // One image and a few fields.
   bodyLimit({
     maxSize: config.images.maxSizeBytes + 64 * 1024,
     onError: (c) => c.fail("IMAGE_TOO_LARGE"),

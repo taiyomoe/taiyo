@@ -72,7 +72,6 @@ export const updateStaffHandler = new Hono().patch(
   }),
   audited(staffAudit.UPDATE),
   withAuth("staff.update"),
-  // One image and a few fields.
   bodyLimit({
     maxSize: config.images.maxSizeBytes + 64 * 1024,
     onError: (c) => c.fail("IMAGE_TOO_LARGE"),

@@ -150,9 +150,6 @@ export const config = {
     maxValidationIssues: 10,
     // Stated in `openapi.description`: change both together.
     maxJsonBodyBytes: 1024 * 1024,
-    // A multipart upload is read whole before its files are checked: bound it too, once the caller
-    // is authenticated. Room for ten images at `images.maxSizeBytes`, which the media creation form
-    // can send in one request.
     // Stated in `openapi.description`: change both together.
     maxMultipartBodyBytes: 100 * 1024 * 1024,
   },

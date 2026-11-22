@@ -11,8 +11,7 @@ type Env<TSchema extends z.ZodType> = {
   }
 }
 
-// Applied here, and only here: the body is read whole in memory, and a limit applied after it was
-// read fails. Every route that reads a multipart body runs this middleware first, after `withAuth`.
+// A limit applied after the body was read throws, so it lives here, before formData().
 const multipartBodyLimit = bodyLimit({
   maxSize: config.input.maxMultipartBodyBytes,
   onError: (c) => c.fail("PAYLOAD_TOO_LARGE"),
@@ -41,7 +40,6 @@ export const validateFormData = <TSchema extends z.ZodType>(schema: TSchema) =>
         return validate({})
       }
 
-      // The limiter answers by itself when the body is too large, and runs this otherwise.
       let validated: ReturnType<typeof validate> | undefined
       const tooLarge = await multipartBodyLimit(c, async () => {
         const formData = await c.req.formData()

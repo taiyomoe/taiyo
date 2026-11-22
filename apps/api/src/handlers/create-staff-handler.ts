@@ -68,7 +68,6 @@ export const createStaffHandler = new Hono().post(
   audited(staffAudit.CREATE),
   withAuth("staff.create"),
   rateLimit({ prefix: "create-staff", windowMs: 60_000, limit: 30 }),
-  // One image and a few fields.
   bodyLimit({
     maxSize: config.images.maxSizeBytes + 64 * 1024,
     onError: (c) => c.fail("IMAGE_TOO_LARGE"),

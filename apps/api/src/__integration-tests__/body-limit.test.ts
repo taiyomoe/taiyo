@@ -32,7 +32,6 @@ describe("JSON body limit", () => {
   })
 })
 
-// Streams `bytes` of zeros without ever holding them all, and without a length.
 const zeros = (bytes: number) => {
   const chunk = new Uint8Array(1024 * 1024)
   let sent = 0

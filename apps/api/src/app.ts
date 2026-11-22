@@ -223,8 +223,7 @@ export const createApp = (services: Services) => {
       }),
     )
     .use(checkOrigin(corsAllowedOrigins))
-    // JSON routes only read bodies sent as JSON, parsed whole in memory: bound them before anything
-    // reads them. Multipart routes bound their own body once the caller is authenticated.
+    // Multipart routes bound their own body after authentication.
     .use((c, next) =>
       c.req.header("content-type")?.includes("multipart/form-data") === true
         ? next()
