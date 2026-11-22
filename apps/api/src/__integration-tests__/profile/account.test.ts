@@ -167,6 +167,34 @@ describe("POST /users/me/password", () => {
     expect(second.body).toMatchObject({ success: false, code: "PASSWORD_ALREADY_SET" })
   })
 
+  test("needs a recent sign-in", async ({ app, services }) => {
+    const { userId, headers } = await signInAs(services)
+
+    await services.db
+      .updateTable("sessions")
+      .set({ createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) })
+      .where("userId", "=", userId)
+      .execute()
+
+    const res = await api(app, "/users/me/password", {
+      method: "POST",
+      headers,
+      json: { newPassword: "a-long-password" },
+    })
+
+    expect(res.status).toBe(403)
+    expect(res.body).toMatchObject({ success: false, code: "SESSION_NOT_FRESH" })
+
+    const credential = await services.db
+      .selectFrom("accounts")
+      .select("id")
+      .where("userId", "=", userId)
+      .where("providerId", "=", "credential")
+      .executeTakeFirst()
+
+    expect(credential).toBeUndefined()
+  })
+
   test("rejects a short password", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const res = await api(app, "/users/me/password", {
