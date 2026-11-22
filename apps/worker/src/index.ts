@@ -31,7 +31,7 @@ import {
 import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from "@taiyomoe/s3"
 import { drainSearchOutbox, getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { Queue, Worker } from "bullmq"
-import { audit, auditRedactPreset, initLogger } from "evlog"
+import { audit, auditRedactPreset, initLogger, log } from "evlog"
 import { createHyperDXDrain } from "evlog/hyperdx"
 import { env } from "./env"
 
@@ -53,6 +53,14 @@ const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
 const mangaDexSyncActor = systemActor("mangadex-sync-worker")
 const rankingActor = systemActor("ranking-worker")
+const logConnectionErrors = (
+  name: string,
+  emitter: { on: (event: "error", listener: (err: Error) => void) => unknown },
+) => {
+  emitter.on("error", (err) => {
+    log.error("bullmq", `${name}: ${err.message}`)
+  })
+}
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const mangaDexDeps = { ...deps, mangaDex: createMangaDexClient() }
 const notificationEvents = createNotificationEvents()
@@ -270,6 +278,14 @@ const rankingWorker = new Worker(
   { connection: createBullConnection(), concurrency: 1 },
 )
 
+logConnectionErrors(CHAPTER_UPLOAD_QUEUE, chapterWorker)
+logConnectionErrors(MANGADEX_SYNC_QUEUE, mangaDexSyncWorker)
+logConnectionErrors(CHAPTER_MAINTENANCE_QUEUE, maintenanceWorker)
+logConnectionErrors(SEARCH_MAINTENANCE_QUEUE, searchWorker)
+logConnectionErrors(COMMENT_MAINTENANCE_QUEUE, commentWorker)
+logConnectionErrors(NOTIFICATION_MAINTENANCE_QUEUE, notificationWorker)
+logConnectionErrors(RANKING_MAINTENANCE_QUEUE, rankingWorker)
+
 chapterWorker.on("ready", () => {
   // oxlint-disable-next-line no-console
   console.debug("chapter-upload worker ready")
@@ -278,6 +294,8 @@ chapterWorker.on("ready", () => {
 const chapterMaintenanceQueue = new Queue(CHAPTER_MAINTENANCE_QUEUE, {
   connection: createBullConnection(),
 })
+
+logConnectionErrors(CHAPTER_MAINTENANCE_QUEUE, chapterMaintenanceQueue)
 
 await chapterMaintenanceQueue
   .upsertJobScheduler(REAP_JOB, { pattern: "0 * * * *" }, { name: REAP_JOB })
@@ -298,6 +316,8 @@ const searchMaintenanceQueue = new Queue(SEARCH_MAINTENANCE_QUEUE, {
   connection: createBullConnection(),
 })
 
+logConnectionErrors(SEARCH_MAINTENANCE_QUEUE, searchMaintenanceQueue)
+
 await searchMaintenanceQueue
   .upsertJobScheduler(DRAIN_JOB, { every: 60_000 }, { name: DRAIN_JOB })
   .then(() => searchMaintenanceQueue.close())
@@ -309,6 +329,8 @@ await searchMaintenanceQueue
 const commentMaintenanceQueue = new Queue(COMMENT_MAINTENANCE_QUEUE, {
   connection: createBullConnection(),
 })
+
+logConnectionErrors(COMMENT_MAINTENANCE_QUEUE, commentMaintenanceQueue)
 
 await commentMaintenanceQueue
   .upsertJobScheduler(
@@ -325,6 +347,8 @@ await commentMaintenanceQueue
 const notificationMaintenanceQueue = new Queue(NOTIFICATION_MAINTENANCE_QUEUE, {
   connection: createBullConnection(),
 })
+
+logConnectionErrors(NOTIFICATION_MAINTENANCE_QUEUE, notificationMaintenanceQueue)
 
 await notificationMaintenanceQueue
   .upsertJobScheduler(DRAIN_NOTIFICATIONS_JOB, { every: 10_000 }, { name: DRAIN_NOTIFICATIONS_JOB })
@@ -351,6 +375,8 @@ await notificationMaintenanceQueue
 const rankingMaintenanceQueue = new Queue(RANKING_MAINTENANCE_QUEUE, {
   connection: createBullConnection(),
 })
+
+logConnectionErrors(RANKING_MAINTENANCE_QUEUE, rankingMaintenanceQueue)
 
 // Periods end at UTC midnight: a short repeat closes them soon after, and catches up after downtime.
 await rankingMaintenanceQueue
