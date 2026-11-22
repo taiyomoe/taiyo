@@ -101,7 +101,10 @@ test.describe("shop", () => {
   test.use({ reducedMotion: "reduce" })
 
   test("a reader buys a cosmetic and the balance drops by its price", async ({ browser, page }) => {
-    const reader = await browser.newContext({ storageState: "e2e/.auth/user.json" })
+    const reader = await browser.newContext({
+      storageState: "e2e/.auth/user.json",
+      reducedMotion: "reduce",
+    })
 
     try {
       const userId = await userIdOf(reader)
@@ -160,7 +163,10 @@ test.describe("shop", () => {
   })
 
   test("a reader opens a loot box and the result matches the API", async ({ browser, page }) => {
-    const reader = await browser.newContext({ storageState: "e2e/.auth/user.json" })
+    const reader = await browser.newContext({
+      storageState: "e2e/.auth/user.json",
+      reducedMotion: "reduce",
+    })
 
     try {
       const userId = await userIdOf(reader)
