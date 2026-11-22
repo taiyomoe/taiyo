@@ -135,8 +135,8 @@ importers:
         specifier: ^6.11.8
         version: 6.11.8(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       remeda:
-        specifier: ^2.58.0
-        version: 2.58.0
+        specifier: ^2.61.0
+        version: 2.61.0
       sharp:
         specifier: ^0.35.5
         version: 0.35.5(@types/node@26.6.6)
@@ -422,8 +422,8 @@ importers:
         specifier: ^7.92.0
         version: 7.92.0(@types/react@19.3.0)(react@19.3.1)
       remeda:
-        specifier: ^2.58.0
-        version: 2.58.0
+        specifier: ^2.61.0
+        version: 2.61.0
       srvx:
         specifier: ^1.0.8
         version: 1.0.8
@@ -628,8 +628,8 @@ importers:
         specifier: ^8.23.1
         version: 8.23.1
       remeda:
-        specifier: ^2.58.0
-        version: 2.58.0
+        specifier: ^2.61.0
+        version: 2.61.0
       validator:
         specifier: ^13.15.35
         version: 13.15.35
@@ -764,8 +764,8 @@ importers:
         specifier: ^0.63.0
         version: 0.63.0
       remeda:
-        specifier: ^2.58.0
-        version: 2.58.0
+        specifier: ^2.61.0
+        version: 2.61.0
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -810,8 +810,8 @@ importers:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
       remeda:
-        specifier: ^2.58.0
-        version: 2.58.0
+        specifier: ^2.61.0
+        version: 2.61.0
     devDependencies:
       '@types/react':
         specifier: ^19.3.0
@@ -1591,12 +1591,6 @@ packages:
 
   '@eslint-community/eslint-utils@4.10.1':
     resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
-
-  '@eslint-community/eslint-utils@4.9.1':
-    resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
@@ -7217,8 +7211,8 @@ packages:
   remark-stringify@11.0.0:
     resolution: {integrity: sha512-1OSmLd3awB/t8qdoEOMazZkNsfVTeY4fTsgzcQFdXNq8ToTN4ZGwrMnlda4K6smTFKD+GRV6O48i6Z4iKgPPpw==}
 
-  remeda@2.58.0:
-    resolution: {integrity: sha512-uCy/WL+c+IF/oAb+sjgZ4Y7XPsW58wP8EWiYpIcqWQZBnNEcb8RnLh9PHsERA97ONpkebGw4S6qNcOtFQ+HG7A==}
+  remeda@2.61.0:
+    resolution: {integrity: sha512-x8v7/slXeMnUy4izdZecOVlorISUQC5sHbc2GIdaf2pNYQUKt30NREbGa68Ag/3bjkaK64e9qDu1X4S47bUZAQ==}
     engines: {node: '>=18.0.0'}
 
   remove-accents@0.5.0:
@@ -8904,11 +8898,6 @@ snapshots:
     optional: true
 
   '@eslint-community/eslint-utils@4.10.1(eslint@10.4.0(jiti@2.7.0))':
-    dependencies:
-      eslint: 10.4.0(jiti@2.7.0)
-      eslint-visitor-keys: 3.4.3
-
-  '@eslint-community/eslint-utils@4.9.1(eslint@10.4.0(jiti@2.7.0))':
     dependencies:
       eslint: 10.4.0(jiti@2.7.0)
       eslint-visitor-keys: 3.4.3
@@ -12532,7 +12521,7 @@ snapshots:
 
   eslint@10.4.0(jiti@2.7.0):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.4.0(jiti@2.7.0))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@10.4.0(jiti@2.7.0))
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.23.5
       '@eslint/config-helpers': 0.6.0
@@ -14329,7 +14318,7 @@ snapshots:
       mdast-util-to-markdown: 2.2.3
       unified: 11.0.5
 
-  remeda@2.58.0: {}
+  remeda@2.61.0: {}
 
   remove-accents@0.5.0: {}
 
