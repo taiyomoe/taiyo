@@ -2,9 +2,10 @@ import {
   captchaEndpoints,
   createBeforeUserCreatedHook,
   isUnverifiedSocialSignUp,
+  normalizeDisplayName,
+  normalizeUsername,
   rateLimitRules,
 } from "@taiyomoe/auth/server"
-import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 import { randomInt, randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"

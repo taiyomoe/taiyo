@@ -19,7 +19,11 @@ const signIn = (auth: ReturnType<typeof createAuth>, origin: string) =>
 
 describe("Better Auth trusted origins", () => {
   test("accepts a cookie-bearing request from a trusted origin", async ({ services }) => {
-    const auth = createAuth({ db: services.db, trustedOrigins: [WEB_ORIGIN] })
+    const auth = createAuth({
+      db: services.db,
+      trustedOrigins: [WEB_ORIGIN],
+      sendEmail: () => Promise.resolve(),
+    })
     const res = await signIn(auth, WEB_ORIGIN)
 
     expect(res.status).toBe(401)
@@ -27,7 +31,11 @@ describe("Better Auth trusted origins", () => {
   })
 
   test("rejects a cookie-bearing request from any other origin", async ({ services }) => {
-    const auth = createAuth({ db: services.db, trustedOrigins: [WEB_ORIGIN] })
+    const auth = createAuth({
+      db: services.db,
+      trustedOrigins: [WEB_ORIGIN],
+      sendEmail: () => Promise.resolve(),
+    })
     const res = await signIn(auth, "http://evil.taiyo.test")
 
     expect(res.status).toBe(403)

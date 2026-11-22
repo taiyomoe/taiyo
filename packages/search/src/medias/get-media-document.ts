@@ -10,7 +10,7 @@ import type {
   MediaStatus,
   MediaType,
 } from "@taiyomoe/db"
-import { toUnixMs } from "@taiyomoe/utils"
+import { toUnixMs } from "../utils/to-unix-ms"
 
 export type MediaDocument = {
   id: string

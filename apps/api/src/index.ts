@@ -2,7 +2,6 @@ import { serve } from "@hono/node-server"
 import { createAuth } from "@taiyomoe/auth/server"
 import { createNotificationEvents } from "@taiyomoe/cache/notification-events"
 import { getDb } from "@taiyomoe/db"
-import { sendGroupInvitationEmail } from "@taiyomoe/email"
 import { createMangaDexClient } from "@taiyomoe/mangadex"
 import {
   createWebPushSender,
@@ -14,6 +13,8 @@ import { getS3Bucket, getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { initLogger } from "evlog"
 import { type AppType, createApp } from "./app"
+import { sendAuthEmail } from "./emails/send-auth-email"
+import { sendGroupInvitationEmail } from "./emails/send-group-invitation-email"
 import { corsAllowedOrigins, env } from "./env"
 
 export { createApp }
@@ -31,7 +32,7 @@ if ((process.env.TEST ?? "") === "") {
     s3Bucket: getS3Bucket(),
     meili: getMeiliClient(),
     mediasIndex: SEARCH_INDEXES.MEDIAS,
-    auth: createAuth({ db, trustedOrigins: corsAllowedOrigins }),
+    auth: createAuth({ db, trustedOrigins: corsAllowedOrigins, sendEmail: sendAuthEmail }),
     chapterUploadQueue: getChapterUploadProducer(),
     mangaDex: createMangaDexClient(),
     mangaDexSyncQueue: getMangaDexSyncProducer(),

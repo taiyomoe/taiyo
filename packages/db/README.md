@@ -60,7 +60,7 @@ The sample is generated from a pre-rewrite production dump, which the script res
 pnpm -F @taiyomoe/scripts cli extract-sample <dump> [--percent 5] [--seed 1]
 ```
 
-The matching images live in the production bucket under the same keys, and local dev reads them through the image proxy's production fallback. To refresh the offline copy, `download-sample-images` reads the production S3 credentials from `packages/scripts/.env.prod` and mirrors every cover, banner and chapter page into `output/sample-images`, laid out like the bucket (rerunning it resumes). Zip that folder and upload it as `dev/sample-images.zip`. `upload-sample-images` pushes an unzipped folder into the local bucket.
+The matching images live in the production bucket under the same keys, and local dev reads them through the image proxy's production fallback. To refresh the offline copy, `download-sample-images` reads the production S3 credentials from `tooling/scripts/.env.prod` and mirrors every cover, banner and chapter page into `output/sample-images`, laid out like the bucket (rerunning it resumes). Zip that folder and upload it as `dev/sample-images.zip`. `upload-sample-images` pushes an unzipped folder into the local bucket.
 
 ```bash
 pnpm -F @taiyomoe/scripts cli download-sample-images

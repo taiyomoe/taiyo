@@ -10,7 +10,14 @@ import { test } from "../setup"
 const SEEDED_USER_ID = "a850ab0e-de0a-4cb8-8592-9c9e1fb89bd5"
 const WEB_ORIGIN = "http://web.taiyo.test"
 const createWebApp = (services: Services) =>
-  createApp({ ...services, auth: createAuth({ db: services.db, trustedOrigins: [WEB_ORIGIN] }) })
+  createApp({
+    ...services,
+    auth: createAuth({
+      db: services.db,
+      trustedOrigins: [WEB_ORIGIN],
+      sendEmail: () => Promise.resolve(),
+    }),
+  })
 const authHeaders = (headers: Record<string, string> = {}) => ({
   "content-type": "application/json",
   origin: WEB_ORIGIN,

@@ -1,6 +1,5 @@
-import type { GroupInvitationMail } from "@taiyomoe/email"
-import "./setup-env"
 import type { Hono } from "hono"
+import "./setup-env"
 import {
   CreateBucketCommand,
   DeleteBucketCommand,
@@ -15,6 +14,7 @@ import { getMeiliClient, initMediasIndex } from "@taiyomoe/search"
 import { setTimeout as sleep } from "node:timers/promises"
 import pg from "pg"
 import { afterAll, test as baseTest } from "vitest"
+import type { GroupInvitationMail } from "../emails/send-group-invitation-email"
 import type { Services } from "../services"
 import { createApp } from "../app"
 import { defined } from "./helpers/assert"
@@ -132,7 +132,11 @@ export const test = baseTest.extend<Fixtures>({
       s3Bucket: bucketName,
       meili: sharedMeili,
       mediasIndex,
-      auth: createAuth({ db, trustedOrigins: ["http://localhost"] }),
+      auth: createAuth({
+        db,
+        trustedOrigins: ["http://localhost"],
+        sendEmail: () => Promise.resolve(),
+      }),
       chapterUploadQueue: { enqueue: async () => {} },
       mangaDex: mangaDex.client,
       mangaDexSyncQueue: mangaDex.queue,

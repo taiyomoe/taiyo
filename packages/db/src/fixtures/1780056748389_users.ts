@@ -2,7 +2,7 @@ import type { Kysely } from "kysely"
 import { faker, fakerEN, fakerPT_BR } from "@faker-js/faker"
 import type { DB } from "../database"
 
-// Inlined to keep @taiyomoe/db a leaf package (no workspace cycle with @taiyomoe/utils).
+// Inlined to keep @taiyomoe/db a leaf package (no workspace cycle with @taiyomoe/auth).
 const USERNAME = { minLength: 3, maxLength: 30 }
 const DISPLAY_NAME = { minLength: 3, maxLength: 30 }
 const LANGUAGES = [

@@ -1,9 +1,10 @@
 import type { User } from "better-auth"
 import { config } from "@taiyomoe/config"
 import { type DB, type Kysely, sql } from "@taiyomoe/db"
-import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 import { APIError } from "better-auth/api"
 import { randomInt } from "node:crypto"
+import { normalizeDisplayName } from "./normalize-display-name"
+import { normalizeUsername } from "./normalize-username"
 
 const MAX_SUFFIXED_ATTEMPTS = 5
 const withSuffix = (base: string, suffix: string, max: number) =>

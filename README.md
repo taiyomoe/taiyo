@@ -39,20 +39,18 @@ taiyo/
 │   ├── cache/             # Dragonfly (Redis-compatible) client
 │   ├── config/            # Shared configuration constants
 │   ├── db/                # Kysely setup, migrations, seeds, model types
-│   ├── email/             # Email templates (react-email)
 │   ├── queue/             # BullMQ queue, chapter processor and reaper
 │   ├── s3/                # S3 client + key helpers (works with RustFS / Garage / AWS)
 │   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
-│   ├── scripts/           # Bootstrap, tunnel and one-shot CLI scripts (init-s3, …)
 │   ├── search/            # Meilisearch client + media sync + filter translator
-│   ├── ui/                # Shared React components (StyleX + Base UI)
-│   └── utils/             # Pure utility helpers (unit-tested)
+│   └── ui/                # Shared React components (StyleX + Base UI)
 ├── docs/                  # Design proposals (group-ownership.md, …)
 ├── .github/
 │   ├── actions/setup/     # pnpm + Node + install composite action
 │   └── workflows/         # ci-static, ci-unit, ci-integration
 └── tooling/
-    └── bruno/             # API request collections
+    ├── bruno/             # API request collections
+    └── scripts/           # Bootstrap, tunnel and one-shot CLI scripts (init-s3, …)
 ```
 
 ### 🛠️ Tech stack
@@ -260,12 +258,12 @@ runs, since `oxfmt` formats markdown too.
 
 Env vars are split per app rather than living in one root file:
 
-| File               | Owns                                                                                                       | Loaded by                                                                                                                             |
-| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `.env`             | Every local port and credential (`WEB_PORT`, `DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`, `pnpm bootstrap`                                                                                                    |
-| `apps/api/.env`    | All server-side vars — DB / cache / S3 / search / auth / email                                             | `apps/api`, the backend tooling in `packages/db` & `packages/scripts` (`--env-file=../../apps/api/.env`), and `pnpm test:integration` |
-| `apps/web/.env`    | `VITE_*` client vars, plus the dev server's `PORT` and `API_PORT`                                          | Vite (`apps/web` is its own `envDir`)                                                                                                 |
-| `apps/worker/.env` | DB / cache / S3 plus `CHAPTER_PROCESSING_CONCURRENCY` — a subset of `apps/api/.env`                        | `apps/worker` (`--env-file=.env`)                                                                                                     |
+| File               | Owns                                                                                                       | Loaded by                                                                                                                            |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `.env`             | Every local port and credential (`WEB_PORT`, `DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`, `pnpm bootstrap`                                                                                                   |
+| `apps/api/.env`    | All server-side vars — DB / cache / S3 / search / auth / email                                             | `apps/api`, the backend tooling in `packages/db` & `tooling/scripts` (`--env-file=../../apps/api/.env`), and `pnpm test:integration` |
+| `apps/web/.env`    | `VITE_*` client vars, plus the dev server's `PORT` and `API_PORT`                                          | Vite (`apps/web` is its own `envDir`)                                                                                                |
+| `apps/worker/.env` | DB / cache / S3 plus `CHAPTER_PROCESSING_CONCURRENCY` — a subset of `apps/api/.env`                        | `apps/worker` (`--env-file=.env`)                                                                                                    |
 
 Each `.env.example` documents its own file's variables, with local-development defaults. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`, which is where a variable's shape and whether it is required are defined.
 
@@ -277,14 +275,11 @@ Each `.env.example` documents its own file's variables, with local-development d
 - **`@taiyomoe/auth`** — Better Auth config, lifecycle hooks, server + client exports
 - **`@taiyomoe/cache`** — Dragonfly (ioredis) client, namespaced cache helpers
 - **`@taiyomoe/config`** — runtime constants (image limits, auth limits, OpenAPI metadata)
-- **`@taiyomoe/email`** — react-email templates + send helpers
 - **`@taiyomoe/queue`** — BullMQ queue, chapter-upload processor and stale-task reaper
 - **`@taiyomoe/s3`** — typed S3 client + key derivation
 - **`@taiyomoe/schemas`** — shared Zod schemas (pagination meta, etc.)
-- **`@taiyomoe/scripts`** — CLI scripts (init-s3, init-meilisearch, etc.)
 - **`@taiyomoe/search`** — Meilisearch client + media sync + search input schema
 - **`@taiyomoe/ui`** — React components on StyleX + Base UI
-- **`@taiyomoe/utils`** — pure helpers (unit-tested)
 
 ## 🚀 Deployment
 

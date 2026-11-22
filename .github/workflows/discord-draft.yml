@@ -22,7 +22,7 @@ jobs:
 
       - uses: ./.github/actions/setup
 
-      - run: node packages/scripts/src/release/write-discord-draft.ts
+      - run: node tooling/scripts/src/release/write-discord-draft.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
