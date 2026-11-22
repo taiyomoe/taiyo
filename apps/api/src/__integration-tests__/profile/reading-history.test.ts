@@ -219,6 +219,60 @@ describe("reading stats", () => {
     expect(res.body.data.reading.byLanguage.map((row) => row.count)).toEqual([1])
   })
 
+  test("leaves deleted and unpublished chapters out of every reading count", async ({
+    app,
+    services,
+  }) => {
+    const { reader, first, second, chapter } = await seedReads(services)
+    const deleted = await chapter(first, 2)
+
+    await services.db
+      .updateTable("medias")
+      .set({ tags: sql`array['{"key":"ACTION","isSpoiler":false}'::jsonb]` })
+      .where("id", "in", [first, second])
+      .execute()
+    await read(services, reader.userId, await chapter(first, 1), "2026-05-10 10:00:00")
+    await read(services, reader.userId, deleted, "2026-05-10 10:05:00")
+    await read(
+      services,
+      reader.userId,
+      await seedChapter(services, {
+        mediaId: second,
+        uploaderId: reader.userId,
+        number: 1,
+        status: "PENDING",
+      }),
+      "2026-05-10 10:10:00",
+    )
+    await services.db
+      .updateTable("chapters")
+      .set({ deletedAt: new Date() })
+      .where("id", "=", deleted)
+      .execute()
+
+    const res = await api<{
+      reading: {
+        chaptersRead: number
+        mediasRead: number
+        byType: Array<{ count: number }>
+        byLanguage: Array<{ count: number }>
+        genres: unknown[]
+        topMedias: Array<{ id: string; chapters: number }>
+      }
+    }>(app, `/users/${reader.userId}/stats?contentRating=NORMAL`)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.reading).toMatchObject({ chaptersRead: 1, mediasRead: 1 })
+    expect(res.body.data.reading.byType.map((row) => row.count)).toEqual([1])
+    expect(res.body.data.reading.byLanguage.map((row) => row.count)).toEqual([1])
+    expect(res.body.data.reading.genres).toEqual([{ genre: "ACTION", count: 1 }])
+    expect(res.body.data.reading.topMedias).toMatchObject([{ id: first, chapters: 1 }])
+    expect(res.body.data.reading.topMedias).toHaveLength(1)
+  })
+
   test("returns the lifetime experience on the profile", async ({ app, services }) => {
     const { reader, first, chapter } = await seedReads(services)
     const chapterId = await chapter(first, 1)
