@@ -4,7 +4,7 @@ import { z } from "zod"
 const API = `http://localhost:${process.env.API_PORT ?? "3002"}`
 const MEDIA_ID = "00000000-0000-0000-0000-000000000000"
 const ALL_CONTENT_RATINGS = "NORMAL,SUGGESTIVE,NSFW,NSFL"
-// Three flat 8x8 PNGs of different colours: the worker decodes them with sharp, so they must be real.
+// The worker decodes these with sharp, so they must be real PNGs.
 const PAGES = [
   "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAEUlEQVR4nGM4ISeHFTEMLQkAkL9BAbKfPiIAAAAASUVORK5CYII=",
   "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAEUlEQVR4nGOQOyGHFTEMLQkAZj9BAeyMgMkAAAAASUVORK5CYII=",
@@ -61,7 +61,6 @@ test.describe("chapter upload", () => {
   test("an uploader uploads one chapter and it is published once processed", async ({ page }) => {
     test.setTimeout(150_000)
 
-    // A retry or an earlier run must not collide with this chapter number.
     const number = 10_000 + (Date.now() % 90_000)
 
     uploaded = number
@@ -70,14 +69,12 @@ test.describe("chapter upload", () => {
 
     await expect(page.getByRole("heading", { name: "Upload chapters", exact: true })).toBeVisible()
 
-    // Loose images become one chapter.
     await page.locator('input[type="file"][accept*="image/png"]').setInputFiles(PAGES)
     await page.getByRole("textbox", { name: "Number", exact: true }).fill(String(number))
     await page.getByRole("button", { name: "Upload chapters (1)" }).click()
 
     await expect(page.getByText(/^Upload started\./).first()).toBeVisible()
 
-    // Public reads only list published chapters, and the worker is what publishes them.
     await expect
       .poll(
         async () =>

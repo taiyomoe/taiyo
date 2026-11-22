@@ -74,7 +74,6 @@ const userIdOf = async (context: BrowserContext) => {
 
   return sessionSchema.parse(await response.json()).user.id
 }
-// Tops the balance up to `target`, so a retry in the same database funds only what is missing.
 const fund = async (admin: Page, userId: string, balance: number, target: number) => {
   if (balance >= target) {
     return
@@ -98,9 +97,7 @@ const cosmeticLabel = (kind: keyof typeof KIND_LABEL_PREFIXES, key: string) => {
 }
 
 test.describe("shop", () => {
-  // The balance checks need the reader's points to move only because of this spec.
   test.describe.configure({ mode: "serial" })
-  // The chest scene and the opening sequence shorten their animations.
   test.use({ reducedMotion: "reduce" })
 
   test("a reader buys a cosmetic and the balance drops by its price", async ({ browser, page }) => {
@@ -109,7 +106,6 @@ test.describe("shop", () => {
     try {
       const userId = await userIdOf(reader)
       const initial = await getShop(reader.request)
-      // Only these get a Buy button; after a retry the first pick is already owned.
       const item = initial.items.find(
         (candidate) => candidate.unlock.type === "shop" && !candidate.unlocked,
       )
@@ -187,7 +183,6 @@ test.describe("shop", () => {
 
       await visit(shop, "/shop")
 
-      // The accessible name of a chest is its label followed by its price.
       const chest = shop
         .getByRole("radiogroup", { name: "Choose a chest" })
         .getByRole("radio", { name: new RegExp(`^${label}`) })
@@ -202,7 +197,6 @@ test.describe("shop", () => {
 
       await expect(overlay).toBeVisible()
 
-      // The balance line only shows once the chest has been opened and the result revealed.
       const balanceLine = overlay.getByText(/^[\d,]+ pts$/)
 
       await expect(balanceLine).toBeVisible()
