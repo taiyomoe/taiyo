@@ -120,8 +120,6 @@ const toChapter = (chapter: z.infer<typeof chaptersResponseSchema>["data"][numbe
       return parsed.success ? [{ ...parsed.data, id: relationship.id }] : []
     }),
   }) satisfies MangaDexChapter
-// Reads at most maxBytes: a declared length over the cap is refused before reading, and a body
-// that grows past it is cancelled mid-stream.
 const readCapped = async (response: Response, maxBytes: number) => {
   const declared = Number(response.headers.get("Content-Length") ?? "")
 
