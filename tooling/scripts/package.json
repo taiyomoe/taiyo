@@ -9,11 +9,13 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.6.0",
+    "@taiyomoe/audit": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",
     "citty": "^0.2.2",
     "dotenv": "^18.0.9",
+    "evlog": "^2.35.1",
     "kysely": "^0.29.8",
     "zod": "^4.6.7"
   },

@@ -99,6 +99,7 @@ export const mediaAudit = defineAuditCatalog("media", {
   CREATE: { target: "media", severity: "medium" },
   UPDATE: { target: "media", severity: "medium", requiresChanges: true },
   DELETE: { target: "media", severity: "high" },
+  PURGE: { target: "media", severity: "critical" },
   RESTORE: { target: "media", severity: "high" },
   MERGE: { target: "media", severity: "high", requiresChanges: true },
   FEATURED_SET: { severity: "medium", requiresChanges: true },
