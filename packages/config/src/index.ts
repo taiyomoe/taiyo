@@ -98,6 +98,16 @@ export const config = {
     maxPushSubscriptions: 10,
     activityPushDelayMinutes: 5,
     maxBulkIds: 100,
+    // Hosts browsers hand out push endpoints on (Chrome and other Chromium browsers, Firefox,
+    // Edge, Safari). The api and the worker only ever contact these.
+    pushServiceHosts: [
+      "fcm.googleapis.com",
+      "android.googleapis.com",
+      "updates.push.services.mozilla.com",
+      "web.push.apple.com",
+    ],
+    // Hosts under these domains are push services too (Edge's WNS uses numbered subdomains).
+    pushServiceDomains: [".notify.windows.com", ".push.apple.com"],
   },
   reports: {
     /** The points a reporter earns when the moderation team acts on their report. */

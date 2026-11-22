@@ -147,7 +147,7 @@ describe("sendPendingPushes", () => {
     const { mediaId } = await setupMedia(services)
     const author = await signInAs(services)
     const replier = await signInAs(services)
-    const endpoint = "https://push.example/send/lost-phone"
+    const endpoint = "https://fcm.googleapis.com/fcm/send/lost-phone"
 
     await api(app, "/users/me/push-subscriptions", {
       method: "PUT",
