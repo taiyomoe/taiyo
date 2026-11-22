@@ -22,7 +22,11 @@ const keyPair = () => {
 
   ecdh.generateKeys()
 
-  return { publicKey: ecdh.getPublicKey("base64url"), privateKey: ecdh.getPrivateKey("base64url") }
+  const scalar = ecdh.getPrivateKey()
+  // Node drops leading zero bytes of the private scalar, but VAPID requires exactly 32
+  const privateKey = Buffer.concat([Buffer.alloc(32 - scalar.length), scalar])
+
+  return { publicKey: ecdh.getPublicKey("base64url"), privateKey: privateKey.toString("base64url") }
 }
 const target = (endpoint: string) => ({
   endpoint,
