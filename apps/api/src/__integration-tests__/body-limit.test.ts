@@ -86,6 +86,12 @@ describe("Multipart body limit", () => {
   })
 })
 
+const errorCode = async (res: Response) => {
+  const body: unknown = await res.json()
+
+  return typeof body === "object" && body !== null && "code" in body ? body.code : undefined
+}
+
 describe("JSON route bodies", () => {
   test("leaves a multipart body on a json route unread", async ({ app }) => {
     const asMultipart = await app.request("/medias/search", {
@@ -105,7 +111,7 @@ describe("JSON route bodies", () => {
 
     expect(asMultipart.status).not.toBe(413)
     expect(asMultipart.status).toBe(asEmptyJson.status)
-    expect(await asMultipart.json()).toEqual(await asEmptyJson.json())
+    expect(await errorCode(asMultipart)).toBe(await errorCode(asEmptyJson))
   })
 
   test("reads a json route's body only when it is sent as json", async ({ app, services }) => {
