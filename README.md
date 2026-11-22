@@ -2,7 +2,7 @@
 
 ![Taiyō's banner](https://cdn.taiyo.moe/assets/banner-red.png)
 
-A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch. The repo currently ships the backend (Hono API), a BullMQ worker that processes uploaded chapters, a Storybook component playground, and a TanStack Start web app with a landing page, auth forms and legal pages.
+A manga reading platform — manga, manhwa, manhua, light novels. The repo ships the backend (Hono API), a BullMQ worker (chapter processing, MangaDex imports, search and notification outboxes, rankings), a TanStack Start web app where readers browse, read and manage their library, with a moderation and admin dashboard, a maintenance page, and a Storybook component playground.
 
 ## 🌟 Features
 
@@ -17,8 +17,6 @@ A manga reading platform — manga, manhwa, manhua, light novels — being rebui
 - **Group ownership workflow**: scanlation groups can be claimed by their actual owners through a request/approval flow; chapter and group mutations gate on membership (additive model — uploaders/mods/admins keep unconditional access)
 - **Observability**: HyperDX (OpenTelemetry) drains via evlog
 
-The web app (`apps/web`) does not browse, display or read manga yet — that frontend is still to be built.
-
 Not yet built (planned): the browse / detail / reader frontend and audit log instrumentation.
 
 ## 🏗️ Architecture
@@ -31,15 +29,19 @@ Monorepo powered by [Turborepo](https://turbo.build/) and [pnpm workspaces](http
 taiyo/
 ├── apps/
 │   ├── api/               # Hono + hono-openapi backend, API_PORT (3002)
+│   ├── maintenance/       # Static downtime page (Vite + TanStack Router)
 │   ├── storybook/         # @taiyomoe/ui component playground, port 6006
 │   ├── web/               # TanStack Start (React) web app, WEB_PORT (3000)
-│   └── worker/            # BullMQ worker that processes chapter uploads
+│   └── worker/            # BullMQ worker: chapter processing, MangaDex sync, outboxes, rankings
 ├── packages/
+│   ├── audit/             # Audit-log action catalog, drain and KQL query parser
 │   ├── auth/              # Better Auth config + plugins + lifecycle hooks
 │   ├── cache/             # Dragonfly (Redis-compatible) client
 │   ├── config/            # Shared configuration constants
 │   ├── db/                # Kysely setup, migrations, seeds, model types
-│   ├── queue/             # BullMQ queue, chapter processor and reaper
+│   ├── mangadex/          # MangaDex API client + field mappings
+│   ├── permissions/       # Permission rules (permix)
+│   ├── queue/             # BullMQ queues and job functions
 │   ├── s3/                # S3 client + key helpers (works with RustFS / Garage / AWS)
 │   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
 │   ├── search/            # Meilisearch client + media sync + filter translator
@@ -47,9 +49,10 @@ taiyo/
 ├── docs/                  # Design proposals (group-ownership.md, …)
 ├── .github/
 │   ├── actions/setup/     # pnpm + Node + install composite action
-│   └── workflows/         # ci-static, ci-unit, ci-integration
+│   └── workflows/         # CI, image builds, release-please, Discord drafts
 └── tooling/
     ├── bruno/             # API request collections
+    ├── oxlint/            # Repo-specific oxlint plugin
     └── scripts/           # Bootstrap, tunnel and one-shot CLI scripts (init-s3, …)
 ```
 
@@ -59,8 +62,8 @@ taiyo/
 
 - [Hono](https://hono.dev/) + [hono-openapi](https://github.com/honojs/middleware/tree/main/packages/openapi-spec) for routes and a Scalar-rendered `/docs` UI
 - [Kysely](https://kysely.dev/) (typed SQL query builder) on [PostgreSQL](https://www.postgresql.org/)
-- [BullMQ](https://bullmq.io/) queues chapter processing for `apps/worker`
-- [Better Auth](https://www.better-auth.com/) (email/password + magic link + OAuth, with CASL-based ability checks)
+- [BullMQ](https://bullmq.io/) queues background jobs (chapter processing, MangaDex sync, outboxes, rankings) for `apps/worker`
+- [Better Auth](https://www.better-auth.com/) (email/password + magic link + OAuth, with permission checks in `@taiyomoe/permissions`, built on permix)
 - [Zod 4](https://zod.dev/) for input validation
 - [sharp](https://sharp.pixelplumbing.com/) + [magic-bytes.js](https://github.com/LarsKoelpin/magic-bytes) for upload validation
 - [evlog](https://github.com/evlog/evlog) → HyperDX (OpenTelemetry) for structured logs
@@ -181,10 +184,11 @@ pnpm format:fix         # oxfmt (in place)
 pnpm lint               # oxlint (type-aware; doubles as the typecheck gate)
 pnpm lint:fix           # oxlint --fix
 pnpm lint:ws            # sherif — workspace dependency validation
-pnpm knip               # unused exports + dead deps
+pnpm knip               # unused exports + dead deps (CI also runs `knip --production`)
 pnpm lint:messages      # unused i18n messages + keys missing from a locale
-pnpm test:unit          # vitest (vitest.config.unit.ts)
+pnpm test:unit          # vitest (vitest.config.unit.ts) — unit tests and web DOM tests
 pnpm test:integration   # vitest (vitest.config.integration.ts) — requires pnpm bootstrap
+pnpm test:e2e           # playwright (apps/web/e2e) — requires pnpm bootstrap
 ```
 
 Package-specific:
@@ -203,9 +207,8 @@ pnpm -F web build                  # production build (client + SSR)
 
 ### Branches
 
-- `main` — production code
-- `rewrite` — current full-stack rebuild (this branch)
-- `feature/*`, `hotfix/*`, `release/*` — see git-flow
+- `develop` — where work lands: branch off it, and open pull requests against it
+- `main` — what production runs, updated only by the release merge from `release.yml`
 
 ### Code quality
 
@@ -240,19 +243,25 @@ applied, frozen history.
 
 ### Continuous integration
 
-Three independent workflows, one job each, all triggered on the same events and
-all running in parallel:
+Seven workflows live in `.github/workflows/`. The static, unit, integration and
+end-to-end workflows run in parallel (integration is split in four shards):
 
-| Workflow                               | Runs                                                 |
-| -------------------------------------- | ---------------------------------------------------- |
-| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`, `lint:messages` |
-| `.github/workflows/ci-unit.yml`        | `test:unit`                                          |
-| `.github/workflows/ci-integration.yml` | `test:integration`, against service containers       |
+| Workflow                               | Runs                                                                              |
+| -------------------------------------- | --------------------------------------------------------------------------------- |
+| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`, `knip --production`, `lint:messages`         |
+| `.github/workflows/ci-unit.yml`        | `test:unit`                                                                       |
+| `.github/workflows/ci-integration.yml` | `test:integration`, against service containers                                    |
+| `.github/workflows/ci-e2e.yml`         | `test:e2e`: Playwright against a production build of the web app                  |
+| `.github/workflows/build-images.yml`   | Docker images of the API, worker and web app, smoke-tested on every run           |
+| `.github/workflows/release.yml`        | release-please on `develop`, then merges the release into `main`                  |
+| `.github/workflows/discord-draft.yml`  | drafts the Discord announcement on a release pull request labeled `discord-draft` |
 
-All three run on pull requests and on direct pushes to `main` and `develop`,
-and install via the shared `.github/actions/setup` composite action. The two
-test workflows skip doc-only changes via `paths-ignore`; static analysis always
-runs, since `oxfmt` formats markdown too.
+The test workflows and `build-images.yml` run on pull requests and on direct
+pushes to `main` and `develop`, and install via the shared `.github/actions/setup`
+composite action. Static analysis always runs, since `oxfmt` formats markdown
+too; the others skip doc-only changes via `paths-ignore`. On `main`,
+`build-images.yml` pushes the images to GHCR and releases them to the cluster,
+once the four test workflows have passed on that commit.
 
 ## 🌐 Environment variables
 
@@ -271,11 +280,14 @@ Each `.env.example` documents its own file's variables, with local-development d
 
 ## 📦 Package overview
 
-- **`@taiyomoe/db`** — Kysely + migrations + seeds + per-table model types
+- **`@taiyomoe/audit`** — audit-log action catalog, log drain and KQL query parser
 - **`@taiyomoe/auth`** — Better Auth config, lifecycle hooks, server + client exports
 - **`@taiyomoe/cache`** — Dragonfly (ioredis) client, namespaced cache helpers
 - **`@taiyomoe/config`** — runtime constants (image limits, auth limits, OpenAPI metadata)
-- **`@taiyomoe/queue`** — BullMQ queue, chapter-upload processor and stale-task reaper
+- **`@taiyomoe/db`** — Kysely + migrations + seeds + per-table model types
+- **`@taiyomoe/mangadex`** — MangaDex API client + field mappings
+- **`@taiyomoe/permissions`** — permission rules, built on permix
+- **`@taiyomoe/queue`** — BullMQ queues and the job functions the worker runs
 - **`@taiyomoe/s3`** — typed S3 client + key derivation
 - **`@taiyomoe/schemas`** — shared Zod schemas (pagination meta, etc.)
 - **`@taiyomoe/search`** — Meilisearch client + media sync + search input schema

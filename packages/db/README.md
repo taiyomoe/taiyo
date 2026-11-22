@@ -1,11 +1,13 @@
-# `@taiyomoe/db2`
+# `@taiyomoe/db`
 
 This package contains the database schema, migrations, seeds, and a typed Kysely client for the project.
 
 ## Usage
 
 ```ts
-import { db } from "@taiyomoe/db2"
+import { getDb } from "@taiyomoe/db"
+
+const db = getDb() // reads DATABASE_URL
 
 // Query database
 const user = await db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst()
@@ -19,8 +21,10 @@ await db.insertInto("medias").values({/* ... */}).execute()
 Per-table types, JSON column types, enum constants, and the Kysely query builder are all re-exported from the package root:
 
 ```ts
-import type { Users, NewUsers, UserSettings, Role } from "@taiyomoe/db2"
+import type { Role, Selectable, User, UserSettings } from "@taiyomoe/db"
 ```
+
+Model types are per table and singular. Wrap them in Kysely's `Selectable`, `Insertable` or `Updateable` depending on whether you read, insert or update a row.
 
 ## Migrations
 
@@ -28,16 +32,16 @@ Migrations live in `src/migrations` and are managed with [`kysely-ctl`](https://
 
 ```bash
 # Create a new migration file
-pnpm -F db2 kysely migrate make <name>
+pnpm -F db kysely migrate make <name>
 
 # Run all pending migrations
-pnpm -F db2 kysely migrate latest
+pnpm -F db kysely migrate latest
 
 # Roll back the last applied migration
-pnpm -F db2 kysely migrate down
+pnpm -F db kysely migrate down
 
 # Show migration status
-pnpm -F db2 kysely migrate list
+pnpm -F db kysely migrate list
 ```
 
 ## Seeds
@@ -46,10 +50,10 @@ Seeds live in `src/seeds`. Each file exports a `seed(db)` function and is run in
 
 ```bash
 # Create a new seed file
-pnpm -F db2 kysely seed make <name>
+pnpm -F db kysely seed make <name>
 
 # Run all seeds
-pnpm -F db2 kysely seed run
+pnpm -F db kysely seed run
 ```
 
 The `sample` seed loads `src/seeds/sample/<table>.jsonl.gz`, a sample of production: a share of the medias (5% by default) with everything attached to them (titles, covers, banners, staff, every chapter and its groups, the reading history and library entries), plus the users those rows reference. Users are anonymized: new IDs, fake names, usernames and emails, randomized profiles, and no accounts or sessions. The `featured-medias` seed reads `featuredMedias.jsonl.gz` from the same folder.
