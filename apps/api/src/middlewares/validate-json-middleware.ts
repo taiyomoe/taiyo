@@ -9,6 +9,12 @@ type Env<TSchema extends z.ZodType> = {
   }
 }
 
+const isJsonContentType = (header: string | undefined) => {
+  const type = header?.split(";")[0]?.trim().toLowerCase() ?? ""
+
+  return type === "application/json" || type.endsWith("+json")
+}
+
 export const validateJson = <TSchema extends z.ZodType>(schema: TSchema) =>
   withRequestSpec(
     createMiddleware<
@@ -16,12 +22,15 @@ export const validateJson = <TSchema extends z.ZodType>(schema: TSchema) =>
       string,
       { in: { json: z.input<TSchema> }; out: { json: z.output<TSchema> } }
     >(async (c, next) => {
-      let raw: unknown
+      let raw: unknown = {}
 
-      try {
-        raw = await c.req.json()
-      } catch {
-        raw = {}
+      // Only a body sent as JSON is read: any other is left unread, and the schema sees `{}`.
+      if (isJsonContentType(c.req.header("content-type"))) {
+        try {
+          raw = await c.req.json()
+        } catch {
+          raw = {}
+        }
       }
 
       const validation = schema.safeParse(raw)

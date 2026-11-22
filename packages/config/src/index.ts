@@ -12,7 +12,7 @@ export const config = {
       "## Pagination",
       "Paginated lists take `page` (from 1) and `perPage` query parameters and return `meta.page`, `meta.perPage` and `meta.total` next to `data`.",
       "## Limits",
-      "A JSON request body larger than 1 MB fails with a 413 `PAYLOAD_TOO_LARGE`, whatever the endpoint. Endpoints that are rate limited list their 429 `RATE_LIMITED` response.",
+      "A JSON request body larger than 1 MB fails with a 413 `PAYLOAD_TOO_LARGE`, whatever the endpoint. A multipart upload larger than 100 MB fails the same way. Endpoints that are rate limited list their 429 `RATE_LIMITED` response.",
     ].join("\n\n"),
   },
   auth: {
@@ -150,6 +150,10 @@ export const config = {
     maxValidationIssues: 10,
     // Stated in `openapi.description`: change both together.
     maxJsonBodyBytes: 1024 * 1024,
+    // A multipart upload is read whole before its files are checked: bound it too. Room for ten
+    // images at `images.maxSizeBytes`, which the media creation form can send in one request.
+    // Stated in `openapi.description`: change both together.
+    maxMultipartBodyBytes: 100 * 1024 * 1024,
   },
 } as const
 

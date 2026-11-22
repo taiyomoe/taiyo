@@ -3,6 +3,7 @@ import { staffAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import { bodyLimit } from "hono/body-limit"
 import z from "zod"
 import { putImage } from "../image-store"
 import { audited } from "../middlewares/audited-middleware"
@@ -67,6 +68,11 @@ export const createStaffHandler = new Hono().post(
   audited(staffAudit.CREATE),
   withAuth("staff.create"),
   rateLimit({ prefix: "create-staff", windowMs: 60_000, limit: 30 }),
+  // One image and a few fields.
+  bodyLimit({
+    maxSize: config.images.maxSizeBytes + 64 * 1024,
+    onError: (c) => c.fail("IMAGE_TOO_LARGE"),
+  }),
   validateFormData(createStaffSchema),
   checkImages(),
   transcodeSlot,

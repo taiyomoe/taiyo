@@ -63,6 +63,10 @@ const jsonBodyLimit = bodyLimit({
   maxSize: config.input.maxJsonBodyBytes,
   onError: (c) => c.fail("PAYLOAD_TOO_LARGE"),
 })
+const multipartBodyLimit = bodyLimit({
+  maxSize: config.input.maxMultipartBodyBytes,
+  onError: (c) => c.fail("PAYLOAD_TOO_LARGE"),
+})
 // The reference runs on the session origin: serve its bundle from the locked dependency rather
 // than an unversioned CDN URL, so every release goes through the lockfile and the release-age delay.
 const scalarBundle = readFile(
@@ -223,11 +227,11 @@ export const createApp = (services: Services) => {
       }),
     )
     .use(checkOrigin(corsAllowedOrigins))
-    // Every body but a multipart upload is JSON, parsed whole in memory: bound it before anything
-    // reads it. Uploads keep their own per-file limits.
+    // Bodies are read whole in memory: bound them before anything reads them. A multipart upload
+    // gets a larger limit, and routes that take a single image set a tighter one.
     .use((c, next) =>
       c.req.header("content-type")?.includes("multipart/form-data") === true
-        ? next()
+        ? multipartBodyLimit(c, next)
         : jsonBodyLimit(c, next),
     )
     .notFound((c) => c.fail("NOT_FOUND"))
