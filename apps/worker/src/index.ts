@@ -18,6 +18,7 @@ import {
   createBullConnection,
   createWebPushSender,
   drainNotificationOutbox,
+  failStaleMangaDexSyncs,
   MANGADEX_SYNC_QUEUE,
   type MangaDexSyncJobData,
   processChapterUpload,
@@ -38,6 +39,7 @@ import { env } from "./env"
 const CHAPTER_MAINTENANCE_QUEUE = "chapter-maintenance"
 const REAP_JOB = "reap-stale-uploads"
 const PUBLISH_JOB = "publish-scheduled-chapters"
+const FAIL_STALE_SYNCS_JOB = "fail-stale-mangadex-syncs"
 const SEARCH_MAINTENANCE_QUEUE = "search-maintenance"
 const DRAIN_JOB = "drain-search-outbox"
 const COMMENT_MAINTENANCE_QUEUE = "comment-maintenance"
@@ -63,6 +65,7 @@ const logConnectionErrors = (
 }
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const mangaDexDeps = { ...deps, mangaDex: createMangaDexClient() }
+const mangaDexSyncQueue = new Queue(MANGADEX_SYNC_QUEUE, { connection: createBullConnection() })
 const notificationEvents = createNotificationEvents()
 const pushDeps = { db: deps.db, send: createWebPushSender() }
 const searchDeps = { db: deps.db, meili: getMeiliClient(), mediasIndex: SEARCH_INDEXES.MEDIAS }
@@ -190,6 +193,26 @@ const maintenanceWorker = new Worker(
       return
     }
 
+    if (job.name === FAIL_STALE_SYNCS_JOB) {
+      const failed = await failStaleMangaDexSyncs({
+        ...mangaDexDeps,
+        getJobState: (syncId) => mangaDexSyncQueue.getJobState(syncId),
+      })
+
+      for (const { id, mediaId, jobState } of failed) {
+        audit(
+          mangaDexSyncAudit.PROCESS({
+            actor: mangaDexSyncActor,
+            target: { id, mediaId },
+            outcome: "failure",
+            reason: `STALLED (job ${jobState})`,
+          }),
+        )
+      }
+
+      return
+    }
+
     const { abandonedChapters, tasks } = await reapStaleChapterUploads(deps)
 
     for (const { id, mediaId } of abandonedChapters) {
@@ -278,6 +301,7 @@ const rankingWorker = new Worker(
   { connection: createBullConnection(), concurrency: 1 },
 )
 
+logConnectionErrors(MANGADEX_SYNC_QUEUE, mangaDexSyncQueue)
 logConnectionErrors(CHAPTER_UPLOAD_QUEUE, chapterWorker)
 logConnectionErrors(MANGADEX_SYNC_QUEUE, mangaDexSyncWorker)
 logConnectionErrors(CHAPTER_MAINTENANCE_QUEUE, maintenanceWorker)
@@ -304,6 +328,13 @@ await chapterMaintenanceQueue
       PUBLISH_JOB,
       { every: 60_000 },
       { name: PUBLISH_JOB },
+    ),
+  )
+  .then(() =>
+    chapterMaintenanceQueue.upsertJobScheduler(
+      FAIL_STALE_SYNCS_JOB,
+      { every: 15 * 60_000 },
+      { name: FAIL_STALE_SYNCS_JOB },
     ),
   )
   .then(() => chapterMaintenanceQueue.close())
@@ -399,6 +430,7 @@ const handleShutdownSignal = () => {
     commentWorker.close(),
     notificationWorker.close(),
     rankingWorker.close(),
+    mangaDexSyncQueue.close(),
   ])
     .then(() => {
       process.exit(0)

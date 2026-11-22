@@ -1,6 +1,6 @@
 import type { Hono } from "hono"
-import { ListObjectsV2Command } from "@aws-sdk/client-s3"
-import { runMangaDexSync } from "@taiyomoe/queue"
+import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
+import { failStaleMangaDexSyncs, runMangaDexSync } from "@taiyomoe/queue"
 import { describe, expect } from "vitest"
 import type { Services } from "../../services"
 import type { MangaDexPlan } from "../../utils/mangadex-sync"
@@ -502,4 +502,162 @@ describe("POST /medias/:id/mangadex-sync", () => {
     })
     expect(mangaDex.jobs).toEqual([])
   }, 30_000)
+})
+
+describe("failStaleMangaDexSyncs", () => {
+  const startAndInterrupt = async (
+    { app, services, mangaDex }: { app: Hono; services: Services; mangaDex: FakeMangaDex },
+    { status, updatedAt }: { status: "PENDING" | "RUNNING"; updatedAt: Date },
+  ) => {
+    const { headers, mediaId } = await setUp({ services, mangaDex })
+    const plan = await getPlan({ app }, mediaId, headers, `?mangaDexId=${MANGADEX_ID}`)
+    const res = await api<{ id: string }>(app, `/medias/${mediaId}/mangadex-sync`, {
+      method: "POST",
+      headers,
+      json: { mangaDexId: MANGADEX_ID, keys: allKeys(plan) },
+    })
+
+    if (!res.body.success) {
+      throw new Error(JSON.stringify(res.body))
+    }
+
+    const syncId = res.body.data.id
+    const item = await services.db
+      .selectFrom("mangaDexSyncItems")
+      .select("id")
+      .where("syncId", "=", syncId)
+      .where("kind", "=", "CHAPTER")
+      .orderBy("position")
+      .executeTakeFirstOrThrow()
+    const entityId = crypto.randomUUID()
+    const prefix = `medias/${mediaId}/chapters/${entityId}/`
+
+    await services.db
+      .updateTable("mangaDexSyncs")
+      .set({ status, updatedAt })
+      .where("id", "=", syncId)
+      .execute()
+    await services.db
+      .updateTable("mangaDexSyncItems")
+      .set({ entityId })
+      .where("id", "=", item.id)
+      .execute()
+    await services.s3.send(
+      new PutObjectCommand({
+        Bucket: services.s3Bucket,
+        Key: `${prefix}page.jpg`,
+        Body: Buffer.from("page"),
+      }),
+    )
+
+    return { syncId, itemId: item.id, entityId, prefix }
+  }
+  const listPrefix = (services: Services, prefix: string) =>
+    services.s3.send(new ListObjectsV2Command({ Bucket: services.s3Bucket, Prefix: prefix }))
+  const getSyncStatus = async (services: Services, syncId: string) =>
+    (
+      await services.db
+        .selectFrom("mangaDexSyncs")
+        .select("status")
+        .where("id", "=", syncId)
+        .executeTakeFirstOrThrow()
+    ).status
+
+  test("fails a quiet sync whose job is gone, and deletes its interrupted pages", async ({
+    app,
+    services,
+    mangaDex,
+  }) => {
+    const { syncId, itemId, prefix } = await startAndInterrupt(
+      { app, services, mangaDex },
+      { status: "RUNNING", updatedAt: new Date(Date.now() - 3 * 3_600_000) },
+    )
+    const failed = await failStaleMangaDexSyncs({
+      db: services.db,
+      s3: services.s3,
+      s3Bucket: services.s3Bucket,
+      mangaDex: mangaDex.client,
+      getJobState: () => Promise.resolve("unknown" as const),
+    })
+
+    expect(failed).toHaveLength(1)
+    expect(failed[0]).toMatchObject({ id: syncId, jobState: "unknown" })
+    expect(await getSyncStatus(services, syncId)).toBe("FAILED")
+    expect((await listPrefix(services, prefix)).Contents).toBeUndefined()
+
+    const item = await services.db
+      .selectFrom("mangaDexSyncItems")
+      .select("entityId")
+      .where("id", "=", itemId)
+      .executeTakeFirstOrThrow()
+
+    expect(item.entityId).toBeNull()
+  }, 60_000)
+
+  test("leaves a quiet sync alone while its job is still alive", async ({
+    app,
+    services,
+    mangaDex,
+  }) => {
+    const { syncId, prefix } = await startAndInterrupt(
+      { app, services, mangaDex },
+      { status: "RUNNING", updatedAt: new Date(Date.now() - 3 * 3_600_000) },
+    )
+    const failed = await failStaleMangaDexSyncs({
+      db: services.db,
+      s3: services.s3,
+      s3Bucket: services.s3Bucket,
+      mangaDex: mangaDex.client,
+      getJobState: () => Promise.resolve("active" as const),
+    })
+
+    expect(failed).toEqual([])
+    expect(await getSyncStatus(services, syncId)).toBe("RUNNING")
+    expect((await listPrefix(services, prefix)).Contents).toHaveLength(1)
+  }, 60_000)
+
+  test("leaves a recently active sync alone", async ({ app, services, mangaDex }) => {
+    const { syncId } = await startAndInterrupt(
+      { app, services, mangaDex },
+      { status: "RUNNING", updatedAt: new Date() },
+    )
+    const failed = await failStaleMangaDexSyncs({
+      db: services.db,
+      s3: services.s3,
+      s3Bucket: services.s3Bucket,
+      mangaDex: mangaDex.client,
+      getJobState: () => Promise.resolve("unknown" as const),
+    })
+
+    expect(failed).toEqual([])
+    expect(await getSyncStatus(services, syncId)).toBe("RUNNING")
+  }, 60_000)
+
+  test("a retried import deletes what the interrupted attempt uploaded", async ({
+    app,
+    services,
+    mangaDex,
+  }) => {
+    const { syncId, itemId, entityId, prefix } = await startAndInterrupt(
+      { app, services, mangaDex },
+      { status: "PENDING", updatedAt: new Date() },
+    )
+
+    await runMangaDexSync(
+      { db: services.db, s3: services.s3, s3Bucket: services.s3Bucket, mangaDex: mangaDex.client },
+      { syncId },
+    )
+
+    expect((await listPrefix(services, prefix)).Contents).toBeUndefined()
+
+    const item = await services.db
+      .selectFrom("mangaDexSyncItems")
+      .select(["status", "entityId"])
+      .where("id", "=", itemId)
+      .executeTakeFirstOrThrow()
+
+    expect(item.status).toBe("DONE")
+    expect(item.entityId).not.toBeNull()
+    expect(item.entityId).not.toBe(entityId)
+  }, 60_000)
 })

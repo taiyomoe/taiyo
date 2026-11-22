@@ -23,6 +23,7 @@ import {
   DeleteObjectsCommand,
   getChapterPageKey,
   getCoverKey,
+  ListObjectsV2Command,
   PutObjectCommand,
   type S3Client,
 } from "@taiyomoe/s3"
@@ -139,6 +140,65 @@ const finishItem = (
     })
     .where("id", "=", item.id)
     .execute()
+// An import reserves its entity id on the item before uploading: if the worker dies before the
+// row is written, the next attempt (or the stale-sync sweep) finds the id and deletes its objects.
+const reserveEntityId = async (db: Kysely<DB>, item: SyncItem, id: string) => {
+  await db
+    .updateTable("mangaDexSyncItems")
+    .set({ entityId: id, updatedAt: sql`CURRENT_TIMESTAMP` })
+    .where("id", "=", item.id)
+    .where("status", "=", "PENDING")
+    .execute()
+}
+const listKeys = async ({ s3, s3Bucket }: MangaDexSyncDeps, prefix: string) => {
+  const keys: string[] = []
+  let token: string | undefined
+
+  do {
+    const page = await s3.send(
+      new ListObjectsV2Command({ Bucket: s3Bucket, Prefix: prefix, ContinuationToken: token }),
+    )
+
+    keys.push(
+      ...(page.Contents ?? []).flatMap((object) => (object.Key === undefined ? [] : [object.Key])),
+    )
+    token = page.IsTruncated === true ? page.NextContinuationToken : undefined
+  } while (token !== undefined && token !== "")
+
+  return keys
+}
+const discardReservedEntity = async (
+  deps: MangaDexSyncDeps,
+  mediaId: string,
+  item: Pick<Selectable<MangaDexSyncItem>, "id" | "kind" | "entityId">,
+) => {
+  if (item.entityId === null) {
+    return
+  }
+
+  const table = item.kind === "COVER" ? "covers" : "chapters"
+  const written = await deps.db
+    .selectFrom(table)
+    .select("id")
+    .where("id", "=", item.entityId)
+    .executeTakeFirst()
+
+  if (written === undefined) {
+    await deleteKeys(
+      deps,
+      item.kind === "COVER"
+        ? [getCoverKey(mediaId, `${item.entityId}.jpg`)]
+        : await listKeys(deps, `medias/${mediaId}/chapters/${item.entityId}/`),
+    )
+  }
+
+  await deps.db
+    .updateTable("mangaDexSyncItems")
+    .set({ entityId: null })
+    .where("id", "=", item.id)
+    .where("status", "=", "PENDING")
+    .execute()
+}
 const importCover = async (ctx: SyncContext, cover: MangaDexCover, item: SyncItem) => {
   const language: MediaLanguage | null = toMediaLanguage(cover.locale)
 
@@ -146,12 +206,15 @@ const importCover = async (ctx: SyncContext, cover: MangaDexCover, item: SyncIte
     throw new SkipItem(`MangaDex cover locale ${cover.locale ?? "none"} is not supported`)
   }
 
+  const id = crypto.randomUUID()
+
+  await reserveEntityId(ctx.db, item, id)
+
   const input = await ctx.mangaDex.download(cover.url)
   const body = await sharp(input, { limitInputPixels: config.images.maxDecodedPixels })
     .rotate()
     .jpeg({ quality: config.images.quality })
     .toBuffer()
-  const id = crypto.randomUUID()
   const key = getCoverKey(ctx.mediaId, `${id}.jpg`)
 
   await ctx.s3.send(
@@ -217,6 +280,9 @@ const importChapter = async (ctx: SyncContext, chapter: MangaDexChapter, item: S
   }
 
   const id = crypto.randomUUID()
+
+  await reserveEntityId(ctx.db, item, id)
+
   const pageIds: string[] = []
   const keys: string[] = []
 
@@ -430,6 +496,13 @@ export const runMangaDexSync = async (
         return { syncId, mediaId: sync.mediaId, status: "FAILED" as const }
       }
 
+      await db
+        .updateTable("mangaDexSyncs")
+        .set({ updatedAt: sql`CURRENT_TIMESTAMP` })
+        .where("id", "=", syncId)
+        .where("status", "=", "RUNNING")
+        .execute()
+
       const imported = await db
         .selectFrom("mangaDexSyncItems")
         .select("entityId")
@@ -443,6 +516,8 @@ export const runMangaDexSync = async (
 
         continue
       }
+
+      await discardReservedEntity(deps, sync.mediaId, item)
 
       try {
         const cover = covers.get(item.mangaDexId)
@@ -494,4 +569,62 @@ export const runMangaDexSync = async (
 
     throw error
   }
+}
+
+type JobState = Awaited<ReturnType<Queue["getJobState"]>>
+
+export const failStaleMangaDexSyncs = async (
+  deps: MangaDexSyncDeps & { getJobState: (syncId: string) => Promise<JobState> },
+  now = new Date(),
+) => {
+  const cutoff = new Date(now.getTime() - config.mangaDex.staleSyncMinutes * 60_000)
+  const candidates = await deps.db
+    .selectFrom("mangaDexSyncs")
+    .select(["id", "mediaId"])
+    .where("status", "in", ["PENDING", "RUNNING"])
+    .where(sql<boolean>`"updatedAt" < ${cutoff}::timestamptz`)
+    .execute()
+  const failed: Array<{ id: string; mediaId: string; jobState: JobState }> = []
+
+  for (const sync of candidates) {
+    const jobState = await deps.getJobState(sync.id)
+
+    // A job still active, waiting or delayed resumes its sync itself.
+    if (jobState !== "failed" && jobState !== "unknown" && jobState !== "completed") {
+      continue
+    }
+
+    const updated = await deps.db
+      .updateTable("mangaDexSyncs")
+      .set({
+        status: "FAILED",
+        error: "The sync stopped without finishing: its worker was interrupted.",
+        finishedAt: sql`CURRENT_TIMESTAMP`,
+        updatedAt: sql`CURRENT_TIMESTAMP`,
+      })
+      .where("id", "=", sync.id)
+      .where("status", "in", ["PENDING", "RUNNING"])
+      .where(sql<boolean>`"updatedAt" < ${cutoff}::timestamptz`)
+      .executeTakeFirst()
+
+    if (updated.numUpdatedRows === 0n) {
+      continue
+    }
+
+    const reserved = await deps.db
+      .selectFrom("mangaDexSyncItems")
+      .select(["id", "kind", "entityId"])
+      .where("syncId", "=", sync.id)
+      .where("status", "=", "PENDING")
+      .where("entityId", "is not", null)
+      .execute()
+
+    for (const item of reserved) {
+      await discardReservedEntity(deps, sync.mediaId, item).catch(() => {})
+    }
+
+    failed.push({ ...sync, jobState })
+  }
+
+  return failed
 }
