@@ -264,7 +264,11 @@ for `userLibraryEntries` rows over a slower schedule.
 
 ### Known gap
 
-Neither count is content-rating aware, and search currently returns every
-content rating unconditionally. Once per-user content-rating filtering lands,
-decide whether "popular" is computed per-audience or globally — a globally
-ranked NSFW title surfacing on a filtered browse page is the failure mode.
+Full search (`POST /medias/search`) defaults to the caller's content ratings: the
+signed-in user's setting, else the default setting. Quick search and the chapter
+feeds default to the default setting, and an explicit filter always wins.
+
+What remains open is popularity: `libraryCount` and `chapterCount` are global,
+so "popular" orderings rank across all ratings even when results are filtered.
+Decide whether to compute them per audience — a globally ranked NSFW title
+surfacing on a filtered browse page is the failure mode.

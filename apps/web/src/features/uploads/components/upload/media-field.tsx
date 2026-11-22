@@ -1,3 +1,4 @@
+import { CONTENT_RATINGS } from "@taiyomoe/db/constants"
 import {
   Combobox,
   ComboboxEmpty,
@@ -13,6 +14,8 @@ import { searchMediasQueryOptions } from "@/features/media/api/medias"
 import { getOptionSynopsis, MediaOptionContent } from "@/features/media/components/media-option"
 import { m } from "@/paraglide/messages"
 
+const ALL_RATINGS = [...CONTENT_RATINGS]
+
 export type MediaOption = { id: string; title: string; coverUrl: string | null; synopsis: string }
 
 export function MediaField({
@@ -27,7 +30,12 @@ export function MediaField({
   const [mediaSearch, setMediaSearch] = useState(media?.title ?? "")
   const mediaQuery = useDeferredValue(mediaSearch.trim())
   const mediaResults = useQuery({
-    ...searchMediasQueryOptions({ q: mediaQuery, page: 1, perPage: 10 }),
+    ...searchMediasQueryOptions({
+      q: mediaQuery,
+      page: 1,
+      perPage: 10,
+      filter: { contentRating: { in: ALL_RATINGS } },
+    }),
     enabled: mediaQuery.length > 0,
   })
   const mediaOptions: MediaOption[] = (mediaResults.data?.data ?? []).flatMap((hit) =>
