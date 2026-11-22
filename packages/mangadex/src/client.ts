@@ -17,6 +17,10 @@ class MangaDexUnavailableError extends Error {
   override name = "MangaDexUnavailableError"
 }
 
+export class MangaDexDownloadTooLargeError extends Error {
+  override name = "MangaDexDownloadTooLargeError"
+}
+
 type Localized = Record<string, string>
 
 export type MangaDexStaff = z.infer<typeof staffAttributesSchema> & {
@@ -116,6 +120,34 @@ const toChapter = (chapter: z.infer<typeof chaptersResponseSchema>["data"][numbe
       return parsed.success ? [{ ...parsed.data, id: relationship.id }] : []
     }),
   }) satisfies MangaDexChapter
+const readCapped = async (response: Response, maxBytes: number) => {
+  const declared = Number(response.headers.get("Content-Length") ?? "")
+
+  if (Number.isFinite(declared) && declared > maxBytes) {
+    await response.body?.cancel()
+    throw new MangaDexDownloadTooLargeError(`${declared} bytes is over the ${maxBytes} byte limit`)
+  }
+
+  const chunks: Uint8Array[] = []
+  let total = 0
+
+  if (response.body !== null) {
+    const reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader()
+
+    for (let read = await reader.read(); !read.done; read = await reader.read()) {
+      total += read.value.byteLength
+
+      if (total > maxBytes) {
+        await reader.cancel()
+        throw new MangaDexDownloadTooLargeError(`The body is over the ${maxBytes} byte limit`)
+      }
+
+      chunks.push(read.value)
+    }
+  }
+
+  return Buffer.concat(chunks, total)
+}
 
 export const createMangaDexClient = ({
   fetch = globalThis.fetch,
@@ -355,7 +387,13 @@ export const createMangaDexClient = ({
           : config.mangaDex.networkReportUrl,
       } satisfies MangaDexPageSource
     },
-    download: async (url: string, { reportsTo = null }: { reportsTo?: string | null } = {}) => {
+    download: async (
+      url: string,
+      {
+        reportsTo = null,
+        maxBytes = config.mangaDex.maxDownloadBytes,
+      }: { reportsTo?: string | null; maxBytes?: number } = {},
+    ) => {
       let failure = "no response"
 
       for (let attempt = 1; attempt <= 3; attempt++) {
@@ -369,11 +407,15 @@ export const createMangaDexClient = ({
           cached = response.headers.get("X-Cache")?.startsWith("HIT") ?? false
 
           if (response.ok) {
-            bytes = Buffer.from(await response.arrayBuffer())
+            bytes = await readCapped(response, maxBytes)
           } else {
             failure = `${new URL(url).hostname} answered ${response.status}`
           }
         } catch (error) {
+          if (error instanceof MangaDexDownloadTooLargeError) {
+            throw error
+          }
+
           const cause =
             error instanceof Error && error.cause instanceof Error
               ? ` (${"code" in error.cause ? String(error.cause.code) : error.cause.message})`

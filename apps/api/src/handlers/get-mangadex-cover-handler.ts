@@ -39,7 +39,9 @@ export const getMangaDexCoverHandler = new Hono().get(
   async (c) => {
     const { mangaDexId, fileName } = c.var.param
     const bytes = await c.var.mangaDex
-      .download(`${config.mangaDex.uploadsUrl}/covers/${mangaDexId}/${fileName}.256.jpg`)
+      .download(`${config.mangaDex.uploadsUrl}/covers/${mangaDexId}/${fileName}.256.jpg`, {
+        maxBytes: config.images.maxSizeBytes,
+      })
       .catch(() => null)
 
     if (bytes === null) {

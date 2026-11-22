@@ -6,6 +6,7 @@ import type {
 } from "@tanstack/markdown"
 import { COMMENT_IMAGE_LINE, parseCommentImageLine } from "@taiyomoe/schemas/comment-content"
 import { parseMarkdown } from "@tanstack/markdown/parser"
+import { toSafeHref } from "@/lib/safe-href"
 
 const MAX_SOURCE_LENGTH = 20_000
 const BLANK = /^[\s\u00AD\u115F\u1160\u200B-\u200D\u2060\u2800\u3164\uFEFF]*$/u
@@ -34,24 +35,6 @@ const inlineText = (nodes: InlineNode[], spoilers: "keep" | "mask" = "keep"): st
       return "children" in node ? inlineText(node.children, spoilers) : ""
     })
     .join("")
-const toSafeHref = (url: string) => {
-  if (!/^https?:\/\//i.test(url)) {
-    return null
-  }
-
-  try {
-    const parsed = new URL(url)
-
-    return (parsed.protocol === "https:" || parsed.protocol === "http:") &&
-      parsed.hostname !== "" &&
-      parsed.username === "" &&
-      parsed.password === ""
-      ? parsed.href
-      : null
-  } catch {
-    return null
-  }
-}
 const getHostname = (value: string) => {
   try {
     return new URL(/^[a-z][a-z\d+.-]*:\/\//i.test(value) ? value : `https://${value}`).hostname

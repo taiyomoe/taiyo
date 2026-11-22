@@ -122,6 +122,7 @@ export const config = {
     feedPageSize: 500,
     maxSelectedItems: 5000,
     recentSyncs: 10,
+    maxDownloadBytes: 25 * 1024 * 1024,
   },
   pagination: {
     defaultPage: 1,
