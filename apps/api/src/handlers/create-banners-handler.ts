@@ -24,6 +24,7 @@ const createBannersSchema = z.object({
     })
     .array()
     .min(1)
+    .max(config.images.maxFilesPerRequest)
     .meta({
       description: "The banners to add to the media.",
       examples: [{ file: "banner-1.jpg", contentRating: "NORMAL" }],
@@ -34,8 +35,7 @@ export const createBannersHandler = new Hono().post(
   "/:id/banners",
   describeRoute({
     summary: "Add banners to a media",
-    description:
-      "Adds one or more banners to a media.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+    description: `Adds one or more banners to a media, up to ${config.images.maxFilesPerRequest} images per request.\n\n**Required roles:** uploader intern, uploader, moderator, admin.`,
     tags: ["Banners"],
     responses: {
       201: {
@@ -75,24 +75,24 @@ export const createBannersHandler = new Hono().post(
   async (c) => {
     const { db, media, user } = c.var
     const body = c.var.formData
-    const bannerRows = await Promise.all(
-      body.banners.map(async (banner) => {
-        const id = crypto.randomUUID()
-        const { extension } = await putImage(
-          c.var,
-          { kind: "banner", mediaId: media.id, id },
-          banner.file,
-        )
+    const bannerRows: NewBanner[] = []
 
-        return {
-          id,
-          mediaId: media.id,
-          extension,
-          contentRating: banner.contentRating,
-          uploaderId: user.id,
-        } satisfies NewBanner
-      }),
-    )
+    for (const banner of body.banners) {
+      const id = crypto.randomUUID()
+      const { extension } = await putImage(
+        c.var,
+        { kind: "banner", mediaId: media.id, id },
+        banner.file,
+      )
+
+      bannerRows.push({
+        id,
+        mediaId: media.id,
+        extension,
+        contentRating: banner.contentRating,
+        uploaderId: user.id,
+      })
+    }
 
     await db.insertInto("banners").values(bannerRows).execute()
 

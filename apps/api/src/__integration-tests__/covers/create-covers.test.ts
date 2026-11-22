@@ -5,6 +5,7 @@ import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { fakeImageOfSize, invalidImage, tinyGif, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
+import { seedMedia } from "../helpers/seed"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
@@ -217,6 +218,68 @@ describe("POST /medias/:id/covers", () => {
 
     expect(res.body.code).toBe("VALIDATION_ERROR")
   })
+
+  test("keeps one main cover when two uploads set it at once", async ({ app, services }) => {
+    const { userId, headers } = await signInAs(services, { role: "ADMIN" })
+    const mediaId = await seedMedia(services, userId)
+
+    await services.db
+      .insertInto("covers")
+      .values({ mediaId, uploaderId: userId, language: "en", isMainCover: true })
+      .execute()
+
+    const upload = async () => {
+      const form = await getForm()
+
+      form.append("covers.0.main", "true")
+
+      return api<{ ids: string[] }>(app, `/medias/${mediaId}/covers`, {
+        method: "POST",
+        headers,
+        form,
+      })
+    }
+    const [first, second] = await Promise.all([upload(), upload()])
+
+    expect(first.status).toBe(201)
+    expect(second.status).toBe(201)
+
+    const mainCovers = await services.db
+      .selectFrom("covers")
+      .select("id")
+      .where("mediaId", "=", mediaId)
+      .where("isMainCover", "=", true)
+      .where("deletedAt", "is", null)
+      .execute()
+
+    expect(mainCovers).toHaveLength(1)
+  }, 30_000)
+
+  test("returns VALIDATION_ERROR above the per-request image limit", async ({ app, services }) => {
+    const { userId, headers } = await signInAs(services, { role: "ADMIN" })
+    const mediaId = await seedMedia(services, userId)
+    const form = new FormData()
+
+    for (let index = 0; index <= config.images.maxFilesPerRequest; index++) {
+      form.append(`covers.${index}.file`, await tinyPng())
+      form.append(`covers.${index}.language`, "en")
+      form.append(`covers.${index}.contentRating`, "NORMAL")
+    }
+
+    const res = await api(app, `/medias/${mediaId}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(422)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("VALIDATION_ERROR")
+  }, 30_000)
 
   test("returns MEDIA_NOT_FOUND for an unknown media", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
