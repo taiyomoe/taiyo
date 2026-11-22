@@ -1,6 +1,6 @@
 import type { EnqueuedTaskPromise, Meilisearch } from "meilisearch"
 import { type DB, type Kysely, sql } from "@taiyomoe/db"
-import { isNullish } from "radashi"
+import { isNullish } from "remeda"
 import { INDEXES_BATCH_SIZE } from "../utils/constants"
 import { getMediaDocument } from "./get-media-document"
 

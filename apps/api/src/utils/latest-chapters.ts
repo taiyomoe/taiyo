@@ -1,6 +1,6 @@
 import { type ContentRating, type DB, type ExpressionBuilder, type Kysely, sql } from "@taiyomoe/db"
 import { getCoverUrl } from "@taiyomoe/s3"
-import { group } from "radashi"
+import { groupBy } from "remeda"
 import { escapeLike } from "./escape-like"
 
 /** The number of processed pages of the chapter. */
@@ -119,7 +119,7 @@ export const withChapterDetails = async <T extends LatestChapterRow>(db: Kysely<
           .select(["chapterGroups.chapterId", "groups.id", "groups.name"])
           .orderBy("groups.name", "asc")
           .execute()
-  const groupsByChapter = group(credits, (credit) => credit.chapterId)
+  const groupsByChapter = groupBy(credits, (credit) => credit.chapterId)
 
   return rows.map(
     ({

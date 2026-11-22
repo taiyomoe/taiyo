@@ -1,5 +1,5 @@
 import { type DB, type Expression, type Kysely, type Language, sql } from "@taiyomoe/db"
-import { sum } from "radashi"
+import { sum, sumBy } from "remeda"
 import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
 
 export const DASHBOARD_RANGES = ["24h", "7d", "30d", "90d", "12m"] as const
@@ -343,7 +343,7 @@ export const getWindowedOverview = async (
 
       return {
         readsByLanguage: languages.slice(0, 5),
-        otherLanguageReads: sum(languages.slice(5), (language) => language.reads),
+        otherLanguageReads: sumBy(languages.slice(5), (language) => language.reads),
         topMedias: medias.map((media) => ({
           id: media.id,
           title: titles.get(media.id) ?? null,

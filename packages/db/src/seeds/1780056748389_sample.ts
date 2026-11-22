@@ -1,5 +1,5 @@
 import type { Kysely } from "kysely"
-import { cluster } from "radashi"
+import { chunk } from "remeda"
 import type { DB } from "../database"
 import { readSampleRows, SAMPLE_TABLES } from "../sample"
 
@@ -9,7 +9,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
       continue
     }
 
-    for (const rows of cluster(await readSampleRows(table), 1000)) {
+    for (const rows of chunk(await readSampleRows(table), 1000)) {
       await db.insertInto(table).values(rows).execute()
     }
   }

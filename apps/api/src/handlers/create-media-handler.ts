@@ -13,7 +13,7 @@ import {
 } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
-import { pick } from "radashi"
+import { pick } from "remeda"
 import z from "zod"
 import { putImage } from "../image-store"
 import { audited } from "../middlewares/audited-middleware"
