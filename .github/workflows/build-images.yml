@@ -19,6 +19,7 @@ on:
       - "docs/**"
       - ".github/ISSUE_TEMPLATE/**"
       - "LICENSE"
+  merge_group:
   workflow_dispatch:
 
 permissions:
@@ -141,9 +142,48 @@ jobs:
           build-args: ${{ steps.build-args.outputs.value }}
           cache-from: type=gha,scope=${{ matrix.app }}
 
+  tests:
+    name: Wait for the tests
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      actions: read
+    steps:
+      - name: Wait for every test workflow on this commit to pass
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          required=("CI / Static analysis" "CI / Unit tests" "CI / Integration tests" "CI / End-to-end tests")
+          deadline=$((SECONDS + 40 * 60))
+          while true; do
+            runs=$(gh api "repos/${REPO}/actions/runs?head_sha=${SHA}&event=push&per_page=100" --jq '.workflow_runs')
+            pending=0
+            for name in "${required[@]}"; do
+              run=$(jq -c --arg name "$name" '[.[] | select(.name == $name)] | sort_by(.run_attempt) | last' <<<"$runs")
+              if [ "$run" = "null" ] || [ "$(jq -r .status <<<"$run")" != "completed" ]; then
+                pending=1
+              elif [ "$(jq -r .conclusion <<<"$run")" != "success" ]; then
+                echo "::error::${name} did not pass on ${SHA}: $(jq -r .html_url <<<"$run")"
+                exit 1
+              fi
+            done
+            if [ "$pending" = 0 ]; then
+              echo "Every test workflow passed on ${SHA}."
+              exit 0
+            fi
+            if [ "$SECONDS" -ge "$deadline" ]; then
+              echo "::error::The test workflows did not finish on ${SHA} within 40 minutes."
+              exit 1
+            fi
+            sleep 30
+          done
+
   release:
     name: Release to the cluster
-    needs: [version, build]
+    needs: [version, build, tests]
     if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
