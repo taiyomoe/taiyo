@@ -827,6 +827,9 @@ importers:
       '@faker-js/faker':
         specifier: ^10.6.0
         version: 10.6.0
+      '@taiyomoe/audit':
+        specifier: workspace:^
+        version: link:../../packages/audit
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../../packages/db
@@ -842,6 +845,9 @@ importers:
       dotenv:
         specifier: ^18.0.9
         version: 18.0.9
+      evlog:
+        specifier: ^2.35.1
+        version: 2.35.1(@tanstack/start-client-core@1.170.39)(ai@7.0.142(zod@4.6.7))(hono@4.13.17)(next@16.4.3(@babel/core@8.0.1)(@playwright/test@1.65.0)(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(ofetch@1.5.1)(react@19.3.1)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       kysely:
         specifier: ^0.29.5
         version: 0.29.8
