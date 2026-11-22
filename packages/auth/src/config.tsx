@@ -159,7 +159,7 @@ export const createAuth = ({
       storage: "secondary-storage",
       customRules: rateLimitRules,
     },
-    session: { storeSessionInDatabase: true },
+    session: { storeSessionInDatabase: true, freshAge: config.auth.sessionFreshAgeSeconds },
     advanced: {
       database: { generateId: "uuid" },
       disableOriginCheck: false,

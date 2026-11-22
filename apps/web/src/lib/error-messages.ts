@@ -64,6 +64,7 @@ export const API_ERROR_MESSAGES = {
   USERNAME_TAKEN: m.error_api_username_taken,
   DISPLAY_NAME_TAKEN: m.error_api_display_name_taken,
   PASSWORD_ALREADY_SET: m.user_settings_password_already_set,
+  SESSION_NOT_FRESH: m.user_settings_session_expired,
   USER_REPORT_SELF: m.error_api_user_report_self,
   USER_REPORT_EXISTS: m.error_api_user_report_exists,
   USER_REPORT_NOT_FOUND: m.error_api_report_not_found,
