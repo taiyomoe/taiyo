@@ -1,13 +1,6 @@
-import { describe, expect, it, vi } from "vitest"
+import { config } from "@taiyomoe/config"
+import { describe, expect, it } from "vitest"
 import { normalizeDisplayName } from "../normalize-display-name"
-
-vi.mock("@faker-js/faker", () => ({
-  faker: {
-    internet: {
-      username: vi.fn<() => string>(() => "generated_username"),
-    },
-  },
-}))
 
 describe("normalizeDisplayName", () => {
   it("should preserve spaces", () => {
@@ -41,10 +34,18 @@ describe("normalizeDisplayName", () => {
     expect(result).toBe("a".repeat(30))
   })
 
-  it("should return faker username if normalized length is less than minLength (3)", () => {
-    expect(normalizeDisplayName("ab")).toBe("generated_username")
-    expect(normalizeDisplayName("a")).toBe("generated_username")
-    expect(normalizeDisplayName("")).toBe("generated_username")
+  it("should return a fallback name if normalized length is less than minLength (3)", () => {
+    expect(normalizeDisplayName("ab")).toMatch(/^reader_[0-9a-f]{8}$/)
+    expect(normalizeDisplayName("a")).toMatch(/^reader_[0-9a-f]{8}$/)
+    expect(normalizeDisplayName("")).toMatch(/^reader_[0-9a-f]{8}$/)
+  })
+
+  it("should return a fallback that passes the config regex", () => {
+    expect(config.auth.displayName.regex.test(normalizeDisplayName("a"))).toBe(true)
+  })
+
+  it("should return a different fallback each time", () => {
+    expect(normalizeDisplayName("")).not.toBe(normalizeDisplayName(""))
   })
 
   it("should return normalized value if length is at least minLength (3)", () => {
@@ -64,8 +65,8 @@ describe("normalizeDisplayName", () => {
   })
 
   it("should handle edge cases", () => {
-    expect(normalizeDisplayName("   ")).toBe("generated_username")
-    expect(normalizeDisplayName("!!!")).toBe("generated_username")
+    expect(normalizeDisplayName("   ")).toMatch(/^reader_[0-9a-f]{8}$/)
+    expect(normalizeDisplayName("!!!")).toMatch(/^reader_[0-9a-f]{8}$/)
     expect(normalizeDisplayName("a b")).toBe("a b")
   })
 })

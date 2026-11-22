@@ -1,5 +1,6 @@
-import { faker } from "@faker-js/faker"
 import { config } from "@taiyomoe/config"
+
+const fallbackName = () => `reader_${crypto.randomUUID().slice(0, 8)}`
 
 export const normalizeUsername = (input: string) => {
   const normalized = input
@@ -8,5 +9,5 @@ export const normalizeUsername = (input: string) => {
     .replace(/[^a-zA-Z0-9_.]/g, "")
     .toLowerCase()
 
-  return normalized.length < config.auth.username.minLength ? faker.internet.username() : normalized
+  return normalized.length < config.auth.username.minLength ? fallbackName() : normalized
 }
