@@ -59,7 +59,8 @@ export const createWebPushSender = ({
       headers: Object.fromEntries(
         Object.entries(headers).filter(([name]) => name.toLowerCase() !== "content-length"),
       ),
-      body,
+      // A Buffer is a body only to Node's fetch types; a Uint8Array is one to the standard's too.
+      body: new Uint8Array(body),
       redirect: "manual",
       signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
     })
