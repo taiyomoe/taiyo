@@ -3324,5 +3324,12 @@
   "media_stats_no_library": "Ninguém adicionou esta obra à biblioteca ainda.",
   "library_sort_score": "Sua nota",
   "search_sort_rating": "Mais bem avaliados",
-  "search_result_rating_label": "nota média"
+  "search_result_rating_label": "nota média",
+  "error_api_rating_has_review": "Sua resenha precisa da sua nota. Remova a resenha também ou mantenha a nota.",
+  "error_api_review_not_found": "Esta resenha não existe ou foi removida.",
+  "error_api_review_rating_required": "Dê uma nota a este título antes de escrever uma resenha.",
+  "error_api_review_self_vote": "Você não pode marcar sua própria resenha como útil.",
+  "error_api_review_report_exists": "Você já denunciou esta resenha.",
+  "error_api_review_report_not_found": "Esta denúncia não existe.",
+  "error_api_review_report_closed": "Esta denúncia já foi encerrada."
 }

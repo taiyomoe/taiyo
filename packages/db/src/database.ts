@@ -26,6 +26,9 @@ import type { MangaDexSync } from "./models/mangadex-sync-model"
 import type { Media } from "./models/media-model"
 import type { MediaRating } from "./models/media-rating-model"
 import type { MediaRatingStats } from "./models/media-rating-stats-model"
+import type { MediaReview } from "./models/media-review-model"
+import type { MediaReviewReport } from "./models/media-review-report-model"
+import type { MediaReviewVote } from "./models/media-review-vote-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
 import type { NotificationActor } from "./models/notification-actor-model"
@@ -86,6 +89,9 @@ export type DB = {
   mangaDexSyncs: MangaDexSync
   mediaRatingStats: MediaRatingStats
   mediaRatings: MediaRating
+  mediaReviewReports: MediaReviewReport
+  mediaReviewVotes: MediaReviewVote
+  mediaReviews: MediaReview
   mediaStaffs: MediaStaff
   mediaSuggestions: MediaSuggestion
   medias: Media

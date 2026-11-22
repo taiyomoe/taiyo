@@ -456,10 +456,40 @@ const libraryErrors = {
     code: 404,
   },
 } as const
+const reviewErrors = {
+  REVIEW_NOT_FOUND: {
+    message: "The requested review was not found.",
+    code: 404,
+  },
+  REVIEW_RATING_REQUIRED: {
+    message: "Rate the media before reviewing it.",
+    code: 409,
+  },
+  REVIEW_SELF_VOTE: {
+    message: "You cannot mark your own review as helpful.",
+    code: 403,
+  },
+  REVIEW_REPORT_EXISTS: {
+    message: "You already reported this review, and the report is still open.",
+    code: 409,
+  },
+  REVIEW_REPORT_NOT_FOUND: {
+    message: "The requested review report was not found.",
+    code: 404,
+  },
+  REVIEW_REPORT_CLOSED: {
+    message: "This review report is already closed.",
+    code: 409,
+  },
+} as const
 const ratingErrors = {
   RATING_NOT_FOUND: {
     message: "You have not rated this media.",
     code: 404,
+  },
+  RATING_HAS_REVIEW: {
+    message: "Your review needs your score: remove the review along with it, or keep the score.",
+    code: 409,
   },
 } as const
 const listErrors = {
@@ -570,6 +600,7 @@ export const errors = {
   ...pageErrors,
   ...libraryErrors,
   ...ratingErrors,
+  ...reviewErrors,
   ...listErrors,
   ...imageErrors,
   ...chapterUploadErrors,

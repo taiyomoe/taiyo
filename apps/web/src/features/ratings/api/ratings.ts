@@ -59,7 +59,10 @@ export function useRateMedia(mediaId: string) {
     scope: { id: `rating:${mediaId}` },
     mutationFn: async (score: number | null) => {
       if (score === null) {
-        const response = await api.medias[":id"].rating.$delete({ param: { id: mediaId } })
+        const response = await api.medias[":id"].rating.$delete({
+          param: { id: mediaId },
+          query: {},
+        })
 
         return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
       }

@@ -48,6 +48,8 @@ const TARGET_ICONS: Record<string, (props: IconProps) => ReactElement> = {
   comment: Comment,
   commentReport: Flag,
   commentImage: Image,
+  review: Comment,
+  reviewReport: Flag,
 }
 
 export function TargetThumb({

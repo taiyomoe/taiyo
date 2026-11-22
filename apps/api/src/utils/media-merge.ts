@@ -14,6 +14,7 @@ import {
   type S3Client,
 } from "@taiyomoe/s3"
 import { mergeRatings } from "./ratings"
+import { mergeReviews } from "./reviews"
 
 type MergedChapter = Pick<
   Selectable<Chapter>,
@@ -373,7 +374,7 @@ export const foldChapter = async (
 
 /**
  * Moves what readers keep about a duplicate to the media: library entries,
- * ratings, list items, reading rewards, the comment thread and a featured spot.
+ * ratings, reviews, list items, reading rewards, the comment thread and a featured spot.
  * A reader who has both in their library keeps the most recently updated
  * status, and is notified when either was set to.
  */
@@ -419,6 +420,7 @@ export const mergeReaders = async (
   )
 
   await mergeRatings(db, { mediaId, duplicateId })
+  await mergeReviews(db, { mediaId, duplicateId })
 
   await db
     .deleteFrom("userListItems as i")

@@ -42,6 +42,8 @@ import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { rankingsRouter } from "./routers/rankings-router"
+import { reviewReportsRouter } from "./routers/review-reports-router"
+import { reviewsRouter } from "./routers/reviews-router"
 import { searchRouter } from "./routers/search-router"
 import { shopRouter } from "./routers/shop-router"
 import { staffsRouter } from "./routers/staffs-router"
@@ -91,7 +93,15 @@ const scalarExtensions = {
     },
     {
       name: "Reading",
-      tags: ["Bookmarks", "Reading history", "Library", "Ratings", "Custom lists"],
+      tags: [
+        "Bookmarks",
+        "Reading history",
+        "Library",
+        "Ratings",
+        "Reviews",
+        "Review reports",
+        "Custom lists",
+      ],
     },
     {
       name: "Groups",
@@ -267,6 +277,8 @@ export const createApp = (services: Services) => {
     .route("/comments", commentsRouter)
     .route("/comment-images", commentImagesRouter)
     .route("/comment-reports", commentReportsRouter)
+    .route("/reviews", reviewsRouter)
+    .route("/review-reports", reviewReportsRouter)
     .route("/dashboard", dashboardRouter)
     .route("/search", searchRouter)
     .route("/shop", shopRouter)
@@ -349,6 +361,15 @@ export const createApp = (services: Services) => {
               name: "Ratings",
               description:
                 "Scores from 1 to 10 that users give medias, and the community statistics they add up to.",
+            },
+            {
+              name: "Reviews",
+              description:
+                "Public reviews users write of the medias they rated, and the helpful marks readers give them.",
+            },
+            {
+              name: "Review reports",
+              description: "Reports about a review, and their review by moderators.",
             },
             {
               name: "Custom lists",

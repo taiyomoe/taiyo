@@ -107,6 +107,7 @@ export type PermissionsDefinition = ValidateDefinition<{
   groupReport: ["create", "review"]
   userReport: ["create", "review"]
   comment: ["create", "delete", "review", "removeImage"]
+  mediaReview: ["delete", "review"]
   list: [
     "moderate",
     { name: "update"; type: ListTarget; required: true },

@@ -3324,5 +3324,12 @@
   "media_stats_no_library": "Personne n’a encore ajouté cette œuvre à sa bibliothèque.",
   "library_sort_score": "Votre note",
   "search_sort_rating": "Les mieux notés",
-  "search_result_rating_label": "note moyenne"
+  "search_result_rating_label": "note moyenne",
+  "error_api_rating_has_review": "Votre critique a besoin de votre note. Supprimez aussi la critique, ou gardez la note.",
+  "error_api_review_not_found": "Cette critique n’existe pas ou a été supprimée.",
+  "error_api_review_rating_required": "Notez ce titre avant d’en écrire une critique.",
+  "error_api_review_self_vote": "Vous ne pouvez pas trouver votre propre critique utile.",
+  "error_api_review_report_exists": "Vous avez déjà signalé cette critique.",
+  "error_api_review_report_not_found": "Ce signalement n’existe pas.",
+  "error_api_review_report_closed": "Ce signalement est déjà clos."
 }

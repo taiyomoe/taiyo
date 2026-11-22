@@ -88,6 +88,12 @@ export * from "./models/media-rating-model"
 
 export * from "./models/media-rating-stats-model"
 
+export * from "./models/media-review-model"
+
+export * from "./models/media-review-report-model"
+
+export * from "./models/media-review-vote-model"
+
 export * from "./models/search-outbox-model"
 
 export * from "./models/notification-actor-model"

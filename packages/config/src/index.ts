@@ -118,6 +118,12 @@ export const config = {
     priorMean: 7,
     minCountForAverage: 5,
   },
+  reviews: {
+    minBodyLength: 200,
+    maxBodyLength: 10_000,
+    maxReportDetailsLength: 500,
+    perPage: 10,
+  },
   reports: {
     /** The points a reporter earns when the moderation team acts on their report. */
     rewardPoints: 10,

@@ -3324,5 +3324,12 @@
   "media_stats_no_library": "Nobody has added this title to their library yet.",
   "library_sort_score": "Your score",
   "search_sort_rating": "Top rated",
-  "search_result_rating_label": "average score"
+  "search_result_rating_label": "average score",
+  "error_api_rating_has_review": "Your review needs your score. Remove the review too, or keep the score.",
+  "error_api_review_not_found": "This review doesn't exist or was removed.",
+  "error_api_review_rating_required": "Rate this title before reviewing it.",
+  "error_api_review_self_vote": "You can't mark your own review as helpful.",
+  "error_api_review_report_exists": "You already reported this review.",
+  "error_api_review_report_not_found": "This report doesn't exist.",
+  "error_api_review_report_closed": "This report is already closed."
 }

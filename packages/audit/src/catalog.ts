@@ -87,6 +87,20 @@ export const commentReportAudit = defineAuditCatalog("comment.report", {
   CLOSE_MANY: { severity: "medium" },
 })
 
+export const reviewAudit = defineAuditCatalog("review", {
+  SAVE: { target: "media", severity: "low" },
+  DELETE: { target: "media", severity: "low" },
+  REMOVE: { target: "review", severity: "medium" },
+  VOTE: { target: "review", severity: "low" },
+  UNVOTE: { target: "review", severity: "low" },
+})
+
+export const reviewReportAudit = defineAuditCatalog("review.report", {
+  CREATE: { target: "review", severity: "low" },
+  CLOSE: { target: "reviewReport", severity: "medium" },
+  CLOSE_MANY: { severity: "medium" },
+})
+
 export const commentImageAudit = defineAuditCatalog("comment.image", {
   UPLOAD: { target: "commentImage", severity: "low" },
   FAVORITE: { target: "commentImage", severity: "low" },
@@ -318,6 +332,8 @@ export const auditCatalogs = [
   commentAudit,
   commentReportAudit,
   commentImageAudit,
+  reviewAudit,
+  reviewReportAudit,
   shopAudit,
   mediaAudit,
   mediaSuggestionAudit,
@@ -379,6 +395,8 @@ declare module "evlog" {
     list: typeof listAudit
     library: typeof libraryAudit
     rating: typeof ratingAudit
+    review: typeof reviewAudit
+    reviewReport: typeof reviewReportAudit
     history: typeof historyAudit
     notification: typeof notificationAudit
     bookmark: typeof bookmarkAudit
