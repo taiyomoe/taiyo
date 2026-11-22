@@ -1,42 +1,12 @@
 import type { GroupCreationRequest, Selectable } from "@taiyomoe/db"
-import { createMiddleware } from "hono/factory"
-import z from "zod"
-import { withRequestSpec } from "../utils/openapi-helper"
-
-const paramSchema = z.object({
-  id: z.uuid().meta({ description: "The ID of the group creation request." }),
-})
+import { checkEntity } from "./check-entity"
 
 export const checkGroupCreationRequest = () =>
-  withRequestSpec(
-    createMiddleware<{
-      Variables: { groupCreationRequest: Selectable<GroupCreationRequest> }
-    }>(async (c, next) => {
-      const parsed = paramSchema.safeParse({ id: c.req.param("id") })
-
-      if (!parsed.success) {
-        return c.fail("VALIDATION_ERROR", parsed.error.issues)
-      }
-
-      const { id } = parsed.data
-      const { db, log } = c.var
-
-      log.set({ groupCreationRequest: { id } })
-
-      const groupCreationRequest = await db
-        .selectFrom("groupCreationRequests")
-        .selectAll()
-        .where("id", "=", id)
-        .executeTakeFirst()
-
-      if (!groupCreationRequest) {
-        return c.fail("GROUP_CREATION_REQUEST_NOT_FOUND")
-      }
-
-      c.set("groupCreationRequest", groupCreationRequest)
-
-      return next()
-    }),
-    "param",
-    paramSchema,
-  )
+  checkEntity({
+    key: "groupCreationRequest",
+    description: "The ID of the group creation request.",
+    notFound: "GROUP_CREATION_REQUEST_NOT_FOUND",
+    logRow: false,
+    load: (db, id): Promise<Selectable<GroupCreationRequest> | undefined> =>
+      db.selectFrom("groupCreationRequests").selectAll().where("id", "=", id).executeTakeFirst(),
+  })
