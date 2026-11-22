@@ -100,6 +100,14 @@ export const config = {
     maxPushSubscriptions: 10,
     activityPushDelayMinutes: 5,
     maxBulkIds: 100,
+    pushServiceHosts: [
+      "fcm.googleapis.com",
+      "android.googleapis.com",
+      "updates.push.services.mozilla.com",
+      "web.push.apple.com",
+    ],
+    // Edge's WNS uses numbered subdomains.
+    pushServiceDomains: [".notify.windows.com", ".push.apple.com"],
   },
   reports: {
     /** The points a reporter earns when the moderation team acts on their report. */

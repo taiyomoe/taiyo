@@ -19,6 +19,7 @@ import {
   type PushSender,
   sendPendingPushes,
 } from "./push"
+import { isPushServiceEndpoint } from "./push-service"
 import { PUSH_TEXTS } from "./push-texts"
 import { CHAPTER_UPLOAD_QUEUE, type ChapterUploadProducer, getChapterUploadProducer } from "./queue"
 import {
@@ -44,6 +45,7 @@ export {
   getMangaDexSyncProducer,
   getVapidPublicKey,
   isExpiredPushStatus,
+  isPushServiceEndpoint,
   MANGADEX_SYNC_QUEUE,
   processChapterUpload,
   PUSH_TEXTS,

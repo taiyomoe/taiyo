@@ -12,6 +12,7 @@ import { getCommentText } from "@taiyomoe/schemas/comment-content"
 import { sql, type Kysely } from "kysely"
 import { generateRequestDetails } from "web-push"
 import { env } from "./env"
+import { isPushServiceEndpoint } from "./push-service"
 import { PUSH_TEXTS } from "./push-texts"
 
 type PushTarget = { endpoint: string; p256dh: string; auth: string }
@@ -42,6 +43,7 @@ export const createWebPushSender = ({
   subject = env.VAPID_SUBJECT,
   publicKey = env.VAPID_PUBLIC_KEY,
   privateKey = env.VAPID_PRIVATE_KEY,
+  isAllowedEndpoint = isPushServiceEndpoint,
 } = {}) => {
   if (publicKey === undefined || privateKey === undefined || subject === undefined) {
     return null
@@ -49,6 +51,11 @@ export const createWebPushSender = ({
 
   const vapidDetails = { subject, publicKey, privateKey }
   const send: PushSender = async ({ endpoint, p256dh, auth }, message) => {
+    // 410 makes callers delete the subscription.
+    if (!isAllowedEndpoint(endpoint)) {
+      return 410
+    }
+
     const { method, headers, body } = generateRequestDetails(
       { endpoint, keys: { p256dh, auth } },
       JSON.stringify(message),
