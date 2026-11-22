@@ -2,13 +2,23 @@
 
 ## Search
 
-**Media document**: the denormalised record of one media in the Meilisearch `medias` index, built by `getMediaDocument` from `medias`, `titles`, `covers`, `mediaStaffs` + `staffs`, `chapters` and `userLibraryEntries`. A media with no live main title or main cover has no media document.
+**Media document**: the denormalised record of one media in the Meilisearch `medias` index, built by `getMediaDocument` from `medias`, `titles`, `covers`, `mediaStaffs` + `staffs`, `chapters`, `userLibraryEntries` and `mediaRatingStats`. A media with no live main title or main cover has no media document.
 
-**Search outbox**: the `searchOutbox` table of mediaIds whose media document may be stale. Postgres triggers on the six source tables write to it inside the same transaction as the change, so no write path can skip it. The only direct writer is the forced reindex route.
+**Search outbox**: the `searchOutbox` table of mediaIds whose media document may be stale. Postgres triggers on the seven source tables write to it inside the same transaction as the change, so no write path can skip it. The only direct writer is the forced reindex route.
 
 **Drain**: reading pending search outbox rows and rebuilding, or removing, each media document. The API drains right after a transaction commits; the worker drains on a schedule to retry anything a failed drain left behind. A row is only removed once its media document has been pushed.
 
 **Search freshness**: the guarantee that a committed change to any source table reaches the media document, eventually and without relying on the code that made the change.
+
+## Ratings
+
+**Rating**: a user's score for a media, an integer from 1 to 10 in `mediaRatings`. It is independent of the library: rating a media does not add it to the library, and removing it from the library keeps the rating.
+
+**Rating stats**: the `mediaRatingStats` row of a media, holding its rating count, the sum of its scores and how many ratings each score has. Every rating write changes it in the same transaction by a relative increment, so concurrent writes never lose a rating. A media nobody ever rated has no row.
+
+**Community average**: the plain mean of a media's ratings, shown on the media page once it has `config.ratings.minCountForAverage` ratings.
+
+**Rating score**: the Bayesian average a media is sorted by in search, so a few high ratings do not outrank many good ones. See [rating score](docs/engineering-notes.md#rating-score).
 
 ## Groups
 

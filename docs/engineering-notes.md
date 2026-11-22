@@ -210,9 +210,9 @@ rather than `z.coerce` in the schema the client is derived from.
 
 ## Search freshness lives in Postgres, not in handlers
 
-A media document (see `CONTEXT.md`) is built by `getMediaDocument` from six
-tables: `medias`, `titles`, `covers`, `mediaStaffs` + `staffs`, `chapters` and
-`userLibraryEntries`. Handlers do not sync search. Row-level triggers on those
+A media document (see `CONTEXT.md`) is built by `getMediaDocument` from seven
+tables: `medias`, `titles`, `covers`, `mediaStaffs` + `staffs`, `chapters`,
+`userLibraryEntries` and `mediaRatingStats`. Handlers do not sync search. Row-level triggers on those
 tables (migration `add-search-outbox`) append the affected mediaIds to
 `searchOutbox` inside the writing transaction, and `drainSearchOutbox`
 rebuilds them:
@@ -260,7 +260,43 @@ fields, so "popular" and "most chapters" browse orderings read straight off
 them. A bookmark therefore rebuilds the whole document to change one integer;
 that is accepted while bookmark volume is low. When it becomes hot, prefer a
 partial Meilisearch update (`updateDocuments` with just `{ id, libraryCount }`)
-for `userLibraryEntries` rows over a slower schedule.
+for `userLibraryEntries` rows over a slower schedule. Ratings are in the same
+position: every rating write updates `mediaRatingStats`, whose trigger rebuilds
+the whole document to change `ratingCount`, `ratingAverage` and `ratingScore`.
+
+### Rating score
+
+The "Top rated" sort orders by `ratingScore`, a Bayesian average rather than
+the plain mean, so a title with two 10s does not outrank one with three hundred
+9s:
+
+```
+score = (m × C + sum) / (m + count)
+```
+
+`count` and `sum` are the media's number of ratings and the sum of their
+scores, read from `mediaRatingStats`. `C` (`config.ratings.priorMean`, 7) is
+the score a title is assumed to have before anyone rates it, and `m`
+(`config.ratings.priorWeight`, 25) is how many ratings that assumption is worth:
+each title scores as if it already had 25 ratings of 7. A new title starts at 7
+and moves toward its own mean as ratings arrive; with 25 ratings, it sits
+halfway. Raise `m` when brigading a small title becomes a problem, and move `C`
+toward the site-wide mean once there is enough data to know it. Changing either
+needs a search reindex (`initMediasIndex`) since the score is stored in the
+documents; `getRatingScore` in `@taiyomoe/config` is the only implementation.
+
+The community average shown on the media page is the plain mean, `sum / count`,
+and is hidden until the title has `config.ratings.minCountForAverage` (5)
+ratings; below that the page shows "Not enough ratings".
+
+`mediaRatingStats` is its own table rather than columns on `medias` for two
+reasons: `medias` has a `set_updated_at` trigger, so every rating would touch
+the media's `updatedAt`, and every rating would contend for the lock on the
+media row that edits and merges also take. Its writes are relative increments
+(`"ratingCount" + 1`) on a row inserted on first use, never a read-modify-write
+in JavaScript, so concurrent ratings serialise on the row lock and never lose
+an update. CHECK constraints keep the totals coherent, and `scoreCounts` is an
+`integer[]` with index 0 counting 1s.
 
 ### Known gap
 
