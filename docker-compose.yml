@@ -94,12 +94,13 @@ services:
       retries: 30
 
   rustfs:
-    image: rustfs/rustfs:1.0.4
+    image: rustfs/rustfs:1.0.5
     restart: unless-stopped
     environment:
       - RUSTFS_ACCESS_KEY=$RUSTFS_ACCESS_KEY
       - RUSTFS_SECRET_KEY=$RUSTFS_SECRET_KEY
       - RUSTFS_VOLUMES=/data
+      - RUSTFS_REGION=auto
     ports:
       - "127.0.0.1:$RUSTFS_PORT:9000"
       - "127.0.0.1:$RUSTFS_CONSOLE_PORT:9001"
