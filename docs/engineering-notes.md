@@ -217,10 +217,12 @@ tables (migration `add-search-outbox`) append the affected mediaIds to
 `searchOutbox` inside the writing transaction, and `drainSearchOutbox`
 rebuilds them:
 
-- `withTransaction` drains up to 100 rows right after every commit.
+- `withTransaction` drains up to 100 rows right after every commit, waiting at
+  most 2 s for Meilisearch to apply each push.
 - The worker's `search-maintenance` queue drains everything every minute, so a
-  drain that failed (Meilisearch down, process crash) is retried rather than
-  lost.
+  drain that failed is retried rather than lost: Meilisearch down, a process
+  crash, a push still pending at the timeout, or a task Meilisearch accepted and
+  then failed. A drain removes rows only once their push succeeded.
 
 A staff update or delete enqueues every media that credits the staff, through
 `mediaStaffs`. A chapter moved between medias enqueues both.
@@ -239,7 +241,8 @@ Two invariants keep the drain correct, and both are easy to break while
   rebuilt from data that includes the change; a new write during the push
   inserts a new row that the next drain picks up. Upserting into a unique
   `mediaId` instead would let that write be absorbed by a row already being
-  drained.
+  drained. "After the push" means after Meilisearch reports the task
+  `succeeded`, not after it enqueued it.
 - **Each mediaId is advisory-locked from build to push.** Two drainers holding
   rows for the same media otherwise race, and the one that read older data can
   push last.

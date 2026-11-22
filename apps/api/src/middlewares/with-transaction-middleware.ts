@@ -64,11 +64,11 @@ export const withTransaction = createMiddleware<{
   if (committed) {
     await runCallbacks(c, afterCommitCallbacks)
 
-    await drainSearchOutbox({
-      db: previous,
-      meili: c.get("meili"),
-      mediasIndex: c.get("mediasIndex"),
-    }).catch((drainErr: unknown) => {
+    // A push still pending at the timeout is retried by the worker.
+    await drainSearchOutbox(
+      { db: previous, meili: c.get("meili"), mediasIndex: c.get("mediasIndex") },
+      { taskTimeoutMs: 2_000 },
+    ).catch((drainErr: unknown) => {
       c.get("log").error(toLoggableError(drainErr))
     })
   }
