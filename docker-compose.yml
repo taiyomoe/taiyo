@@ -19,7 +19,7 @@ services:
       retries: 20
 
   dragonfly:
-    image: "docker.dragonflydb.io/dragonflydb/dragonfly"
+    image: "docker.dragonflydb.io/dragonflydb/dragonfly:v2.1.0"
     restart: unless-stopped
     ulimits:
       memlock: -1
@@ -38,7 +38,7 @@ services:
       retries: 20
 
   hyperdx:
-    image: "docker.hyperdx.io/hyperdx/hyperdx-all-in-one"
+    image: "docker.hyperdx.io/hyperdx/hyperdx-all-in-one:2.46.0"
     profiles: ["hyperdx"]
     restart: unless-stopped
     ports:
@@ -78,7 +78,7 @@ services:
       retries: 20
 
   meilisearch:
-    image: "getmeili/meilisearch:latest"
+    image: "getmeili/meilisearch:v1.57.0"
     restart: unless-stopped
     environment:
       - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
@@ -112,7 +112,7 @@ services:
       retries: 30
 
   images:
-    image: "nginx:alpine"
+    image: "nginx:1.31.9-alpine"
     restart: unless-stopped
     depends_on:
       - rustfs
