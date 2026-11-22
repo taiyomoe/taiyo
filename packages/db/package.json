@@ -21,7 +21,7 @@
   "dependencies": {
     "@faker-js/faker": "^10.6.0",
     "@t3-oss/env-core": "^0.13.11",
-    "kysely": "^0.29.8",
+    "kysely": "^0.29.9",
     "mangadex-full-api": "^6.2.0",
     "pg": "^8.23.1",
     "remeda": "^2.61.0",
