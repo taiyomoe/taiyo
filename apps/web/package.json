@@ -72,6 +72,8 @@
     "@stylexjs/unplugin": "^0.19.1",
     "@taiyomoe/api": "workspace:^",
     "@tanstack/devtools-vite": "^0.8.6",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
