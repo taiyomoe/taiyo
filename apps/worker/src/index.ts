@@ -53,7 +53,6 @@ const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
 const mangaDexSyncActor = systemActor("mangadex-sync-worker")
 const rankingActor = systemActor("ranking-worker")
-// BullMQ re-emits connection errors as "error": unhandled, one Redis blip would crash the worker.
 const logConnectionErrors = (
   name: string,
   emitter: { on: (event: "error", listener: (err: Error) => void) => unknown },

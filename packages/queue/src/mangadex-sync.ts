@@ -55,7 +55,6 @@ export const getMangaDexSyncProducer = () =>
             removeOnFail: { age: 24 * 3_600 },
           },
         })
-        // Unhandled, a Redis connection error would crash the API.
         queue.on("error", (err) => {
           // oxlint-disable-next-line no-console
           console.error(`${MANGADEX_SYNC_QUEUE} queue error:`, err.message)

@@ -23,7 +23,6 @@ export const getChapterUploadProducer = () =>
             removeOnFail: { age: 24 * 3_600 },
           },
         })
-        // Unhandled, a Redis connection error would crash the API.
         queue.on("error", (err) => {
           // oxlint-disable-next-line no-console
           console.error(`${CHAPTER_UPLOAD_QUEUE} queue error:`, err.message)
