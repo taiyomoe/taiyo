@@ -105,7 +105,6 @@ export const createAuthActions = ({
   callbackURL?: string | undefined
   getOrigin?: () => string
 }) => {
-  // Where to land after signing in comes from the URL: only follow it when it stays on the site.
   const callbackURL = toInternalPath(requestedCallbackURL)
   // Better Auth runs on the api's origin and resolves a relative callbackURL against it,
   // so the redirects it issues (social sign-in, verification links) would land on the
