@@ -34,7 +34,7 @@ export const checkUser = (opts: { includeBanned?: boolean } = {}) =>
         return c.fail("USER_NOT_FOUND")
       }
 
-      log.set({ targetUser })
+      log.set({ targetUser: { id: targetUser.id, role: targetUser.role } })
 
       c.set("targetUser", targetUser)
 
