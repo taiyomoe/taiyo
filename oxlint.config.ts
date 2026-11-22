@@ -29,7 +29,7 @@ export default defineConfig({
   ],
   overrides: [
     {
-      files: ["./packages/scripts/src/**/*.ts"],
+      files: ["./tooling/scripts/src/**/*.ts"],
       rules: {
         "no-console": "off",
       },

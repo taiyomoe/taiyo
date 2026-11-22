@@ -2,13 +2,6 @@ import type { DB, Kysely, Role, UserSettings } from "@taiyomoe/db"
 import { kyselyAdapter } from "@better-auth/kysely-adapter"
 import { cacheClient } from "@taiyomoe/cache"
 import { config } from "@taiyomoe/config"
-import {
-  ChangeEmailEmail,
-  MagicLinkEmail,
-  ResetPasswordEmail,
-  sendEmail as sendSesEmail,
-  SignUpEmail,
-} from "@taiyomoe/email"
 import { createPermissions, toRole } from "@taiyomoe/permissions"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
@@ -61,8 +54,10 @@ const createInvalidCredsError = (isEmail: boolean) =>
     message: isEmail ? "Invalid email or password" : "Invalid username or password",
   })
 
+/** @internal Exported for its tests. */
 export const captchaEndpoints = ["/sign-up/email", "/request-password-reset"]
 
+/** @internal Exported for its tests. */
 export const rateLimitRules = {
   "/sign-in/email": { window: 60, max: 3 },
   "/sign-in/username": { window: 60, max: 3 },
@@ -71,14 +66,23 @@ export const rateLimitRules = {
   "/request-password-reset": { window: 120, max: 1 },
 }
 
+type AuthEmailBase = { to: string; name: string; url: string }
+
+/** The emails Better Auth asks for. The app renders and sends them, so auth stays free of templates. */
+export type AuthEmail =
+  | (AuthEmailBase & { kind: "reset-password" })
+  | (AuthEmailBase & { kind: "verify-email" })
+  | (AuthEmailBase & { kind: "change-email"; newEmail: string })
+  | (AuthEmailBase & { kind: "magic-link" })
+
 export const createAuth = ({
   db,
   trustedOrigins = [],
-  sendEmail = sendSesEmail,
+  sendEmail,
 }: {
   db: Kysely<DB>
   trustedOrigins?: string[]
-  sendEmail?: typeof sendSesEmail
+  sendEmail: (email: AuthEmail) => Promise<void>
 }) =>
   betterAuth({
     appName: "Taiyō",
@@ -96,9 +100,10 @@ export const createAuth = ({
       revokeSessionsOnPasswordReset: true,
       sendResetPassword: async (data) => {
         await sendEmail({
+          kind: "reset-password",
           to: data.user.email,
-          subject: "Reset your password",
-          react: <ResetPasswordEmail name={data.user.name} url={data.url} />,
+          name: data.user.name,
+          url: data.url,
         })
       },
     },
@@ -109,9 +114,10 @@ export const createAuth = ({
       autoSignInAfterVerification: true,
       sendVerificationEmail: async (data) => {
         await sendEmail({
+          kind: "verify-email",
           to: data.user.email,
-          subject: "Verify your email",
-          react: <SignUpEmail name={data.user.name} url={data.url} />,
+          name: data.user.name,
+          url: data.url,
         })
       },
     },
@@ -123,11 +129,11 @@ export const createAuth = ({
         enabled: true,
         sendChangeEmailConfirmation: async (data) => {
           await sendEmail({
+            kind: "change-email",
             to: data.user.email,
-            subject: "Confirm your email change",
-            react: (
-              <ChangeEmailEmail name={data.user.name} newEmail={data.newEmail} url={data.url} />
-            ),
+            name: data.user.name,
+            newEmail: data.newEmail,
+            url: data.url,
           })
         },
       },
@@ -389,11 +395,7 @@ export const createAuth = ({
             return
           }
 
-          await sendEmail({
-            to: user.email,
-            subject: "Your magic link for Taiyō",
-            react: <MagicLinkEmail name={user.name} url={data.url} />,
-          })
+          await sendEmail({ kind: "magic-link", to: user.email, name: user.name, url: data.url })
         },
       }),
       captcha({

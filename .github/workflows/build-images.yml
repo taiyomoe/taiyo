@@ -241,7 +241,7 @@ jobs:
 
       - uses: ./.github/actions/setup
 
-      - run: node packages/scripts/src/release/post-discord-announcement.ts
+      - run: node tooling/scripts/src/release/post-discord-announcement.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ needs.version.outputs.tag }}

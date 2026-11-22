@@ -1,4 +1,4 @@
-import { createAuth } from "@taiyomoe/auth/server"
+import { type AuthEmail, createAuth } from "@taiyomoe/auth/server"
 import { randomInt, randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
 import { test } from "../setup"
@@ -11,12 +11,12 @@ describe("Email sign-in of an unverified account", () => {
     services,
   }) => {
     const { db } = services
-    const sent: Array<{ to: string; subject: string }> = []
+    const sent: Array<Pick<AuthEmail, "kind" | "to">> = []
     const auth = createAuth({
       db,
       trustedOrigins: [ORIGIN],
-      sendEmail: ({ to, subject }) => {
-        sent.push({ to, subject })
+      sendEmail: ({ kind, to }) => {
+        sent.push({ kind, to })
 
         return Promise.resolve()
       },
@@ -67,7 +67,7 @@ describe("Email sign-in of an unverified account", () => {
       .execute()
 
     expect(await signIn()).toMatchObject({ status: 403, body: { code: "EMAIL_NOT_VERIFIED" } })
-    expect(sent).toEqual([{ to: email, subject: "Verify your email" }])
+    expect(sent).toEqual([{ kind: "verify-email", to: email }])
 
     expect(await signIn()).toMatchObject({
       status: 403,

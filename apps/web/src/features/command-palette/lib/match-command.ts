@@ -39,6 +39,7 @@ const tokenScore = (
 
 export type CommandMatch = { score: number; strong: boolean; weak: boolean }
 
+/** @internal Exported for its tests. */
 export const matchCommand = (query: string, command: PaletteCommand): CommandMatch | null => {
   const tokens = toWords(query)
 

@@ -53,7 +53,6 @@ export {
   PUSH_TEXTS,
   publishScheduledChapters,
   purgeNotifications,
-  RANKING_REWARD_POINTS,
   RANKING_SIZE,
   READER_ORDER,
   reapOrphanCommentImages,
@@ -68,6 +67,11 @@ export type {
   ChapterUploadProducer,
   MangaDexSyncJobData,
   MangaDexSyncProducer,
-  PushMessage,
   PushSender,
 }
+
+/** @internal Exported for its tests. */
+export { RANKING_REWARD_POINTS }
+
+/** @internal Exported for its tests. */
+export type { PushMessage }

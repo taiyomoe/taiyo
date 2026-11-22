@@ -10,6 +10,17 @@ import type { KnipConfig } from "knip"
  * dead and the report has to be suppressed package by package.
  */
 const importMatcher = /@import\s+(?:url\(\s*)?["']([^"']+)["']/g
+/**
+ * The default run counts tests as users, so code only its tests import never reads as dead.
+ * `knip --production` drops tests and every entry without a `!`, then reports what nothing else
+ * reaches. Test helpers, dev-server code and local seed data are not production code either:
+ * these globs leave them out of that run, and the default run still checks them. An export kept
+ * for its tests takes an `@internal` tag, which only the production run honors.
+ */
+const developmentOnly = (...globs: string[]) => [
+  "**/*.{js,mjs,cjs,jsx,ts,tsx,mts,cts}!",
+  ...globs.map((glob) => `!${glob}!`),
+]
 const config: KnipConfig = {
   // Every package is private to the monorepo: an export nothing imports is dead, entry file or not.
   includeEntryExports: true,
@@ -21,11 +32,29 @@ const config: KnipConfig = {
     "packages/ui/src/components/ui/*.tsx": ["exports", "types"],
   },
   workspaces: {
+    "apps/api": {
+      entry: ["src/backfills/*.ts!"],
+      project: developmentOnly("src/__integration-tests__/**"),
+    },
+    "apps/web": {
+      entry: ["scripts/og-media/render.ts!"],
+      // twemoji-assets.ts only serves the emoji to the dev server.
+      project: developmentOnly("**/__tests__/**", "twemoji-assets.ts"),
+    },
     "packages/db": {
       entry: [
         "kysely.config.ts",
-        "src/{migrations,seeds,fixtures,backfills}/*.ts",
-        "src/migrate.ts",
+        "src/{seeds,fixtures}/*.ts",
+        // The api image migrates before each deploy, and backfills run against production.
+        "src/{migrations,backfills}/*.ts!",
+        "src/migrate.ts!",
+      ],
+      project: developmentOnly("src/{seeds,fixtures}/**"),
+    },
+    "tooling/scripts": {
+      entry: [
+        "src/{index,bootstrap,check-messages,tunnel}.ts!",
+        "src/release/{write-discord-draft,post-discord-announcement}.ts!",
       ],
     },
   },

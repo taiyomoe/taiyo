@@ -17,6 +17,7 @@ class MangaDexUnavailableError extends Error {
   override name = "MangaDexUnavailableError"
 }
 
+/** @internal Exported for its tests. */
 export class MangaDexDownloadTooLargeError extends Error {
   override name = "MangaDexDownloadTooLargeError"
 }

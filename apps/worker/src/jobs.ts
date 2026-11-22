@@ -30,6 +30,7 @@ export {
   CLOSE_RANKING_PERIODS_JOB,
 }
 
+/** @internal Exported for its tests. */
 export const MAINTENANCE_JOBS = {
   [CHAPTER_MAINTENANCE_QUEUE]: [REAP_JOB, PUBLISH_JOB, FAIL_STALE_SYNCS_JOB],
   [SEARCH_MAINTENANCE_QUEUE]: [DRAIN_JOB],
@@ -81,6 +82,7 @@ export const SCHEDULES: readonly Schedule[] = [
   },
 ]
 
+/** @internal Exported for its tests. */
 export class UnknownJobError extends Error {}
 
 export const routeJobs = <Q extends MaintenanceQueue>(

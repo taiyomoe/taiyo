@@ -34,4 +34,7 @@ export type { GroupMembershipRole, GroupPermission, Role }
 
 export type * from "./definition"
 
-export { buildRules, getChapterGroupIds, toRole }
+export { getChapterGroupIds, toRole }
+
+/** @internal Exported for its tests. */
+export { buildRules }
