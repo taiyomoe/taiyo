@@ -140,7 +140,7 @@ export function OpeningOverlay({
   const label = TIER_LABELS[box.key].name()
 
   useEffect(() => {
-    if (scene !== null && !started.current) {
+    if ((scene !== null || failed) && !started.current) {
       started.current = true
       sequence.start(box.key)
     }
