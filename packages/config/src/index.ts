@@ -52,6 +52,8 @@ export const config = {
   } satisfies Required<UserSettings>,
   images: {
     maxSizeBytes: 10 * 1024 * 1024,
+    // Images one upload request may carry (covers, banners): each one is transcoded in turn.
+    maxFilesPerRequest: 10,
     quality: 85,
     chapterPageQuality: 82,
     maxChapterPageSizeBytes: 15 * 1024 * 1024,

@@ -39,6 +39,7 @@ const createCoversSchema = z.object({
     })
     .array()
     .min(1)
+    .max(config.images.maxFilesPerRequest)
     .meta({
       description: "The covers to add to the media.",
       examples: [
@@ -60,8 +61,7 @@ export const createCoversHandler = new Hono().post(
   "/:id/covers",
   describeRoute({
     summary: "Add covers to a media",
-    description:
-      "Adds one or more covers to a media. At most one of them can be marked as `main`, and it then replaces the previous main cover.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+    description: `Adds one or more covers to a media, up to ${config.images.maxFilesPerRequest} images per request. At most one of them can be marked as \`main\`, and it then replaces the previous main cover.\n\n**Required roles:** uploader intern, uploader, moderator, admin.`,
     tags: ["Covers"],
     responses: {
       201: {
@@ -101,29 +101,33 @@ export const createCoversHandler = new Hono().post(
   async (c) => {
     const { db, media, user } = c.var
     const body = c.var.formData
-    const coverRows = await Promise.all(
-      body.covers.map(async (cover) => {
-        const id = crypto.randomUUID()
-        const { extension } = await putImage(
-          c.var,
-          { kind: "cover", mediaId: media.id, id },
-          cover.file,
-        )
+    const coverRows: NewCover[] = []
 
-        return {
-          id,
-          mediaId: media.id,
-          extension,
-          volume: cover.volume !== undefined ? String(cover.volume) : null,
-          language: cover.language,
-          contentRating: cover.contentRating,
-          isMainCover: cover.main,
-          uploaderId: user.id,
-        } satisfies NewCover
-      }),
-    )
+    for (const cover of body.covers) {
+      const id = crypto.randomUUID()
+      const { extension } = await putImage(
+        c.var,
+        { kind: "cover", mediaId: media.id, id },
+        cover.file,
+      )
 
-    if (coverRows.some((row) => row.isMainCover)) {
+      coverRows.push({
+        id,
+        mediaId: media.id,
+        extension,
+        volume: cover.volume !== undefined ? String(cover.volume) : null,
+        language: cover.language,
+        contentRating: cover.contentRating,
+        isMainCover: cover.main,
+        uploaderId: user.id,
+      })
+    }
+
+    if (body.covers.some((cover) => cover.main)) {
+      // Concurrent main-cover changes of one media run in turn: each clears the main cover the
+      // previous one set, instead of both inserting a main cover.
+      await db.selectFrom("medias").select("id").where("id", "=", media.id).forUpdate().execute()
+
       await db
         .updateTable("covers")
         .set({ isMainCover: false })
