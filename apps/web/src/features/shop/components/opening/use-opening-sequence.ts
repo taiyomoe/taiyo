@@ -52,12 +52,8 @@ export function useOpeningSequence({ scene, sound }: { scene: ChestScene | null;
   )
 
   const start = (box: LootBoxKey) => {
-    if (scene === null) {
-      return
-    }
-
     clearTimers()
-    scene.reset()
+    scene?.reset()
     setResult(null)
     setStage("charging")
 
@@ -72,7 +68,7 @@ export function useOpeningSequence({ scene, sound }: { scene: ChestScene | null;
     const ramp = window.setInterval(() => {
       const progress = Math.min(1, (performance.now() - startedAt) / chargeMs)
 
-      scene.setCharge(progress)
+      scene?.setCharge(progress)
       beat += 1
 
       if (beat % 3 === 0) {
@@ -88,7 +84,7 @@ export function useOpeningSequence({ scene, sound }: { scene: ChestScene | null;
           window.clearInterval(ramp)
           setResult(opening)
           setStage("burst")
-          scene.burst(opening.item.rarity)
+          scene?.burst(opening.item.rarity)
           audio()?.burst(opening.item.rarity)
           later(BURST_TO_REVEAL_MS, () => {
             setStage("reveal")
@@ -101,7 +97,7 @@ export function useOpeningSequence({ scene, sound }: { scene: ChestScene | null;
       },
       onError: () => {
         window.clearInterval(ramp)
-        scene.reset()
+        scene?.reset()
         audio()?.fail()
         setStage("failed")
       },

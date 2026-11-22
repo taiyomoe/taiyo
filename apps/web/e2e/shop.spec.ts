@@ -1,5 +1,6 @@
 import {
   type APIRequestContext,
+  type Browser,
   type BrowserContext,
   type Page,
   expect,
@@ -95,13 +96,32 @@ const cosmeticLabel = (kind: keyof typeof KIND_LABEL_PREFIXES, key: string) => {
 
   return label
 }
+// CI renders WebGL in software and the chest scene starves the page; this spec tests the opening
+// flow, not the 3D scene, so the app falls back to its plain stage.
+const newReader = async (browser: Browser) => {
+  const context = await browser.newContext({
+    storageState: "e2e/.auth/user.json",
+    reducedMotion: "reduce",
+  })
+
+  await context.addInitScript(`
+    const getContext = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = function (type, ...args) {
+      return ["webgl", "webgl2", "experimental-webgl"].includes(type)
+        ? null
+        : getContext.call(this, type, ...args)
+    }
+  `)
+
+  return context
+}
 
 test.describe("shop", () => {
   test.describe.configure({ mode: "serial" })
   test.use({ reducedMotion: "reduce" })
 
   test("a reader buys a cosmetic and the balance drops by its price", async ({ browser, page }) => {
-    const reader = await browser.newContext({ storageState: "e2e/.auth/user.json" })
+    const reader = await newReader(browser)
 
     try {
       const userId = await userIdOf(reader)
@@ -160,7 +180,7 @@ test.describe("shop", () => {
   })
 
   test("a reader opens a loot box and the result matches the API", async ({ browser, page }) => {
-    const reader = await browser.newContext({ storageState: "e2e/.auth/user.json" })
+    const reader = await newReader(browser)
 
     try {
       const userId = await userIdOf(reader)
