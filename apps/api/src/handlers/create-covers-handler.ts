@@ -124,8 +124,7 @@ export const createCoversHandler = new Hono().post(
     }
 
     if (body.covers.some((cover) => cover.main)) {
-      // Concurrent main-cover changes of one media run in turn: each clears the main cover the
-      // previous one set, instead of both inserting a main cover.
+      // Serializes main-cover changes of this media.
       await db.selectFrom("medias").select("id").where("id", "=", media.id).forUpdate().execute()
 
       await db

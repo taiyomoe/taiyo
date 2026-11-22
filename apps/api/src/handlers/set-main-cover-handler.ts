@@ -48,8 +48,7 @@ export const setMainCoverHandler = new Hono().post(
 
     c.var.audit.set({ target: { mediaId: cover.mediaId } })
 
-    // Concurrent main-cover changes of one media run in turn: each clears the main cover the
-    // previous one set, instead of both setting a main cover.
+    // Serializes main-cover changes of this media.
     await db.selectFrom("medias").select("id").where("id", "=", cover.mediaId).forUpdate().execute()
 
     await db
