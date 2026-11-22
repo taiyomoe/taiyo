@@ -2,7 +2,6 @@ import type { QueryClient } from "@tanstack/react-query"
 import { m } from "../paraglide/messages"
 import { AUTH_ERROR_MESSAGES, SOCIAL_ERROR_MESSAGES } from "./error-messages"
 import { getCodeMessage } from "./errors"
-import { sessionQueryOptions } from "./session"
 
 export type SocialProvider = "discord" | "google"
 
@@ -97,19 +96,23 @@ export const createAuthActions = ({
   router,
   callbackURL = "/",
   getOrigin = () => window.location.origin,
+  onAccountChange = () => {},
 }: {
   client: AuthClient
   queryClient: QueryClient
   router: AuthRouter
   callbackURL?: string | undefined
   getOrigin?: () => string
+  onAccountChange?: () => void
 }) => {
   // Better Auth runs on the api's origin and resolves a relative callbackURL against it,
   // so the redirects it issues (social sign-in, verification links) would land on the
   // api. Resolved when an action runs: the hook also renders on the server.
   const authCallbackURL = () => new URL(callbackURL, getOrigin()).href
   const refreshSession = async () => {
-    queryClient.removeQueries({ queryKey: sessionQueryOptions.queryKey })
+    onAccountChange()
+    await queryClient.cancelQueries()
+    queryClient.removeQueries()
     await router.invalidate()
   }
   const finishSignIn = async (result: AuthResult) => {
