@@ -71,6 +71,29 @@ describe("PATCH /users/me/account", () => {
     expect(res.body).toMatchObject({ success: false, code: "DISPLAY_NAME_TAKEN" })
   })
 
+  test("lets only one of two users take a name at once, ignoring case", async ({
+    app,
+    services,
+  }) => {
+    const first = await signInAs(services)
+    const second = await signInAs(services)
+    const name = `Race ${crypto.randomUUID().replaceAll("-", "").slice(0, 8)}`
+    const results = await Promise.all([
+      api(app, "/users/me/account", {
+        method: "PATCH",
+        headers: first.headers,
+        json: { displayName: name },
+      }),
+      api(app, "/users/me/account", {
+        method: "PATCH",
+        headers: second.headers,
+        json: { displayName: name.toLowerCase() },
+      }),
+    ])
+
+    expect(results.map((res) => res.status).sort((a, b) => a - b)).toEqual([200, 409])
+  })
+
   test("keeps the user's own names when they are sent back unchanged", async ({
     app,
     services,

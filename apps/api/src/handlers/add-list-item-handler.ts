@@ -9,6 +9,7 @@ import { requireListOwner } from "../middlewares/require-list-owner-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { isUniqueViolation } from "../utils/database-errors"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 import { countListItems, touchList } from "../utils/user-lists"
@@ -97,14 +98,7 @@ export const addListItemHandler = new Hono().post(
         .values({ listId: list.id, mediaId, position: finalPosition })
         .execute()
     } catch (err) {
-      if (
-        err !== null &&
-        typeof err === "object" &&
-        "code" in err &&
-        "constraint" in err &&
-        err.code === "23505" &&
-        err.constraint === "userListItems_pkey"
-      ) {
+      if (isUniqueViolation(err, "userListItems_pkey")) {
         return c.fail("LIST_ITEM_EXISTS")
       }
 

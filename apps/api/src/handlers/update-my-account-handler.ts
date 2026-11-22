@@ -9,6 +9,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { auditChanges } from "../utils/audit"
+import { isUniqueViolation } from "../utils/database-errors"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope, displayNameSchema } from "../utils/schemas"
@@ -101,12 +102,26 @@ export const updateMyAccountHandler = new Hono().patch(
 
     c.var.audit.set({ changes: auditChanges(before, patch) })
 
-    const updated = await db
-      .updateTable("users")
-      .set(patch)
-      .where("id", "=", user.id)
-      .returning(["username", "displayUsername", "name"])
-      .executeTakeFirstOrThrow()
+    let updated: typeof before
+
+    try {
+      updated = await db
+        .updateTable("users")
+        .set(patch)
+        .where("id", "=", user.id)
+        .returning(["username", "displayUsername", "name"])
+        .executeTakeFirstOrThrow()
+    } catch (err) {
+      if (isUniqueViolation(err, "users_username_key")) {
+        return c.fail("USERNAME_TAKEN")
+      }
+
+      if (isUniqueViolation(err, "users_displayUsername_lower_key")) {
+        return c.fail("DISPLAY_NAME_TAKEN")
+      }
+
+      throw err
+    }
 
     c.var.afterCommit(() => refreshUserSessions(auth, user.id))
 
