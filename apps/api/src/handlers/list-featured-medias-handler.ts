@@ -1,7 +1,7 @@
 import { getBannerUrl, getCoverUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
-import { group } from "radashi"
+import { groupBy } from "remeda"
 import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -137,7 +137,7 @@ export const listFeaturedMediasHandler = new Hono().get(
       .orderBy("mediaStaffs.role", "asc")
       .orderBy("staffs.name", "asc")
       .execute()
-    const authorsByMedia = group(credits, (credit) => credit.mediaId)
+    const authorsByMedia = groupBy(credits, (credit) => credit.mediaId)
 
     return c.ok(
       medias.map((media) => ({

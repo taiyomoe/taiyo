@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker"
 import { type Kysely, sql } from "kysely"
-import { cluster } from "radashi"
+import { chunk } from "remeda"
 import normalizeEmail from "validator/lib/normalizeEmail"
 
 type MigrationDb = {
@@ -152,7 +152,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addColumn("normalizedEmail", "text")
     .execute()
 
-  for (const batch of cluster(normalizedEmails, BATCH_SIZE)) {
+  for (const batch of chunk(normalizedEmails, BATCH_SIZE)) {
     await db.insertInto("normalizedEmails").values(batch).execute()
   }
 
@@ -226,7 +226,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addColumn("displayUsername", "text", (c) => c.notNull())
     .execute()
 
-  for (const batch of cluster(usernames, BATCH_SIZE)) {
+  for (const batch of chunk(usernames, BATCH_SIZE)) {
     await db.insertInto("usernames").values(batch).execute()
   }
 
@@ -276,7 +276,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addColumn("settings", "jsonb", (c) => c.notNull())
     .execute()
 
-  for (const batch of cluster(userSettings, BATCH_SIZE)) {
+  for (const batch of chunk(userSettings, BATCH_SIZE)) {
     await db.insertInto("userSettings").values(batch).execute()
   }
 

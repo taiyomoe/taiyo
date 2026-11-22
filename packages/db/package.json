@@ -25,7 +25,7 @@
     "kysely": "^0.29.8",
     "mangadex-full-api": "^6.2.0",
     "pg": "^8.23.1",
-    "radashi": "^13.0.4",
+    "remeda": "^2.58.0",
     "validator": "^13.15.35",
     "zod": "^4.6.7"
   },

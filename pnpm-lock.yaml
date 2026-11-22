@@ -125,9 +125,9 @@ importers:
       magic-bytes.js:
         specifier: ^1.13.1
         version: 1.13.1
-      radashi:
-        specifier: ^13.0.4
-        version: 13.0.4
+      remeda:
+        specifier: ^2.58.0
+        version: 2.58.0
       sharp:
         specifier: ^0.35.5
         version: 0.35.5(@types/node@26.6.6)
@@ -455,7 +455,7 @@ importers:
         version: 0.187.0
       '@vitejs/plugin-react':
         specifier: ^6.2.1
-        version: 6.3.0(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.157.0)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 6.3.0(@rolldown/plugin-babel@0.2.3(@babel/core@8.0.1)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.157.0)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       oxc-transform-react:
         specifier: ^0.157.0
         version: 0.157.0
@@ -619,9 +619,9 @@ importers:
       pg:
         specifier: ^8.23.1
         version: 8.23.1
-      radashi:
-        specifier: ^13.0.4
-        version: 13.0.4
+      remeda:
+        specifier: ^2.58.0
+        version: 2.58.0
       validator:
         specifier: ^13.15.35
         version: 13.15.35
@@ -826,9 +826,9 @@ importers:
       meilisearch:
         specifier: ^0.62.0
         version: 0.62.0
-      radashi:
-        specifier: ^13.0.4
-        version: 13.0.4
+      remeda:
+        specifier: ^2.58.0
+        version: 2.58.0
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -7180,10 +7180,6 @@ packages:
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
 
-  radashi@13.0.4:
-    resolution: {integrity: sha512-LbAKjpZi73m544arwpuKesF3lDFNKDL4N9gqW2E+/CDl2lsGLF2ABB5yhyKb7nnjmrKpn2QMUogv7Q0vMtyODw==}
-    engines: {node: '>=18.0.0'}
-
   radix-vue@1.9.17:
     resolution: {integrity: sha512-mVCu7I2vXt1L2IUYHTt0sZMz7s1K2ZtqKeTIxG3yC5mMFfLBG4FtE1FDeRMpDd+Hhg/ybi9+iXmAP1ISREndoQ==}
     peerDependencies:
@@ -10329,16 +10325,6 @@ snapshots:
       vite: 8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
     optional: true
 
-  '@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
-    dependencies:
-      '@babel/core': 7.29.7
-      picomatch: 4.0.7
-      rolldown: 1.2.16
-    optionalDependencies:
-      '@babel/runtime': 8.0.7
-      vite: 8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
-    optional: true
-
   '@rolldown/plugin-babel@0.2.3(@babel/core@8.0.1)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
       '@babel/core': 8.0.1
@@ -11947,15 +11933,6 @@ snapshots:
       babel-plugin-react-compiler: 1.0.0
       oxc-transform-react: 0.157.0
 
-  '@vitejs/plugin-react@6.3.0(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.157.0)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
-    dependencies:
-      '@rolldown/pluginutils': 1.0.1
-      vite: 8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
-    optionalDependencies:
-      '@rolldown/plugin-babel': 0.2.3(@babel/core@7.29.7)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
-      babel-plugin-react-compiler: 1.0.0
-      oxc-transform-react: 0.157.0
-
   '@vitejs/plugin-react@6.3.0(@rolldown/plugin-babel@0.2.3(@babel/core@8.0.1)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.152.0)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
@@ -11964,6 +11941,15 @@ snapshots:
       '@rolldown/plugin-babel': 0.2.3(@babel/core@8.0.1)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       babel-plugin-react-compiler: 1.0.0
       oxc-transform-react: 0.152.0
+
+  '@vitejs/plugin-react@6.3.0(@rolldown/plugin-babel@0.2.3(@babel/core@8.0.1)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.157.0)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
+    dependencies:
+      '@rolldown/pluginutils': 1.0.1
+      vite: 8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
+    optionalDependencies:
+      '@rolldown/plugin-babel': 0.2.3(@babel/core@8.0.1)(@babel/runtime@8.0.7)(rolldown@1.2.16)(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      babel-plugin-react-compiler: 1.0.0
+      oxc-transform-react: 0.157.0
 
   '@vitest/expect@3.2.4':
     dependencies:
@@ -14337,8 +14323,6 @@ snapshots:
   punycode@2.3.1: {}
 
   quansync@0.2.11: {}
-
-  radashi@13.0.4: {}
 
   radix-vue@1.9.17(vue@3.5.45(typescript@7.0.2)):
     dependencies:

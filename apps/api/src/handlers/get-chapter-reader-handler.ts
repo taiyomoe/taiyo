@@ -1,7 +1,7 @@
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
-import { group } from "radashi"
+import { groupBy } from "remeda"
 import z from "zod"
 import { authorizeChapterView } from "../middlewares/authorize-chapter-view-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
@@ -140,7 +140,7 @@ export const getChapterReaderHandler = new Hono().get(
           .where("chapters.id", "=", chapter.id)
           .select(readerColumns)
           .execute()
-    const groupsByChapter = group(credits, (credit) => credit.chapterId)
+    const groupsByChapter = groupBy(credits, (credit) => credit.chapterId)
 
     return c.ok({
       chapters: [...visible, ...hidden].map((row) => ({

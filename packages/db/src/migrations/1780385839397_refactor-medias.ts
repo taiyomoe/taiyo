@@ -1,5 +1,5 @@
 import { type ColumnType, type Kysely, sql } from "kysely"
-import { cluster } from "radashi"
+import { chunk } from "remeda"
 
 type RefactorTrackersDb = {
   Media: {
@@ -549,7 +549,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addColumn("links", "jsonb", (c) => c.notNull())
     .execute()
 
-  for (const batch of cluster(mediaLinks, BATCH_SIZE)) {
+  for (const batch of chunk(mediaLinks, BATCH_SIZE)) {
     await db.insertInto("mediaLinks").values(batch).execute()
   }
 
@@ -686,7 +686,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
     .addColumn("tags", "jsonb", (c) => c.notNull())
     .execute()
 
-  for (const batch of cluster(mediaTags, BATCH_SIZE)) {
+  for (const batch of chunk(mediaTags, BATCH_SIZE)) {
     await db.insertInto("mediaTags").values(batch).execute()
   }
 

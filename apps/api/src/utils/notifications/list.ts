@@ -8,7 +8,7 @@ import {
   sql,
 } from "@taiyomoe/db"
 import { getCommentText } from "@taiyomoe/schemas/comment-content"
-import { group } from "radashi"
+import { groupBy } from "remeda"
 import { liveCommentSql, THREAD_COLUMNS, timestampSql } from "../comments"
 import { getMainCoverUrls, getMainTitles } from "../latest-chapters"
 import { liveActorSql, selectVisibleNotifications } from "./query"
@@ -61,24 +61,22 @@ const listActors = async (db: Kysely<DB>, notificationIds: string[]) => {
   `.execute(db)
 
   return new Map(
-    Object.entries(group(rows, (row) => row.notificationId)).map(
-      ([notificationId, actors = []]) => [
-        notificationId,
-        {
-          count: Number(actors[0]?.count ?? 0),
-          latest: actors.map(
-            ({ id, username, displayUsername, image, nameEffect, avatarBorder }) => ({
-              id,
-              username,
-              displayUsername,
-              image,
-              nameEffect,
-              avatarBorder,
-            }),
-          ),
-        },
-      ],
-    ),
+    Object.entries(groupBy(rows, (row) => row.notificationId)).map(([notificationId, actors]) => [
+      notificationId,
+      {
+        count: Number(actors[0].count),
+        latest: actors.map(
+          ({ id, username, displayUsername, image, nameEffect, avatarBorder }) => ({
+            id,
+            username,
+            displayUsername,
+            image,
+            nameEffect,
+            avatarBorder,
+          }),
+        ),
+      },
+    ]),
   )
 }
 const resolveTargets = async (
@@ -204,7 +202,7 @@ export const listNotifications = async (
       rows.flatMap((row) => (row.type === "FOLLOW" || row.type === "COMMENT_LIKE" ? row.id : [])),
     ),
   ])
-  const groupsByChapter = group(credits, (credit) => credit.chapterId)
+  const groupsByChapter = groupBy(credits, (credit) => credit.chapterId)
   const targetOf = (row: (typeof rows)[number]) => {
     const threadIds = {
       mediaId: row.threadMediaId,
