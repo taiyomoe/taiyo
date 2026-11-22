@@ -2,7 +2,7 @@ import { type Page, expect, test } from "@playwright/test"
 import { z } from "zod"
 
 const API = `http://localhost:${process.env.API_PORT ?? "3002"}`
-const MEDIA_ID = "00000000-0000-0000-0000-000000000000"
+const MEDIA_ID = "11616192-2351-4e1e-8d70-3bf7908b796c"
 const ALL_CONTENT_RATINGS = "NORMAL,SUGGESTIVE,NSFW,NSFL"
 // The worker decodes these with sharp, so they must be real PNGs.
 const PAGES = [
