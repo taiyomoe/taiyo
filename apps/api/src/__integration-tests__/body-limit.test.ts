@@ -88,6 +88,27 @@ describe("Multipart body limit", () => {
 })
 
 describe("JSON route bodies", () => {
+  test("leaves a multipart body on a json route unread", async ({ app }) => {
+    const asMultipart = await app.request("/medias/search", {
+      method: "POST",
+      headers: {
+        "content-type": "multipart/form-data; boundary=x",
+        "cf-connecting-ip": "192.0.2.15",
+      },
+      body: zeros(2 * 1024 * 1024),
+      duplex: "half",
+    })
+    const asEmptyJson = await app.request("/medias/search", {
+      method: "POST",
+      headers: { "content-type": "application/json", "cf-connecting-ip": "192.0.2.16" },
+      body: "{}",
+    })
+
+    expect(asMultipart.status).not.toBe(413)
+    expect(asMultipart.status).toBe(asEmptyJson.status)
+    expect(await asMultipart.json()).toEqual(await asEmptyJson.json())
+  })
+
   test("reads a json route's body only when it is sent as json", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const body = JSON.stringify({
