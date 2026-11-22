@@ -167,7 +167,6 @@ const listKeys = async ({ s3, s3Bucket }: MangaDexSyncDeps, prefix: string) => {
 
   return keys
 }
-/** Deletes what an interrupted import of this item uploaded, unless its row was written after all. */
 const discardReservedEntity = async (
   deps: MangaDexSyncDeps,
   mediaId: string,
@@ -574,11 +573,6 @@ export const runMangaDexSync = async (
 
 type JobState = Awaited<ReturnType<Queue["getJobState"]>>
 
-/**
- * Fails the PENDING or RUNNING syncs that have been quiet for staleSyncMinutes and whose BullMQ job
- * will never run again (gone, or failed), and deletes what their interrupted imports uploaded.
- * A job that is active, waiting or delayed is left alone: it will resume the sync itself.
- */
 export const failStaleMangaDexSyncs = async (
   deps: MangaDexSyncDeps & { getJobState: (syncId: string) => Promise<JobState> },
   now = new Date(),
@@ -595,6 +589,7 @@ export const failStaleMangaDexSyncs = async (
   for (const sync of candidates) {
     const jobState = await deps.getJobState(sync.id)
 
+    // A job still active, waiting or delayed resumes its sync itself.
     if (jobState !== "failed" && jobState !== "unknown" && jobState !== "completed") {
       continue
     }
