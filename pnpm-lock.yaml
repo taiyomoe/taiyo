@@ -371,8 +371,8 @@ importers:
         specifier: ^0.10.14
         version: 0.10.14(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(csstype@3.2.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(solid-js@1.9.17)
       '@tanstack/react-hotkeys':
-        specifier: ^0.22.3
-        version: 0.22.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: ^0.25.1
+        version: 0.25.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@tanstack/react-hotkeys-devtools':
         specifier: ^0.14.4
         version: 0.14.4(@tanstack/hotkeys@0.26.0)(@tanstack/react-devtools@0.10.14(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(csstype@3.2.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(solid-js@1.9.17))(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(csstype@3.2.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(solid-js@1.9.18)(vue@3.5.45(typescript@7.0.2))
@@ -795,8 +795,8 @@ importers:
         specifier: ^0.19.1
         version: 0.19.1
       '@tanstack/react-hotkeys':
-        specifier: ^0.22.3
-        version: 0.22.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: ^0.25.1
+        version: 0.25.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -4210,6 +4210,10 @@ packages:
     resolution: {integrity: sha512-1b65lc9qkIdTj+jmR2KE5VMbpl0pxja90JrYi5EuPKcsyTss05009yPisn7Ej98MQtXSsYln+EnZNjuX/MV0Hg==}
     engines: {node: '>=20'}
 
+  '@tanstack/hotkeys@0.30.0':
+    resolution: {integrity: sha512-6jZkzpFcvZhZFRjSJwAkQJpydkP5zkxaevTD6ooY2hW3l+gEh1ltb2zhL6+T3tiDUKIp6D/Lvco2jburNg+osA==}
+    engines: {node: '>=20'}
+
   '@tanstack/markdown@1.2.0':
     resolution: {integrity: sha512-8ZaMDLvp7iUuo7R5Ot+yvX/h1ZN8Cq2p38iL+X9uOkIKVFw3IjgP62dXT6+dp/Nk522qsuSDCJNdt2F4fZvVXQ==}
     peerDependencies:
@@ -4253,8 +4257,8 @@ packages:
       '@tanstack/react-devtools':
         optional: true
 
-  '@tanstack/react-hotkeys@0.22.3':
-    resolution: {integrity: sha512-Feo/cwrByjfvAHJ04JFNopjhHQr5wSAX3wmQrpfXOTEcpztioFe6AB+iRqt6kb2LJgX1XWUSD9ujbvBcIR8LSQ==}
+  '@tanstack/react-hotkeys@0.25.1':
+    resolution: {integrity: sha512-4n8TMrvXc64YhKREqdOvJllVcyszUpltAU0Klv7+iP2nHsNsnI327sZZNfz+1aLsQi8MNidKuydDFf+vpGbNeg==}
     engines: {node: '>=20'}
     peerDependencies:
       react: '>=18.0.0'
@@ -11042,6 +11046,8 @@ snapshots:
 
   '@tanstack/hotkeys@0.26.0': {}
 
+  '@tanstack/hotkeys@0.30.0': {}
+
   '@tanstack/markdown@1.2.0(react@19.3.1)':
     optionalDependencies:
       react: 19.3.1
@@ -11101,9 +11107,9 @@ snapshots:
       - svelte
       - vue
 
-  '@tanstack/react-hotkeys@0.22.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@tanstack/react-hotkeys@0.25.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@tanstack/hotkeys': 0.26.0
+      '@tanstack/hotkeys': 0.30.0
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 

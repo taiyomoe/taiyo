@@ -43,7 +43,7 @@
     "@tanstack/charts": "^1.5.0",
     "@tanstack/markdown": "^1.2.0",
     "@tanstack/react-devtools": "^0.10.14",
-    "@tanstack/react-hotkeys": "^0.22.3",
+    "@tanstack/react-hotkeys": "^0.25.1",
     "@tanstack/react-hotkeys-devtools": "^0.14.4",
     "@tanstack/react-query": "^5.107.1",
     "@tanstack/react-query-devtools": "^5.107.1",
