@@ -68,7 +68,13 @@ test.describe("rating a media", () => {
     const stats = page.getByRole("tabpanel")
 
     await expect(
-      stats.getByText(before + 1 === 1 ? "1 rating" : `${before + 1} ratings`).first(),
+      stats
+        .getByText(
+          before + 1 === 1
+            ? "1 rating"
+            : `${new Intl.NumberFormat("en").format(before + 1)} ratings`,
+        )
+        .first(),
     ).toBeVisible()
 
     await page.reload()
