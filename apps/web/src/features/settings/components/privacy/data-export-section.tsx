@@ -6,6 +6,7 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
 import { useQuery } from "@tanstack/react-query"
+import { useEffect, useRef } from "react"
 import { Pill } from "@/components/badges/pill"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { TimeAgo } from "@/components/time/time-ago"
@@ -100,6 +101,15 @@ function ExportStatus({ latest }: { latest: DataExport }) {
 export function DataExportSection() {
   const state = useQuery(myDataExportQueryOptions)
   const request = useRequestDataExport()
+  // The mutation only reports pending after a tick: a double click would ask twice, and the
+  // second ask fails on the daily limit.
+  const requested = useRef(false)
+
+  useEffect(() => {
+    if (!request.isPending) {
+      requested.current = false
+    }
+  }, [request.isPending, request.error])
   const download = useDownloadDataExport()
   const latest = state.data?.latest ?? null
   const nextRequestAt = state.data?.nextRequestAt ?? null
@@ -117,7 +127,10 @@ export function DataExportSection() {
               disabled={!canRequest}
               loading={request.isPending}
               onClick={() => {
-                request.mutate()
+                if (!requested.current) {
+                  requested.current = true
+                  request.mutate()
+                }
               }}
               variant={latest === null ? "default" : "outline"}
             >
