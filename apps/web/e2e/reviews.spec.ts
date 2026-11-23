@@ -2,8 +2,8 @@ import { type Page, expect, test } from "@playwright/test"
 import { z } from "zod"
 
 const API = `http://localhost:${process.env.API_PORT ?? "3002"}`
-// A fixture title no other spec rates or reviews.
-const MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
+// A seeded title no other spec rates or reviews.
+const MEDIA_ID = "6c38ee07-cab3-4cec-a6d2-75276fd156ab"
 const reviewsSchema = z.object({
   data: z.array(z.object({ id: z.string(), body: z.string(), helpfulCount: z.number() })),
 })
@@ -16,7 +16,9 @@ const visit = async (page: Page, path: string) => {
 const listReviews = async (page: Page) =>
   reviewsSchema.parse(
     await (
-      await page.request.get(`${API}/medias/${MEDIA_ID}/reviews?sort=newest&contentRating=NORMAL`)
+      await page.request.get(
+        `${API}/medias/${MEDIA_ID}/reviews?sort=newest&contentRating=NORMAL,SUGGESTIVE,NSFW,NSFL`,
+      )
     ).json(),
   ).data
 
