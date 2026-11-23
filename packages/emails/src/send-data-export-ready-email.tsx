@@ -8,9 +8,10 @@ export type DataExportReadyMail = {
   url: string | null
 }
 
-export const sendDataExportReadyEmail = ({ to, ...props }: DataExportReadyMail) =>
-  sendEmail({
+export const sendDataExportReadyEmail = async ({ to, ...props }: DataExportReadyMail) => {
+  await sendEmail({
     to,
     subject: "Your Taiyō data is ready to download",
     react: <DataExportReadyEmail {...props} />,
   })
+}
