@@ -81,6 +81,8 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "comment.delete": ["MODERATOR", "ADMIN"],
   "comment.review": ["MODERATOR", "ADMIN"],
   "comment.removeImage": ["MODERATOR", "ADMIN"],
+  "mediaReview.delete": ["MODERATOR", "ADMIN"],
+  "mediaReview.review": ["MODERATOR", "ADMIN"],
   "list.moderate": ["MODERATOR", "ADMIN"],
   "user.list": ["MODERATOR", "ADMIN"],
   "user.grant": ["ADMIN"],

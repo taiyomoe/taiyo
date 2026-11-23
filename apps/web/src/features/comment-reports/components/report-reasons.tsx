@@ -1,7 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Flag } from "@taiyomoe/ui/components/icons"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import type { ReportedComment } from "@/features/comment-reports/api/comment-reports"
 import { Pill } from "@/components/badges/pill"
 import { REPORT_REASON_OPTIONS } from "@/features/comment-reports/lib/report-options"
 import { getReasons } from "@/features/comment-reports/lib/reported-comment"
@@ -26,14 +25,14 @@ const styles = stylex.create({
 })
 
 /**
- * The reasons a comment was reported for, and how many times when more than once. Folded
+ * The reasons a comment or review was reported for, and how many times when more than once. Folded
  * under a narrow row, the reasons read as one line of text that wraps instead of pills.
  */
 export function ReportReasons({
   entry,
   folded = false,
 }: {
-  entry: ReportedComment
+  entry: Parameters<typeof getReasons>[0] & { reportCount: number }
   folded?: boolean
 }) {
   const reasons = getReasons(entry)

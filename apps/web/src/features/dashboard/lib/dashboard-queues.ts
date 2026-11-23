@@ -37,6 +37,12 @@ const DASHBOARD_QUEUES: ReadonlyArray<{
     icon: Flag,
     to: "/dashboard/comment-reports",
   },
+  {
+    key: "reviewReports",
+    label: m.review_reports_title,
+    icon: Flag,
+    to: "/dashboard/review-reports",
+  },
   { key: "groupReports", label: m.reports_title, icon: Flag, to: "/dashboard/group-reports" },
   {
     key: "userReports",

@@ -6,6 +6,7 @@ import { createMediaHandler } from "../handlers/create-media-handler"
 import { createMediaSuggestionHandler } from "../handlers/create-media-suggestion-handler"
 import { deleteMediaHandler } from "../handlers/delete-media-handler"
 import { deleteMediaRatingHandler } from "../handlers/delete-media-rating-handler"
+import { deleteMediaReviewHandler } from "../handlers/delete-media-review-handler"
 import { deleteMediasHandler } from "../handlers/delete-medias-handler"
 import { flagMediaHandler } from "../handlers/flag-media-handler"
 import { getMangaDexPlanHandler } from "../handlers/get-mangadex-plan-handler"
@@ -14,6 +15,7 @@ import { getMediaEditHandler } from "../handlers/get-media-edit-handler"
 import { getMediaHandler } from "../handlers/get-media-handler"
 import { getMediaStatsHandler } from "../handlers/get-media-stats-handler"
 import { getMediasDeletionImpactHandler } from "../handlers/get-medias-deletion-impact-handler"
+import { getMyMediaReviewHandler } from "../handlers/get-my-media-review-handler"
 import { linkMediaStaffHandler } from "../handlers/link-media-staff-handler"
 import { listBannersHandler } from "../handlers/list-banners-handler"
 import { listChapterFacetsHandler } from "../handlers/list-chapter-facets-handler"
@@ -24,11 +26,13 @@ import { listFeaturedMediasHandler } from "../handlers/list-featured-medias-hand
 import { listManagedFeaturedMediasHandler } from "../handlers/list-managed-featured-medias-handler"
 import { listManagedMediasHandler } from "../handlers/list-managed-medias-handler"
 import { listMangaDexSyncsHandler } from "../handlers/list-mangadex-syncs-handler"
+import { listMediaReviewsHandler } from "../handlers/list-media-reviews-handler"
 import { listMediaStaffsHandler } from "../handlers/list-media-staffs-handler"
 import { listShowcaseMediasHandler } from "../handlers/list-showcase-medias-handler"
 import { markMediaReadHandler } from "../handlers/mark-media-read-handler"
 import { mergeMediasHandler } from "../handlers/merge-medias-handler"
 import { putMediaRatingHandler } from "../handlers/put-media-rating-handler"
+import { putMediaReviewHandler } from "../handlers/put-media-review-handler"
 import { reindexMediaHandler } from "../handlers/reindex-media-handler"
 import { restoreMediaHandler } from "../handlers/restore-media-handler"
 import { restoreMediasHandler } from "../handlers/restore-medias-handler"
@@ -72,6 +76,10 @@ export const mediasRouter = new Hono()
   .route("/", getMediaStatsHandler)
   .route("/", putMediaRatingHandler)
   .route("/", deleteMediaRatingHandler)
+  .route("/", listMediaReviewsHandler)
+  .route("/", getMyMediaReviewHandler)
+  .route("/", putMediaReviewHandler)
+  .route("/", deleteMediaReviewHandler)
   .route("/", createChapterHandler)
   .route("/", listMediaStaffsHandler)
   .route("/", linkMediaStaffHandler)

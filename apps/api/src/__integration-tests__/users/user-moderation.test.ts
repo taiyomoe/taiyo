@@ -410,16 +410,32 @@ describe("GET /users/me/overview", () => {
       .values({ groupId, reporterId: user.userId, reason: "SPAM" })
       .execute()
 
+    const review = await services.db
+      .insertInto("mediaReviews")
+      .values({ userId: user.userId, mediaId, body: "A reported review. ".repeat(12) })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+
+    await services.db
+      .insertInto("mediaReviewReports")
+      .values([
+        { reviewId: review.id, reporterId: moderator.userId, reason: "SPOILER" },
+        { reviewId: review.id, reporterId: (await signInAs(services)).userId, reason: "SPAM" },
+      ])
+      .execute()
+
     const after = await getQueues(moderator.headers)
 
     expect(after).toMatchObject({
       pageReports: (before.pageReports ?? 0) + 1,
       commentReports: (before.commentReports ?? 0) + 1,
+      reviewReports: (before.reviewReports ?? 0) + 1,
       groupReports: (before.groupReports ?? 0) + 1,
     })
     expect(await getQueues(user.headers)).toMatchObject({
       pageReports: null,
       commentReports: null,
+      reviewReports: null,
       groupReports: null,
     })
   })

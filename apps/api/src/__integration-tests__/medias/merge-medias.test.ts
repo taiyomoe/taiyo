@@ -338,6 +338,48 @@ describe("POST /medias/:id/merge", () => {
     ])
   })
 
+  test("moves the duplicate's reviews, keeping a reviewer's latest one", async ({
+    app,
+    services,
+  }) => {
+    const { headers, userId } = await signInAs(services, { role: "ADMIN" })
+    const mediaId = await seedMedia(services, userId)
+    const duplicateId = await seedMedia(services, userId)
+    const both = await signInAs(services)
+    const duplicateOnly = await signInAs(services)
+    const review = async (reviewer: Record<string, string>, id: string, body: string) => {
+      await api(app, `/medias/${id}/rating`, {
+        method: "PUT",
+        headers: reviewer,
+        json: { score: 7 },
+      })
+      await api(app, `/medias/${id}/review`, { method: "PUT", headers: reviewer, json: { body } })
+    }
+
+    await review(both.headers, mediaId, "older ".repeat(40))
+    await review(both.headers, duplicateId, "newer ".repeat(40))
+    await review(duplicateOnly.headers, duplicateId, "only ".repeat(50))
+    await services.db
+      .updateTable("mediaReviews")
+      .set({ updatedAt: new Date(Date.now() + 60_000) })
+      .where("userId", "=", both.userId)
+      .where("mediaId", "=", duplicateId)
+      .execute()
+
+    expect((await merge(app, headers, mediaId, [duplicateId])).status).toBe(201)
+
+    const reviews = await services.db
+      .selectFrom("mediaReviews")
+      .select(["userId", "mediaId", "body", "deletedAt"])
+      .where("mediaId", "in", [mediaId, duplicateId])
+      .where("deletedAt", "is", null)
+      .execute()
+
+    expect(reviews).toHaveLength(2)
+    expect(reviews.every((row) => row.mediaId === mediaId)).toBe(true)
+    expect(reviews.find((row) => row.userId === both.userId)?.body).toMatch(/^newer/)
+  })
+
   test("gives a release only the duplicates have to the media once", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services, { role: "ADMIN" })
     const mediaId = await seedMedia(services, userId)

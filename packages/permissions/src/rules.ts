@@ -236,6 +236,10 @@ export const buildRules = (actor: Actor | null) => {
       review: is("MODERATOR", "ADMIN"),
       removeImage: is("MODERATOR", "ADMIN"),
     },
+    mediaReview: {
+      delete: is("MODERATOR", "ADMIN"),
+      review: is("MODERATOR", "ADMIN"),
+    },
     list: {
       moderate: moderatesLists,
       update: managesList,

@@ -38,6 +38,7 @@ import { listMyNotificationsHandler } from "../handlers/list-my-notifications-ha
 import { listUserAchievementsHandler } from "../handlers/list-user-achievements-handler"
 import { listUserListsHandler } from "../handlers/list-user-lists-handler"
 import { listUserReadingHistoryHandler } from "../handlers/list-user-reading-history-handler"
+import { listUserReviewsHandler } from "../handlers/list-user-reviews-handler"
 import { listUsersHandler } from "../handlers/list-users-handler"
 import { readAllMyNotificationsHandler } from "../handlers/read-all-my-notifications-handler"
 import { readMyNotificationHandler } from "../handlers/read-my-notification-handler"
@@ -75,6 +76,7 @@ export const usersRouter = new Hono()
   .route("/", followUserHandler)
   .route("/", unfollowUserHandler)
   .route("/", listFollowersHandler)
+  .route("/", listUserReviewsHandler)
   .route("/", listFollowingHandler)
   .route("/", listMyHistoryHandler)
   .route("/", getReadingProgressHandler)

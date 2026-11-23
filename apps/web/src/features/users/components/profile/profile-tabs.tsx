@@ -7,6 +7,7 @@ import type { UserProfile } from "@/features/users/api/profile"
 import type { ProfileTab } from "@/features/users/lib/profile-page"
 import type { Session } from "@/lib/session"
 import { useCommentCount } from "@/features/comments/hooks/use-comment-count"
+import { UserReviews } from "@/features/reviews/components/user-reviews"
 import {
   AchievementsTab,
   AchievementsTabSkeleton,
@@ -108,6 +109,9 @@ export function ProfileTabs({
             <span sx={styles.count}>{commentCount}</span>
           )}
         </TabsTab>
+        <TabsTab sx={styles.tab} value="reviews">
+          {m.profile_tab_reviews()}
+        </TabsTab>
       </TabsList>
       <TabsPanel value="profile">
         <Suspense fallback={<StatsTabSkeleton />}>
@@ -136,6 +140,9 @@ export function ProfileTabs({
       </TabsPanel>
       <TabsPanel value="comments">
         <CommentsTab profile={profile} viewer={viewer} />
+      </TabsPanel>
+      <TabsPanel value="reviews">
+        <UserReviews isOwner={viewer?.id === profile.id} userId={profile.id} />
       </TabsPanel>
     </Tabs>
   )

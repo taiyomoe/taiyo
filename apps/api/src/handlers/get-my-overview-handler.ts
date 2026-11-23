@@ -37,6 +37,9 @@ const overviewSchema = z.object({
       commentReports: queueCount(
         "The number of reported comments waiting for review, or null when you cannot review them.",
       ),
+      reviewReports: queueCount(
+        "The number of reported reviews waiting for review, or null when you cannot review them.",
+      ),
       groupReports: queueCount(
         "The number of group reports waiting for review, or null when you cannot review them.",
       ),
@@ -82,6 +85,7 @@ export const getMyOverviewHandler = new Hono().get(
       creationQueue,
       pageReportQueue,
       commentReportQueue,
+      reviewReportQueue,
       groupReportQueue,
       userReportQueue,
     ] = await Promise.all([
@@ -172,6 +176,13 @@ export const getMyOverviewHandler = new Hono().get(
             .where("status", "=", "OPEN")
             .executeTakeFirst()
         : null,
+      can("mediaReview.review")
+        ? db
+            .selectFrom("mediaReviewReports")
+            .select(sql<string>`count(distinct "reviewId")`.as("count"))
+            .where("status", "=", "OPEN")
+            .executeTakeFirst()
+        : null,
       can("groupReport.review")
         ? db
             .selectFrom("groupReports")
@@ -209,6 +220,7 @@ export const getMyOverviewHandler = new Hono().get(
             : count(ownershipQueue) + count(creationQueue),
         pageReports: pageReportQueue === null ? null : count(pageReportQueue),
         commentReports: commentReportQueue === null ? null : count(commentReportQueue),
+        reviewReports: reviewReportQueue === null ? null : count(reviewReportQueue),
         groupReports: groupReportQueue === null ? null : count(groupReportQueue),
         userReports: userReportQueue === null ? null : count(userReportQueue),
       },
