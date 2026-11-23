@@ -126,7 +126,9 @@ export const listReviewReportsHandler = new Hono().get(
     const [reviews, reports] = await Promise.all([
       selectReviews(db, user.id)
         .select([
-          timestampSql("rv.deletedAt").as("deletedAt"),
+          sql<string | null>`to_char("rv"."deletedAt", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`.as(
+            "deletedAt",
+          ),
           sql<boolean>`coalesce("rv"."deleterId" = "rv"."userId", false)`.as("deletedByAuthor"),
         ])
         .where("rv.id", "in", reviewIds)

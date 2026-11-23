@@ -4,6 +4,7 @@ import { type QueryClient, queryOptions, useMutation, useQueryClient } from "@ta
 import type { ContentRating } from "@/lib/settings"
 import { libraryEntryQueryOptions } from "@/features/library/api/library"
 import { applyScoreChange } from "@/features/ratings/lib/ratings"
+import { invalidateReviews, reviewKeys } from "@/features/reviews/api/reviews"
 import { api } from "@/lib/api"
 import { unwrap } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
@@ -31,6 +32,9 @@ export const mediaStatsQueryOptions = (mediaId: string, contentRatings: readonly
 
 type ScoreChange = { mediaId: string; score: number | null }
 
+/** A new score, or `null` to clear it; clearing it with `withReview` deletes the review too. */
+type RatingChange = { score: number | null; withReview?: boolean }
+
 const setCachedScore = (queryClient: QueryClient, { mediaId, score }: ScoreChange) => {
   const { queryKey } = libraryEntryQueryOptions(mediaId)
   const previous = queryClient.getQueryData(queryKey)?.score ?? null
@@ -57,11 +61,11 @@ export function useRateMedia(mediaId: string) {
   return useMutation({
     mutationKey: ratingMutationKey(mediaId),
     scope: { id: `rating:${mediaId}` },
-    mutationFn: async (score: number | null) => {
+    mutationFn: async ({ score, withReview = false }: RatingChange) => {
       if (score === null) {
         const response = await api.medias[":id"].rating.$delete({
           param: { id: mediaId },
-          query: {},
+          query: withReview ? { withReview: "true" } : {},
         })
 
         return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
@@ -74,7 +78,7 @@ export function useRateMedia(mediaId: string) {
 
       return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
     },
-    onMutate: async (score) => {
+    onMutate: async ({ score }) => {
       await Promise.all([
         queryClient.cancelQueries({ queryKey: libraryEntryQueryOptions(mediaId).queryKey }),
         queryClient.cancelQueries({ queryKey: statsKey(mediaId) }),
@@ -82,7 +86,7 @@ export function useRateMedia(mediaId: string) {
 
       return { previous: setCachedScore(queryClient, { mediaId, score }) }
     },
-    onError: (error, score, context) => {
+    onError: (error, { score }, context) => {
       if (context !== undefined) {
         setCachedScore(queryClient, { mediaId, score: context.previous })
       }
@@ -93,10 +97,16 @@ export function useRateMedia(mediaId: string) {
         type: "error",
       })
     },
+    onSuccess: (_, { withReview = false }) => {
+      if (withReview) {
+        queryClient.setQueryData(reviewKeys.mine(mediaId), null)
+      }
+    },
     onSettled: () =>
       queryClient.isMutating({ mutationKey: ratingMutationKey(mediaId) }) > 1
         ? undefined
         : Promise.all([
+            invalidateReviews(queryClient, mediaId),
             queryClient.invalidateQueries({ queryKey: libraryEntryQueryOptions(mediaId).queryKey }),
             queryClient.invalidateQueries({ queryKey: statsKey(mediaId) }),
             queryClient.invalidateQueries({ queryKey: ["library", "list"] }),

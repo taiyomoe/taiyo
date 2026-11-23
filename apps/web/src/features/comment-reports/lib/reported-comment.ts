@@ -1,3 +1,4 @@
+import type { CommentReportReason } from "@taiyomoe/db/constants"
 import { getCommentText } from "@taiyomoe/schemas/comment-content"
 import type { ReportedComment } from "@/features/comment-reports/api/comment-reports"
 import { m } from "@/paraglide/messages"
@@ -18,6 +19,6 @@ export const getExcerpt = (entry: ReportedComment) =>
     .trim()
 
 /** The reasons given in the latest reports, each once. */
-export const getReasons = (entry: ReportedComment) => [
+export const getReasons = (entry: { reports: ReadonlyArray<{ reason: CommentReportReason }> }) => [
   ...new Set(entry.reports.map((report) => report.reason)),
 ]

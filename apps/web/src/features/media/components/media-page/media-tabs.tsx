@@ -16,6 +16,7 @@ import { MediaChapters } from "@/features/media/components/media-chapters/media-
 import { MediaCovers } from "@/features/media/components/media-covers/media-covers"
 import { MediaInfo } from "@/features/media/components/media-info/media-info"
 import { MediaStats } from "@/features/ratings/components/media-stats"
+import { ReviewSection, useReviewCount } from "@/features/reviews/components/review-section"
 import { getPermissions } from "@/lib/permissions"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
@@ -68,6 +69,7 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
     mediaChapterFacetsQueryOptions(media.id, { contentRatings, language: lang }),
   )
   const commentCount = useCommentCount({ type: "MEDIA", id: media.id })
+  const reviewCount = useReviewCount(media.id)
   const canManage = user !== null && getPermissions(user)("media.update")
   const coverCount = media.covers.filter((cover) =>
     contentRatings.includes(cover.contentRating),
@@ -110,6 +112,12 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
             <span sx={styles.tabCount}>{commentCount}</span>
           )}
         </TabsTab>
+        <TabsTab sx={styles.tab} value="reviews">
+          {m.media_tab_reviews()}
+          {reviewCount === undefined || reviewCount === 0 ? null : (
+            <span sx={styles.tabCount}>{reviewCount}</span>
+          )}
+        </TabsTab>
         <TabsTab sx={styles.tab} value="stats">
           {m.media_tab_stats()}
         </TabsTab>
@@ -139,6 +147,9 @@ export function MediaTabs({ media, user }: { media: Media; user: Session["user"]
           target={{ type: "MEDIA", id: media.id }}
           viewer={user}
         />
+      </TabsPanel>
+      <TabsPanel value="reviews">
+        <ReviewSection mediaId={media.id} viewer={user} />
       </TabsPanel>
       <TabsPanel value="stats">
         <MediaStats mediaId={media.id} />

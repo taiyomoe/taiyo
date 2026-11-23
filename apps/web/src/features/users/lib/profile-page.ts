@@ -5,6 +5,7 @@ export const PROFILE_TABS = [
   "uploads",
   "lists",
   "comments",
+  "reviews",
 ] as const
 
 export type ProfileTab = (typeof PROFILE_TABS)[number]

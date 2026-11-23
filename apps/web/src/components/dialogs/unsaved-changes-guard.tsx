@@ -11,9 +11,17 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { useBlocker } from "@tanstack/react-router"
 import { m } from "@/paraglide/messages"
 
-export function UnsavedChangesGuard({ dirty }: { dirty: boolean }) {
+export function UnsavedChangesGuard({
+  dirty,
+  allowSamePage = false,
+}: {
+  dirty: boolean
+  /** Lets the page change its search params, for state the page keeps across them. */
+  allowSamePage?: boolean
+}) {
   const blocker = useBlocker({
-    shouldBlockFn: () => dirty,
+    shouldBlockFn: ({ current, next }) =>
+      dirty && !(allowSamePage && current.pathname === next.pathname),
     enableBeforeUnload: () => dirty,
     withResolver: true,
   })

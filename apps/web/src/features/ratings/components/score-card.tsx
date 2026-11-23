@@ -2,10 +2,13 @@ import * as stylex from "@stylexjs/stylex"
 import { config } from "@taiyomoe/config"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { colors, consts, font, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useQuery } from "@tanstack/react-query"
 import { type KeyboardEvent, useEffect, useEffectEvent, useId, useRef, useState } from "react"
+import { ConfirmDialog } from "@/components/dialogs/confirm-dialog"
 import { useRateMedia } from "@/features/ratings/api/ratings"
 import { StarGlyph } from "@/features/ratings/components/star-glyph"
 import { SCORES } from "@/features/ratings/lib/ratings"
+import { myReviewQueryOptions } from "@/features/reviews/api/reviews"
 import { m } from "@/paraglide/messages"
 
 const SAVE_DELAY_MS = 400
@@ -97,6 +100,8 @@ const styles = stylex.create({
 export function ScoreCard({ mediaId, score }: { mediaId: string; score: number | null }) {
   const labelId = useId()
   const rate = useRateMedia(mediaId)
+  const review = useQuery(myReviewQueryOptions(mediaId))
+  const [confirmingClear, setConfirmingClear] = useState(false)
   const [draft, setDraft] = useState<number | null | undefined>(undefined)
   const [hovered, setHovered] = useState<number | null>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -111,7 +116,7 @@ export function ScoreCard({ mediaId, score }: { mediaId: string; score: number |
     pending.current = undefined
 
     if (next !== undefined) {
-      rate.mutate(next.value)
+      rate.mutate({ score: next.value })
       setDraft(undefined)
     }
   }
@@ -175,7 +180,11 @@ export function ScoreCard({ mediaId, score }: { mediaId: string; score: number |
             <Button
               aria-label={m.rating_clear()}
               onClick={() => {
-                choose(null)
+                if (review.data === undefined || review.data === null) {
+                  choose(null)
+                } else {
+                  setConfirmingClear(true)
+                }
               }}
               size="xs"
               sx={styles.clear}
@@ -225,6 +234,30 @@ export function ScoreCard({ mediaId, score }: { mediaId: string; score: number |
           </button>
         ))}
       </div>
+      <ConfirmDialog
+        confirmation={
+          confirmingClear
+            ? {
+                title: m.rating_clear_review_title(),
+                description: m.rating_clear_review_description(),
+                confirmLabel: m.rating_clear_review_confirm(),
+                destructive: true,
+                run: () => {
+                  clearTimeout(timer.current)
+                  pending.current = undefined
+                  setDraft(undefined)
+
+                  return rate.mutateAsync({ score: null, withReview: true })
+                },
+              }
+            : null
+        }
+        error={null}
+        onClose={() => {
+          setConfirmingClear(false)
+        }}
+        pending={rate.isPending}
+      />
     </section>
   )
 }
