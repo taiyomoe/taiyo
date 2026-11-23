@@ -56,6 +56,7 @@ export const userAudit = defineAuditCatalog("user", {
   ACCOUNT_UPDATE: { target: "user", severity: "high", requiresChanges: true },
   SETTINGS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
   READER_SETTINGS_UPDATE: { target: "user", severity: "low" },
+  DELETE_REQUEST: { target: "user", severity: "high" },
   DELETE: { target: "user", severity: "critical" },
   FOLLOW: { target: "user", severity: "low" },
   UNFOLLOW: { target: "user", severity: "low" },

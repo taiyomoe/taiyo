@@ -1,5 +1,6 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
+import { DELETED_USERNAME } from "@taiyomoe/db/constants"
 import {
   PreviewCard,
   PreviewCardPopup,
@@ -11,6 +12,7 @@ import { Suspense } from "react"
 import { type NameEffectProp, UserName } from "@/components/user-name/user-name"
 import { UserHoverCardSkeleton } from "@/features/users/components/hover-card/user-hover-card-skeleton"
 import { createLazyComponent } from "@/lib/lazy-component"
+import { m } from "@/paraglide/messages"
 
 // The card only downloads the first time someone hovers a name.
 const UserHoverCard = createLazyComponent(
@@ -31,6 +33,10 @@ const styles = stylex.create({
     textDecorationThickness: "1px",
     textUnderlineOffset: "0.2em",
   },
+  deleted: {
+    color: colors.mutedForeground,
+    fontStyle: "italic",
+  },
   popup: {
     padding: 0,
     overflow: "hidden",
@@ -46,12 +52,21 @@ export type LinkedUser = {
   nameEffect: NameEffectProp
 }
 
+/** The name to show for a user, in the reader's language for the "Deleted user" account. */
+export const getDisplayName = (user: { username: string; displayUsername: string }) =>
+  user.username === DELETED_USERNAME ? m.deleted_user() : user.displayUsername
+
 /**
  * A user's painted name that links to their profile and previews it on hover.
  * Use it wherever a name is shown, except inside another link or a preview of
  * the name itself.
  */
 export function UserLink({ user, sx }: { user: LinkedUser; sx?: Sx }) {
+  // It stands in for deleted accounts and has no profile to open.
+  if (user.username === DELETED_USERNAME) {
+    return <span sx={[styles.deleted, sx]}>{m.deleted_user()}</span>
+  }
+
   return (
     <PreviewCard>
       <PreviewCardTrigger

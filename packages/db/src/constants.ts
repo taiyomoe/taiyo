@@ -1,3 +1,13 @@
+/**
+ * The account that keeps what deleted accounts made for everyone else: the chapters, covers,
+ * titles and groups they created, and the reviews they did. A migration creates it banned and
+ * without any way to sign in.
+ */
+export const DELETED_USER_ID = "00000000-0000-4000-8000-0000000de1e7"
+
+/** The username of the "Deleted user" account: no username a person can pick has a hyphen. */
+export const DELETED_USERNAME = "deleted-user"
+
 export const CONTENT_RATINGS = ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"] as const
 
 export type ContentRating = (typeof CONTENT_RATINGS)[number]

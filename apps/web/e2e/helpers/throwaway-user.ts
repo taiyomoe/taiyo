@@ -11,11 +11,22 @@ const userSchema = z.object({
 })
 
 /** A fresh account signed in a new browser context, for a test that changes it for good. */
-export const newThrowawayUser = async (browser: Browser) => {
-  const output = execFileSync("pnpm", ["--silent", "-F", "@taiyomoe/scripts", "cli", "e2e-user"], {
-    cwd: resolve(import.meta.dirname, "../../../.."),
-    encoding: "utf8",
-  })
+export const newThrowawayUser = async (
+  browser: Browser,
+  { password }: { password?: string } = {},
+) => {
+  const output = execFileSync(
+    "pnpm",
+    [
+      "--silent",
+      "-F",
+      "@taiyomoe/scripts",
+      "cli",
+      "e2e-user",
+      ...(password === undefined ? [] : ["--password", password]),
+    ],
+    { cwd: resolve(import.meta.dirname, "../../../.."), encoding: "utf8" },
+  )
   const line = output.split("\n").find((candidate) => candidate.startsWith("{"))
   const user = userSchema.parse(JSON.parse(line ?? "null"))
   const separator = user.cookie.indexOf("=")

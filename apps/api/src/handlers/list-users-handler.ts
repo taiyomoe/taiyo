@@ -1,4 +1,4 @@
-import { sql, isBannedSql } from "@taiyomoe/db"
+import { DELETED_USER_ID, sql, isBannedSql } from "@taiyomoe/db"
 import { ROLES } from "@taiyomoe/permissions"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
@@ -35,7 +35,7 @@ export const listUsersHandler = new Hono().get(
   describeRoute({
     summary: "List users",
     description:
-      "Lists users for moderation, newest first, with their role, ban, points and profile title. Email addresses are only returned to admins.\n\n**Required roles:** moderator, admin.",
+      'Lists users for moderation, newest first, with their role, ban, points and profile title. Email addresses are only returned to admins. The "Deleted user" account, which keeps what deleted accounts left for others, is never listed.\n\n**Required roles:** moderator, admin.',
     tags: ["Users"],
     responses: {
       200: {
@@ -80,6 +80,8 @@ export const listUsersHandler = new Hono().get(
           "banExpires",
         ),
       ])
+      // It stands in for deleted accounts: there is nothing to moderate on it.
+      .where("users.id", "!=", DELETED_USER_ID)
       .where((eb) =>
         pattern === null
           ? eb.and([])

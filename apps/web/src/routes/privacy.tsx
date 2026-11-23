@@ -222,9 +222,9 @@ function RouteComponent() {
             <>
               <p sx={prose.p}>
                 We keep account information for as long as your account exists. When you delete your
-                account we remove or anonymise your personal information within 30 days, except
-                where we must keep something longer — for example, records of copyright notices, or
-                information needed to stop a suspended user returning.
+                account, your personal information is deleted at once, except where we must keep
+                something longer — for example, records of copyright notices, or the security log of
+                actions taken on accounts, which keeps your account&rsquo;s ID but not your profile.
               </p>
               <p sx={prose.p}>
                 Server logs are kept for a short period, normally no more than 90 days, and then
@@ -265,6 +265,17 @@ function RouteComponent() {
                 notifications, rewards, purchases and sign-in sessions, along with your avatar,
                 banner and comment images. You can ask once a day. Passwords, two-factor secrets and
                 sign-in tokens are left out, as are reports other people filed about you.
+              </p>
+              <p sx={prose.p}>
+                You can also delete your account yourself, from{" "}
+                <Link search={{ tab: "account" }} to="/settings" {...stylex.props(prose.a)}>
+                  Settings, under Account
+                </Link>
+                . We email you a link to confirm, and once you do, your account and personal
+                information are deleted right away. What you added to the shared catalog for other
+                readers — chapters, titles, covers, staff and groups — stays, credited to
+                &ldquo;Deleted user&rdquo;, and your comments show as deleted. Owners of a group
+                transfer or delete it first.
               </p>
               <p sx={prose.p}>
                 For anything else, write to{" "}

@@ -41,6 +41,10 @@ const adminBodySchema = z.object({
 })
 const cookieDomain = serverEnv.BETTER_AUTH_COOKIE_DOMAIN ?? ""
 const unlinkAccountBodySchema = z.object({ accountId: z.string() })
+const deleteUserBodySchema = z.object({
+  password: z.string().optional(),
+  token: z.string().optional(),
+})
 const signInBodySchema = z.object({
   email: z.string().optional(),
   username: z.string().optional(),
@@ -74,15 +78,34 @@ export type AuthEmail =
   | (AuthEmailBase & { kind: "verify-email" })
   | (AuthEmailBase & { kind: "change-email"; newEmail: string })
   | (AuthEmailBase & { kind: "magic-link" })
+  | (AuthEmailBase & { kind: "delete-account"; expiresInMinutes: number })
+  | { kind: "account-deleted"; to: string; name: string }
+
+/** What deleting an account needs from the app. Without it, accounts cannot be deleted. */
+export type AccountDeletion = {
+  /** The code of what keeps the user from deleting their account now, or null. */
+  getBlocker: (userId: string) => Promise<string | null>
+  /** The web page that asks the user to confirm, from the token in the emailed link. */
+  getConfirmUrl: (token: string) => string
+  /**
+   * Deletes the account and everything that belongs to it, in one transaction, unless something
+   * now keeps it from being deleted: then nothing changes and the code of that blocker is returned.
+   */
+  deleteAccount: (userId: string) => Promise<string | null>
+  /** Cleans up outside the database once the account is gone. */
+  afterDelete: (userId: string) => Promise<void>
+}
 
 export const createAuth = ({
   db,
   trustedOrigins = [],
   sendEmail,
+  accountDeletion,
 }: {
   db: Kysely<DB>
   trustedOrigins?: string[]
   sendEmail: (email: AuthEmail) => Promise<void>
+  accountDeletion?: AccountDeletion
 }) =>
   betterAuth({
     appName: "Taiyō",
@@ -90,7 +113,9 @@ export const createAuth = ({
     trustedOrigins,
     // Profile edits go through /users/me/account and /users/me/avatar, which enforce the display
     // name policy and the owned-avatar rule that Better Auth's generic endpoint would skip.
-    disabledPaths: ["/update-user"],
+    // The emailed deletion link opens a web page that asks before calling POST /delete-user: a
+    // GET that deletes would run for any mail scanner that opens the link.
+    disabledPaths: ["/update-user", "/delete-user/callback"],
     database: kyselyAdapter(db, { type: "postgres", usePlural: true }),
     emailAndPassword: {
       enabled: true,
@@ -137,6 +162,36 @@ export const createAuth = ({
           })
         },
       },
+      deleteUser:
+        accountDeletion === undefined
+          ? { enabled: false }
+          : {
+              enabled: true,
+              deleteTokenExpiresIn: config.auth.deleteAccountLinkTtlSeconds,
+              sendDeleteAccountVerification: async ({ user, token }) => {
+                await sendEmail({
+                  kind: "delete-account",
+                  to: user.email,
+                  name: user.name,
+                  url: accountDeletion.getConfirmUrl(token),
+                  expiresInMinutes: config.auth.deleteAccountLinkTtlSeconds / 60,
+                })
+              },
+              beforeDelete: async (user) => {
+                const blocker = await accountDeletion.deleteAccount(user.id)
+
+                if (blocker !== null) {
+                  throw new APIError("FORBIDDEN", {
+                    code: blocker,
+                    message: "Something keeps this account from being deleted",
+                  })
+                }
+              },
+              afterDelete: async (user) => {
+                await accountDeletion.afterDelete(user.id)
+                await sendEmail({ kind: "account-deleted", to: user.email, name: user.name })
+              },
+            },
       additionalFields: {
         settings: { fieldName: "settings", type: "string", input: false },
         nameEffect: { fieldName: "nameEffect", type: "string", required: false, input: false },
@@ -253,6 +308,59 @@ export const createAuth = ({
           }
 
           if (
+            freshAge !== 0 &&
+            Date.now() - new Date(session.session.createdAt).getTime() >= freshAge * 1000
+          ) {
+            throw new APIError("FORBIDDEN", {
+              code: "SESSION_NOT_FRESH",
+              message: "Session is not fresh",
+            })
+          }
+
+          return
+        }
+
+        if (ctx.path === "/delete-user" && accountDeletion !== undefined) {
+          const session = await getAuthoritativeSessionFromCtx(ctx)
+          const body = deleteUserBodySchema.safeParse(ctx.body)
+
+          if (session === null) {
+            throw new APIError("UNAUTHORIZED")
+          }
+
+          // Checked before Better Auth uses up the token, so a blocked user keeps their link.
+          const blocker = await accountDeletion.getBlocker(session.user.id)
+
+          if (blocker !== null) {
+            throw new APIError("FORBIDDEN", {
+              code: blocker,
+              message: "Something keeps this account from being deleted",
+            })
+          }
+
+          if (body.success && body.data.token !== undefined) {
+            return
+          }
+
+          const credential = await db
+            .selectFrom("accounts")
+            .select("id")
+            .where("userId", "=", session.user.id)
+            .where("providerId", "=", "credential")
+            .executeTakeFirst()
+
+          // Better Auth only checks a password it is given: an account that has one must give it.
+          if (credential !== undefined && (!body.success || (body.data.password ?? "") === "")) {
+            throw new APIError("BAD_REQUEST", {
+              code: "PASSWORD_REQUIRED",
+              message: "Enter your password to delete your account",
+            })
+          }
+
+          const { freshAge } = ctx.context.sessionConfig
+
+          if (
+            credential === undefined &&
             freshAge !== 0 &&
             Date.now() - new Date(session.session.createdAt).getTime() >= freshAge * 1000
           ) {

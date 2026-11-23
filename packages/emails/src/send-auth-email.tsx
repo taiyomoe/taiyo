@@ -1,12 +1,27 @@
 import type { AuthEmail } from "@taiyomoe/auth/server"
 import { sendEmail } from "./client"
+import AccountDeletedEmail from "./templates/account-deleted-email"
 import ChangeEmailEmail from "./templates/change-email-email"
+import DeleteAccountEmail from "./templates/delete-account-email"
 import MagicLinkEmail from "./templates/magic-link-email"
 import ResetPasswordEmail from "./templates/reset-password-email"
 import SignUpEmail from "./templates/sign-up-email"
 
 const toMessage = (email: AuthEmail) => {
-  const { name, url } = email
+  const { name } = email
+
+  if (email.kind === "account-deleted") {
+    return { subject: "Your Taiyō account was deleted", react: <AccountDeletedEmail name={name} /> }
+  }
+
+  const { url } = email
+
+  if (email.kind === "delete-account") {
+    return {
+      subject: "Confirm the deletion of your Taiyō account",
+      react: <DeleteAccountEmail expiresInMinutes={email.expiresInMinutes} name={name} url={url} />,
+    }
+  }
 
   if (email.kind === "reset-password") {
     return {

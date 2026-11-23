@@ -2,6 +2,7 @@
 import * as stylex from "@stylexjs/stylex"
 import type { Session } from "@/lib/session"
 import { ConnectedAccountsSection } from "@/features/settings/components/account/connected-accounts-section"
+import { DeleteAccountSection } from "@/features/settings/components/account/delete-account-section"
 import { EmailSection } from "@/features/settings/components/account/email-section"
 import { IdentitySection } from "@/features/settings/components/account/identity-section"
 import { settingsStyles } from "@/features/settings/components/settings-styles"
@@ -12,6 +13,7 @@ export function AccountSettings({ user }: { user: Session["user"] }) {
       <IdentitySection user={user} />
       <EmailSection user={user} />
       <ConnectedAccountsSection />
+      <DeleteAccountSection user={user} />
     </div>
   )
 }

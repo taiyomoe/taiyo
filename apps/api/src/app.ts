@@ -416,7 +416,8 @@ export const createApp = (services: Services) => {
             },
             {
               name: "Your data",
-              description: "Copies of everything Taiyō holds about your account, to download.",
+              description:
+                "Copies of everything Taiyō holds about your account, to download, and what to settle before deleting it.",
             },
             {
               name: "Shop",

@@ -33,6 +33,7 @@ export const config = {
       maxLength: 50,
     },
     sessionFreshAgeSeconds: 24 * 60 * 60,
+    deleteAccountLinkTtlSeconds: 60 * 60,
   },
   settings: {
     contentRating: ["NORMAL", "SUGGESTIVE"],

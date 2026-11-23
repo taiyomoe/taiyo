@@ -39,7 +39,14 @@ import {
 import { getLocale } from "@/paraglide/runtime"
 import appCss from "../styles.css?url"
 
-const PUBLIC_ROUTES: Array<keyof FileRoutesById> = ["/", "/auth", "/terms", "/privacy", "/dmca"]
+const PUBLIC_ROUTES: Array<keyof FileRoutesById> = [
+  "/",
+  "/auth",
+  "/terms",
+  "/privacy",
+  "/dmca",
+  "/goodbye",
+]
 const readCookies = createIsomorphicFn()
   .server(() => getCookies())
   .client(() =>

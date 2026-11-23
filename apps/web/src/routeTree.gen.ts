@@ -14,6 +14,7 @@ import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DmcaRouteImport } from './routes/dmca'
+import { Route as GoodbyeRouteImport } from './routes/goodbye'
 import { Route as LatestRouteImport } from './routes/latest'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as NotificationsRouteImport } from './routes/notifications'
@@ -24,6 +25,7 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TitlesRouteImport } from './routes/titles'
+import { Route as AccountDeleteRouteImport } from './routes/account.delete'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
@@ -99,6 +101,11 @@ const DmcaRoute = DmcaRouteImport.update({
   path: '/dmca',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GoodbyeRoute = GoodbyeRouteImport.update({
+  id: '/goodbye',
+  path: '/goodbye',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LatestRoute = LatestRouteImport.update({
   id: '/latest',
   path: '/latest',
@@ -147,6 +154,11 @@ const TermsRoute = TermsRouteImport.update({
 const TitlesRoute = TitlesRouteImport.update({
   id: '/titles',
   path: '/titles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountDeleteRoute = AccountDeleteRouteImport.update({
+  id: '/account/delete',
+  path: '/account/delete',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
@@ -403,6 +415,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
+  '/goodbye': typeof GoodbyeRoute
   '/latest': typeof LatestRoute
   '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
@@ -413,6 +426,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/titles': typeof TitlesRoute
+  '/account/delete': typeof AccountDeleteRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -468,6 +482,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
+  '/goodbye': typeof GoodbyeRoute
   '/latest': typeof LatestRoute
   '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
@@ -478,6 +493,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/titles': typeof TitlesRoute
+  '/account/delete': typeof AccountDeleteRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -535,6 +551,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/dmca': typeof DmcaRoute
+  '/goodbye': typeof GoodbyeRoute
   '/latest': typeof LatestRoute
   '/library': typeof LibraryRoute
   '/notifications': typeof NotificationsRoute
@@ -545,6 +562,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/titles': typeof TitlesRoute
+  '/account/delete': typeof AccountDeleteRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -603,6 +621,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/changelog'
     | '/dmca'
+    | '/goodbye'
     | '/latest'
     | '/library'
     | '/notifications'
@@ -613,6 +632,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/terms'
     | '/titles'
+    | '/account/delete'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
@@ -668,6 +688,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/changelog'
     | '/dmca'
+    | '/goodbye'
     | '/latest'
     | '/library'
     | '/notifications'
@@ -678,6 +699,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/terms'
     | '/titles'
+    | '/account/delete'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
@@ -734,6 +756,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/changelog'
     | '/dmca'
+    | '/goodbye'
     | '/latest'
     | '/library'
     | '/notifications'
@@ -744,6 +767,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/terms'
     | '/titles'
+    | '/account/delete'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
@@ -801,6 +825,7 @@ export interface RootRouteChildren {
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ChangelogRoute: typeof ChangelogRoute
   DmcaRoute: typeof DmcaRoute
+  GoodbyeRoute: typeof GoodbyeRoute
   LatestRoute: typeof LatestRoute
   LibraryRoute: typeof LibraryRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -811,6 +836,7 @@ export interface RootRouteChildren {
   ShopRoute: typeof ShopRoute
   TermsRoute: typeof TermsRoute
   TitlesRoute: typeof TitlesRoute
+  AccountDeleteRoute: typeof AccountDeleteRoute
   GroupsGroupIdRoute: typeof GroupsGroupIdRoute
   ListsListIdRoute: typeof ListsListIdRoute
   ListsNewRoute: typeof ListsNewRoute
@@ -863,6 +889,13 @@ declare module '@tanstack/react-router' {
       path: '/dmca'
       fullPath: '/dmca'
       preLoaderRoute: typeof DmcaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goodbye': {
+      id: '/goodbye'
+      path: '/goodbye'
+      fullPath: '/goodbye'
+      preLoaderRoute: typeof GoodbyeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/latest': {
@@ -933,6 +966,13 @@ declare module '@tanstack/react-router' {
       path: '/titles'
       fullPath: '/titles'
       preLoaderRoute: typeof TitlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/delete': {
+      id: '/account/delete'
+      path: '/account/delete'
+      fullPath: '/account/delete'
+      preLoaderRoute: typeof AccountDeleteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/forgot-password': {
@@ -1375,6 +1415,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ChangelogRoute: ChangelogRoute,
   DmcaRoute: DmcaRoute,
+  GoodbyeRoute: GoodbyeRoute,
   LatestRoute: LatestRoute,
   LibraryRoute: LibraryRoute,
   NotificationsRoute: NotificationsRoute,
@@ -1385,6 +1426,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShopRoute: ShopRoute,
   TermsRoute: TermsRoute,
   TitlesRoute: TitlesRoute,
+  AccountDeleteRoute: AccountDeleteRoute,
   GroupsGroupIdRoute: GroupsGroupIdRoute,
   ListsListIdRoute: ListsListIdRoute,
   ListsNewRoute: ListsNewRoute,

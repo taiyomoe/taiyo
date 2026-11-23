@@ -1,4 +1,4 @@
-import type { Auth, AuthEmail, Session, User } from "./config"
+import type { AccountDeletion, Auth, AuthEmail, Session, User } from "./config"
 
 export { createAuth } from "./config"
 
@@ -11,4 +11,4 @@ export * from "./utils/normalize-display-name"
 
 export * from "./utils/normalize-username"
 
-export type { Auth, AuthEmail, Session, User }
+export type { AccountDeletion, Auth, AuthEmail, Session, User }

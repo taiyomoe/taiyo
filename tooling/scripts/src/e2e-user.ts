@@ -1,4 +1,5 @@
 import { getDb } from "@taiyomoe/db"
+import { hashPassword } from "better-auth/crypto"
 import { defineCommand } from "citty"
 import { createHmac, randomBytes, randomUUID } from "node:crypto"
 
@@ -10,7 +11,13 @@ export default defineCommand({
     description:
       "Create a throwaway verified user with a fresh session and print it as JSON, for end-to-end tests that change an account for good.",
   },
-  run: async () => {
+  args: {
+    password: {
+      type: "string",
+      description: "Give the user this password, as if they signed up with an email.",
+    },
+  },
+  run: async ({ args }) => {
     const secret = process.env.BETTER_AUTH_SECRET
 
     if (secret === undefined || secret === "") {
@@ -36,6 +43,19 @@ export default defineCommand({
       })
       .execute()
     await db.insertInto("userProfiles").values({ userId }).execute()
+
+    if (args.password !== undefined) {
+      await db
+        .insertInto("accounts")
+        .values({
+          userId,
+          providerId: "credential",
+          accountId: userId,
+          password: await hashPassword(args.password),
+        })
+        .execute()
+    }
+
     await db
       .insertInto("sessions")
       .values({ userId, token, expiresAt: new Date(Date.now() + LIFETIME_MS), userAgent: "e2e" })

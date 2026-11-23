@@ -15,6 +15,7 @@ import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
 import { getMyDataExportHandler } from "../handlers/get-my-data-export-handler"
+import { getMyDeletionBlockersHandler } from "../handlers/get-my-deletion-blockers-handler"
 import { getMyLibraryCountsHandler } from "../handlers/get-my-library-counts-handler"
 import { getMyNotificationCountsHandler } from "../handlers/get-my-notification-counts-handler"
 import { getMyOverviewHandler } from "../handlers/get-my-overview-handler"
@@ -122,6 +123,7 @@ export const usersRouter = new Hono()
   .route("/", requestMyDataExportHandler)
   .route("/", getMyDataExportHandler)
   .route("/", downloadMyDataExportHandler)
+  .route("/", getMyDeletionBlockersHandler)
   // After the `/me/...` routes, which `/:id/...` would otherwise catch.
   .route("/", updateUserProfileHandler)
   .route("/", deleteUserAvatarHandler)

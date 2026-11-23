@@ -1,3 +1,4 @@
+import type { AuthEmail } from "@taiyomoe/auth/server"
 import type { GroupInvitationMail } from "@taiyomoe/emails"
 import "./setup-env"
 import type { DataExportJobData } from "@taiyomoe/queue"
@@ -18,6 +19,7 @@ import pg from "pg"
 import { afterAll, test as baseTest } from "vitest"
 import type { Services } from "../services"
 import { createApp } from "../app"
+import { createAccountDeletion } from "../utils/account-deletion"
 import { defined } from "./helpers/assert"
 import { createFakeMangaDex, type FakeMangaDex } from "./helpers/mangadex"
 import { createMemoryNotificationEvents } from "./helpers/notification-events"
@@ -111,11 +113,13 @@ type Fixtures = {
   mails: GroupInvitationMail[]
   mangaDex: FakeMangaDex
   dataExportJobs: DataExportJobData[]
+  authMails: AuthEmail[]
 }
 
 const sentMails = new WeakMap<Services, GroupInvitationMail[]>()
 const fakeMangaDexes = new WeakMap<Services, FakeMangaDex>()
 const dataExportJobs = new WeakMap<Services, DataExportJobData[]>()
+const sentAuthMails = new WeakMap<Services, AuthEmail[]>()
 
 export const test = baseTest.extend<Fixtures>({
   // Meilisearch runs its tasks one at a time: only the files that read the index opt in.
@@ -139,17 +143,31 @@ export const test = baseTest.extend<Fixtures>({
     const mails: GroupInvitationMail[] = []
     const mangaDex = createFakeMangaDex()
     const exportJobs: DataExportJobData[] = []
-    const services: Services = {
+    const authMails: AuthEmail[] = []
+    const storage = {
       db,
       s3,
       s3Bucket: bucketName,
       s3PrivateBucket: `${bucketName}-private`,
       meili: sharedMeili,
       mediasIndex,
+    }
+    const services: Services = {
+      ...storage,
       auth: createAuth({
         db,
         trustedOrigins: ["http://localhost"],
-        sendEmail: () => Promise.resolve(),
+        sendEmail: (mail) => {
+          authMails.push(mail)
+
+          return Promise.resolve()
+        },
+        accountDeletion: createAccountDeletion({
+          ...storage,
+          webOrigin: "http://localhost",
+          // Its search drain fails where the file did not opt into search, as no index exists.
+          onError: () => {},
+        }),
       }),
       chapterUploadQueue: { enqueue: async () => {} },
       mangaDex: mangaDex.client,
@@ -177,6 +195,7 @@ export const test = baseTest.extend<Fixtures>({
     sentMails.set(services, mails)
     fakeMangaDexes.set(services, mangaDex)
     dataExportJobs.set(services, exportJobs)
+    sentAuthMails.set(services, authMails)
 
     await use(services)
 
@@ -204,5 +223,8 @@ export const test = baseTest.extend<Fixtures>({
   },
   dataExportJobs: async ({ services }, use) => {
     await use(defined(dataExportJobs.get(services)))
+  },
+  authMails: async ({ services }, use) => {
+    await use(defined(sentAuthMails.get(services)))
   },
 })

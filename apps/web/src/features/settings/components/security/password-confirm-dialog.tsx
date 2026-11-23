@@ -13,7 +13,7 @@ import {
 } from "@taiyomoe/ui/components/ui/dialog"
 import { Field, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { PasswordInput } from "@taiyomoe/ui/components/ui/password-input"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { settingsStyles } from "@/features/settings/components/settings-styles"
 import { m } from "@/paraglide/messages"
@@ -30,6 +30,7 @@ export function PasswordConfirmDialog({
   description,
   confirmLabel,
   destructive = false,
+  confirmDisabled = false,
   hasPassword,
   pending,
   error,
@@ -41,6 +42,7 @@ export function PasswordConfirmDialog({
   description: string
   confirmLabel: string
   destructive?: boolean
+  confirmDisabled?: boolean
   hasPassword: boolean
   pending: boolean
   error: string | null
@@ -49,6 +51,14 @@ export function PasswordConfirmDialog({
   children?: ReactNode
 }) {
   const [password, setPassword] = useState("")
+  // The mutation only reports pending after a tick, so a double click would confirm twice.
+  const submitted = useRef(false)
+
+  useEffect(() => {
+    if (!pending) {
+      submitted.current = false
+    }
+  }, [pending, error])
 
   return (
     <Dialog
@@ -64,7 +74,11 @@ export function PasswordConfirmDialog({
           sx={styles.contents}
           onSubmit={(event) => {
             event.preventDefault()
-            onConfirm(hasPassword ? password : undefined)
+
+            if (!submitted.current) {
+              submitted.current = true
+              onConfirm(hasPassword ? password : undefined)
+            }
           }}
         >
           <DialogHeader>
@@ -94,7 +108,7 @@ export function PasswordConfirmDialog({
           <DialogFooter>
             <DialogClose render={<Button variant="outline" />}>{m.cancel()}</DialogClose>
             <Button
-              disabled={hasPassword && password === ""}
+              disabled={confirmDisabled || (hasPassword && password === "")}
               loading={pending}
               type="submit"
               variant={destructive ? "destructive" : "default"}
