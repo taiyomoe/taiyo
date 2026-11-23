@@ -298,6 +298,31 @@ in JavaScript, so concurrent ratings serialise on the row lock and never lose
 an update. CHECK constraints keep the totals coherent, and `scoreCounts` is an
 `integer[]` with index 0 counting 1s.
 
+### Reviews
+
+A review needs its author's rating, and the two are written by separate
+endpoints, so the invariant is held with row locks: `PUT /medias/{id}/review`
+reads the rating `FOR SHARE`, and `DELETE /medias/{id}/rating` reads it
+`FOR UPDATE` before looking for a review. A rating delete that finds a live
+review fails with `RATING_HAS_REVIEW` unless it is sent with `withReview=true`,
+which soft-deletes the review in the same transaction; the web app asks before
+sending it. A review whose rating is gone anyway (a merge, a race this misses)
+is left out of the media's list rather than shown without a score.
+
+The body is plain text, normalized by `normalizeReviewBody` in
+`@taiyomoe/schemas/review-body`, which the API and the composer's counter
+share. The minimum (`config.reviews.minBodyLength`) counts code points without
+the invisible ones that pad a body out; the maximum counts code points, as
+Postgres' `char_length` does. The CHECK on `mediaReviews.body` repeats both
+limits, so changing them in config needs a migration.
+
+Lists page by keyset: the cursor holds the sort key (helpful count or score),
+the creation time and the ID, and ties always break newest first. The partial
+indexes on `mediaId` cover the helpful and newest sorts; the score sorts join
+`mediaRatings` and are fine at the size a title's reviews reach. A banned
+author's reviews are hidden from lists, not deleted, so lifting the ban brings
+them back.
+
 ### Known gap
 
 Full search (`POST /medias/search`) defaults to the caller's content ratings: the

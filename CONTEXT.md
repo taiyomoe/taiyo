@@ -20,6 +20,14 @@
 
 **Rating score**: the Bayesian average a media is sorted by in search, so a few high ratings do not outrank many good ones. See [rating score](docs/engineering-notes.md#rating-score).
 
+## Reviews
+
+**Review**: a user's written opinion of a media, in plain text, in `mediaReviews`. A user has at most one live review per media, and a review needs its author's rating: the score shown on it is the author's current rating. Deleting a review, by its author or a moderator, soft-deletes it (`deletedAt`, `deleterId`), so its reports keep it and the author can write a new one. Reviews are public.
+
+**Helpful vote**: a user marking someone else's review as helpful, in `mediaReviewVotes`. The review's `helpfulCount` changes in the same transaction by a relative increment. There are no negative votes.
+
+**Review report**: a user flagging a review for moderators, in `mediaReviewReports`, with the reasons and statuses of comment reports. Removing a review as a moderator resolves its open reports.
+
 ## Groups
 
 **Owned group / unowned group**: a group is owned while at least one `groupMemberships` row for it has the OWNER role, and unowned otherwise. Groups created in bulk start unowned.
