@@ -168,7 +168,13 @@ export function ReviewReportRow({
       <CatalogCell column="review">
         <TitleCell
           detail={
-            <button onClick={run("reports")} sx={styles.excerpt} title={text} type="button">
+            <button
+              dir="auto"
+              onClick={run("reports")}
+              sx={styles.excerpt}
+              title={text}
+              type="button"
+            >
               {text}
             </button>
           }

@@ -179,7 +179,9 @@ export function ReviewReportDialog({
                 <TimeAgo date={review.createdAt} length="long" />
                 <ReviewRemovalPill entry={entry} />
               </span>
-              <p sx={styles.text}>{review.body}</p>
+              <p dir="auto" sx={styles.text}>
+                {review.body}
+              </p>
             </div>
             <h3 sx={styles.heading}>
               {m.comment_reports_list_heading({ count: entry.reportCount })}

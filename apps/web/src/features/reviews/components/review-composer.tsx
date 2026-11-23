@@ -196,6 +196,7 @@ export function ReviewComposer({
       <Textarea
         aria-describedby={counterId}
         aria-invalid={measure.excess > 0 ? true : undefined}
+        dir="auto"
         id={textareaId}
         onChange={(event) => {
           update({ ...draft, body: event.target.value })

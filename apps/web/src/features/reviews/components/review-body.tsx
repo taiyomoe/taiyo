@@ -108,7 +108,7 @@ export function ReviewBody({
 
   return (
     <div sx={styles.root}>
-      <p ref={text} id={id} sx={[styles.text, !expanded && styles.clamped]}>
+      <p ref={text} dir="auto" id={id} sx={[styles.text, !expanded && styles.clamped]}>
         {body}
       </p>
       {overflowing || expanded ? (
