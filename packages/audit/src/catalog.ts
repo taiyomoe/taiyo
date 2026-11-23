@@ -66,6 +66,13 @@ export const userAudit = defineAuditCatalog("user", {
   COSMETICS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
 })
 
+export const userExportAudit = defineAuditCatalog("user.export", {
+  REQUEST: { target: "dataExport", severity: "medium" },
+  DOWNLOAD: { target: "dataExport", severity: "high" },
+  BUILD: { target: "dataExport", severity: "low" },
+  EXPIRE: { target: "dataExport", severity: "low" },
+})
+
 export const shopAudit = defineAuditCatalog("shop", {
   ITEM_PURCHASE: { target: "user", severity: "medium" },
   LOOT_BOX_OPEN: { target: "user", severity: "medium" },
@@ -310,6 +317,7 @@ export const auditCatalogs = [
   authAudit,
   adminAudit,
   userAudit,
+  userExportAudit,
   commentAudit,
   commentReportAudit,
   commentImageAudit,
@@ -348,6 +356,7 @@ declare module "evlog" {
     auth: typeof authAudit
     admin: typeof adminAudit
     user: typeof userAudit
+    userExport: typeof userExportAudit
     comment: typeof commentAudit
     commentReport: typeof commentReportAudit
     commentImage: typeof commentImageAudit

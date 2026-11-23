@@ -12,6 +12,8 @@ const PURGE_NOTIFICATIONS_JOB = "purge-notifications"
 const SEND_PUSHES_JOB = "send-pushes"
 const RANKING_MAINTENANCE_QUEUE = "ranking-maintenance"
 const CLOSE_RANKING_PERIODS_JOB = "close-ranking-periods"
+const ACCOUNT_MAINTENANCE_QUEUE = "account-maintenance"
+const EXPIRE_DATA_EXPORTS_JOB = "expire-data-exports"
 
 export {
   CHAPTER_MAINTENANCE_QUEUE,
@@ -28,6 +30,8 @@ export {
   SEND_PUSHES_JOB,
   RANKING_MAINTENANCE_QUEUE,
   CLOSE_RANKING_PERIODS_JOB,
+  ACCOUNT_MAINTENANCE_QUEUE,
+  EXPIRE_DATA_EXPORTS_JOB,
 }
 
 /** @internal Exported for its tests. */
@@ -41,6 +45,7 @@ export const MAINTENANCE_JOBS = {
     PURGE_NOTIFICATIONS_JOB,
   ],
   [RANKING_MAINTENANCE_QUEUE]: [CLOSE_RANKING_PERIODS_JOB],
+  [ACCOUNT_MAINTENANCE_QUEUE]: [EXPIRE_DATA_EXPORTS_JOB],
 } as const
 
 export type MaintenanceQueue = keyof typeof MAINTENANCE_JOBS
@@ -79,6 +84,11 @@ export const SCHEDULES: readonly Schedule[] = [
     queue: RANKING_MAINTENANCE_QUEUE,
     job: CLOSE_RANKING_PERIODS_JOB,
     repeat: { every: 10 * 60_000 },
+  },
+  {
+    queue: ACCOUNT_MAINTENANCE_QUEUE,
+    job: EXPIRE_DATA_EXPORTS_JOB,
+    repeat: { every: 15 * 60_000 },
   },
 ]
 

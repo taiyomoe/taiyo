@@ -27,6 +27,9 @@ export const getS3Client = (endpoint = env.S3_ENDPOINT) =>
 
 export const getS3Bucket = () => env.S3_BUCKET_NAME
 
+/** The bucket nobody can read without a signed URL. */
+export const getS3PrivateBucket = () => env.S3_PRIVATE_BUCKET_NAME
+
 export {
   CopyObjectCommand,
   CreateBucketCommand,
@@ -71,6 +74,27 @@ export const getPresignedUploadUrl = (
     { expiresIn, signableHeaders: new Set(["content-type", "content-length"]) },
   )
 
+export const getDataExportKey = (userId: string, exportId: string) =>
+  `data-exports/${userId}/${exportId}.zip`
+
+export const getPresignedDownloadUrl = (
+  s3: S3Client,
+  bucket: string,
+  key: string,
+  fileName: string,
+  expiresIn: number,
+) =>
+  getSignedUrl(
+    presignClient ?? s3,
+    new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ResponseContentDisposition: `attachment; filename="${fileName}"`,
+      ResponseContentType: "application/zip",
+    }),
+    { expiresIn },
+  )
+
 export const getChapterPageKey = (mediaId: string, chapterId: string, pageId: string) =>
   `medias/${mediaId}/chapters/${chapterId}/${pageId}.jpg`
 
@@ -83,3 +107,12 @@ export const getBannerUrl = (mediaId: string, bannerId: string, extension: strin
   `${S3_PUBLIC_BASE}/${getBannerKey(mediaId, `${bannerId}.${extension}`)}`
 
 export const getPublicImageUrl = (key: string) => `${S3_PUBLIC_BASE}/${key}`
+
+/** The key of the user's avatar when Taiyō stores it, null when it comes from a sign-in provider. */
+export const getOwnedAvatarKey = (userId: string, image: string | null) => {
+  const prefix = `${S3_PUBLIC_BASE}/`
+
+  return image?.startsWith(`${prefix}users/${userId}/avatars/`) === true
+    ? image.slice(prefix.length)
+    : null
+}

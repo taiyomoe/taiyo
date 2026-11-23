@@ -90,11 +90,14 @@ export type UserSettings = {
   pushFollows?: boolean
 }
 
+/** What a notification without a column of its own is about. */
+export type NotificationPayload = ModerationNotificationPayload | { exportId: string }
+
 /**
  * What a moderation notification is about. IDs are kept without foreign keys: the notification
  * outlives the comment, chapter or group it points at.
  */
-export type NotificationPayload =
+export type ModerationNotificationPayload =
   | { listId: string; action: ListModerationAction }
   | { fields: ProfileModerationField[] }
   | ({

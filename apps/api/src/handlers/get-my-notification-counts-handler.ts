@@ -21,6 +21,10 @@ const countsSchema = z.object({
         "The number of unread notifications about what the moderation team did to your lists, your profile and your reports.",
         1,
       ),
+      account: count(
+        "The number of unread notifications about your account, such as a copy of your data that is ready.",
+        0,
+      ),
     })
     .meta({ description: "The number of unread notifications of each kind." }),
 })

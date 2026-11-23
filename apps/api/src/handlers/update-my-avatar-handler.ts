@@ -1,6 +1,6 @@
 import { userAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
-import { getPublicImageUrl, S3_PUBLIC_BASE } from "@taiyomoe/s3"
+import { getOwnedAvatarKey, getPublicImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { bodyLimit } from "hono/body-limit"
@@ -22,14 +22,6 @@ const bodySchema = z.object({
   file: fileSchema("The original image, in PNG, JPEG, GIF or WebP. Animated GIFs stay animated."),
   crop: imageCropSchema,
 })
-
-export const getOwnedAvatarKey = (userId: string, image: string | null) => {
-  const prefix = `${S3_PUBLIC_BASE}/`
-
-  return image?.startsWith(`${prefix}users/${userId}/avatars/`) === true
-    ? image.slice(prefix.length)
-    : null
-}
 
 export const updateMyAvatarHandler = new Hono().put(
   "/me/avatar",

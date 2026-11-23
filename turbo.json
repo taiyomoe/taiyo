@@ -38,6 +38,7 @@
     "SES_SECRET_ACCESS_KEY",
     "S3_PUBLIC_URL",
     "S3_PRESIGN_ENDPOINT",
+    "S3_PRIVATE_BUCKET_NAME",
     "NODE_ENV"
   ],
   "globalPassThroughEnv": ["CI", "npm_lifecycle_event"]

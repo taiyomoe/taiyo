@@ -222,6 +222,10 @@ try {
     S3_ENDPOINT: s3Endpoint,
     S3_ACCESS_KEY_ID: get("RUSTFS_ACCESS_KEY"),
     S3_SECRET_ACCESS_KEY: get("RUSTFS_SECRET_KEY"),
+    S3_PRIVATE_BUCKET_NAME:
+      current.S3_PRIVATE_BUCKET_NAME === undefined || current.S3_PRIVATE_BUCKET_NAME === ""
+        ? `${bucketOf(current)}-private`
+        : current.S3_PRIVATE_BUCKET_NAME,
     S3_PUBLIC_URL: `${localUrl(get("IMAGES_PORT"))}/${bucketOf(current)}`,
   })
 
@@ -268,7 +272,7 @@ try {
     step("Starting infrastructure")
     run("docker", ["compose", "up", "-d", "--wait"])
 
-    step("Creating the S3 bucket")
+    step("Creating the S3 buckets")
     run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-s3"])
 
     step("Migrating the database")

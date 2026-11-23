@@ -10,9 +10,11 @@ import { deleteMyNotificationsHandler } from "../handlers/delete-my-notification
 import { deletePushSubscriptionHandler } from "../handlers/delete-push-subscription-handler"
 import { deleteUserAvatarHandler } from "../handlers/delete-user-avatar-handler"
 import { deleteUserBannerHandler } from "../handlers/delete-user-banner-handler"
+import { downloadMyDataExportHandler } from "../handlers/download-my-data-export-handler"
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getMyCosmeticsHandler } from "../handlers/get-my-cosmetics-handler"
+import { getMyDataExportHandler } from "../handlers/get-my-data-export-handler"
 import { getMyLibraryCountsHandler } from "../handlers/get-my-library-counts-handler"
 import { getMyNotificationCountsHandler } from "../handlers/get-my-notification-counts-handler"
 import { getMyOverviewHandler } from "../handlers/get-my-overview-handler"
@@ -42,6 +44,7 @@ import { listUsersHandler } from "../handlers/list-users-handler"
 import { readAllMyNotificationsHandler } from "../handlers/read-all-my-notifications-handler"
 import { readMyNotificationHandler } from "../handlers/read-my-notification-handler"
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
+import { requestMyDataExportHandler } from "../handlers/request-my-data-export-handler"
 import { setMyPasswordHandler } from "../handlers/set-my-password-handler"
 import { setUserRoleHandler } from "../handlers/set-user-role-handler"
 import { setUsersRoleHandler } from "../handlers/set-users-role-handler"
@@ -116,6 +119,9 @@ export const usersRouter = new Hono()
   .route("/", deleteMyAvatarHandler)
   .route("/", updateMyBannerHandler)
   .route("/", deleteMyBannerHandler)
+  .route("/", requestMyDataExportHandler)
+  .route("/", getMyDataExportHandler)
+  .route("/", downloadMyDataExportHandler)
   // After the `/me/...` routes, which `/:id/...` would otherwise catch.
   .route("/", updateUserProfileHandler)
   .route("/", deleteUserAvatarHandler)

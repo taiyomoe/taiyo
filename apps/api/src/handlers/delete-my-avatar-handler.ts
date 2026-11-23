@@ -1,4 +1,5 @@
 import { userAudit } from "@taiyomoe/audit"
+import { getOwnedAvatarKey } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -9,7 +10,6 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope } from "../utils/schemas"
-import { getOwnedAvatarKey } from "./update-my-avatar-handler"
 
 export const deleteMyAvatarHandler = new Hono().delete(
   "/me/avatar",

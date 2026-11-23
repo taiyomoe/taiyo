@@ -13,14 +13,11 @@
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
     "start": "node --env-file-if-exists=.env --import tsx src/index.ts",
-    "backfill:legacy-images": "node --env-file-if-exists=.env --import tsx src/backfills/import-legacy-images.ts",
-    "email:preview": "email dev --dir ./src/emails/templates"
+    "backfill:legacy-images": "node --env-file-if-exists=.env --import tsx src/backfills/import-legacy-images.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-sesv2": "^3.1169.0",
     "@hono-rate-limiter/redis": "^0.1.4",
     "@hono/node-server": "^2.1.8",
-    "@react-email/render": "^2.3.1",
     "@scalar/api-reference": "^1.78.1",
     "@scalar/hono-api-reference": "^0.12.20",
     "@t3-oss/env-core": "^0.13.11",
@@ -29,6 +26,7 @@
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/emails": "workspace:^",
     "@taiyomoe/mangadex": "workspace:^",
     "@taiyomoe/permissions": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
@@ -40,9 +38,6 @@
     "hono-openapi": "^1.6.0",
     "hono-rate-limiter": "^0.5.4",
     "magic-bytes.js": "^1.13.1",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "react-email": "^6.11.13",
     "remeda": "^2.61.0",
     "sharp": "^0.35.5",
     "tsx": "^4.23.15",
@@ -50,11 +45,9 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.1169.0",
-    "@react-email/ui": "^6.11.13",
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
+    "fflate": "^0.8.3",
     "kysely": "^0.29.9",
     "pg": "^8.23.1"
   }

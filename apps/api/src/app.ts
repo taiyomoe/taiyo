@@ -112,6 +112,7 @@ const scalarExtensions = {
         "Rankings",
         "Notifications",
         "Settings",
+        "Your data",
         "Shop",
       ],
     },
@@ -160,12 +161,14 @@ export const createApp = (services: Services) => {
         c.set("db", services.db)
         c.set("s3", services.s3)
         c.set("s3Bucket", services.s3Bucket)
+        c.set("s3PrivateBucket", services.s3PrivateBucket)
         c.set("meili", services.meili)
         c.set("mediasIndex", services.mediasIndex)
         c.set("auth", services.auth)
         c.set("chapterUploadQueue", services.chapterUploadQueue)
         c.set("mangaDex", services.mangaDex)
         c.set("mangaDexSyncQueue", services.mangaDexSyncQueue)
+        c.set("dataExportQueue", services.dataExportQueue)
         c.set("mailer", services.mailer)
         c.set("notificationEvents", services.notificationEvents)
         c.set("pushSender", services.pushSender)
@@ -410,6 +413,10 @@ export const createApp = (services: Services) => {
             {
               name: "Settings",
               description: "Your preferences, saved on your account so every device shares them.",
+            },
+            {
+              name: "Your data",
+              description: "Copies of everything Taiyō holds about your account, to download.",
             },
             {
               name: "Shop",

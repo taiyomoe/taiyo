@@ -36,6 +36,7 @@ export const NOTIFICATION_CATEGORIES = [
   "activity",
   "rewards",
   "moderation",
+  "account",
 ] as const
 
 const CATEGORY_OF_TYPE = {
@@ -48,6 +49,7 @@ const CATEGORY_OF_TYPE = {
   LIST_MODERATED: "moderation",
   PROFILE_MODERATED: "moderation",
   REPORT_REVIEWED: "moderation",
+  DATA_EXPORT_READY: "account",
 } as const satisfies Record<Notification["type"], NotificationCategory>
 const categoryOf = (notification: Notification) => CATEGORY_OF_TYPE[notification.type]
 
@@ -150,7 +152,14 @@ const applyChange = (queryClient: QueryClient, change: Change) => {
       return {
         ...counts,
         unread: 0,
-        categories: { chapters: 0, replies: 0, activity: 0, rewards: 0, moderation: 0 },
+        categories: {
+          chapters: 0,
+          replies: 0,
+          activity: 0,
+          rewards: 0,
+          moderation: 0,
+          account: 0,
+        },
       }
     }
 

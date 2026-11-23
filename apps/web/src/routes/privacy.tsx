@@ -20,7 +20,7 @@ function RouteComponent() {
     <LegalPage
       eyebrow="Legal"
       title="Privacy Policy"
-      updated="15 November 2026"
+      updated="23 November 2026"
       intro="This policy explains what Taiyō collects, why we collect it, who else sees it, and the control you have over it. We have tried to write it in plain language rather than in the shape of a liability shield."
       sections={[
         {
@@ -231,6 +231,9 @@ function RouteComponent() {
                 deleted. Audience measurement data is deleted after 90 days. Backups roll off on
                 their own schedule.
               </p>
+              <p sx={prose.p}>
+                A copy of your data you ask for is deleted 7 days after it is ready.
+              </p>
             </>
           ),
         },
@@ -252,7 +255,19 @@ function RouteComponent() {
                 <li>to withdraw consent, where we relied on consent.</li>
               </ul>
               <p sx={prose.p}>
-                Write to{" "}
+                You can download a copy of your data yourself: in{" "}
+                <Link search={{ tab: "privacy" }} to="/settings" {...stylex.props(prose.a)}>
+                  Settings, under Privacy
+                </Link>
+                , ask for your data. A few minutes later you get an email and a notification, and
+                you can download a ZIP archive of JSON files with your account, profile, settings,
+                library, reading history, lists, comments, follows, reports, requests,
+                notifications, rewards, purchases and sign-in sessions, along with your avatar,
+                banner and comment images. You can ask once a day. Passwords, two-factor secrets and
+                sign-in tokens are left out, as are reports other people filed about you.
+              </p>
+              <p sx={prose.p}>
+                For anything else, write to{" "}
                 <a href={`mailto:${support}`} sx={prose.a}>
                   {support}
                 </a>{" "}
