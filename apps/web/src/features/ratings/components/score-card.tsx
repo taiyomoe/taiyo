@@ -55,7 +55,8 @@ const styles = stylex.create({
   },
   stars: {
     display: "grid",
-    gridTemplateColumns: `repeat(${maxScore}, minmax(0, 1fr))`,
+    gridAutoColumns: "minmax(0, 1fr)",
+    gridAutoFlow: "column",
   },
   star: {
     padding: 0,
