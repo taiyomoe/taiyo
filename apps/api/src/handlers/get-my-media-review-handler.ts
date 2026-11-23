@@ -24,6 +24,7 @@ export const getMyMediaReviewHandler = new Hono().get(
       },
       ...getOpenApiResponses({
         401: true,
+        403: true,
         404: "No media with the given ID exists.",
         422: "The provided ID is not a valid UUID.",
       }),
