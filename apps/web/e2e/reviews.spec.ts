@@ -91,11 +91,16 @@ test.describe("reviewing a media", () => {
 
     await visit(voter, `/media/${MEDIA_ID}?tab=reviews`)
 
-    const card = voter.getByRole("article").filter({ hasText: "This review contains spoilers." })
+    const collapsed = voter
+      .getByRole("article")
+      .filter({ hasText: "This review contains spoilers." })
+
+    await expect(collapsed).toHaveCount(1)
+    await collapsed.getByRole("button", { name: "Show review" }).click()
+
+    const card = voter.getByRole("article").filter({ hasText: `Review ${tag}.` })
 
     await expect(card).toHaveCount(1)
-    await card.getByRole("button", { name: "Show review" }).click()
-    await expect(card.getByText(`Review ${tag}.`, { exact: false })).toBeVisible()
 
     const helpful = card.getByRole("button", { name: /^Helpful/ })
     const voted = voter.waitForResponse((response) => response.url().endsWith("/vote"))
