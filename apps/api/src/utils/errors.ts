@@ -284,6 +284,18 @@ const userErrors = {
     message: "Sign in again to do this: it needs a sign-in from the last day.",
     code: 403,
   },
+  DATA_EXPORT_COOLDOWN: {
+    message: "You can only ask for one copy of your data a day.",
+    code: 409,
+  },
+  DATA_EXPORT_NOT_FOUND: {
+    message: "The requested data export was not found.",
+    code: 404,
+  },
+  DATA_EXPORT_NOT_READY: {
+    message: "This data export is not ready to download, or it has expired.",
+    code: 409,
+  },
   USER_REPORT_SELF: {
     message: "You cannot report yourself.",
     code: 403,

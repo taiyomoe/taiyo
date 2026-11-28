@@ -2,6 +2,7 @@ import {
   CreateBucketCommand,
   getS3Bucket,
   getS3Client,
+  getS3PrivateBucket,
   PutBucketCorsCommand,
   PutBucketPolicyCommand,
 } from "@taiyomoe/s3"
@@ -11,26 +12,30 @@ export default defineCommand({
   meta: {
     name: "init-s3",
     description:
-      "Create the configured S3 bucket if it does not exist, let anonymous clients read its objects, and let the web app upload chapter pages to it.",
+      "Create the configured S3 buckets if they do not exist, let anonymous clients read the public one's objects, and let the web app upload chapter pages to it.",
   },
   run: async () => {
     const s3 = getS3Client()
     const bucket = getS3Bucket()
+    const createBucket = async (name: string) => {
+      console.log(`Creating bucket "${name}"...`)
 
-    console.log(`Creating bucket "${bucket}"...`)
+      try {
+        await s3.send(new CreateBucketCommand({ Bucket: name }))
+        console.log("Done.")
+      } catch (error) {
+        const code = error instanceof Error ? error.name : ""
 
-    try {
-      await s3.send(new CreateBucketCommand({ Bucket: bucket }))
-      console.log("Done.")
-    } catch (error) {
-      const name = error instanceof Error ? error.name : ""
-
-      if (name === "BucketAlreadyOwnedByYou" || name === "BucketAlreadyExists") {
-        console.log("Already exists.")
-      } else {
-        throw error
+        if (code === "BucketAlreadyOwnedByYou" || code === "BucketAlreadyExists") {
+          console.log("Already exists.")
+        } else {
+          throw error
+        }
       }
     }
+
+    await createBucket(bucket)
+    await createBucket(getS3PrivateBucket())
 
     await s3.send(
       new PutBucketPolicyCommand({
@@ -48,7 +53,7 @@ export default defineCommand({
         }),
       }),
     )
-    console.log("Objects are publicly readable.")
+    console.log(`Objects in "${bucket}" are publicly readable.`)
 
     const origins = (process.env.CORS_ALLOWED_ORIGINS ?? "")
       .split(",")

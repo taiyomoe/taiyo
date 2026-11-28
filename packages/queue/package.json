@@ -8,6 +8,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@aws-sdk/lib-storage": "^3.1169.0",
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
@@ -15,6 +16,7 @@
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
     "bullmq": "^6.7.6",
+    "fflate": "^0.8.3",
     "kysely": "^0.29.9",
     "magic-bytes.js": "^1.13.1",
     "sharp": "^0.35.5",

@@ -56,6 +56,7 @@ export const userAudit = defineAuditCatalog("user", {
   ACCOUNT_UPDATE: { target: "user", severity: "high", requiresChanges: true },
   SETTINGS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
   READER_SETTINGS_UPDATE: { target: "user", severity: "low" },
+  DELETE_REQUEST: { target: "user", severity: "high" },
   DELETE: { target: "user", severity: "critical" },
   FOLLOW: { target: "user", severity: "low" },
   UNFOLLOW: { target: "user", severity: "low" },
@@ -64,6 +65,13 @@ export const userAudit = defineAuditCatalog("user", {
   BANNER_UPDATE: { target: "user", severity: "low" },
   BANNER_REMOVE: { target: "user", severity: "low" },
   COSMETICS_UPDATE: { target: "user", severity: "low", requiresChanges: true },
+})
+
+export const userExportAudit = defineAuditCatalog("user.export", {
+  REQUEST: { target: "dataExport", severity: "medium" },
+  DOWNLOAD: { target: "dataExport", severity: "high" },
+  BUILD: { target: "dataExport", severity: "low" },
+  EXPIRE: { target: "dataExport", severity: "low" },
 })
 
 export const shopAudit = defineAuditCatalog("shop", {
@@ -310,6 +318,7 @@ export const auditCatalogs = [
   authAudit,
   adminAudit,
   userAudit,
+  userExportAudit,
   commentAudit,
   commentReportAudit,
   commentImageAudit,
@@ -348,6 +357,7 @@ declare module "evlog" {
     auth: typeof authAudit
     admin: typeof adminAudit
     user: typeof userAudit
+    userExport: typeof userExportAudit
     comment: typeof commentAudit
     commentReport: typeof commentReportAudit
     commentImage: typeof commentImageAudit

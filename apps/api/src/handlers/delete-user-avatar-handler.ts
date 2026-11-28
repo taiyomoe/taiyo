@@ -1,4 +1,5 @@
 import { adminAudit } from "@taiyomoe/audit"
+import { getOwnedAvatarKey } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -13,7 +14,6 @@ import { notifyModeration } from "../utils/notifications/moderation"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { refreshUserSessions } from "../utils/refresh-sessions"
 import { apiSuccessEnvelope } from "../utils/schemas"
-import { getOwnedAvatarKey } from "./update-my-avatar-handler"
 
 export const deleteUserAvatarHandler = new Hono().delete(
   "/:id/avatar",

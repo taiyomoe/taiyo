@@ -280,12 +280,25 @@ export const notificationSchema = z.discriminatedUnion("type", [
     type: z.literal("REPORT_REVIEWED").meta({ description: "The kind of notification." }),
     report: reportSchema,
   }),
+  notificationBaseSchema.extend({
+    type: z.literal("DATA_EXPORT_READY").meta({ description: "The kind of notification." }),
+    dataExport: z
+      .object({
+        id: z.uuid().meta({ description: "The ID of the export." }),
+        expiresAt: z.iso
+          .datetime()
+          .nullable()
+          .meta({ description: "When the archive is deleted, if it is known." }),
+        expired: z.boolean().meta({ description: "Whether the archive was deleted since." }),
+      })
+      .meta({ description: "The copy of your data you asked for." }),
+  }),
 ])
 
 export const notificationFiltersSchema = z.object({
   category: z.enum(NOTIFICATION_CATEGORY_NAMES).optional().meta({
     description:
-      "Only list this kind: new chapters, replies to your comments, activity (upvotes and follows), rewards (ranking rewards and achievements), or moderation (changes the moderation team made to your lists or profile, and the outcome of your reports).",
+      "Only list this kind: new chapters, replies to your comments, activity (upvotes and follows), rewards (ranking rewards and achievements), moderation (changes the moderation team made to your lists or profile, and the outcome of your reports), or account (copies of your data that are ready).",
     example: "chapters",
   }),
   unread: z
@@ -311,6 +324,9 @@ const storedReportSchema = z.object({
   outcome: z.enum(["RESOLVED", "DISMISSED"]),
   points: z.int().nonnegative().optional(),
 })
+
+/** What a DATA_EXPORT_READY notification stores, checked again when it is read. */
+export const dataExportPayloadSchema = z.object({ exportId: z.guid() })
 
 /** What each moderation notification stores, checked again when it is read. */
 export const moderationPayloadSchemas = {

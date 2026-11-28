@@ -43,8 +43,7 @@ const auditedAuthPaths: Record<string, AuditActionEntry> = {
   "/refresh-token": authAudit.TOKEN_REFRESH,
   "/get-access-token": authAudit.ACCESS_TOKEN_READ,
   "/update-user": userAudit.PROFILE_UPDATE,
-  "/delete-user": userAudit.DELETE,
-  "/delete-user/callback": userAudit.DELETE,
+  "/delete-user": userAudit.DELETE_REQUEST,
   "/admin/create-user": adminAudit.USER_CREATE,
   "/admin/update-user": adminAudit.USER_UPDATE,
   "/admin/remove-user": adminAudit.USER_REMOVE,
@@ -83,6 +82,7 @@ const requestBodySchema = z
     email: z.string().optional(),
     username: z.string().optional(),
     provider: z.string().optional(),
+    token: z.string().optional(),
   })
   .catch({})
 const responseBodySchema = z
@@ -218,7 +218,14 @@ export const auditAuthRequest = createMiddleware(async (c, next) => {
     signInMethods[path] ?? (path === "/callback/:id" ? c.req.path.split("/").at(-1) : body.provider)
   const reason =
     outcome === "success" ? undefined : (redirectError ?? response.code ?? response.message)
-  const action = isNewSocialUser ? authAudit.SIGN_UP : entry
+  let action = entry
+
+  if (isNewSocialUser) {
+    action = authAudit.SIGN_UP
+  } else if (path === "/delete-user" && body.token !== undefined) {
+    // With the emailed token, the request confirms the deletion and deletes the account at once.
+    action = userAudit.DELETE
+  }
 
   log.audit({
     action: action.action,

@@ -8,6 +8,7 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
+import { isSessionFresh } from "../utils/session-freshness"
 
 const bodySchema = z.object({
   newPassword: z
@@ -67,14 +68,7 @@ export const setMyPasswordHandler = new Hono().post(
       return c.fail("PASSWORD_ALREADY_SET")
     }
 
-    // The session may come from the cache: the database row is authoritative.
-    const { createdAt } = await db
-      .selectFrom("sessions")
-      .select("createdAt")
-      .where("id", "=", c.var.session.id)
-      .executeTakeFirstOrThrow()
-
-    if (Date.now() - createdAt.getTime() >= config.auth.sessionFreshAgeSeconds * 1000) {
+    if (!(await isSessionFresh(db, c.var.session.id))) {
       return c.fail("SESSION_NOT_FRESH")
     }
 

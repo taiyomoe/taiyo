@@ -33,6 +33,7 @@ export const config = {
       maxLength: 50,
     },
     sessionFreshAgeSeconds: 24 * 60 * 60,
+    deleteAccountLinkTtlSeconds: 60 * 60,
   },
   settings: {
     contentRating: ["NORMAL", "SUGGESTIVE"],
@@ -108,6 +109,14 @@ export const config = {
     ],
     // Edge's WNS uses numbered subdomains.
     pushServiceDomains: [".notify.windows.com", ".push.apple.com"],
+  },
+  dataExports: {
+    cooldownHours: 24,
+    expiryDays: 7,
+    downloadUrlTtlSeconds: 60,
+    // A build still pending after this was lost with its job: the reaper marks it failed.
+    staleAfterHours: 2,
+    pageSize: 500,
   },
   reports: {
     /** The points a reporter earns when the moderation team acts on their report. */

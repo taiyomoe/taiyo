@@ -62,6 +62,8 @@ export * from "./models/comment-vote-model"
 
 export * from "./models/cover-model"
 
+export * from "./models/data-export-model"
+
 export * from "./models/featured-media-model"
 
 export * from "./models/group-creation-request-model"

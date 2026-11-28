@@ -1,10 +1,12 @@
 import { describe, expect, it, vi } from "vitest"
 import {
+  ACCOUNT_MAINTENANCE_QUEUE,
   CHAPTER_MAINTENANCE_QUEUE,
   CLOSE_RANKING_PERIODS_JOB,
   COMMENT_MAINTENANCE_QUEUE,
   DRAIN_JOB,
   DRAIN_NOTIFICATIONS_JOB,
+  EXPIRE_DATA_EXPORTS_JOB,
   FAIL_STALE_SYNCS_JOB,
   MAINTENANCE_JOBS,
   NOTIFICATION_MAINTENANCE_QUEUE,
@@ -107,6 +109,11 @@ describe("SCHEDULES", () => {
         queue: RANKING_MAINTENANCE_QUEUE,
         job: CLOSE_RANKING_PERIODS_JOB,
         repeat: { every: 600_000 },
+      },
+      {
+        queue: ACCOUNT_MAINTENANCE_QUEUE,
+        job: EXPIRE_DATA_EXPORTS_JOB,
+        repeat: { every: 900_000 },
       },
     ])
   })

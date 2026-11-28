@@ -567,7 +567,7 @@ describe("the moderation category", () => {
     expect(counts).toEqual({
       total: 2,
       unread: 2,
-      categories: { chapters: 0, replies: 0, activity: 0, rewards: 0, moderation: 2 },
+      categories: { chapters: 0, replies: 0, activity: 0, rewards: 0, moderation: 2, account: 0 },
     })
     expect(await types("?category=moderation")).toEqual(["LIST_MODERATED", "PROFILE_MODERATED"])
     expect(await types("?category=activity")).toEqual([])

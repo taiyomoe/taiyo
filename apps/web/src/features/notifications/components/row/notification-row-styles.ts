@@ -18,6 +18,7 @@ export const KIND_COLORS = {
   LIST_MODERATED: MODERATION_COLORS,
   PROFILE_MODERATED: MODERATION_COLORS,
   REPORT_REVIEWED: MODERATION_COLORS,
+  DATA_EXPORT_READY: { text: colors.infoForeground, tint: colors.info },
 } as const
 
 export const notificationRowStyles = stylex.create({

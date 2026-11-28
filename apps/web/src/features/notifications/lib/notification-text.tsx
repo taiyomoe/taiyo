@@ -148,7 +148,7 @@ const actorsText = (
   })
 }
 
-/** The sentence of a reply, upvote, follow, ranking reward, achievement or moderation notification, with its names in bold. */
+/** The sentence of a reply, upvote, follow, ranking reward, achievement, moderation or account notification, with its names in bold. */
 export const notificationText = (notification: Notification, viewerId: string) => {
   if (notification.type === "COMMENT_REPLY") {
     return richMessage(m.notifications_reply_text({ name: "{name}", target: "{target}" }), {
@@ -262,6 +262,22 @@ export const notificationText = (notification: Notification, viewerId: string) =
         : m.notifications_report_dismissed
 
     return richMessage(template({ target: "{target}" }), { target })
+  }
+
+  if (notification.type === "DATA_EXPORT_READY") {
+    const { expiresAt, expired } = notification.dataExport
+
+    if (expired || expiresAt === null) {
+      return m.notifications_data_export_expired()
+    }
+
+    const date = new Intl.DateTimeFormat(getLocale(), { dateStyle: "long" }).format(
+      new Date(expiresAt),
+    )
+
+    return richMessage(m.notifications_data_export_ready({ date: "{date}" }), {
+      date: <Strong>{date}</Strong>,
+    })
   }
 
   return null

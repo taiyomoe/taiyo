@@ -6,18 +6,25 @@ import {
   mangaDexSyncAudit,
   rankingAudit,
   systemActor,
+  userExportAudit,
 } from "@taiyomoe/audit"
 import { createNotificationEvents } from "@taiyomoe/cache/notification-events"
 import { config } from "@taiyomoe/config"
 import { getDb } from "@taiyomoe/db"
+import { sendDataExportReadyEmail } from "@taiyomoe/emails"
 import { createMangaDexClient } from "@taiyomoe/mangadex"
 import {
+  buildDataExport,
   CHAPTER_UPLOAD_QUEUE,
   type ChapterUploadJobData,
   closeRankingPeriods,
   createBullConnection,
   createWebPushSender,
+  DATA_EXPORT_QUEUE,
+  type DataExportJobData,
   drainNotificationOutbox,
+  expireDataExports,
+  failDataExport,
   failStaleMangaDexSyncs,
   MANGADEX_SYNC_QUEUE,
   type MangaDexSyncJobData,
@@ -29,18 +36,25 @@ import {
   runMangaDexSync,
   sendPendingPushes,
 } from "@taiyomoe/queue"
-import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from "@taiyomoe/s3"
+import {
+  getS3Bucket,
+  getS3Client,
+  getS3PrivateBucket,
+  PutBucketLifecycleConfigurationCommand,
+} from "@taiyomoe/s3"
 import { drainSearchOutbox, getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { Queue, Worker } from "bullmq"
 import { audit, auditRedactPreset, initLogger, log } from "evlog"
 import { createHyperDXDrain } from "evlog/hyperdx"
 import { env } from "./env"
 import {
+  ACCOUNT_MAINTENANCE_QUEUE,
   CHAPTER_MAINTENANCE_QUEUE,
   CLOSE_RANKING_PERIODS_JOB,
   COMMENT_MAINTENANCE_QUEUE,
   DRAIN_JOB,
   DRAIN_NOTIFICATIONS_JOB,
+  EXPIRE_DATA_EXPORTS_JOB,
   FAIL_STALE_SYNCS_JOB,
   NOTIFICATION_MAINTENANCE_QUEUE,
   PUBLISH_JOB,
@@ -59,6 +73,7 @@ const maintenanceActor = systemActor("chapter-maintenance-worker")
 const commentMaintenanceActor = systemActor("comment-maintenance-worker")
 const mangaDexSyncActor = systemActor("mangadex-sync-worker")
 const rankingActor = systemActor("ranking-worker")
+const dataExportActor = systemActor("data-export-worker")
 const logConnectionErrors = (
   name: string,
   emitter: { on: (event: "error", listener: (err: Error) => void) => unknown },
@@ -69,6 +84,7 @@ const logConnectionErrors = (
 }
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const mangaDexDeps = { ...deps, mangaDex: createMangaDexClient() }
+const dataExportDeps = { ...deps, s3PrivateBucket: getS3PrivateBucket() }
 const mangaDexSyncQueue = new Queue(MANGADEX_SYNC_QUEUE, { connection: createBullConnection() })
 const notificationEvents = createNotificationEvents()
 const pushDeps = { db: deps.db, send: createWebPushSender() }
@@ -174,6 +190,89 @@ const mangaDexSyncWorker = new Worker<MangaDexSyncJobData>(
       throw err
     }
   },
+  { connection: createBullConnection(), concurrency: 1 },
+)
+// One archive at a time bounds the memory and the database snapshot an export holds.
+const dataExportWorker = new Worker<DataExportJobData>(
+  DATA_EXPORT_QUEUE,
+  async (job) => {
+    const { exportId, settingsUrl } = job.data
+
+    try {
+      const ready = await buildDataExport(dataExportDeps, job.data)
+
+      if (ready === undefined) {
+        return
+      }
+
+      audit(
+        userExportAudit.BUILD({
+          actor: dataExportActor,
+          target: { id: exportId, userId: ready.userId, byteSize: ready.byteSize },
+          outcome: "success",
+        }),
+      )
+      await notificationEvents.publish([ready.userId])
+
+      if (ready.email !== null && ready.email !== "") {
+        await sendDataExportReadyEmail({
+          to: ready.email,
+          name: ready.name,
+          expiresInDays: config.dataExports.expiryDays,
+          url: settingsUrl,
+        }).catch((err: unknown) => {
+          log.error("data-export", `email for ${exportId} not sent: ${String(err)}`)
+        })
+      }
+    } catch (err) {
+      const isFinalAttempt = job.attemptsMade + 1 >= (job.opts.attempts ?? 1)
+
+      if (isFinalAttempt) {
+        await failDataExport(deps, exportId)
+      }
+
+      audit(
+        userExportAudit.BUILD({
+          actor: dataExportActor,
+          target: { id: exportId },
+          outcome: "failure",
+          reason: err instanceof Error ? err.message : String(err),
+        }),
+      )
+
+      throw err
+    }
+  },
+  { connection: createBullConnection(), concurrency: 1 },
+)
+const accountWorker = new Worker(
+  ACCOUNT_MAINTENANCE_QUEUE,
+  routeJobs(ACCOUNT_MAINTENANCE_QUEUE, {
+    [EXPIRE_DATA_EXPORTS_JOB]: async () => {
+      const { expired, failed } = await expireDataExports(dataExportDeps)
+
+      for (const { id, userId } of expired) {
+        audit(
+          userExportAudit.EXPIRE({
+            actor: dataExportActor,
+            target: { id, userId },
+            outcome: "success",
+          }),
+        )
+      }
+
+      for (const { id, userId } of failed) {
+        audit(
+          userExportAudit.BUILD({
+            actor: dataExportActor,
+            target: { id, userId },
+            outcome: "failure",
+            reason: `still pending after ${config.dataExports.staleAfterHours} hours`,
+          }),
+        )
+      }
+    },
+  }),
   { connection: createBullConnection(), concurrency: 1 },
 )
 const maintenanceWorker = new Worker(
@@ -314,6 +413,8 @@ logConnectionErrors(SEARCH_MAINTENANCE_QUEUE, searchWorker)
 logConnectionErrors(COMMENT_MAINTENANCE_QUEUE, commentWorker)
 logConnectionErrors(NOTIFICATION_MAINTENANCE_QUEUE, notificationWorker)
 logConnectionErrors(RANKING_MAINTENANCE_QUEUE, rankingWorker)
+logConnectionErrors(DATA_EXPORT_QUEUE, dataExportWorker)
+logConnectionErrors(ACCOUNT_MAINTENANCE_QUEUE, accountWorker)
 
 chapterWorker.on("ready", () => {
   // oxlint-disable-next-line no-console
@@ -348,6 +449,8 @@ const handleShutdownSignal = () => {
     commentWorker.close(),
     notificationWorker.close(),
     rankingWorker.close(),
+    dataExportWorker.close(),
+    accountWorker.close(),
     mangaDexSyncQueue.close(),
   ])
     .then(() => {

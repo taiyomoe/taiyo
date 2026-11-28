@@ -272,3 +272,28 @@ What remains open is popularity: `libraryCount` and `chapterCount` are global,
 so "popular" orderings rank across all ratings even when results are filtered.
 Decide whether to compute them per audience — a globally ranked NSFW title
 surfacing on a filtered browse page is the failure mode.
+
+## Deleting an account frees its username and email
+
+`deleteAccountData` in `apps/api/src/utils/account-deletion.ts` deletes the
+user row, so the username, display name, email and `normalizedEmail` are free
+for anyone to take right after. We decided not to keep a tombstone of them.
+
+- **Why it is safe.** Only a signed-in user can delete their account, and a ban
+  revokes every session and refuses new ones, so a banned user cannot delete
+  their account to come back with a clean slate under the same email.
+  Re-registering the email of a deleted account starts a brand new account with
+  none of the old data.
+- **What a tombstone would cost.** Keeping the email, even hashed, is personal
+  data kept after a deletion request, with a retention period to justify. Keeping
+  the username would block a name for ever on behalf of nobody.
+- **What a reused name can mislead.** Comments of the deleted account have no
+  author and read as deleted, notifications drop actors that are gone, and
+  everything credited to someone else moved to the "Deleted user" account
+  (`DELETED_USER_ID`). Nothing that stays on the site still points at the old
+  username, so a newcomer who takes it inherits no history. Audit log entries
+  keep the old user ID, which no new account can get.
+
+Revisit this if bans start being evaded through deletion, for example if banned
+users can ever keep a session: then keep `normalizedEmail` of banned accounts
+in a separate table, for the length of the ban.

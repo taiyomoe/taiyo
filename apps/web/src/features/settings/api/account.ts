@@ -120,3 +120,30 @@ export function useRevokeSessions() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: mySessionsQueryOptions.queryKey }),
   })
 }
+
+export const myDeletionBlockersQueryOptions = queryOptions({
+  queryKey: ["settings", "deletion-blockers"],
+  queryFn: async () => {
+    const response = await api.users.me["deletion-blockers"].$get()
+
+    return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
+  },
+})
+
+export function useRequestAccountDeletion() {
+  return useMutation({
+    mutationFn: (password: string | undefined) =>
+      unwrapAuth(authClient.deleteUser(password === undefined ? {} : { password })),
+  })
+}
+
+export function useConfirmAccountDeletion() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (token: string) => unwrapAuth(authClient.deleteUser({ token })),
+    onSuccess: () => {
+      queryClient.clear()
+    },
+  })
+}

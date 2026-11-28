@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src", "../../packages/auth/src"]
+  "include": ["src", "../../packages/auth/src", "../../packages/emails/src"]
 }

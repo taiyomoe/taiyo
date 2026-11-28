@@ -4,7 +4,12 @@ import type { NotificationEvents } from "@taiyomoe/cache/notification-events"
 import type { DB } from "@taiyomoe/db"
 import type { MangaDexClient } from "@taiyomoe/mangadex"
 import type { Actor, Permissions } from "@taiyomoe/permissions"
-import type { ChapterUploadProducer, MangaDexSyncProducer, PushSender } from "@taiyomoe/queue"
+import type {
+  ChapterUploadProducer,
+  DataExportProducer,
+  MangaDexSyncProducer,
+  PushSender,
+} from "@taiyomoe/queue"
 import type { Meilisearch } from "@taiyomoe/search"
 import type { EvlogVariables } from "evlog/hono"
 import type { TypedResponse } from "hono"
@@ -55,6 +60,7 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   db: Kysely<DB>
   s3: S3Client
   s3Bucket: string
+  s3PrivateBucket: string
   meili: Meilisearch
   mediasIndex: string
   auth: Auth
@@ -65,6 +71,7 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   chapterUploadQueue: ChapterUploadProducer
   mangaDex: MangaDexClient
   mangaDexSyncQueue: MangaDexSyncProducer
+  dataExportQueue: DataExportProducer
   mailer: Mailer
   notificationEvents: NotificationEvents
   pushSender: PushSender | null

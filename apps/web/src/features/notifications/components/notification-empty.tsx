@@ -7,6 +7,7 @@ import {
   Shield,
   ThumbsUp,
   Trophy,
+  User,
 } from "@taiyomoe/ui/components/icons"
 import {
   Empty,
@@ -53,6 +54,11 @@ const CATEGORY_EMPTY = {
     icon: Shield,
     title: m.notifications_empty_moderation,
     description: m.notifications_empty_moderation_description,
+  },
+  account: {
+    icon: User,
+    title: m.notifications_empty_account,
+    description: m.notifications_empty_account_description,
   },
 } as const
 const emptyStateOf = ({

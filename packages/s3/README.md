@@ -4,13 +4,14 @@ S3 client configuration for the Taiyō monorepo.
 
 ## Environment Variables
 
-| Variable               | Description                             | Required |
-| ---------------------- | --------------------------------------- | -------- |
-| `S3_ENDPOINT`          | S3-compatible endpoint URL              | Yes      |
-| `S3_ACCESS_KEY_ID`     | Access key ID for authentication        | Yes      |
-| `S3_SECRET_ACCESS_KEY` | Secret access key for authentication    | Yes      |
-| `S3_BUCKET_NAME`       | Default bucket name                     | Yes      |
-| `S3_PUBLIC_URL`        | Public base URL objects are served from | Yes      |
+| Variable                 | Description                                                                                       | Required |
+| ------------------------ | ------------------------------------------------------------------------------------------------- | -------- |
+| `S3_ENDPOINT`            | S3-compatible endpoint URL                                                                        | Yes      |
+| `S3_ACCESS_KEY_ID`       | Access key ID for authentication                                                                  | Yes      |
+| `S3_SECRET_ACCESS_KEY`   | Secret access key for authentication                                                              | Yes      |
+| `S3_BUCKET_NAME`         | Default bucket name                                                                               | Yes      |
+| `S3_PRIVATE_BUCKET_NAME` | Bucket for files only their owner may download, through signed URLs (data exports). Never public. | Yes      |
+| `S3_PUBLIC_URL`          | Public base URL objects are served from                                                           | Yes      |
 
 ## Development
 

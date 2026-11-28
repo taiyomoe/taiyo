@@ -2,6 +2,18 @@ import { awardMetricAchievements, getAchievementProgress } from "./achievements"
 import { reapOrphanCommentImages } from "./comment-image-reaper"
 import { createBullConnection } from "./connection"
 import {
+  buildDataExport,
+  expireDataExports,
+  failDataExport,
+  getDataExportFileName,
+} from "./data-export/archive"
+import {
+  DATA_EXPORT_QUEUE,
+  type DataExportJobData,
+  type DataExportProducer,
+  getDataExportProducer,
+} from "./data-export/queue"
+import {
   failStaleMangaDexSyncs,
   getMangaDexSyncProducer,
   MANGADEX_SYNC_QUEUE,
@@ -35,15 +47,21 @@ import { type ChapterUploadJobData, chapterUploadManifestSchema } from "./types"
 
 export {
   awardMetricAchievements,
+  buildDataExport,
   CHAPTER_UPLOAD_QUEUE,
   chapterUploadManifestSchema,
   closeRankingPeriods,
   createBullConnection,
   createWebPushSender,
+  DATA_EXPORT_QUEUE,
   drainNotificationOutbox,
+  expireDataExports,
+  failDataExport,
   failStaleMangaDexSyncs,
   getAchievementProgress,
   getChapterUploadProducer,
+  getDataExportFileName,
+  getDataExportProducer,
   getMangaDexSyncProducer,
   getVapidPublicKey,
   isExpiredPushStatus,
@@ -65,6 +83,8 @@ export {
 export type {
   ChapterUploadJobData,
   ChapterUploadProducer,
+  DataExportJobData,
+  DataExportProducer,
   MangaDexSyncJobData,
   MangaDexSyncProducer,
   PushSender,

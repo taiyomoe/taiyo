@@ -1,0 +1,29 @@
+{
+  "name": "@taiyomoe/emails",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "email:preview": "email dev --dir ./src/templates"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.1169.0",
+    "@react-email/render": "^2.3.1",
+    "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/auth": "workspace:^",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-email": "^6.11.13",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@react-email/ui": "^6.11.13",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
+  }
+}

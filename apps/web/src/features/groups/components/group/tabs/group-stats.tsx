@@ -12,6 +12,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { Suspense, useDeferredValue, useMemo } from "react"
 import { range } from "remeda"
+import { getDisplayName } from "@/components/user-name/user-link"
 import {
   ChartFrame,
   chartTheme,
@@ -208,7 +209,7 @@ function GroupStatsContent({ groupId }: { groupId: string }) {
                 <PersonAvatar person={uploader} sx={styles.avatar} />
                 <Meter
                   max={stats.topUploaders[0]?.count ?? 1}
-                  name={<span sx={styles.barName}>{uploader.displayUsername}</span>}
+                  name={<span sx={styles.barName}>{getDisplayName(uploader)}</span>}
                   value={uploader.count}
                 />
                 <span sx={styles.value}>{formatNumber(uploader.count)}</span>

@@ -20,7 +20,7 @@ function RouteComponent() {
     <LegalPage
       eyebrow="Legal"
       title="Privacy Policy"
-      updated="15 November 2026"
+      updated="23 November 2026"
       intro="This policy explains what Taiyō collects, why we collect it, who else sees it, and the control you have over it. We have tried to write it in plain language rather than in the shape of a liability shield."
       sections={[
         {
@@ -222,14 +222,17 @@ function RouteComponent() {
             <>
               <p sx={prose.p}>
                 We keep account information for as long as your account exists. When you delete your
-                account we remove or anonymise your personal information within 30 days, except
-                where we must keep something longer — for example, records of copyright notices, or
-                information needed to stop a suspended user returning.
+                account, your personal information is deleted at once, except where we must keep
+                something longer — for example, records of copyright notices, or the security log of
+                actions taken on accounts, which keeps your account&rsquo;s ID but not your profile.
               </p>
               <p sx={prose.p}>
                 Server logs are kept for a short period, normally no more than 90 days, and then
                 deleted. Audience measurement data is deleted after 90 days. Backups roll off on
                 their own schedule.
+              </p>
+              <p sx={prose.p}>
+                A copy of your data you ask for is deleted 7 days after it is ready.
               </p>
             </>
           ),
@@ -252,7 +255,30 @@ function RouteComponent() {
                 <li>to withdraw consent, where we relied on consent.</li>
               </ul>
               <p sx={prose.p}>
-                Write to{" "}
+                You can download a copy of your data yourself: in{" "}
+                <Link search={{ tab: "privacy" }} to="/settings" {...stylex.props(prose.a)}>
+                  Settings, under Privacy
+                </Link>
+                , ask for your data. A few minutes later you get an email and a notification, and
+                you can download a ZIP archive of JSON files with your account, profile, settings,
+                library, reading history, lists, comments, follows, reports, requests,
+                notifications, rewards, purchases and sign-in sessions, along with your avatar,
+                banner and comment images. You can ask once a day. Passwords, two-factor secrets and
+                sign-in tokens are left out, as are reports other people filed about you.
+              </p>
+              <p sx={prose.p}>
+                You can also delete your account yourself, from{" "}
+                <Link search={{ tab: "account" }} to="/settings" {...stylex.props(prose.a)}>
+                  Settings, under Account
+                </Link>
+                . We email you a link to confirm, and once you do, your account and personal
+                information are deleted right away. What you added to the shared catalog for other
+                readers — chapters, titles, covers, staff and groups — stays, credited to
+                &ldquo;Deleted user&rdquo;, and your comments show as deleted. Owners of a group
+                transfer or delete it first.
+              </p>
+              <p sx={prose.p}>
+                For anything else, write to{" "}
                 <a href={`mailto:${support}`} sx={prose.a}>
                   {support}
                 </a>{" "}

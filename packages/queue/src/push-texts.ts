@@ -30,6 +30,8 @@ type PushTexts = {
   anImage: string
   replyTitle: (name: string) => string
   sentAnImage: string
+  dataExportTitle: string
+  dataExportBody: string
   testTitle: string
   testBody: string
 }
@@ -105,6 +107,8 @@ export const PUSH_TEXTS = {
     anImage: "An image",
     replyTitle: (name) => `${name} replied to your comment`,
     sentAnImage: "Sent an image",
+    dataExportTitle: "Your data is ready",
+    dataExportBody: "Download the copy of your Taiyō data from your privacy settings.",
     testTitle: "Notifications are on",
     testBody: "This device will now get new chapters and replies from Taiyō.",
   },
@@ -172,6 +176,9 @@ export const PUSH_TEXTS = {
     anImage: "Une image",
     replyTitle: (name) => `${name} a répondu à votre commentaire`,
     sentAnImage: "A envoyé une image",
+    dataExportTitle: "Vos données sont prêtes",
+    dataExportBody:
+      "Téléchargez la copie de vos données Taiyō depuis vos paramètres de confidentialité.",
     testTitle: "Les notifications sont activées",
     testBody: "Cet appareil recevra désormais les nouveaux chapitres et les réponses de Taiyō.",
   },
@@ -239,6 +246,8 @@ export const PUSH_TEXTS = {
     anImage: "Uma imagem",
     replyTitle: (name) => `${name} respondeu ao seu comentário`,
     sentAnImage: "Enviou uma imagem",
+    dataExportTitle: "Seus dados estão prontos",
+    dataExportBody: "Baixe a cópia dos seus dados do Taiyō nas suas configurações de privacidade.",
     testTitle: "As notificações estão ativadas",
     testBody: "Este dispositivo agora vai receber novos capítulos e respostas do Taiyō.",
   },

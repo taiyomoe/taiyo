@@ -1,6 +1,7 @@
 import type {
   DB,
   Locale,
+  ModerationNotificationPayload,
   NotificationPayload,
   NotificationType,
   RankingPeriodKind,
@@ -167,7 +168,7 @@ const commentPath = (row: PushRow) => {
   return "/notifications"
 }
 /** Where a moderation push leads: what it is about while it can still be opened, else the inbox. */
-const moderationPath = (row: PushRow, payload: NotificationPayload) => {
+const moderationPath = (row: PushRow, payload: ModerationNotificationPayload) => {
   if ("listId" in payload) {
     return row.listDeleted === false ? `/lists/${payload.listId}` : MODERATION_INBOX
   }
@@ -195,7 +196,7 @@ const moderationPath = (row: PushRow, payload: NotificationPayload) => {
     : `/users/${encodeURIComponent(row.reportedUsername)}`
 }
 /** The moderation team stays anonymous: no name, no avatar. */
-const moderationMessage = (row: PushRow, payload: NotificationPayload) => {
+const moderationMessage = (row: PushRow, payload: ModerationNotificationPayload) => {
   const texts = PUSH_TEXTS[row.locale]
   const message = { url: "", icon: null, tag: row.notificationId }
 
@@ -295,7 +296,17 @@ const toMessage = (row: PushRow) => {
     } satisfies PushMessage
   }
 
-  if (row.payload !== null) {
+  if (row.type === "DATA_EXPORT_READY") {
+    return {
+      title: texts.dataExportTitle,
+      body: texts.dataExportBody,
+      url: open("/settings?tab=privacy"),
+      icon: null,
+      tag: row.notificationId,
+    } satisfies PushMessage
+  }
+
+  if (row.payload !== null && !("exportId" in row.payload)) {
     return { ...moderationMessage(row, row.payload), url: open(moderationPath(row, row.payload)) }
   }
 
@@ -488,7 +499,7 @@ const loadPushRows = async (db: Kysely<DB>, notificationIds: string[]) => {
         OR "n"."type" = 'ACHIEVEMENT_EARNED'
         -- Moderation notices have no setting: people always learn when their content changes.
         OR ("n"."type" = 'LIST_MODERATED' AND "ml"."id" IS NOT NULL)
-        OR "n"."type" IN ('PROFILE_MODERATED', 'REPORT_REVIEWED')
+        OR "n"."type" IN ('PROFILE_MODERATED', 'REPORT_REVIEWED', 'DATA_EXPORT_READY')
       )
   `.execute(db)
 

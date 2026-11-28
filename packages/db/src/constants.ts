@@ -1,3 +1,13 @@
+/**
+ * The account that keeps what deleted accounts made for everyone else: the chapters, covers,
+ * titles and groups they created, and the reviews they did. A migration creates it banned and
+ * without any way to sign in.
+ */
+export const DELETED_USER_ID = "00000000-0000-4000-8000-0000000de1e7"
+
+/** The username of the "Deleted user" account: no username a person can pick has a hyphen. */
+export const DELETED_USERNAME = "deleted-user"
+
 export const CONTENT_RATINGS = ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"] as const
 
 export type ContentRating = (typeof CONTENT_RATINGS)[number]
@@ -54,6 +64,10 @@ export const PAGE_REPORT_REASONS = [
 
 export type PageReportReason = (typeof PAGE_REPORT_REASONS)[number]
 
+export const DATA_EXPORT_STATUSES = ["PENDING", "READY", "FAILED", "EXPIRED"] as const
+
+export type DataExportStatus = (typeof DATA_EXPORT_STATUSES)[number]
+
 export const PAGE_REPORT_STATUSES = ["OPEN", "RESOLVED", "DISMISSED"] as const
 
 export type PageReportStatus = (typeof PAGE_REPORT_STATUSES)[number]
@@ -76,6 +90,7 @@ const NOTIFICATION_TYPES = [
   "LIST_MODERATED",
   "PROFILE_MODERATED",
   "REPORT_REVIEWED",
+  "DATA_EXPORT_READY",
 ] as const
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number]
@@ -86,6 +101,7 @@ export const NOTIFICATION_CATEGORY_NAMES = [
   "activity",
   "rewards",
   "moderation",
+  "account",
 ] as const
 
 export const NOTIFICATION_CATEGORIES = {
@@ -94,6 +110,7 @@ export const NOTIFICATION_CATEGORIES = {
   activity: ["COMMENT_LIKE", "FOLLOW"],
   rewards: ["RANKING_REWARD", "ACHIEVEMENT_EARNED"],
   moderation: ["LIST_MODERATED", "PROFILE_MODERATED", "REPORT_REVIEWED"],
+  account: ["DATA_EXPORT_READY"],
 } as const satisfies Record<NotificationCategory, readonly NotificationType[]>
 
 export type NotificationCategory = (typeof NOTIFICATION_CATEGORY_NAMES)[number]
