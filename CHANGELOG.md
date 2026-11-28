@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.5.0](https://github.com/taiyomoe/taiyo/compare/v2.4.0...v2.5.0) (2026-11-28)
+
+
+### Features
+
+* default media search to the caller's content ratings ([#3585](https://github.com/taiyomoe/taiyo/issues/3585)) ([fd88ecc](https://github.com/taiyomoe/taiyo/commit/fd88ecc0a1e388bf684fa3df41d70295da7bcaf6))
+
+
+### Bug Fixes
+
+* accept push subscriptions from known push services only ([#3567](https://github.com/taiyomoe/taiyo/issues/3567)) ([4a7bf97](https://github.com/taiyomoe/taiyo/commit/4a7bf978898011fa7b2cd0292639e497282d42fc))
+* ask for a recent sign-in before adding a password ([#3579](https://github.com/taiyomoe/taiyo/issues/3579)) ([9df4ab4](https://github.com/taiyomoe/taiyo/commit/9df4ab400cec98ccbd7d3fe9db0caf6cfc220cd8))
+* bound every request body and parse only json bodies as json ([#3568](https://github.com/taiyomoe/taiyo/issues/3568)) ([9fc80fd](https://github.com/taiyomoe/taiyo/commit/9fc80fdb7dcc9cb1f66d5d1b41cdecf0012f13ea))
+* cap image uploads per request and serialize main cover changes ([#3575](https://github.com/taiyomoe/taiyo/issues/3575)) ([44506c8](https://github.com/taiyomoe/taiyo/commit/44506c802b29a7e0b3c857c7f8ead7b248f4f231))
+* count only live published chapters in reading stats ([#3581](https://github.com/taiyomoe/taiyo/issues/3581)) ([f89d41d](https://github.com/taiyomoe/taiyo/commit/f89d41dccf2498196b38cec7ab5d91e92a02f3eb))
+* drop every cached query when the signed-in account changes ([#3569](https://github.com/taiyomoe/taiyo/issues/3569)) ([950d8de](https://github.com/taiyomoe/taiyo/commit/950d8de13b579951a12b5265bce976fdc84bed8e))
+* enforce case-insensitive unique display names in the database ([#3577](https://github.com/taiyomoe/taiyo/issues/3577)) ([29b4b51](https://github.com/taiyomoe/taiyo/commit/29b4b510d47c0c3d2772a3ea1b867b7c0f8847c9))
+* fail mangadex syncs whose job died and clean up their pages ([#3586](https://github.com/taiyomoe/taiyo/issues/3586)) ([c98a6a3](https://github.com/taiyomoe/taiyo/commit/c98a6a3edc3012a22f0dfa69833c4c83aceeaabc))
+* follow redirect targets only when they stay on the site ([#3574](https://github.com/taiyomoe/taiyo/issues/3574)) ([5f5fe1e](https://github.com/taiyomoe/taiyo/commit/5f5fe1ee920a4d95f14fa3722ac47c1215d3a46f))
+* keep search outbox rows until meilisearch applies the push ([#3578](https://github.com/taiyomoe/taiyo/issues/3578)) ([3afafd8](https://github.com/taiyomoe/taiyo/commit/3afafd893957c1cbb07a0b5a83ff956bc1ee2c0f))
+* keep the worker alive through redis and postgres connection errors ([#3572](https://github.com/taiyomoe/taiyo/issues/3572)) ([d8d322a](https://github.com/taiyomoe/taiyo/commit/d8d322a629a4a838461515f4e7672ebb4dbab965))
+* log only the id and role of a route's target user ([#3573](https://github.com/taiyomoe/taiyo/issues/3573)) ([62fb4eb](https://github.com/taiyomoe/taiyo/commit/62fb4ebb8a7872d006777d463c105aec361d4b47))
+* open loot boxes when webgl is unavailable ([#3614](https://github.com/taiyomoe/taiyo/issues/3614)) ([72e8e63](https://github.com/taiyomoe/taiyo/commit/72e8e636cc3c1a8b19214fb8c14430a9123589f4))
+* run the delete-media cli against the current schema ([#3592](https://github.com/taiyomoe/taiyo/issues/3592)) ([90a4493](https://github.com/taiyomoe/taiyo/commit/90a449301c44cd4d0038cc559acdf08aca70e7c9))
+* **search:** give up on meilisearch after 5 seconds ([#3620](https://github.com/taiyomoe/taiyo/issues/3620)) ([4314842](https://github.com/taiyomoe/taiyo/commit/4314842ce5e968aba9373cb8ae196e6cc30a228f))
+* set a user's role and unequip its cosmetics in one transaction ([#3580](https://github.com/taiyomoe/taiyo/issues/3580)) ([58230ac](https://github.com/taiyomoe/taiyo/commit/58230aca1b959e7ca3491d3a5c4302bb072d4dfa))
+* type the push request body for the dom lib ([#3570](https://github.com/taiyomoe/taiyo/issues/3570)) ([22a3868](https://github.com/taiyomoe/taiyo/commit/22a3868cb7d69866788e1cfeb27be70bd405aef8))
+* validate mangadex chapter links and cap download size ([#3571](https://github.com/taiyomoe/taiyo/issues/3571)) ([7e4aecd](https://github.com/taiyomoe/taiyo/commit/7e4aecdd08bdadd0d18b6d1a8eb5ed60d51378f7))
+
 ## [2.4.0](https://github.com/taiyomoe/taiyo/compare/v2.3.0...v2.4.0) (2026-11-21)
 
 
