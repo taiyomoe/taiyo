@@ -5,6 +5,7 @@ export const getMeiliClient = () =>
   new Meilisearch({
     host: env.MEILISEARCH_HOST,
     apiKey: env.MEILISEARCH_API_KEY,
+    timeout: 5000,
   })
 
 export const SEARCH_INDEXES = {
