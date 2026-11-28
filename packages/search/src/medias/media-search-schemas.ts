@@ -88,6 +88,7 @@ const mediaFilterSchema = z
       "Filters on the number of users with the media in their library.",
     ),
     chapterCount: filterOn(countFilter, "Filters on the number of chapters of the media."),
+    ratingCount: filterOn(countFilter, "Filters on the number of ratings of the media."),
   })
   .strict()
 const mediaSortSchema = z
@@ -101,8 +102,13 @@ const mediaSortSchema = z
         "mainTitle",
         "libraryCount",
         "chapterCount",
+        "rating",
       ])
-      .meta({ description: "The field to sort by.", example: "libraryCount" }),
+      .meta({
+        description:
+          "The field to sort by. `rating` sorts by the average score weighted by the number of ratings, so a media rated by few users does not outrank one rated well by many.",
+        example: "libraryCount",
+      }),
     direction: sortDirectionSchema.default("desc"),
   })
   .array()

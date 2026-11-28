@@ -89,7 +89,10 @@ const scalarExtensions = {
       name: "Chapters",
       tags: ["Chapters", "Chapter review", "Chapter groups", "Page reports"],
     },
-    { name: "Reading", tags: ["Bookmarks", "Reading history", "Library", "Custom lists"] },
+    {
+      name: "Reading",
+      tags: ["Bookmarks", "Reading history", "Library", "Ratings", "Custom lists"],
+    },
     {
       name: "Groups",
       tags: [
@@ -341,6 +344,11 @@ export const createApp = (services: Services) => {
               name: "Library",
               description:
                 "The medias you track in your library, with a status such as reading or completed.",
+            },
+            {
+              name: "Ratings",
+              description:
+                "Scores from 1 to 10 that users give medias, and the community statistics they add up to.",
             },
             {
               name: "Custom lists",

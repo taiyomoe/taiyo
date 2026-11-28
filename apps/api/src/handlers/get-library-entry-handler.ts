@@ -19,20 +19,29 @@ const libraryEntrySchema = z.object({
   createdAt: z.iso.datetime().meta({ description: "When you added the media to your library." }),
   updatedAt: z.iso.datetime().meta({ description: "When you last updated the entry." }),
 })
+const responseSchema = z.object({
+  entry: libraryEntrySchema
+    .nullable()
+    .meta({ description: "Your library entry for the media, or null when it is not there." }),
+  score: z
+    .int()
+    .nullable()
+    .meta({ description: "Your score for the media, if you rated it.", example: 8 }),
+})
 
 export const getLibraryEntryHandler = new Hono().get(
   "/me/library/:mediaId",
   describeRoute({
     summary: "Get my library entry for a media",
     description:
-      "Returns your library entry for the media, or `null` when the media is not in your library.\n\n**Authentication:** signed-in user.",
+      "Returns your library entry for the media, `null` when the media is not in your library, and the score you gave the media, `null` when you have not rated it.\n\n**Authentication:** signed-in user.",
     tags: ["Library"],
     responses: {
       200: {
-        description: "Your library entry, or null.",
+        description: "Your library entry and score.",
         content: {
           "application/json": {
-            schema: resolver(apiSuccessEnvelope(libraryEntrySchema.nullable())),
+            schema: resolver(apiSuccessEnvelope(responseSchema)),
           },
         },
       },
@@ -48,13 +57,21 @@ export const getLibraryEntryHandler = new Hono().get(
   async (c) => {
     const { db, user } = c.var
     const { mediaId } = c.var.param
-    const entry = await db
-      .selectFrom("userLibraryEntries")
-      .select(["mediaId", "status", "notify", "createdAt", "updatedAt"])
-      .where("userId", "=", user.id)
-      .where("mediaId", "=", mediaId)
-      .executeTakeFirst()
+    const [entry, rating] = await Promise.all([
+      db
+        .selectFrom("userLibraryEntries")
+        .select(["mediaId", "status", "notify", "createdAt", "updatedAt"])
+        .where("userId", "=", user.id)
+        .where("mediaId", "=", mediaId)
+        .executeTakeFirst(),
+      db
+        .selectFrom("mediaRatings")
+        .select("score")
+        .where("userId", "=", user.id)
+        .where("mediaId", "=", mediaId)
+        .executeTakeFirst(),
+    ])
 
-    return c.ok(entry ?? null)
+    return c.ok({ entry: entry ?? null, score: rating?.score ?? null })
   },
 )

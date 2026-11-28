@@ -292,9 +292,13 @@ try {
       step("Seeding the database")
       run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run"])
     } else {
-      step("Database already has data, seeding only the dev accounts and featured medias")
+      step("Database already has data, seeding only the dev accounts, featured medias and ratings")
 
-      for (const seed of ["1780056748390_dev-accounts", "1791888129084_featured-medias"]) {
+      for (const seed of [
+        "1780056748390_dev-accounts",
+        "1791888129084_featured-medias",
+        "1795372586705_media-ratings",
+      ]) {
         run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run", "--specific", seed])
       }
     }

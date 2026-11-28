@@ -24,6 +24,8 @@ import type { GroupReport } from "./models/group-report-model"
 import type { MangaDexSyncItem } from "./models/mangadex-sync-item-model"
 import type { MangaDexSync } from "./models/mangadex-sync-model"
 import type { Media } from "./models/media-model"
+import type { MediaRating } from "./models/media-rating-model"
+import type { MediaRatingStats } from "./models/media-rating-stats-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { MediaSuggestion } from "./models/media-suggestion-model"
 import type { NotificationActor } from "./models/notification-actor-model"
@@ -82,6 +84,8 @@ export type DB = {
   groups: Group
   mangaDexSyncItems: MangaDexSyncItem
   mangaDexSyncs: MangaDexSync
+  mediaRatingStats: MediaRatingStats
+  mediaRatings: MediaRating
   mediaStaffs: MediaStaff
   mediaSuggestions: MediaSuggestion
   medias: Media

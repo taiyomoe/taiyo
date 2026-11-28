@@ -267,6 +267,11 @@ export const libraryAudit = defineAuditCatalog("library", {
   ENTRY_REMOVE: { target: "media", severity: "low" },
 })
 
+export const ratingAudit = defineAuditCatalog("rating", {
+  SET: { target: "media", severity: "low" },
+  REMOVE: { target: "media", severity: "low" },
+})
+
 export const historyAudit = defineAuditCatalog("history", {
   CHAPTER_OPEN: { target: "chapter", severity: "low" },
   PROGRESS_UPDATE: { target: "chapter", severity: "low" },
@@ -334,6 +339,7 @@ export const auditCatalogs = [
   userReportAudit,
   listAudit,
   libraryAudit,
+  ratingAudit,
   historyAudit,
   notificationAudit,
   bookmarkAudit,
@@ -372,6 +378,7 @@ declare module "evlog" {
     userReport: typeof userReportAudit
     list: typeof listAudit
     library: typeof libraryAudit
+    rating: typeof ratingAudit
     history: typeof historyAudit
     notification: typeof notificationAudit
     bookmark: typeof bookmarkAudit

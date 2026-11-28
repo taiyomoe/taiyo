@@ -109,6 +109,15 @@ export const config = {
     // Edge's WNS uses numbered subdomains.
     pushServiceDomains: [".notify.windows.com", ".push.apple.com"],
   },
+  ratings: {
+    minScore: 1,
+    maxScore: 10,
+    // Bayesian prior: a title scores as if it already had `priorWeight` ratings of `priorMean`.
+    // See docs/engineering-notes.md#rating-score.
+    priorWeight: 25,
+    priorMean: 7,
+    minCountForAverage: 5,
+  },
   reports: {
     /** The points a reporter earns when the moderation team acts on their report. */
     rewardPoints: 10,
@@ -171,3 +180,5 @@ export const config = {
 export { tags } from "./tags"
 
 export * from "./tag-keys"
+
+export * from "./ratings"

@@ -17,6 +17,7 @@ import { profileStyles } from "@/features/users/components/profile/profile-style
 import { BarList } from "@/features/users/components/profile/tabs/bar-list"
 import { GenreDonut } from "@/features/users/components/profile/tabs/genre-donut"
 import { useHoverTip } from "@/features/users/components/profile/tabs/hover-tip"
+import { StatsCard } from "@/features/users/components/profile/tabs/stats-card"
 import { statsStyles } from "@/features/users/components/profile/tabs/stats-styles"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
@@ -164,29 +165,6 @@ const styles = stylex.create({
     },
   },
 })
-
-function Card({
-  title,
-  note,
-  flush = false,
-  children,
-}: {
-  title: string
-  note?: string
-  flush?: boolean
-  children: React.ReactNode
-}) {
-  return (
-    <section sx={[profileStyles.card, flush && profileStyles.flush, statsStyles.cardBody]}>
-      <div sx={statsStyles.cardHead}>
-        <h3 sx={profileStyles.sectionTitle}>{title}</h3>
-        {note === undefined ? null : <span sx={statsStyles.cardNote}>{note}</span>}
-      </div>
-      {children}
-    </section>
-  )
-}
-
 const days = (count: number) =>
   count === 1 ? m.profile_stats_day() : m.profile_stats_days({ count })
 
@@ -202,7 +180,7 @@ function Reading({
   return (
     <>
       <div sx={styles.top}>
-        <Card
+        <StatsCard
           flush
           note={m.profile_stats_genres_note({ count: format(reading.mediasRead) })}
           title={m.profile_stats_genres()}
@@ -212,8 +190,8 @@ function Reading({
           ) : (
             <GenreDonut genres={reading.genres} />
           )}
-        </Card>
-        <Card
+        </StatsCard>
+        <StatsCard
           flush
           note={m.profile_stats_streak_note({ days: days(reading.longestStreak) })}
           title={m.profile_stats_totals()}
@@ -239,11 +217,11 @@ function Reading({
               </dd>
             </div>
           </dl>
-        </Card>
+        </StatsCard>
       </div>
       <div sx={statsStyles.grid}>
         {library === null ? null : (
-          <Card
+          <StatsCard
             note={
               library.total === 1
                 ? m.profile_stats_library_total_one()
@@ -259,9 +237,9 @@ function Reading({
                 title: `${LIBRARY_STATUS_LABELS[status]()}: ${format(library.byStatus[status])}`,
               }))}
             />
-          </Card>
+          </StatsCard>
         )}
-        <Card title={m.profile_stats_by_type()}>
+        <StatsCard title={m.profile_stats_by_type()}>
           {reading.byType.length === 0 ? (
             <p sx={profileStyles.empty}>{m.profile_stats_no_reading()}</p>
           ) : (
@@ -274,8 +252,8 @@ function Reading({
               }))}
             />
           )}
-        </Card>
-        <Card title={m.profile_stats_by_language()}>
+        </StatsCard>
+        <StatsCard title={m.profile_stats_by_language()}>
           {reading.byLanguage.length === 0 ? (
             <p sx={profileStyles.empty}>{m.profile_stats_no_reading()}</p>
           ) : (
@@ -293,10 +271,10 @@ function Reading({
               }))}
             />
           )}
-        </Card>
+        </StatsCard>
       </div>
       {reading.topMedias.length === 0 ? null : (
-        <Card title={m.profile_stats_top_titles()}>
+        <StatsCard title={m.profile_stats_top_titles()}>
           <ol sx={styles.covers}>
             {reading.topMedias.map((media) => (
               <li key={media.id} sx={styles.coverItem}>
@@ -316,7 +294,7 @@ function Reading({
               </li>
             ))}
           </ol>
-        </Card>
+        </StatsCard>
       )}
     </>
   )
@@ -334,7 +312,7 @@ function Uploads({ uploads }: { uploads: UserStats["uploads"] }) {
   })
 
   return (
-    <Card title={m.profile_stats_uploads()}>
+    <StatsCard title={m.profile_stats_uploads()}>
       <div sx={styles.uploadsLayout}>
         <div sx={styles.uploadTiles}>
           <div sx={statsStyles.tile}>
@@ -387,7 +365,7 @@ function Uploads({ uploads }: { uploads: UserStats["uploads"] }) {
         </div>
       </div>
       {tip.element}
-    </Card>
+    </StatsCard>
   )
 }
 

@@ -7,6 +7,7 @@ import {
   Refresh,
   SortAZ,
   Sparkles,
+  Star,
 } from "@taiyomoe/ui/components/icons"
 import {
   Select,
@@ -31,6 +32,7 @@ const SORT_OPTIONS: Record<
   added: { label: m.library_sort_added, icon: CalendarArrowDown },
   released: { label: m.library_sort_released, icon: Sparkles },
   title: { label: m.library_sort_title, icon: SortAZ },
+  score: { label: m.library_sort_score, icon: Star },
 }
 const styles = stylex.create({
   trigger: {

@@ -1,9 +1,5 @@
-import type { Actor } from "@taiyomoe/permissions"
-import { config } from "@taiyomoe/config"
 import {
-  type DB,
   FLAGS,
-  type Kysely,
   LANGUAGES,
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
@@ -19,6 +15,7 @@ import z from "zod"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
+import { getUserContentRatings } from "../utils/content-ratings"
 import { getMainCoverUrls } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
@@ -69,6 +66,7 @@ const sortFieldToAttribute = {
   mainTitle: "_sortMainTitle",
   libraryCount: "libraryCount",
   chapterCount: "chapterCount",
+  rating: "ratingScore",
 } satisfies Record<MediaSort[number]["field"], string>
 const mediaFilterSpec = {
   type: { kind: "enum", attr: "type" },
@@ -92,6 +90,7 @@ const mediaFilterSpec = {
   endDate: { kind: "date", attr: "endDate" },
   libraryCount: { kind: "count", attr: "libraryCount" },
   chapterCount: { kind: "count", attr: "chapterCount" },
+  ratingCount: { kind: "count", attr: "ratingCount" },
 } satisfies FilterSpec<MediaDocument>
 const unixMs = <T extends z.ZodType>(schema: T, description: string) =>
   schema.meta({ description: `${description} In Unix milliseconds.`, example: 1704067200000 })
@@ -178,21 +177,12 @@ const mediaHitSchema = z.object({
   chapterCount: z
     .int()
     .meta({ description: "The number of published chapters of the media.", example: 214 }),
+  ratingCount: z.int().meta({ description: "The number of ratings of the media.", example: 530 }),
+  ratingAverage: z
+    .number()
+    .nullable()
+    .meta({ description: "The average score of the media, if it has ratings.", example: 8.6 }),
 })
-const getCallerContentRatings = async (db: Kysely<DB>, viewer: Actor | null) => {
-  const row =
-    viewer === null
-      ? undefined
-      : await db
-          .selectFrom("users")
-          .select("settings")
-          .where("id", "=", viewer.id)
-          .executeTakeFirst()
-  const saved = row?.settings.contentRating
-
-  // An empty setting would turn into an `in: []` filter, which the search skips.
-  return saved && saved.length > 0 ? saved : [...config.settings.contentRating]
-}
 
 // oxlint-disable-next-line taiyo/require-audited-route
 export const searchMediasHandler = new Hono().post(
@@ -226,7 +216,7 @@ export const searchMediasHandler = new Hono().post(
       input.filter.contentRating === undefined
         ? {
             ...input.filter,
-            contentRating: { in: await getCallerContentRatings(c.var.db, c.var.viewer) },
+            contentRating: { in: await getUserContentRatings(c.var.db, c.var.viewer?.id ?? null) },
           }
         : input.filter
     const clauses: string[] = []

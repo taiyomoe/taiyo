@@ -292,6 +292,52 @@ describe("POST /medias/:id/merge", () => {
     expect(log?.targetId).toBe(mediaId)
   })
 
+  test("moves the duplicate's ratings and recounts the media's totals", async ({
+    app,
+    services,
+  }) => {
+    const { headers, userId } = await signInAs(services, { role: "ADMIN" })
+    const mediaId = await seedMedia(services, userId)
+    const duplicateId = await seedMedia(services, userId)
+    const both = await signInAs(services)
+    const duplicateOnly = await signInAs(services)
+    const mediaOnly = await signInAs(services)
+    const rate = (raterHeaders: Record<string, string>, id: string, score: number) =>
+      api(app, `/medias/${id}/rating`, { method: "PUT", headers: raterHeaders, json: { score } })
+
+    await rate(both.headers, mediaId, 3)
+    await rate(both.headers, duplicateId, 9)
+    await rate(duplicateOnly.headers, duplicateId, 6)
+    await rate(mediaOnly.headers, mediaId, 10)
+
+    expect((await merge(app, headers, mediaId, [duplicateId])).status).toBe(201)
+
+    const ratings = await services.db
+      .selectFrom("mediaRatings")
+      .select(["userId", "mediaId", "score"])
+      .where("mediaId", "in", [mediaId, duplicateId])
+      .execute()
+
+    expect(ratings).toHaveLength(3)
+    expect(ratings.every((row) => row.mediaId === mediaId)).toBe(true)
+    expect(ratings.find((row) => row.userId === both.userId)?.score).toBe(9)
+
+    const stats = await services.db
+      .selectFrom("mediaRatingStats")
+      .select(["mediaId", "ratingCount", "ratingSum", "scoreCounts"])
+      .where("mediaId", "in", [mediaId, duplicateId])
+      .execute()
+
+    expect(stats).toEqual([
+      {
+        mediaId,
+        ratingCount: 3,
+        ratingSum: 25,
+        scoreCounts: [0, 0, 0, 0, 0, 1, 0, 0, 1, 1],
+      },
+    ])
+  })
+
   test("gives a release only the duplicates have to the media once", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services, { role: "ADMIN" })
     const mediaId = await seedMedia(services, userId)

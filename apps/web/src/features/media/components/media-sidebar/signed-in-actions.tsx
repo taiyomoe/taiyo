@@ -17,6 +17,7 @@ import { mediaSidebarStyles } from "@/features/media/components/media-sidebar/me
 import { ProgressCard } from "@/features/media/components/media-sidebar/progress-card"
 import { ReadButton } from "@/features/media/components/media-sidebar/read-button"
 import { getMainTitle } from "@/features/media/lib/media-labels"
+import { ScoreCard } from "@/features/ratings/components/score-card"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -45,10 +46,11 @@ export function SignedInActions({ mediaId, canEdit }: { mediaId: string; canEdit
       ) : (
         <LibraryButton
           mediaId={mediaId}
-          notify={entry.data?.notify ?? true}
-          status={entry.data?.status ?? null}
+          notify={entry.data.entry?.notify ?? true}
+          status={entry.data.entry?.status ?? null}
         />
       )}
+      {entry.data === undefined ? null : <ScoreCard mediaId={mediaId} score={entry.data.score} />}
       {progress.data === undefined || progress.data.lastRead === null ? null : (
         <ProgressCard progress={progress.data} />
       )}

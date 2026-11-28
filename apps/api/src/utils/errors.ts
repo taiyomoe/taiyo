@@ -456,6 +456,12 @@ const libraryErrors = {
     code: 404,
   },
 } as const
+const ratingErrors = {
+  RATING_NOT_FOUND: {
+    message: "You have not rated this media.",
+    code: 404,
+  },
+} as const
 const listErrors = {
   LIST_NOT_FOUND: {
     message: "The requested list was not found.",
@@ -563,6 +569,7 @@ export const errors = {
   ...historyErrors,
   ...pageErrors,
   ...libraryErrors,
+  ...ratingErrors,
   ...listErrors,
   ...imageErrors,
   ...chapterUploadErrors,
