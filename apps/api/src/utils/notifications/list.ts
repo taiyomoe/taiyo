@@ -15,6 +15,7 @@ import { liveActorSql, selectVisibleNotifications } from "./query"
 import {
   type actorsSchema,
   LATEST_ACTORS,
+  dataExportPayloadSchema,
   moderationPayloadSchemas,
   type NotificationFilters,
 } from "./schemas"
@@ -158,6 +159,10 @@ export const listNotifications = async (
       sql<boolean>`"rg"."deletedAt" is not null`.as("groupDeleted"),
       "ru.username as reportedUsername",
       "ru.displayUsername as reportedDisplayUsername",
+      timestampSql("de.expiresAt").$castTo<string | null>().as("exportExpiresAt"),
+      sql<boolean>`("de"."status" = 'EXPIRED' or "de"."expiresAt" <= (CURRENT_TIMESTAMP at time zone 'UTC'))`.as(
+        "exportExpired",
+      ),
     ])
     .orderBy("n.lastEventAt", "desc")
     .orderBy("n.id", "desc")
@@ -389,6 +394,22 @@ export const listNotifications = async (
         const payload = moderationPayloadSchemas.PROFILE_MODERATED.safeParse(row.payload)
 
         return payload.success ? { ...base, type: row.type, fields: payload.data.fields } : null
+      }
+
+      if (row.type === "DATA_EXPORT_READY") {
+        const payload = dataExportPayloadSchema.safeParse(row.payload)
+
+        return payload.success
+          ? {
+              ...base,
+              type: row.type,
+              dataExport: {
+                id: payload.data.exportId,
+                expiresAt: row.exportExpiresAt,
+                expired: row.exportExpired,
+              },
+            }
+          : null
       }
 
       if (row.type === "REPORT_REVIEWED") {

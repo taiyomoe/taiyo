@@ -101,6 +101,9 @@ export const selectVisibleNotifications = (
     .leftJoin("users as ru", (join) =>
       join.on(sql<SqlBool>`"ru"."id" = ("n"."payload" ->> 'userId')::uuid`),
     )
+    .leftJoin("dataExports as de", (join) =>
+      join.on(sql<SqlBool>`"de"."id" = ("n"."payload" ->> 'exportId')::uuid`),
+    )
     .where("n.userId", "=", userId)
     .where((eb) =>
       eb.or([
@@ -129,6 +132,7 @@ export const selectVisibleNotifications = (
         ]),
         eb.and([eb("n.type", "=", "LIST_MODERATED"), eb("ml.id", "is not", null)]),
         eb("n.type", "in", ["PROFILE_MODERATED", "REPORT_REVIEWED"]),
+        eb.and([eb("n.type", "=", "DATA_EXPORT_READY"), eb("de.id", "is not", null)]),
       ]),
     )
     .$call((qb) =>
@@ -153,6 +157,7 @@ export const countNotifications = async (db: Kysely<DB>, userId: string) => {
       unreadOf("activity").as("activity"),
       unreadOf("rewards").as("rewards"),
       unreadOf("moderation").as("moderation"),
+      unreadOf("account").as("account"),
     ])
     .executeTakeFirstOrThrow()
 
@@ -165,6 +170,7 @@ export const countNotifications = async (db: Kysely<DB>, userId: string) => {
       activity: Number(row.activity),
       rewards: Number(row.rewards),
       moderation: Number(row.moderation),
+      account: Number(row.account),
     },
   }
 }

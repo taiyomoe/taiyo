@@ -30,6 +30,7 @@ const TAB_LABELS = {
   activity: m.notifications_tab_activity,
   rewards: m.notifications_tab_rewards,
   moderation: m.notifications_tab_moderation,
+  account: m.notifications_tab_account,
 } satisfies Record<NotificationCategory, () => string>
 const styles = stylex.create({
   panel: {

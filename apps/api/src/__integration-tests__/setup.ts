@@ -1,5 +1,7 @@
-import type { Hono } from "hono"
+import type { GroupInvitationMail } from "@taiyomoe/emails"
 import "./setup-env"
+import type { DataExportJobData } from "@taiyomoe/queue"
+import type { Hono } from "hono"
 import {
   CreateBucketCommand,
   DeleteBucketCommand,
@@ -14,7 +16,6 @@ import { getMeiliClient, initMediasIndex } from "@taiyomoe/search"
 import { setTimeout as sleep } from "node:timers/promises"
 import pg from "pg"
 import { afterAll, test as baseTest } from "vitest"
-import type { GroupInvitationMail } from "../emails/send-group-invitation-email"
 import type { Services } from "../services"
 import { createApp } from "../app"
 import { defined } from "./helpers/assert"
@@ -62,22 +63,31 @@ afterAll(async () => {
   await adminPool.end()
 })
 
-// Most tests never reach S3: the bucket is created right before the first command that needs it.
-const getTestS3 = (bucket: string) => {
+// Most tests never reach S3: each bucket is created right before the first command that needs it.
+const getTestS3 = () => {
   const s3 = getS3Client()
-  let created: Promise<unknown> | undefined
+  const created = new Map<string, Promise<unknown>>()
 
   s3.middlewareStack.add(
     (next) => async (args) => {
-      created ??= sharedS3.send(new CreateBucketCommand({ Bucket: bucket }))
-      await created
+      const { input } = args
+      const Bucket =
+        typeof input === "object" && "Bucket" in input && typeof input.Bucket === "string"
+          ? input.Bucket
+          : undefined
+
+      if (Bucket !== undefined && !created.has(Bucket)) {
+        created.set(Bucket, sharedS3.send(new CreateBucketCommand({ Bucket })))
+      }
+
+      await (Bucket === undefined ? undefined : created.get(Bucket))
 
       return next(args)
     },
     { step: "initialize" },
   )
 
-  return { s3, getCreated: () => created }
+  return { s3, created }
 }
 const emptyBucket = async (bucket: string) => {
   const listed = await sharedS3.send(new ListObjectsV2Command({ Bucket: bucket }))
@@ -100,10 +110,12 @@ type Fixtures = {
   app: Hono
   mails: GroupInvitationMail[]
   mangaDex: FakeMangaDex
+  dataExportJobs: DataExportJobData[]
 }
 
 const sentMails = new WeakMap<Services, GroupInvitationMail[]>()
 const fakeMangaDexes = new WeakMap<Services, FakeMangaDex>()
+const dataExportJobs = new WeakMap<Services, DataExportJobData[]>()
 
 export const test = baseTest.extend<Fixtures>({
   // Meilisearch runs its tasks one at a time: only the files that read the index opt in.
@@ -118,7 +130,7 @@ export const test = baseTest.extend<Fixtures>({
     fileDatabases.push(dbName)
 
     const db = getDb(getDbUrl(dbName))
-    const { s3, getCreated } = getTestS3(bucketName)
+    const { s3, created } = getTestS3()
 
     if (search) {
       await initMediasIndex({ db, meili: sharedMeili, mediasIndex })
@@ -126,10 +138,12 @@ export const test = baseTest.extend<Fixtures>({
 
     const mails: GroupInvitationMail[] = []
     const mangaDex = createFakeMangaDex()
+    const exportJobs: DataExportJobData[] = []
     const services: Services = {
       db,
       s3,
       s3Bucket: bucketName,
+      s3PrivateBucket: `${bucketName}-private`,
       meili: sharedMeili,
       mediasIndex,
       auth: createAuth({
@@ -140,6 +154,13 @@ export const test = baseTest.extend<Fixtures>({
       chapterUploadQueue: { enqueue: async () => {} },
       mangaDex: mangaDex.client,
       mangaDexSyncQueue: mangaDex.queue,
+      dataExportQueue: {
+        enqueue: (data) => {
+          exportJobs.push(data)
+
+          return Promise.resolve()
+        },
+      },
       mailer: {
         sendGroupInvitation: (mail) => {
           mails.push(mail)
@@ -155,15 +176,16 @@ export const test = baseTest.extend<Fixtures>({
 
     sentMails.set(services, mails)
     fakeMangaDexes.set(services, mangaDex)
+    dataExportJobs.set(services, exportJobs)
 
     await use(services)
 
     await db.destroy()
     s3.destroy()
 
-    if (getCreated() !== undefined) {
-      await getCreated()
-      await emptyBucket(bucketName)
+    for (const [bucket, creation] of created) {
+      await creation
+      await emptyBucket(bucket)
     }
 
     // Elsewhere the index never exists: without a primary key, Meilisearch refuses to create it.
@@ -179,5 +201,8 @@ export const test = baseTest.extend<Fixtures>({
   },
   mangaDex: async ({ services }, use) => {
     await use(defined(fakeMangaDexes.get(services)))
+  },
+  dataExportJobs: async ({ services }, use) => {
+    await use(defined(dataExportJobs.get(services)))
   },
 })

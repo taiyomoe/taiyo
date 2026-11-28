@@ -13,6 +13,7 @@ import type { CommentRevision } from "./models/comment-revision-model"
 import type { CommentThread } from "./models/comment-thread-model"
 import type { CommentVote } from "./models/comment-vote-model"
 import type { Cover } from "./models/cover-model"
+import type { DataExport } from "./models/data-export-model"
 import type { FeaturedMedia } from "./models/featured-media-model"
 import type { GroupCreationRequest } from "./models/group-creation-request-model"
 import type { GroupFollow } from "./models/group-follow-model"
@@ -72,6 +73,7 @@ export type DB = {
   commentVotes: CommentVote
   comments: Comment
   covers: Cover
+  dataExports: DataExport
   featuredMedias: FeaturedMedia
   groupCreationRequests: GroupCreationRequest
   groupFollows: GroupFollow

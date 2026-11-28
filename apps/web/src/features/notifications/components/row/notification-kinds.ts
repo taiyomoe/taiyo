@@ -4,6 +4,7 @@ import {
   Flag,
   List,
   Medal,
+  Package,
   ThumbsUp,
   Trophy,
   User,
@@ -23,4 +24,5 @@ export const KINDS = {
   LIST_MODERATED: { icon: List, label: m.notifications_label_list },
   PROFILE_MODERATED: { icon: User, label: m.notifications_label_profile },
   REPORT_REVIEWED: { icon: Flag, label: m.notifications_label_report },
+  DATA_EXPORT_READY: { icon: Package, label: m.notifications_label_data_export },
 } as const

@@ -197,6 +197,14 @@ export function PrimaryLink({
     )
   }
 
+  if (notification.type === "DATA_EXPORT_READY") {
+    return (
+      <Link {...props} data-primary="" search={{ tab: "privacy" }} to="/settings">
+        {children}
+      </Link>
+    )
+  }
+
   if (notification.type === "ACHIEVEMENT_EARNED") {
     return (
       <Link
